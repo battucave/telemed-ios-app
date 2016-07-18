@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="10032"/>
+    </dependencies>
+    <scenes>
+        <!--Interface Controller-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="MyTeleMedWatch" customModuleProvider="target">
+                    <items>
+                        <label alignment="center" text="MyTeleMed" id="N5G-wl-t01"/>
+                        <imageView alignment="center" verticalAlignment="center" image="image-logo.png" contentMode="scaleAspectFit" id="s0a-Ai-uv8"/>
+                        <label alignment="left" verticalAlignment="bottom" text="View secure messages on iPhone app." textAlignment="center" numberOfLines="2" minimumScaleFactor="0.69999999999999996" id="0xv-KP-dzf">
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                            <variation key="device=watch38mm" text="View secure messages on iPhone."/>
+                        </label>
+                    </items>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="220" y="345"/>
+        </scene>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut">
+                    <items>
+                        <label alignment="left" text="Alert Label" id="IdU-wH-bcW"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="IdU-wH-bcW" id="JKC-fr-R95"/>
+                        <segue destination="4sK-HA-Art" kind="relationship" relationship="dynamicNotificationInterface" id="kXh-Jw-8B1"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="220" y="643"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="ZPc-GJ-vnh">
+            <objects>
+                <controller id="4sK-HA-Art" customClass="NotificationController" customModule="MyTeleMedWatch" customModuleProvider="target">
+                    <items>
+                        <separator alignment="left" id="PPQ-md-bl4"/>
+                        <table alignment="left" id="2Kz-Pi-fJQ">
+                            <items>
+                                <tableRow identifier="Label" id="w8k-OU-OvP">
+                                    <group key="rootItem" width="1" alignment="left" id="XHr-T3-ydb">
+                                        <items>
+                                            <label width="132.5" alignment="center" verticalAlignment="center" text="Label" textAlignment="center" id="ek0-cj-FML"/>
+                                        </items>
+                                    </group>
+                                </tableRow>
+                                <tableRow identifier="Image" id="qOQ-0V-L3o">
+                                    <group key="rootItem" width="1" alignment="left" id="7D1-NB-qae">
+                                        <items>
+                                            <imageView alignment="center" verticalAlignment="center" id="jcO-jW-FYs"/>
+                                        </items>
+                                    </group>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="468" y="643"/>
+        </scene>
+    </scenes>
+</document>

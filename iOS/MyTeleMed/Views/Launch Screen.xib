@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIViewController"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="UdY-XV-nWz">
+                    <rect key="frame" x="20" y="249" width="280" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="UdY-XV-nWz" secondAttribute="height" multiplier="4:1" id="bVv-JP-jVh"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background-LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="0jR-lw-Twh">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="YbA-iH-AFQ">
+                    <rect key="frame" x="13" y="246" width="294" height="75"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="75" id="515-Z1-Arg"/>
+                        <constraint firstAttribute="width" constant="294" id="s1b-fc-PAi"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="0jR-lw-Twh" secondAttribute="bottom" id="7Ua-g9-nfg"/>
+                <constraint firstItem="UdY-XV-nWz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="FLE-Pt-Jai"/>
+                <constraint firstAttribute="trailing" secondItem="0jR-lw-Twh" secondAttribute="trailing" id="GZm-5Q-zbu"/>
+                <constraint firstAttribute="trailing" secondItem="UdY-XV-nWz" secondAttribute="trailing" constant="20" id="K3d-tT-5OY"/>
+                <constraint firstAttribute="centerY" secondItem="YbA-iH-AFQ" secondAttribute="centerY" id="KXK-03-UbF"/>
+                <constraint firstItem="0jR-lw-Twh" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="M9D-IL-rv8"/>
+                <constraint firstItem="0jR-lw-Twh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="lGl-Ch-76y"/>
+                <constraint firstAttribute="centerX" secondItem="YbA-iH-AFQ" secondAttribute="centerX" id="lrN-Iu-Xnx"/>
+                <constraint firstAttribute="centerY" secondItem="UdY-XV-nWz" secondAttribute="centerY" id="ucC-DX-jXS"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <point key="canvasLocation" x="914" y="370"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Background-LaunchImage" width="320" height="480"/>
+        <image name="Logo" width="300" height="75"/>
+    </resources>
+</document>
