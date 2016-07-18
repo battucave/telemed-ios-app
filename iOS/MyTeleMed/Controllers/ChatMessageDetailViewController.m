@@ -63,8 +63,12 @@
 {
 	[super viewWillAppear:animated];
 	
-	// TEMPORARY
-	[self.messageEventModel getMessageEvents:self.conversationID];
+	// Only get Chat Messages if there is an existing Conversation ID (New Chat Message does not have Conversation ID)
+	if(self.conversationID)
+	{
+		// TEMPORARY
+		[self.messageEventModel getMessageEvents:self.conversationID];
+	}
 	
 	// Add Keyboard Observers (iOS 7)
 	if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
@@ -219,7 +223,10 @@
 		}
 	}
 	
-	// This value is not accurate when more than @ 15 rows: CGPoint bottomOffset = CGPointMake(0, self.tableComments.contentSize.height - self.tableComments.bounds.size.height + self.tableComments.contentInset.bottom);
+	// This value is not accurate when more than @ 15 rows:
+	// CGPoint bottomOffset = CGPointMake(0, self.tableComments.contentSize.height - self.tableComments.bounds.size.height + self.tableComments.contentInset.bottom);
+	
+	// So use this instead:
 	CGPoint bottomOffset = CGPointMake(0, self.tableCommentsContentHeight - self.tableComments.bounds.size.height + self.tableComments.contentInset.bottom);
 	
 	if(bottomOffset.y > 0)
@@ -306,7 +313,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if([self.filteredMessageEvents count] == 0)
+	// If there is an existing Conversation ID, but no Chat Messages, show a message
+	if(self.conversationID && [self.filteredMessageEvents count] == 0)
 	{
 		return 1;
 	}
@@ -358,8 +366,12 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
+		// // If there is an existing Conversation ID, but no Chat Messages, show a message
+		if(self.conversationID)
+		{
+			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
+		}
 		
 		return emptyCell;
 	}
@@ -407,6 +419,20 @@
 	}
 	
 	return cell;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if([segue.identifier isEqualToString:@"showMessageRecipientPickerFromChatMessageDetail"])
+	{
+		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
+		
+		// Set Message Recipient Type
+		[messageRecipientPickerViewController setMessageRecipientType:@"Chat"];
+		
+		// Set selected Message Recipients if previously set
+		//[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+	}
 }
 
 - (void)dealloc

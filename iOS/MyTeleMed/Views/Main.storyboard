@@ -859,7 +859,7 @@
             <objects>
                 <tableViewController id="4fX-RS-WG1" customClass="MessagesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="84" sectionHeaderHeight="1" sectionFooterHeight="1" id="60m-NG-kHz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="396"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="402"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -3593,7 +3593,11 @@
                                             <action selector="deleteMessages:" destination="o2h-qA-hBP" id="A0f-HU-imd"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem systemItem="compose" id="o1h-CU-EEc"/>
+                                    <barButtonItem systemItem="compose" id="o1h-CU-EEc">
+                                        <connections>
+                                            <segue destination="i1Q-xN-TGC" kind="push" identifier="showNewChatMessageDetail" id="j8k-kI-sFx"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Fje-V1-MBs"/>
                                 </items>
                             </toolbar>
@@ -4129,19 +4133,20 @@
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="hp2-gk-n0x"/>
-        <segue reference="V9Q-rq-EEe"/>
+        <segue reference="E1e-BY-bXG"/>
+        <segue reference="yVi-an-TG3"/>
         <segue reference="rKc-RT-hpR"/>
-        <segue reference="fdC-lY-Wkj"/>
-        <segue reference="c1m-Px-Iwz"/>
         <segue reference="nDL-G3-d11"/>
-        <segue reference="ZfR-s3-nyT"/>
         <segue reference="duc-Go-Hul"/>
         <segue reference="SWX-Rd-no8"/>
+        <segue reference="ZfR-s3-nyT"/>
+        <segue reference="V9Q-rq-EEe"/>
+        <segue reference="c1m-Px-Iwz"/>
+        <segue reference="j8k-kI-sFx"/>
         <segue reference="d5q-Lg-iEw"/>
-        <segue reference="1fs-hi-JGd"/>
+        <segue reference="hp2-gk-n0x"/>
+        <segue reference="fdC-lY-Wkj"/>
         <segue reference="O2m-UP-1tm"/>
-        <segue reference="E1e-BY-bXG"/>
         <segue reference="jIb-YA-bfg"/>
     </inferredMetricsTieBreakers>
 </document>
