@@ -177,7 +177,7 @@
 		// Set End Date
 		[self setEndDate:[NSDate date]];
 		NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-		[self setEndDate:[calendar dateFromComponents:[calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:self.endDate]]];
+		[self setEndDate:[calendar dateFromComponents:[calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.endDate]]];
 		
 		// Set Start Date
 		NSScanner *scanner = [NSScanner scannerWithString:dateRange];

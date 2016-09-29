@@ -145,7 +145,7 @@
 		{
 			// Parse and format On Call Entry Start Date to remove time
 			NSDate *dateOnCall = [dateFormatterOnCall dateFromString:onCallEntry.WillStart];
-			dateOnCall = [calendar dateFromComponents:[calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:dateOnCall]];
+			dateOnCall = [calendar dateFromComponents:[calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:dateOnCall]];
 			
 			// Set Should Display Date property depending on whether On Call date is greater than Previous On Call date
 			onCallEntry.shouldDisplayDate = ([datePreviousOnCall compare:dateOnCall] == NSOrderedAscending);

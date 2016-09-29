@@ -20,3 +20,5 @@ Thumbs.db
 #######
 *.xcuserdatad
 *.xcworkspace
+*.xcodeproj
+*.xcodeproj/**

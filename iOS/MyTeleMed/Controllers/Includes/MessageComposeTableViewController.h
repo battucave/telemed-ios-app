@@ -22,7 +22,6 @@
 
 @property (weak) id delegate;
 @property (weak, nonatomic) IBOutlet UIButton *buttonMessageRecipient;
-@property (weak, nonatomic) IBOutlet UIButton *buttonSelectMessageRecipient;
 @property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
 @property (nonatomic) NSString *textViewMessagePlaceholder;
 @property (nonatomic) CGFloat cellMessageHeight;

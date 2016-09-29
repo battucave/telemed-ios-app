@@ -11,7 +11,7 @@
 #import "AccountModel.h"
 #import "MessageModel.h"
 
-@interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) MessageModel *message;
 @property (nonatomic) AccountModel *selectedAccount;

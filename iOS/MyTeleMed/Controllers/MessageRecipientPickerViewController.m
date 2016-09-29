@@ -16,7 +16,8 @@
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
 @property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
-@property (nonatomic) IBOutlet UISearchBar *searchBar;
+
+@property (nonatomic, strong) UISearchController *searchController;
 
 @property (nonatomic) NSMutableArray *messageRecipients;
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
@@ -47,12 +48,26 @@
 	// Initialize Filtered Message Recipients
 	[self setFilteredMessageRecipients:[[NSMutableArray alloc] init]];
 	
+	// Initialize Search Controller
+	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+	
+	[self.searchController setDelegate:self];
+	[self.searchController setDimsBackgroundDuringPresentation:NO];
+	[self.searchController setSearchResultsUpdater:self];
+	
+	self.definesPresentationContext = YES;
+	
+	// Initialize Search Bar
+	[self.searchController.searchBar setDelegate:self];
+	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	[self.searchController.searchBar sizeToFit];
+	
+	// Add Search Bar to View
+	self.tableMessageRecipients.tableHeaderView = self.searchController.searchBar;
+	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
 	
-	// Set Search Delegates
-	self.searchBar.delegate = self;
-	self.searchDisplayController.delegate = self;
 }
 
 // Get Message Recipients
@@ -158,7 +173,7 @@
 }
 
 // Filter Search Results
-- (void)filterSearchResults:(NSString *)text scope:(NSString *)scope
+- (void)filterSearchResults:(NSString *)text
 {
 	NSPredicate *predicate;
 	text = [[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"," withString:@""];
@@ -183,12 +198,12 @@
 	[self setFilteredMessageRecipients:[NSMutableArray arrayWithArray:[self.messageRecipients filteredArrayUsingPredicate:predicate]]];
 }
 
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+// Delegate Method for Updating Search Results
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-	// Reload when search text changes
-	[self filterSearchResults:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+	[self filterSearchResults:searchController.searchBar.text];
 	
-	return YES;
+	[self.tableMessageRecipients reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -199,7 +214,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// Search Results Table
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		if([self.filteredMessageRecipients count] == 0)
 		{
@@ -227,7 +242,7 @@
 	MessageRecipientModel *messageRecipient;
 	
 	// Search Results Table
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// If no Filtered Message Recipients, create a not found message
 		if([self.filteredMessageRecipients count] == 0)
@@ -282,7 +297,7 @@
 	UITableViewCell *cell;
 	
 	// Search Results Table
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active)
 	{
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 		
@@ -294,7 +309,7 @@
 		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
 		// Reset Search Results
-		[self.searchDisplayController setActive:NO animated:NO];
+		[self.searchController setActive:NO];
 	}
 	// Message Recipients Table
 	else
@@ -318,10 +333,10 @@
 	MessageRecipientModel *messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
 	
 	// Should never be possible to Deselect row from Search Results, but just in case
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active)
 	{
 		// Reset Search Results
-		[self.searchDisplayController setActive:NO animated:NO];
+		[self.searchController setActive:NO];
 		
 		return;
 	}
