@@ -78,7 +78,47 @@
 	{
 		SEL selector = NSSelectorFromString(elementName);
 		
-		if([self.myStatus respondsToSelector:selector])
+		// Store date strings as NSDate
+		if([elementName isEqualToString:@"NextOnCall"] || [elementName isEqualToString:@"Started"] || [elementName isEqualToString:@"WillEnd"] || [elementName isEqualToString:@"WillStart"])
+		{
+			//@"2016-10-03T10:55:17.7924093-0400"
+			self.currentElementValue = (NSMutableString *)[NSString stringWithFormat:@"%@.1234567-04:00", self.currentElementValue];
+			
+			NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+			//NSDate *UTCDate;
+			NSDate *localDate;
+			
+			if(self.currentElementValue != nil && ! [self.currentElementValue isEqualToString:@"Never"])
+			{
+				// Get date in UTC timezone (not needed at this time, but keep here for future changes)
+				/*[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
+				UTCDate = [dateFormatter dateFromString:self.currentElementValue];
+				
+				if(UTCDate == nil)
+				{
+					[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+					UTCDate = [dateFormatter dateFromString:self.currentElementValue];
+				}*/
+				
+				// Get date as-is (server provides correct timezone)
+				self.currentElementValue = (NSMutableString *)[self.currentElementValue substringToIndex:19];
+				
+				[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+				[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+				localDate = [dateFormatter dateFromString:self.currentElementValue];
+			}
+			
+			// Store dates as NSDate
+			if([self.myStatus respondsToSelector:selector])
+			{
+				[self.myStatus setValue:localDate forKey:elementName];
+			}
+			else if([self.onCallEntry respondsToSelector:selector])
+			{
+				[self.onCallEntry setValue:localDate forKey:elementName];
+			}
+		}
+		else if([self.myStatus respondsToSelector:selector])
 		{
 			if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"ActiveMessageCount"] || [elementName isEqualToString:@"UnreadMessageCount"])
 			{

@@ -100,11 +100,6 @@
 	[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
-- (CGFloat)calculateCellMessageHeight:(CGFloat)keyboardHeight
-{
-	return self.parentViewController.view.frame.size.height - keyboardHeight - self.cellMessageRecipient.bounds.size.height;
-}
-
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder

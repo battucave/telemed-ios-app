@@ -16,6 +16,7 @@
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
 @property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
+//@property (nonatomic) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, strong) UISearchController *searchController;
 
@@ -63,7 +64,7 @@
 	[self.searchController.searchBar sizeToFit];
 	
 	// Add Search Bar to View
-	self.tableMessageRecipients.tableHeaderView = self.searchController.searchBar;
+	//self.tableMessageRecipients.tableHeaderView = self.searchController.searchBar;
 	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
@@ -201,6 +202,8 @@
 // Delegate Method for Updating Search Results
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
+	NSLog(@"Search: %@", searchController.searchBar.text);
+	
 	[self filterSearchResults:searchController.searchBar.text];
 	
 	[self.tableMessageRecipients reloadData];

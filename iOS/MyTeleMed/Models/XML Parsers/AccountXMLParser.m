@@ -33,6 +33,10 @@
 		// Initialize the Account
 		self.account = [[AccountModel alloc] init];
 	}
+	else if([elementName isEqualToString:@"TimeZone"])
+	{
+		self.timeZone = [[NSMutableDictionary alloc] init];
+	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
@@ -55,9 +59,18 @@
 		
 		self.account = nil;
 	}
+	else if([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+	{
+		[self.timeZone setValue:self.currentElementValue forKey:elementName];
+	}
 	else if([elementName isEqualToString:@"ID"])
 	{
 		[self.account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+	}
+	else if([elementName isEqualToString:@"TimeZone"])
+	{
+		self.account.TimeZone = self.timeZone;
+		self.timeZone = nil;
 	}
 	else
 	{

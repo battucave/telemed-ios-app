@@ -20,6 +20,8 @@
 
 - (void)awakeFromNib
 {
+	[super awakeFromNib];
+	
 	// Set default separator inset
 	if([self respondsToSelector:@selector(setSeparatorInset:)])
 	{

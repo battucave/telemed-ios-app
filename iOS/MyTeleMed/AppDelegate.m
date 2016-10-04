@@ -45,11 +45,6 @@
 		[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
 		[application registerForRemoteNotifications];
 	}
-	else
-	{
-		// iOS 7 Push Notifications
-		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-	}
 	
 	// Setup app Timeout feature
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:kApplicationDidTimeoutNotification object:nil];
@@ -393,6 +388,8 @@
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	UIScreen *screen = [UIScreen mainScreen];
 	
 	// Load Timeout Preference
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
