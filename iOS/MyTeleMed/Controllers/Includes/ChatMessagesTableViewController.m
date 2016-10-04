@@ -266,6 +266,15 @@
 		if([self.chatMessages count] > [self.tableView indexPathForSelectedRow].row)
 		{
 			ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
+			
+			NSLog(@"Get Chat Message Detail");
+			NSLog(@"ID: %@", chatMessage.ID);
+			NSLog(@"Text: %@", chatMessage.Text);
+			NSLog(@"SenderID: %@", chatMessage.SenderID);
+			NSLog(@"SenderName: %@", chatMessage.SenderName);
+			NSLog(@"State: %@", chatMessage.State);
+			NSLog(@"TimeReceived_LCL: %@", chatMessage.TimeReceived_LCL);
+			NSLog(@"TimeReceived_UTC: %@", chatMessage.TimeReceived_UTC);
 	 
 			[chatMessageDetailViewController setConversationID:chatMessage.ID];
 		}

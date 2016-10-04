@@ -19,21 +19,22 @@
 // TEMPORARY
 @property (nonatomic) MessageEventModel *messageEventModel;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableComments;
-@property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewComment;
-@property (weak, nonatomic) IBOutlet UIButton *buttonSend;
+@property (weak, nonatomic) IBOutlet UITableView *tableChatMessages;
+@property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatMessage;
+@property (weak, nonatomic) IBOutlet UIButton *buttonChatMessageRecipient;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewMessageHeight;
 
-@property (nonatomic) NSUInteger messageCount;
-@property (nonatomic) CGFloat tableCommentsContentHeight;
-@property (nonatomic) NSString *textViewCommentPlaceholder;
+@property (nonatomic) CGFloat tableChatMessagesContentHeight;
+@property (nonatomic) NSString *textViewChatMessagePlaceholder;
 
 @property (nonatomic) BOOL isLoaded;
 
-// TEMPORARY
-@property (nonatomic) NSArray *messageEvents;
-@property (nonatomic) NSMutableArray *filteredMessageEvents;
+@property (nonatomic) NSUInteger chatMessageCount;
+@property (nonatomic) NSArray *chatMessages;
+@property (nonatomic) NSMutableArray *filteredChatMessages;
+@property (nonatomic) NSMutableArray *selectedChatParticipants;
 
 @end
 
@@ -47,16 +48,16 @@
 	[self setMessageEventModel:[[MessageEventModel alloc] init]];
 	[self.messageEventModel setDelegate:self];
 	
-	// TEMPORARY - Initialize Filtered Basic Events
-	[self setFilteredMessageEvents:[NSMutableArray array]];
+	// TEMPORARY - Initialize Filtered Chat Messages
+	[self setFilteredChatMessages:[NSMutableArray array]];
 	
 	// Initialize Text View Comment Input
-	UIEdgeInsets textViewCommentEdgeInsets = self.textViewComment.textContainerInset;
+	UIEdgeInsets textViewChatMessageEdgeInsets = self.textViewChatMessage.textContainerInset;
 	
-	[self.textViewComment setDelegate:self];
-	[self.textViewComment setTextContainerInset:UIEdgeInsetsMake(textViewCommentEdgeInsets.top, 12.0f, textViewCommentEdgeInsets.bottom, 12.0f)];
-	[self.textViewComment setMaxHeight:120.0f];
-	self.textViewCommentPlaceholder = self.textViewComment.text;
+	[self.textViewChatMessage setDelegate:self];
+	[self.textViewChatMessage setTextContainerInset:UIEdgeInsetsMake(textViewChatMessageEdgeInsets.top, 12.0f, textViewChatMessageEdgeInsets.bottom, 12.0f)];
+	[self.textViewChatMessage setMaxHeight:120.0f];
+	self.textViewChatMessagePlaceholder = self.textViewChatMessage.text;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -89,7 +90,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 	
 	// Add 10px to bottom of Table Comments
-	[self.tableComments setContentInset:UIEdgeInsetsMake(0, 0, 10, 0)];
+	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(0, 0, 10, 0)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -130,17 +131,45 @@
 	// Obtain reference to Source View Controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;
 	
-	/*// Save selected Message Recipients
-	[self setSelectedMessageRecipients:messageRecipientPickerViewController.selectedMessageRecipients];
+	// Save selected Chat Participants
+	[self setSelectedChatParticipants:messageRecipientPickerViewController.selectedMessageRecipients];
 	
-	// Update MessageComposeTableViewController with selected Message Recipient Names
-	if([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
+	NSString *messageRecipientNames = @"";
+	NSInteger messageRecipientsCount = [messageRecipientPickerViewController.selectedMessageRecipients count];
+	
+	if(messageRecipientsCount > 0)
 	{
-		[self.messageComposeTableViewController updateSelectedMessageRecipients:self.selectedMessageRecipients];
+		messageRecipientNames = [[messageRecipientPickerViewController.selectedMessageRecipients objectAtIndex:0] Name];
+		
+		if(messageRecipientsCount > 1)
+		{
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+		}
 	}
 	
+	// Update Message Recipient Label with Message Recipient Name
+	[self.buttonChatMessageRecipient setTitle:messageRecipientNames forState:UIControlStateNormal];
+	[self.buttonChatMessageRecipient setTitle:messageRecipientNames forState:UIControlStateSelected];
+	
 	// Validate form
-	[self validateForm:self.messageComposeTableViewController.textViewMessage.text];*/
+	[self validateForm:self.textViewChatMessage.text];
+}
+
+- (IBAction)sendNewChatMessage:(id)sender
+{
+	NSLog(@"Send New Chat Message");
+	//[self setNewMessageModel:[[NewMessageModel alloc] init]];
+	//[self.newMessageModel setDelegate:self];
+	
+	//[self.newMessageModel sendNewMessage:self.textViewMessage.text participantIDs:[self.selectedChatParticipants valueForKey:@"ID"]];
+}
+
+// Check required fields to determine if Form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate
+- (void)validateForm:(NSString *)messageText
+{
+	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	[self.buttonSend setEnabled:( ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.textViewChatMessagePlaceholder] && self.selectedChatParticipants != nil && [self.selectedChatParticipants count] > 0)];
 }
 
 /*/ Override default Remote Notification action from CoreViewController
@@ -163,19 +192,19 @@
 }*/
 
 // Return Events from MessageEventModel delegate
-- (void)updateMessageEvents:(NSMutableArray *)newMessageEvents
+- (void)updateMessageEvents:(NSMutableArray *)newChatMessages
 {
 	self.isLoaded = YES;
-	self.messageEvents = newMessageEvents;
+	self.chatMessages = newChatMessages;
 	
-	[self.filteredMessageEvents removeAllObjects];
+	[self.filteredChatMessages removeAllObjects];
 	
 	// Add only comments from Basic Events
-	for(MessageEventModel *messageEvent in newMessageEvents)
+	for(MessageEventModel *messageEvent in newChatMessages)
 	{
 		if([messageEvent.Type isEqualToString:@"Comment"])
 		{
-			[self.filteredMessageEvents addObject:messageEvent];
+			[self.filteredChatMessages addObject:messageEvent];
 		}
 	}
 	
@@ -184,16 +213,16 @@
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[self.tableComments reloadData];
+		[self.tableChatMessages reloadData];
 		
-		// Scroll to bottom of comments after table reloads data only if a new comment has been added since last check
-		if(self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount)
+		// Scroll to bottom of Chat Messages after table reloads data only if a new Chat Message has been added since last check
+		if(self.chatMessageCount > 0 && [self.filteredChatMessages count] > self.chatMessageCount)
 		{
 			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 		}
 		
-		// Update message count with new number of Filtered Message Events
-		self.messageCount = [self.filteredMessageEvents count];
+		// Update Chat Message count with new number of Filtered Chat Messages
+		self.chatMessageCount = [self.filteredChatMessages count];
 	});
 }
 
@@ -215,25 +244,25 @@
 - (void)scrollToBottom
 {
 	// Calulate total height of Table Comments (needed when there are more rows than what will remain in memory)
-	if( ! self.tableCommentsContentHeight)
+	if( ! self.tableChatMessagesContentHeight)
 	{
-		for(int i = 0; i < [self.filteredMessageEvents count]; i++)
+		for(int i = 0; i < [self.filteredChatMessages count]; i++)
 		{
-			self.tableCommentsContentHeight += [self tableView:self.tableComments heightForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+			self.tableChatMessagesContentHeight += [self tableView:self.tableChatMessages heightForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
 		}
 	}
 	
 	// This value is not accurate when more than @ 15 rows:
-	// CGPoint bottomOffset = CGPointMake(0, self.tableComments.contentSize.height - self.tableComments.bounds.size.height + self.tableComments.contentInset.bottom);
+	// CGPoint bottomOffset = CGPointMake(0, self.tableChatMessages.contentSize.height - self.tableChatMessages.bounds.size.height + self.tableChatMessages.contentInset.bottom);
 	
 	// So use this instead:
-	CGPoint bottomOffset = CGPointMake(0, self.tableCommentsContentHeight - self.tableComments.bounds.size.height + self.tableComments.contentInset.bottom);
+	CGPoint bottomOffset = CGPointMake(0, self.tableChatMessagesContentHeight - self.tableChatMessages.bounds.size.height + self.tableChatMessages.contentInset.bottom);
 	
 	if(bottomOffset.y > 0)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			[self.tableComments setContentOffset:bottomOffset animated:YES];
+			[self.tableChatMessages setContentOffset:bottomOffset animated:YES];
 		});
 	}
 }
@@ -242,7 +271,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[self.textViewComment resignFirstResponder];
+		[self.textViewChatMessage resignFirstResponder];
 	});
 }
 
@@ -275,7 +304,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if([textView.text isEqualToString:self.textViewCommentPlaceholder])
+	if([textView.text isEqualToString:self.textViewChatMessagePlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -290,7 +319,7 @@
 	// Show placeholder
 	if([textView.text isEqualToString:@""])
 	{
-		[textView setText:self.textViewCommentPlaceholder];
+		[textView setText:self.textViewChatMessagePlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];
 		[textView setFont:[UIFont systemFontOfSize:17.0]];
 	}
@@ -303,7 +332,7 @@
 	// Scroll Scroll View content to bottom
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.0];
 	
-	[self.buttonSend setEnabled:( ! [textView.text isEqualToString:@""] && ! [textView.text isEqualToString:self.textViewCommentPlaceholder])];
+	[self.buttonSend setEnabled:( ! [textView.text isEqualToString:@""] && ! [textView.text isEqualToString:self.textViewChatMessagePlaceholder])];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -314,12 +343,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// If there is an existing Conversation ID, but no Chat Messages, show a message
-	if(self.conversationID && [self.filteredMessageEvents count] == 0)
+	if(self.conversationID && [self.filteredChatMessages count] == 0)
 	{
 		return 1;
 	}
 	
-	return [self.filteredMessageEvents count];
+	return [self.filteredChatMessages count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -330,7 +359,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Return default height if no Comments available
-	if([self.filteredMessageEvents count] == 0)
+	if([self.filteredChatMessages count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
@@ -344,14 +373,14 @@
 	static NSString *cellIdentifier = @"ChatMessageDetailCell";
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
-	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
+	MessageEventModel *messageEvent = [self.filteredChatMessages objectAtIndex:indexPath.row];
+	
+	[cell setNeedsLayout];
+	[cell layoutIfNeeded];
 	
 	// Calculate Auto Height of Table Cell
 	[cell.labelDetail setText:messageEvent.Detail];
 	[cell.labelDetail setPreferredMaxLayoutWidth:cell.labelDetail.frame.size.width];
-	
-	[cell setNeedsLayout];
-	[cell layoutIfNeeded];
 	
 	// Determine the new height
 	CGFloat cellHeight = ceil([cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height);
@@ -362,7 +391,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set default message if no Comments available
-	if([self.filteredMessageEvents count] == 0)
+	if([self.filteredChatMessages count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -380,7 +409,7 @@
 	static NSString *cellIdentifierSent = @"SentChatMessageDetailCell";
 	
 	// Set up the cell
-	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
+	MessageEventModel *messageEvent = [self.filteredChatMessages objectAtIndex:indexPath.row];
 	
 	BOOL isComment = [messageEvent.Type isEqualToString:@"Comment"];
 	//BOOL currentUserIsSender = ([messageEvent.EnteredByID isEqualToNumber:self.currentUserID]);
@@ -431,7 +460,7 @@
 		[messageRecipientPickerViewController setMessageRecipientType:@"Chat"];
 		
 		// Set selected Message Recipients if previously set
-		//[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedChatParticipants mutableCopy]];
 	}
 }
 
