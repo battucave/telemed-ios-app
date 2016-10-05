@@ -79,6 +79,9 @@
 		}
 	}
 	
+	// Fix bug in iOS8 that shifts Search Bar after pressing Cancel
+	[self setEdgesForExtendedLayout:UIRectEdgeNone];
+	
 	// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
 	[self.searchBar setHidden:YES];
 	
@@ -344,7 +347,7 @@
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	MessageRecipientModel *messageRecipient;
-	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+	UITableViewCell *cell;
 	
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
@@ -355,7 +358,7 @@
 		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
-		// Select cell
+		// Deselect cell
 		[self.tableMessageRecipients deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
 	}
 	// Message Recipients Table
