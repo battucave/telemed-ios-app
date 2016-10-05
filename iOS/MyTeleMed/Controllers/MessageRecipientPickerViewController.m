@@ -15,8 +15,8 @@
 @property (nonatomic) ChatParticipantModel *chatParticipantModel;
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
+@property (nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
-//@property (nonatomic) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, strong) UISearchController *searchController;
 
@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	// Initialize Chat Participant Model (only used for Chat)
 	[self setChatParticipantModel:[[ChatParticipantModel alloc] init]];
@@ -64,7 +64,23 @@
 	[self.searchController.searchBar sizeToFit];
 	
 	// Add Search Bar to View
-	//self.tableMessageRecipients.tableHeaderView = self.searchController.searchBar;
+	[self.view addSubview:self.searchController.searchBar];
+	
+	// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
+	for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+	{
+		if(constraint.firstItem == self.searchBar)
+		{
+			[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		}
+		else if(constraint.secondItem == self.searchBar)
+		{
+			[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		}
+	}
+	
+	// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
+	[self.searchBar setHidden:YES];
 	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
@@ -173,11 +189,11 @@
 	[errorAlertView show];
 }
 
-// Filter Search Results
-- (void)filterSearchResults:(NSString *)text
+// Delegate Method for Updating Search Results
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
 	NSPredicate *predicate;
-	text = [[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"," withString:@""];
+	NSString *text = [[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"," withString:@""];
 	
 	// Reset Filtered Message Recipients
 	[self.filteredMessageRecipients removeAllObjects];
@@ -197,14 +213,6 @@
 	}
 	
 	[self setFilteredMessageRecipients:[NSMutableArray arrayWithArray:[self.messageRecipients filteredArrayUsingPredicate:predicate]]];
-}
-
-// Delegate Method for Updating Search Results
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
-{
-	NSLog(@"Search: %@", searchController.searchBar.text);
-	
-	[self filterSearchResults:searchController.searchBar.text];
 	
 	[self.tableMessageRecipients reloadData];
 }
@@ -244,6 +252,10 @@
 	UITableViewCell *cell = [self.tableMessageRecipients dequeueReusableCellWithIdentifier:cellIdentifier];
 	MessageRecipientModel *messageRecipient;
 	
+	// Set up the cell
+	[tableView deselectRowAtIndexPath:indexPath animated:NO];
+	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
@@ -269,26 +281,22 @@
 		}
 		
 		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
-		
-		// Set up the cell
-		[tableView deselectRowAtIndexPath:indexPath animated:NO];
-		[cell setAccessoryType:UITableViewCellAccessoryNone];
-		
-		// Determine if Message Recipient already exists in selected Recipients
-		NSUInteger messageRecipientIndex = [self.selectedMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient2, NSUInteger foundIndex, BOOL *stop)
-		{
-			return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
-		}];
-		
-		// Set previously selected Message Recipients as selected and add checkmark
-		if(messageRecipientIndex != NSNotFound)
-		{
-			[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-		}
 	}
 	
-	// Set up the cell
+	// Determine if Message Recipient already exists in selected Recipients
+	NSUInteger messageRecipientIndex = [self.selectedMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient2, NSUInteger foundIndex, BOOL *stop)
+	{
+		return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
+	}];
+	
+	// Set previously selected Message Recipients as selected and add checkmark
+	if(messageRecipientIndex != NSNotFound)
+	{
+		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+	}
+	
+	// Set cell label
 	[cell.textLabel setText:messageRecipient.Name];
 	
 	return cell;
@@ -300,7 +308,7 @@
 	UITableViewCell *cell;
 	
 	// Search Results Table
-	if(self.searchController.active)
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 		
@@ -310,9 +318,6 @@
 		
 		// Select cell
 		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-		
-		// Reset Search Results
-		[self.searchController setActive:NO];
 	}
 	// Message Recipients Table
 	else
@@ -321,6 +326,12 @@
 		
 		// Get cell in Message Recipients Table
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
+	}
+	
+	// Reset Search Results (put here because it's possible for it to be active, but without any entered text)
+	if(self.searchController.active)
+	{
+		[self.searchController setActive:NO];
 	}
 	
 	// Add Message Recipient to selected Message Recipients
@@ -332,16 +343,34 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	MessageRecipientModel *messageRecipient;
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-	MessageRecipientModel *messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
 	
-	// Should never be possible to Deselect row from Search Results, but just in case
+	// Search Results Table
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	{
+		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
+		
+		// Get cell in Message Recipients Table
+		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
+		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
+		
+		// Select cell
+		[self.tableMessageRecipients deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
+	}
+	// Message Recipients Table
+	else
+	{
+		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
+		
+		// Get cell in Message Recipients Table
+		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
+	}
+	
+	// Reset Search Results (put here because it's possible for it to be active, but without any entered text)
 	if(self.searchController.active)
 	{
-		// Reset Search Results
 		[self.searchController setActive:NO];
-		
-		return;
 	}
 	
 	// Find index of Message Recipient in selected Message Recipients
@@ -369,8 +398,8 @@
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
 }
 
 @end

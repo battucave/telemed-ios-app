@@ -736,7 +736,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" text="" placeholder="Search Recipients" translatesAutoresizingMaskIntoConstraints="NO" id="fdQ-tg-0kE">
+                            <searchBar hidden="YES" contentMode="redraw" placeholder="Search Recipients (this is placeholder only)" translatesAutoresizingMaskIntoConstraints="NO" id="fdQ-tg-0kE">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="jvJ-Ms-KEi"/>
                                 </constraints>
@@ -752,11 +752,11 @@
                                         <rect key="frame" x="0.0" y="1" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Upo-gR-JBa" id="B7b-n4-kLc">
-                                            <frame key="frameInset" width="320" height="43"/>
+                                            <frame key="frameInset" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g6D-99-BDF">
-                                                    <frame key="frameInset" minX="15" width="290" height="43"/>
+                                                    <frame key="frameInset" minX="15" width="290" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -792,21 +792,12 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="searchDisplayController" destination="aFU-Kv-ZgS" id="lRQ-jU-9ev"/>
+                        <outlet property="searchBar" destination="fdQ-tg-0kE" id="DF9-7k-MFx"/>
                         <outlet property="tableMessageRecipients" destination="ayW-Td-L8K" id="a84-Z8-2Fe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qmR-jp-ZGN" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Xer-aF-ffG" userLabel="Exit" sceneMemberID="exit"/>
-                <searchDisplayController id="aFU-Kv-ZgS">
-                    <connections>
-                        <outlet property="delegate" destination="dbR-X4-VWn" id="3jy-ut-m3q"/>
-                        <outlet property="searchBar" destination="fdQ-tg-0kE" id="ris-hy-jLo"/>
-                        <outlet property="searchContentsController" destination="dbR-X4-VWn" id="0XQ-42-1ui"/>
-                        <outlet property="searchResultsDataSource" destination="dbR-X4-VWn" id="UcV-5Y-taG"/>
-                        <outlet property="searchResultsDelegate" destination="dbR-X4-VWn" id="4tA-M8-zDc"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="4115" y="-992"/>
         </scene>
@@ -1156,11 +1147,11 @@
                                             <constraint firstAttribute="height" constant="252" id="OBl-yX-RxH"/>
                                         </constraints>
                                         <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CommentCell" rowHeight="64" id="R3z-IR-UVJ" customClass="CommentCell">
-                                                <rect key="frame" x="0.0" y="1" width="320" height="64"/>
+                                            <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CommentCell" rowHeight="64" id="R3z-IR-UVJ" customClass="CommentCell">
+                                                <rect key="frame" x="0.0" y="1" width="1000" height="64"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R3z-IR-UVJ" id="FbQ-Zn-PvC">
-                                                    <frame key="frameInset" width="320" height="64"/>
+                                                    <frame key="frameInset" width="1000" height="64"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="indicator-CommentLeft.png" translatesAutoresizingMaskIntoConstraints="NO" id="L9o-Vq-P6f">
@@ -1244,11 +1235,11 @@
                                                     <outlet property="viewCommentShadow" destination="8oP-Zl-g8J" id="xk0-Mc-5AA"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SentCommentCell" rowHeight="64" id="x5H-XO-mlg" customClass="CommentCell">
-                                                <rect key="frame" x="0.0" y="65" width="320" height="64"/>
+                                            <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SentCommentCell" rowHeight="64" id="x5H-XO-mlg" customClass="CommentCell">
+                                                <rect key="frame" x="0.0" y="65" width="1000" height="64"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x5H-XO-mlg" id="btK-fB-SNN">
-                                                    <frame key="frameInset" width="320" height="64"/>
+                                                    <frame key="frameInset" width="1000" height="64"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6Q-7U-pn1">
@@ -1320,11 +1311,11 @@
                                                     <outlet property="viewCommentShadow" destination="r6Q-7U-pn1" id="sDN-d8-DWe"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageEventCell" rowHeight="68" id="7AL-4J-9I5" customClass="MessageEventCell">
-                                                <rect key="frame" x="0.0" y="129" width="320" height="68"/>
+                                            <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageEventCell" rowHeight="68" id="7AL-4J-9I5" customClass="MessageEventCell">
+                                                <rect key="frame" x="0.0" y="129" width="1000" height="68"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7AL-4J-9I5" id="V4n-KC-7Gr">
-                                                    <frame key="frameInset" width="320" height="68"/>
+                                                    <frame key="frameInset" width="1000" height="68"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z6D-Nk-W4X">
@@ -2749,7 +2740,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="KXu-UX-slf">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="ubb-Xe-leF">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="ubb-Xe-leF">
                             <connections>
                                 <segue destination="5XR-pZ-Rgq" kind="unwind" identifier="unwindToSettingsNotifications" unwindAction="setSelectedNotificationSetting:" id="K8s-6I-EIK"/>
                             </connections>
@@ -2998,11 +2989,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="324" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Cwo-PI-RCQ">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="MessageEventCell" rowHeight="62" id="kRw-nD-ZKD" customClass="MessageEventCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="62"/>
+                                    <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="MessageEventCell" rowHeight="62" id="kRw-nD-ZKD" customClass="MessageEventCell">
+                                        <rect key="frame" x="0.0" y="22" width="1000" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kRw-nD-ZKD" id="KyV-NV-NBf">
-                                            <frame key="frameInset" width="320" height="61.5"/>
+                                            <frame key="frameInset" width="1000" height="61.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s31-Vw-ZoO">
@@ -3340,7 +3331,6 @@
                     <navigationItem key="navigationItem" title="Select Account" id="a7F-8v-kyb"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="searchDisplayController" destination="aFU-Kv-ZgS" id="bEt-Ju-Mk7"/>
                         <outlet property="tableAccounts" destination="QZ7-a8-rYA" id="Ye1-JO-GxR"/>
                         <segue destination="dbR-X4-VWn" kind="push" identifier="showMessageRecipientPickerFromMessageAccountPicker" id="Wxx-iI-zqX"/>
                     </connections>
@@ -3652,11 +3642,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="62" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Yf9-Xr-x3o">
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageDetailCell" rowHeight="64" id="tqU-Ae-Y1O" customClass="CommentCell">
-                                        <rect key="frame" x="0.0" y="1" width="1000" height="64"/>
+                                    <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageDetailCell" rowHeight="64" id="tqU-Ae-Y1O" customClass="CommentCell">
+                                        <rect key="frame" x="0.0" y="1" width="320" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tqU-Ae-Y1O" id="NBk-Au-8FL">
-                                            <frame key="frameInset" width="1000" height="64"/>
+                                            <frame key="frameInset" width="320" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="indicator-CommentLeft.png" translatesAutoresizingMaskIntoConstraints="NO" id="21o-bl-ikZ">
@@ -3740,11 +3730,11 @@
                                             <outlet property="viewCommentShadow" destination="13O-BV-0Y5" id="6MW-tX-5B8"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SentChatMessageDetailCell" rowHeight="64" id="AdB-Fh-yDZ" customClass="CommentCell">
-                                        <rect key="frame" x="0.0" y="65" width="1000" height="64"/>
+                                    <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SentChatMessageDetailCell" rowHeight="64" id="AdB-Fh-yDZ" customClass="CommentCell">
+                                        <rect key="frame" x="0.0" y="65" width="320" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AdB-Fh-yDZ" id="N3u-bi-PQn">
-                                            <frame key="frameInset" width="1000" height="64"/>
+                                            <frame key="frameInset" width="320" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6iQ-At-l0s">
