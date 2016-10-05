@@ -27,6 +27,8 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *FormattedMessageText;
+@property (nonatomic) NSNumber *MessageDeliveryID; /* Not yet implemented */
+@property (nonatomic) NSNumber *MessageID; /* Not yet implemented */
 @property (nonatomic) NSString *PatientName;
 @property (nonatomic) NSString *Priority;
 @property (nonatomic) NSString *SenderContact;

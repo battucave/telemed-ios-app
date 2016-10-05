@@ -28,7 +28,8 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"Message"])
+	// ReceivedMessage is current on test server; Message is deprecated but still current on production server
+	if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
 	{
 		// Initialize the Message
 		self.message = [[MessageModel alloc] init];
@@ -49,16 +50,33 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Message"])
+	// ReceivedMessage is current on test server; Message is deprecated, but still current on production server
+	if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
 	{
 		[self.messages addObject:self.message];
 		
 		self.message = nil;
 	}
-	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"SenderID"])
+	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"MessageDeliverID"] || [elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
 	{
 		[self.message setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
+	// Future compatibility - State is currently Unread/Read/Archive, but seems to be going to number system
+	/*else if([elementName isEqualToString:@"State"])
+	{
+		if([self.currentElementValue isEqualToString:@"0"])
+		{
+			[self.message setValue:@"Unread" forKey:elementName];
+		}
+		else if([self.currentElementValue isEqualToString:@"1"])
+		{
+			[self.message setValue:@"Read" forKey:elementName];
+		}
+		else
+		{
+			[self.message setValue:self.currentElementValue forKey:elementName];
+		}
+	}*/
 	else
 	{
 		@try

@@ -62,7 +62,7 @@
 			
 			// Sort On Call Now Entries by StartTime
 			self.currentOnCallEntries = [self.currentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
-				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
+				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
 			}];
 			
 			// Populate Next On Call Entries with result
@@ -100,15 +100,24 @@
 
 - (void)filterOnCallEntries:(NSInteger)onCallPeriod
 {
+	NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+	NSDate *datePreviousOnCall = [NSDate dateWithTimeIntervalSinceNow:-24 * 60 * 60]; // Initially set to Yesterday
+	
+	NSDate *dateTime;
+	
 	// Filter to Current On Call Entries
 	if(onCallPeriod == 0)
 	{
 		[self setFilteredOnCallEntries:self.currentOnCallEntries];
+		
+		dateTime = [[self.filteredOnCallEntries objectAtIndex:0] Started];
 	}
 	// Filter to Future On Call Entries
 	else
 	{
 		[self setFilteredOnCallEntries:self.futureOnCallEntries];
+		
+		dateTime = [[self.filteredOnCallEntries objectAtIndex:0] WillStart];
 	}
 	
 	// Cancel filtering if no Filtered On Call Entries
@@ -122,30 +131,13 @@
 		return;
 	}
 	
-	NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-	NSDateFormatter *dateFormatterOnCall = [[NSDateFormatter alloc] init];
-	NSDate *datePreviousOnCall = [NSDate dateWithTimeIntervalSinceNow:-24 * 60 * 60]; // Initially set to Yesterday
-	
-	// Get format for On Call Entry StartTime
-	[dateFormatterOnCall setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-	[dateFormatterOnCall setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-	
-	NSDate *dateTime = [dateFormatterOnCall dateFromString:[[self.filteredOnCallEntries objectAtIndex:0] WillStart]];
-	
-	// If date is nil, it may have been formatted incorrectly
-	if(dateTime == nil)
-	{
-		[dateFormatterOnCall setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-	}
-	
 	// Display Date Grouping only if showing Future On Call entries
 	if(onCallPeriod == 1)
 	{
 		for(OnCallEntryModel *onCallEntry in self.filteredOnCallEntries)
 		{
 			// Parse and format On Call Entry Start Date to remove time
-			NSDate *dateOnCall = [dateFormatterOnCall dateFromString:onCallEntry.WillStart];
-			dateOnCall = [calendar dateFromComponents:[calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:dateOnCall]];
+			NSDate *dateOnCall = [calendar dateFromComponents:[calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:onCallEntry.WillStart]];
 			
 			// Set Should Display Date property depending on whether On Call date is greater than Previous On Call date
 			onCallEntry.shouldDisplayDate = ([datePreviousOnCall compare:dateOnCall] == NSOrderedAscending);
@@ -223,6 +215,9 @@
 	
 	OnCallEntryModel *onCallEntry = [self.filteredOnCallEntries objectAtIndex:indexPath.row];
 	
+	[cell setNeedsLayout];
+	[cell layoutIfNeeded];
+	
 	// Calculate On Call Summary Title height difference between original storyboard height and dynamic size that fits height
 	CGFloat heightLabelTitleDifference = [self calculateHeightDifference:cell.labelTitle text:[NSString stringWithFormat:@"%@ %@", onCallEntry.AccountKey, onCallEntry.AccountName]];
 	
@@ -260,41 +255,25 @@
 	}
 	
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	NSDate *startDateRaw = (onCallEntry.Started ?: onCallEntry.WillStart);
 	
-	// Set Start and Stop Times
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-	NSDate *startDateTime = [dateFormatter dateFromString:onCallEntry.WillStart];
-	NSDate *stopDateTime = [dateFormatter dateFromString:onCallEntry.WillEnd];
-	
-	// If StartDateTime is nil, it may have been formatted incorrectly
-	if(startDateTime == nil)
-	{
-		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-		startDateTime = [dateFormatter dateFromString:onCallEntry.WillStart];
-	}
-	
-	// If StopDateTime is nil, it may have been formatted incorrectly
-	if(stopDateTime == nil)
-	{
-		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-		stopDateTime = [dateFormatter dateFromString:onCallEntry.WillEnd];
-	}
+	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 	
 	// Set On Call Summary Start and Stop Dates
 	[dateFormatter setDateFormat:@"MMM d, yyyy"];
-	NSString *startDate = [dateFormatter stringFromDate:startDateTime];
-	NSString *stopDate = [dateFormatter stringFromDate:stopDateTime];
+	NSString *startDate = [dateFormatter stringFromDate:startDateRaw];
+	NSString *stopDate = [dateFormatter stringFromDate:onCallEntry.WillEnd];
 	
 	// Set On Call Summary Start and Stop Times
 	[dateFormatter setDateFormat:@"h:mma"];
-	NSString *startTime = [[dateFormatter stringFromDate:startDateTime] lowercaseString];
-	NSString *stopTime = [[dateFormatter stringFromDate:stopDateTime] lowercaseString];
+	NSString *startTime = [[dateFormatter stringFromDate:startDateRaw] lowercaseString];
+	NSString *stopTime = [[dateFormatter stringFromDate:onCallEntry.WillEnd] lowercaseString];
 	
 	[cell.labelStartTime setText:[NSString stringWithFormat:@"%@, %@", startDate, startTime]];
 	[cell.labelStopTime setText:[NSString stringWithFormat:@"%@, %@", stopDate, stopTime]];
 	
 	// If StartTime is nil, hide start dates (this should never happen)
-	if(onCallEntry.WillStart == nil)
+	if(startDateRaw == nil)
 	{
 		[cell.labelStart setHidden:YES];
 		[cell.labelStartTime setText:@""];
@@ -314,20 +293,20 @@
 	{
 		// Set On Call Summary Day
 		[dateFormatter setDateFormat:@"EEEE"];
-		[cell.labelDay setText:[dateFormatter stringFromDate:startDateTime]];
+		[cell.labelDay setText:[dateFormatter stringFromDate:startDateRaw]];
 		[cell.labelDate setText:startDate];
 	}
 	
-	// Set On Call Summary Title
+	// Set On Call Summary Title and SlotName(s)
 	[cell.labelTitle setText:[NSString stringWithFormat:@"%@ %@", onCallEntry.AccountKey, onCallEntry.AccountName]];
+	[cell.labelSlotNames setText:onCallEntry.SlotDesc];
+	
+	[cell layoutIfNeeded];
 	
 	// Set Auto Height for On Call Summary Title
 	CGFloat widthLabelTitle = cell.labelTitle.frame.size.width;
 	CGSize newSizeLabelTitle = [cell.labelTitle sizeThatFits:CGSizeMake(widthLabelTitle, MAXFLOAT)];
 	cell.constraintLabelTitleHeight.constant = newSizeLabelTitle.height;
-	
-	// Set On Call Summary Slot Name(s)
-	[cell.labelSlotNames setText:onCallEntry.SlotDesc];
 	
 	// Set Auto Height for On Call Summary Slot Name(s)
 	CGFloat widthLabelSlotNames = cell.labelSlotNames.frame.size.width;

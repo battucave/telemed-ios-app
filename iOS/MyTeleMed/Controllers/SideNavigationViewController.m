@@ -21,11 +21,9 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *labelMessageCount;
-@property (weak, nonatomic) IBOutlet UILabel *labelNextOnCallDate;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintMessageCountsWidth;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintNextOnCallDateRight;
 
 @end
 
@@ -48,8 +46,6 @@
 	// Adjust Table Height to match number of Menu Items to avoid extra separator lines
 	self.constraintTableHeight.constant = [self.menuItems count] * 44 + 23;
 	
-	[self.labelMessageCount setHidden:YES];
-	
 	// Set Initial Message Counts on Messages Row and On Call Date on On Call Schedule Row using MyStatusModel sharedInstance
 	[self updateNavigationWithStatus:self.myStatusModel];
 	
@@ -58,21 +54,6 @@
 	{
 		[self updateNavigationWithStatus:status];
 	}];
-}
-
-- (void)viewDidLayoutSubviews
-{
-	// Force left inset of 15.0 for iOS 7
-	if([self.tableView respondsToSelector:@selector(setSeparatorInset:)])
-	{
-		[self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 15.0f, 0, 0)];
-	}
-	
-	// Force left inset of 15.0 for iOS 8
-	if([self.tableView respondsToSelector:@selector(setLayoutMargins:)])
-	{
-		[self.tableView setLayoutMargins:UIEdgeInsetsMake(0, 15.0f, 0, 0)];
-	}
 }
 
 - (IBAction)doLogout:(id)sender
@@ -84,66 +65,81 @@
 
 - (void)updateNavigationWithStatus:(MyStatusModel *)status
 {
+	NSLog(@"updateNavigationWithStatus");
+	
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[self.menuItems indexOfObject:@"On Call Schedule"] inSection:0]];
 	
-	[self.labelMessageCount setText:[NSString stringWithFormat:@"%@/%@", status.UnreadMessageCount, status.ActiveMessageCount]];
-	
-	[self.labelMessageCount sizeToFit];
-	
-	CGRect newFrame = self.labelMessageCount.frame;
-	self.constraintMessageCountsWidth.constant = newFrame.size.width + 8.0;
-	
-	[self.labelMessageCount layoutIfNeeded];
-	[self.labelMessageCount setHidden:NO];
-	
-	[cell.textLabel setText:(status.OnCallNow == YES ? @"Currently On Call" : @"Next On Call:" )];
+	// If StatusModel has not returned a result yet, hide message counts
+	if(status.UnreadMessageCount == nil || status.ActiveMessageCount == nil)
+	{
+		[self.labelMessageCount setHidden:YES];
+	}
+	else
+	{
+		[self.labelMessageCount setText:[NSString stringWithFormat:@"%@/%@", status.UnreadMessageCount, status.ActiveMessageCount]];
+		
+		// TESTING ONLY (set counts to random numbers) 
+		//[self.labelMessageCount setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+		
+		// Store old frame size
+		CGRect oldFrame = self.labelMessageCount.frame;
+		
+		// Resize Message Count label to fit updated text
+		[self.labelMessageCount sizeToFit];
+		[cell layoutIfNeeded];
+		
+		CGRect newFrame = self.labelMessageCount.frame;
+		
+		// Increase new frame size and restore its old height
+		newFrame.size.width = newFrame.size.width + 8.0;
+		newFrame.size.height = oldFrame.size.height;
+		
+		[self.labelMessageCount setFrame:newFrame];
+		self.constraintMessageCountsWidth.constant = newFrame.size.width;
+		
+		[self.labelMessageCount setHidden:NO];
+	}
 	
 	// Set Next On Call
 	if(status.OnCallNow == NO)
 	{
-		// Set Default Segment Control Index
+		// Direct users to "Next" on call items on On Call Schedule screen
 		self.onCallScheduleDefaultSegmentControlIndex = 1;
+		
+		[cell.textLabel setText:@"Next On Call:"];
 		
 		NSString *nextOnCallDate = @"None";
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		
-		// Get Next On Call Date
-		if(status.NextOnCall != nil && ! [status.NextOnCall isEqualToString:@"Never"])
+	
+		if(status.NextOnCall != nil)
 		{
 			[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-			NSDate *date = [dateFormatter dateFromString:status.NextOnCall];
+			[dateFormatter setDateFormat:@"M/dd h:mma"];
+			nextOnCallDate = [[dateFormatter stringFromDate:status.NextOnCall] lowercaseString];
 			
-			// If date is nil, it may have been formatted incorrectly
-			if(date == nil)
-			{
-				[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-				date = [dateFormatter dateFromString:status.NextOnCall];
-			}
+			NSLog(@"Next On Call Date: %@", nextOnCallDate);
 			
-			// Set Next On Call Date
-			if(date != nil)
-			{
-				[dateFormatter setDateFormat:@"M/dd h:mma"];
-				nextOnCallDate = [[dateFormatter stringFromDate:date] lowercaseString];
-				
-				// Set Next On Call Date label trailing constraint to default
-				self.constraintNextOnCallDateRight.constant = 65.0f;
-			}
+			// Remove right padding of On Call Schedule cell
+			[cell setLayoutMargins:UIEdgeInsetsZero];
 		}
-		
 		// If there is no Next On Call date, then line up Next On Call Date label with Message Counts
-		if([nextOnCallDate isEqualToString:@"None"])
+		else
 		{
-			self.constraintNextOnCallDateRight.constant = 88.0f;
+			// Add right padding to On Call Schedule cell
+			[cell setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 35.0f)];
 		}
 		
-		[self.labelNextOnCallDate setText:nextOnCallDate];
-		[self.labelNextOnCallDate setHidden:NO];
+		[cell.detailTextLabel setText:nextOnCallDate];
+		[cell.detailTextLabel setHidden:NO];
 	}
 	else
 	{
-		[self.labelNextOnCallDate setHidden:YES];
+		// Direct users to "Current" on call items on On Call Schedule screen
+		self.onCallScheduleDefaultSegmentControlIndex = 0;
+		
+		[cell.textLabel setText:@"Currently On Call"];
+		
+		[cell.detailTextLabel setHidden:YES];
 	}
 }
 
@@ -173,16 +169,10 @@
 	// Fix issue in iPad where background defaulted to White (unfixable in IB because of bug)
 	[cell setBackgroundColor:[UIColor clearColor]];
 	
-	// Force left inset of 15.0 for iOS 7
-	if([cell respondsToSelector:@selector(setSeparatorInset:)])
-	{
-		[cell setSeparatorInset:UIEdgeInsetsMake(0, 15.0f, 0, 0)];
-	}
-	
-	// Force left inset of 15.0 for iOS 8
+	// Force left inset of 15.0 for iOS 8+
 	if([cell respondsToSelector:@selector(setLayoutMargins:)])
 	{
-		[cell setLayoutMargins:UIEdgeInsetsMake(0, 15.0f, 0, 0)];
+		[cell setLayoutMargins:UIEdgeInsetsZero];
 	}
 }
 

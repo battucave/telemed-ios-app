@@ -15,6 +15,7 @@
 
 @property (nonatomic) AccountModel *account;
 @property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) NSMutableDictionary *timeZone;
 @property (nonatomic) NSMutableString *currentElementValue;
 
 @end

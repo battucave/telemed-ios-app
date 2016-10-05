@@ -287,6 +287,9 @@
 		[self.messagesTableViewController initMessagesWithType:0];
 		[self.messagesTableViewController setDelegate:self];
 		
+		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
+		[self.toolbarBottom layoutIfNeeded];
+		
 		// Increase bottom inset of Messages Table so that its bottom scroll position rests above bottom Toolbar
 		UIEdgeInsets tableInset = self.messagesTableViewController.tableView.contentInset;
 		CGSize toolbarSize = self.toolbarBottom.frame.size;

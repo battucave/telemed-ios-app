@@ -421,6 +421,9 @@
 		[self.buttonArchive setEnabled:NO];
 	}
 	
+	// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
+	[self.textViewMessage layoutIfNeeded];
+	
 	// Auto size Text View Message height to its contents
 	CGSize newSize = [self.textViewMessage sizeThatFits:CGSizeMake(self.textViewMessage.frame.size.width, MAXFLOAT)];
 	
@@ -549,7 +552,10 @@
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
-	// iOS8+ Auto Height
+	
+	return UITableViewAutomaticDimension;
+	
+	/*/ iOS8+ Auto Height
 	else if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
 	{
 		return UITableViewAutomaticDimension;
@@ -561,17 +567,17 @@
 	
 	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
 	
+	[cell setNeedsLayout];
+	[cell layoutIfNeeded];
+	
 	// Calculate Auto Height of Table Cell
 	[cell.labelDetail setText:messageEvent.Detail];
 	[cell.labelDetail setPreferredMaxLayoutWidth:cell.labelDetail.frame.size.width];
 	
-	[cell setNeedsLayout];
-	[cell layoutIfNeeded];
-	
 	// Determine the new height
 	CGFloat cellHeight = ceil([cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height);
 	
-	return cellHeight;
+	return cellHeight;*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
