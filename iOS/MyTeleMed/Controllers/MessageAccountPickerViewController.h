@@ -10,7 +10,7 @@
 #import "CoreViewController.h"
 #import "AccountModel.h"
 
-@interface MessageAccountPickerViewController : CoreViewController <UITableViewDataSource, UITableViewDelegate>
+@interface MessageAccountPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) NSMutableArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
