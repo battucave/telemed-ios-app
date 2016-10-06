@@ -42,14 +42,7 @@
 	[self.activityIndicator stopAnimating];
 	[self.labelLoading setHidden:YES];
 	
-	if(floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber_iOS_7_1)
-	{
-		self.timerPDFBackgroundFix = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(fixPDFBackground) userInfo:nil repeats:YES];
-	}
-	else
-	{
-		[self.webViewPDFViewer setHidden:NO];
-	}
+	self.timerPDFBackgroundFix = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(fixPDFBackground) userInfo:nil repeats:YES];
 }
 
 - (void)fixPDFBackground

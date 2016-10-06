@@ -71,26 +71,17 @@
 		[self.messageEventModel getMessageEvents:self.conversationID];
 	}
 	
-	// Add Keyboard Observers (iOS 7)
-	if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
-	}
-	// Add Keyboard Observers (iOS 8+)
-	else
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillShowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillHideNotification object:nil];
-	}
+	// Add 10px to bottom of Table Comments
+	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(0, 0, 10, 0)];
+	
+	// Add Keyboard Observers
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Add Application Did Enter Background Observer to Hide Keyboard (otherwise it will be hidden when app returns to foreground)
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Add Call Disconnected Observer to Hide Keyboard
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
-	
-	// Add 10px to bottom of Table Comments
-	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(0, 0, 10, 0)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -100,23 +91,17 @@
 	// Stop refreshing message events when user leaves this screen
 	[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
 	
-	// Remove Keyboard Observers (iOS 7)
-	if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-	}
-	// Remove Keyboard Observers (iOS 8+)
-	else
-	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-	}
+	// Remove Keyboard Observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Remove Application Did Enter Background Observer to Hide Keyboard (otherwise it will be hidden when app returns to foreground)
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Remove Call Disconnected Observer to Hide Keyboard
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidDisconnectCall" object:nil];
+	
+	// Dismiss Keyboard
+	[self.view endEditing:YES];
 }
 
 // Perform Segue to MessageRecipientPickerTableViewController
