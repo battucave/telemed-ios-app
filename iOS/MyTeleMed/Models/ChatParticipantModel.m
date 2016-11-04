@@ -15,7 +15,7 @@
 {
 	// TEMPORARY
 	NSLog(@"Get Chat Participants");
-	return;
+	//return;
 	
 	[self.operationManager GET:@"ChatParticipants" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{

@@ -22,9 +22,11 @@
 @property (weak) id delegate;
 
 @property (nonatomic) NSNumber *ID;
-@property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *FirstName;
 @property (nonatomic) NSString *LastName;
+@property (nonatomic) NSString *Name;
+@property (nonatomic) NSString *FormattedName;
+@property (nonatomic) NSString *FormattedNameLF;
 
 - (void)getChatParticipants;
 

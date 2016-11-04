@@ -59,29 +59,15 @@
 	{
 		[self.chatParticipant setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"Name"])
+	/*else if([elementName isEqualToString:@"Name"])
 	{
 		[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
-		
-		/*// Most names are of the following format: Lastname, Firstname
-		if([self.currentElementValue rangeOfString:@", "].location != NSNotFound)
-		{
-			NSArray *nameParts = [self.currentElementValue componentsSeparatedByString:@", "];
-			
-			[self.chatParticipant setFirstName:[nameParts objectAtIndex:1]];
-			[self.chatParticipant setLastName:[nameParts objectAtIndex:0]];
-		}
-		// Some names are not actual names (example: "Abundant HH On Call")
-		else
-		{
-			[self.chatParticipant setFirstName:self.currentElementValue];
-			[self.chatParticipant setLastName:@""];
-		}*/
-	}
+	}*/
 	else
 	{
 		@try
 		{
+			NSLog(@"%@ = %@", elementName, self.currentElementValue);
 			[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
 		}
 		@catch(NSException *exception)

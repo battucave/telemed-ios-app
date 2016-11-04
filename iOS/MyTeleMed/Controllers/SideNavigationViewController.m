@@ -9,6 +9,7 @@
 #import "SideNavigationViewController.h"
 #import "SWRevealViewController.h"
 #import "OnCallScheduleViewController.h"
+#import "SideNavigationCountCell.h"
 #import "AuthenticationModel.h"
 #import "MyStatusModel.h"
 
@@ -20,10 +21,9 @@
 @property (nonatomic) int onCallScheduleDefaultSegmentControlIndex;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *labelMessageCount;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintMessageCountsWidth;
+
+@property (nonatomic) BOOL isStatusLoaded;
 
 @end
 
@@ -46,13 +46,12 @@
 	// Adjust Table Height to match number of Menu Items to avoid extra separator lines
 	self.constraintTableHeight.constant = [self.menuItems count] * 44 + 23;
 	
-	// Set Initial Message Counts on Messages Row and On Call Date on On Call Schedule Row using MyStatusModel sharedInstance
-	[self updateNavigationWithStatus:self.myStatusModel];
-	
 	// Update Message Counts on Messages Row and On Call Date on On Call Schedule Row
 	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 	{
-		[self updateNavigationWithStatus:status];
+		[self setIsStatusLoaded:YES];
+		
+		[self.tableView reloadData];
 	}];
 }
 
@@ -61,86 +60,6 @@
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	
 	[authenticationModel doLogout];
-}
-
-- (void)updateNavigationWithStatus:(MyStatusModel *)status
-{
-	NSLog(@"updateNavigationWithStatus");
-	
-	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[self.menuItems indexOfObject:@"On Call Schedule"] inSection:0]];
-	
-	// If StatusModel has not returned a result yet, hide message counts
-	if(status.UnreadMessageCount == nil || status.ActiveMessageCount == nil)
-	{
-		[self.labelMessageCount setHidden:YES];
-	}
-	else
-	{
-		[self.labelMessageCount setText:[NSString stringWithFormat:@"%@/%@", status.UnreadMessageCount, status.ActiveMessageCount]];
-		
-		// TESTING ONLY (set counts to random numbers) 
-		//[self.labelMessageCount setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
-		
-		// Store old frame size
-		CGRect oldFrame = self.labelMessageCount.frame;
-		
-		// Resize Message Count label to fit updated text
-		[self.labelMessageCount sizeToFit];
-		[cell layoutIfNeeded];
-		
-		CGRect newFrame = self.labelMessageCount.frame;
-		
-		// Increase new frame size and restore its old height
-		newFrame.size.width = newFrame.size.width + 8.0;
-		newFrame.size.height = oldFrame.size.height;
-		
-		[self.labelMessageCount setFrame:newFrame];
-		self.constraintMessageCountsWidth.constant = newFrame.size.width;
-		
-		[self.labelMessageCount setHidden:NO];
-	}
-	
-	// Set Next On Call
-	if(status.OnCallNow == NO)
-	{
-		// Direct users to "Next" on call items on On Call Schedule screen
-		self.onCallScheduleDefaultSegmentControlIndex = 1;
-		
-		[cell.textLabel setText:@"Next On Call:"];
-		
-		NSString *nextOnCallDate = @"None";
-		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	
-		if(status.NextOnCall != nil)
-		{
-			[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-			[dateFormatter setDateFormat:@"M/dd h:mma"];
-			nextOnCallDate = [[dateFormatter stringFromDate:status.NextOnCall] lowercaseString];
-			
-			NSLog(@"Next On Call Date: %@", nextOnCallDate);
-			
-			// Remove right padding of On Call Schedule cell
-			[cell setLayoutMargins:UIEdgeInsetsZero];
-		}
-		// If there is no Next On Call date, then line up Next On Call Date label with Message Counts
-		else
-		{
-			// Add right padding to On Call Schedule cell
-			[cell setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 35.0f)];
-		}
-		
-		[cell.detailTextLabel setText:nextOnCallDate];
-		[cell.detailTextLabel setHidden:NO];
-	}
-	else
-	{
-		// Direct users to "Current" on call items on On Call Schedule screen
-		self.onCallScheduleDefaultSegmentControlIndex = 0;
-		
-		[cell.textLabel setText:@"Currently On Call"];
-		
-		[cell.detailTextLabel setHidden:YES];
-	}
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -161,7 +80,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -180,7 +99,99 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSString *CellIdentifier = [self.menuItems objectAtIndex:indexPath.row];
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+	SideNavigationCountCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+	
+	// If cell is for Chat or Messages
+	if([CellIdentifier isEqualToString:@"Chat"] || [CellIdentifier isEqualToString:@"Messages"])
+	{
+		// Hide Message Counts by default
+		[cell.labelCounts setHidden:YES];
+		
+		// If StatusModel has finished loading
+		if(self.isStatusLoaded)
+		{
+			// If cell is for Chat, set Chat Counts
+			if([CellIdentifier isEqualToString:@"Chat"])
+			{
+				NSLog(@"SET CHAT COUNTS (SideNavigationViewController::cellForRowAtIndexPath");
+				
+				[cell.labelCounts setText:@"?/?"];
+			}
+			// If cell is for Messages, set Message Counts
+			else if([CellIdentifier isEqualToString:@"Messages"])
+			{
+				[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnreadMessageCount, self.myStatusModel.ActiveMessageCount]];
+			}
+			
+			// TESTING ONLY (set counts to random numbers)
+			//[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+			
+			// Store old frame size
+			CGRect oldFrame = cell.labelCounts.frame;
+			
+			// Resize Message Count label to fit updated text
+			[cell.labelCounts sizeToFit];
+			
+			CGRect newFrame = cell.labelCounts.frame;
+			
+			// Increase new frame size and restore its old height
+			newFrame.size.width = newFrame.size.width + 12.0;
+			newFrame.size.height = oldFrame.size.height;
+			
+			[cell.labelCounts setFrame:newFrame];
+			[cell.constraintCountsWidth setConstant:newFrame.size.width];
+			
+			// Show Message Counts
+			[cell.labelCounts setHidden:NO];
+		}
+	}
+	// If cell is for On Call Schedule and StatusModel has finished loading
+	else if([CellIdentifier isEqualToString:@"On Call Schedule"] && self.isStatusLoaded)
+	{
+		// If user is Currently On Call
+		if(self.myStatusModel.OnCallNow)
+		{
+			// Direct users to "Current" on call items on On Call Schedule screen
+			self.onCallScheduleDefaultSegmentControlIndex = 0;
+			
+			[cell.textLabel setText:@"Currently On Call"];
+			
+			[cell.detailTextLabel setHidden:YES];
+		}
+		
+		// Set Next On Call
+		else
+		{
+			// Direct users to "Next" on call items on On Call Schedule screen
+			self.onCallScheduleDefaultSegmentControlIndex = 1;
+			
+			[cell.textLabel setText:@"Next On Call:"];
+			
+			NSString *nextOnCallDate = @"None";
+			NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		
+			if(self.myStatusModel.NextOnCall != nil)
+			{
+				[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+				[dateFormatter setDateFormat:@"M/dd h:mma"];
+				nextOnCallDate = [[dateFormatter stringFromDate:self.myStatusModel.NextOnCall] lowercaseString];
+				
+				NSLog(@"Next On Call Date: %@", nextOnCallDate);
+				
+				// Remove right padding of On Call Schedule cell
+				[cell setLayoutMargins:UIEdgeInsetsZero];
+			}
+			// If there is no Next On Call date, then line up Next On Call Date label with Message Counts
+			else
+			{
+				// Add right padding to On Call Schedule cell
+				[cell setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 35.0f)];
+			}
+			
+			[cell.detailTextLabel setText:nextOnCallDate];
+			[cell.detailTextLabel setHidden:NO];
+		}
+	}
 	
 	// Draw top border only on first cell
 	if(indexPath.row == 0)

@@ -10,6 +10,7 @@
 #import "MessageRecipientPickerViewController.h"
 #import "AutoGrowingTextView.h"
 #import "CommentCell.h"
+#import "NewChatMessageModel.h"
 
 // TEMPORARY
 #import "MessageEventModel.h"
@@ -17,6 +18,7 @@
 @interface ChatMessageDetailViewController ()
 
 // TEMPORARY
+@property (nonatomic, getter=theNewChatMessageModel) NewChatMessageModel *newChatMessageModel;
 @property (nonatomic) MessageEventModel *messageEventModel;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableChatMessages;
@@ -140,13 +142,13 @@
 	[self validateForm:self.textViewChatMessage.text];
 }
 
-- (IBAction)sendNewChatMessage:(id)sender
+- (IBAction)sendChatMessage:(id)sender
 {
-	NSLog(@"Send New Chat Message");
-	//[self setNewMessageModel:[[NewMessageModel alloc] init]];
-	//[self.newMessageModel setDelegate:self];
+	NSLog(@"Send Chat Message");
+	[self setNewChatMessageModel:[[NewChatMessageModel alloc] init]];
+	[self.newChatMessageModel setDelegate:self];
 	
-	//[self.newMessageModel sendNewMessage:self.textViewMessage.text participantIDs:[self.selectedChatParticipants valueForKey:@"ID"]];
+	[self.newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:NO];
 }
 
 // Check required fields to determine if Form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate

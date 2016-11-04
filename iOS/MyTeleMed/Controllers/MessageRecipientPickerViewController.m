@@ -105,8 +105,8 @@
 	if([self.messageRecipientType isEqualToString:@"Chat"])
 	{
 		// TEMPORARY
-		//[self.chatParticipantModel getChatParticipants];
-		[self.messageRecipientModel getNewMessageRecipients:[NSNumber numberWithInteger:250795]];
+		[self.chatParticipantModel getChatParticipants];
+		//[self.messageRecipientModel getNewMessageRecipients:[NSNumber numberWithInteger:250795]];
 	}
 	// Get Recipients for Forward Message
 	else if([self.messageRecipientType isEqualToString:@"Forward"])

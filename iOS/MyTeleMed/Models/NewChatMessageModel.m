@@ -39,6 +39,8 @@
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
+	return;
+	
 	[self.operationManager POST:@"NewChatMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		// Close Activity Indicator
