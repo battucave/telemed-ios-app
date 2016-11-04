@@ -24,7 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonChatMessageRecipient;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewMessageHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewChatMessageHeight;
 
 @property (nonatomic) CGFloat tableChatMessagesContentHeight;
 @property (nonatomic) NSString *textViewChatMessagePlaceholder;

@@ -15,6 +15,7 @@
 @property (nonatomic) ChatParticipantModel *chatParticipantModel;
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
+@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
 
@@ -54,6 +55,7 @@
 	
 	[self.searchController setDelegate:self];
 	[self.searchController setDimsBackgroundDuringPresentation:NO];
+	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
 	
 	self.definesPresentationContext = YES;
@@ -63,8 +65,12 @@
 	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
 	[self.searchController.searchBar sizeToFit];
 	
-	// Add Search Bar to View
-	[self.view addSubview:self.searchController.searchBar];
+	// Add auto-generated constraints that allow Search Bar to animate without disappearing
+	//[self.searchController.searchBar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+	[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
+	
+	// Add Search Bar to Search Bar's Container View
+	[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
 	
 	// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
 	for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
@@ -79,8 +85,10 @@
 		}
 	}
 	
-	// Fix bug in iOS8 that shifts Search Bar after pressing Cancel
-	[self setEdgesForExtendedLayout:UIRectEdgeNone];
+	for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+	{
+		[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+	}
 	
 	// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
 	[self.searchBar setHidden:YES];
