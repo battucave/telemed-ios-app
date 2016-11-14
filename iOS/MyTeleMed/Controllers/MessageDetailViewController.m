@@ -418,8 +418,6 @@
 // Scroll to bottom of Scroll View
 - (void)scrollToBottom
 {
-	// See scrollToBottom method in ChatMessageDetailViewController.m if a more accurate way to ensure Table Comments scrolls all the way to the bottom when there are a lot of rows is needed
-	
 	CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height + self.scrollView.contentInset.bottom);
 	
 	if(bottomOffset.y > 0)
@@ -540,13 +538,7 @@
 	
 	return UITableViewAutomaticDimension;
 	
-	/*/ iOS8+ Auto Height
-	else if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		return UITableViewAutomaticDimension;
-	}
-	
-	// Manually determine height for < iOS8
+	/*/ Manually determine height for < iOS8 OR for calculating total table height before all rows have loaded
 	static NSString *cellIdentifier = @"CommentCell";
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	

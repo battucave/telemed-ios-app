@@ -10,32 +10,26 @@
 #import "MessageRecipientPickerViewController.h"
 #import "AutoGrowingTextView.h"
 #import "CommentCell.h"
+#import "ChatMessageModel.h"
 #import "NewChatMessageModel.h"
-
-// TEMPORARY
-#import "MessageEventModel.h"
 
 @interface ChatMessageDetailViewController ()
 
 // TEMPORARY
 @property (nonatomic, getter=theNewChatMessageModel) NewChatMessageModel *newChatMessageModel;
-@property (nonatomic) MessageEventModel *messageEventModel;
+@property (nonatomic) ChatMessageModel *chatMessageModel;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableChatMessages;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatMessage;
 @property (weak, nonatomic) IBOutlet UIButton *buttonChatMessageRecipient;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewChatMessageHeight;
-
-@property (nonatomic) CGFloat tableChatMessagesContentHeight;
 @property (nonatomic) NSString *textViewChatMessagePlaceholder;
 
 @property (nonatomic) BOOL isLoaded;
 
 @property (nonatomic) NSUInteger chatMessageCount;
 @property (nonatomic) NSArray *chatMessages;
-@property (nonatomic) NSMutableArray *filteredChatMessages;
 @property (nonatomic) NSMutableArray *selectedChatParticipants;
 
 @end
@@ -46,12 +40,9 @@
 {
 	[super viewDidLoad];
 	
-	// TEMPORARY - Initialize Basic Event Model
-	[self setMessageEventModel:[[MessageEventModel alloc] init]];
-	[self.messageEventModel setDelegate:self];
-	
-	// TEMPORARY - Initialize Filtered Chat Messages
-	[self setFilteredChatMessages:[NSMutableArray array]];
+	// Initialize Chat Message Model
+	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
+	[self.chatMessageModel setDelegate:self];
 	
 	// Initialize Text View Comment Input
 	UIEdgeInsets textViewChatMessageEdgeInsets = self.textViewChatMessage.textContainerInset;
@@ -70,7 +61,8 @@
 	if(self.conversationID)
 	{
 		// TEMPORARY
-		[self.messageEventModel getMessageEvents:self.conversationID];
+		//[self.messageEventModel getMessageEvents:self.conversationID];
+		[self.chatMessageModel getChatMessages];
 	}
 	
 	// Add 10px to bottom of Table Comments
@@ -91,7 +83,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Stop refreshing message events when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
 	
 	// Remove Keyboard Observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -176,24 +168,11 @@
 	
 	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
 	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
-}*/
-
-// Return Events from MessageEventModel delegate
-- (void)updateMessageEvents:(NSMutableArray *)newChatMessages
+}*/// Return Chat Messages from ChatMessageModel delegate
+- (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
-	self.isLoaded = YES;
-	self.chatMessages = newChatMessages;
-	
-	[self.filteredChatMessages removeAllObjects];
-	
-	// Add only comments from Basic Events
-	for(MessageEventModel *messageEvent in newChatMessages)
-	{
-		if([messageEvent.Type isEqualToString:@"Comment"])
-		{
-			[self.filteredChatMessages addObject:messageEvent];
-		}
-	}
+	[self setIsLoaded:YES];
+	[self setChatMessages:chatMessages];
 	
 	// Refresh message events again after delay
 	//[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
@@ -203,55 +182,38 @@
 		[self.tableChatMessages reloadData];
 		
 		// Scroll to bottom of Chat Messages after table reloads data only if a new Chat Message has been added since last check
-		if(self.chatMessageCount > 0 && [self.filteredChatMessages count] > self.chatMessageCount)
+		if(self.chatMessageCount > 0 && [self.chatMessages count] > self.chatMessageCount)
 		{
 			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 		}
 		
 		// Update Chat Message count with new number of Filtered Chat Messages
-		self.chatMessageCount = [self.filteredChatMessages count];
+		self.chatMessageCount = [self.chatMessages count];
 	});
 }
 
-// Return error from MessageEventModel delegate
-- (void)updateMessageEventsError:(NSError *)error
+// Return error from ChatMessageModel delegate
+- (void)updateChatMessagesError:(NSError *)error
 {
-	NSLog(@"Error getting Basic Events");
-	
-	self.isLoaded = YES;
+	[self setIsLoaded:YES];
 	
 	// If device offline, show offline message
 	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
 	{
-		return [self.messageEventModel showOfflineError];
+		return [self.chatMessageModel showOfflineError];
 	}
+	
+	//UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Chat Messages Error" message:@"There was a problem retrieving your Chat Messages. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	
+	//[errorAlertView show];
 }
 
 // Scroll to bottom of Table Comments
 - (void)scrollToBottom
 {
-	// Calulate total height of Table Comments (needed when there are more rows than what will remain in memory)
-	if( ! self.tableChatMessagesContentHeight)
-	{
-		for(int i = 0; i < [self.filteredChatMessages count]; i++)
-		{
-			self.tableChatMessagesContentHeight += [self tableView:self.tableChatMessages heightForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-		}
-	}
+	NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:[self.chatMessages count] - 1 inSection:0];
 	
-	// This value is not accurate when more than @ 15 rows:
-	// CGPoint bottomOffset = CGPointMake(0, self.tableChatMessages.contentSize.height - self.tableChatMessages.bounds.size.height + self.tableChatMessages.contentInset.bottom);
-	
-	// So use this instead:
-	CGPoint bottomOffset = CGPointMake(0, self.tableChatMessagesContentHeight - self.tableChatMessages.bounds.size.height + self.tableChatMessages.contentInset.bottom);
-	
-	if(bottomOffset.y > 0)
-	{
-		dispatch_async(dispatch_get_main_queue(), ^
-		{
-			[self.tableChatMessages setContentOffset:bottomOffset animated:YES];
-		});
-	}
+	[self.tableChatMessages scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)dismissKeyboard:(NSNotification *)notification
@@ -330,55 +292,52 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// If there is an existing Conversation ID, but no Chat Messages, show a message
-	if(self.conversationID && [self.filteredChatMessages count] == 0)
+	if(self.conversationID && [self.chatMessages count] == 0)
 	{
 		return 1;
 	}
 	
-	return [self.filteredChatMessages count];
+	return [self.chatMessages count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 62.0f;
+	return 74.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Return default height if no Comments available
-	if([self.filteredChatMessages count] == 0)
+	if([self.chatMessages count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
-	// iOS8+ Auto Height (can't use this because [self scrollToBottom] method needs actual height value to calculate total height of Table Comments
-	/*else if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		return UITableViewAutomaticDimension;
-	}*/
 	
-	// Manually determine height for < iOS8
+	return UITableViewAutomaticDimension;
+	
+	/*/ Manually determine height for < iOS8 OR for calculating total table height before all rows have loaded
 	static NSString *cellIdentifier = @"ChatMessageDetailCell";
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
-	MessageEventModel *messageEvent = [self.filteredChatMessages objectAtIndex:indexPath.row];
+	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
 	[cell setNeedsLayout];
 	[cell layoutIfNeeded];
 	
 	// Calculate Auto Height of Table Cell
-	[cell.labelDetail setText:messageEvent.Detail];
+	[cell.labelDetail setText:chatMessage.Text];
 	[cell.labelDetail setPreferredMaxLayoutWidth:cell.labelDetail.frame.size.width];
 	
 	// Determine the new height
 	CGFloat cellHeight = ceil([cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height);
 	
-	return cellHeight;
+	return cellHeight;*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set default message if no Comments available
-	if([self.filteredChatMessages count] == 0)
+	if([self.chatMessages count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -396,27 +355,26 @@
 	static NSString *cellIdentifierSent = @"SentChatMessageDetailCell";
 	
 	// Set up the cell
-	MessageEventModel *messageEvent = [self.filteredChatMessages objectAtIndex:indexPath.row];
+	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
-	BOOL isComment = [messageEvent.Type isEqualToString:@"Comment"];
 	//BOOL currentUserIsSender = ([messageEvent.EnteredByID isEqualToNumber:self.currentUserID]);
-	BOOL currentUserIsSender = ! (indexPath.row % 2); // Only used for testing both cell types
+	BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
 	
 	// Set both types of events to use CommentCell
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];
 
 	// Set Message Event Date and Time
-	if(messageEvent.Time_LCL)
+	if(chatMessage.TimeReceived_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-		NSDate *dateTime = [dateFormatter dateFromString:messageEvent.Time_LCL];
+		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeReceived_LCL];
 		
 		// If date is nil, it may have been formatted incorrectly
 		if(dateTime == nil)
 		{
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-			dateTime = [dateFormatter dateFromString:messageEvent.Time_LCL];
+			dateTime = [dateFormatter dateFromString:chatMessage.TimeReceived_LCL];
 		}
 		
 		[dateFormatter setDateFormat:@"M/dd/yy h:mm a"];
@@ -426,12 +384,12 @@
 	}
 	
 	// Set Message Event Detail
-	[cell.labelDetail setText:messageEvent.Detail];
+	[cell.labelDetail setText:chatMessage.Text];
 	
-	// Set Message Event Sender (only applies to Comments)
-	if(isComment && ! currentUserIsSender)
+	// Set Message Event Sender
+	if(currentUserIsSender)
 	{
-		[cell.labelEnteredBy setText:messageEvent.EnteredBy];
+		[cell.labelEnteredBy setText:chatMessage.SenderName];
 	}
 	
 	return cell;
