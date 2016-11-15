@@ -256,7 +256,7 @@
 	self.isLoaded = YES;
 	
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.messageEventModel showOfflineError];
 	}
@@ -278,7 +278,7 @@
 	NSLog(@"There was a problem retrieving recipients for the Message");
 	
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.messageRecipientModel showOfflineError];
 	}
@@ -344,7 +344,7 @@
 - (void)saveCommentError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.commentModel showOfflineError];
 	}

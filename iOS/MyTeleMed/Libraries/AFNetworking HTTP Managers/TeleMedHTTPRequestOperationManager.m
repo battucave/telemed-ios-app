@@ -59,7 +59,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		
 		// Customize Request Serializer
 		[self.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
 		
 		// Set required XML Request Headers
 		[self.requestSerializer setValue:@"application/xml" forHTTPHeaderField:@"Accept"];
@@ -99,7 +99,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		#if defined(DEBUG)
 			[[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
 			//[[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelInfo];
-			//[[AFNetworkActivityLogger sharedLogger] startLogging];
+			[[AFNetworkActivityLogger sharedLogger] startLogging];
 		#endif
 	}
 	
@@ -223,7 +223,16 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
 						failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
+	// Shorten timeout for GET requests
+	if(self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
+	{
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+	}
+	
 	NSMutableURLRequest *request = [self HTTPRequestWithHTTPMethod:@"GET" URLString:URLString parameters:parameters failure:failure];
+	
+	// Restore timeout interval to default
+	[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
 	
 	return [self addAuthenticatedRequest:request success:success failure:failure];
 }
@@ -234,7 +243,16 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 success:(void (^)(AFHTTPRequestOperation *operation))success
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
+	// Shorten timeout for HEAD requests
+	if(self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
+	{
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+	}
+	
 	NSMutableURLRequest *request = [self HTTPRequestWithHTTPMethod:@"HEAD" URLString:URLString parameters:parameters failure:failure];
+	
+	// Restore timeout interval to default
+	[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
 	
 	return [self addAuthenticatedRequest:request success:^(AFHTTPRequestOperation *requestOperation, __unused id responseObject)
 	{
@@ -440,41 +458,34 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 				
 				[self.authenticationModel setAccessToken:nil];
 				
-				[self addAuthenticatedOperation:newOperation success:success failure:wrappedFailure isRetry:YES];
+				[self addAuthenticatedOperation:newOperation success:success failure:wrappedFailure];
 			}
 		}
 		// If the operation failed because device is definitely offline, then retry the operation after a short delay (NSURLErrorNotConnectedToInternet sometimes mistakenly occurs immediately after device goes back online)
-		if(error.code == NSURLErrorNotConnectedToInternet && ! isRetry)
+		else if(error.code == NSURLErrorNotConnectedToInternet && ! isRetry)
 		{
 			NSLog(@"Retry Operation");
 			
 			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
 			{
-				[self addAuthenticatedOperation:newOperation success:success failure:wrappedFailure isRetry:YES];
+				[self addAuthenticatedOperation:newOperation success:success failure:wrappedFailure];
 			});
 		}
-		// If device timed out or is definitely offline even after a retry, then set offline error and execute original failure block
-		else if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost)
-		{
-			NSLog(@"Timeout Error - Add to Pending Operations");
-			
-			// Add stored operation to pending operations to be executed after user re-establishes connection
-			[self addPendingOperation:newOperation success:success failure:failure];
-			
-			// Control timeout errors by setting them to a standard code
-			if(error.code != NSURLErrorNotConnectedToInternet)
-			{
-				error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorTimedOut userInfo:error.userInfo];
-			}
-			
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				failure(operation, error);
-			});
-		}
-		// Execute original failure block
 		else
 		{
+			// If device is definitely offline even after a retry, then set offline error and execute original failure block
+			if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost/* || error.code == NSURLErrorTimedOut*/)
+			{
+				NSLog(@"Offline Error - Add to Pending Operations");
+				
+				// Add stored operation to pending operations to be executed after user re-establishes connection
+				[self addPendingOperation:newOperation success:success failure:failure];
+				
+				// Control offline errors by setting them to a standard code
+				error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:error.userInfo];
+			}
+			
+			// Execute original failure block
 			dispatch_async(dispatch_get_main_queue(), ^
 			{
 				failure(operation, error);
@@ -496,13 +507,13 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	// Create new operation from request
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:wrappedSuccess failure:wrappedFailure];
 	
-	[self addAuthenticatedOperation:operation success:wrappedSuccess failure:failure isRetry:NO];
+	[self addAuthenticatedOperation:operation success:wrappedSuccess failure:failure];
 	
 	return operation;
 }
 
 // Add valid Authentication Bearer Token to operation before adding it to the Queue
-- (void)addAuthenticatedOperation:operation success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure isRetry:(BOOL)isRetry
+- (void)addAuthenticatedOperation:operation success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// If Access Token is still valid, immediately execute the request operation
 	if(self.authenticationModel.accessTokenIsValid)

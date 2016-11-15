@@ -37,7 +37,6 @@
 	{
 		[self setCallModel:[[CallModel alloc] init]];
 		[self.callModel setDelegate:self];
-		
 		[self.callModel callTeleMed];
 	}
 }
@@ -52,7 +51,7 @@
 - (void)callTeleMedError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.callModel showOfflineError];
 	}

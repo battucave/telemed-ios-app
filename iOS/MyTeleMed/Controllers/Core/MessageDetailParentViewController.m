@@ -98,7 +98,7 @@
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.messageModel showOfflineError];
 	}
@@ -121,7 +121,7 @@
 - (void)callSenderError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.callModel showOfflineError];
 	}

@@ -198,10 +198,7 @@ static AuthenticationModel *sharedAuthenticationInstance = nil;
 			NSLog(@"Refreshing Tokens Timed Out: %@", error);
 			
 			// Control timeout errors by setting them to a standard code
-			if(error.code != NSURLErrorNotConnectedToInternet)
-			{
-				error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorTimedOut userInfo:error.userInfo];
-			}
+			error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:error.userInfo];
 			
 			failure(error);
 		}

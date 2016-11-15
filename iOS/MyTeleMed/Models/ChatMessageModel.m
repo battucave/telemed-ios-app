@@ -229,7 +229,7 @@
 			NSLog(@"ChatMessageModel Error: %@", error);
 			
 			// Handle device offline error
-			if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+			if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 			{
 				// Cancel further operations to prevent multiple error messages
 				[self.operationManager.operationQueue cancelAllOperations];

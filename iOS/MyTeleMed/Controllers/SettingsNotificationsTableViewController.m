@@ -120,7 +120,7 @@
 	NSLog(@"Error loading notification settings");
 	
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.notificationSettingModel showOfflineError];
 	}
@@ -136,7 +136,7 @@
 -(void)saveNotificationSettingsError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.notificationSettingModel showOfflineError];
 	}

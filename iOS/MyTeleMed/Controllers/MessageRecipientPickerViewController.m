@@ -140,7 +140,7 @@
 	self.isLoaded = YES;
 	
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.chatParticipantModel showOfflineError];
 	}
@@ -190,7 +190,7 @@
 	self.isLoaded = YES;
 	
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
 	{
 		return [self.messageRecipientModel showOfflineError];
 	}

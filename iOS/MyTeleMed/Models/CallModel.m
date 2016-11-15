@@ -23,10 +23,9 @@
 	NSLog(@"CallTeleMed");
 	NSLog(@"%@", parameters);
 	
-	// The web service only returns a result after the phone call has been answered so increase timeout interval
-	[self.operationManager.requestSerializer setTimeoutInterval:90.0];
+	// This Rest Service Method only returns after the phone call has been answered so increase timeout interval
+	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
-	// This Rest Service Method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSLog(@"CallModel Success: %@", operation.response);
@@ -62,7 +61,7 @@
 		}
 	}];
 	
-	// Reset timeout interval to default
+	// Restore timeout interval to default
 	[self.operationManager.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 }
 
@@ -80,7 +79,7 @@
 	NSLog(@"%@", parameters);
 	
 	// The web service only returns a result after the phone call has been answered so increase timeout interval
-	[self.operationManager.requestSerializer setTimeoutInterval:90.0];
+	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
 	// This Rest Service Method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
