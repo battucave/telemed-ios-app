@@ -18,9 +18,4 @@
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 @property (nonatomic) NSString *messageRecipientType;
 
-- (void)updateChatParticipants:(NSMutableArray *)newRecipients;
-- (void)updateChatParticipantsError:(NSError *)error;
-- (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients;
-- (void)updateMessageRecipientsError:(NSError *)error;
-
 @end

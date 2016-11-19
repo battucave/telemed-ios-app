@@ -18,6 +18,7 @@
 @property (nonatomic) UIRefreshControl *savedRefreshControl;
 @property (nonatomic) NSMutableArray *messages;
 @property (nonatomic) NSMutableArray *filteredMessages;
+@property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
 
 @property (nonatomic) int messagesType; // 0 = Active, 1 = Archived
@@ -138,7 +139,7 @@
 	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
 	if(self.messagesType == 0)
 	{
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
 	[self setPriorityFilter:newPriorityFilter];
@@ -159,6 +160,48 @@
 	// Don't need to Reload Messages here because viewWillAppear fires when ArchivesPickerViewController is popped from Navigation Controller
 }
 
+- (void)hideSelectedMessages:(NSArray *)messages
+{
+	self.hiddenMessages = [NSMutableArray new];
+	
+	// If no Messages to hide, cancel
+	if(messages == nil || [messages count] == 0)
+	{
+		return;
+	}
+	
+	// Add each Message to Hidden Messages
+	for(MessageModel *message in messages)
+	{
+		[self.hiddenMessages addObject:message];
+	}
+	
+	// Toggle the Edit button
+	[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+	
+	[self.tableView reloadData];
+}
+
+- (void)unHideSelectedMessages:(NSArray *)messages
+{
+	// If no Messages to hide, cancel
+	if(messages == nil || [messages count] == 0)
+	{
+		return;
+	}
+	
+	// Remove each Message from Hidden Messages
+	for(MessageModel *message in messages)
+	{
+		[self.hiddenMessages removeObject:message];
+	}
+	
+	// Show the Edit button (there will always be at least one Message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+	
+	[self.tableView reloadData];
+}
+
 - (void)removeSelectedMessages:(NSArray *)messages
 {
 	NSMutableArray *indexPaths = [NSMutableArray new];
@@ -170,33 +213,36 @@
 		return;
 	}
 	
-	// Remove each Message from the source data, selected data, and the table itself
+	// Remove each Message from the source data, filtered data, hidden data, selected data, and the table itself
 	for(MessageModel *message in messages)
 	{
+		[self.messages removeObject:message];
 		[self.filteredMessages removeObject:message];
+		[self.hiddenMessages removeObject:message];
 		[self.selectedMessages removeObject:message];
 		
 		[indexPaths addObject:[NSIndexPath indexPathForItem:[filteredMessagesCopy indexOfObject:message] inSection:0]];
 	}
 	
 	// Remove rows
-	if([self.filteredMessages count] > 0)
+	if([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no Messages left in the source data, reload the table to show the No Messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the No Messages cell))
+	// If there are no Messages left in the source data, reload the row to show the No Messages cell
 	else
 	{
 		[self.tableView reloadData];
 		
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+		// Toggle the Edit button
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
 	// Update delegate's list of selected messages
 	[self.delegate setSelectedMessages:self.selectedMessages];
 }
 
-// Reset Messages back to loading
+// Reset Messages back to Loading state
 - (void)resetMessages
 {
 	[self setIsLoaded:NO];
@@ -238,15 +284,8 @@
 	
 	[self.refreshControl endRefreshing];
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
-	{
-		return [self.messageModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Messages Error" message:@"There was a problem retrieving your Messages. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.messageModel showError:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -264,9 +303,26 @@
 	return [self.filteredMessages count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are Filtered Messages and Hidden Messages and row is not the only row in the table
+	if([self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
+	{
+		MessageModel *message = [self.filteredMessages objectAtIndex:indexPath.row];
+		
+		// Hide Hidden Messages by setting its height to 0
+		if([self.hiddenMessages containsObject:message])
+		{
+			return 0.0f;
+		}
+	}
+	
+	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.filteredMessages count] == 0)
+	if([self.filteredMessages count] == 0 || (indexPath.row == 0 && [self.filteredMessages count] == [self.hiddenMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -282,6 +338,12 @@
 	
 	// Set up the cell
 	MessageModel *message = [self.filteredMessages objectAtIndex:indexPath.row];
+	
+	// Hide Hidden Messages
+	if([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
+	{
+		[cell setHidden:YES];
+	}
 	
 	// Set Date and Time
 	if(message.TimeReceived_LCL)

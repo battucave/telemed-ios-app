@@ -11,9 +11,4 @@
 
 @interface MessageNewViewController : CoreViewController
 
-- (void)updateAccounts:(NSMutableArray *)newAccounts;
-- (void)updateAccountsError:(NSError *)error;
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
-
 @end

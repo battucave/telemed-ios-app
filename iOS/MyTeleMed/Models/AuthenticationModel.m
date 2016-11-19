@@ -193,12 +193,18 @@ static AuthenticationModel *sharedAuthenticationInstance = nil;
 			});
 		}
 		// Handle timeout issues differently if not in LoginSSO Storyboard
-		else if( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost))
+		else if( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
 		{
 			NSLog(@"Refreshing Tokens Timed Out: %@", error);
 			
-			// Control timeout errors by setting them to a standard code
-			error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:error.userInfo];
+			// Turn off isWorking
+			self.isWorking = NO;
+			
+			// Control timeout errors by setting them to a standard code (except for NSURLErrorTimedOut)
+			if(error.code != NSURLErrorTimedOut)
+			{
+				error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:error.userInfo];
+			}
 			
 			failure(error);
 		}
@@ -216,6 +222,12 @@ static AuthenticationModel *sharedAuthenticationInstance = nil;
 			});
 		}
 	}];
+	
+	// Dispatch AFNetworkingOperationDidStartNotification as shortcut to force models to execute pending callbacks
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[[NSNotificationCenter defaultCenter] postNotificationName:AFNetworkingOperationDidStartNotification object:self];
+	});
 }
 
 - (BOOL)accessTokenIsValid

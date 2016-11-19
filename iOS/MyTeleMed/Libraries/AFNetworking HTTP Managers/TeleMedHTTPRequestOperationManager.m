@@ -473,7 +473,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		}
 		else
 		{
-			// If device is definitely offline even after a retry, then set offline error and execute original failure block
+			// If device is definitely offline even after a retry, then set offline error (do not show on NSURLErrorTimedOut)
 			if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost/* || error.code == NSURLErrorTimedOut*/)
 			{
 				NSLog(@"Offline Error - Add to Pending Operations");
@@ -610,7 +610,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	{
 		// Active operations will automatically execute their failure block when they are cancelled so no need to attempt to do this manually
 		
-		// Pending operations need to have their failure block executed manually. Note that we are not cancelling the operation - it will still fire when tokens are refreshed. But we are firing off it's failure block to allow the delegate to execute any necessary activities.
+		// Pending operations need to have their failure block executed manually. Note that we only cancel POST, PUT, PATCH, and DELETE operations - GET and HEAD operations will still fire when tokens are refreshed. But we are firing off it's failure block to allow the delegate to execute any necessary activities.
 		[self processPendingFailures:error];
 		
 		// Resume Operation Queue after a delay (if operation simply timed out rather than it being offline, then Operation Queue will never get reset otherwise)
@@ -627,6 +627,14 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	if([self.pendingOperations count] > 0 && ! self.authenticationModel.isWorking)
 	{
 		[self.authenticationModel getNewTokensWithSuccess:authenticationSuccess failure:authenticationFailure];
+	}
+	else if(self.authenticationModel.isWorking)
+	{
+		// Dispatch AFNetworkingOperationDidStartNotification as shortcut to force models to execute pending callbacks
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:AFNetworkingOperationDidStartNotification object:self];
+		});
 	}
 }
 
@@ -656,14 +664,29 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	{
 		NSLog(@"Authentication Failure Pending Operations: %lu", (unsigned long)[self.pendingOperations count]);
 		
+		NSMutableArray *deletePendingOperations = [[NSMutableArray alloc] init];
+		
 		//for(NSDictionary *pendingOperation in self.pendingOperations) // Have to do it with regular for loop to avoid "NSArray was mutated while being enumerated" error
 		for(int i = 0; i < [self.pendingOperations count]; i++)
 		{
 			NSDictionary *pendingOperation = self.pendingOperations[i];
 			
+			AFHTTPRequestOperation *operation = [pendingOperation objectForKey:@"operation"];
 			void (^pendingFailure)(AFHTTPRequestOperation *operation, NSError *error) = [pendingOperation objectForKey:@"failure"];
 			
 			pendingFailure([pendingOperation objectForKey:@"operation"], error);
+			
+			// If operation is a POST, PUT, PATCH, or DELETE request, then remove it from pending operations
+			if( ! [operation.request.HTTPMethod isEqualToString:@"GET"] && ! [operation.request.HTTPMethod isEqualToString:@"HEAD"])
+			{
+				[deletePendingOperations addObject:pendingOperation];
+			}
+		}
+		
+		// Remove POST, PUT, PATCH, and DELETE requests from pending operations
+		if([deletePendingOperations count] > 0)
+		{
+			[self.pendingOperations removeObjectsInArray:deletePendingOperations];
 		}
 	}
 }

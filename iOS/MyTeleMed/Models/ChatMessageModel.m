@@ -15,6 +15,7 @@
 @property (nonatomic) int numberOfFinishedOperations;
 @property (nonatomic) NSMutableArray *failedChatMessageIDs;
 @property BOOL queueCancelled;
+@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -53,10 +54,12 @@
 				[self.delegate updateChatMessages:[parser chatMessages]];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 			{
 				[self.delegate updateChatMessagesError:error];
@@ -67,8 +70,10 @@
 	{
 		NSLog(@"ChatMessageModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages." andTitle:@"Chat Messages Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 		{
 			[self.delegate updateChatMessagesError:error];
@@ -100,10 +105,12 @@
 				[self.delegate updateChatMessages:[parser chatMessages]];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 			{
 				[self.delegate updateChatMessagesError:error];
@@ -114,8 +121,10 @@
 	{
 		NSLog(@"ChatMessageModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages." andTitle:@"Chat Messages Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 		{
 			[self.delegate updateChatMessagesError:error];
@@ -132,14 +141,19 @@
 	
 	return;
 	
+	// Show Activity Indicator
+	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
 	NSDictionary *parameters = @{
 		@"chatMsgID"	: chatMessageID
 	};
 	
 	[self.operationManager DELETE:@"ChatMessages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
@@ -151,12 +165,19 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
-			if([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
+			{
+				// Include callback to retry the request
+				[self deleteChatMessage:chatMessageID];
+			}];
+			
+			/*if([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 			{
 				[self.delegate deleteChatMessageError:error];
-			}
+			}*/
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -166,12 +187,23 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem deleting the Chat Message."];
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		if([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem deleting the Chat Message." andTitle:@"Chat Message Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self deleteChatMessage:chatMessageID];
+		}];
+		
+		/*if([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 		{
 			[self.delegate deleteChatMessageError:error];
-		}
+		}*/
 	}];
 }
 
@@ -192,6 +224,11 @@
 	
 	return;
 	
+	[self showActivityIndicator:@"Deleting..."];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
 	for(ChatMessageModel *chatMessage in chatMessages)
 	{
 		NSDictionary *parameters = @{
@@ -207,7 +244,7 @@
 			
 			if(operation.response.statusCode != 204)
 			{
-				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
+				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Delete Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
 				
 				NSLog(@"ChatMessageModel Error: %@", error);
 				
@@ -229,7 +266,7 @@
 			NSLog(@"ChatMessageModel Error: %@", error);
 			
 			// Handle device offline error
-			if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+			if(error.code == NSURLErrorNotConnectedToInternet)
 			{
 				// Cancel further operations to prevent multiple error messages
 				[self.operationManager.operationQueue cancelAllOperations];
@@ -262,9 +299,13 @@
 	// Close Activity Indicator
 	[self hideActivityIndicator];
 	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
 	// If a failure occurred while deleting Chat Message
 	if([self.failedChatMessageIDs count] > 0)
 	{
+		// Still being used to reset Chat Messages
 		if([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
 		{
 			[self.delegate deleteMultipleChatMessagesError:self.failedChatMessageIDs];
@@ -273,6 +314,7 @@
 	// If request was not cancelled, then it was successful
 	else if( ! self.queueCancelled)
 	{
+		// Not currently used
 		if([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
 		{
 			[self.delegate deleteMultipleChatMessagesSuccess];
@@ -284,6 +326,34 @@
 	self.numberOfFinishedOperations = 0;
 	
 	[self.failedChatMessageIDs removeAllObjects];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	if( ! self.pendingComplete)
+	{
+		// Notify delegate that Delete Chat Message has been sent to server
+		if([self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
+		{
+			[self.delegate deleteChatMessagePending];
+		}
+		
+		// Notify delegate that Multiple Chat Message Deletions have begun being sent to server
+		if([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
+		{
+			[self.delegate deleteMultipleChatMessagesPending];
+		}
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	self.pendingComplete = YES;
 }
 
 @end

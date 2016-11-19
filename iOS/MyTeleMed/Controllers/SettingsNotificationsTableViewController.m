@@ -119,24 +119,24 @@
 {
 	NSLog(@"Error loading notification settings");
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+	// Show error message only if device offline
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
-		return [self.notificationSettingModel showOfflineError];
+		[self.notificationSettingModel showError:error];
 	}
 }
 
-// Return Save success from NotificationSettingModel delegate
+/*/ Return Save success from NotificationSettingModel delegate (no longer used)
 - (void)saveNotificationSettingsSuccess
 {
 	NSLog(@"Notification Settings saved to server successfully");
 }
 
-// Return Save error from NotificationSettingModel delegate
+// Return Save error from NotificationSettingModel delegate (no longer used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
 	{
 		return [self.notificationSettingModel showOfflineError];
 	}
@@ -144,7 +144,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Notification Settings Error" message:@"There was a problem saving your Notification Settings. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {

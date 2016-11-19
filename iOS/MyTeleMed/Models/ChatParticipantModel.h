@@ -13,6 +13,8 @@
 
 @required
 - (void)updateChatParticipants:(NSMutableArray *)newChatParticipants;
+
+@optional
 - (void)updateChatParticipantsError:(NSError *)error;
 
 @end

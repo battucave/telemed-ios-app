@@ -13,9 +13,13 @@
 
 @required
 - (void)updateChatMessages:(NSMutableArray *)chatMessages;
+
+@optional
 - (void)updateChatMessagesError:(NSError *)error;
+- (void)deleteChatMessagePending;
 - (void)deleteChatMessageSuccess;
 - (void)deleteChatMessageError:(NSError *)error;
+- (void)deleteMultipleChatMessagesPending;
 - (void)deleteMultipleChatMessagesSuccess;
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessageIDs;
 

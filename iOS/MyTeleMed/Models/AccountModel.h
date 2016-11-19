@@ -13,6 +13,8 @@
 
 @required
 - (void)updateAccounts:(NSMutableArray *)accounts;
+
+@optional
 - (void)updateAccountsError:(NSError *)error;
 
 @end

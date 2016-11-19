@@ -39,6 +39,7 @@
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	
+	// Get list of Accounts
 	[self.accountModel getAccounts];
 	
 	[self.pickerViewDefault selectRow:0 inComponent:0 animated:NO];
@@ -112,15 +113,14 @@
 // Return error from AccountModel delegate
 - (void)updateAccountsError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+	// Customize error message if device not offline
+	if(error.code != NSURLErrorNotConnectedToInternet)
 	{
-		return [self.accountModel showOfflineError];
+		error = [self.accountModel buildError:error usingData:nil withGenericMessage:@"There was a problem retrieving the Accounts. Will default to All Accounts." andTitle:error.localizedFailureReason];
 	}
 	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Accounts Error" message:@"There was a problem retrieving your Accounts. Will default to All Accounts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.accountModel showError:error];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView

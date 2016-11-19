@@ -15,9 +15,4 @@
 @property (nonatomic) NSInteger notificationSettingsType; // 1 = Stat, 2 = Priority, 3 = Normal, 4 = Comment
 @property (nonatomic) NotificationSettingModel *notificationSettings;
 
-- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name;
-- (void)updateNotificationSettingsError:(NSError *)error;
-- (void)saveNotificationSettingsSuccess;
-- (void)saveNotificationSettingsError:(NSError *)error;
-
 @end

@@ -13,7 +13,4 @@
 
 @property (nonatomic) MessageModel *message;
 
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
-
 @end

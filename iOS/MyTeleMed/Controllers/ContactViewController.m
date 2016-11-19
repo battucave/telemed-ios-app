@@ -41,17 +41,17 @@
 	}
 }
 
-// Return success from CallTeleMedModel delegate
-- (void)callTeleMedSuccess
+// Return success from CallTeleMedModel delegate (no longer used)
+/*- (void)callTeleMedSuccess
 {
 	NSLog(@"Call TeleMed request sent successfully");
 }
 
-// Return error from CallTeleMedModel delegate
+// Return error from CallTeleMedModel delegate (no longer used)
 - (void)callTeleMedError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.callModel showOfflineError];
 	}
@@ -59,7 +59,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Call TeleMed Error" message:@"There was a problem requesting a Return Call. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 - (void)didReceiveMemoryWarning
 {

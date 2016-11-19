@@ -129,12 +129,12 @@
 				NSLog(@"PhoneNumberViewController Error: %@", error);
 				
 				// If device offline, show offline message
-				if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+				if(error.code == NSURLErrorNotConnectedToInternet)
 				{
-					return [registeredDeviceModel showOfflineError];
+					return [registeredDeviceModel showError:error];
 				}
 				
-				UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Registration Error" message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] delegate:self cancelButtonTitle:@"Go Back" otherButtonTitles:@"Try Again", nil];
+				UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] delegate:self cancelButtonTitle:@"Go Back" otherButtonTitles:@"Try Again", nil];
 				errorAlertView.tag = 2;
 				
 				[errorAlertView show];
@@ -145,10 +145,9 @@
 	else if(alertView.tag == 2 && buttonIndex == 0)
 	{
 		// Go back to Login
-		if([self.navigationController.viewControllers count] > 1)
+		if(self.delegate)
 		{
-			[self.navigationController popViewControllerAnimated:YES];
-		
+			[self performSegueWithIdentifier:@"unwindFromPhoneNumber" sender:self];
 		}
 		// User was automatically redirected to PhoneNumberViewController from AppDelegate
 		else

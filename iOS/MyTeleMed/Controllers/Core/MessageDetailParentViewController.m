@@ -81,7 +81,20 @@
     }
 }
 
-// Return Modify Message State success from MessageModel delegate
+// Return Message State pending from MessageModel delegate
+- (void)modifyMessageStatePending:(NSString *)state
+{
+    // If finished Archiving message, send user back
+    if([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }
+}
+
+/*/ Return Message State success from MessageModel delegate
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
     // If finished Archiving message, send user back
@@ -94,34 +107,27 @@
     }
 }
 
-// Return Modify Message State error from MessageModel delegate
+// Return Message State error from MessageModel delegate
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
-	{
-		return [self.messageModel showOfflineError];
-	}
-	
+	// Show error message
 	if([state isEqualToString:@"archive"])
     {
-        UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Message Archive Error" message:@"There was a problem Archiving your Message. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        
-        [errorAlertView show];
+		[self.messageModel showError:error];
     }
-}
+}*/
 
-// Return success from CallTeleMedModel delegate
+/*/ Return success from CallTeleMedModel delegate (no longer used)
 - (void)callSenderSuccess
 {
 	NSLog(@"Call Message Sender request sent successfully");
 }
 
-// Return error from CallTeleMedModel delegate
+// Return error from CallTeleMedModel delegate (no longer used)
 - (void)callSenderError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.callModel showOfflineError];
 	}
@@ -129,7 +135,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Return Call Error" message:@"There was a problem requesting a Return Call. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

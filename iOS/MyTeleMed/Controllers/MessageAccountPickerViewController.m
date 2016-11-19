@@ -12,6 +12,8 @@
 
 @interface MessageAccountPickerViewController ()
 
+@property (nonatomic) AccountModel *accountModel;
+
 @property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic) IBOutlet UITableView *tableAccounts;
@@ -33,11 +35,11 @@
 	if([self.accounts count] == 0)
 	{
 		// Initialize Account Model
-		AccountModel *accountModel = [[AccountModel alloc] init];
-		accountModel.delegate = self;
+		[self setAccountModel:[[AccountModel alloc] init]];
+		[self.accountModel setDelegate:self];
 		
 		// Get list of Accounts
-		[accountModel getAccounts];
+		[self.accountModel getAccounts];
 	}
 	
 	// Initialize Search Controller
@@ -130,17 +132,8 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet/* || error.code == NSURLErrorTimedOut*/)
-	{
-		AccountModel *accountModel = [[AccountModel alloc] init];
-		
-		return [accountModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Accounts Error" message:@"There was a problem retrieving your Accounts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.accountModel showError:error];
 }
 
 // Delegate Method for Updating Search Results

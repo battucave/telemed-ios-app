@@ -14,6 +14,5 @@
 @property (nonatomic) UIStoryboard *storyboard;
 
 - (void)showMainScreen;
-- (void)showOfflineError;
 
 @end

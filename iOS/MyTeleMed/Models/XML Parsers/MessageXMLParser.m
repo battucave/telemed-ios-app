@@ -57,7 +57,7 @@
 		
 		self.message = nil;
 	}
-	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"MessageDeliverID"] || [elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
+	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"MessageDeliveryID"] || [elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
 	{
 		[self.message setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}

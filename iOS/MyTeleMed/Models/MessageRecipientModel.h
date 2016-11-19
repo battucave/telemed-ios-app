@@ -13,6 +13,8 @@
 
 @required
 - (void)updateMessageRecipients:(NSMutableArray *)newRecipients;
+
+@optional
 - (void)updateMessageRecipientsError:(NSError *)error;
 
 @end
