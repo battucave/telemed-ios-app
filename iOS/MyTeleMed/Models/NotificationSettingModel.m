@@ -9,6 +9,12 @@
 #import "NotificationSettingModel.h"
 #import "NotificationSettingXMLParser.h"
 
+@interface NotificationSettingModel ()
+
+@property BOOL pendingComplete;
+
+@end
+
 @implementation NotificationSettingModel
 
 // Override Tone setter to also store Tone Title (user friendly tone)
@@ -132,10 +138,12 @@
 				[self.delegate updateNotificationSettings:self forName:name];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing Notification Settings.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 			{
 				[self.delegate updateNotificationSettingsError:error];
@@ -146,8 +154,10 @@
 	{
 		NSLog(@"NotificationSettingModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
@@ -157,7 +167,11 @@
 
 - (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)settings
 {
-	[self showActivityIndicator:@"Saving..."];
+	// Show Activity Indicator
+	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Create Interval value (Comment setting does not include Interval)
 	NSString *interval = ([name isEqualToString:@"comment"] ? @"<Interval i:nil=\"true\" />" : [NSString stringWithFormat:@"<Interval>%@</Interval>", (settings.isReminderOn ? settings.Interval : @"0")]);
@@ -175,8 +189,7 @@
 		
 	[self.operationManager POST:@"NotificationSettings" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		NSString *notificationKey = [NSString stringWithFormat:@"%@Settings", name];
 		
@@ -191,6 +204,7 @@
 			
 			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], settings.Tone);
 			
+			// Not currently used
 			if([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
@@ -198,8 +212,16 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem saving your Notification Settings.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem saving your Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
+			{
+				// Include callback to retry the request
+				[self saveNotificationSettingsByName:name settings:settings];
+			}];
+			
+			// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
 			if([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
@@ -213,14 +235,44 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your Notification Settings."];
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your Notification Settings." andTitle:@"Notification Settings Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self saveNotificationSettingsByName:name settings:settings];
+		}];
+		
+		// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
 		if([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 		{
 			[self.delegate saveNotificationSettingsError:error];
 		}
 	}];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Notify delegate that Notification Settings has been sent to server
+	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+	{
+		[self.delegate saveNotificationSettingsPending];
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	self.pendingComplete = YES;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder

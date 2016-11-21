@@ -184,6 +184,37 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
+// Return Delete Multiple Chat Message pending from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesPending
+{
+	// Remove selected rows from ChatMessagesTableViewController
+	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
+	
+	[self setEditing:NO animated:YES];
+}
+
+// Return Delete Multiple Chat Message error from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessageIDs
+{
+	// Default to all Messages failed to send
+	NSString *errorMessage = @"There was a problem deleting your Chat Messages.";
+	
+	// Only some Chat Messages failed to send
+	if([failedChatMessageIDs count] > 0 && [failedChatMessageIDs count] != [self.selectedChatMessages count])
+	{
+		errorMessage = @"There was a problem deleting some of your Chat Messages.";
+	}
+	
+	// Reload Chat Messages Table to re-show Chat Messages that were not Archived
+	[self.chatMessagesTableViewController reloadChatMessages];
+	
+	// Show error message
+	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Delete Chat Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
+	
+	[self.chatMessageModel showError:error];
+}
+
+/*/ Return Delete Multiple Chat Message success from ChatMessageModel delegate (no longer used)
 - (void)deleteMultipleChatMessagesSuccess
 {
 	// Remove selected rows from ChatMessagesTableViewController
@@ -192,6 +223,7 @@
 	[self setEditing:NO animated:YES];
 }
 
+// Return Delete Multiple Chat Message error from ChatMessageModel delegate (no longer used)
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessageIDs
 {
 	// Default to all Messages failed to send
@@ -225,7 +257,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended

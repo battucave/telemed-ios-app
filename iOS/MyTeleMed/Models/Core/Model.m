@@ -7,9 +7,10 @@
 //
 
 #import "Model.h"
-#import "AppDelegate.h"
+//#import "AppDelegate.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "CustomAlertView.h"
+#import "ErrorAlertController.h"
 #import "GenericErrorXMLParser.h"
 
 @interface Model ()
@@ -61,7 +62,7 @@
 	});
 }
 
-- (NSError *)buildError:(NSError *)error usingData:(NSData *)data withGenericMessage:(NSString *)message
+- (NSError *)buildError:(NSError *)error usingData:(NSData *)data withGenericMessage:(NSString *)message andTitle:(NSString *)title
 {
 	NSString *errorString;
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:data];
@@ -74,11 +75,6 @@
 	{
 		errorString = parser.error;
 	}
-	// If error is offline, then set offline message (this is not necessary because it will be reset anyway in showOfflineError, but is here anyway for completeness)
-	else if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		errorString = @"You must connect to a Wi-Fi or cellular data network to continue.";
-	}
 	// Error parsing XML file or generic response returned
 	else
 	{
@@ -87,14 +83,27 @@
 	
 	NSLog(@"Error: %@", errorString);
 	
-	return [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:error.code userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:errorString, NSLocalizedDescriptionKey, nil]];
+	return [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:error.code userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:title, NSLocalizedFailureReasonErrorKey, errorString, NSLocalizedDescriptionKey, nil]];
 }
 
-- (void)showOfflineError
+- (void)showError:(NSError *)error
 {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	[appDelegate showOfflineError];
+	[errorAlertController show:error];
+}
+
+- (void)showError:(NSError *)error withCallback:(void (^)(void))callback
+{
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error withCallback:callback];
+}
+
+- (void)dealloc
+{
+	// Remove all Observers if applicable (models with POST or DELETE requests have Network Activity Observers)
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

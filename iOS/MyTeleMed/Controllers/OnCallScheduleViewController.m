@@ -24,6 +24,7 @@
 
 @property (nonatomic) UIColor *segmentedControlColor;
 @property (nonatomic) NSString *cellIdentifier;
+@property (nonatomic) BOOL isLoaded;
 
 @end
 
@@ -55,6 +56,8 @@
 	// Get On Call Entries
 	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 	{
+		self.isLoaded = YES;
+		
 		if(success)
 		{
 			// Populate On Call Now Entries with result
@@ -79,11 +82,8 @@
 		{
 			NSLog(@"OnCallScheduleViewController Error: %@", error);
 			
-			// If device offline, show offline message
-			if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-			{
-				return [self.myStatusModel showOfflineError];
-			}
+			// Show error message
+			[self.myStatusModel showError:error];
 		}
 	}];
 }
@@ -110,14 +110,20 @@
 	{
 		[self setFilteredOnCallEntries:self.currentOnCallEntries];
 		
-		dateTime = [[self.filteredOnCallEntries objectAtIndex:0] Started];
+		if([self.filteredOnCallEntries count] > 0)
+		{
+			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] Started];
+		}
 	}
 	// Filter to Future On Call Entries
 	else
 	{
 		[self setFilteredOnCallEntries:self.futureOnCallEntries];
 		
-		dateTime = [[self.filteredOnCallEntries objectAtIndex:0] WillStart];
+		if([self.filteredOnCallEntries count] > 0)
+		{
+			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] WillStart];
+		}
 	}
 	
 	// Cancel filtering if no Filtered On Call Entries
@@ -235,7 +241,7 @@
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:([self.segmentedControl selectedSegmentIndex] == 0 ? @"You are currently not on call." : @"You have no upcoming on call entries.")];
+		[emptyCell.textLabel setText:(self.isLoaded ? ([self.segmentedControl selectedSegmentIndex] == 0 ? @"You are currently not on call." : @"You have no upcoming on call entries.") : @"Loading...")];
 		
 		return emptyCell;
 	}

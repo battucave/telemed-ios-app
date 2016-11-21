@@ -213,6 +213,44 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
+// Return Multiple Message States pending from MessageModel delegate
+- (void)modifyMultipleMessagesStatePending:(NSString *)state
+{
+	// Remove selected rows from MessagesTableViewController
+	[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
+	
+	[self setEditing:NO animated:YES];
+}
+
+// Return Multiple Message States success from MessageModel delegate (no longer used)
+- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
+{
+	// Remove selected rows from MessagesTableViewController
+	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
+}
+
+// Return Multiple Message States error from MessageModel delegate
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
+{
+	// Determine which messages were successfully Archived
+	NSMutableArray *successfulMessages = [NSMutableArray arrayWithArray:[self.selectedMessages copy]];
+	
+	[successfulMessages removeObjectsInArray:failedMessages];
+	
+	// Remove selected all rows from MessagesTableViewController that were successfully Archived
+	if([self.selectedMessages count] > 0)
+	{
+		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
+	}
+	
+	// Reload Messages Table to re-show Messages that were not Archived
+	[self.messagesTableViewController unHideSelectedMessages:failedMessages];
+	
+	// Update Selected Messages to only the Failed Messages
+	self.selectedMessages = failedMessages;
+}
+
+/*/ Return Multiple Message States success from MessageModel delegate (no longer used)
 - (void)modifyMultipleMessagesStateSuccess:(NSString *)state
 {
 	// Remove selected rows from MessagesTableViewController
@@ -221,6 +259,7 @@
 	[self setEditing:NO animated:YES];
 }
 
+// Return Multiple Message States error from MessageModel delegate (no longer used)
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state
 {
 	// Default to all Messages failed to send
@@ -254,7 +293,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Archive Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended

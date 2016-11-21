@@ -21,9 +21,4 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonArchive;
 @property (weak, nonatomic) IBOutlet UIButton *buttonForward;
 
-- (void)modifyMessageStateSuccess:(NSString *)state;
-- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state;
-- (void)callSenderSuccess;
-- (void)callSenderError:(NSError *)error;
-
 @end

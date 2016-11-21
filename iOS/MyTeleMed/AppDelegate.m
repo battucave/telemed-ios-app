@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
+#import "ErrorAlertController.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationModel.h"
 #import "MyProfileModel.h"
@@ -21,9 +22,6 @@
 @interface AppDelegate()
 
 @property (nonatomic) CTCallCenter *callCenter;
-@property (nonatomic) UIAlertView *errorAlertView;
-@property (nonatomic) BOOL isErrorAlertViewShowing;
-@property (nonatomic) NSDate *dateLastErrorMessage;
 
 @end
 
@@ -69,9 +67,6 @@
 		}
 	#endif
 	
-	// Set delegate for ErrorAlertView
-	[self.errorAlertView setDelegate:self];
-	
 	// Initialize CDMAVoiceData settings
 	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
 	
@@ -79,7 +74,6 @@
 	
 	// Initialize Call Center
 	self.callCenter = [[CTCallCenter alloc] init];
-	__weak typeof(self) weakSelf = self;
 	
 	[self.callCenter setCallEventHandler:^(CTCall *call)
 	{
@@ -87,8 +81,10 @@
 		{
 			NSLog(@"Call disconnected");
 			
-			// Dismiss the ErrorAlertView if showing (after phone call has ended, user should not see Data Connection Unavailable error)
-			[weakSelf.errorAlertView dismissWithClickedButtonIndex:-1 animated:NO];
+			// Dismiss Error Alert if showing (after phone call has ended, user should not see Data Connection Unavailable error)
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController dismiss];
 			
 			// Post a notification to other files in the project
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
@@ -182,8 +178,10 @@
 	// Remove view over app that was used to obsure screenshot (calling it here is required when user double clicks home button and then clicks the already active TeleMed app - applicationWillEnterForeground is not called in this case)
 	[self toggleScreenshotView:YES];
 	
-	// Dismiss the ErrorAlertView if showing
-	[self.errorAlertView dismissWithClickedButtonIndex:-1 animated:NO];
+	// Dismiss Error Alert if showing
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController dismiss];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -212,15 +210,9 @@
 		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
 		if(error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 		{
-			self.errorAlertView = [[UIAlertView alloc] initWithTitle:@"Device Registration Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[self.errorAlertView setDelegate:self];
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			
-			if( ! self.isErrorAlertViewShowing)
-			{
-				[self.errorAlertView show];
-			}
-			
-			self.isErrorAlertViewShowing = YES;
+			[errorAlertController show:error];
 		}
 	}];
 }
@@ -290,27 +282,6 @@
 }
 
 
-#pragma mark - UIAlertView Delegate Methods
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	// Toggle ErrorAlertView to show again
-	self.isErrorAlertViewShowing = NO;
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-	// Toggle ErrorAlertView to show again
-	self.isErrorAlertViewShowing = NO;
-}
-
-- (void)alertViewCancel:(UIAlertView *)alertView
-{
-	// Toggle ErrorAlertView to show again
-	self.isErrorAlertViewShowing = NO;
-}
-
-
 #pragma mark - Public Methods
 
 - (void)showMainScreen
@@ -320,47 +291,6 @@
 	
 	[self.window setRootViewController:messagesViewController];
 	[self.window makeKeyAndVisible];
-}
-
-// Always fired from Model.m or any model that extends it, but executed from here
-- (void)showOfflineError
-{
-	NSLog(@"Show Offline Error");
-	
-	NSString *alertMessage = @"You must connect to a Wi-Fi or cellular data network to continue.";
-	CTCallCenter *callCenter = [[CTCallCenter alloc] init];
-	
-	// Update messaging if a call is currently connected
-	for(CTCall *call in callCenter.currentCalls)
-	{
-		if(call.callState == CTCallStateConnected)
-		{
-			alertMessage = @"Your device does not support simultaneous voice and cellular data connections. You must connect to a Wi-Fi network to continue.";
-		}
-	}
-	
-	NSLog(@"Alert Message: %@", alertMessage);
-	
-	// Only show error message if it has never been shown or has been 2+ seconds since last shown
-	if( ! self.dateLastErrorMessage || [[NSDate date] compare:[self.dateLastErrorMessage dateByAddingTimeInterval:2.0]] == NSOrderedDescending)
-	{
-		self.errorAlertView = [[UIAlertView alloc] initWithTitle:@"Data Connection Unavailable" message:alertMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[self.errorAlertView setDelegate:self];
-		
-		if( ! self.isErrorAlertViewShowing)
-		{
-			NSLog(@"Show Error Alert View");
-			
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				[self.errorAlertView show];
-			});
-		}
-		
-		self.isErrorAlertViewShowing = YES;
-	}
-	
-	self.dateLastErrorMessage = [NSDate date];
 }
 
 
@@ -436,15 +366,9 @@
 						// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
 						if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 						{
-							self.errorAlertView = [[UIAlertView alloc] initWithTitle:@"Device Registration Error" message:registeredDeviceError.localizedDescription delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-							[self.errorAlertView setDelegate:self];
+							ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 							
-							if( ! self.isErrorAlertViewShowing)
-							{
-								[self.errorAlertView show];
-							}
-							
-							self.isErrorAlertViewShowing = YES;
+							[errorAlertController show:error];
 						}
 						
 						// Go to Main Storyboard regardless of whether there was an error (no need to force re-login here because Account is valid, there was just an error updating device for push notifications)

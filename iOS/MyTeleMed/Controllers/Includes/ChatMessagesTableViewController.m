@@ -131,15 +131,8 @@
 	
 	[self.refreshControl endRefreshing];
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.chatMessageModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Chat Messages Error" message:@"There was a problem retrieving your Chat Messages. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.chatMessageModel showError:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

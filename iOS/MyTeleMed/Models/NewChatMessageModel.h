@@ -11,7 +11,8 @@
 
 @protocol NewChatMessageDelegate <NSObject>
 
-@required
+@optional
+- (void)sendChatMessagePending;
 - (void)sendChatMessageSuccess;
 - (void)sendChatMessageError:(NSError *)error;
 

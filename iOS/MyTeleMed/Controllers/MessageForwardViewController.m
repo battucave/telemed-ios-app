@@ -61,13 +61,27 @@
 
 - (IBAction)sendForwardMessage:(id)sender
 {
+	NSString *comment = self.messageComposeTableViewController.textViewMessage.text;
+	
+	// Remove placeholder comment
+	if([self.messageComposeTableViewController.textViewMessage.text isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
+	{
+		comment = @"";
+	}
+	
 	[self setForwardMessageModel:[[ForwardMessageModel alloc] init]];
 	[self.forwardMessageModel setDelegate:self];
-	
-	[self.forwardMessageModel forwardMessage:self.message.ID messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"]];
+	[self.forwardMessageModel forwardMessage:self.message messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"] withComment:self.messageComposeTableViewController.textViewMessage.text];
 }
 
-// Return success from ForwardMessageModel delegate
+// Return pending from ForwardMessageModel delegate
+- (void)sendMessagePending
+{
+	// Go back to Messages (assume success)
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+/*/ Return success from ForwardMessageModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
 	NSString *messageText = self.messageComposeTableViewController.textViewMessage.text;
@@ -92,11 +106,11 @@
 	}
 }
 
-// Return error from ForwardMessageModel delegate
+// Return error from ForwardMessageModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.forwardMessageModel showOfflineError];
 	}
@@ -106,7 +120,7 @@
 	[errorAlertView show];
 }
 
-// Return success from CommentModel delegate
+// Return success from CommentModel delegate (no longer used)
 - (void)saveCommentSuccess:(NSString *)commentText
 {
 	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message" message:@"Message forwarded successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -117,11 +131,11 @@
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-// Return error from CommentModel delegate
+// Return error from CommentModel delegate (no longer used)
 - (void)saveCommentError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		[self.commentModel showOfflineError];
 	}
@@ -134,7 +148,7 @@
 
 	// Go back to Message Detail
 	[self.navigationController popViewControllerAnimated:YES];
-}
+}*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText

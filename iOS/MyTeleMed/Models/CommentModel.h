@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "MessageModel.h"
 
 @protocol CommentDelegate <NSObject>
 
-@required
-- (void)saveCommentSuccess:(NSString *)comment;
-- (void)saveCommentError:(NSError *)error;
+@optional
+- (void)saveCommentPending:(NSString *)comment withPendingID:(NSNumber *)pendingID;
+- (void)saveCommentSuccess:(NSString *)comment withPendingID:(NSNumber *)pendingID;
+- (void)saveCommentError:(NSError *)error withPendingID:(NSNumber *)pendingID;
 
 @end
 
@@ -21,6 +23,7 @@
 
 @property (weak) id delegate;
 
-- (void)addMessageComment:(NSNumber *)messageID comment:(NSString *)comment;
+- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID;
+- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage;
 
 @end

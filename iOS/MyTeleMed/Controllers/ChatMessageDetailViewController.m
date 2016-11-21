@@ -136,11 +136,12 @@
 
 - (IBAction)sendChatMessage:(id)sender
 {
-	NSLog(@"Send Chat Message");
 	[self setNewChatMessageModel:[[NewChatMessageModel alloc] init]];
 	[self.newChatMessageModel setDelegate:self];
 	
 	[self.newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:NO];
+	
+	// IMPORTANT: Manually add message to screen. Maintain delegate success to start listening for changes on success
 }
 
 // Check required fields to determine if Form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate
@@ -168,7 +169,9 @@
 	
 	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
 	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
-}*/// Return Chat Messages from ChatMessageModel delegate
+}*/
+
+// Return Chat Messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
 	[self setIsLoaded:YES];
@@ -197,15 +200,19 @@
 {
 	[self setIsLoaded:YES];
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.chatMessageModel showOfflineError];
-	}
-	
-	//UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Chat Messages Error" message:@"There was a problem retrieving your Chat Messages. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	//[errorAlertView show];
+	// Show error message
+	[self.chatMessageModel showError:error];
+}
+
+// Return Pending from NewChatMessageModel delegate
+- (void)sendChatMessagePending
+{
+	// Do something?
+}
+
+- (void)sendChatMessageSuccess
+{
+	// IMPORTANT: Manually add message to screen. Maintain delegate success to start listening for changes on success
 }
 
 // Scroll to bottom of Table Comments

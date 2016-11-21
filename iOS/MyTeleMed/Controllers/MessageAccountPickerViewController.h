@@ -16,7 +16,4 @@
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
-- (void)updateAccounts:(NSMutableArray *)newAccounts;
-- (void)updateAccountsError:(NSError *)error;
-
 @end

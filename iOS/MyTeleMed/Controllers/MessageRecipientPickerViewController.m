@@ -139,15 +139,8 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.chatParticipantModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Participants Error" message:@"There was a problem retrieving Participants for your Chat. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.chatParticipantModel showError:error];
 }
 
 // Return Message Recipients from MessageRecipientModel delegate
@@ -189,15 +182,8 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.messageRecipientModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Recipients Error" message:@"There was a problem retrieving Recipients for your Message. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.messageRecipientModel showError:error];
 }
 
 // Delegate Method for Updating Search Results

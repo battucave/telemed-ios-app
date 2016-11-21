@@ -7,43 +7,98 @@
 //
 
 #import "CommentModel.h"
+#import "MessageModel.h"
+
+@interface CommentModel ()
+
+@property (nonatomic) NSString *comment;
+@property (nonatomic) NSNumber *pendingID;
+@property (nonatomic) BOOL pendingComplete;
+
+@end
 
 @implementation CommentModel
 
-- (void)addMessageComment:(NSNumber *)messageID comment:(NSString *)comment
+- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
 {
-	// Show Activity Indicator
-	[self showActivityIndicator];
+	[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:NO];
+}
+
+- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
+{
+	[self addMessageComment:message comment:comment withPendingID:nil toForwardMessage:toForwardMessage];
+}
+
+- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
+{
+	// Show Activity Indicator only if not being added with Forward Message
+	if( ! toForwardMessage)
+	{
+		[self showActivityIndicator];
+	}
 	
-	NSString *xmlBody = [NSString stringWithFormat:
-		@"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-			"<CommentText>%@</CommentText>"
-			"<MessageDeliveryID>%@</MessageDeliveryID>"
-		"</Comment>",
-		comment, messageID];
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Store comment and ID for saveCommentPending method
+	self.comment = comment;
+	self.pendingID = pendingID;
+	
+	NSString *xmlBody;
+	
+	// New API
+	if(message.MessageDeliveryID)
+	{
+		xmlBody = [NSString stringWithFormat:
+			@"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+				"<CommentText>%@</CommentText>"
+				"<MessageDeliveryID>%@</MessageDeliveryID>"
+				"<MessageID>%@</MessageID>"
+			"</Comment>",
+			comment, message.MessageDeliveryID, message.MessageID];
+	}
+	// Deprecated API (still used on production)
+	else
+	{
+		xmlBody = [NSString stringWithFormat:
+			@"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+				"<CommentText>%@</CommentText>"
+				"<MessageDeliveryID>%@</MessageDeliveryID>"
+			"</Comment>",
+			comment, message.ID];
+	}
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
 	[self.operationManager POST:@"Comments" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
-			if([self.delegate respondsToSelector:@selector(saveCommentSuccess:)])
+			// Not currently used
+			if([self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
 			{
-				[self.delegate saveCommentSuccess:comment];
+				[self.delegate saveCommentSuccess:comment withPendingID:pendingID];
 			}
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem adding your Comment.", NSLocalizedDescriptionKey, nil]];
+			NSString *errorMessage = (toForwardMessage ? @"Message forward successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Add Comment Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
-			if([self.delegate respondsToSelector:@selector(saveCommentError:)])
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
 			{
-				[self.delegate saveCommentError:error];
+				// Include callback to retry the request
+				[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
+			}];
+			
+			// Still being used
+			if([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+			{
+				[self.delegate saveCommentError:error withPendingID:pendingID];
 			}
 		}
 	}
@@ -54,14 +109,45 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem adding your Comment."];
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		if([self.delegate respondsToSelector:@selector(saveCommentError:)])
+		// Build a generic error message
+		NSString *errorMessage = (toForwardMessage ? @"Message forward successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:errorMessage andTitle:@"Add Comment Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
 		{
-			[self.delegate saveCommentError:error];
+			// Include callback to retry the request
+			[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
+		}];
+		
+		// Still being used
+		if([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+		{
+			[self.delegate saveCommentError:error withPendingID:pendingID];
 		}
 	}];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Notify delegate that Comment has been sent to server
+	if(/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
+	{
+		[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	//self.pendingComplete = YES;
 }
 
 @end

@@ -17,6 +17,7 @@
 
 @property (nonatomic) MessageComposeTableViewController *messageComposeTableViewController;
 
+@property (nonatomic) AccountModel *accountModel;
 @property (nonatomic, getter=theNewMessageModel) NewMessageModel *newMessageModel;
 
 @property (nonatomic) NSMutableArray *accounts;
@@ -37,11 +38,11 @@
 	self.selectedMessageRecipients = [[NSMutableArray alloc] init];
 	
 	// Initialize Account Model
-	AccountModel *accountModel = [[AccountModel alloc] init];
-	accountModel.delegate = self;
+	[self setAccountModel:[[AccountModel alloc] init]];
+	[self.accountModel setDelegate:self];
 	
 	// Get list of Accounts
-	[accountModel getAccounts];
+	[self.accountModel getAccounts];
 }
 
 // Unwind Segue from MessageRecipientPickerViewController
@@ -71,8 +72,6 @@
 	[self setNewMessageModel:[[NewMessageModel alloc] init]];
 	[self.newMessageModel setDelegate:self];
 	
-	//NSString *messageText = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self.messageComposeTableViewController.textViewMessage.text, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding)));
-	
 	[self.newMessageModel sendNewMessage:self.messageComposeTableViewController.textViewMessage.text accountID:self.selectedAccount.ID messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"]];
 }
 
@@ -91,35 +90,30 @@
 // Return error from AccountModel delegate
 - (void)updateAccountsError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		AccountModel *accountModel = [[AccountModel alloc] init];
-		
-		return [accountModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Accounts Error" message:@"There was a problem retrieving your Accounts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.accountModel showError:error];
 }
 
-// Return success from NewMessageModel delegate
+// Return pending from NewMessageModel delegate
+- (void)sendMessagePending
+{
+	// Go back to Messages (assume success)
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+/*/ Return success from NewMessageModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
 	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"New Message" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[successAlertView show];
-	
-	// Go back to Messages
-	[self.navigationController popViewControllerAnimated:YES];
 }
 
-// Return error from NewMessageModel delegate
+// Return error from NewMessageModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.newMessageModel showOfflineError];
 	}
@@ -127,7 +121,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"New Message Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 // Fired from MessageComposeTable to perform segue to either MessageAccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender

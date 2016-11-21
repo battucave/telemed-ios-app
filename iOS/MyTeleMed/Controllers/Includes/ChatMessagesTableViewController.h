@@ -23,7 +23,5 @@
 
 - (void)reloadChatMessages;
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages;
-- (void)updateChatMessages:(NSMutableArray *)chatMessages;
-- (void)updateChatMessagesError:(NSError *)error;
 
 @end

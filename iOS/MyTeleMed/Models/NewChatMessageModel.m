@@ -8,12 +8,21 @@
 
 #import "NewChatMessageModel.h"
 
+@interface NewChatMessageModel ()
+
+@property BOOL pendingComplete;
+
+@end
+
 @implementation NewChatMessageModel
 
 - (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat
 {
 	// Show Activity Indicator
 	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSMutableString *xmlParticipants = [[NSMutableString alloc] init];
 	
@@ -43,12 +52,12 @@
 	
 	[self.operationManager POST:@"NewChatMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
+			// Still used to begin listening to replies if user remained on screen
 			if([self.delegate respondsToSelector:@selector(sendChatMessageSuccess)])
 			{
 				[self.delegate sendChatMessageSuccess];
@@ -56,12 +65,19 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
-			if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
+			{
+				// Include callback to retry the request
+				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat];
+			}];
+			
+			/*if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
 			{
 				[self.delegate sendChatMessageError:error];
-			}
+			}*/
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -71,14 +87,43 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message."];
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Chat Message." andTitle:@"Chat Message Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat];
+		}];
+		
+		/*if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
 		{
 			[self.delegate sendChatMessageError:error];
-		}
+		}*/
 	}];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Notify delegate that Chat Message has been sent to server
+	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendChatMessagePending)])
+	{
+		[self.delegate sendChatMessagePending];
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	self.pendingComplete = YES;
 }
 
 @end
