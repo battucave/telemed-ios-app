@@ -10,10 +10,13 @@
 #import "ChatMessageDetailViewController.h"
 #import "ChatMessageCell.h"
 #import "ChatMessageModel.h"
+#import "ChatParticipantModel.h"
+#import "MyProfileModel.h"
 
 @interface ChatMessagesTableViewController ()
 
 @property (nonatomic) ChatMessageModel *chatMessageModel;
+@property (nonatomic) MyProfileModel *myProfileModel;
 
 @property (nonatomic) NSMutableArray *chatMessages;
 @property (nonatomic) NSMutableArray *selectedChatMessages;
@@ -40,6 +43,9 @@
 	// Initialize Chat Message Model
 	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
 	[self.chatMessageModel setDelegate:self];
+	
+	// Initialize My Profile Model
+	[self setMyProfileModel:[MyProfileModel sharedInstance]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -118,7 +124,6 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableView reloadData];
-		//[self.tableView setEditing:YES animated:YES];
 	});
 	
 	[self.refreshControl endRefreshing];
@@ -169,12 +174,40 @@
 	// Set up the cell
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
+	// Set Participants
+	if(chatMessage.ChatParticipants)
+	{
+		// Remove self from Chat Participants
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID != %@", self.myProfileModel.ID];
+		NSArray *chatParticipants = [chatMessage.ChatParticipants filteredArrayUsingPredicate:predicate];
+		
+		NSString *chatParticipantNames = @"";
+		NSInteger chatParticipantsCount = [chatParticipants count];
+		
+		// Format Chat Participant Names
+		if(chatParticipantsCount > 0)
+		{
+			ChatParticipantModel *chatParticipant = [chatParticipants objectAtIndex:0];
+			
+			if(chatParticipantsCount > 1)
+			{
+				chatParticipantNames = [chatParticipant.LastName stringByAppendingFormat:@" & %ld more...", (long)chatParticipantsCount - 1];
+			}
+			else
+			{
+				chatParticipantNames = chatParticipant.FormattedNameLNF;
+			}
+		}
+		
+		[cell.labelChatParticipants setText:chatParticipantNames];
+	}
+	
 	// Set Date and Time
-	if(chatMessage.TimeReceived_LCL)
+	if(chatMessage.TimeSent_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeReceived_LCL];
+		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeSent_LCL];
 		
 		[dateFormatter setDateFormat:@"M/dd/yy"];
 		NSString *date = [dateFormatter stringFromDate:dateTime];
@@ -186,9 +219,30 @@
 		[cell.labelTime setText:time];
 	}
 	
-	// Set Name and Message
-	[cell.labelName setText:chatMessage.SenderName];
+	// Set Message
 	[cell.labelMessage setText:chatMessage.Text];
+	
+	// Set Unopened/Unread
+	if(chatMessage.Unopened)
+	//if(indexPath.row % 2) // Only used for testing both styles
+	{
+		// Show blue bar
+		[cell.viewUnopened setHidden:NO];
+		
+		// Style Message
+		[cell.labelMessage setTextColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0]];
+		[cell.labelMessage setFont:[UIFont boldSystemFontOfSize:cell.labelMessage.font.pointSize]];
+	}
+	// Set Opened/Read
+	else
+	{
+		// Hide blue bar
+		[cell.viewUnopened setHidden:YES];
+		
+		// Style Message
+		[cell.labelMessage setTextColor:cell.labelMessage.textColor];
+		[cell.labelMessage setFont:[UIFont systemFontOfSize:cell.labelMessage.font.pointSize]];
+	}
 	
 	return cell;
 }
@@ -263,10 +317,9 @@
 			NSLog(@"ID: %@", chatMessage.ID);
 			NSLog(@"Text: %@", chatMessage.Text);
 			NSLog(@"SenderID: %@", chatMessage.SenderID);
-			NSLog(@"SenderName: %@", chatMessage.SenderName);
-			NSLog(@"State: %@", chatMessage.State);
-			NSLog(@"TimeReceived_LCL: %@", chatMessage.TimeReceived_LCL);
-			NSLog(@"TimeReceived_UTC: %@", chatMessage.TimeReceived_UTC);
+			NSLog(@"Unopened: %@", (chatMessage.Unopened ? @"Yes" : @"No"));
+			NSLog(@"TimeSent_LCL: %@", chatMessage.TimeSent_LCL);
+			NSLog(@"TimeSent_UTC: %@", chatMessage.TimeSent_UTC);
 	 
 			[chatMessageDetailViewController setConversationID:chatMessage.ID];
 		}

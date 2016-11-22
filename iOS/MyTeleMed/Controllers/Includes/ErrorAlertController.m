@@ -16,7 +16,7 @@
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) NSMutableArray *windows;
 @property (nonatomic, strong) NSDate *dateLastOfflineError;
-@property BOOL isErrorAlertShowing;
+@property (nonatomic) BOOL isErrorAlertShowing;
 
 @end
 
@@ -41,10 +41,6 @@
 {
 	[super viewWillDisappear:animated];
 	
-	NSLog(@"ViewWillDisappear");
-	
-	NSLog(@"Windows: %lu", (unsigned long)[[ErrorAlertController sharedInstance].windows count]);
-	
 	// Remove this window from stack
 	[[ErrorAlertController sharedInstance].windows removeObject:self.window];
 	
@@ -59,13 +55,9 @@
 {
 	[super viewDidDisappear:animated];
 	
-	NSLog(@"ViewDidDisappear");
-	
 	// Remove window property
 	[self.window setHidden:YES];
 	self.window = nil;
-	
-	NSLog(@"Windows: %lu", (unsigned long)[[ErrorAlertController sharedInstance].windows count]);
 }
 
 - (instancetype)show:(NSError *)error
@@ -82,8 +74,7 @@
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Dismiss alert
-		[alertController dismissViewControllerAnimated:YES completion:nil];
+		// No action necessary
 	}];
 	
 	[alertController addAction:actionOK];
@@ -113,14 +104,10 @@
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Would you like to try again?", errorMessage] preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Dismiss alert
-		[alertController dismissViewControllerAnimated:YES completion:nil];
+		// No action necessary
 	}];
 	UIAlertAction *actionRetry = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Dismiss alert
-		[alertController dismissViewControllerAnimated:YES completion:nil];
-		
 		// Execute callback
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -156,7 +143,8 @@
 			self.offlineAlertController = [ErrorAlertController alertControllerWithTitle:@"Data Connection Unavailable" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 			{
-				[self dismiss];
+				// Toggle Error Alert to show again
+				self.isErrorAlertShowing = NO;
 			}];
 			
 			[self.offlineAlertController addAction:actionOK];

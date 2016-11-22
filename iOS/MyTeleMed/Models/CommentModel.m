@@ -13,7 +13,7 @@
 
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSNumber *pendingID;
-@property (nonatomic) BOOL pendingComplete;
+//@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -77,7 +77,7 @@
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
-			// Not currently used
+			// Still being used
 			if([self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
 			{
 				[self.delegate saveCommentSuccess:comment withPendingID:pendingID];

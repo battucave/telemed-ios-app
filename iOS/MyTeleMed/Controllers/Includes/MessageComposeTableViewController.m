@@ -8,6 +8,7 @@
 
 #import "MessageComposeTableViewController.h"
 #import "MessageRecipientPickerViewController.h"
+#import "MessageRecipientModel.h"
 
 @interface MessageComposeTableViewController ()
 
@@ -70,11 +71,15 @@
 	
 	if(messageRecipientsCount > 0)
 	{
-		messageRecipientNames = [[messageRecipients objectAtIndex:0] Name];
+		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
 		
 		if(messageRecipientsCount > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+		}
+		else
+		{
+			messageRecipientNames = messageRecipient.Name;
 		}
 	}
 	

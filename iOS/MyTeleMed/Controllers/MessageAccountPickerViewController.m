@@ -332,4 +332,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+	// Avoid superfluous warning that "Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior <UISearchController>"
+	[self.searchController.view removeFromSuperview];
+}
+
 @end

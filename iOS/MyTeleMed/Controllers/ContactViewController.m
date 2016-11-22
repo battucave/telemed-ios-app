@@ -8,7 +8,6 @@
 
 #import "ContactViewController.h"
 #import "CallModel.h"
-#import "MyProfileModel.h"
 
 @interface ContactViewController ()
 

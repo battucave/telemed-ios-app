@@ -10,19 +10,25 @@
 
 @interface NewChatMessageModel ()
 
-@property BOOL pendingComplete;
+@property (nonatomic) NSString *chatMessage;
+@property (nonatomic) NSNumber *pendingID;
+//@property (nonatomic) BOOL pendingComplete;
 
 @end
 
 @implementation NewChatMessageModel
 
-- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat
+- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID
 {
 	// Show Activity Indicator
 	[self showActivityIndicator];
 	
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Store message and ID for sendChatMessagePending method
+	self.chatMessage = message;
+	self.pendingID = pendingID;
 	
 	NSMutableString *xmlParticipants = [[NSMutableString alloc] init];
 	
@@ -48,8 +54,6 @@
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
-	return;
-	
 	[self.operationManager POST:@"NewChatMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
@@ -57,10 +61,10 @@
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
-			// Still used to begin listening to replies if user remained on screen
-			if([self.delegate respondsToSelector:@selector(sendChatMessageSuccess)])
+			// Still being used
+			if([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
 			{
-				[self.delegate sendChatMessageSuccess];
+				[self.delegate sendChatMessageSuccess:message withPendingID:pendingID];
 			}
 		}
 		else
@@ -71,13 +75,14 @@
 			[self showError:error withCallback:^(void)
 			{
 				// Include callback to retry the request
-				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat];
+				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
+			// Still being used
+			if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
-				[self.delegate sendChatMessageError:error];
-			}*/
+				[self.delegate sendChatMessageError:error withPendingID:pendingID];
+			}
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -97,13 +102,14 @@
 		[self showError:error withCallback:^(void)
 		{
 			// Include callback to retry the request
-			[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat];
+			[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
+		// Still being used
+		if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
-			[self.delegate sendChatMessageError:error];
-		}*/
+			[self.delegate sendChatMessageError:error withPendingID:pendingID];
+		}
 	}];
 }
 
@@ -117,13 +123,13 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Chat Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendChatMessagePending)])
+	if(/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 	{
-		[self.delegate sendChatMessagePending];
+		[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
+	//self.pendingComplete = YES;
 }
 
 @end

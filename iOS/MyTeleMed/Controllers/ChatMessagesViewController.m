@@ -71,7 +71,7 @@
 	
 	for(ChatMessageModel *chatMessage in self.selectedChatMessages)
 	{
-		if([chatMessage.State isEqualToString:@"Unread"])
+		if(chatMessage.Unopened)
 		{
 			unreadChatMessageCount++;
 		}

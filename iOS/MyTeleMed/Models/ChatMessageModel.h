@@ -30,12 +30,13 @@
 @property (weak) id delegate;
 
 @property (nonatomic) NSNumber *ID;
-@property (nonatomic) NSString *Text;
 @property (nonatomic) NSNumber *SenderID;
-@property (nonatomic) NSString *SenderName;
-@property (nonatomic) NSString *State;
-@property (nonatomic) NSString *TimeReceived_LCL;
-@property (nonatomic) NSString *TimeReceived_UTC;
+@property (nonatomic) NSString *Text;
+@property (nonatomic) NSString *TimeSent_LCL;
+@property (nonatomic) NSString *TimeSent_UTC;
+@property (nonatomic) BOOL Unopened;
+
+@property (nonatomic) NSArray *ChatParticipants;
 
 - (void)getChatMessages;
 - (void)getChatMessageByID:(NSNumber *)chatMessageID;

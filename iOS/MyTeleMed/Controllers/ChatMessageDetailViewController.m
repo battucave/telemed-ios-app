@@ -11,6 +11,7 @@
 #import "AutoGrowingTextView.h"
 #import "CommentCell.h"
 #import "ChatMessageModel.h"
+#import "ChatParticipantModel.h"
 #import "NewChatMessageModel.h"
 
 @interface ChatMessageDetailViewController ()
@@ -21,12 +22,13 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableChatMessages;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatMessage;
-@property (weak, nonatomic) IBOutlet UIButton *buttonChatMessageRecipient;
+@property (weak, nonatomic) IBOutlet UIButton *buttonChatParticipant;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
 @property (nonatomic) NSString *textViewChatMessagePlaceholder;
 
 @property (nonatomic) BOOL isLoaded;
+@property (nonatomic) BOOL isGroupChat;
 
 @property (nonatomic) NSUInteger chatMessageCount;
 @property (nonatomic) NSArray *chatMessages;
@@ -105,7 +107,7 @@
 }
 
 // Unwind Segue from MessageRecipientPickerViewController
-- (IBAction)setMessageRecipients:(UIStoryboardSegue *)segue
+- (IBAction)setChatParticipants:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to Source View Controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;
@@ -113,22 +115,31 @@
 	// Save selected Chat Participants
 	[self setSelectedChatParticipants:messageRecipientPickerViewController.selectedMessageRecipients];
 	
-	NSString *messageRecipientNames = @"";
-	NSInteger messageRecipientsCount = [messageRecipientPickerViewController.selectedMessageRecipients count];
+	// Save Group Chat setting
+	[self setIsGroupChat:messageRecipientPickerViewController.isGroupChat];
 	
-	if(messageRecipientsCount > 0)
+	NSLog(@"Is Group Chat: %@", (self.isGroupChat ? @"Yes" : @"No"));
+	
+	NSString *chatParticipantNames = @"";
+	NSInteger chatParticipantsCount = [self.selectedChatParticipants count];
+	
+	if(chatParticipantsCount > 0)
 	{
-		messageRecipientNames = [[messageRecipientPickerViewController.selectedMessageRecipients objectAtIndex:0] Name];
+		ChatParticipantModel *chatParticipant = [self.selectedChatParticipants objectAtIndex:0];
 		
-		if(messageRecipientsCount > 1)
+		if(chatParticipantsCount > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+			chatParticipantNames = [chatParticipant.LastName stringByAppendingFormat:@" & %ld more...", (long)chatParticipantsCount - 1];
+		}
+		else
+		{
+			chatParticipantNames = chatParticipant.FormattedNameLNF;
 		}
 	}
 	
-	// Update Message Recipient Label with Message Recipient Name
-	[self.buttonChatMessageRecipient setTitle:messageRecipientNames forState:UIControlStateNormal];
-	[self.buttonChatMessageRecipient setTitle:messageRecipientNames forState:UIControlStateSelected];
+	// Update Message Recipient Label with Chat Participant Name
+	[self.buttonChatParticipant setTitle:chatParticipantNames forState:UIControlStateNormal];
+	[self.buttonChatParticipant setTitle:chatParticipantNames forState:UIControlStateSelected];
 	
 	// Validate form
 	[self validateForm:self.textViewChatMessage.text];
@@ -139,9 +150,7 @@
 	[self setNewChatMessageModel:[[NewChatMessageModel alloc] init]];
 	[self.newChatMessageModel setDelegate:self];
 	
-	[self.newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:NO];
-	
-	// IMPORTANT: Manually add message to screen. Maintain delegate success to start listening for changes on success
+	[self.newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:self.isGroupChat withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 
 // Check required fields to determine if Form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate
@@ -204,23 +213,35 @@
 	[self.chatMessageModel showError:error];
 }
 
-// Return Pending from NewChatMessageModel delegate
-- (void)sendChatMessagePending
+// Return pending from NewChatMessageModel delegate
+- (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
-	// Do something?
+	NSLog(@"sendChatMessagePending");
+	
+	// Add Message to Chat Messages
 }
 
-- (void)sendChatMessageSuccess
+// Return success from NewChatMessageModel delegate
+- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
-	// IMPORTANT: Manually add message to screen. Maintain delegate success to start listening for changes on success
+	NSLog(@"sendChatMessageSuccess");
+}
+
+// Return error from NewChatMessageModel delegate
+- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID
+{
+	NSLog(@"sendChatMessageError");
 }
 
 // Scroll to bottom of Table Comments
 - (void)scrollToBottom
 {
-	NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:[self.chatMessages count] - 1 inSection:0];
-	
-	[self.tableChatMessages scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	if([self.chatMessages count] > 1)
+	{
+		NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:[self.chatMessages count] - 1 inSection:0];
+		
+		[self.tableChatMessages scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	}
 }
 
 - (void)dismissKeyboard:(NSNotification *)notification
@@ -371,17 +392,17 @@
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];
 
 	// Set Message Event Date and Time
-	if(chatMessage.TimeReceived_LCL)
+	if(chatMessage.TimeSent_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeReceived_LCL];
+		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeSent_LCL];
 		
 		// If date is nil, it may have been formatted incorrectly
 		if(dateTime == nil)
 		{
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-			dateTime = [dateFormatter dateFromString:chatMessage.TimeReceived_LCL];
+			dateTime = [dateFormatter dateFromString:chatMessage.TimeSent_LCL];
 		}
 		
 		[dateFormatter setDateFormat:@"M/dd/yy h:mm a"];
@@ -396,7 +417,8 @@
 	// Set Message Event Sender
 	if(currentUserIsSender)
 	{
-		[cell.labelEnteredBy setText:chatMessage.SenderName];
+		NSLog(@"Chat Participants: %lu", (unsigned long)[chatMessage.ChatParticipants count]);
+		//[cell.labelEnteredBy setText:chatMessage.SenderName];
 	}
 	
 	return cell;

@@ -27,9 +27,15 @@
 		// Parse the XML file
 		if([xmlParser parse])
 		{
+			// Sort Chat Participants by Last Name, First Name
+			NSArray *chatParticipants = [[parser chatParticipants] sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
+			{
+				return [chatParticipantModelA.FormattedNameLNF compare:chatParticipantModelB.FormattedNameLNF];
+			}];
+			
 			if([self.delegate respondsToSelector:@selector(updateChatParticipants:)])
 			{
-				[self.delegate updateChatParticipants:[parser chatParticipants]];
+				[self.delegate updateChatParticipants:[chatParticipants mutableCopy]];
 			}
 		}
 		// Error parsing XML file

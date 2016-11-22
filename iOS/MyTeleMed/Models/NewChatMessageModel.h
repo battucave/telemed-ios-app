@@ -12,9 +12,9 @@
 @protocol NewChatMessageDelegate <NSObject>
 
 @optional
-- (void)sendChatMessagePending;
-- (void)sendChatMessageSuccess;
-- (void)sendChatMessageError:(NSError *)error;
+- (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID;
+- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID;
+- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID;
 
 @end
 
@@ -24,6 +24,7 @@
 @property (nonatomic) BOOL Success;
 @property (nonatomic) NSString *Message;
 
-- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat;
+//- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat;
+- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID;
 
 @end

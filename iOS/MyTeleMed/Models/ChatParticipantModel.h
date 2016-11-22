@@ -28,7 +28,7 @@
 @property (nonatomic) NSString *LastName;
 @property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *FormattedName;
-@property (nonatomic) NSString *FormattedNameLF;
+@property (nonatomic) NSString *FormattedNameLNF;
 
 - (void)getChatParticipants;
 

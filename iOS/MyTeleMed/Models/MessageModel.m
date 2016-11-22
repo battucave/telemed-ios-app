@@ -15,8 +15,8 @@
 @property (nonatomic) int totalNumberOfOperations;
 @property (nonatomic) int numberOfFinishedOperations;
 @property (nonatomic) NSMutableArray *failedMessages;
-@property BOOL queueCancelled;
-@property BOOL pendingComplete;
+@property (nonatomic) BOOL queueCancelled;
+@property (nonatomic) BOOL pendingComplete;
 
 @end
 

@@ -28,7 +28,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"ChatParticipant"])
+	if([elementName isEqualToString:@"Person"])
 	{
 		// Initialize the Message Event.
 		self.chatParticipant = [[ChatParticipantModel alloc] init];
@@ -49,7 +49,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"ChatParticipant"])
+	if([elementName isEqualToString:@"Person"])
 	{
 		[self.chatParticipants addObject:self.chatParticipant];
 		
@@ -59,15 +59,17 @@
 	{
 		[self.chatParticipant setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	/*else if([elementName isEqualToString:@"Name"])
+	else if([elementName isEqualToString:@"FormattedNameLNF"])
 	{
 		[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
-	}*/
+		
+		// Manually set Name property from FormattedNameLNF
+		[self.chatParticipant setValue:self.currentElementValue forKey:@"Name"];
+	}
 	else
 	{
 		@try
 		{
-			NSLog(@"%@ = %@", elementName, self.currentElementValue);
 			[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
 		}
 		@catch(NSException *exception)
