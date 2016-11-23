@@ -12,6 +12,7 @@
 #import "CommentCell.h"
 #import "ChatMessageModel.h"
 #import "ChatParticipantModel.h"
+#import "MyProfileModel.h"
 #import "NewChatMessageModel.h"
 
 @interface ChatMessageDetailViewController ()
@@ -20,18 +21,21 @@
 @property (nonatomic, getter=theNewChatMessageModel) NewChatMessageModel *newChatMessageModel;
 @property (nonatomic) ChatMessageModel *chatMessageModel;
 
+@property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatParticipants;
+@property (weak, nonatomic) IBOutlet UIButton *buttonAddChatParticipant;
 @property (weak, nonatomic) IBOutlet UITableView *tableChatMessages;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatMessage;
-@property (weak, nonatomic) IBOutlet UIButton *buttonChatParticipant;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
 @property (nonatomic) NSString *textViewChatMessagePlaceholder;
 
 @property (nonatomic) BOOL isLoaded;
 @property (nonatomic) BOOL isGroupChat;
+@property (nonatomic) BOOL isParticipantsExpanded;
 
 @property (nonatomic) NSUInteger chatMessageCount;
-@property (nonatomic) NSArray *chatMessages;
+@property (nonatomic) NSNumber *currentUserID;
+@property (nonatomic) NSMutableArray *chatMessages;
 @property (nonatomic) NSMutableArray *selectedChatParticipants;
 
 @end
@@ -42,16 +46,24 @@
 {
 	[super viewDidLoad];
 	
+	// Set Current User ID
+	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	self.currentUserID = myProfileModel.ID;
+	
 	// Initialize Chat Message Model
 	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
 	[self.chatMessageModel setDelegate:self];
 	
-	// Initialize Text View Comment Input
+	// Initialize Text View Chat Participants
+	[self.textViewChatParticipants setDelegate:self];
+	[self.textViewChatParticipants setTextContainerInset:UIEdgeInsetsZero];
+	
+	// Initialize Text View Chat Message Input
 	UIEdgeInsets textViewChatMessageEdgeInsets = self.textViewChatMessage.textContainerInset;
 	
 	[self.textViewChatMessage setDelegate:self];
+	[self.textViewChatMessage setMaxHeight:118.5f]; // (118.5 = View height - keyboard height - Chat Participants View Height - 1px border on iPhone 4s)
 	[self.textViewChatMessage setTextContainerInset:UIEdgeInsetsMake(textViewChatMessageEdgeInsets.top, 12.0f, textViewChatMessageEdgeInsets.bottom, 12.0f)];
-	[self.textViewChatMessage setMaxHeight:120.0f];
 	self.textViewChatMessagePlaceholder = self.textViewChatMessage.text;
 }
 
@@ -62,13 +74,25 @@
 	// Only get Chat Messages if there is an existing Conversation ID (New Chat Message does not have Conversation ID)
 	if(self.conversationID)
 	{
-		// TEMPORARY
-		//[self.messageEventModel getMessageEvents:self.conversationID];
-		[self.chatMessageModel getChatMessages];
+		[self.chatMessageModel getChatMessagesByID:self.conversationID];
+		
+		// Existing Chat Messages are always a Group Chat
+		self.isGroupChat = YES;
+		
+		// Hide Add Chat Participant button
+		[self.buttonAddChatParticipant setHidden:YES];
 	}
 	
-	// Add 10px to bottom of Table Comments
-	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(0, 0, 10, 0)];
+	// Detect taps on Text View Chat Participants to allow for toggling Participants list AND scrolling the textview
+	UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textViewChatParticipantsTapped:)];
+	
+	[self.textViewChatParticipants addGestureRecognizer:tapGestureRecognizer];
+	
+	// Set max height of Text View Chat Participants to half of screen size minus max height of Text View Chat Message minus height of navigation bar
+	[self.textViewChatParticipants setMaxHeight:(([UIScreen mainScreen].bounds.size.height - 64.0f - self.textViewChatMessage.bounds.size.height) / 2.5)];
+	
+	// Add 10px to top and bottom of Table Comments
+	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(10, 0, 10, 0)];
 	
 	// Add Keyboard Observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -100,10 +124,27 @@
 	[self.view endEditing:YES];
 }
 
+- (IBAction)sendChatMessage:(id)sender
+{
+	[self setNewChatMessageModel:[[NewChatMessageModel alloc] init]];
+	[self.newChatMessageModel setDelegate:self];
+	
+	[self.newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:self.isGroupChat withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
+}
+
 // Perform Segue to MessageRecipientPickerTableViewController
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
-	[self performSegueWithIdentifier:@"showMessageRecipientPickerFromChatMessageDetail" sender:sender];
+	// If Chat Detail screen then just show expanded list of Participants
+	if(self.conversationID)
+	{
+		[self toggleChatParticipantNames];
+	}
+	// New Chat Message screen
+	else
+	{
+		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromChatMessageDetail" sender:sender];
+	}
 }
 
 // Unwind Segue from MessageRecipientPickerViewController
@@ -120,37 +161,100 @@
 	
 	NSLog(@"Is Group Chat: %@", (self.isGroupChat ? @"Yes" : @"No"));
 	
-	NSString *chatParticipantNames = @"";
-	NSInteger chatParticipantsCount = [self.selectedChatParticipants count];
-	
-	if(chatParticipantsCount > 0)
-	{
-		ChatParticipantModel *chatParticipant = [self.selectedChatParticipants objectAtIndex:0];
-		
-		if(chatParticipantsCount > 1)
-		{
-			chatParticipantNames = [chatParticipant.LastName stringByAppendingFormat:@" & %ld more...", (long)chatParticipantsCount - 1];
-		}
-		else
-		{
-			chatParticipantNames = chatParticipant.FormattedNameLNF;
-		}
-	}
-	
-	// Update Message Recipient Label with Chat Participant Name
-	[self.buttonChatParticipant setTitle:chatParticipantNames forState:UIControlStateNormal];
-	[self.buttonChatParticipant setTitle:chatParticipantNames forState:UIControlStateSelected];
+	// Update Text View Chat Participants with Chat Participant Name(s)
+	[self setChatParticipantNames:self.selectedChatParticipants expanded:NO];
 	
 	// Validate form
 	[self validateForm:self.textViewChatMessage.text];
 }
 
-- (IBAction)sendChatMessage:(id)sender
+// Handle only taps on Text View Chat Participants
+- (void)textViewChatParticipantsTapped:(UITapGestureRecognizer *)recognizer
 {
-	[self setNewChatMessageModel:[[NewChatMessageModel alloc] init]];
-	[self.newChatMessageModel setDelegate:self];
+	// Perform Segue to Message Recipient Picker to duplicate its conditional functionality
+	[self performSegueToMessageRecipientPicker:recognizer.view];
+}
+
+// Update Text View Chat Participants with Chat Participant Name(s)
+- (void)setChatParticipantNames:(NSArray *)chatParticipants expanded:(BOOL)expanded
+{
+	// Remove self from Chat Participants
+	if([chatParticipants count] > 0)
+	{
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID != %@", self.currentUserID];
+		chatParticipants = [chatParticipants filteredArrayUsingPredicate:predicate];
+	}
 	
-	[self.newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:self.isGroupChat withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
+	NSString *chatParticipantNames = @"";
+	NSInteger chatParticipantsCount = [chatParticipants count];
+	
+	// Format Chat Participant Names
+	if(chatParticipantsCount > 0)
+	{
+		// Only need to expand Participants if more than one
+		if(expanded && chatParticipantsCount > 1)
+		{
+			// Collapse Text View Chat Message by removing focus from it
+			[self.textViewChatMessage resignFirstResponder];
+			
+			// Extract Formatted Names into array
+			NSArray *chatParticipantNamesArray = [self.selectedChatParticipants valueForKey:@"FormattedNameLNF"];
+			
+			// Flatten array into string with line breaks
+			chatParticipantNames = [chatParticipantNamesArray componentsJoinedByString:@"\n"];
+			
+			// TESTING ONLY
+			#if defined(DEBUG)
+				chatParticipantNames = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n", chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames];
+			#endif//*/
+		}
+		else
+		{
+			ChatParticipantModel *chatParticipant1 = [chatParticipants objectAtIndex:0];
+			ChatParticipantModel *chatParticipant2 = (chatParticipantsCount > 1 ? [chatParticipants objectAtIndex:1] : nil);
+			
+			switch(chatParticipantsCount)
+			{
+				case 1:
+					chatParticipantNames = chatParticipant1.FormattedNameLNF;
+					break;
+				
+				case 2:
+					chatParticipantNames = [NSString stringWithFormat:@"%@ & %@", chatParticipant1.LastName, chatParticipant2.LastName];
+					break;
+				
+				default:
+					chatParticipantNames = [NSString stringWithFormat:@"%@, %@ & %ld more...", chatParticipant1.LastName, chatParticipant2.LastName, (long)chatParticipantsCount - 2];
+					break;
+			}
+		}
+	}
+	
+	// Fix bug on iOS < 10 that UITextView font size changes when setting text if it is not selectable
+	[self.textViewChatParticipants setSelectable:YES];
+	
+	// Update Text View Chat Participants with Chat Participant Name(s)
+	[self.textViewChatParticipants setText:chatParticipantNames];
+	
+	// Flash scrollbar so user knows Participants are scrollable
+	if(expanded)
+	{
+		[self.textViewChatParticipants flashScrollIndicators];
+	}
+	// Prevent text selection unless Text View Chat Participants is expanded
+	else
+	{
+		[self.textViewChatParticipants setSelectable:NO];
+	}
+	
+	// Toggle Participants Expanded flag
+	self.isParticipantsExpanded = ! self.isParticipantsExpanded;
+}
+
+// Toggle expansion of Chat Participant Names
+- (void)toggleChatParticipantNames
+{
+	[self setChatParticipantNames:self.selectedChatParticipants expanded: ! self.isParticipantsExpanded];
 }
 
 // Check required fields to determine if Form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate
@@ -161,46 +265,66 @@
 	[self.buttonSend setEnabled:( ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.textViewChatMessagePlaceholder] && self.selectedChatParticipants != nil && [self.selectedChatParticipants count] > 0)];
 }
 
-/*/ Override default Remote Notification action from CoreViewController
+// Override default Remote Notification action from CoreViewController
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
 {
 	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
 	
 	// Reload Message Events if remote notification is a comment specifically for the current message
-	if([notificationType isEqualToString:@"Comment"] && deliveryID && [deliveryID isEqualToNumber:self.message.ID])
+	/*if([notificationType isEqualToString:@"Comment"] && deliveryID && [deliveryID isEqualToNumber:self.conversationID])
 	{
-		NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
+		NSLog(@"Refresh Comments with Conversation ID: %@", deliveryID);
 		
-		[self.messageEventModel getMessageEvents:self.message.ID];
+		[self.chatMessageModel getChatMessagesByID:self.conversationID];
 		
 		//return;
-	}
+	}*/
 	
 	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
 	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
-}*/
+}
 
 // Return Chat Messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
 	[self setIsLoaded:YES];
 	[self setChatMessages:chatMessages];
+	[self setSelectedChatParticipants:[[NSMutableArray alloc] init]];
 	
-	// Refresh message events again after delay
-	//[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
+	NSUInteger chatMessageCount = [chatMessages count];
+	
+	// Refresh Chat Messages again after delay (TEMPORARY COMMENTED OUT)
+	//[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:15.0];
+	
+	// Extract Chat Participants from first Chat Message
+	if(chatMessageCount > 0)
+	{
+		ChatMessageModel *chatMessage = [chatMessages objectAtIndex:0];
+		
+		if([chatMessage.ChatParticipants count] > 0)
+		{
+			[self setSelectedChatParticipants:[chatMessage.ChatParticipants mutableCopy]];
+			
+			// Update Text View Chat Participants with Chat Participant Name(s)
+			[self setChatParticipantNames:chatMessage.ChatParticipants expanded:NO];
+			
+			// Reset Participants Expanded flag
+			self.isParticipantsExpanded = NO;
+		}
+	}
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableChatMessages reloadData];
 		
 		// Scroll to bottom of Chat Messages after table reloads data only if a new Chat Message has been added since last check
-		if(self.chatMessageCount > 0 && [self.chatMessages count] > self.chatMessageCount)
+		if(self.chatMessageCount > 0 && chatMessageCount > self.chatMessageCount)
 		{
 			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 		}
 		
-		// Update Chat Message count with new number of Filtered Chat Messages
-		self.chatMessageCount = [self.chatMessages count];
+		// Update Chat Message count with new number of Chat Messages
+		self.chatMessageCount = chatMessageCount;
 	});
 }
 
@@ -216,21 +340,89 @@
 // Return pending from NewChatMessageModel delegate
 - (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
-	NSLog(@"sendChatMessagePending");
+	// Add Chat Message to Chat Messages Array
+	ChatMessageModel *chatMessage = [[ChatMessageModel alloc] init];
+	NSDate *currentDate = [[NSDate alloc] init];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	
-	// Add Message to Chat Messages
-}
-
-// Return success from NewChatMessageModel delegate
-- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID
-{
-	NSLog(@"sendChatMessageSuccess");
+	// Set Comment details
+	[chatMessage setID:pendingID];
+	[chatMessage setChatParticipants:self.selectedChatParticipants];
+	[chatMessage setSenderID:self.currentUserID];
+	[chatMessage setText:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)message, CFSTR(""), kCFStringEncodingUTF8))];
+	[chatMessage setUnopened:NO];
+	
+	// Create local date
+	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+	[chatMessage setTimeSent_LCL:[dateFormatter stringFromDate:currentDate]];
+	
+	// Create UTC date
+	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+	[chatMessage setTimeSent_UTC:[dateFormatter stringFromDate:currentDate]];
+	
+	[self.chatMessages addObject:chatMessage];
+	
+	// Begin actual update
+	[self.tableChatMessages beginUpdates];
+	
+	// If adding first Comment/Event
+	if([self.chatMessages count] == 1)
+	{
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+		
+		[self.tableChatMessages reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	// If adding to already existing Comments/Events
+	else
+	{
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.chatMessages count] - 1 inSection:0]];
+		
+		[self.tableChatMessages insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	
+	// Commit row updates
+	[self.tableChatMessages endUpdates];
+	
+	// Auto size Table Comments height to show all rows
+	//[self autoSizeTableChatMessages];
+	
+	// Clear and resign focus from Text View Comment
+	[self.textViewChatMessage setText:@""];
+	[self.textViewChatMessage resignFirstResponder];
+	[self.buttonSend setEnabled:NO];
+	
+	// Trigger a scroll to bottom to ensure the newly added Comment is shown
+	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
 
 // Return error from NewChatMessageModel delegate
 - (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID
 {
-	NSLog(@"sendChatMessageError");
+	// Find Comment with Pending ID in Filtered Message Events
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
+	NSArray *results = [self.chatMessages filteredArrayUsingPredicate:predicate];
+	
+	if([results count] > 0)
+	{
+		// Find and delete table cell that contains Chat Message
+		ChatMessageModel *chatMessage = [results objectAtIndex:0];
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
+		
+		// Remove Chat Message from Chat Messages
+		[self.chatMessages removeObject:chatMessage];
+		
+		// If removing only Chat Message
+		if([self.chatMessages count] == 0)
+		{
+			[self.tableChatMessages reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		// If removing from existing Chat Messages
+		else
+		{
+			[self.tableChatMessages deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+	}
 }
 
 // Scroll to bottom of Table Comments
@@ -243,6 +435,17 @@
 		[self.tableChatMessages scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 	}
 }
+
+/*/ Auto size Table Chat Messages height to show all rows
+- (void)autoSizeTableChatMessages
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		CGSize newSize = [self.tableChatMessages sizeThatFits:CGSizeMake(self.tableChatMessages.frame.size.width, MAXFLOAT)];
+		
+		self.constraintTableChatMessagesHeight.constant = newSize.height;
+	});
+}*/
 
 - (void)dismissKeyboard:(NSNotification *)notification
 {
@@ -280,6 +483,12 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
+	// Collapse Text View Chat Participants
+	if(self.isParticipantsExpanded)
+	{
+		[self setChatParticipantNames:self.selectedChatParticipants expanded:NO];
+	}
+	
 	// Hide placeholder
 	if([textView.text isEqualToString:self.textViewChatMessagePlaceholder])
 	{
@@ -342,24 +551,6 @@
 	}
 	
 	return UITableViewAutomaticDimension;
-	
-	/*/ Manually determine height for < iOS8 OR for calculating total table height before all rows have loaded
-	static NSString *cellIdentifier = @"ChatMessageDetailCell";
-	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	
-	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
-	
-	[cell setNeedsLayout];
-	[cell layoutIfNeeded];
-	
-	// Calculate Auto Height of Table Cell
-	[cell.labelDetail setText:chatMessage.Text];
-	[cell.labelDetail setPreferredMaxLayoutWidth:cell.labelDetail.frame.size.width];
-	
-	// Determine the new height
-	CGFloat cellHeight = ceil([cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height);
-	
-	return cellHeight;*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -376,6 +567,9 @@
 			[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
 		}
 		
+		// Auto size Table Chat Messages height to show all rows
+		//[self autoSizeTableChatMessages];
+		
 		return emptyCell;
 	}
 	
@@ -385,8 +579,8 @@
 	// Set up the cell
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
-	//BOOL currentUserIsSender = ([messageEvent.EnteredByID isEqualToNumber:self.currentUserID]);
-	BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
+	BOOL currentUserIsSender = ([chatMessage.SenderID isEqualToNumber:self.currentUserID]);
+	//BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
 	
 	// Set both types of events to use CommentCell
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];
@@ -415,11 +609,21 @@
 	[cell.labelDetail setText:chatMessage.Text];
 	
 	// Set Message Event Sender
-	if(currentUserIsSender)
+	if( ! currentUserIsSender)
 	{
-		NSLog(@"Chat Participants: %lu", (unsigned long)[chatMessage.ChatParticipants count]);
-		//[cell.labelEnteredBy setText:chatMessage.SenderName];
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", chatMessage.SenderID];
+		NSArray *results = [chatMessage.ChatParticipants filteredArrayUsingPredicate:predicate];
+		
+		if([results count] > 0)
+		{
+			ChatParticipantModel *chatParticipant = [results objectAtIndex:0];
+			
+			[cell.labelEnteredBy setText:chatParticipant.FormattedName];
+		}
 	}
+	
+	// Auto size Table Chat Messages height to show all rows
+	//[self autoSizeTableChatMessages];
 	
 	return cell;
 }

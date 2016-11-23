@@ -191,7 +191,7 @@
 		}
 	}
 	
-	// Refresh message events again after delay
+	// Refresh Message Events again after delay
 	[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
@@ -367,8 +367,6 @@
 		else
 		{
 			[self.tableComments deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableComments reloadData];
 		}
 	}
 }

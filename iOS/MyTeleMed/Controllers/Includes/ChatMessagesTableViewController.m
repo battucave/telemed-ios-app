@@ -16,12 +16,12 @@
 @interface ChatMessagesTableViewController ()
 
 @property (nonatomic) ChatMessageModel *chatMessageModel;
-@property (nonatomic) MyProfileModel *myProfileModel;
+
+@property (nonatomic) BOOL isLoaded;
 
 @property (nonatomic) NSMutableArray *chatMessages;
 @property (nonatomic) NSMutableArray *selectedChatMessages;
-
-@property (nonatomic) BOOL isLoaded;
+@property (nonatomic) NSNumber *currentUserID;
 
 - (IBAction)refreshControlRequest:(id)sender;
 
@@ -40,12 +40,13 @@
 		[self.refreshControl endRefreshing];
 	});
 	
+	// Set Current User ID
+	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	self.currentUserID = myProfileModel.ID;
+	
 	// Initialize Chat Message Model
 	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
 	[self.chatMessageModel setDelegate:self];
-	
-	// Initialize My Profile Model
-	[self setMyProfileModel:[MyProfileModel sharedInstance]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -116,6 +117,15 @@
 // Return Chat Messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
+	// Sort Chat Messages by Date Descending
+	if([chatMessages count] > 0)
+	{
+		chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+		{
+			return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
+		}] mutableCopy];
+	}
+	
 	[self setIsLoaded:YES];
 	[self setChatMessages:chatMessages];
 	
@@ -178,7 +188,7 @@
 	if(chatMessage.ChatParticipants)
 	{
 		// Remove self from Chat Participants
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID != %@", self.myProfileModel.ID];
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID != %@", self.currentUserID];
 		NSArray *chatParticipants = [chatMessage.ChatParticipants filteredArrayUsingPredicate:predicate];
 		
 		NSString *chatParticipantNames = @"";
@@ -187,15 +197,30 @@
 		// Format Chat Participant Names
 		if(chatParticipantsCount > 0)
 		{
-			ChatParticipantModel *chatParticipant = [chatParticipants objectAtIndex:0];
+			ChatParticipantModel *chatParticipant1 = [chatParticipants objectAtIndex:0];
+			ChatParticipantModel *chatParticipant2 = (chatParticipantsCount > 1 ? [chatParticipants objectAtIndex:1] : nil);
 			
-			if(chatParticipantsCount > 1)
+			switch(chatParticipantsCount)
 			{
-				chatParticipantNames = [chatParticipant.LastName stringByAppendingFormat:@" & %ld more...", (long)chatParticipantsCount - 1];
-			}
-			else
-			{
-				chatParticipantNames = chatParticipant.FormattedNameLNF;
+				case 1:
+					chatParticipantNames = chatParticipant1.FormattedNameLNF;
+					break;
+				
+				case 2:
+					chatParticipantNames = [NSString stringWithFormat:@"%@ & %@", chatParticipant1.LastName, chatParticipant2.LastName];
+					break;
+				
+				default:
+					// iPhone 6+ can handle more names
+					if([UIScreen mainScreen].bounds.size.width > 320.0f)
+					{
+						chatParticipantNames = [NSString stringWithFormat:@"%@, %@ & %ld more...", chatParticipant1.LastName, chatParticipant2.LastName, (long)chatParticipantsCount - 2];
+					}
+					else
+					{
+						chatParticipantNames = [NSString stringWithFormat:@"%@ & %ld more...", chatParticipant1.LastName, (long)chatParticipantsCount - 2];
+					}
+					break;
 			}
 		}
 		

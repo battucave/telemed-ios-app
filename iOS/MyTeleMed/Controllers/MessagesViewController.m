@@ -68,7 +68,7 @@
 	if([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		// Change top layout constraint to 11 (Keep Swipe Message there as it will simply be hidden under the Container View and we can still use the top border of it)
-		self.constraintTopSpace.constant = 11;
+		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
 	}
 	
 	[self toggleToolbarButtons:NO];

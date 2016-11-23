@@ -39,7 +39,7 @@
 @property (nonatomic) NSArray *ChatParticipants;
 
 - (void)getChatMessages;
-- (void)getChatMessageByID:(NSNumber *)chatMessageID;
+- (void)getChatMessagesByID:(NSNumber *)chatMessageID;
 - (void)deleteChatMessage:(NSNumber *)chatMessageID;
 - (void)deleteMultipleChatMessages:(NSArray *)chatMessages;
 

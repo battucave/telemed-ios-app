@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessageRecipient;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessage;
+@property (weak, nonatomic) IBOutlet UILabel *labelMessageRecipient;
 
 @end
 
@@ -84,8 +85,7 @@
 	}
 	
 	// Update Message Recipient Label with Message Recipient Name
-	[self.buttonMessageRecipient setTitle:messageRecipientNames forState:UIControlStateNormal];
-	[self.buttonMessageRecipient setTitle:messageRecipientNames forState:UIControlStateSelected];
+	[self.labelMessageRecipient setText:messageRecipientNames];
 }
 
 // Resize Message Text View to match available space between top of Table Cell and Keyboard
