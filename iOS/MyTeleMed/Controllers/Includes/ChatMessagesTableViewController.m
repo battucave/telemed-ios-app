@@ -19,7 +19,7 @@
 
 @property (nonatomic) BOOL isLoaded;
 
-@property (nonatomic) NSMutableArray *chatMessages;
+@property (nonatomic) NSMutableArray *hiddenChatMessages;
 @property (nonatomic) NSMutableArray *selectedChatMessages;
 @property (nonatomic) NSNumber *currentUserID;
 
@@ -71,10 +71,52 @@
 	[settings synchronize];
 }
 
-// Check Chat Messages
+// Reload Chat Messages
 - (void)reloadChatMessages
 {
 	[self.chatMessageModel getChatMessages];
+}
+
+- (void)hideSelectedChatMessages:(NSArray *)chatMessages
+{
+	self.hiddenChatMessages = [NSMutableArray new];
+	
+	// If no Chat Messages to hide, cancel
+	if(chatMessages == nil || [chatMessages count] == 0)
+	{
+		return;
+	}
+	
+	// Add each Chat Message to Hidden Chat Messages
+	for(ChatMessageModel *chatMessage in chatMessages)
+	{
+		[self.hiddenChatMessages addObject:chatMessage];
+	}
+	
+	// Toggle the Edit button
+	[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
+	
+	[self.tableView reloadData];
+}
+
+- (void)unHideSelectedChatMessages:(NSArray *)chatMessages
+{
+	// If no Chat Messages to hide, cancel
+	if(chatMessages == nil || [chatMessages count] == 0)
+	{
+		return;
+	}
+	
+	// Remove each Chat Message from Hidden Chat Messages
+	for(ChatMessageModel *chatMessage in chatMessages)
+	{
+		[self.hiddenChatMessages removeObject:chatMessage];
+	}
+	
+	// Show the Edit button (there will always be at least one Message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+	
+	[self.tableView reloadData];
 }
 
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
@@ -92,22 +134,24 @@
 	for(ChatMessageModel *chatMessage in chatMessages)
 	{
 		[self.chatMessages removeObject:chatMessage];
+		[self.hiddenChatMessages removeObject:chatMessage];
 		[self.selectedChatMessages removeObject:chatMessage];
 		
 		[indexPaths addObject:[NSIndexPath indexPathForItem:[chatMessagesCopy indexOfObject:chatMessage] inSection:0]];
 	}
 	
 	// Remove rows
-	if([self.chatMessages count] > 0)
+	if([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no Chat Messages left in the source data, reload the table to show the No Messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the No Messages cell))
+	// If there are no Chat Messages left in the source data, simply reload the table to show the No Messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the No Messages cell))
 	else
 	{
 		[self.tableView reloadData];
 		
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+		// Toggle the Edit button
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 || [self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
 	// Update delegate's list of selected messages
@@ -165,9 +209,26 @@
 	return [self.chatMessages count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are Chat Messages and Hidden Chat Messages and row is not the only row in the table
+	if([self.chatMessages count] > 0 && [self.hiddenChatMessages count] > 0 && (indexPath.row > 0 || [self.chatMessages count] != [self.hiddenChatMessages count]))
+	{
+		ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
+		
+		// Hide Hidden Chat Messages by setting its height to 0
+		if([self.hiddenChatMessages containsObject:chatMessage])
+		{
+			return 0.0f;
+		}
+	}
+	
+	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.chatMessages count] == 0)
+	if([self.chatMessages count] == 0 || (indexPath.row == 0 && [self.chatMessages count] == [self.hiddenChatMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -183,6 +244,12 @@
 	
 	// Set up the cell
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
+	
+	// Hide Hidden Chat Messages
+	if([self.hiddenChatMessages count] > 0 && [self.hiddenChatMessages containsObject:chatMessage])
+	{
+		[cell setHidden:YES];
+	}
 	
 	// Set Participants
 	if(chatMessage.ChatParticipants)
@@ -338,14 +405,7 @@
 		{
 			ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
-			NSLog(@"Get Chat Message Detail");
-			NSLog(@"ID: %@", chatMessage.ID);
-			NSLog(@"Text: %@", chatMessage.Text);
-			NSLog(@"SenderID: %@", chatMessage.SenderID);
-			NSLog(@"Unopened: %@", (chatMessage.Unopened ? @"Yes" : @"No"));
-			NSLog(@"TimeSent_LCL: %@", chatMessage.TimeSent_LCL);
-			NSLog(@"TimeSent_UTC: %@", chatMessage.TimeSent_UTC);
-	 
+			[chatMessageDetailViewController setIsNewChat:NO];
 			[chatMessageDetailViewController setConversationID:chatMessage.ID];
 		}
 	}

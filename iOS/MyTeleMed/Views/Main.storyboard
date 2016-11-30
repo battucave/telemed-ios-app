@@ -25,7 +25,7 @@
                     </view>
                     <connections>
                         <segue destination="W1Q-1B-CLM" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegue" id="bBN-ok-Q7g"/>
-                        <segue destination="xvU-lO-4ac" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegue" id="kNn-t1-gLp"/>
+                        <segue destination="kay-ex-DkM" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegue" id="jE4-y9-Gdi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -822,7 +822,7 @@
                         <viewControllerLayoutGuide type="bottom" id="zNV-0l-rQp"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="vCf-2A-71b">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7fW-0Y-ehL">
@@ -846,7 +846,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="108" width="375" height="441"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
@@ -3859,11 +3859,11 @@
                         <viewControllerLayoutGuide type="bottom" id="tmm-zx-AMa"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="n38-BS-AWX">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GjJ-DZ-lPM">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44.5"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="44.5"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lv2-0a-Guf">
                                         <rect key="frame" x="15" y="11" width="30" height="22"/>
@@ -3926,7 +3926,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="62" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Yf9-Xr-x3o">
-                                <rect key="frame" x="0.0" y="44.5" width="375" height="458.5"/>
+                                <rect key="frame" x="0.0" y="108.5" width="375" height="512.5"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageDetailCell" rowHeight="73" id="tqU-Ae-Y1O" customClass="CommentCell">
@@ -4115,7 +4115,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9k-Zv-eY1">
-                                <rect key="frame" x="0.0" y="503" width="375" height="46"/>
+                                <rect key="frame" x="0.0" y="621" width="375" height="46"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XWh-RG-uGU">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -4231,13 +4231,13 @@
         <segue reference="uzl-of-xL0"/>
         <segue reference="V9Q-rq-EEe"/>
         <segue reference="nDL-G3-d11"/>
-        <segue reference="duc-Go-Hul"/>
-        <segue reference="c1m-Px-Iwz"/>
         <segue reference="SWX-Rd-no8"/>
         <segue reference="ZfR-s3-nyT"/>
+        <segue reference="duc-Go-Hul"/>
+        <segue reference="c1m-Px-Iwz"/>
         <segue reference="hp2-gk-n0x"/>
         <segue reference="xeH-nb-wrL"/>
-        <segue reference="9pZ-e2-2FC"/>
+        <segue reference="j8k-kI-sFx"/>
         <segue reference="d5q-Lg-iEw"/>
         <segue reference="yVi-an-TG3"/>
         <segue reference="O2m-UP-1tm"/>

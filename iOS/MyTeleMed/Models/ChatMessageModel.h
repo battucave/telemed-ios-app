@@ -21,7 +21,7 @@
 - (void)deleteChatMessageError:(NSError *)error;
 - (void)deleteMultipleChatMessagesPending;
 - (void)deleteMultipleChatMessagesSuccess;
-- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessageIDs;
+- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages;
 
 @end
 

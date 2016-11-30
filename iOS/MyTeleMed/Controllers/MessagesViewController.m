@@ -213,31 +213,31 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
-// Return Multiple Message States pending from MessageModel delegate
+// Return Modify Multiple Message States pending from MessageModel delegate
 - (void)modifyMultipleMessagesStatePending:(NSString *)state
 {
-	// Remove selected rows from MessagesTableViewController
+	// Hide selected rows from Messages Table
 	[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
 	
 	[self setEditing:NO animated:YES];
 }
 
-// Return Multiple Message States success from MessageModel delegate (no longer used)
+// Return Modify Multiple Message States success from MessageModel delegate
 - (void)modifyMultipleMessagesStateSuccess:(NSString *)state
 {
-	// Remove selected rows from MessagesTableViewController
+	// Remove selected rows from Messages Table
 	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
 }
 
-// Return Multiple Message States error from MessageModel delegate
+// Return Modify Multiple Message States error from MessageModel delegate
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
 {
-	// Determine which messages were successfully Archived
+	// Determine which Messages were successfully Archived
 	NSMutableArray *successfulMessages = [NSMutableArray arrayWithArray:[self.selectedMessages copy]];
 	
 	[successfulMessages removeObjectsInArray:failedMessages];
 	
-	// Remove selected all rows from MessagesTableViewController that were successfully Archived
+	// Remove selected all rows from Messages Table that were successfully Archived
 	if([self.selectedMessages count] > 0)
 	{
 		[self.messagesTableViewController removeSelectedMessages:successfulMessages];

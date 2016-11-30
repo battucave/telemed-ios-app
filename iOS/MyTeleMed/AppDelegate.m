@@ -265,7 +265,7 @@
 			"NotificationType":"Chat"
 		}*/
 	
-	/*/ TESTING ONLY (push notifications can generally only be tested in AdHoc mode where nothing can be logged, so show result in an alert instead)
+	/*/ TESTING ONLY (push notifications can generally only be tested in Ad Hoc mode where nothing can be logged, so show result in an alert instead)
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[alertView show];

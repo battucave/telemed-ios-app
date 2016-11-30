@@ -13,7 +13,7 @@
 
 @property (nonatomic) int totalNumberOfOperations;
 @property (nonatomic) int numberOfFinishedOperations;
-@property (nonatomic) NSMutableArray *failedChatMessageIDs;
+@property (nonatomic) NSMutableArray *failedChatMessages;
 @property (nonatomic) BOOL queueCancelled;
 @property (nonatomic) BOOL pendingComplete;
 
@@ -95,21 +95,15 @@
 
 - (void)deleteChatMessage:(NSNumber *)chatMessageID
 {
-	// TEMPORARY
-	NSLog(@"Delete Chat Message");
-	
-	[self.delegate deleteChatMessageSuccess];
-	
-	return;
-	
 	// Show Activity Indicator
-	[self showActivityIndicator];
+	[self showActivityIndicator:@"Deleting..."];
 	
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
-		@"chatMsgID"	: chatMessageID
+		@"chatMsgID"	: chatMessageID,
+		@"entireConvo"	: @"true"
 	};
 	
 	[self.operationManager DELETE:@"ChatMessages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
@@ -170,21 +164,16 @@
 
 - (void)deleteMultipleChatMessages:(NSArray *)chatMessages
 {
-	self.failedChatMessageIDs = [[NSMutableArray alloc] init];
+	self.failedChatMessages = [[NSMutableArray alloc] init];
 	
 	if([chatMessages count] < 1)
 	{
 		return;
 	}
 	
-	// TEMPORARY
 	NSLog(@"Delete Multiple Chat Messages");
 	
-	[self.failedChatMessageIDs addObject:[NSNumber numberWithLong:5133538688706197]];
-	[self chatMessageDeleteQueueFinished];
-	
-	return;
-	
+	// Show Activity Indicator
 	[self showActivityIndicator:@"Deleting..."];
 	
 	// Add Network Activity Observer
@@ -193,7 +182,8 @@
 	for(ChatMessageModel *chatMessage in chatMessages)
 	{
 		NSDictionary *parameters = @{
-			@"chatMsgID"	: chatMessage.ID
+			@"chatMsgID"	: chatMessage.ID,
+			@"entireConvo"	: @"true"
 		};
 		
 		// Increment total number of operations
@@ -209,8 +199,8 @@
 				
 				NSLog(@"ChatMessageModel Error: %@", error);
 				
-				// Add Chat Message ID to failed Chat Message IDs
-				[self.failedChatMessageIDs addObject:chatMessage.ID];
+				// Add Chat Message to failed Chat Messages
+				[self.failedChatMessages addObject:chatMessage];
 			}
 			
 			// Increment number of finished operations
@@ -238,8 +228,8 @@
 				return;
 			}
 			
-			// Add Chat Message ID to failed Chat Message IDs
-			[self.failedChatMessageIDs addObject:chatMessage.ID];
+			// Add Chat Message to failed Chat Messages
+			[self.failedChatMessages addObject:chatMessage];
 			
 			// Increment number of finished operations
 			self.numberOfFinishedOperations++;
@@ -255,7 +245,7 @@
 
 - (void)chatMessageDeleteQueueFinished
 {
-	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedChatMessageIDs count], self.totalNumberOfOperations);
+	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedChatMessages count], self.totalNumberOfOperations);
 	
 	// Close Activity Indicator
 	[self hideActivityIndicator];
@@ -264,12 +254,32 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// If a failure occurred while deleting Chat Message
-	if([self.failedChatMessageIDs count] > 0)
+	if([self.failedChatMessages count] > 0)
 	{
+		// Default to all Chat Messages failed to delete
+		NSString *errorMessage = @"There was a problem deleting your Chat Messages.";
+		
+		// Only some Chat Messages failed to delete
+		if([self.failedChatMessages count] != self.totalNumberOfOperations)
+		{
+			errorMessage = @"There was a problem deleting some of your Chat Messages.";
+		}
+		
+		// Show error message
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Delete Chat Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
+		NSArray *failedChatMessages = [NSArray arrayWithArray:[self.failedChatMessages copy]];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self deleteMultipleChatMessages:failedChatMessages];
+		}];
+		
 		// Still being used to reset Chat Messages
 		if([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
 		{
-			[self.delegate deleteMultipleChatMessagesError:self.failedChatMessageIDs];
+			[self.delegate deleteMultipleChatMessagesError:self.failedChatMessages];
 		}
 	}
 	// If request was not cancelled, then it was successful
@@ -286,7 +296,7 @@
 	self.totalNumberOfOperations = 0;
 	self.numberOfFinishedOperations = 0;
 	
-	[self.failedChatMessageIDs removeAllObjects];
+	[self.failedChatMessages removeAllObjects];
 }
 
 // Network Request has been sent, but still awaiting response
@@ -305,12 +315,12 @@
 		{
 			[self.delegate deleteChatMessagePending];
 		}
-		
-		// Notify delegate that Multiple Chat Message Deletions have begun being sent to server
-		if([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
-		{
-			[self.delegate deleteMultipleChatMessagesPending];
-		}
+	}
+	
+	// Notify delegate that Multiple Chat Message Deletions have begun being sent to server (should always run multiple times if needed)
+	if([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
+	{
+		[self.delegate deleteMultipleChatMessagesPending];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error

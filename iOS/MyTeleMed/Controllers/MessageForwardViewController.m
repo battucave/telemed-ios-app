@@ -19,7 +19,6 @@
 @property (nonatomic) MessageComposeTableViewController *messageComposeTableViewController;
 
 @property (nonatomic) CommentModel *commentModel;
-@property (nonatomic) ForwardMessageModel *forwardMessageModel;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
@@ -69,9 +68,10 @@
 		comment = @"";
 	}
 	
-	[self setForwardMessageModel:[[ForwardMessageModel alloc] init]];
-	[self.forwardMessageModel setDelegate:self];
-	[self.forwardMessageModel forwardMessage:self.message messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"] withComment:self.messageComposeTableViewController.textViewMessage.text];
+	ForwardMessageModel *forwardMessageModel = [[ForwardMessageModel alloc] init];
+	
+	[forwardMessageModel setDelegate:self];
+	[forwardMessageModel forwardMessage:self.message messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"] withComment:self.messageComposeTableViewController.textViewMessage.text];
 }
 
 // Return pending from ForwardMessageModel delegate

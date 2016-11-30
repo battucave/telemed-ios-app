@@ -281,34 +281,23 @@
 		[self.operationManager POST:@"Messages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 		{
 			// Successful Post returns a 204 code with no response
-			if(operation.response.statusCode == 204)
-			{
-				// Increment number of finished operations
-				self.numberOfFinishedOperations++;
-				
-				// Execute Queue finished method if all operations have completed
-				if(self.numberOfFinishedOperations == self.totalNumberOfOperations)
-				{
-					[self messageStateQueueFinished:state];
-				}
-			}
-			else
+			if(operation.response.statusCode != 204)
 			{
 				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Archive Error", NSLocalizedFailureReasonErrorKey, @"There was a problem modifying the Message Status.", NSLocalizedDescriptionKey, nil]];
 				
 				NSLog(@"MessageModel Error: %@", error);
 				
-				// Add Message ID to failed Message IDs
+				// Add Message to failed Messages
 				[self.failedMessages addObject:message];
-				
-				// Increment number of finished operations
-				self.numberOfFinishedOperations++;
-				
-				// Execute Queue finished method if all operations have completed
-				if(self.numberOfFinishedOperations == self.totalNumberOfOperations)
-				{
-					[self messageStateQueueFinished:state];
-				}
+			}
+			
+			// Increment number of finished operations
+			self.numberOfFinishedOperations++;
+			
+			// Execute Queue finished method if all operations have completed
+			if(self.numberOfFinishedOperations == self.totalNumberOfOperations)
+			{
+				[self messageStateQueueFinished:state];
 			}
 		}
 		failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -327,7 +316,7 @@
 				return;
 			}
 			
-			// Add Message ID to failed Message IDs
+			// Add Message to failed Messages
 			[self.failedMessages addObject:message];
 			
 			// Increment number of finished operations
@@ -355,10 +344,10 @@
 	// If a failure occurred while modifying Message state
 	if([self.failedMessages count] > 0)
 	{
-		// Default to all Messages failed to send
+		// Default to all Messages failed to archive
 		NSString *errorMessage = @"There was a problem archiving your Messages.";
 		
-		// Only some Messages failed to send
+		// Only some Messages failed to archive
 		if([self.failedMessages count] != self.totalNumberOfOperations)
 		{
 			errorMessage = @"There was a problem archiving some of your Messages.";

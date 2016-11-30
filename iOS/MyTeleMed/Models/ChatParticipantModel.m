@@ -13,10 +13,6 @@
 
 - (void)getChatParticipants
 {
-	// TEMPORARY
-	NSLog(@"Get Chat Participants");
-	//return;
-	
 	[self.operationManager GET:@"ChatParticipants" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;

@@ -18,7 +18,6 @@
 @property (nonatomic) MessageComposeTableViewController *messageComposeTableViewController;
 
 @property (nonatomic) AccountModel *accountModel;
-@property (nonatomic, getter=theNewMessageModel) NewMessageModel *newMessageModel;
 
 @property (nonatomic) NSMutableArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
@@ -69,10 +68,10 @@
 
 - (IBAction)sendNewMessage:(id)sender
 {
-	[self setNewMessageModel:[[NewMessageModel alloc] init]];
-	[self.newMessageModel setDelegate:self];
+	NewMessageModel *newMessageModel = [[NewMessageModel alloc] init];
 	
-	[self.newMessageModel sendNewMessage:self.messageComposeTableViewController.textViewMessage.text accountID:self.selectedAccount.ID messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"]];
+	[newMessageModel setDelegate:self];
+	[newMessageModel sendNewMessage:self.messageComposeTableViewController.textViewMessage.text accountID:self.selectedAccount.ID messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"]];
 }
 
 // Return Accounts from AccountModel delegate

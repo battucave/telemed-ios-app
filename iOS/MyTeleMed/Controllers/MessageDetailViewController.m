@@ -177,8 +177,8 @@
 // Return Events from MessageEventModel delegate
 - (void)updateMessageEvents:(NSMutableArray *)newMessageEvents
 {
-	self.isLoaded = YES;
-	self.messageEvents = newMessageEvents;
+	[self setIsLoaded:YES];
+	[self setMessageEvents:newMessageEvents];
 	
 	[self.filteredMessageEvents removeAllObjects];
 	
@@ -190,9 +190,6 @@
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
 	}
-	
-	// Refresh Message Events again after delay
-	[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
 	#if defined(DEBUG)
@@ -245,6 +242,9 @@
 		// Update message count with new number of Filtered Message Events
 		self.messageCount = [self.filteredMessageEvents count];
 	});
+	
+	// Refresh Message Events again after delay
+	[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
 }
 
 // Return error from MessageEventModel delegate
@@ -358,7 +358,7 @@
 		// Remove Comment from Filtered Message Events
 		[self.filteredMessageEvents removeObject:messageEvent];
 		
-		// If removing only Comment/Event
+		// If removing the only Comment/Event
 		if([self.filteredMessageEvents count] == 0)
 		{
 			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];

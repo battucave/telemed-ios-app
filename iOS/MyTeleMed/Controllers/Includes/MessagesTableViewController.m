@@ -229,7 +229,7 @@
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no Messages left in the source data, reload the row to show the No Messages cell
+	// If there are no Messages left in the source data, simply reload the row to show the No Messages cell
 	else
 	{
 		[self.tableView reloadData];
@@ -251,7 +251,7 @@
 	[self.tableView reloadData];
 }
 
-// Check Messages
+// Reload Messages
 - (void)reloadMessages
 {
 	// Get Archived Messages
