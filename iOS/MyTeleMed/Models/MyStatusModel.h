@@ -14,10 +14,11 @@
 
 @property (weak) id delegate;
 
-@property (nonatomic) NSNumber *ID;
+@property (nonatomic) NSNumber *ActiveChatConvoCount;
 @property (nonatomic) NSNumber *ActiveMessageCount;
 @property (nonatomic) BOOL OnCallNow;
 @property (nonatomic) NSDate *NextOnCall;
+@property (nonatomic) NSNumber *UnopenedChatConvoCount;
 @property (nonatomic) NSNumber *UnreadMessageCount;
 
 @property (nonatomic) NSArray *CurrentOnCallEntries;

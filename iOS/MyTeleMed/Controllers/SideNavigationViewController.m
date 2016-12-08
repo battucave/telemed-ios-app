@@ -113,18 +113,16 @@
 			// If cell is for Chat, set Chat Counts
 			if([CellIdentifier isEqualToString:@"Chat"])
 			{
-				NSLog(@"SET CHAT COUNTS (SideNavigationViewController::cellForRowAtIndexPath");
-				
-				[cell.labelCounts setText:@"?/?"];
+				[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
 			}
 			// If cell is for Messages, set Message Counts
 			else if([CellIdentifier isEqualToString:@"Messages"])
 			{
 				[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnreadMessageCount, self.myStatusModel.ActiveMessageCount]];
+				
+				// TESTING ONLY (set counts to random numbers)
+				//[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
 			}
-			
-			// TESTING ONLY (set counts to random numbers)
-			//[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
 			
 			// Store old frame size
 			CGRect oldFrame = cell.labelCounts.frame;
