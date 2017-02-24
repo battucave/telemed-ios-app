@@ -33,8 +33,8 @@
 {
     [super viewDidLoad];
 	
-	//_menuItems = @[@"Messages", @"Sent", @"Archives", @"On Call Schedule", @"Contact TeleMed", @"Settings"];
-	_menuItems = @[@"Messages", @"Archives", @"Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"];
+	//[self setMenuItems:@[@"Messages", @"Sent", @"Archives", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
+	[self setMenuItems:@[@"Messages", @"Archives", @"Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
 	[self setMyStatusModel:[MyStatusModel sharedInstance]];
 }
