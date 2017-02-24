@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -822,7 +822,7 @@
                         <viewControllerLayoutGuide type="bottom" id="zNV-0l-rQp"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="vCf-2A-71b">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7fW-0Y-ehL">
@@ -846,7 +846,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="441"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
@@ -910,7 +910,7 @@
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="4fX-RS-WG1" customClass="MessagesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="84" sectionHeaderHeight="1" sectionFooterHeight="1" id="60m-NG-kHz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
@@ -1050,7 +1050,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wy6-Ax-Zkh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="wat-Vb-eeV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e3z-22-s1l">
@@ -1178,7 +1178,7 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YrZ-nn-gfM">
-                                <rect key="frame" x="0.0" y="76" width="375" height="379"/>
+                                <rect key="frame" x="0.0" y="76" width="375" height="373"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVS-kb-72j">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="83"/>
@@ -1556,7 +1556,7 @@
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcv-jw-qVF">
-                                <rect key="frame" x="0.0" y="455" width="375" height="46"/>
+                                <rect key="frame" x="0.0" y="449" width="375" height="46"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hne-BT-fVu">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -1669,11 +1669,11 @@
                         <viewControllerLayoutGuide type="bottom" id="VKV-i9-iGJ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1jG-UR-rFx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afd-mk-ap7">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <segue destination="Tcd-A0-vuW" kind="embed" identifier="embedMessageForwardTable" id="dmg-yj-Han"/>
@@ -1713,11 +1713,11 @@
                         <viewControllerLayoutGuide type="bottom" id="K0E-0L-Xgz"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="vMX-sx-xfo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vjQ-9g-J4Z">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                                 <connections>
                                     <segue destination="vUd-oo-bvD" kind="embed" identifier="embedMessageTeleMedTable" id="jIb-YA-bfg"/>
                                 </connections>
@@ -3065,7 +3065,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Nb8-dF-aE9"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Tsp-Tx-wNi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="501"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="495"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvx-gW-eRD">
@@ -3214,7 +3214,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="324" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Cwo-PI-RCQ">
-                                <rect key="frame" x="0.0" y="151" width="375" height="350"/>
+                                <rect key="frame" x="0.0" y="151" width="375" height="344"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="MessageEventCell" rowHeight="62" id="kRw-nD-ZKD" customClass="MessageEventCell">
@@ -3834,7 +3834,7 @@
         <!--Chat-->
         <scene sceneID="nrp-Zm-uBa">
             <objects>
-                <navigationController title="Chat" automaticallyAdjustsScrollViewInsets="NO" id="xvU-lO-4ac" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ChatNavigationController" title="Chat" automaticallyAdjustsScrollViewInsets="NO" id="xvU-lO-4ac" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rT8-Ee-hw5">
@@ -3859,11 +3859,11 @@
                         <viewControllerLayoutGuide type="bottom" id="tmm-zx-AMa"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="n38-BS-AWX">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GjJ-DZ-lPM">
-                                <rect key="frame" x="0.0" y="64" width="375" height="44.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44.5"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lv2-0a-Guf">
                                         <rect key="frame" x="15" y="11" width="30" height="22"/>
@@ -3926,7 +3926,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="62" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Yf9-Xr-x3o">
-                                <rect key="frame" x="0.0" y="108.5" width="375" height="512.5"/>
+                                <rect key="frame" x="0.0" y="44.5" width="375" height="458.5"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageDetailCell" rowHeight="73" id="tqU-Ae-Y1O" customClass="CommentCell">
@@ -4115,7 +4115,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9k-Zv-eY1">
-                                <rect key="frame" x="0.0" y="621" width="375" height="46"/>
+                                <rect key="frame" x="0.0" y="503" width="375" height="46"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XWh-RG-uGU">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -4227,20 +4227,20 @@
         <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="NoH-LA-OtZ"/>
+        <segue reference="PWR-PC-xIB"/>
+        <segue reference="1fs-hi-JGd"/>
+        <segue reference="O2m-UP-1tm"/>
+        <segue reference="E1e-BY-bXG"/>
         <segue reference="uzl-of-xL0"/>
         <segue reference="V9Q-rq-EEe"/>
-        <segue reference="nDL-G3-d11"/>
         <segue reference="SWX-Rd-no8"/>
-        <segue reference="ZfR-s3-nyT"/>
-        <segue reference="duc-Go-Hul"/>
         <segue reference="c1m-Px-Iwz"/>
         <segue reference="hp2-gk-n0x"/>
         <segue reference="xeH-nb-wrL"/>
-        <segue reference="j8k-kI-sFx"/>
+        <segue reference="NoH-LA-OtZ"/>
         <segue reference="d5q-Lg-iEw"/>
-        <segue reference="yVi-an-TG3"/>
-        <segue reference="O2m-UP-1tm"/>
-        <segue reference="E1e-BY-bXG"/>
+        <segue reference="9pZ-e2-2FC"/>
+        <segue reference="Bd7-aS-lX5"/>
+        <segue reference="eMl-Hh-sfW"/>
     </inferredMetricsTieBreakers>
 </document>
