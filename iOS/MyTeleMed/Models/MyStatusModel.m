@@ -40,9 +40,10 @@ static MyStatusModel *sharedMyStatusInstance = nil;
 		{
 			callback(YES, self, nil);
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing My Status.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Status Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Status.", NSLocalizedDescriptionKey, nil]];
 			
 			callback(NO, nil, error);
 		}
@@ -51,7 +52,8 @@ static MyStatusModel *sharedMyStatusInstance = nil;
 	{
 		NSLog(@"MyStatusModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Status."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Status." andTitle:@"Status Error"];
 		
 		callback(NO, nil, error);
 	}];

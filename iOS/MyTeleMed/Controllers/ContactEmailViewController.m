@@ -35,7 +35,14 @@
 	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
 }
 
-// Return success from EmailTelemedModel delegate
+// Return pending from EmailTeleMedModel delegate
+- (void)sendMessagePending
+{
+	// Go back to Messages (assume success)
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+/*/ Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
 	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -46,19 +53,13 @@
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-// Return error from EmailTelemedModel delegate
+// Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.emailTelemedModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress

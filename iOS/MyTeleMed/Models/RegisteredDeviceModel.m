@@ -121,7 +121,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem registering your Device.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Device Registration Error", NSLocalizedFailureReasonErrorKey, @"There was a problem registering your Device.", NSLocalizedDescriptionKey, nil]];
 			
 			callback(NO, error);
 		}
@@ -130,8 +130,8 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	{
 		NSLog(@"RegisteredDeviceModel Error: %@", error);
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem registering your Device."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem registering your Device." andTitle:@"Device Registration Error"];
 		
 		callback(NO, error);
 	}];

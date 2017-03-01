@@ -8,11 +8,13 @@
 
 #import "MessageComposeTableViewController.h"
 #import "MessageRecipientPickerViewController.h"
+#import "MessageRecipientModel.h"
 
 @interface MessageComposeTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessageRecipient;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessage;
+@property (weak, nonatomic) IBOutlet UILabel *labelMessageRecipient;
 
 @end
 
@@ -70,17 +72,20 @@
 	
 	if(messageRecipientsCount > 0)
 	{
-		messageRecipientNames = [[messageRecipients objectAtIndex:0] Name];
+		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
 		
 		if(messageRecipientsCount > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+		}
+		else
+		{
+			messageRecipientNames = messageRecipient.Name;
 		}
 	}
 	
 	// Update Message Recipient Label with Message Recipient Name
-	[self.buttonMessageRecipient setTitle:messageRecipientNames forState:UIControlStateNormal];
-	[self.buttonMessageRecipient setTitle:messageRecipientNames forState:UIControlStateSelected];
+	[self.labelMessageRecipient setText:messageRecipientNames];
 }
 
 // Resize Message Text View to match available space between top of Table Cell and Keyboard

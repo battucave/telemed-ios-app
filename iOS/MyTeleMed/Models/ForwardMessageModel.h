@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "MessageModel.h"
 
 @protocol ForwardMessageDelegate <NSObject>
 
-@required
+@optional
+- (void)sendMessagePending;
 - (void)sendMessageSuccess;
 - (void)sendMessageError:(NSError *)error;
 
@@ -23,6 +25,6 @@
 @property (nonatomic) BOOL Success;
 @property (nonatomic) NSString *Message;
 
-- (void)forwardMessage:(NSNumber *)messageID messageRecipientIDs:(NSArray *)messageRecipientIDs;
+- (void)forwardMessage:(MessageModel *)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment;
 
 @end

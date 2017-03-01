@@ -11,7 +11,8 @@
 
 @protocol NewMessageDelegate <NSObject>
 
-@required
+@optional
+- (void)sendMessagePending;
 - (void)sendMessageSuccess;
 - (void)sendMessageError:(NSError *)error;
 

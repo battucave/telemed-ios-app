@@ -50,14 +50,14 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	// ReceivedMessage is current on test server; Message is deprecated, but still current on production server
-	if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
+	// Message is currently used; ReceivedMessage was used on test server for a period of time, but has since reverted back
+	if([elementName isEqualToString:@"Message"]/* || [elementName isEqualToString:@"ReceivedMessage"]*/)
 	{
 		[self.messages addObject:self.message];
 		
 		self.message = nil;
 	}
-	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"MessageDeliverID"] || [elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
+	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"MessageDeliveryID"] || [elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
 	{
 		[self.message setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}

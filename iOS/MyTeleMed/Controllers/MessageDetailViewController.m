@@ -141,12 +141,11 @@
 
 - (IBAction)sendComment:(id)sender
 {
-	//NSString *commentText = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self.textViewComment.text, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding)));
-	
 	[self setCommentModel:[[CommentModel alloc] init]];
 	[self.commentModel setDelegate:self];
 	
-	[self.commentModel addMessageComment:self.message.ID comment:self.textViewComment.text];
+	// Send Comment with a pending ID so that it can be identified in callbacks
+	[self.commentModel addMessageComment:self.message comment:self.textViewComment.text withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 
 // Override default Remote Notification action from CoreViewController
@@ -178,8 +177,8 @@
 // Return Events from MessageEventModel delegate
 - (void)updateMessageEvents:(NSMutableArray *)newMessageEvents
 {
-	self.isLoaded = YES;
-	self.messageEvents = newMessageEvents;
+	[self setIsLoaded:YES];
+	[self setMessageEvents:newMessageEvents];
 	
 	[self.filteredMessageEvents removeAllObjects];
 	
@@ -191,9 +190,6 @@
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
 	}
-	
-	// Refresh message events again after delay
-	[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
 	#if defined(DEBUG)
@@ -246,6 +242,9 @@
 		// Update message count with new number of Filtered Message Events
 		self.messageCount = [self.filteredMessageEvents count];
 	});
+	
+	// Refresh Message Events again after delay
+	[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
 }
 
 // Return error from MessageEventModel delegate
@@ -255,10 +254,10 @@
 	
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	// Show error message only if device offline
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
-		return [self.messageEventModel showOfflineError];
+		[self.messageEventModel showError:error];
 	}
 }
 
@@ -277,14 +276,102 @@
 {
 	NSLog(@"There was a problem retrieving recipients for the Message");
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	// Show error message only if device offline
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
-		return [self.messageRecipientModel showOfflineError];
+		[self.messageRecipientModel showError:error];
 	}
 }
 
-// Return success from CommentModel delegate
+// Return pending from CommentModel delegate
+- (void)saveCommentPending:(NSString *)commentText withPendingID:(NSNumber *)pendingID
+{
+	// Add Comment to Basic Events array
+	MessageEventModel *comment = [[MessageEventModel alloc] init];
+	NSDate *currentDate = [[NSDate alloc] init];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	
+	// Set Comment details
+	[comment setID:pendingID];
+	[comment setDetail:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)commentText, CFSTR(""), kCFStringEncodingUTF8))];
+	[comment setEnteredByID:self.currentUserID];
+	[comment setMessageID:self.message.ID];
+	[comment setType:@"Comment"];
+	
+	// Create local date
+	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+	[comment setTime_LCL:[dateFormatter stringFromDate:currentDate]];
+	
+	// Create UTC date
+	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+	[comment setTime_UTC:[dateFormatter stringFromDate:currentDate]];
+	
+	[self.filteredMessageEvents addObject:comment];
+	
+	// Begin actual update
+	[self.tableComments beginUpdates];
+	
+	// If adding first Comment/Event
+	if([self.filteredMessageEvents count] == 1)
+	{
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+		
+		[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	// If adding to already existing Comments/Events
+	else
+	{
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.filteredMessageEvents count] - 1 inSection:0]];
+		
+		[self.tableComments insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	
+	// Commit row updates
+	[self.tableComments endUpdates];
+	
+	// Auto size Table Comments height to show all rows
+	[self autoSizeTableComments];
+	
+	// Clear and resign focus from Text View Comment
+	[self.textViewComment setText:@""];
+	[self.textViewComment resignFirstResponder];
+	[self.buttonSend setEnabled:NO];
+	
+	// Trigger a scroll to bottom to ensure the newly added Comment is shown
+	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
+}
+
+// Return error from CommentModel delegate
+- (void)saveCommentError:(NSError *)error withPendingID:(NSNumber *)pendingID
+{
+	// Find Comment with Pending ID in Filtered Message Events
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
+	NSArray *results = [self.filteredMessageEvents filteredArrayUsingPredicate:predicate];
+	
+	if([results count] > 0)
+	{
+		// Find and delete table cell that contains Comment
+		MessageEventModel *messageEvent = [results objectAtIndex:0];
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.filteredMessageEvents indexOfObject:messageEvent] inSection:0]];
+		
+		// Remove Comment from Filtered Message Events
+		[self.filteredMessageEvents removeObject:messageEvent];
+		
+		// If removing the only Comment/Event
+		if([self.filteredMessageEvents count] == 0)
+		{
+			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		// If removing from existing Comments/Events
+		else
+		{
+			[self.tableComments deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+	}
+}
+
+/*/ Return success from CommentModel delegate (no longer used)
 - (void)saveCommentSuccess:(NSString *)commentText
 {
 	// Add comment to Basic Events array
@@ -340,11 +427,11 @@
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
 
-// Return error from CommentModel delegate
+// Return error from CommentModel delegate (no longer used)
 - (void)saveCommentError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.commentModel showOfflineError];
 	}
@@ -352,7 +439,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Add Comment Error" message:@"There was a problem adding your Comment. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 - (void)setMessageDetails
 {
@@ -418,8 +505,6 @@
 // Scroll to bottom of Scroll View
 - (void)scrollToBottom
 {
-	// See scrollToBottom method in ChatMessageDetailViewController.m if a more accurate way to ensure Table Comments scrolls all the way to the bottom when there are a lot of rows is needed
-	
 	CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height + self.scrollView.contentInset.bottom);
 	
 	if(bottomOffset.y > 0)
@@ -540,13 +625,7 @@
 	
 	return UITableViewAutomaticDimension;
 	
-	/*/ iOS8+ Auto Height
-	else if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		return UITableViewAutomaticDimension;
-	}
-	
-	// Manually determine height for < iOS8
+	/*/ Manually determine height for < iOS8 OR for calculating total table height before all rows have loaded
 	static NSString *cellIdentifier = @"CommentCell";
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	

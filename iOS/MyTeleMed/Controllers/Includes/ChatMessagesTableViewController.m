@@ -10,15 +10,18 @@
 #import "ChatMessageDetailViewController.h"
 #import "ChatMessageCell.h"
 #import "ChatMessageModel.h"
+#import "ChatParticipantModel.h"
+#import "MyProfileModel.h"
 
 @interface ChatMessagesTableViewController ()
 
 @property (nonatomic) ChatMessageModel *chatMessageModel;
 
-@property (nonatomic) NSMutableArray *chatMessages;
-@property (nonatomic) NSMutableArray *selectedChatMessages;
-
 @property (nonatomic) BOOL isLoaded;
+
+@property (nonatomic) NSMutableArray *hiddenChatMessages;
+@property (nonatomic) NSMutableArray *selectedChatMessages;
+@property (nonatomic) NSNumber *currentUserID;
 
 - (IBAction)refreshControlRequest:(id)sender;
 
@@ -36,6 +39,10 @@
 		[self.refreshControl beginRefreshing];
 		[self.refreshControl endRefreshing];
 	});
+	
+	// Set Current User ID
+	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	self.currentUserID = myProfileModel.ID;
 	
 	// Initialize Chat Message Model
 	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
@@ -64,10 +71,52 @@
 	[settings synchronize];
 }
 
-// Check Chat Messages
+// Reload Chat Messages
 - (void)reloadChatMessages
 {
 	[self.chatMessageModel getChatMessages];
+}
+
+- (void)hideSelectedChatMessages:(NSArray *)chatMessages
+{
+	self.hiddenChatMessages = [NSMutableArray new];
+	
+	// If no Chat Messages to hide, cancel
+	if(chatMessages == nil || [chatMessages count] == 0)
+	{
+		return;
+	}
+	
+	// Add each Chat Message to Hidden Chat Messages
+	for(ChatMessageModel *chatMessage in chatMessages)
+	{
+		[self.hiddenChatMessages addObject:chatMessage];
+	}
+	
+	// Toggle the Edit button
+	[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
+	
+	[self.tableView reloadData];
+}
+
+- (void)unHideSelectedChatMessages:(NSArray *)chatMessages
+{
+	// If no Chat Messages to hide, cancel
+	if(chatMessages == nil || [chatMessages count] == 0)
+	{
+		return;
+	}
+	
+	// Remove each Chat Message from Hidden Chat Messages
+	for(ChatMessageModel *chatMessage in chatMessages)
+	{
+		[self.hiddenChatMessages removeObject:chatMessage];
+	}
+	
+	// Show the Edit button (there will always be at least one Message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+	
+	[self.tableView reloadData];
 }
 
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
@@ -85,22 +134,24 @@
 	for(ChatMessageModel *chatMessage in chatMessages)
 	{
 		[self.chatMessages removeObject:chatMessage];
+		[self.hiddenChatMessages removeObject:chatMessage];
 		[self.selectedChatMessages removeObject:chatMessage];
 		
 		[indexPaths addObject:[NSIndexPath indexPathForItem:[chatMessagesCopy indexOfObject:chatMessage] inSection:0]];
 	}
 	
 	// Remove rows
-	if([self.chatMessages count] > 0)
+	if([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no Chat Messages left in the source data, reload the table to show the No Messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the No Messages cell))
+	// If there are no Chat Messages left in the source data, simply reload the table to show the No Messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the No Messages cell))
 	else
 	{
 		[self.tableView reloadData];
 		
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+		// Toggle the Edit button
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 || [self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
 	// Update delegate's list of selected messages
@@ -110,6 +161,15 @@
 // Return Chat Messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
+	// Sort Chat Messages by Date Descending
+	if([chatMessages count] > 0)
+	{
+		chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+		{
+			return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
+		}] mutableCopy];
+	}
+	
 	[self setIsLoaded:YES];
 	[self setChatMessages:chatMessages];
 	
@@ -118,7 +178,6 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableView reloadData];
-		//[self.tableView setEditing:YES animated:YES];
 	});
 	
 	[self.refreshControl endRefreshing];
@@ -131,15 +190,8 @@
 	
 	[self.refreshControl endRefreshing];
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.chatMessageModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Chat Messages Error" message:@"There was a problem retrieving your Chat Messages. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.chatMessageModel showError:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -157,10 +209,26 @@
 	return [self.chatMessages count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are Chat Messages and Hidden Chat Messages and row is not the only row in the table
+	if([self.chatMessages count] > 0 && [self.hiddenChatMessages count] > 0 && (indexPath.row > 0 || [self.chatMessages count] != [self.hiddenChatMessages count]))
+	{
+		ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
+		
+		// Hide Hidden Chat Messages by setting its height to 0
+		if([self.hiddenChatMessages containsObject:chatMessage])
+		{
+			return 0.0f;
+		}
+	}
+	
+	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// TEMPORARY
-	if([self.chatMessages count] == 0)
+	if([self.chatMessages count] == 0 || (indexPath.row == 0 && [self.chatMessages count] == [self.hiddenChatMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -177,12 +245,61 @@
 	// Set up the cell
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
+	// Hide Hidden Chat Messages
+	if([self.hiddenChatMessages count] > 0 && [self.hiddenChatMessages containsObject:chatMessage])
+	{
+		[cell setHidden:YES];
+	}
+	
+	// Set Participants
+	if(chatMessage.ChatParticipants)
+	{
+		// Remove self from Chat Participants
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID != %@", self.currentUserID];
+		NSArray *chatParticipants = [chatMessage.ChatParticipants filteredArrayUsingPredicate:predicate];
+		
+		NSString *chatParticipantNames = @"";
+		NSInteger chatParticipantsCount = [chatParticipants count];
+		
+		// Format Chat Participant Names
+		if(chatParticipantsCount > 0)
+		{
+			ChatParticipantModel *chatParticipant1 = [chatParticipants objectAtIndex:0];
+			ChatParticipantModel *chatParticipant2 = (chatParticipantsCount > 1 ? [chatParticipants objectAtIndex:1] : nil);
+			
+			switch(chatParticipantsCount)
+			{
+				case 1:
+					chatParticipantNames = chatParticipant1.FormattedNameLNF;
+					break;
+				
+				case 2:
+					chatParticipantNames = [NSString stringWithFormat:@"%@ & %@", chatParticipant1.LastName, chatParticipant2.LastName];
+					break;
+				
+				default:
+					// iPhone 6+ can handle more names
+					if([UIScreen mainScreen].bounds.size.width > 320.0f)
+					{
+						chatParticipantNames = [NSString stringWithFormat:@"%@, %@ & %ld more...", chatParticipant1.LastName, chatParticipant2.LastName, (long)chatParticipantsCount - 2];
+					}
+					else
+					{
+						chatParticipantNames = [NSString stringWithFormat:@"%@ & %ld more...", chatParticipant1.LastName, (long)chatParticipantsCount - 2];
+					}
+					break;
+			}
+		}
+		
+		[cell.labelChatParticipants setText:chatParticipantNames];
+	}
+	
 	// Set Date and Time
-	if(chatMessage.TimeReceived_LCL)
+	if(chatMessage.TimeSent_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeReceived_LCL];
+		NSDate *dateTime = [dateFormatter dateFromString:chatMessage.TimeSent_LCL];
 		
 		[dateFormatter setDateFormat:@"M/dd/yy"];
 		NSString *date = [dateFormatter stringFromDate:dateTime];
@@ -194,9 +311,30 @@
 		[cell.labelTime setText:time];
 	}
 	
-	// Set Name and Message
-	[cell.labelName setText:chatMessage.SenderName];
+	// Set Message
 	[cell.labelMessage setText:chatMessage.Text];
+	
+	// Set Unopened/Unread
+	if(chatMessage.Unopened)
+	//if(indexPath.row % 2) // Only used for testing both styles
+	{
+		// Show blue bar
+		[cell.viewUnopened setHidden:NO];
+		
+		// Style Message
+		[cell.labelMessage setTextColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0]];
+		[cell.labelMessage setFont:[UIFont boldSystemFontOfSize:cell.labelMessage.font.pointSize]];
+	}
+	// Set Opened/Read
+	else
+	{
+		// Hide blue bar
+		[cell.viewUnopened setHidden:YES];
+		
+		// Style Message
+		[cell.labelMessage setTextColor:cell.labelMessage.textColor];
+		[cell.labelMessage setFont:[UIFont systemFontOfSize:cell.labelMessage.font.pointSize]];
+	}
 	
 	return cell;
 }
@@ -267,15 +405,7 @@
 		{
 			ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
-			NSLog(@"Get Chat Message Detail");
-			NSLog(@"ID: %@", chatMessage.ID);
-			NSLog(@"Text: %@", chatMessage.Text);
-			NSLog(@"SenderID: %@", chatMessage.SenderID);
-			NSLog(@"SenderName: %@", chatMessage.SenderName);
-			NSLog(@"State: %@", chatMessage.State);
-			NSLog(@"TimeReceived_LCL: %@", chatMessage.TimeReceived_LCL);
-			NSLog(@"TimeReceived_UTC: %@", chatMessage.TimeReceived_UTC);
-	 
+			[chatMessageDetailViewController setIsNewChat:NO];
 			[chatMessageDetailViewController setConversationID:chatMessage.ID];
 		}
 	}

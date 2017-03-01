@@ -45,9 +45,10 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 			
 			callback(YES, self, nil);
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing My Profile.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Account.", NSLocalizedDescriptionKey, nil]];
 			
 			callback(NO, nil, error);
 		}
@@ -56,7 +57,8 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 	{
 		NSLog(@"MyProfileModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Account."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Account." andTitle:@"Account Error"];
 		
 		callback(NO, nil, error);
 	}];

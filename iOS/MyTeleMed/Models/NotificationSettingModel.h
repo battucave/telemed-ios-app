@@ -13,7 +13,10 @@
 
 @required
 - (void)updateNotificationSettings:(id)serverNotificationSettings forName:(NSString *)name;
+
+@optional
 - (void)updateNotificationSettingsError:(NSError *)error;
+- (void)saveNotificationSettingsPending;
 - (void)saveNotificationSettingsSuccess;
 - (void)saveNotificationSettingsError:(NSError *)error;
 

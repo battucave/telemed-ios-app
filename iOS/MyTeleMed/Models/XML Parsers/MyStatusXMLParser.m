@@ -120,8 +120,9 @@
 		}
 		else if([self.myStatus respondsToSelector:selector])
 		{
-			if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"ActiveMessageCount"] || [elementName isEqualToString:@"UnreadMessageCount"])
+			if([@[@"ActiveChatConvoCount", @"ActiveMessageCount", @"UnopenedChatConvoCount", @"UnreadMessageCount"] containsObject:elementName])
 			{
+				NSLog(@"NumberFromString: %@", elementName);
 				[self.myStatus setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 			}
 			else

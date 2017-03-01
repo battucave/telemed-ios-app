@@ -13,9 +13,13 @@
 
 @required
 - (void)updateMessages:(NSMutableArray *)messages;
+
+@optional
 - (void)updateMessagesError:(NSError *)error;
+- (void)modifyMessageStatePending:(NSString *)state;
 - (void)modifyMessageStateSuccess:(NSString *)state;
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state;
+- (void)modifyMultipleMessagesStatePending:(NSString *)state;
 - (void)modifyMultipleMessagesStateSuccess:(NSString *)state;
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state;
 
@@ -27,8 +31,8 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *FormattedMessageText;
-@property (nonatomic) NSNumber *MessageDeliveryID; /* Not yet implemented */
-@property (nonatomic) NSNumber *MessageID; /* Not yet implemented */
+@property (nonatomic) NSNumber *MessageDeliveryID;
+@property (nonatomic) NSNumber *MessageID;
 @property (nonatomic) NSString *PatientName;
 @property (nonatomic) NSString *Priority;
 @property (nonatomic) NSString *SenderContact;

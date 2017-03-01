@@ -8,12 +8,44 @@
 
 #import "NewChatMessageModel.h"
 
+@interface NewChatMessageModel ()
+
+@property (nonatomic) NSString *chatMessage;
+@property (nonatomic) NSNumber *pendingID;
+//@property (nonatomic) BOOL pendingComplete;
+
+@end
+
 @implementation NewChatMessageModel
 
-- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat
+- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID
 {
+	// Validate max length
+	if([[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] length] > 1000)
+	{
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"Message field cannot exceed 1000 characters.", NSLocalizedDescriptionKey, nil]];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error];
+		
+		/*/ Not needed here
+		if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+		{
+			[self.delegate sendChatMessageError:error withPendingID:pendingID];
+		}*/
+		
+		return;
+	}
+	
 	// Show Activity Indicator
 	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Store message and ID for sendChatMessagePending method
+	self.chatMessage = message;
+	self.pendingID = pendingID;
 	
 	NSMutableString *xmlParticipants = [[NSMutableString alloc] init];
 	
@@ -41,24 +73,32 @@
 	
 	[self.operationManager POST:@"NewChatMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
-			if([self.delegate respondsToSelector:@selector(sendChatMessageSuccess)])
+			// Still being used
+			if([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
 			{
-				[self.delegate sendChatMessageSuccess];
+				[self.delegate sendChatMessageSuccess:message withPendingID:pendingID];
 			}
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
-			if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
 			{
-				[self.delegate sendChatMessageError:error];
+				// Include callback to retry the request
+				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
+			}];
+			
+			// Still being used
+			if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			{
+				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
 		}
 	}
@@ -69,14 +109,44 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message."];
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		if([self.delegate respondsToSelector:@selector(sendChatMessageError:)])
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Chat Message." andTitle:@"Chat Message Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
 		{
-			[self.delegate sendChatMessageError:error];
+			// Include callback to retry the request
+			[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
+		}];
+		
+		// Still being used
+		if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+		{
+			[self.delegate sendChatMessageError:error withPendingID:pendingID];
 		}
 	}];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Notify delegate that Chat Message has been sent to server
+	if(/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
+	{
+		[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	//self.pendingComplete = YES;
 }
 
 @end

@@ -71,7 +71,7 @@
 			}
 		}
 		
-		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The ID Provider you entered is invalid. Please try again or leave blank.", NSLocalizedDescriptionKey, nil]];
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"ID Provider Error", NSLocalizedFailureReasonErrorKey, @"The ID Provider you entered is invalid. Please try again or leave blank.", NSLocalizedDescriptionKey, nil]];
 		
 		callback(NO, error);
 	}
@@ -98,7 +98,8 @@
 			errorString = @"The ID Provider entered is invalid.";
 		}
 		
-		error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:error.code userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:errorString, NSLocalizedDescriptionKey, nil]];
+		// Build a generic error message
+		error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:error.code userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"ID Provider Error", NSLocalizedFailureReasonErrorKey, errorString, NSLocalizedDescriptionKey, nil]];
 		
 		callback(NO, error);
 	}];

@@ -13,6 +13,8 @@
 
 @required
 - (void)updateMessageEvents:(NSMutableArray *)messageEvents;
+
+@optional
 - (void)updateMessageEventsError:(NSError *)error;
 
 @end

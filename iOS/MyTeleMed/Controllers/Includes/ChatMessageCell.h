@@ -10,7 +10,8 @@
 
 @interface ChatMessageCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *labelName;
+@property (weak, nonatomic) IBOutlet UIView *viewUnopened;
+@property (weak, nonatomic) IBOutlet UILabel *labelChatParticipants;
 @property (weak, nonatomic) IBOutlet UILabel *labelDate;
 @property (weak, nonatomic) IBOutlet UILabel *labelTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelMessage;

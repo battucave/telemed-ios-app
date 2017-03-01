@@ -95,7 +95,56 @@
 	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
-	
+}
+
+// Unwind to previous controller (Chat Message Detail, Forward Message, or New Message)
+- (IBAction)unwind:(id)sender
+{
+	// Unwind to Chat Message Detail
+	if([self.messageRecipientType isEqualToString:@"Chat"])
+	{
+		if([self.selectedMessageRecipients count] > 1)
+		{
+			UIAlertController *confirmGroupChatController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+			{
+				// Disable Group Chat
+				self.isGroupChat = NO;
+				
+				// Execute unwind segue
+				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+			}];
+			UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				// Enable Group Chat
+				self.isGroupChat = YES;
+				
+				// Execute unwind segue
+				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+			}];
+			
+			[confirmGroupChatController addAction:actionNo];
+			[confirmGroupChatController addAction:actionYes];
+			[confirmGroupChatController setPreferredAction:actionYes];
+			
+			// Show Alert
+			[self presentViewController:confirmGroupChatController animated:YES completion:nil];
+		}
+		else
+		{
+			// Disable Group Chat
+			self.isGroupChat = NO;
+			
+			// Execute unwind segue
+			[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+		}
+	}
+	// Unwind to Forward Message or New Message
+	else
+	{
+		// Execute unwind segue
+		[self performSegueWithIdentifier:@"setMessageRecipients" sender:self];
+	}
 }
 
 // Get Message Recipients
@@ -104,9 +153,7 @@
 	// Get Participants for Chat
 	if([self.messageRecipientType isEqualToString:@"Chat"])
 	{
-		// TEMPORARY
-		//[self.chatParticipantModel getChatParticipants];
-		[self.messageRecipientModel getNewMessageRecipients:[NSNumber numberWithInteger:250795]];
+		[self.chatParticipantModel getChatParticipants];
 	}
 	// Get Recipients for Forward Message
 	else if([self.messageRecipientType isEqualToString:@"Forward"])
@@ -139,15 +186,8 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.chatParticipantModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Participants Error" message:@"There was a problem retrieving Participants for your Chat. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.chatParticipantModel showError:error];
 }
 
 // Return Message Recipients from MessageRecipientModel delegate
@@ -189,15 +229,8 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.messageRecipientModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Recipients Error" message:@"There was a problem retrieving Recipients for your Message. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.messageRecipientModel showError:error];
 }
 
 // Delegate Method for Updating Search Results
@@ -411,6 +444,12 @@
 {
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+	// Avoid superfluous warning that "Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior <UISearchController>"
+	[self.searchController.view removeFromSuperview];
 }
 
 @end

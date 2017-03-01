@@ -11,7 +11,4 @@
 
 @interface ContactEmailViewController : CoreViewController
 
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
-
 @end

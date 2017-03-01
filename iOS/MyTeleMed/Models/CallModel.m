@@ -9,10 +9,22 @@
 #import "CallModel.h"
 #import "RegisteredDeviceModel.h"
 
+@interface CallModel ()
+
+@property (nonatomic) BOOL pendingComplete;
+
+@end
+
 @implementation CallModel
 
 - (void)callTeleMed
 {
+	// Show Activity Indicator
+	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
 	NSDictionary *parameters = @{
@@ -23,17 +35,19 @@
 	NSLog(@"CallTeleMed");
 	NSLog(@"%@", parameters);
 	
-	// The web service only returns a result after the phone call has been answered so increase timeout interval
-	[self.operationManager.requestSerializer setTimeoutInterval:90.0];
+	// This Rest Service Method only returns after the phone call has been answered so increase timeout interval
+	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
-	// This Rest Service Method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSLog(@"CallModel Success: %@", operation.response);
 		
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
+			// Not currently used
 			if([self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
 			{
 				[self.delegate callTeleMedSuccess];
@@ -41,33 +55,59 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem calling TeleMed.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Call TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
 			
-			if([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
+			{
+				// Include callback to retry the request
+				[self callTeleMed];
+			}];
+			
+			/*if([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
-			}
+			}*/
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"CallModel Error: %@", error);
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem calling TeleMed."];
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 		
-		if([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem requesting a Return Call." andTitle:@"Call TeleMed Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self callTeleMed];
+		}];
+		
+		/*if([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
 			[self.delegate callTeleMedError:error];
-		}
+		}*/
 	}];
 	
-	// Reset timeout interval to default
+	// Restore timeout interval to default
 	[self.operationManager.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 }
 
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
+	// Show Activity Indicator
+	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 		
 	NSDictionary *parameters = @{
@@ -80,16 +120,19 @@
 	NSLog(@"%@", parameters);
 	
 	// The web service only returns a result after the phone call has been answered so increase timeout interval
-	[self.operationManager.requestSerializer setTimeoutInterval:90.0];
+	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
 	// This Rest Service Method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSLog(@"CallModel Success: %@", operation.response);
 		
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
+			// Not currently used
 			if([self.delegate respondsToSelector:@selector(callSenderSuccess)])
 			{
 				[self.delegate callSenderSuccess];
@@ -97,29 +140,77 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem calling the Message Sender.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Return Call Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
 			
-			if([self.delegate respondsToSelector:@selector(callSenderError:)])
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
+			{
+				// Include callback to retry the request
+				[self callSenderForMessage:messageID recordCall:recordCall];
+			}];
+			
+			/*if([self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
-			}
+			}*/
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"CallModel Error: %@", error);
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem calling the Message Sender."];
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 		
-		if([self.delegate respondsToSelector:@selector(callSenderError:)])
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem requesting a Return Call." andTitle:@"Return Call Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self callSenderForMessage:messageID recordCall:recordCall];
+		}];
+		
+		/*if([self.delegate respondsToSelector:@selector(callSenderError:)])
 		{
 			[self.delegate callSenderError:error];
-		}
+		}*/
 	}];
 	
 	// Reset timeout interval to default
 	[self.operationManager.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	if( ! self.pendingComplete)
+	{
+		// Notify delegate that TeleMed Call Request has been sent to server
+		if([self.delegate respondsToSelector:@selector(callTeleMedPending)])
+		{
+			[self.delegate callTeleMedPending];
+		}
+		
+		// Notify delegate that Sender Call Request has been sent to server
+		if([self.delegate respondsToSelector:@selector(callSenderPending)])
+		{
+			[self.delegate callSenderPending];
+		}
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	self.pendingComplete = YES;
 }
 
 @end

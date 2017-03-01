@@ -28,7 +28,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"ChatParticipant"])
+	if([elementName isEqualToString:@"Person"])
 	{
 		// Initialize the Message Event.
 		self.chatParticipant = [[ChatParticipantModel alloc] init];
@@ -49,7 +49,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"ChatParticipant"])
+	if([elementName isEqualToString:@"Person"])
 	{
 		[self.chatParticipants addObject:self.chatParticipant];
 		
@@ -59,24 +59,12 @@
 	{
 		[self.chatParticipant setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"Name"])
+	else if([elementName isEqualToString:@"FormattedNameLNF"])
 	{
 		[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
 		
-		/*// Most names are of the following format: Lastname, Firstname
-		if([self.currentElementValue rangeOfString:@", "].location != NSNotFound)
-		{
-			NSArray *nameParts = [self.currentElementValue componentsSeparatedByString:@", "];
-			
-			[self.chatParticipant setFirstName:[nameParts objectAtIndex:1]];
-			[self.chatParticipant setLastName:[nameParts objectAtIndex:0]];
-		}
-		// Some names are not actual names (example: "Abundant HH On Call")
-		else
-		{
-			[self.chatParticipant setFirstName:self.currentElementValue];
-			[self.chatParticipant setLastName:@""];
-		}*/
+		// Manually set Name property from FormattedNameLNF
+		[self.chatParticipant setValue:self.currentElementValue forKey:@"Name"];
 	}
 	else
 	{
