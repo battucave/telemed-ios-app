@@ -11,7 +11,5 @@
 @interface MessagesViewController : RevealViewController
 
 - (void)setSelectedMessages:(NSArray *)theSelectedMessages;
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state;
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state;
 
 @end

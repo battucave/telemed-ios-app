@@ -15,15 +15,15 @@ class InterfaceController: WKInterfaceController
 	@IBAction func
 		showAlertPressed()
 		{
-			let cancel = WKAlertAction(title: "Cancel", style:WKAlertActionStyle.Cancel, handler: { () -> Void in })
-			let action = WKAlertAction(title: "Action", style:WKAlertActionStyle.Default, handler: { () -> Void in })
+			let cancel = WKAlertAction(title: "Cancel", style:WKAlertActionStyle.cancel, handler: { () -> Void in })
+			let action = WKAlertAction(title: "Action", style:WKAlertActionStyle.default, handler: { () -> Void in })
 			
-			self.presentAlertControllerWithTitle("Alert", message: "Please check your phone for notification", preferredStyle: WKAlertControllerStyle.SideBySideButtonsAlert, actions: [cancel, action])
+			self.presentAlert(withTitle: "Alert", message: "Please check your phone for notification", preferredStyle: WKAlertControllerStyle.sideBySideButtonsAlert, actions: [cancel, action])
 	}
 	
-	override func awakeWithContext(context: AnyObject?)
+	override func awake(withContext context: Any?)
 	{
-		super.awakeWithContext(context)
+		super.awake(withContext: context)
 		
 		// Configure interface objects here.
 	}

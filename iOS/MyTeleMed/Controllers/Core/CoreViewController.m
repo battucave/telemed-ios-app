@@ -55,8 +55,8 @@
 	
 	NSDictionary *aps = [userInfo objectForKey:@"aps"];
 	NSString *notificationType = [userInfo objectForKey:@"NotificationType"];
-	NSNumber *deliveryID = [userInfo objectForKey:@"DeliveryID"];
 	id alert = [aps objectForKey:@"alert"];
+	NSNumber *deliveryID;
 	NSString *message = nil;
 	
 	// If no NotificationType was sent, assume it's a message.
@@ -69,6 +69,16 @@
 		{
 			notificationType = @"Comment";
 		}
+	}
+	
+	// Extract Delivery ID or Chat Message ID
+	if([notificationType isEqualToString:@"Comment"])
+	{
+		deliveryID = [userInfo objectForKey:@"DeliveryID"];
+	}
+	else if([notificationType isEqualToString:@"Chat"])
+	{
+		deliveryID = [userInfo objectForKey:@"ChatMsgID"];
 	}
 	
 	// Determine whether message was sent as an object or a string.

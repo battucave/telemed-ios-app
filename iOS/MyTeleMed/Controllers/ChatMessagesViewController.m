@@ -8,6 +8,7 @@
 
 #import "ChatMessagesViewController.h"
 #import "ChatMessagesTableViewController.h"
+#import "ChatMessageDetailViewController.h"
 #import "SWRevealViewController.h"
 #import "ChatMessageModel.h"
 
@@ -71,7 +72,7 @@
 	
 	for(ChatMessageModel *chatMessage in self.selectedChatMessages)
 	{
-		if([chatMessage.State isEqualToString:@"Unread"])
+		if(chatMessage.Unopened)
 		{
 			unreadChatMessageCount++;
 		}
@@ -124,10 +125,10 @@
 }
 
 // Override selectedChatMessages setter
-- (void)setSelectedChatMessages:(NSArray *)theSelectedChatMessages
+- (void)setSelectedChatMessages:(NSArray *)selectedChatMessages
 {
-	_selectedChatMessages = [NSArray arrayWithArray:theSelectedChatMessages];
-	NSInteger selectedChatMessageCount = [theSelectedChatMessages count];
+	_selectedChatMessages = [NSArray arrayWithArray:selectedChatMessages];
+	NSInteger selectedChatMessageCount = [selectedChatMessages count];
 	
 	// Toggle Delete bar button on/off based on number of selected Chat Messages
 	[self.barButtonDelete setEnabled:(selectedChatMessageCount > 0)];
@@ -184,49 +185,42 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
-- (void)deleteMultipleChatMessagesSuccess
+// Return Delete Multiple Chat Message pending from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesPending
 {
-	// Remove selected rows from ChatMessagesTableViewController
-	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
+	// Hide selected rows from Chat Messages Table
+	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
 	
 	[self setEditing:NO animated:YES];
 }
 
-- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessageIDs
+// Return Delete Multiple Chat Message success from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesSuccess
 {
-	// Default to all Messages failed to send
-	NSString *errorMessage = @"There was a problem deleting your Chat Messages. Please try again.";
-	
-	// Only some Chat Messages failed to send
-	if([failedChatMessageIDs count] > 0 && [failedChatMessageIDs count] != [self.selectedChatMessages count])
-	{
-		errorMessage = @"There was a problem deleting some of your Chat Messages. Please try again.";
-		
-		// Remove rows of successfully deleted Messages in MessagesTableViewController
-		NSMutableArray *chatMessagesForRemoval = [[NSMutableArray alloc] initWithArray:[self.selectedChatMessages copy]];
-		
-		// If Chat Message failed to delete, exclude it from Chat Messages to be removed
-		for(NSString *failedChatMessageID in failedChatMessageIDs)
-		{
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", failedChatMessageID];
-			NSArray *results = [chatMessagesForRemoval filteredArrayUsingPredicate:predicate];
-			
-			if([results count] > 0)
-			{
-				ChatMessageModel *chatMessage = [results objectAtIndex:0];
-				
-				[chatMessagesForRemoval removeObject:chatMessage];
-			}
-		}
-		
-		[self.chatMessagesTableViewController removeSelectedChatMessages:chatMessagesForRemoval];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Remove selected rows from Chat Messages Table
+	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
 }
 
+// Return Delete Multiple Chat Message error from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
+{
+	// Determine which Chat Messages were successfully Archived
+	NSMutableArray *successfulChatMessages = [NSMutableArray arrayWithArray:[self.selectedChatMessages copy]];
+	
+	[successfulChatMessages removeObjectsInArray:failedChatMessages];
+	
+	// Remove selected all rows from Chat Messages Table that were successfully Archived
+	if([self.selectedChatMessages count] > 0)
+	{
+		[self.chatMessagesTableViewController removeSelectedChatMessages:successfulChatMessages];
+	}
+	
+	// Reload Chat Messages Table to re-show Chat Messages that were not Archived
+	[self.chatMessagesTableViewController unHideSelectedChatMessages:failedChatMessages];
+	
+	// Update Selected Messages to only the Failed Chat Messages
+	self.selectedChatMessages = failedChatMessages;
+}
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
@@ -257,13 +251,23 @@
 		// Set Chat Messages
 		[self.chatMessagesTableViewController setDelegate:self];
 		
+		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
+		[self.toolbarBottom layoutIfNeeded];
+		
 		// Increase bottom inset of Messages Table so that its bottom scroll position rests above bottom Toolbar
 		UIEdgeInsets tableInset = self.chatMessagesTableViewController.tableView.contentInset;
 		CGSize toolbarSize = self.toolbarBottom.frame.size;
 		
 		tableInset.bottom = toolbarSize.height;
 		[self.chatMessagesTableViewController.tableView setContentInset:tableInset];
+	}
+	// Set Conversations for Chat Message Detail to use for determining whether a message with selected Chat Participants already exists
+	else if([segue.identifier isEqualToString:@"showNewChatMessageDetail"])
+	{
+		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;
 		
+		[chatMessageDetailViewController setIsNewChat:YES];
+		[chatMessageDetailViewController setConversations:self.chatMessagesTableViewController.chatMessages];
 	}
 }
 

@@ -22,7 +22,4 @@
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 
-- (void)updateAccounts:(NSMutableArray *)accounts;
-- (void)updateAccountsError:(NSError *)error;
-
 @end

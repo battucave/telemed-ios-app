@@ -14,7 +14,10 @@
 {
 	[super awakeFromNib];
 	
-	self.constant = 1.0 / [UIScreen mainScreen].scale;
+	if(self.constant == 1.0)
+	{
+		self.constant = 1.0 / [UIScreen mainScreen].scale;
+	}
 }
 
 @end

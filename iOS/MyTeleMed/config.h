@@ -12,7 +12,7 @@
 #define DEVELOPMENT 0
 #define PRODUCTION 1
 
-#define ENVIRONMENT DEVELOPMENT
+#define ENVIRONMENT PRODUCTION
 
 /**
  WEB SERVICES
@@ -29,7 +29,8 @@
 #define AUTHENTICATION_CALLBACK_PAGE @"Authentication/Success"
 
 #define ACCESS_TOKEN_EXPIRATION_TIME 28.0
-#define NSURLREQUEST_TIMEOUT_INTERVAL 10.0
+#define NSURLREQUEST_TIMEOUT_INTERVAL 12.0
+#define NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL 60.0 // All requests that submit data to server need longer timeout
 
 
 /**

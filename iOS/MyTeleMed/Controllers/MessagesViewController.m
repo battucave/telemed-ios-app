@@ -68,7 +68,7 @@
 	if([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		// Change top layout constraint to 11 (Keep Swipe Message there as it will simply be hidden under the Container View and we can still use the top border of it)
-		self.constraintTopSpace.constant = 11;
+		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
 	}
 	
 	[self toggleToolbarButtons:NO];
@@ -213,6 +213,44 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
+// Return Modify Multiple Message States pending from MessageModel delegate
+- (void)modifyMultipleMessagesStatePending:(NSString *)state
+{
+	// Hide selected rows from Messages Table
+	[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
+	
+	[self setEditing:NO animated:YES];
+}
+
+// Return Modify Multiple Message States success from MessageModel delegate
+- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
+{
+	// Remove selected rows from Messages Table
+	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
+}
+
+// Return Modify Multiple Message States error from MessageModel delegate
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
+{
+	// Determine which Messages were successfully Archived
+	NSMutableArray *successfulMessages = [NSMutableArray arrayWithArray:[self.selectedMessages copy]];
+	
+	[successfulMessages removeObjectsInArray:failedMessages];
+	
+	// Remove selected all rows from Messages Table that were successfully Archived
+	if([self.selectedMessages count] > 0)
+	{
+		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
+	}
+	
+	// Reload Messages Table to re-show Messages that were not Archived
+	[self.messagesTableViewController unHideSelectedMessages:failedMessages];
+	
+	// Update Selected Messages to only the Failed Messages
+	self.selectedMessages = failedMessages;
+}
+
+/*/ Return Multiple Message States success from MessageModel delegate (no longer used)
 - (void)modifyMultipleMessagesStateSuccess:(NSString *)state
 {
 	// Remove selected rows from MessagesTableViewController
@@ -221,6 +259,7 @@
 	[self setEditing:NO animated:YES];
 }
 
+// Return Multiple Message States error from MessageModel delegate (no longer used)
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state
 {
 	// Default to all Messages failed to send
@@ -254,7 +293,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Archive Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended
@@ -286,6 +325,9 @@
 		// Set Messages Type to Active
 		[self.messagesTableViewController initMessagesWithType:0];
 		[self.messagesTableViewController setDelegate:self];
+		
+		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
+		[self.toolbarBottom layoutIfNeeded];
 		
 		// Increase bottom inset of Messages Table so that its bottom scroll position rests above bottom Toolbar
 		UIEdgeInsets tableInset = self.messagesTableViewController.tableView.contentInset;

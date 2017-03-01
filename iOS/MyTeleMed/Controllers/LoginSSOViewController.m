@@ -7,6 +7,7 @@
 //
 
 #import "LoginSSOViewController.h"
+#import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
 #import "AuthenticationModel.h"
@@ -59,6 +60,12 @@
 	
 	 // Remove Reachability Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
+}
+
+// Unwind Segue from PhoneNumberViewController
+- (IBAction)unwindFromPhoneNumber:(UIStoryboardSegue *)segue
+{
+	NSLog(@"unwindFromPhoneNumber");
 }
 
 // Unwind Segue from SSOProviderViewController
@@ -262,6 +269,17 @@
 	errorMessage = [NSString stringWithFormat:@"<div style=\"margin: 50px 10px 0; color: #fff; font-size: 16px;\"><p>%@</p><p>Please check your network connection and press the refresh button below to try again.</p></div>", errorMessage];
 	
 	[self.webView loadHTMLString:errorMessage baseURL:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if([segue.identifier isEqualToString:@"showPhoneNumber"])
+	{
+		PhoneNumberViewController *phoneNumberViewController = segue.destinationViewController;
+		
+		// Set delegate
+		[phoneNumberViewController setDelegate:self];
+	}
 }
 
 

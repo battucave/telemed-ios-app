@@ -34,11 +34,6 @@
 	[self.textFieldSender setText:myProfileModel.Email];
 }
 
-- (CGFloat)calculateCellMessageHeight:(CGFloat)keyboardHeight
-{
-	return self.parentViewController.view.frame.size.height - keyboardHeight - self.cellMessageRecipient.bounds.size.height - self.cellMessageSender.bounds.size.height;
-}
-
 - (IBAction)textFieldDidChangeEditing:(UITextField *)textField
 {
 	// Validate form in delegate
