@@ -50,8 +50,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	// Message is currently used; ReceivedMessage was used on test server for a period of time, but has since reverted back
-	if([elementName isEqualToString:@"Message"]/* || [elementName isEqualToString:@"ReceivedMessage"]*/)
+	if([elementName isEqualToString:@"Message"])
 	{
 		[self.messages addObject:self.message];
 		
