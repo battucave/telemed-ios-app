@@ -33,7 +33,7 @@ class NotificationController: WKUserNotificationInterfaceController {
 		super.didDeactivate()
 	}
 	
-	override func didReceive(_ localNotification: UILocalNotification, withCompletion completionHandler: (@escaping (WKUserNotificationInterfaceType) -> Void))
+	override func didReceive(_ localNotification: UILocalNotification, withCompletion completionHandler: @escaping (WKUserNotificationInterfaceType) -> Void)
 	{
 		// Local are notifications that are scheduled by the application itself, and don't involve any comm with Push
 		if localNotification.alertTitle == "Urgent"
@@ -53,7 +53,7 @@ class NotificationController: WKUserNotificationInterfaceController {
 	
 	
 	
-	override func didReceiveRemoteNotification(_ remoteNotification: [AnyHashable: Any], withCompletion completionHandler: (@escaping (WKUserNotificationInterfaceType) -> Void))
+	override func didReceiveRemoteNotification(_ remoteNotification: [AnyHashable: Any], withCompletion completionHandler: @escaping (WKUserNotificationInterfaceType) -> Void)
 	{
 		
 		// Remote handle Push from Apple
