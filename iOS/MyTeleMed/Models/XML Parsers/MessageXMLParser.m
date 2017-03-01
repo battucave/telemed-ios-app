@@ -50,8 +50,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	// ReceivedMessage is current on test server; Message is deprecated, but still current on production server
-	if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
+	if([elementName isEqualToString:@"Message"])
 	{
 		[self.messages addObject:self.message];
 		
