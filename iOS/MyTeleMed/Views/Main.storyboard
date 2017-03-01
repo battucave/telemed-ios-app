@@ -182,7 +182,7 @@
                                             <segue destination="lCh-Yc-kzD" kind="custom" identifier="showArchives" customClass="SWRevealViewControllerSegue" id="duc-Go-Hul"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Chat" id="BjS-O6-WPf" customClass="SideNavigationCountCell">
+                                    <tableViewCell hidden="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Chat" id="BjS-O6-WPf" customClass="SideNavigationCountCell">
                                         <rect key="frame" x="0.0" y="133" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BjS-O6-WPf" id="LFi-JL-QKv">
@@ -233,7 +233,6 @@
                                         <connections>
                                             <outlet property="constraintCountsWidth" destination="gGn-ta-aif" id="o7x-MY-Foh"/>
                                             <outlet property="labelCounts" destination="iYx-x1-Rrv" id="BYM-DT-Z9W"/>
-                                            <segue destination="o2h-qA-hBP" kind="custom" customClass="SWRevealViewControllerSegue" id="ZfR-s3-nyT"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="On Call Schedule" textLabel="FRd-UZ-5Au" detailTextLabel="7an-Qs-mvP" style="IBUITableViewCellStyleValue1" id="PoK-2E-c0S">
@@ -4227,20 +4226,19 @@
         <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="PWR-PC-xIB"/>
-        <segue reference="1fs-hi-JGd"/>
-        <segue reference="O2m-UP-1tm"/>
-        <segue reference="E1e-BY-bXG"/>
-        <segue reference="uzl-of-xL0"/>
-        <segue reference="V9Q-rq-EEe"/>
+        <segue reference="xeH-nb-wrL"/>
         <segue reference="SWX-Rd-no8"/>
+        <segue reference="V9Q-rq-EEe"/>
+        <segue reference="uzl-of-xL0"/>
         <segue reference="c1m-Px-Iwz"/>
         <segue reference="hp2-gk-n0x"/>
-        <segue reference="xeH-nb-wrL"/>
         <segue reference="NoH-LA-OtZ"/>
-        <segue reference="d5q-Lg-iEw"/>
         <segue reference="9pZ-e2-2FC"/>
-        <segue reference="Bd7-aS-lX5"/>
+        <segue reference="d5q-Lg-iEw"/>
+        <segue reference="PWR-PC-xIB"/>
+        <segue reference="1fs-hi-JGd"/>
+        <segue reference="E1e-BY-bXG"/>
+        <segue reference="O2m-UP-1tm"/>
         <segue reference="eMl-Hh-sfW"/>
     </inferredMetricsTieBreakers>
 </document>
