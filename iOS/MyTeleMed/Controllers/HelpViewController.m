@@ -42,10 +42,10 @@
 // Help Video Control Action button with direct link to video
 - (IBAction)playClicked:(id)sender
 {
-	NSURL *videoStrreamURL = [NSURL URLWithString:@"http://www.telemedinc.com/ios-app/resources/TeleMed-AppPreview-Update.mp4"];
-	MPMoviePlayerViewController *player = [[MPMoviePlayerViewController alloc] initWithContentURL:videoStrreamURL];
+	NSURL *videoStreamURL = [NSURL URLWithString:@"http://www.telemedinc.com/ios-app/resources/TeleMed-AppPreview-Update.mp4"];
+	MPMoviePlayerViewController *player = [[MPMoviePlayerViewController alloc] initWithContentURL:videoStreamURL];
 	
-	[self presentMoviePlayerViewControllerAnimated: player];
+	[self presentMoviePlayerViewControllerAnimated:player];
 }
 
 - (void)didReceiveMemoryWarning
