@@ -62,7 +62,7 @@
                 
                 NSString *recordCall = (buttonIndex == 2) ? @"true" : @"false";
                 
-                [self.callModel callSenderForMessage:self.message.ID recordCall:recordCall];
+                [self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:recordCall];
             }
             
             break;
@@ -73,7 +73,7 @@
         {
             if(buttonIndex > 0)
             {
-                [self.messageModel modifyMessageState:self.message.ID state:@"archive"];
+                [self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"archive"];
             }
             
             break;

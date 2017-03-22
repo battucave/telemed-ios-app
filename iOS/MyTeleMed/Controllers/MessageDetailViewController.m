@@ -78,16 +78,16 @@
 {
 	[super viewWillAppear:animated];
 	
-	//NSLog(@"Message ID: %@", self.message.ID);
+	//NSLog(@"Message ID: %@", self.message.MessageDeliveryID);
 	
 	// Mark message as read if active message
 	if(self.message.messageType == 0)
 	{
-		[self.messageModel modifyMessageState:self.message.ID state:@"read"];
+		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"read"];
 		
 		/*/ TESTING ONLY (set message back to unread)
 		#if defined(DEBUG)
-		[self.messageModel modifyMessageState:self.message.ID state:@"unread"];
+		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unread"];
 		#endif
 		// END TESTING ONLY*/
 	}
@@ -95,7 +95,7 @@
 	else
 	{
 		#if defined(DEBUG)
-		[self.messageModel modifyMessageState:self.message.ID state:@"unarchive"];
+		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unarchive"];
 		#endif
 	}
 	// END TESTING ONLY*/
@@ -104,10 +104,10 @@
 	[self setMessageDetails];
 	
 	// Load Message Events
-	[self.messageEventModel getMessageEvents:self.message.ID];
+	[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
 	
 	// Load Forward Message Recipients to determine if message is forwardable
-	[self.messageRecipientModel getForwardMessageRecipients:self.message.ID];
+	[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.message.MessageDeliveryID];
 	
 	// Add Keyboard Observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -161,11 +161,11 @@
 	#endif*/
 	
 	// Reload Message Events if remote notification is a comment specifically for the current message
-	if([notificationType isEqualToString:@"Comment"] && deliveryID && [deliveryID isEqualToNumber:self.message.ID])
+	if([notificationType isEqualToString:@"Comment"] && deliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
 	{
 		NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
 		
-		[self.messageEventModel getMessageEvents:self.message.ID];
+		[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
 		
 		//return;
 	}
@@ -244,7 +244,7 @@
 	});
 	
 	// Refresh Message Events again after delay
-	[self.messageEventModel performSelector:@selector(getMessageEvents:) withObject:self.message.ID afterDelay:15.0];
+	[self.messageEventModel performSelector:@selector(getMessageEventsForMessageDeliveryID:) withObject:self.message.MessageDeliveryID afterDelay:15.0];
 }
 
 // Return error from MessageEventModel delegate
@@ -295,7 +295,7 @@
 	[comment setID:pendingID];
 	[comment setDetail:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)commentText, CFSTR(""), kCFStringEncodingUTF8))];
 	[comment setEnteredByID:self.currentUserID];
-	[comment setMessageID:self.message.ID];
+	[comment setMessageID:self.message.MessageDeliveryID];
 	[comment setType:@"Comment"];
 	
 	// Create local date

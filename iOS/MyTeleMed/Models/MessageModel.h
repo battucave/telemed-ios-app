@@ -29,7 +29,7 @@
 
 @property (weak) id delegate;
 
-@property (nonatomic) NSNumber *ID;
+@property (nonatomic) NSNumber *ID; // Deprecated in favor of MessageDeliveryID (they are identical)
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSNumber *MessageDeliveryID;
 @property (nonatomic) NSNumber *MessageID;

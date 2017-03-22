@@ -33,7 +33,7 @@
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];
 	[self.emailTelemedModel setDelegate:self];
 	
-	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text messageID:self.message.ID];
+	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
 }
 
 // Return pending from EmailTelemedModel delegate

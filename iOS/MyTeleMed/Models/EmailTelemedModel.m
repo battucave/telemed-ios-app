@@ -18,10 +18,10 @@
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress
 {
-	[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress messageID:nil];
+	[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:nil];
 }
 
-- (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress messageID:(NSNumber *)messageID
+- (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
 	// Validate email address
 	if( ! [self isValidEmailAddress:fromEmailAddress])
@@ -45,8 +45,8 @@
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Create Message Delivery ID if a Message ID exists (exists for MessageTeleMedViewController, doesn't exist for ContactEmailViewController)
-	NSString *messageDeliveryID = (messageID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageID] : @"");
+	// Add Message Identifier if a Message Delivery ID exists (exists for MessageTeleMedViewController, doesn't exist for ContactEmailViewController)
+	NSString *messageIdentifier = (messageDeliveryID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageDeliveryID] : @"");
 	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<EmailToTelemed xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
@@ -54,7 +54,7 @@
 			"<FromAddress>%@</FromAddress>"
 			"%@"
 		"</EmailToTelemed>",
-		message, fromEmailAddress, messageDeliveryID];
+		message, fromEmailAddress, messageIdentifier];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
@@ -79,7 +79,7 @@
 			[self showError:error withCallback:^(void)
 			{
 				// Include callback to retry the request
-				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress messageID:messageID];
+				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
 			}];
 			
 			/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
@@ -105,7 +105,7 @@
 		[self showError:error withCallback:^(void)
 		{
 			// Include callback to retry the request
-			[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress messageID:messageID];
+			[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
 		}];
 		
 		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])

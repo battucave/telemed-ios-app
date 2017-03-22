@@ -11,7 +11,7 @@
 
 @implementation MessageRecipientModel
 
-- (void)getNewMessageRecipients:(NSNumber *)accountID
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID
 {
 	NSDictionary *parameters = @{
 		@"acctID"	: accountID
@@ -20,10 +20,19 @@
 	[self getMessageRecipients:parameters];
 }
 
-- (void)getForwardMessageRecipients:(NSNumber *)messageID
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
 	NSDictionary *parameters = @{
-		@"mdid"	: messageID
+		@"mdid"	: messageDeliveryID
+	};
+	
+	[self getMessageRecipients:parameters];
+}
+
+- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID
+{
+	NSDictionary *parameters = @{
+		@"mid"	: messageID
 	};
 	
 	[self getMessageRecipients:parameters];
