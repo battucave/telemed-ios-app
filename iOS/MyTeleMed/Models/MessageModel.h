@@ -29,7 +29,7 @@
 
 @property (weak) id delegate;
 
-@property (nonatomic) NSNumber *ID;
+@property (nonatomic) NSNumber *ID; // Deprecated by MessageDeliveryID (they are identical)
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSNumber *MessageDeliveryID;
 @property (nonatomic) NSNumber *MessageID;
@@ -42,7 +42,7 @@
 @property (nonatomic) NSString *TimeReceived_LCL;
 @property (nonatomic) NSString *TimeReceived_UTC;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (This property not set by XML)
+@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (This property not set by web service)
 
 - (void)getActiveMessages;
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;

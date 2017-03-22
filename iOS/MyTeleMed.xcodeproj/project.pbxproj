@@ -178,6 +178,9 @@
 		E27B85371B14D12900AD50C6 /* MyStatusXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85361B14D12900AD50C6 /* MyStatusXMLParser.m */; };
 		E28307F11AD83170006FDD6D /* news_flash.caf in Resources */ = {isa = PBXBuildFile; fileRef = E28307F01AD83170006FDD6D /* news_flash.caf */; };
 		E291269E1D2C29C900154AB2 /* ChatMessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E291269D1D2C29C900154AB2 /* ChatMessageDetailViewController.m */; };
+		E2920C941E81AB04004BEF10 /* SentMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */; };
+		E2920C971E82BC73004BEF10 /* SentMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C961E82BC73004BEF10 /* SentMessageModel.m */; };
+		E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */; };
 		E2964B471E675860002FF97B /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E2964B4A1E67587F002FF97B /* SideNavigationCountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B491E67587F002FF97B /* SideNavigationCountCell.m */; };
 		E2AE66371CE0DD7300953EFA /* NSObject+Swizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */; };
@@ -611,6 +614,12 @@
 		E28307F01AD83170006FDD6D /* news_flash.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = news_flash.caf; sourceTree = "<group>"; };
 		E291269C1D2C29C900154AB2 /* ChatMessageDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageDetailViewController.h; sourceTree = "<group>"; };
 		E291269D1D2C29C900154AB2 /* ChatMessageDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageDetailViewController.m; sourceTree = "<group>"; };
+		E2920C921E81AB04004BEF10 /* SentMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentMessagesViewController.h; sourceTree = "<group>"; };
+		E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SentMessagesViewController.m; sourceTree = "<group>"; };
+		E2920C951E82BC73004BEF10 /* SentMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentMessageModel.h; sourceTree = "<group>"; };
+		E2920C961E82BC73004BEF10 /* SentMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SentMessageModel.m; sourceTree = "<group>"; };
+		E2920C981E82BC96004BEF10 /* SentMessageXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentMessageXMLParser.h; sourceTree = "<group>"; };
+		E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SentMessageXMLParser.m; sourceTree = "<group>"; };
 		E2964B451E675860002FF97B /* ErrorAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ErrorAlertController.h; path = Includes/ErrorAlertController.h; sourceTree = "<group>"; };
 		E2964B461E675860002FF97B /* ErrorAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ErrorAlertController.m; path = Includes/ErrorAlertController.m; sourceTree = "<group>"; };
 		E2964B481E67587F002FF97B /* SideNavigationCountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SideNavigationCountCell.h; path = Includes/SideNavigationCountCell.h; sourceTree = "<group>"; };
@@ -1059,14 +1068,14 @@
 				E291269D1D2C29C900154AB2 /* ChatMessageDetailViewController.m */,
 				E2D3E85A1D23063B00746265 /* ChatMessagesViewController.h */,
 				E2D3E85B1D23063B00746265 /* ChatMessagesViewController.m */,
-				28CCCD8B17F535DD0093CEE2 /* ContactViewController.h */,
-				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
 				E2D5670F1CD95C500054FD3F /* ContactEmailViewController.h */,
 				E2D567101CD95C500054FD3F /* ContactEmailViewController.m */,
-				28EAB9E8194B585100903772 /* HelpViewController.h */,
-				28EAB9E9194B585100903772 /* HelpViewController.m */,
+				28CCCD8B17F535DD0093CEE2 /* ContactViewController.h */,
+				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
 				28990CE9194F3A7E009BA9E0 /* HelpUserGuideViewController.h */,
 				28990CEA194F3A7E009BA9E0 /* HelpUserGuideViewController.m */,
+				28EAB9E8194B585100903772 /* HelpViewController.h */,
+				28EAB9E9194B585100903772 /* HelpViewController.m */,
 				E272B8871B0D327100A7154B /* LoginSSOViewController.h */,
 				E272B8881B0D327100A7154B /* LoginSSOViewController.m */,
 				E21EC5CF1CE37C880027AA14 /* MessageAccountPickerViewController.h */,
@@ -1089,10 +1098,12 @@
 				28CCCD8E17F535DD0093CEE2 /* OnCallScheduleViewController.m */,
 				28ADA6EB17FA1585003A81A1 /* PhoneNumberViewController.h */,
 				28ADA6EC17FA1585003A81A1 /* PhoneNumberViewController.m */,
-				280929B218311A6800877D46 /* SettingsNotificationsTableViewController.h */,
-				280929B318311A6800877D46 /* SettingsNotificationsTableViewController.m */,
+				E2920C921E81AB04004BEF10 /* SentMessagesViewController.h */,
+				E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */,
 				281716191831659200CD3086 /* SettingsNotificationsPickerTableViewController.h */,
 				2817161A1831659200CD3086 /* SettingsNotificationsPickerTableViewController.m */,
+				280929B218311A6800877D46 /* SettingsNotificationsTableViewController.h */,
+				280929B318311A6800877D46 /* SettingsNotificationsTableViewController.m */,
 				28CCCD8F17F535DD0093CEE2 /* SettingsTableViewController.h */,
 				28CCCD9017F535DD0093CEE2 /* SettingsTableViewController.m */,
 				28CCCD8317F5185B0093CEE2 /* SideNavigationViewController.h */,
@@ -1266,6 +1277,8 @@
 				E27B850B1B14D02A00AD50C6 /* RegisteredDeviceModel.m */,
 				E27B850D1B14D03500AD50C6 /* ScreenshotAlertModel.h */,
 				E27B850E1B14D03500AD50C6 /* ScreenshotAlertModel.m */,
+				E2920C951E82BC73004BEF10 /* SentMessageModel.h */,
+				E2920C961E82BC73004BEF10 /* SentMessageModel.m */,
 				E2ECFB571B331F910024D970 /* SSOProviderModel.h */,
 				E2ECFB581B331F910024D970 /* SSOProviderModel.m */,
 			);
@@ -1288,10 +1301,10 @@
 				E27B85191B14D09400AD50C6 /* AccountXMLParser.m */,
 				E270ED891B18F24B00DD43B8 /* AuthenticationXMLParser.h */,
 				E270ED8A1B18F24B00DD43B8 /* AuthenticationXMLParser.m */,
-				E2CDEFA11D25752100728F1A /* ChatParticipantXMLParser.h */,
-				E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */,
 				E2CDEFA31D25752100728F1A /* ChatMessageXMLParser.h */,
 				E2CDEFA41D25752100728F1A /* ChatMessageXMLParser.m */,
+				E2CDEFA11D25752100728F1A /* ChatParticipantXMLParser.h */,
+				E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */,
 				E27B85161B14D09400AD50C6 /* GenericErrorXMLParser.h */,
 				E27B85131B14D09400AD50C6 /* GenericErrorXMLParser.m */,
 				E27B852F1B14D11200AD50C6 /* MessageEventXMLParser.h */,
@@ -1306,6 +1319,8 @@
 				E27B85361B14D12900AD50C6 /* MyStatusXMLParser.m */,
 				E27B851B1B14D09400AD50C6 /* NotificationSettingXMLParser.h */,
 				E27B85121B14D09400AD50C6 /* NotificationSettingXMLParser.m */,
+				E2920C981E82BC96004BEF10 /* SentMessageXMLParser.h */,
+				E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */,
 				E2ECFB5A1B33223C0024D970 /* SSOProviderXMLParser.h */,
 				E2ECFB5B1B33223C0024D970 /* SSOProviderXMLParser.m */,
 			);
@@ -1781,7 +1796,9 @@
 				2802E7B91A9CC2AD004565BD /* CommentCell.m in Sources */,
 				E270ED6B1B1758C900DD43B8 /* AFURLRequestSerialization.m in Sources */,
 				28BA8E921A7009800042D769 /* MessageHistoryViewController.m in Sources */,
+				E2920C941E81AB04004BEF10 /* SentMessagesViewController.m in Sources */,
 				E21AE0AA1D231BB200EA13E4 /* ChatMessageCell.m in Sources */,
+				E2920C971E82BC73004BEF10 /* SentMessageModel.m in Sources */,
 				28CCCD9317F535DD0093CEE2 /* OnCallScheduleViewController.m in Sources */,
 				E270ED641B1758C900DD43B8 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				28CCCD9117F535DD0093CEE2 /* ArchivesViewController.m in Sources */,
@@ -1791,6 +1808,7 @@
 				E270ED6F1B1758C900DD43B8 /* AFURLSessionManager.m in Sources */,
 				28A8DA51182C55CE00C9DB08 /* MessageComposeTableViewController.m in Sources */,
 				E272B8891B0D327200A7154B /* LoginSSOViewController.m in Sources */,
+				E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */,
 				E27B852E1B14D0F400AD50C6 /* MessageRecipientXMLParser.m in Sources */,
 				E27B850C1B14D02A00AD50C6 /* RegisteredDeviceModel.m in Sources */,
 				E2CDEFAC1D25753400728F1A /* ChatParticipantModel.m in Sources */,
