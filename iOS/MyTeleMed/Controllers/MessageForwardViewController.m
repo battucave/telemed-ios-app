@@ -84,26 +84,12 @@
 /*/ Return success from ForwardMessageModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	NSString *messageText = self.messageComposeTableViewController.textViewMessage.text;
+	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message" message:@"Message forwarded successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
-	// Add comment if necessary
-	if( ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
-	{
-		[self setCommentModel:[[CommentModel alloc] init]];
-		[self.commentModel setDelegate:self];
-		
-		[self.commentModel addMessageComment:self.message.ID comment:messageText];
-	}
-	// If no comment needs to be added then show success
-	else
-	{
-		UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message" message:@"Message forwarded successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		
-		[successAlertView show];
-		
-		// Go back to Message Detail
-		[self.navigationController popViewControllerAnimated:YES];
-	}
+	[successAlertView show];
+	
+	// Go back to Message Detail
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // Return error from ForwardMessageModel delegate (no longer used)
@@ -118,36 +104,6 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
-
-// Return success from CommentModel delegate (no longer used)
-- (void)saveCommentSuccess:(NSString *)commentText
-{
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message" message:@"Message forwarded successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];
-
-	// Go back to Message Detail
-	[self.navigationController popViewControllerAnimated:YES];
-}
-
-// Return error from CommentModel delegate (no longer used)
-- (void)saveCommentError:(NSError *)error
-{
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
-	{
-		[self.commentModel showOfflineError];
-	}
-	else
-	{
-		UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message" message:@"Message forward successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		
-		[errorAlertView show];
-	}
-
-	// Go back to Message Detail
-	[self.navigationController popViewControllerAnimated:YES];
 }*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate

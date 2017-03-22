@@ -11,13 +11,27 @@
 
 @implementation MessageEventModel
 
-- (void)getMessageEvents:(NSNumber *)messageID
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getMessageEvents:) object:messageID];
-	
 	NSDictionary *parameters = @{
-		@"mdid"	: messageID
+		@"mdid"	: messageDeliveryID
 	};
+	
+	[self getMessageEvents:parameters];
+}
+
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID
+{
+	NSDictionary *parameters = @{
+		@"mid"	: messageID
+	};
+	
+	[self getMessageEvents:parameters];
+}
+
+- (void)getMessageEvents:(NSDictionary *)parameters
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getMessageEvents:) object:parameters];
 	
 	[self.operationManager GET:@"MsgEvents" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{

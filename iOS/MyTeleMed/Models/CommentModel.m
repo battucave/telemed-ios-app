@@ -44,28 +44,35 @@
 	self.comment = comment;
 	self.pendingID = pendingID;
 	
-	NSString *xmlBody;
+	NSString *xmlBody = @"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+			"<CommentText>%3$@</CommentText>"
+			"<%1$@>%2$@</%1$@>"
+		"</Comment>";
 	
-	// New API
+	// Comment with Message Delivery ID
 	if(message.MessageDeliveryID)
 	{
-		xmlBody = [NSString stringWithFormat:
-			@"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-				"<CommentText>%@</CommentText>"
-				"<MessageDeliveryID>%@</MessageDeliveryID>"
-				"<MessageID>%@</MessageID>"
-			"</Comment>",
-			comment, message.MessageDeliveryID, message.MessageID];
+		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, comment];
 	}
-	// Deprecated API (still used on production)
+	// Comment with Message ID
+	else if(message.MessageID)
+	{
+		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageID", message.MessageID, comment];
+	}
+	// Message must contain either MessageDeliveryID or MessageID
 	else
 	{
-		xmlBody = [NSString stringWithFormat:
-			@"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-				"<CommentText>%@</CommentText>"
-				"<MessageDeliveryID>%@</MessageDeliveryID>"
-			"</Comment>",
-			comment, message.ID];
+		NSString *errorMessage = (toForwardMessage ? @"Message forward successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Add Comment Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
+		
+		// Show error (user cannot have navigated to another screen at this point)
+		[self showError:error];
+		
+		// Still being used
+		if([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+		{
+			[self.delegate saveCommentError:error withPendingID:pendingID];
+		}
 	}
 	
 	NSLog(@"XML Body: %@", xmlBody);

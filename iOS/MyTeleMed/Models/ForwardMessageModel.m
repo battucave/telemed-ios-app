@@ -33,32 +33,30 @@
 		[xmlRecipients appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", messageRecipientID]];
 	}
 	
-	NSString *xmlBody;
+	NSString *xmlBody = @"<FwdMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+			"<%1$@>%2$@</%1$@>"
+			"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
+				"%3$@"
+			"</MessageRecipients>"
+		"</FwdMsg>";
 	
-	// New API
+	// Forward with Message Delivery ID
 	if(message.MessageDeliveryID)
 	{
-		xmlBody = [NSString stringWithFormat:
-			@"<FwdMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-				"<MessageDeliveryID>%@</MessageDeliveryID>"
-				"<MessageID>%@</MessageID>"
-				"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
-					"%@"
-				"</MessageRecipients>"
-			"</FwdMsg>",
-			message.MessageDeliveryID, message.MessageID, xmlRecipients];
+		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, xmlRecipients];
 	}
-	// Deprecated API (still used on production)
+	// Forward with Message ID
+	else if(message.MessageID)
+	{
+		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageID", message.MessageID, xmlRecipients];
+	}
+	// Message must contain either MessageDeliveryID or MessageID
 	else
 	{
-		xmlBody = [NSString stringWithFormat:
-			@"<FwdMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-				"<MessageDeliveryID>%@</MessageDeliveryID>"
-				"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
-					"%@"
-				"</MessageRecipients>"
-			"</FwdMsg>",
-			message.ID, xmlRecipients];
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Forward Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem forwarding your Message.", NSLocalizedDescriptionKey, nil]];
+			
+		// Show error (user cannot have navigated to another screen at this point)
+		[self showError:error];
 	}
 	
 	NSLog(@"XML Body: %@", xmlBody);

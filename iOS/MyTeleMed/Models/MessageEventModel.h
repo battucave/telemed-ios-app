@@ -32,6 +32,7 @@
 @property (nonatomic) NSString *Time_LCL;
 @property (nonatomic) NSString *Time_UTC;
 
-- (void)getMessageEvents:(NSNumber *)messageID;
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID;
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID;
 
 @end

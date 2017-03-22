@@ -28,7 +28,8 @@
 @property (nonatomic) NSString *FirstName;
 @property (nonatomic) NSString *LastName;
 
-- (void)getNewMessageRecipients:(NSNumber *)accountID;
-- (void)getForwardMessageRecipients:(NSNumber *)messageID;
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID;
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID;
+- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID;
 
 @end

@@ -158,12 +158,12 @@
 	// Get Recipients for Forward Message
 	else if([self.messageRecipientType isEqualToString:@"Forward"])
 	{
-		[self.messageRecipientModel getForwardMessageRecipients:self.message.ID];
+		[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.message.MessageDeliveryID];
 	}
 	// Get Recipients for New Message
 	else
 	{
-		[self.messageRecipientModel getNewMessageRecipients:self.selectedAccount.ID];
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
 	}
 }
 

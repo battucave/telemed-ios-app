@@ -25,6 +25,6 @@
 @property (nonatomic) NSString *Message;
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress;
-- (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress messageID:(NSNumber *)messageID;
+- (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID;
 
 @end

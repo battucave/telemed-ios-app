@@ -271,7 +271,7 @@
 	for(MessageModel *message in messages)
 	{
 		NSDictionary *parameters = @{
-			@"mdid"		: message.ID,
+			@"mdid"		: message.MessageDeliveryID,
 			@"method"	: state
 		};
 		
