@@ -84,6 +84,30 @@
 	return settings;
 }
 
+// Not currently used (only here to provide a method for viewing all notification settings)
+- (void)getServerNotificationSettings
+{
+	[self.operationManager GET:@"NotificationSettings" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
+	{
+		NSLog(@"Got Notification Settings - see log");
+		
+		// View results in debug log. Make sure AFNetworkActivityLogger is enabled in TeleMedHTTPRequestOperationManager.m
+	}
+	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
+	{
+		NSLog(@"NotificationSettingModel Error: %@", error);
+		
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
+		
+		// Only handle error if user still on same screen
+		if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		{
+			[self.delegate updateNotificationSettingsError:error];
+		}
+	}];
+}
+
 - (void)getServerNotificationSettingsByName:(NSString *)name
 {
 	NSDictionary *parameters = @{

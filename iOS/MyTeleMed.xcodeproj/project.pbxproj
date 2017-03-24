@@ -129,6 +129,11 @@
 		E21AE0AD1D24145800EA13E4 /* ChatMessagesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21AE0AC1D24145800EA13E4 /* ChatMessagesTableViewController.m */; };
 		E21C14691D33E2240025B6ED /* OnePixelLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C14681D33E2240025B6ED /* OnePixelLayoutConstraint.m */; };
 		E21EC5D11CE37C880027AA14 /* MessageAccountPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21EC5D01CE37C880027AA14 /* MessageAccountPickerViewController.m */; };
+		E232D7021E675E6200B797E1 /* button-Navigation-ChatMessages.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D6FF1E675E6200B797E1 /* button-Navigation-ChatMessages.png */; };
+		E232D7031E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7001E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png */; };
+		E232D7041E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */; };
+		E232D7071E675E7800B797E1 /* indicator-CommentRightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */; };
+		E232D7081E675E7800B797E1 /* indicator-CommentRightBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */; };
 		E270ED5F1B1758C900DD43B8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */; };
 		E270ED601B1758C900DD43B8 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */; };
 		E270ED611B1758C900DD43B8 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3C1B1758C900DD43B8 /* AFSecurityPolicy.m */; };
@@ -519,6 +524,11 @@
 		E21C146A1D33E2290025B6ED /* OnePixelLayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePixelLayoutConstraint.h; sourceTree = "<group>"; };
 		E21EC5CF1CE37C880027AA14 /* MessageAccountPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageAccountPickerViewController.h; sourceTree = "<group>"; };
 		E21EC5D01CE37C880027AA14 /* MessageAccountPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageAccountPickerViewController.m; sourceTree = "<group>"; };
+		E232D6FF1E675E6200B797E1 /* button-Navigation-ChatMessages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages.png"; sourceTree = "<group>"; };
+		E232D7001E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@2x.png"; sourceTree = "<group>"; };
+		E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@3x.png"; sourceTree = "<group>"; };
+		E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue.png"; sourceTree = "<group>"; };
+		E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue@2x.png"; sourceTree = "<group>"; };
 		E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
 		E270ED391B1758C900DD43B8 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
@@ -1346,109 +1356,114 @@
 		E2D567181CDB85B80054FD3F /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				E2D567191CDB85B80054FD3F /* button-Contact-Call@2x.png */,
-				E2D5671A1CDB85B80054FD3F /* button-MessageDetail-ReturnCall@2x.png */,
 				E2D5671B1CDB85B80054FD3F /* background-Login.png */,
-				E2D5671C1CDB85B80054FD3F /* button-Help-PDF@3x.png */,
-				E2D5671D1CDB85B80054FD3F /* button-MessageDetail-History.png */,
-				E2D5671E1CDB85B80054FD3F /* button-Continue@2x.png */,
-				E2D5671F1CDB85B80054FD3F /* button-Navigation-Messages@3x.png */,
-				E2D567201CDB85B80054FD3F /* icon-Mail-Read.png */,
-				E2D567211CDB85B80054FD3F /* button-Navigation-Sent.png */,
-				E2D567221CDB85B80054FD3F /* icon-Mail-Read@3x.png */,
-				E2D567231CDB85B80054FD3F /* button-Navigation-OnCallSchedule@2x.png */,
-				E2D567241CDB85B80054FD3F /* indicator-CommentLeft@2x.png */,
-				E2D567251CDB85B80054FD3F /* button-Navigation-Archives@3x.png */,
-				E2D567261CDB85B80054FD3F /* button-Contact-Call.png */,
-				E2D567271CDB85B80054FD3F /* button-Navigation-Sent@3x.png */,
-				E2D567281CDB85B80054FD3F /* button-Navigation-Archives.png */,
-				E2D567291CDB85B80054FD3F /* button-WebViewBack@2x.png */,
-				E2D5672A1CDB85B80054FD3F /* button-Navigation-Archives@2x.png */,
-				E2D5672B1CDB85B80054FD3F /* button-Navigation-Messages.png */,
-				E2D5672C1CDB85B80054FD3F /* menu@3x.png */,
-				E2D5672D1CDB85B80054FD3F /* image-ContactLogo@3x.png */,
-				E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */,
-				E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */,
-				E2D567301CDB85B80054FD3F /* button-Continue.png */,
-				E2D567311CDB85B80054FD3F /* image-SideNavigationLogo.png */,
-				E2D567321CDB85B80054FD3F /* background-Login@3x.png */,
-				E2D567331CDB85B80054FD3F /* menu.png */,
-				E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */,
-				E2D567351CDB85B80054FD3F /* button-MessageDetail-ReturnCall@3x.png */,
-				E2D567361CDB85B80054FD3F /* button-Navigation-OnCallSchedule.png */,
-				E2D567371CDB85B80054FD3F /* button-WebViewForward@2x.png */,
-				E2D567381CDB85B80054FD3F /* image-ContactLogo@2x.png */,
-				E2D567391CDB85B80054FD3F /* button-Save.png */,
-				E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */,
-				E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */,
-				E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */,
-				E2D5673D1CDB85B80054FD3F /* image-SideNavigationLogo@2x.png */,
-				E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */,
-				E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */,
-				E2D567401CDB85B80054FD3F /* button-Navigation-ForgotPassword@3x.png */,
-				E2D567411CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png */,
-				E2D567421CDB85B80054FD3F /* icon-Mail-Unread@2x.png */,
-				E2D567431CDB85B80054FD3F /* button-MessageDetail-TeleMed@3x.png */,
-				E2D567441CDB85B80054FD3F /* button-MessageDetail-ReturnCall.png */,
-				E2D567451CDB85B80054FD3F /* image-ContactLogo.png */,
-				E2D567461CDB85B80054FD3F /* button-TextField-Help@3x.png */,
-				E2D567471CDB85B80054FD3F /* button-Continue@3x.png */,
-				E2D567481CDB85B80054FD3F /* button-Help-Video@2x.png */,
-				E2D567491CDB85B80054FD3F /* button-Help-Video@3x.png */,
-				E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */,
-				E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */,
-				E2D5674C1CDB85B80054FD3F /* image-SideNavigationLogo@3x.png */,
-				E2D5674D1CDB85B80054FD3F /* button-Navigation-ContactTeleMed@2x.png */,
-				E2D5674E1CDB85B80054FD3F /* button-Cancel@3x.png */,
-				E2D5674F1CDB85B80054FD3F /* button-Navigation-Help@3x.png */,
-				E2D567501CDB85B80054FD3F /* button-Help-Video.png */,
-				E2D567511CDB85B80054FD3F /* button-Navigation-Settings@3x.png */,
-				E2D567521CDB85B80054FD3F /* button-Save@2x.png */,
-				E2D567531CDB85B80054FD3F /* button-Contact-Mail@3x.png */,
-				E2D567541CDB85B80054FD3F /* button-Help-ForgotPassword.png */,
-				E2D567551CDB85B80054FD3F /* button-Navigation-LogOut.png */,
-				E2D567561CDB85B80054FD3F /* button-Navigation-LogOut@3x.png */,
-				E2D567571CDB85B80054FD3F /* button-MessageDetail-TeleMed.png */,
-				E2D567581CDB85B80054FD3F /* button-MessageDetail-Forward.png */,
-				E2D567591CDB85B80054FD3F /* button-MessageDetail-History@2x.png */,
-				E2D5675A1CDB85B80054FD3F /* icon-Mail-Unread@3x.png */,
-				E2D5675B1CDB85B80054FD3F /* button-AddComment@3x.png */,
-				E2D5675C1CDB85B80054FD3F /* indicator-CommentRight@2x.png */,
-				E2D5675D1CDB85B80054FD3F /* icon-Mail-Unread.png */,
-				E2D5675E1CDB85B80054FD3F /* button-Navigation-Sent@2x.png */,
-				E2D5675F1CDB85B80054FD3F /* button-WebViewForward.png */,
-				E2D567601CDB85B80054FD3F /* button-MessageDetail-TeleMed@2x.png */,
-				E2D567611CDB85B80054FD3F /* button-Navigation-ForgotPassword@2x.png */,
-				E2D567621CDB85B80054FD3F /* button-MessageDetail-Forward@2x.png */,
-				E2D567631CDB85B80054FD3F /* button-Navigation-Help.png */,
 				E2D567641CDB85B80054FD3F /* background-Login@2x.png */,
-				E2D567651CDB85B80054FD3F /* button-TextField-Help.png */,
-				E2D567661CDB85B80054FD3F /* button-TextField-Help@2x.png */,
-				E2D567671CDB85B80054FD3F /* button-MessageDetail-Forward@3x.png */,
-				E2D567681CDB85B80054FD3F /* button-AddComment.png */,
-				E2D567691CDB85B80054FD3F /* button-Cancel.png */,
-				E2D5676A1CDB85B80054FD3F /* button-Navigation-Settings.png */,
-				E2D5676B1CDB85B80054FD3F /* button-Help-ForgotPassword@3x.png */,
-				E2D5676C1CDB85B80054FD3F /* button-MessageDetail-Archive@2x.png */,
-				E2D5676D1CDB85B80054FD3F /* button-Navigation-Settings@2x.png */,
-				E2D5676E1CDB85B80054FD3F /* button-Navigation-OnCallSchedule@3x.png */,
-				E2D5676F1CDB85B80054FD3F /* button-MessageDetail-Archive@3x.png */,
-				E2D567701CDB85B80054FD3F /* button-Navigation-ContactTeleMed.png */,
-				E2D567711CDB85B80054FD3F /* button-MessageDetail-History@3x.png */,
-				E2D567721CDB85B80054FD3F /* button-MessageDetail-Archive.png */,
-				E2D567731CDB85B80054FD3F /* button-WebViewBack.png */,
-				E2D567741CDB85B80054FD3F /* button-Contact-Call@3x.png */,
-				E2D567751CDB85B80054FD3F /* button-Help-ForgotPassword@2x.png */,
-				E2D567761CDB85B80054FD3F /* button-Navigation-Messages@2x.png */,
-				E2D567771CDB85B80054FD3F /* logo@2x.png */,
-				E2D567781CDB85B80054FD3F /* menu@2x.png */,
+				E2D567321CDB85B80054FD3F /* background-Login@3x.png */,
 				E2D567791CDB85B80054FD3F /* background-PhoneNumber.png */,
+				E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */,
+				E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */,
+				E2D567681CDB85B80054FD3F /* button-AddComment.png */,
+				E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */,
+				E2D5675B1CDB85B80054FD3F /* button-AddComment@3x.png */,
+				E2D567691CDB85B80054FD3F /* button-Cancel.png */,
+				E2D5677D1CDB85B80054FD3F /* button-Cancel@2x.png */,
+				E2D5674E1CDB85B80054FD3F /* button-Cancel@3x.png */,
+				E2D567261CDB85B80054FD3F /* button-Contact-Call.png */,
+				E2D567191CDB85B80054FD3F /* button-Contact-Call@2x.png */,
+				E2D567741CDB85B80054FD3F /* button-Contact-Call@3x.png */,
 				E2D5677A1CDB85B80054FD3F /* button-Contact-Mail.png */,
 				E2D5677B1CDB85B80054FD3F /* button-Contact-Mail@2x.png */,
-				E2D5677C1CDB85B80054FD3F /* button-Navigation-Help@2x.png */,
-				E2D5677D1CDB85B80054FD3F /* button-Cancel@2x.png */,
-				E2D5677E1CDB85B80054FD3F /* logo.png */,
+				E2D567531CDB85B80054FD3F /* button-Contact-Mail@3x.png */,
+				E2D567301CDB85B80054FD3F /* button-Continue.png */,
+				E2D5671E1CDB85B80054FD3F /* button-Continue@2x.png */,
+				E2D567471CDB85B80054FD3F /* button-Continue@3x.png */,
+				E2D567541CDB85B80054FD3F /* button-Help-ForgotPassword.png */,
+				E2D567751CDB85B80054FD3F /* button-Help-ForgotPassword@2x.png */,
+				E2D5676B1CDB85B80054FD3F /* button-Help-ForgotPassword@3x.png */,
+				E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */,
+				E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */,
+				E2D5671C1CDB85B80054FD3F /* button-Help-PDF@3x.png */,
+				E2D567501CDB85B80054FD3F /* button-Help-Video.png */,
+				E2D567481CDB85B80054FD3F /* button-Help-Video@2x.png */,
+				E2D567491CDB85B80054FD3F /* button-Help-Video@3x.png */,
+				E2D567721CDB85B80054FD3F /* button-MessageDetail-Archive.png */,
+				E2D5676C1CDB85B80054FD3F /* button-MessageDetail-Archive@2x.png */,
+				E2D5676F1CDB85B80054FD3F /* button-MessageDetail-Archive@3x.png */,
+				E2D567581CDB85B80054FD3F /* button-MessageDetail-Forward.png */,
+				E2D567621CDB85B80054FD3F /* button-MessageDetail-Forward@2x.png */,
+				E2D567671CDB85B80054FD3F /* button-MessageDetail-Forward@3x.png */,
+				E2D5671D1CDB85B80054FD3F /* button-MessageDetail-History.png */,
+				E2D567591CDB85B80054FD3F /* button-MessageDetail-History@2x.png */,
+				E2D567711CDB85B80054FD3F /* button-MessageDetail-History@3x.png */,
+				E2D567441CDB85B80054FD3F /* button-MessageDetail-ReturnCall.png */,
+				E2D5671A1CDB85B80054FD3F /* button-MessageDetail-ReturnCall@2x.png */,
+				E2D567351CDB85B80054FD3F /* button-MessageDetail-ReturnCall@3x.png */,
+				E2D567571CDB85B80054FD3F /* button-MessageDetail-TeleMed.png */,
+				E2D567601CDB85B80054FD3F /* button-MessageDetail-TeleMed@2x.png */,
+				E2D567431CDB85B80054FD3F /* button-MessageDetail-TeleMed@3x.png */,
+				E2D567281CDB85B80054FD3F /* button-Navigation-Archives.png */,
+				E2D5672A1CDB85B80054FD3F /* button-Navigation-Archives@2x.png */,
+				E2D567251CDB85B80054FD3F /* button-Navigation-Archives@3x.png */,
+				E232D6FF1E675E6200B797E1 /* button-Navigation-ChatMessages.png */,
+				E232D7001E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png */,
+				E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */,
+				E2D567701CDB85B80054FD3F /* button-Navigation-ContactTeleMed.png */,
+				E2D5674D1CDB85B80054FD3F /* button-Navigation-ContactTeleMed@2x.png */,
+				E2D567411CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png */,
 				E2D5677F1CDB85B80054FD3F /* button-Navigation-ForgotPassword.png */,
+				E2D567611CDB85B80054FD3F /* button-Navigation-ForgotPassword@2x.png */,
+				E2D567401CDB85B80054FD3F /* button-Navigation-ForgotPassword@3x.png */,
+				E2D567631CDB85B80054FD3F /* button-Navigation-Help.png */,
+				E2D5677C1CDB85B80054FD3F /* button-Navigation-Help@2x.png */,
+				E2D5674F1CDB85B80054FD3F /* button-Navigation-Help@3x.png */,
+				E2D567551CDB85B80054FD3F /* button-Navigation-LogOut.png */,
+				E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */,
+				E2D567561CDB85B80054FD3F /* button-Navigation-LogOut@3x.png */,
+				E2D5672B1CDB85B80054FD3F /* button-Navigation-Messages.png */,
+				E2D567761CDB85B80054FD3F /* button-Navigation-Messages@2x.png */,
+				E2D5671F1CDB85B80054FD3F /* button-Navigation-Messages@3x.png */,
+				E2D567361CDB85B80054FD3F /* button-Navigation-OnCallSchedule.png */,
+				E2D567231CDB85B80054FD3F /* button-Navigation-OnCallSchedule@2x.png */,
+				E2D5676E1CDB85B80054FD3F /* button-Navigation-OnCallSchedule@3x.png */,
+				E2D567211CDB85B80054FD3F /* button-Navigation-Sent.png */,
+				E2D5675E1CDB85B80054FD3F /* button-Navigation-Sent@2x.png */,
+				E2D567271CDB85B80054FD3F /* button-Navigation-Sent@3x.png */,
+				E2D5676A1CDB85B80054FD3F /* button-Navigation-Settings.png */,
+				E2D5676D1CDB85B80054FD3F /* button-Navigation-Settings@2x.png */,
+				E2D567511CDB85B80054FD3F /* button-Navigation-Settings@3x.png */,
+				E2D567391CDB85B80054FD3F /* button-Save.png */,
+				E2D567521CDB85B80054FD3F /* button-Save@2x.png */,
+				E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */,
+				E2D567651CDB85B80054FD3F /* button-TextField-Help.png */,
+				E2D567661CDB85B80054FD3F /* button-TextField-Help@2x.png */,
+				E2D567461CDB85B80054FD3F /* button-TextField-Help@3x.png */,
+				E2D567731CDB85B80054FD3F /* button-WebViewBack.png */,
+				E2D567291CDB85B80054FD3F /* button-WebViewBack@2x.png */,
+				E2D5675F1CDB85B80054FD3F /* button-WebViewForward.png */,
+				E2D567371CDB85B80054FD3F /* button-WebViewForward@2x.png */,
+				E2D567201CDB85B80054FD3F /* icon-Mail-Read.png */,
+				E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */,
+				E2D567221CDB85B80054FD3F /* icon-Mail-Read@3x.png */,
+				E2D5675D1CDB85B80054FD3F /* icon-Mail-Unread.png */,
+				E2D567421CDB85B80054FD3F /* icon-Mail-Unread@2x.png */,
+				E2D5675A1CDB85B80054FD3F /* icon-Mail-Unread@3x.png */,
+				E2D567451CDB85B80054FD3F /* image-ContactLogo.png */,
+				E2D567381CDB85B80054FD3F /* image-ContactLogo@2x.png */,
+				E2D5672D1CDB85B80054FD3F /* image-ContactLogo@3x.png */,
+				E2D567311CDB85B80054FD3F /* image-SideNavigationLogo.png */,
+				E2D5673D1CDB85B80054FD3F /* image-SideNavigationLogo@2x.png */,
+				E2D5674C1CDB85B80054FD3F /* image-SideNavigationLogo@3x.png */,
+				E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */,
+				E2D567241CDB85B80054FD3F /* indicator-CommentLeft@2x.png */,
+				E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */,
+				E2D5675C1CDB85B80054FD3F /* indicator-CommentRight@2x.png */,
+				E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */,
+				E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */,
+				E2D5677E1CDB85B80054FD3F /* logo.png */,
+				E2D567771CDB85B80054FD3F /* logo@2x.png */,
+				E2D567331CDB85B80054FD3F /* menu.png */,
+				E2D567781CDB85B80054FD3F /* menu@2x.png */,
+				E2D5672C1CDB85B80054FD3F /* menu@3x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -1536,7 +1551,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = SolutionBuilt;
 				TargetAttributes = {
 					081710661C495602000DD7C9 = {
@@ -1617,8 +1632,10 @@
 				283DF2CE18CA09EE00A344D2 /* circles.caf in Resources */,
 				283DF2DB18CA09EE00A344D2 /* chirp.caf in Resources */,
 				E2D5679F1CDB85B80054FD3F /* image-ContactLogo@2x.png in Resources */,
+				E232D7031E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png in Resources */,
 				E2D567811CDB85B80054FD3F /* button-MessageDetail-ReturnCall@2x.png in Resources */,
 				E2D567DE1CDB85B80054FD3F /* logo@2x.png in Resources */,
+				E232D7021E675E6200B797E1 /* button-Navigation-ChatMessages.png in Resources */,
 				E2D567A51CDB85B80054FD3F /* background-PhoneNumber@2x.png in Resources */,
 				E2D567DC1CDB85B80054FD3F /* button-Help-ForgotPassword@2x.png in Resources */,
 				E2D567A31CDB85B80054FD3F /* button-Save@3x.png in Resources */,
@@ -1626,6 +1643,7 @@
 				081710AA1C49572D000DD7C9 /* Images.xcassets in Resources */,
 				283DF2CF18CA09EE00A344D2 /* input.caf in Resources */,
 				283DF2D018CA09EE00A344D2 /* synth.caf in Resources */,
+				E232D7041E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png in Resources */,
 				283DF30218CA09EE00A344D2 /* anticipate.caf in Resources */,
 				081710A31C49572D000DD7C9 /* 44pt.png in Resources */,
 				E2D567991CDB85B80054FD3F /* background-Login@3x.png in Resources */,
@@ -1648,6 +1666,7 @@
 				E2D567911CDB85B80054FD3F /* button-Navigation-Archives@2x.png in Resources */,
 				E2D5678D1CDB85B80054FD3F /* button-Contact-Call.png in Resources */,
 				E2D567801CDB85B80054FD3F /* button-Contact-Call@2x.png in Resources */,
+				E232D7081E675E7800B797E1 /* indicator-CommentRightBlue@2x.png in Resources */,
 				E2D567C71CDB85B80054FD3F /* button-MessageDetail-TeleMed@2x.png in Resources */,
 				E2D567DA1CDB85B80054FD3F /* button-WebViewBack.png in Resources */,
 				E2D567BC1CDB85B80054FD3F /* button-Navigation-LogOut.png in Resources */,
@@ -1746,6 +1765,7 @@
 				283DF2F818CA09EE00A344D2 /* tiptoes.caf in Resources */,
 				E2D567B51CDB85B80054FD3F /* button-Cancel@3x.png in Resources */,
 				E2D567BF1CDB85B80054FD3F /* button-MessageDetail-Forward.png in Resources */,
+				E232D7071E675E7800B797E1 /* indicator-CommentRightBlue.png in Resources */,
 				E2D567CC1CDB85B80054FD3F /* button-TextField-Help.png in Resources */,
 				E2D567B01CDB85B80054FD3F /* button-Help-Video@3x.png in Resources */,
 				E2D567AE1CDB85B80054FD3F /* button-Continue@3x.png in Resources */,
@@ -2024,13 +2044,13 @@
 		0817108C1C495603000DD7C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -2053,6 +2073,7 @@
 		0817108D1C495603000DD7C9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -2060,7 +2081,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -2083,6 +2103,7 @@
 		0817108E1C495603000DD7C9 /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -2090,7 +2111,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -2123,19 +2143,24 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2152,7 +2177,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
 				INFOPLIST_FILE = "MyTeleMed/MyTeleMed-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc;
 				PRODUCT_NAME = "$(TARGET_NAME)β";
@@ -2177,13 +2202,18 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2196,7 +2226,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -2215,20 +2245,26 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -2244,7 +2280,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
 				INFOPLIST_FILE = "MyTeleMed/MyTeleMed-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug;
 				PRODUCT_NAME = "MyTmd Debug";
@@ -2266,7 +2302,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
 				INFOPLIST_FILE = "MyTeleMed/MyTeleMed-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
