@@ -52,6 +52,9 @@
 	
 	[self toggleToolbarButtons:NO];
 	
+	// Modify text of future Back Button to this View Controller
+	[self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Sent" style:UIBarButtonItemStylePlain target:nil action:nil]];
+	
 	[super viewWillAppear:animated];
 }
 
@@ -220,7 +223,6 @@
 		
 		tableInset.bottom = toolbarSize.height;
 		[self.messagesTableViewController.tableView setContentInset:tableInset];
-		
 	}
 }
 

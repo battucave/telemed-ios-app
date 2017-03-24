@@ -11,6 +11,7 @@
 #import "MessageCell.h"
 #import "MessageModel.h"
 #import "SentMessageModel.h"
+#import "MessageStub.h"
 
 @interface MessagesTableViewController ()
 
@@ -364,24 +365,22 @@
 	
 	static NSString *cellIdentifier = @"MessageCell";
 	MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	id message = [self.filteredMessages objectAtIndex:indexPath.row];
 	
 	// Sent Messages
 	if(self.messagesType == 2)
 	{
-		return [self sentMessagesWithCell:cell forRowAtIndexPath:indexPath];
+		return [self cellForSentMessage:cell withMessage:message];
 	}
 	// Active and Archived Messages
 	else
 	{
-		return [self receivedMessagesWithCell:cell forRowAtIndexPath:indexPath];
+		return [self cellForReceivedMessage:cell withMessage:message];
 	}
 }
 
-- (UITableViewCell *)receivedMessagesWithCell:(MessageCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(MessageModel *)message
 {
-	// Set up the cell
-	MessageModel *message = [self.filteredMessages objectAtIndex:indexPath.row];
-	
 	// Hide Hidden Messages
 	if([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
 	{
@@ -461,13 +460,10 @@
 	return cell;
 }
 
-- (UITableViewCell *)sentMessagesWithCell:(MessageCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)cellForSentMessage:(MessageCell *)cell withMessage:(SentMessageModel *)sentMessage
 {
-	// Set up the cell
-	SentMessageModel *sentMessage = [self.filteredMessages objectAtIndex:indexPath.row];
-	
 	// Set Name, Phone Number, and Message
-	[cell.labelName setText:sentMessage.Recipients];
+	[cell.labelName setText:[sentMessage.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
 	[cell.labelPhoneNumber setText:@""];
 	[cell.labelMessage setText:sentMessage.FormattedMessageText];
 	
@@ -580,7 +576,7 @@
 		
 		if([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
 		{
-			MessageModel *message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
+			MessageStub *message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
 			[message setMessageType:self.messagesType];
 			[messageDetailViewController setMessage:message];

@@ -52,12 +52,6 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Disable Archive Button for already Archived messages
-	if(self.isArchived)
-	{
-		[self.buttonArchive setEnabled:NO];
-	}
-	
 	// Disable Forward Button if no Message Recipients available
 	if( ! self.canForward)
 	{

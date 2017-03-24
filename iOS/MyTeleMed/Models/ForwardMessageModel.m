@@ -8,7 +8,7 @@
 
 #import "ForwardMessageModel.h"
 #import "CommentModel.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
 @interface ForwardMessageModel ()
 
@@ -18,7 +18,7 @@
 
 @implementation ForwardMessageModel
 
-- (void)forwardMessage:(MessageModel *)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment
+- (void)forwardMessage:(MessageStub *)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment
 {
 	// Show Activity Indicator
 	[self showActivityIndicator];

@@ -23,7 +23,6 @@
 @property (nonatomic) MessageEventModel *messageEventModel;
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
-@property (weak, nonatomic) IBOutlet UIView *viewPriority;
 @property (weak, nonatomic) IBOutlet UILabel *labelName;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPhoneNumber;
 @property (weak, nonatomic) IBOutlet UILabel *labelDate;
@@ -35,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewComment;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSend;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelNameHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewMessageHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableCommentsHeight;
 
@@ -78,7 +78,52 @@
 {
 	[super viewWillAppear:animated];
 	
-	//NSLog(@"Message ID: %@", self.message.MessageDeliveryID);
+	NSLog(@"Message ID: %@", self.message.MessageID);
+	
+	if(self.message.MessageDeliveryID)
+	{
+		NSLog(@"Message Delivery ID: %@", self.message.MessageDeliveryID);
+	}
+	
+	// Set Sent Message Details
+	if(self.message.messageType == 2)
+	{
+		[self setSentMessageDetails];
+		
+		// Change Title in Navigation Bar
+		[self.navigationItem setTitle:@"Sent Message Detail"];
+	}
+	// Set Active or Archived Message Details
+	else
+	{
+		[self setMessageDetails];
+	}
+	
+	// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
+	[self.labelName layoutIfNeeded];
+	[self.textViewMessage layoutIfNeeded];
+	
+	// Auto size Label Name and Text View Message height to their contents
+	CGSize newNameSize = [self.labelName sizeThatFits:CGSizeMake(self.labelName.frame.size.width, MAXFLOAT)];
+	CGSize newMessageSize = [self.textViewMessage sizeThatFits:CGSizeMake(self.textViewMessage.frame.size.width, MAXFLOAT)];
+	
+	[self.constraintLabelNameHeight setConstant:newNameSize.height];
+	[self.constraintTextViewMessageHeight setConstant:newMessageSize.height];
+	
+	// Load Message Events
+	[self.messageEventModel getMessageEventsForMessageID:self.message.MessageID];
+	
+	// Load Forward Message Recipients to determine if message is forwardable
+	[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
+	
+	// Add Keyboard Observers
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	
+	// Add Application Did Enter Background Observer to Hide Keyboard (otherwise it will be hidden when app returns to foreground)
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	
+	// Add Call Disconnected Observer to Hide Keyboard
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 	
 	// Mark message as read if active message
 	if(self.message.messageType == 0)
@@ -92,31 +137,13 @@
 		// END TESTING ONLY*/
 	}
 	/*/ TESTING ONLY (unarchive archived messages)
-	else
+	else if(self.message.messageType == 1)
 	{
 		#if defined(DEBUG)
 		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unarchive"];
 		#endif
 	}
 	// END TESTING ONLY*/
-	
-	// Set Message Details
-	[self setMessageDetails];
-	
-	// Load Message Events
-	[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
-	
-	// Load Forward Message Recipients to determine if message is forwardable
-	[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.message.MessageDeliveryID];
-	
-	// Add Keyboard Observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
-	
-	// Add Application Did Enter Background Observer to Hide Keyboard (otherwise it will be hidden when app returns to foreground)
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-	
-	// Add Call Disconnected Observer to Hide Keyboard
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -161,7 +188,7 @@
 	#endif*/
 	
 	// Reload Message Events if remote notification is a comment specifically for the current message
-	if([notificationType isEqualToString:@"Comment"] && deliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
+	if([notificationType isEqualToString:@"Comment"] && deliveryID && self.message.MessageDeliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
 	{
 		NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
 		
@@ -244,7 +271,7 @@
 	});
 	
 	// Refresh Message Events again after delay
-	[self.messageEventModel performSelector:@selector(getMessageEventsForMessageDeliveryID:) withObject:self.message.MessageDeliveryID afterDelay:15.0];
+	[self.messageEventModel performSelector:@selector(getMessageEventsForMessageID:) withObject:self.message.MessageID afterDelay:15.0];
 }
 
 // Return error from MessageEventModel delegate
@@ -295,7 +322,7 @@
 	[comment setID:pendingID];
 	[comment setDetail:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)commentText, CFSTR(""), kCFStringEncodingUTF8))];
 	[comment setEnteredByID:self.currentUserID];
-	[comment setMessageID:self.message.MessageDeliveryID];
+	[comment setMessageID:self.message.MessageID];
 	[comment setType:@"Comment"];
 	
 	// Create local date
@@ -443,6 +470,21 @@
 
 - (void)setMessageDetails
 {
+	NSLog(@"Set Message Details");
+	
+	// Set Message Name, Phone Number, and Message
+	[self.labelName setText:self.message.SenderName];
+	[self.buttonPhoneNumber setTitle:self.message.SenderContact forState:UIControlStateNormal];
+	[self.textViewMessage setText:self.message.FormattedMessageText];
+	
+	/*/ TESTING ONLY (used for generating Screenshots)
+	#if defined(DEBUG)
+	[self.labelName setText:@"TeleMed"];
+	[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
+	[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
+	#endif
+	// END TESTING ONLY*/
+	
 	// Set Message Date and Time
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
@@ -463,43 +505,40 @@
 	
 	[self.labelDate setText:date];
 	[self.labelTime setText:time];
+}
+
+- (void)setSentMessageDetails
+{
+	NSLog(@"Set Sent Message Details");
 	
 	// Set Message Name, Phone Number, and Message
-	[self.labelName setText:self.message.SenderName];
-	[self.buttonPhoneNumber setTitle:self.message.SenderContact forState:UIControlStateNormal];
+	[self.labelName setText:[self.message.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
+	[self.buttonPhoneNumber setTitle:@"" forState:UIControlStateNormal];
 	[self.textViewMessage setText:self.message.FormattedMessageText];
 	
-	// Set Message Priority color
-	if([self.message.Priority isEqualToString:@"Priority"])
-	{
-		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
-	}
-	else if([self.message.Priority isEqualToString:@"Stat"])
-	{
-		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
-	}
+	// Disable Phone Number
+	[self.buttonPhoneNumber setEnabled:NO];
 	
-	/*/ TESTING ONLY (used for generating Screenshots)
-	#if defined(DEBUG)
-	[self.labelName setText:@"TeleMed"];
-	[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
-	[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
-	#endif
-	// END TESTING ONLY*/
+	// Set Message Date and Time
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+	NSDate *dateTime = [dateFormatter dateFromString:self.message.FirstSent_LCL];
 	
-	// Disable Archive Button for already Archived messages
-	if(self.message.messageType > 0)
+	// If date is nil, it may have been formatted incorrectly
+	if(dateTime == nil)
 	{
-		[self.buttonArchive setEnabled:NO];
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+		dateTime = [dateFormatter dateFromString:self.message.FirstSent_LCL];
 	}
 	
-	// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
-	[self.textViewMessage layoutIfNeeded];
+	[dateFormatter setDateFormat:@"M/dd/yy"];
+	NSString *date = [dateFormatter stringFromDate:dateTime];
 	
-	// Auto size Text View Message height to its contents
-	CGSize newSize = [self.textViewMessage sizeThatFits:CGSizeMake(self.textViewMessage.frame.size.width, MAXFLOAT)];
+	[dateFormatter setDateFormat:@"h:mm a"];
+	NSString *time = [dateFormatter stringFromDate:dateTime];
 	
-	self.constraintTextViewMessageHeight.constant = newSize.height;
+	[self.labelDate setText:date];
+	[self.labelTime setText:time];
 }
 
 // Scroll to bottom of Scroll View
@@ -720,11 +759,6 @@
 		[messageHistoryViewController setMessage:self.message];
 		[messageHistoryViewController setMessageEvents:self.messageEvents];
 		[messageHistoryViewController setCanForward:self.buttonForward.enabled];
-		
-		if(self.message.messageType > 0)
-		{
-			[messageHistoryViewController setIsArchived:YES];
-		}
 	}
 }
 

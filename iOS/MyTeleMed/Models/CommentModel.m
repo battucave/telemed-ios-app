@@ -7,7 +7,7 @@
 //
 
 #import "CommentModel.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
 @interface CommentModel ()
 
@@ -19,17 +19,17 @@
 
 @implementation CommentModel
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
 {
 	[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:NO];
 }
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
 {
 	[self addMessageComment:message comment:comment withPendingID:nil toForwardMessage:toForwardMessage];
 }
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
 {
 	// Show Activity Indicator only if not being added with Forward Message
 	if( ! toForwardMessage)
