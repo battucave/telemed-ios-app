@@ -493,7 +493,7 @@
 	
 	// Hide Status image
 	[cell.imageStatus setHidden:YES];
-	[cell.constraintNameLeftSpace setConstant:7.0f];
+	[cell.constraintNameLeadingSpace setConstant:7.0f];
 	
 	// Set Message Priority color
 	if([sentMessage.Priority isEqualToString:@"Priority"])
