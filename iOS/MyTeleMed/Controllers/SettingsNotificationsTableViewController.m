@@ -44,32 +44,32 @@
 	// Set Notification Settings Type as string
 	switch(self.notificationSettingsType)
 	{
-		// Stat Settings
-		case 1:
+		// Stat Message Settings
+		case 0:
 			[self setNotificationSettingsName:@"stat"];
 			[self.navigationItem setTitle:@"Stat Messages"];
 			break;
 		
-		// Priority Settings
-		case 2:
+		// Priority Message Settings
+		case 1:
 			[self setNotificationSettingsName:@"priority"];
 			[self.navigationItem setTitle:@"Priority Messages"];
 			break;
 		
-		// Normal Settings
-		case 3:
+		// Normal Message Settings
+		case 2:
 			[self setNotificationSettingsName:@"normal"];
 			[self.navigationItem setTitle:@"Normal Messages"];
 			break;
 		
-		// Chat Settings
-		case 4:
+		// Chat Message Settings
+		case 3:
 			[self setNotificationSettingsName:@"chat"];
 			[self.navigationItem setTitle:@"Chat Messages"];
 			break;
 		
 		// Comment Settings
-		case 5:
+		case 4:
 			[self setNotificationSettingsName:@"comment"];
 			[self.navigationItem setTitle:@"Comment Messages"];
 			break;
@@ -156,40 +156,6 @@
 	[errorAlertView show];
 }*/
 
-/*- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	// Set Notification Settings Type as string
-	switch(self.notificationSettingsType)
-	{
-		// Stat Settings
-		case 1:
-			return @"Stat Messages";
-			break;
-		
-		// Priority Settings
-		case 2:
-			return @"Priority Messages";
-			break;
-		
-		// Normal Settings
-		case 3:
-			return @"Normal Messages";
-			break;
-		
-		// Comment Settings
-		case 4:
-			return @"Chat Messages";
-			break;
-		
-		// Comment Settings
-		case 5:
-			return @"Comments";
-			break;
-	}
-	
-	return @"";
-}*/
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0 : 46.0;
@@ -198,7 +164,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide everything except Alert Sound for Comments
-	return (self.notificationSettingsType == 5 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	return (self.notificationSettingsType == 4 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
