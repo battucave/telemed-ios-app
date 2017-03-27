@@ -112,14 +112,8 @@
 	{
 		[self.tableAccounts reloadData];
 		
-		// Get index path for selected Account in Accounts Table
-		NSIndexPath *indexPath = [self indexRowForSelectedAccount:self.selectedAccount];
-		
-		// Scroll to cell
-		if(indexPath)
-		{
-			[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
-		}
+		// Scroll to selected Account
+		[self scrollToSelectedAccount];
 	}
 }
 
@@ -148,14 +142,8 @@
 		// If account was previously selected, scroll to it
 		if(self.selectedAccount)
 		{
-			// Get index path for selected Account in Accounts Table
-			NSIndexPath *indexPath = [self indexRowForSelectedAccount:self.selectedAccount];
-			
-			// Scroll to cell
-			if(indexPath)
-			{
-				[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
-			}
+			// Scroll to selected Account
+			[self scrollToSelectedAccount];
 		}
 	});
 }
@@ -174,6 +162,26 @@
 {
 	// Go back to Settings (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)scrollToSelectedAccount
+{
+	// Find Selected Account in Accounts (can be used to find Account even if it was not originally extracted from Accounts array - i.e. MyProfile.MyPreferredAccount)
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
+	NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
+	
+	if([results count] > 0)
+	{
+		// Find and delete table cell that contains Comment
+		AccountModel *account = [results objectAtIndex:0];
+		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
+		
+		// Scroll to cell
+		if(indexPath)
+		{
+			[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+		}
+	}
 }
 
 // Delegate Method for Updating Search Results
@@ -206,23 +214,14 @@
 	[self.tableAccounts reloadData];
 }
 
-// Find Selected Account in Accounts array (can be used to find Account even if it was not originally extracted from Accounts array - i.e. MyProfile.MyPreferredAccount)
-- (NSIndexPath *)indexRowForSelectedAccount:(AccountModel *)account
+// Delegate Method for clicking Cancel button on Search Results
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-	// Find Selected Account in Accounts
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
-	NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
+	// Close Search Results
+	[self.searchController setActive:NO];
 	
-	if([results count] > 0)
-	{
-		// Find and delete table cell that contains Comment
-		AccountModel *account = [results objectAtIndex:0];
-		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
-		
-		return indexPath;
-	}
-	
-	return nil;
+	// Scroll to selected Account
+	[self scrollToSelectedAccount];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -311,6 +310,18 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// If no Filtered Message Recipients, then user clicked "No results."
+		if([self.filteredAccounts count] == 0)
+		{
+			// Close Search Results (must execute before scrolling to selected Account
+			[self.searchController setActive:NO];
+			
+			// Scroll to selected Account
+			[self scrollToSelectedAccount];
+			
+			return;
+		}
+		
 		// Set selected Account (in case user presses back button from next screen)
 		[self setSelectedAccount:[self.filteredAccounts objectAtIndex:indexPath.row]];
 		
@@ -318,8 +329,8 @@
 		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
 		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
-		// Select cell
-		[self.tableAccounts selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected Account)
+		//[self.tableAccounts selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 	// Message Recipients Table
 	else
@@ -358,6 +369,9 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// Close Search Results
+		[self.searchController setActive:NO];
+		
 		// Get cell in Message Accounts Table
 		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
 		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];

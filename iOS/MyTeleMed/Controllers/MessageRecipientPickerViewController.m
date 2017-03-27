@@ -354,28 +354,36 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// If no Filtered Message Recipients, then user clicked "No results."
+		if([self.filteredMessageRecipients count] == 0)
+		{
+			// Close Search Results
+			[self.searchController setActive:NO];
+			
+			return;
+		}
+		
+		// Set Message Recipient
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
+		
+		// Close Search Results
+		[self.searchController setActive:NO];
 		
 		// Get cell in Message Recipients Table
 		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Select cell
-		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 	// Message Recipients Table
 	else
 	{
+		// Set Message Recipient
 		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
 		
 		// Get cell in Message Recipients Table
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Reset Search Results (put here because it's possible for it to be active, but without any entered text)
-	if(self.searchController.active)
-	{
-		[self.searchController setActive:NO];
 	}
 	
 	// Add Message Recipient to selected Message Recipients
@@ -393,6 +401,9 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// Close Search Results
+		[self.searchController setActive:NO];
+		
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 		
 		// Get cell in Message Recipients Table
@@ -409,12 +420,6 @@
 		
 		// Get cell in Message Recipients Table
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Reset Search Results (put here because it's possible for it to be active, but without any entered text)
-	if(self.searchController.active)
-	{
-		[self.searchController setActive:NO];
 	}
 	
 	// Find index of Message Recipient in selected Message Recipients
