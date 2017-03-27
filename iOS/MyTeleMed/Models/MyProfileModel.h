@@ -28,5 +28,6 @@
 + (MyProfileModel *)sharedInstance;
 
 - (void)getWithCallback:(void (^)(BOOL success, MyProfileModel *profile, NSError *error))callback;
+- (void)restoreMyPreferredAccount;
 
 @end

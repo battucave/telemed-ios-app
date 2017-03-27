@@ -11,6 +11,12 @@
 #import "RegisteredDeviceModel.h"
 #import "MyProfileXMLParser.h"
 
+@interface MyProfileModel()
+
+@property (nonatomic) AccountModel *oldMyPreferredAccount;
+
+@end
+
 @implementation MyProfileModel
 
 static MyProfileModel *sharedMyProfileInstance = nil;
@@ -25,6 +31,21 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 	});
 	
 	return sharedMyProfileInstance;
+}
+
+// Override MyPreferredAccount setter to also store existing MyPreferredAccount
+- (void)setMyPreferredAccount:(AccountModel *)account
+{
+	if(_MyPreferredAccount != account)
+	{
+		// Store reference to previous value to be restored (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
+		if(_MyPreferredAccount != nil)
+		{
+			_oldMyPreferredAccount = _MyPreferredAccount;
+		}
+		
+		_MyPreferredAccount = account;
+	}
 }
 
 - (void)getWithCallback:(void (^)(BOOL success, MyProfileModel *profile, NSError *error))callback
@@ -62,6 +83,15 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 		
 		callback(NO, nil, error);
 	}];
+}
+
+// Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
+- (void)restoreMyPreferredAccount
+{
+	if(_oldMyPreferredAccount != nil)
+	{
+		_MyPreferredAccount = _oldMyPreferredAccount;
+	}
 }
 
 - (void)setCurrentDevice

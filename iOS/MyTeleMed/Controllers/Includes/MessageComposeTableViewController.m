@@ -58,7 +58,7 @@
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Perform Segue to MessageAccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
+// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self.delegate performSegueToMessageRecipientPicker:(id)sender];

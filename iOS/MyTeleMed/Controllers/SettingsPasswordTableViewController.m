@@ -32,9 +32,11 @@
 	[self.textFieldCurrentPassword becomeFirstResponder];
 }
 
-- (IBAction)savePassword:(id)sender
+- (IBAction)changePassword:(id)sender
 {
 	PasswordChangeModel *passwordChangeModel = [[PasswordChangeModel alloc] init];
+	
+	[passwordChangeModel setDelegate:self];
 	
 	// Verify that New Password matches Confirm Password
 	if( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
@@ -49,7 +51,6 @@
 		return;
 	}
 	
-	[passwordChangeModel setDelegate:self];
 	[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
 }
 
@@ -62,7 +63,7 @@
 // Return pending from PasswordChangeModel delegate (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc)
 /*- (void)changePasswordPending
 {
-	// Go back to Messages (assume success)
+	// Go back to Settings (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }*/
 
@@ -76,20 +77,6 @@
 	// Go back to Settings
 	[self.navigationController popViewControllerAnimated:YES];
 }
-
-// Return error from PasswordChangeModel delegate (no longer used)
-/*- (void)changePasswordError:(NSError *)error
-{
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.passwordChangeModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Change Password Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
-}*/
 
 // Check required fields to determine if Form can be submitted
 - (void)validateForm

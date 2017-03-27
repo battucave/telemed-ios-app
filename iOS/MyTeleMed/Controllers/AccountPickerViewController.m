@@ -1,16 +1,18 @@
 //
-//  MessageAccountPickerViewController.m
+//  AccountPickerViewController.m
 //  MyTeleMed
 //
 //  Created by SolutionBuilt on 5/11/16.
 //  Copyright (c) 2016 SolutionBuilt. All rights reserved.
 //
 
-#import "MessageAccountPickerViewController.h"
+#import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
 #import "AccountModel.h"
+#import "MyProfileModel.h"
+#import "PreferredAccountModel.h"
 
-@interface MessageAccountPickerViewController ()
+@interface AccountPickerViewController ()
 
 @property (nonatomic) AccountModel *accountModel;
 
@@ -21,17 +23,21 @@
 @property (nonatomic, strong) UISearchController *searchController;
 
 @property (nonatomic) NSMutableArray *filteredAccounts;
+@property (nonatomic) NSString *storyboardID;
 @property (nonatomic) BOOL isLoaded;
 
 @end
 
-@implementation MessageAccountPickerViewController
+@implementation AccountPickerViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	
-	// If accounts were not loaded in MessageNewViewController (slow connection), then load them here
+	// Initialize Storyboard ID
+	[self setStoryboardID:[self valueForKey:@"storyboardIdentifier"]];
+	
+	// If accounts were not pre-loaded (slow connection in MessageNewViewController), then load them here
 	if([self.accounts count] == 0)
 	{
 		// Initialize Account Model
@@ -40,6 +46,17 @@
 		
 		// Get list of Accounts
 		[self.accountModel getAccounts];
+	}
+	
+	// If Selected Account not already set, then set it to MyProfileModel's MyPreferredAccount
+	if( ! self.selectedAccount)
+	{
+		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+		
+		if(myProfileModel.MyPreferredAccount)
+		{
+			[self setSelectedAccount:myProfileModel.MyPreferredAccount];
+		}
 	}
 	
 	// Initialize Search Controller
@@ -91,15 +108,18 @@
 	[super viewWillAppear:animated];
 	
 	// If account was previously selected, scroll to it
-	if(self.selectedAccount)
+	if(self.selectedAccount && [self.accounts count] > 0)
 	{
 		[self.tableAccounts reloadData];
 		
-		// Get cell for selected Account in Accounts Table
-		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
+		// Get index path for selected Account in Accounts Table
+		NSIndexPath *indexPath = [self indexRowForSelectedAccount:self.selectedAccount];
 		
 		// Scroll to cell
-		[self.tableAccounts scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+		if(indexPath)
+		{
+			[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+		}
 	}
 }
 
@@ -107,7 +127,7 @@
 {
 	[super viewDidDisappear:animated];
 	
-	// Reset Search Results (put here because it's animation must occur AFTER segue to Message Recipient Picker)
+	// Reset Search Results (put here because it's animation must occur AFTER any segue)
 	if(self.searchController.active)
 	{
 		[self.searchController setActive:NO];
@@ -124,6 +144,19 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableAccounts reloadData];
+		
+		// If account was previously selected, scroll to it
+		if(self.selectedAccount)
+		{
+			// Get index path for selected Account in Accounts Table
+			NSIndexPath *indexPath = [self indexRowForSelectedAccount:self.selectedAccount];
+			
+			// Scroll to cell
+			if(indexPath)
+			{
+				[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+			}
+		}
 	});
 }
 
@@ -134,6 +167,13 @@
 	
 	// Show error message
 	[self.accountModel showError:error];
+}
+
+// Return pending from PreferredAccountModel delegate
+- (void)savePreferredAccountPending
+{
+	// Go back to Settings (assume success)
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // Delegate Method for Updating Search Results
@@ -164,6 +204,25 @@
 	[self setFilteredAccounts:[NSMutableArray arrayWithArray:[self.accounts filteredArrayUsingPredicate:predicate]]];
 	
 	[self.tableAccounts reloadData];
+}
+
+// Find Selected Account in Accounts array (can be used to find Account even if it was not originally extracted from Accounts array - i.e. MyProfile.MyPreferredAccount)
+- (NSIndexPath *)indexRowForSelectedAccount:(AccountModel *)account
+{
+	// Find Selected Account in Accounts
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
+	NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
+	
+	if([results count] > 0)
+	{
+		// Find and delete table cell that contains Comment
+		AccountModel *account = [results objectAtIndex:0];
+		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
+		
+		return indexPath;
+	}
+	
+	return nil;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -275,8 +334,21 @@
 	// Add checkmark of selected Account
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// Go to MessageRecipientPickerTableViewController
-	[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageAccountPicker" sender:cell];
+	// If using NewMessageAccountPicker view from storyboard
+	if([self.storyboardID isEqualToString:@"NewMessageAccountPicker"])
+	{
+		// Go to MessageRecipientPickerTableViewController
+		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
+	}
+	// If using SettingsPreferredAccountPicker view from storyboard
+	else if([self.storyboardID isEqualToString:@"SettingsPreferredAccountPicker"])
+	{
+		// Save Preferred Account to server
+		PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
+		
+		[preferredAccountModel setDelegate:self];
+		[preferredAccountModel savePreferredAccount:self.selectedAccount];
+	}
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -310,7 +382,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Set Account for MessageRecipientPickerTableViewController
-	if([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromMessageAccountPicker"])
+	if([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		

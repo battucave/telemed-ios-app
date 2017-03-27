@@ -38,7 +38,7 @@
 	// Show Activity Indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc
+	// Add Network Activity Observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -65,7 +65,7 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify your Current Password and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error
 			[self showError:error];
@@ -83,11 +83,11 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		// Remove Network Activity Observer
+		// Remove Network Activity Observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 		//[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem changing your Password. Please verify your Current Password and that your New Password meets requirements." andTitle:@"Change Password Error"];
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements." andTitle:@"Change Password Error"];
 		
 		// Show error
 		[self showError:error];
@@ -99,8 +99,8 @@
 	}];
 }
 
-// Network Request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
+// Network Request has been sent, but still awaiting response (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
+/*- (void)networkRequestDidStart:(NSNotification *)notification
 {
 	// Close Activity Indicator
 	[self hideActivityIndicator];
@@ -116,6 +116,6 @@
 	
 	// Ensure that pending callback doesn't fire again after possible error
 	self.pendingComplete = YES;
-}
+}*/
 
 @end

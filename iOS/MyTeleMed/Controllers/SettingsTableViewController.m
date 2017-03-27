@@ -153,9 +153,14 @@
 		[self performSegueWithIdentifier:@"showSettingsNotifications" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 	// Segue to Change Password
-	else if(indexPath.section == 2)
+	else if(indexPath.section == 2 && indexPath.row == 0)
 	{
 		[self performSegueWithIdentifier:@"showSettingsPassword" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+	}
+	// Segue to Preferred Account
+	else if(indexPath.section == 2 && indexPath.row == 1)
+	{
+		[self performSegueWithIdentifier:@"showAccountPickerFromSettings" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 }
 
