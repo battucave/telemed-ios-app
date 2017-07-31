@@ -331,7 +331,7 @@
 		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
 		
 		#if defined(DEBUG)
-			[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'shanegoodwin'; document.getElementById('passwordTextBox').value = 'SBpassw0rd';"];
+			[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'shanegoodwin'; document.getElementById('passwordTextBox').value = 'tm4321$$';"];
 			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'mattrogers'; document.getElementById('passwordTextBox').value = 'tm4321$$';"];
 			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'bturner'; document.getElementById('passwordTextBox').value = 'passw0rd';"];
 			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'jhutchison'; document.getElementById('passwordTextBox').value = 'passw0rd';"];

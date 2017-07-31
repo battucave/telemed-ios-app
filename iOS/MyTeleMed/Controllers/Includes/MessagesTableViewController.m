@@ -370,16 +370,16 @@
 	// Sent Messages
 	if(self.messagesType == 2)
 	{
-		return [self cellForSentMessage:cell withMessage:message];
+		return [self cellForSentMessage:cell withMessage:message atIndexPath:indexPath];
 	}
 	// Active and Archived Messages
 	else
 	{
-		return [self cellForReceivedMessage:cell withMessage:message];
+		return [self cellForReceivedMessage:cell withMessage:message atIndexPath:indexPath];
 	}
 }
 
-- (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(MessageModel *)message
+- (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(MessageModel *)message atIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide Hidden Messages
 	if([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
@@ -460,7 +460,7 @@
 	return cell;
 }
 
-- (UITableViewCell *)cellForSentMessage:(MessageCell *)cell withMessage:(SentMessageModel *)sentMessage
+- (UITableViewCell *)cellForSentMessage:(MessageCell *)cell withMessage:(SentMessageModel *)sentMessage atIndexPath:(NSIndexPath *)indexPath
 {
 	// Set Name, Phone Number, and Message
 	[cell.labelName setText:[sentMessage.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
