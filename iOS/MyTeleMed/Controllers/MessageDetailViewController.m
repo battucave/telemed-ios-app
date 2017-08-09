@@ -131,16 +131,16 @@
 		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"read"];
 		
 		/*/ TESTING ONLY (set message back to unread)
-		#if defined(DEBUG)
-		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unread"];
+		#if DEBUG
+			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unread"];
 		#endif
 		// END TESTING ONLY*/
 	}
 	/*/ TESTING ONLY (unarchive archived messages)
 	else if(self.message.messageType == 1)
 	{
-		#if defined(DEBUG)
-		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unarchive"];
+		#if DEBUG
+			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unarchive"];
 		#endif
 	}
 	// END TESTING ONLY*/
@@ -180,12 +180,13 @@
 {
 	NSLog(@"Received Remote Notification MessageDetailViewController");
 	
-	// TESTING ONLY (test custom handling of push notification comment to a particular message
-	/*#if defined(DEBUG)
-	message = @"Shane Goodwin added a comment to a message.";
-	type = @"comment";
-	deliveryId = 5133538688695397;
-	#endif*/
+	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message
+	#if DEBUG
+		message = @"Shane Goodwin added a comment to a message.";
+		type = @"comment";
+		deliveryId = 5133538688695397;
+	#endif
+	//*/
 	
 	// Reload Message Events if remote notification is a comment specifically for the current message
 	if([notificationType isEqualToString:@"Comment"] && deliveryID && self.message.MessageDeliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
@@ -219,40 +220,40 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if defined(DEBUG)
-	[self.filteredMessageEvents removeAllObjects];
-	
-	for(int i = 0; i < 3; i++)
-	{
-		MessageEventModel *messageEvent = [[MessageEventModel alloc] init];
-		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+	#if DEBUG
+		[self.filteredMessageEvents removeAllObjects];
 		
-		[messageEvent setValue:@"Comment" forKey:@"Type"];
-		
-		// Test Message from Jason
-		if(i == 0)
+		for(int i = 0; i < 3; i++)
 		{
-			[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
-			[messageEvent setValue:@"2015-04-11T13:24:06.444" forKey:@"Time_LCL"];
-			[messageEvent setValue:@"Introducing the new TeleMed comments section" forKey:@"Detail"];
+			MessageEventModel *messageEvent = [[MessageEventModel alloc] init];
+			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+			
+			[messageEvent setValue:@"Comment" forKey:@"Type"];
+			
+			// Test Message from Jason
+			if(i == 0)
+			{
+				[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
+				[messageEvent setValue:@"2015-04-11T13:24:06.444" forKey:@"Time_LCL"];
+				[messageEvent setValue:@"Introducing the new TeleMed comments section" forKey:@"Detail"];
+			}
+			// Test Message from Me (ensure EnteredyByID matches own logged in ID)
+			else if(i == 1)
+			{
+				[messageEvent setValue:[numberFormatter numberFromString:@"14140220"] forKey:@"EnteredByID"];
+				[messageEvent setValue:@"2015-04-11T15:46:06.444" forKey:@"Time_LCL"];
+				[messageEvent setValue:@"Tap on the message field at the bottom of the screen to send messages back and forth." forKey:@"Detail"];
+			}
+			// Test Message from Jason
+			else if(i == 2)
+			{
+				[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
+				[messageEvent setValue:@"2015-04-12T10:58:39.444" forKey:@"Time_LCL"];
+				[messageEvent setValue:@"Events are now found by tapping the History button located above." forKey:@"Detail"];
+			}
+			
+			[self.filteredMessageEvents addObject:messageEvent];
 		}
-		// Test Message from Me (ensure EnteredyByID matches own logged in ID)
-		else if(i == 1)
-		{
-			[messageEvent setValue:[numberFormatter numberFromString:@"14140220"] forKey:@"EnteredByID"];
-			[messageEvent setValue:@"2015-04-11T15:46:06.444" forKey:@"Time_LCL"];
-			[messageEvent setValue:@"Tap on the message field at the bottom of the screen to send messages back and forth." forKey:@"Detail"];
-		}
-		// Test Message from Jason
-		else if(i == 2)
-		{
-			[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
-			[messageEvent setValue:@"2015-04-12T10:58:39.444" forKey:@"Time_LCL"];
-			[messageEvent setValue:@"Events are now found by tapping the History button located above." forKey:@"Detail"];
-		}
-		
-		[self.filteredMessageEvents addObject:messageEvent];
-	}
 	#endif
 	// END TESTING ONLY*/
 	
@@ -478,10 +479,10 @@
 	[self.textViewMessage setText:self.message.FormattedMessageText];
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if defined(DEBUG)
-	[self.labelName setText:@"TeleMed"];
-	[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
-	[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
+	#if DEBUG
+		[self.labelName setText:@"TeleMed"];
+		[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
+		[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 	#endif
 	// END TESTING ONLY*/
 	

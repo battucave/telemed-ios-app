@@ -35,31 +35,31 @@
 	[self.textPhoneNumber setAutocorrectionType:UITextAutocorrectionTypeNo];
 	[self.textPhoneNumber becomeFirstResponder];
 	
-	#if defined(DEBUG)
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-	
-	switch([myProfileModel.ID integerValue])
-	{
-		// Jason Hutchison
-		case 5320:
-			self.textPhoneNumber.text = @"2762759018";
-			break;
+	#if DEBUG
+		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 		
-		// Brian Turner
-		case 31130:
-			self.textPhoneNumber.text = @"4049856441";
-			break;
-		
-		// Matt Rogers
-		case 829772:
-			self.textPhoneNumber.text = @"6784696061";
-			break;
+		switch([myProfileModel.ID integerValue])
+		{
+			// Jason Hutchison
+			case 5320:
+				self.textPhoneNumber.text = @"2762759018";
+				break;
 			
-		// Shane Goodwin
-		case 14140220:
-			self.textPhoneNumber.text = @"4049901383";
-			break;
-	}
+			// Brian Turner
+			case 31130:
+				self.textPhoneNumber.text = @"4049856441";
+				break;
+			
+			// Matt Rogers
+			case 829772:
+				self.textPhoneNumber.text = @"6784696061";
+				break;
+				
+			// Shane Goodwin
+			case 14140220:
+				self.textPhoneNumber.text = @"4049901383";
+				break;
+		}
 	#endif
 }
 

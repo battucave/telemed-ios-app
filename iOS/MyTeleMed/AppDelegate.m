@@ -55,13 +55,13 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
-	#if !(TARGET_IPHONE_SIMULATOR) && !defined(DEBUG)
+	#if !TARGET_IPHONE_SIMULATOR && !DEBUG
 		// Initialize Carrier
 		CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
 		CTCarrier *carrier = [networkInfo subscriberCellularProvider];
 	
 		// AT&T and T-Mobile are guaranteed to support Voice and Data simultaneously, so turn off CDMAVoiceData message by default for them
-		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"] || [carrier.carrierName hasPrefix:@"T-M"])
+		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
 		{
 			[settings setBool:YES forKey:@"CDMAVoiceDataDisabled"];
 		}
@@ -381,8 +381,8 @@
 					NSLog(@"Phone Number Invalid");
 					
 					// If using Simulator, skip Phone Number step because it is always invalid
-					#if defined(DEBUG)
-					//#if (TARGET_IPHONE_SIMULATOR)
+					// #if DEBUG
+					#if TARGET_IPHONE_SIMULATOR
 						NSLog(@"Skip Phone Number step when on Simulator or Debugging");
 						
 						[self showMainScreen];

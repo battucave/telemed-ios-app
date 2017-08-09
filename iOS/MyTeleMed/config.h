@@ -7,25 +7,12 @@
 //
 
 /**
- ENVIRONMENT (have to use integers for preprocessor to compare)
+ * WEB SERVICES
+ * Set in project's Build Settings' Preprocessor Macros
  */
-#define DEVELOPMENT 0
-#define PRODUCTION 1
 
-#define ENVIRONMENT DEVELOPMENT
-
-/**
- WEB SERVICES
- Also used by LoginSSOViewController to clear cookies
- */
-#if ENVIRONMENT == PRODUCTION
-	#define BASE_DOMAIN @"www.mytelemed.com"
-#else
-	#define BASE_DOMAIN @"test.mytelemed.com"
-#endif
-
-#define API_BASE_URL @"https://" BASE_DOMAIN @"/MyTmdWebApi/api/"
-#define AUTHENTICATION_BASE_URL @"https://" BASE_DOMAIN @"/Auth/"
+#define API_BASE_URL BASE_URL @"/MyTmdWebApi/api/"
+#define AUTHENTICATION_BASE_URL BASE_URL @"/Auth/"
 #define AUTHENTICATION_CALLBACK_PAGE @"Authentication/Success"
 
 #define ACCESS_TOKEN_EXPIRATION_TIME 28.0
@@ -34,13 +21,13 @@
 
 
 /**
- CONTACT TELEMED RECIPIENT
+ * CONTACT TELEMED RECIPIENT
  */
 #define CONTACT_RECIPIENTS @"Billing", @"Calendar", @"Technical Support", @"Customer Service", @"App Feedback", @"Miscellanous"
 
 
 /**
- NOTIFICATIONS
+ * NOTIFICATIONS
  */
 #define NOTIFICATION_TONES_SUBCATEGORIES @"Staff Favorites", @"MyTeleMed", @"iOS7", @"Classic"
 #define NOTIFICATION_TONES_IOS7 @"Aurora", @"Bamboo", @"Chord", @"Circles", @"Complete", @"Hello", @"Input", @"Keys", @"Note", @"Popcorn", @"Pulse", @"Synth"

@@ -538,6 +538,7 @@
 		E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordChangeModel.m; sourceTree = "<group>"; };
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
+		E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTeleMed.entitlements; sourceTree = "<group>"; };
 		E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
 		E270ED391B1758C900DD43B8 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
@@ -1039,6 +1040,7 @@
 		28CCCD4617F517A50093CEE2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */,
 				28CCCD4717F517A50093CEE2 /* MyTeleMed-Info.plist */,
 				28CCCD4817F517A50093CEE2 /* InfoPlist.strings */,
 				28CCCD4B17F517A50093CEE2 /* main.m */,
@@ -1584,6 +1586,11 @@
 					28CCCD3B17F517A50093CEE2 = {
 						DevelopmentTeam = FLMB52V94K;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -2189,11 +2196,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = MyTeleMed/MyTeleMed.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
+					"ADHOC=1",
+					"BETA=1",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "MyTeleMed/MyTeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -2292,11 +2306,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = MyTeleMed/MyTeleMed.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "MyTeleMed/MyTeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -2314,11 +2333,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = MyTeleMed/MyTeleMed.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
+					"RELEASE=1",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "MyTeleMed/MyTeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";

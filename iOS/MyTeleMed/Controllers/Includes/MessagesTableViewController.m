@@ -427,19 +427,19 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if defined(DEBUG)
-	[cell.labelName setText:@"TeleMed"];
-	[cell.labelPhoneNumber setText:@"800-420-4695"];
-	[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
-	
-	if(indexPath.row < 3)
-	{
-		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
-	}
-	else
-	{
-		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
-	}
+	#if DEBUG
+		[cell.labelName setText:@"TeleMed"];
+		[cell.labelPhoneNumber setText:@"800-420-4695"];
+		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
+		
+		if(indexPath.row < 3)
+		{
+			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
+		}
+		else
+		{
+			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
+		}
 	#endif
 	// END TESTING ONLY*/
 	
