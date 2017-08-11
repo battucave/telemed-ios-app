@@ -137,6 +137,7 @@
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
+		E263C96B1F3E4F2100913BF1 /* PreferredAccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E263C96A1F3E4F2100913BF1 /* PreferredAccountCell.m */; };
 		E270ED5F1B1758C900DD43B8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */; };
 		E270ED601B1758C900DD43B8 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */; };
 		E270ED611B1758C900DD43B8 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3C1B1758C900DD43B8 /* AFSecurityPolicy.m */; };
@@ -539,6 +540,8 @@
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
 		E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTeleMed.entitlements; sourceTree = "<group>"; };
+		E263C9691F3E4F2100913BF1 /* PreferredAccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PreferredAccountCell.h; path = Includes/PreferredAccountCell.h; sourceTree = "<group>"; };
+		E263C96A1F3E4F2100913BF1 /* PreferredAccountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PreferredAccountCell.m; path = Includes/PreferredAccountCell.m; sourceTree = "<group>"; };
 		E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
 		E270ED391B1758C900DD43B8 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
@@ -1176,6 +1179,8 @@
 				E2D5670D1CD93A7D0054FD3F /* MessageTeleMedComposeTableViewController.m */,
 				283DF31018CA637A00A344D2 /* OnCallSummaryCell.h */,
 				283DF31118CA637A00A344D2 /* OnCallSummaryCell.m */,
+				E263C9691F3E4F2100913BF1 /* PreferredAccountCell.h */,
+				E263C96A1F3E4F2100913BF1 /* PreferredAccountCell.m */,
 				E2964B481E67587F002FF97B /* SideNavigationCountCell.h */,
 				E2964B491E67587F002FF97B /* SideNavigationCountCell.m */,
 			);
@@ -1897,6 +1902,7 @@
 				E270ED8B1B18F24B00DD43B8 /* AuthenticationXMLParser.m in Sources */,
 				E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */,
 				283710D117F9FD1D00A25053 /* KeychainItemWrapper.m in Sources */,
+				E263C96B1F3E4F2100913BF1 /* PreferredAccountCell.m in Sources */,
 				28CCCD4C17F517A50093CEE2 /* main.m in Sources */,
 				E270ED6A1B1758C900DD43B8 /* AFHTTPRequestOperation.m in Sources */,
 				E27B85061B14D01100AD50C6 /* NewMessageModel.m in Sources */,

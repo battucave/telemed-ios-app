@@ -8,6 +8,7 @@
 
 #import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
+#import "PreferredAccountCell.h"
 #import "AccountModel.h"
 #import "MyProfileModel.h"
 #import "PreferredAccountModel.h"
@@ -253,40 +254,62 @@
 	}
 }
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 58.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// Return default height if no Account available
+	if([self.accounts count] == 0)
+	{
+		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
+	}
+	
+	return UITableViewAutomaticDimension;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *cellIdentifier = @"AccountCell";
-	UITableViewCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
+	if([self.accounts count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] == 0))
+	{
+		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
+		
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
+		// [emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
+		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		
+		// Message recipients table
+		if([self.accounts count] == 0)
+		{
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
+		}
+		// Search results table
+		else
+		{
+			[emptyCell.textLabel setText:@"No results."];
+		}
+		
+		return emptyCell;
+	}
+	
+	static NSString *cellIdentifier = @"PreferredAccountCell";
+	PreferredAccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	AccountModel *account;
 	
 	// Set up the cell
 	[tableView deselectRowAtIndexPath:indexPath animated:NO];
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// Search Results Table
+	// Search Results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no Filtered Message Recipients, create a not found message
-		if([self.filteredAccounts count] == 0)
-		{
-			[cell.textLabel setText:@"No results."];
-			
-			return cell;
-		}
-		
 		account = [self.filteredAccounts objectAtIndex:indexPath.row];
 	}
-	// Message Recipients Table
+	// Message Recipients table
 	else
 	{
-		// If no Accounts, create a not found message
-		if([self.accounts count] == 0)
-		{
-			[cell.textLabel setText:(self.isLoaded ? @"No valid accounts available." : @"Loading...")];
-			
-			return cell;
-		}
-		
 		account = [self.accounts objectAtIndex:indexPath.row];
 	}
 	
@@ -297,8 +320,11 @@
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	}
 	
-	// Set cell label
-	[cell.textLabel setText:[NSString stringWithFormat:@"%@ - %@", account.PublicKey, account.Name]];
+	// Set Account Name label
+	[cell.accountName setText:account.Name];
+	
+	// Set Account Number label
+	[cell.accountPublicKey setText:account.PublicKey];
 	
 	return cell;
 }

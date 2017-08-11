@@ -36,7 +36,7 @@
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<NewMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
 			"<AccountID>%@</AccountID>"
-			"<DoChase>true</DoChase>"
+			"<DoChase>false</DoChase>"
 			"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
 				"%@"
 			"</MessageRecipients>"

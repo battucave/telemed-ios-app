@@ -230,7 +230,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
 	// IMPORTANT: TeleMed's test and production servers both send push notifications through Apple's production server. Only apps signed with Ad Hoc or Distribution provisioning profiles can receive these notifications - not Debug.
-	// To test on debug, find/generate a Sandbox Push Notification Certificate for TeleMed (com.solutionbuilt.telemed-debug) and save its .cer file somewhere. Then use "APN Tester Free" Mac app to send push notifications to a specific device using its Device Token.
+	// To test on debug, find/generate a Sandbox Push Notification Certificate for TeleMed (com.solutionbuilt.telemed.debug) and save its .cer file somewhere. Then use "APN Tester Free" Mac app to send push notifications to a specific device using its Device Token.
 		// Sample Notifications that can be used with APNS Tester Free (these are real notifications that come from TeleMed)
 		/* Message Push Notification
 		{
@@ -271,10 +271,8 @@
 	[alertView show];
 	// END TESTING ONLY*/
 	
-	UIApplicationState state = [application applicationState];
-	
 	// Handle Push Notification when App is Active.
-	if(state == UIApplicationStateActive)
+	if([application applicationState] == UIApplicationStateActive)
 	{
 		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];

@@ -33,7 +33,7 @@
 {
     [super viewDidLoad];
 	
-	[self setMenuItems:@[@"Messages", @"Sent", @"Archives", @"Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
+	[self setMenuItems:@[@"Messages", @"Sent", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
 	[self setMyStatusModel:[MyStatusModel sharedInstance]];
 }
@@ -100,8 +100,8 @@
 	NSString *CellIdentifier = [self.menuItems objectAtIndex:indexPath.row];
 	SideNavigationCountCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	
-	// If cell is for Chat or Messages
-	if([CellIdentifier isEqualToString:@"Chat"] || [CellIdentifier isEqualToString:@"Messages"])
+	// If cell is for Secure Chat or Messages
+	if([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
 	{
 		// Hide Message Counts by default
 		[cell.labelCounts setHidden:YES];
@@ -109,8 +109,8 @@
 		// If StatusModel has finished loading
 		if(self.isStatusLoaded)
 		{
-			// If cell is for Chat, set Chat Counts
-			if([CellIdentifier isEqualToString:@"Chat"])
+			// If cell is for Secure Chat, set Chat Counts
+			if([CellIdentifier isEqualToString:@"Secure Chat"])
 			{
 				[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
 			}

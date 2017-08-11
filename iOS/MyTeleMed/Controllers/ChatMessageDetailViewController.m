@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatMessage;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
+@property (nonatomic) NSString *navigationBarTitle;
 @property (nonatomic) NSString *textViewChatMessagePlaceholder;
 
 @property (nonatomic) BOOL isLoaded;
@@ -43,6 +44,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	// Store Navigation Bar Title
+	[self setNavigationBarTitle:self.navigationItem.title];
 	
 	// Set Current User ID
 	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
@@ -72,8 +76,8 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Get Chat Messages for Conversation ID if this is not a new Chat
-	if( ! self.isNewChat)
+	// Get Chat Messages for Conversation ID if its set (not a new Chat)
+	if(self.conversationID)
 	{
 		NSLog(@"Conversation ID: %@", self.conversationID);
 		
@@ -84,6 +88,10 @@
 		
 		// Hide Add Chat Participant button
 		[self.buttonAddChatParticipant setHidden:YES];
+	}
+	// Update navigation bar title if this is a new Chat
+	else if(self.isNewChat) {
+		[self.navigationItem setTitle:@"New Secure Chat"];
 	}
 	
 	// Detect taps on Text View Chat Participants to allow for toggling Participants list AND scrolling the textview
@@ -195,6 +203,9 @@
 				
 				// Reset Is Loaded flag to show loading message
 				[self setIsLoaded:NO];
+				
+				// Update navigation bar title to reflect existing Conversation
+				[self.navigationItem setTitle:self.navigationBarTitle];
 				
 				break;
 			}
@@ -427,6 +438,11 @@
 // Return pending from NewChatMessageModel delegate
 - (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
+	// Update navigation bar title to reflect existing Conversation
+	if(self.isNewChat) {
+		[self.navigationItem setTitle:self.navigationBarTitle];
+	}
+	
 	// Add Chat Message to Chat Messages Array
 	ChatMessageModel *chatMessage = [[ChatMessageModel alloc] init];
 	NSDate *currentDate = [[NSDate alloc] init];

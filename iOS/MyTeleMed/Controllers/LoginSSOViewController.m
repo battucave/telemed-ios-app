@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *changeIDPRoviderButton;
 
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isRetry;
@@ -33,6 +34,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	// TEMPORARY: Client requested to hide Change ID Provider button
+	[self.changeIDPRoviderButton setTitle:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
