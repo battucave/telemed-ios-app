@@ -8,7 +8,7 @@
 
 #import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
-#import "PreferredAccountCell.h"
+#import "AccountCell.h"
 #import "AccountModel.h"
 #import "MyProfileModel.h"
 #import "PreferredAccountModel.h"
@@ -256,7 +256,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 58.0;
+	return 46.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -294,8 +294,8 @@
 		return emptyCell;
 	}
 	
-	static NSString *cellIdentifier = @"PreferredAccountCell";
-	PreferredAccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
+	static NSString *cellIdentifier = @"AccountCell";
+	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	AccountModel *account;
 	
 	// Set up the cell
@@ -371,20 +371,20 @@
 	// Add checkmark of selected Account
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// If using NewMessageAccountPicker view from storyboard
-	if([self.storyboardID isEqualToString:@"NewMessageAccountPicker"])
-	{
-		// Go to MessageRecipientPickerTableViewController
-		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
-	}
 	// If using SettingsPreferredAccountPicker view from storyboard
-	else if([self.storyboardID isEqualToString:@"SettingsPreferredAccountPicker"])
+	if(self.shouldSetPreferredAccount)
 	{
 		// Save Preferred Account to server
 		PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
 		
 		[preferredAccountModel setDelegate:self];
 		[preferredAccountModel savePreferredAccount:self.selectedAccount];
+	}
+	// If using NewMessageAccountPicker view from storyboard
+	else
+	{
+		// Go to MessageRecipientPickerTableViewController
+		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
 	}
 }
 

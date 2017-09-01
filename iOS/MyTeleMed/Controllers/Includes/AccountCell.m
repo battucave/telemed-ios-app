@@ -1,15 +1,13 @@
 //
-//  PreferredAccountCell.m
+//  AccountCell.m
 //  MyTeleMed
 //
 //  Created by Shane Goodwin on 8/11/17.
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import "PreferredAccountCell.h"
+#import "AccountCell.h"
 
-@implementation PreferredAccountCell
-
-
+@implementation AccountCell
 
 @end

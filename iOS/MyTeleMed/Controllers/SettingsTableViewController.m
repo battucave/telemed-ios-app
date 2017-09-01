@@ -7,6 +7,7 @@
 //
 
 #import "SettingsTableViewController.h"
+#import "AccountPickerViewController.h"
 #import "SettingsNotificationsTableViewController.h"
 #import "MyProfileModel.h"
 
@@ -174,7 +175,14 @@
 		
 		// Set Notification Settings Type
 		[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
+	// Update title of AccountsPickerViewController
+	} else if([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
+		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
+		
+		[accountPickerViewController setTitle:@"Preferred Account"];
+		[accountPickerViewController setShouldSetPreferredAccount:YES];
 	}
+	
 }
 
 - (void)didReceiveMemoryWarning

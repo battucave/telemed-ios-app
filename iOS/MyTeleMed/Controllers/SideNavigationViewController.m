@@ -45,7 +45,7 @@
 	// Adjust Table Height to match number of Menu Items to avoid extra separator lines
 	self.constraintTableHeight.constant = [self.menuItems count] * 44 + 23;
 	
-	// Update Message Counts on Messages Row and On Call Date on On Call Schedule Row
+	// Update Message Counts on Messages row and On Call Date on On Call Schedule row
 	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 	{
 		[self setIsStatusLoaded:YES];
@@ -132,8 +132,8 @@
 			CGRect newFrame = cell.labelCounts.frame;
 			
 			// Increase new frame size and restore its old height
-			newFrame.size.width = newFrame.size.width + 12.0;
-			newFrame.size.height = oldFrame.size.height;
+			newFrame.size.width = newFrame.size.width + 22.0;
+			newFrame.size.height = oldFrame.size.height+ 4.0;
 			
 			[cell.labelCounts setFrame:newFrame];
 			[cell.constraintCountsWidth setConstant:newFrame.size.width];
@@ -194,7 +194,8 @@
 	if(indexPath.row == 0)
 	{
 		UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-		topLineView.backgroundColor = [UIColor colorWithRed:105.0/255.0 green:105.0/255.0 blue:105.0/255.0 alpha:1];
+		topLineView.backgroundColor = [UIColor colorWithRed:125.0/255.0 green:125.0/255.0 blue:125.0/255.0 alpha:1];
+		
 		[cell.contentView addSubview:topLineView];
 	}
 	

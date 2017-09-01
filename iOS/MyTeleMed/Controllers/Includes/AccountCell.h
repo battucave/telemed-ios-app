@@ -1,5 +1,5 @@
 //
-//  PreferredAccountCell.h
+//  AccountCell.h
 //  MyTeleMed
 //
 //  Created by Shane Goodwin on 8/11/17.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PreferredAccountCell : UITableViewCell
+@interface AccountCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *accountName;
 @property (weak, nonatomic) IBOutlet UILabel *accountPublicKey;

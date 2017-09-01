@@ -14,6 +14,7 @@
 
 @interface AccountPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic) BOOL shouldSetPreferredAccount;
 @property (nonatomic) NSMutableArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;

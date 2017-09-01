@@ -65,13 +65,13 @@
 		// Chat Message Settings
 		case 3:
 			[self setNotificationSettingsName:@"chat"];
-			[self.navigationItem setTitle:@"Chat Messages"];
+			[self.navigationItem setTitle:@"Secure Chat Messages"];
 			break;
 		
 		// Comment Settings
 		case 4:
 			[self setNotificationSettingsName:@"comment"];
-			[self.navigationItem setTitle:@"Comment Messages"];
+			[self.navigationItem setTitle:@"Comments"];
 			break;
 	}
 	
