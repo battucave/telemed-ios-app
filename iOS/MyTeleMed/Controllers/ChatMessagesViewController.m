@@ -81,15 +81,15 @@
 	// Update notification message if all of these Messages are Unread
 	if(unreadChatMessageCount == selectedChatMessageCount)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not yet been read. Selecting Continue will delete %@ from our system. Are you sure you want to continue?", (unreadChatMessageCount == 1 ? @"This secure chat message has" : @"These secure chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will delete %@ from our system.", (unreadChatMessageCount == 1 ? @"This secure chat message has" : @"These secure chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
 	else if(unreadChatMessageCount > 0)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not yet been read. Selecting Continue will delete %@ from our system. Are you sure you want to continue?", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not been read yet. Selecting Continue will delete %@ from our system.", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
 	
     [alertView show];
 }

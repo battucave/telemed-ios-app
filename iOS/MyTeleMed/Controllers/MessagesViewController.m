@@ -100,12 +100,12 @@
 	// Update notification message if all of these messages are Unread
 	if(unreadMessageCount == selectedMessageCount)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not yet been read. Selecting Continue will archive and close out %@ from our system. Are you sure you want to continue?", (unreadMessageCount == 1 ? @"This message has" : @"These messages have"), (unreadMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (unreadMessageCount == 1 ? @"This message has" : @"These messages have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
 	else if(unreadMessageCount > 0)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these messages %@ not yet been read. Selecting Continue will archive and close out %@ from our system. Are you sure you want to continue?", (long)unreadMessageCount, (unreadMessageCount == 1 ? @"has" : @"have"), (unreadMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these messages %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (long)unreadMessageCount, (unreadMessageCount == 1 ? @"has" : @"have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Archive Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];

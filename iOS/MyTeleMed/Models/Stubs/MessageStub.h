@@ -27,6 +27,6 @@
 @property (nonatomic) NSString *TimeReceived_LCL;
 @property (nonatomic) NSString *TimeReceived_UTC;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived, 2 = Archived (This property not set by web service)
+@property (nonatomic) int messageType; // 0 = Active, 1 = Archived, 2 = Sent (This property not set by web service)
 
 @end

@@ -125,25 +125,28 @@
 	// Add Call Disconnected Observer to Hide Keyboard
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 	
-	// Mark message as read if active message
-	if(self.message.messageType == 0)
+	// Mark message as read if active and unread
+	if([self.message respondsToSelector:@selector(State)])
 	{
-		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"read"];
-		
-		/*/ TESTING ONLY (set message back to unread)
-		#if DEBUG
-			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unread"];
-		#endif
+		if(self.message.messageType == 0 && [self.message.State isEqualToString:@"Unread"])
+		{
+			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
+			
+			/*/ TESTING ONLY (set message back to unread)
+			#if DEBUG
+				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unread"];
+			#endif
+			// END TESTING ONLY*/
+		}
+		/*/ TESTING ONLY (unarchive archived messages)
+		else if(self.message.messageType == 1)
+		{
+			#if DEBUG
+				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
+			#endif
+		}
 		// END TESTING ONLY*/
 	}
-	/*/ TESTING ONLY (unarchive archived messages)
-	else if(self.message.messageType == 1)
-	{
-		#if DEBUG
-			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"unarchive"];
-		#endif
-	}
-	// END TESTING ONLY*/
 }
 
 - (void)viewWillDisappear:(BOOL)animated
