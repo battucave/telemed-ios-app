@@ -59,7 +59,7 @@
 		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
 	}
 	
-	// Set Message Priority color
+	// Set Message Priority color (defaults to "Normal" green color)
 	if([self.message.Priority isEqualToString:@"Priority"])
 	{
 		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
