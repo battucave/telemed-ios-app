@@ -238,7 +238,7 @@
 			{
 				"alert":"3 new messages.",
 				"badge":3,
-				"sound":"note"
+				"sound":"note.caf"
 			},
 			"NotificationType":"Message"
 		}*/
@@ -248,7 +248,7 @@
 			"aps":
 			{
 				"alert":"Dr. Matt Rogers added a comment to a message.",
-				"sound":"circles"
+				"sound":"circles.caf"
 			},
 			"DeliveryID":5133538688695397,
 			"NotificationType":"Comment"
@@ -259,7 +259,7 @@
 			"aps":
 			{
 				"alert":"Matt Rogers:What's happening?",
-				"sound":"note"
+				"sound":"note.caf"
 			},
 			"ChatMsgID":12345,
 			"NotificationType":"Chat"

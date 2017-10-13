@@ -60,7 +60,6 @@
 		[self getServerNotificationSettingsByName:name];
 		
 		// Return default settings
-		NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
 		NSArray *intervals = [[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil];
 		
 		settings = [[NotificationSettingModel alloc] init];
@@ -68,11 +67,7 @@
 		[settings setEnabled:YES];
 		[settings setIsReminderOn:YES];
 		
-		// Tones should always exist
-		if([tones count] > 8)
-		{
-			[settings setToneTitle:[tones objectAtIndex:8]]; // iOS7 Defaults to Note tone
-		}
+		[settings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
 		
 		// Intervals should always exist
 		if([intervals count] > 0)
@@ -138,8 +133,8 @@
 				self.Interval = [NSNumber numberWithInt:1];
 			}
 			
-			// If the tone received from server is Default, change it to the iOS default: "Note"
-			if([self.Tone isEqualToString:@"Default"])
+			// DEPRECATED: If the tone received from server is Default, change it to the iOS default: "Note"
+			/* if([self.Tone isEqualToString:@"Default"])
 			{
 				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
 				
@@ -151,7 +146,7 @@
 				
 				// Save new default to server
 				[self saveNotificationSettingsByName:name settings:self];
-			}
+			}*/
 			
 			// Save Notification Settings for type to device
 			[preferences setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
@@ -198,7 +193,16 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Create Interval value (Comment setting does not include Interval)
-	NSString *interval = ([name isEqualToString:@"comment"] ? @"<Interval i:nil=\"true\" />" : [NSString stringWithFormat:@"<Interval>%@</Interval>", (settings.isReminderOn ? settings.Interval : @"0")]);
+	NSString *interval;
+	
+	if([name isEqualToString:@"comment"] || settings.Interval == nil)
+	{
+		interval = @"<Interval i:nil=\"true\" />";
+	}
+	else
+	{
+		interval = [NSString stringWithFormat:@"<Interval>%@</Interval>", (settings.isReminderOn ? settings.Interval : @"0")];
+	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<NotificationSetting xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"

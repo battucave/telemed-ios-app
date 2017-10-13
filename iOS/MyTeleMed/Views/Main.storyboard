@@ -209,7 +209,7 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="0/0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iYx-x1-Rrv">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0/0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iYx-x1-Rrv">
                                                     <rect key="frame" x="264" y="9" width="44" height="25"/>
                                                     <color key="backgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -243,7 +243,7 @@
                                                 <constraint firstItem="yrQ-96-piO" firstAttribute="centerY" secondItem="LFi-JL-QKv" secondAttribute="centerY" id="TlZ-yi-ePk"/>
                                                 <constraint firstItem="iYx-x1-Rrv" firstAttribute="centerY" secondItem="Xsr-eW-5WW" secondAttribute="centerY" id="g2l-yR-mic"/>
                                                 <constraint firstAttribute="bottom" secondItem="Xsr-eW-5WW" secondAttribute="bottom" id="iTJ-aD-IWE"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="iYx-x1-Rrv" secondAttribute="trailing" constant="3" id="r4q-Z1-Lfh"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="iYx-x1-Rrv" secondAttribute="trailing" constant="4" id="r4q-Z1-Lfh"/>
                                                 <constraint firstItem="Xsr-eW-5WW" firstAttribute="leading" secondItem="yrQ-96-piO" secondAttribute="trailing" constant="8" id="u5s-od-JUN"/>
                                             </constraints>
                                         </tableViewCellContentView>

@@ -7,6 +7,14 @@
 //
 
 #import "CoreViewController.h"
+#import "NotificationSettingModel.h"
+#import <AudioToolbox/AudioServices.h>
+
+@interface CoreViewController ()
+
+@property (nonatomic) SystemSoundID systemSoundID;
+
+@end
 
 @implementation CoreViewController
 
@@ -58,6 +66,7 @@
 	id alert = [aps objectForKey:@"alert"];
 	NSNumber *deliveryID;
 	NSString *message = nil;
+	NSString *tone = [aps objectForKey:@"sound"];
 	
 	// If no NotificationType was sent, assume it's a message.
 	if( ! notificationType)
@@ -99,16 +108,52 @@
 	// If message does not exist, then this is a reminder. Ignore reminders.
 	if(message != nil)
 	{
-		[self handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
+		[self handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	}
 }
 
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
-	// Present user with the message from notification
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MyTeleMed" message:message delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+	// Play notification sound
+	if(tone != nil)
+	{
+		// If tone is "default", then use iOS7's default tone (there is no way to retrieve system's default alert sound)
+		if([tone isEqualToString:@"default"])
+		{
+			NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
+			NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
+			
+			if([tones count] > 8)
+			{
+				tone = [notificationSettingModel getToneFromToneTitle:[tones objectAtIndex:8]]; // Default to Note tone
+			}
+		}
+		
+		NSString *tonePath = [[NSBundle mainBundle] pathForResource:tone ofType:nil];
+		
+		if(tonePath != nil)
+		{
+			AudioServicesDisposeSystemSoundID(self.systemSoundID);
+			
+			NSURL *toneURL = [NSURL fileURLWithPath:tonePath];
+			AudioServicesCreateSystemSoundID((__bridge CFURLRef)toneURL, &_systemSoundID);
+			AudioServicesPlaySystemSound(self.systemSoundID);
+		}
+	}
 	
-	[alertView show];
+	// Present user with the message from notification
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"MyTeleMed" message:message preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		// Stop notification sound
+		AudioServicesDisposeSystemSoundID(self.systemSoundID);
+	}];
+	
+	[alertController addAction:actionClose];
+	[alertController setPreferredAction:actionClose];
+	
+	// Show Alert
+	[self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)dealloc
