@@ -140,13 +140,15 @@
 // Override default Remote Notification action from CoreViewController
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
+	NSLog(@"Received Remote Notification MessagesViewController");
+	
 	// Execute the default Notification Message action
 	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	
 	// Reload Messages list to get the new Message only if the notification was for a Message
 	if([notificationType isEqualToString:@"Message"])
 	{
-		NSLog(@"Received Remote Notification MessagesViewController");
+		NSLog(@"Refresh Messages");
 		
 		[self.messagesTableViewController reloadMessages];
 	}

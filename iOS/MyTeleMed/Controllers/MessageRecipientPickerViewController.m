@@ -125,7 +125,12 @@
 			
 			[confirmGroupChatController addAction:actionNo];
 			[confirmGroupChatController addAction:actionYes];
-			[confirmGroupChatController setPreferredAction:actionYes];
+			
+			// PreferredAction only supported in 9.0+
+			if([confirmGroupChatController respondsToSelector:@selector(setPreferredAction:)])
+			{
+				[confirmGroupChatController setPreferredAction:actionYes];
+			}
 			
 			// Show Alert
 			[self presentViewController:confirmGroupChatController animated:YES completion:nil];

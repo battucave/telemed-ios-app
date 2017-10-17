@@ -112,13 +112,15 @@
 // Override default Remote Notification action from CoreViewController
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
+	NSLog(@"Received Remote Notification ChatMessagesViewController");
+	
 	// Execute the default Notification Message action
 	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	
 	// Reload Chat Messages list to get the new Chat Message only if the notification was for a Chat Message
-	if([notificationType isEqualToString:@"Chat Message"])
+	if([notificationType isEqualToString:@"Chat"])
 	{
-		NSLog(@"Received Remote Notification ChatMessagesViewController");
+		NSLog(@"Refresh Chat Messages");
 		
 		[self.chatMessagesTableViewController reloadChatMessages];
 	}

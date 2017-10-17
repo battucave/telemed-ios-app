@@ -529,6 +529,7 @@
 		E21C146A1D33E2290025B6ED /* OnePixelLayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePixelLayoutConstraint.h; sourceTree = "<group>"; };
 		E21EC5CF1CE37C880027AA14 /* AccountPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountPickerViewController.h; sourceTree = "<group>"; };
 		E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountPickerViewController.m; sourceTree = "<group>"; };
+		E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedβ.entitlements"; sourceTree = "<group>"; };
 		E232D6FF1E675E6200B797E1 /* button-Navigation-ChatMessages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages.png"; sourceTree = "<group>"; };
 		E232D7001E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@2x.png"; sourceTree = "<group>"; };
 		E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@3x.png"; sourceTree = "<group>"; };
@@ -536,7 +537,6 @@
 		E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue@2x.png"; sourceTree = "<group>"; };
 		E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IBDesignable.h"; sourceTree = "<group>"; };
 		E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+IBDesignable.m"; sourceTree = "<group>"; };
-		E24B3D931F91177400684782 /* MyTeleMedβ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedβ.entitlements"; sourceTree = "<group>"; };
 		E24B3D941F91221300684782 /* MyTeleMedWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedWatch Extension.entitlements"; sourceTree = "<group>"; };
 		E24D45031E8948E700B36DD6 /* SettingsPasswordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsPasswordTableViewController.h; sourceTree = "<group>"; };
 		E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPasswordTableViewController.m; sourceTree = "<group>"; };
@@ -1032,7 +1032,6 @@
 		28CCCD4517F517A50093CEE2 /* MyTeleMed */ = {
 			isa = PBXGroup;
 			children = (
-				E24B3D931F91177400684782 /* MyTeleMedβ.entitlements */,
 				28CCCD8217F518420093CEE2 /* Controllers */,
 				E2AE66311CE0DBF900953EFA /* Extensions */,
 				28CCCD7417F517FC0093CEE2 /* Libraries */,
@@ -1050,6 +1049,7 @@
 		28CCCD4617F517A50093CEE2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */,
 				E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */,
 				28CCCD4717F517A50093CEE2 /* MyTeleMed-Info.plist */,
 				28CCCD4817F517A50093CEE2 /* InfoPlist.strings */,
@@ -2239,7 +2239,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTeleMed/MyTeleMed-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
+					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"ADHOC=1",
 					"BETA=1",
 					"$(inherited)",

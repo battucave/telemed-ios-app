@@ -183,7 +183,7 @@
 {
 	NSLog(@"Received Remote Notification MessageDetailViewController");
 	
-	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message
+	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message)
 	#if DEBUG
 		message = @"Shane Goodwin added a comment to a message.";
 		type = @"comment";
@@ -192,13 +192,28 @@
 	//*/
 	
 	// Reload Message Events if remote notification is a comment specifically for the current message
-	if([notificationType isEqualToString:@"Comment"] && deliveryID && self.message.MessageDeliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
+	if([notificationType isEqualToString:@"Comment"] && deliveryID)
 	{
-		NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
-		
-		[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
-		
-		//return;
+		// Received Messages
+		if(self.message.MessageDeliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
+		{
+			NSLog(@"Refresh Comments with Message Delivery ID: %@", deliveryID);
+			
+			// Cancel queued Comments refresh
+			[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
+			
+			[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
+		}
+		// Sent Messages
+		else if(self.message.MessageID && [deliveryID isEqualToNumber:self.message.MessageID])
+		{
+			NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
+			
+			// Cancel queued Comments refresh
+			[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
+			
+			[self.messageEventModel getMessageEventsForMessageID:self.message.MessageID];
+		}
 	}
 	
 	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
@@ -274,7 +289,7 @@
 		self.messageCount = [self.filteredMessageEvents count];
 	});
 	
-	// Refresh Message Events again after delay
+	// Refresh Message Events again after 15 second delay
 	[self.messageEventModel performSelector:@selector(getMessageEventsForMessageID:) withObject:self.message.MessageID afterDelay:15.0];
 }
 

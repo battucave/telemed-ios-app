@@ -150,7 +150,12 @@
 	}];
 	
 	[alertController addAction:actionClose];
-	[alertController setPreferredAction:actionClose];
+	
+	// PreferredAction only supported in 9.0+
+	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[alertController setPreferredAction:actionClose];
+	}
 	
 	// Show Alert
 	[self presentViewController:alertController animated:YES completion:nil];

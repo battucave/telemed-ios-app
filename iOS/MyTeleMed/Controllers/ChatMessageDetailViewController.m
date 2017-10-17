@@ -334,9 +334,9 @@
 	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
 	
 	// Reload Chat Messages if remote notification is a Chat Message specifically for the current Conversation
-	if(self.conversationID && [notificationType isEqualToString:@"Chat"] && deliveryID && [deliveryID isEqualToNumber:self.conversationID])
+	if([notificationType isEqualToString:@"Chat"] && deliveryID && self.conversationID && [deliveryID isEqualToNumber:self.conversationID])
 	{
-		NSLog(@"Refresh Comments with Conversation ID: %@", deliveryID);
+		NSLog(@"Refresh Chat Messages with Conversation ID: %@", deliveryID);
 		
 		// Cancel queued Chat Messages refresh
 		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
@@ -422,7 +422,7 @@
 		self.chatMessageCount = chatMessageCount;
 	});
 	
-	// Refresh Chat Messages again after delay
+	// Refresh Chat Messages again after 15 second delay
 	[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:15.0];
 }
 

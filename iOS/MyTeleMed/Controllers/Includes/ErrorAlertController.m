@@ -117,7 +117,12 @@
 	
 	[alertController addAction:actionCancel];
 	[alertController addAction:actionRetry];
-	[alertController setPreferredAction:actionRetry];
+	
+	// PreferredAction only supported in 9.0+
+	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[alertController setPreferredAction:actionRetry];
+	}
 	
 	// Show Alert
 	dispatch_async(dispatch_get_main_queue(), ^
