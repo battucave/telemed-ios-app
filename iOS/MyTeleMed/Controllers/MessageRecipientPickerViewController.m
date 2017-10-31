@@ -65,33 +65,52 @@
 	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
 	[self.searchController.searchBar sizeToFit];
 	
-	// Add auto-generated constraints that allow Search Bar to animate without disappearing
-	//[self.searchController.searchBar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-	[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
-	
-	// Add Search Bar to Search Bar's Container View
-	[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
-	
-	// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
-	for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+	// iOS 11+ navigation bar has support for search controller
+	if(@available(iOS 11.0, *))
 	{
-		if(constraint.firstItem == self.searchBar)
+		[self.navigationItem setSearchController:self.searchController];
+		
+		[self.viewSearchBarContainer setHidden:YES];
+		
+		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
-			[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-		}
-		else if(constraint.secondItem == self.searchBar)
-		{
-			[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			if(constraint.firstAttribute == NSLayoutAttributeHeight)
+			{
+				[constraint setConstant:0.0f];
+				break;
+			}
 		}
 	}
-	
-	for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+	// iOS < 11 places search controller under navigation bar
+	else
 	{
-		[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		// Add auto-generated constraints that allow Search Bar to animate without disappearing
+		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
+		
+		// Add Search Bar to Search Bar's Container View
+		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
+		
+		// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
+		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+		{
+			if(constraint.firstItem == self.searchBar)
+			{
+				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			}
+			else if(constraint.secondItem == self.searchBar)
+			{
+				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			}
+		}
+		
+		for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+		{
+			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		}
+		
+		// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
+		[self.searchBar setHidden:YES];
 	}
-	
-	// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
-	[self.searchBar setHidden:YES];
 	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
@@ -302,7 +321,6 @@
 	MessageRecipientModel *messageRecipient;
 	
 	// Set up the cell
-	[tableView deselectRowAtIndexPath:indexPath animated:NO];
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Search Results Table

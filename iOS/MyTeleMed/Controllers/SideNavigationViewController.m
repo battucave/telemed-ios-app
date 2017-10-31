@@ -87,9 +87,14 @@
 	// Fix issue in iPad where background defaulted to White (unfixable in IB because of bug)
 	[cell setBackgroundColor:[UIColor clearColor]];
 	
-	// Force left inset of 15.0 for iOS 8+
-	if([cell respondsToSelector:@selector(setLayoutMargins:)])
+	// Fix bugs on iOS < 10
+	if( ! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 	{
+		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
+		[cell setPreservesSuperviewLayoutMargins:NO];
+		[cell.contentView setPreservesSuperviewLayoutMargins:NO];
+		
+		// Fix issue in iOS 8-9 where label has too much left margin
 		[cell setLayoutMargins:UIEdgeInsetsZero];
 	}
 }

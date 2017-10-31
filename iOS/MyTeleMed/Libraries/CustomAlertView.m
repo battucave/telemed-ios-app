@@ -139,11 +139,7 @@ CGFloat buttonSpacerHeight = 0;
 	// Add Activity Indicator to Alert View
 	UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 	indicator.center = CGPointMake(dialogView.frame.origin.x + (dialogView.frame.size.width / 2), dialogView.frame.origin.y + 35);
-	
-	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
-	{
-		indicator.color = [UIColor blackColor];
-	}
+	indicator.color = [UIColor blackColor];
 	
 	[indicator startAnimating];
 	[self addSubview:indicator];
@@ -320,11 +316,6 @@ CGFloat buttonSpacerHeight = 0;
 // Add motion effects
 - (void)applyMotionEffects
 {
-	if(floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1)
-	{
-		return;
-	}
-
 	UIInterpolatingMotionEffect *horizontalEffect = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
 																									type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
 	horizontalEffect.minimumRelativeValue = @(-kCustomMotionEffectExtent);
