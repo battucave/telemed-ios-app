@@ -187,7 +187,7 @@
 			else
 			{
 				// Add right padding to On Call Schedule cell
-				[cell setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 35.0f)];
+				[cell setLayoutMargins:UIEdgeInsetsZero];
 			}
 			
 			[cell.detailTextLabel setText:nextOnCallDate];
