@@ -24,8 +24,6 @@
 
 @property (weak, nonatomic) MessagesTableViewController *messagesTableViewController;
 
-@property (nonatomic) MessageModel *messageModel;
-
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonArchive; // (Must be strong reference)
@@ -126,14 +124,10 @@
 {
 	if(buttonIndex > 0)
 	{
-		// Added this because a minority of users were complaining that Archiving sometimes causes crash
-		if(self.messageModel == nil)
-		{
-			[self setMessageModel:[[MessageModel alloc] init]];
-			[self.messageModel setDelegate:self];
-		}
+		MessageModel *messageModel = [[MessageModel alloc] init];
+		[messageModel setDelegate:self];
 		
-		[self.messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
+		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
 	}
 }
 
@@ -251,52 +245,6 @@
 	// Update Selected Messages to only the Failed Messages
 	self.selectedMessages = failedMessages;
 }
-
-/*/ Return Multiple Message States success from MessageModel delegate (no longer used)
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
-{
-	// Remove selected rows from MessagesTableViewController
-	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
-	
-	[self setEditing:NO animated:YES];
-}
-
-// Return Multiple Message States error from MessageModel delegate (no longer used)
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state
-{
-	// Default to all Messages failed to send
-	NSString *errorMessage = @"There was a problem archiving your Messages. Please try again.";
-	
-	// Only some Messages failed to send
-	if([failedMessageIDs count] > 0 && [failedMessageIDs count] != [self.selectedMessages count])
-	{
-		errorMessage = @"There was a problem archiving some of your Messages. Please try again.";
-		
-		// Remove rows of successfully archived Messages in MessagesTableViewController
-		NSMutableArray *messagesForRemoval = [[NSMutableArray alloc] initWithArray:[self.selectedMessages copy]];
-		
-		// If Message failed to archive, exclude it from Messages to be removed
-		for(NSString *failedMessageID in failedMessageIDs)
-		{
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", failedMessageID];
-			NSArray *results = [messagesForRemoval filteredArrayUsingPredicate:predicate];
-			
-			if([results count] > 0)
-			{
-				MessageModel *message = [results objectAtIndex:0];
-				
-				[messagesForRemoval removeObject:message];
-			}
-		}
-		
-		[self.messagesTableViewController removeSelectedMessages:messagesForRemoval];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Archive Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
-}*/
-
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController

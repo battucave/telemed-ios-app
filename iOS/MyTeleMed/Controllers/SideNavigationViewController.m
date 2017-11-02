@@ -21,7 +21,6 @@
 @property (nonatomic) int onCallScheduleDefaultSegmentControlIndex;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableHeight;
 
 @property (nonatomic) BOOL isStatusLoaded;
 
@@ -42,8 +41,8 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Adjust Table Height to match number of Menu Items to avoid extra separator lines
-	self.constraintTableHeight.constant = [self.menuItems count] * 44 + 23;
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// Update Message Counts on Messages row and On Call Date on On Call Schedule row
 	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)

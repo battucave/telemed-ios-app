@@ -60,11 +60,8 @@
                                         </constraints>
                                     </imageView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="0an-ou-B5y">
-                                        <rect key="frame" x="0.0" y="65" width="320" height="311"/>
+                                        <rect key="frame" x="0.0" y="65" width="320" height="582"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="311" id="nrh-b3-z69"/>
-                                        </constraints>
                                         <color key="separatorColor" red="0.49019607843137253" green="0.49019607843137253" blue="0.49019607843137253" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
@@ -361,6 +358,7 @@
                                     <constraint firstItem="zoK-KT-N6p" firstAttribute="leading" secondItem="nEx-7Y-Nvy" secondAttribute="leading" id="QgD-Q6-MNm"/>
                                     <constraint firstItem="zoK-KT-N6p" firstAttribute="top" secondItem="nEx-7Y-Nvy" secondAttribute="top" id="VSu-DH-AnN"/>
                                     <constraint firstItem="0an-ou-B5y" firstAttribute="trailing" secondItem="zoK-KT-N6p" secondAttribute="trailing" constant="-55" id="XQx-Z5-zr0"/>
+                                    <constraint firstAttribute="bottom" secondItem="0an-ou-B5y" secondAttribute="bottom" id="ZyW-4S-my5"/>
                                     <constraint firstItem="LR0-MN-SuI" firstAttribute="leading" secondItem="nEx-7Y-Nvy" secondAttribute="leading" constant="10" id="djW-9e-zP9"/>
                                     <constraint firstItem="0an-ou-B5y" firstAttribute="top" secondItem="zoK-KT-N6p" secondAttribute="bottom" id="lbp-Dt-Izc"/>
                                     <constraint firstItem="0an-ou-B5y" firstAttribute="leading" secondItem="zoK-KT-N6p" secondAttribute="leading" id="thR-af-9Rs"/>
