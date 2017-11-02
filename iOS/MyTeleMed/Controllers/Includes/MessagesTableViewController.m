@@ -25,7 +25,6 @@
 @property (nonatomic) NSMutableArray *selectedMessages;
 
 @property (nonatomic) int messagesType; // 0 = Active, 1 = Archived, 2 = Sent
-@property (nonatomic) int priorityFilter; // 0 = All, 1 = Stat, 2 = Priority, 3 = Normal
 @property (nonatomic) NSNumber *archiveAccountID;
 @property (nonatomic) NSDate *archiveStartDate;
 @property (nonatomic) NSDate *archiveEndDate;
@@ -94,67 +93,12 @@
 			self.refreshControl = self.savedRefreshControl;
 		}
 	}
-	// If Messages Type is Archives, disable Refresh Control
+	// If Messages Type is Archives or Sent, disable Refresh Control
 	else
 	{
 		self.savedRefreshControl = self.refreshControl;
 		self.refreshControl = nil;
 	}
-}
-
-- (void)filterActiveMessages:(int)newPriorityFilter
-{
-	NSString *priorityString = nil;
-	
-	[self.filteredMessages removeAllObjects];
-	
-	switch(newPriorityFilter)
-	{
-		// Stat
-		case 1:
-			priorityString = @"Stat";
-			break;
-		
-		// Priority
-		case 2:
-			priorityString = @"Priority";
-			break;
-		
-		// Normal
-		case 3:
-			priorityString = @"Normal";
-			break;
-	}
-	
-	// If Priority set
-	if(priorityString != nil)
-	{
-		for(MessageModel *message in self.messages)
-		{
-			if([message.Priority isEqualToString:priorityString])
-			{
-				[self.filteredMessages addObject:message];
-			}
-		}
-	}
-	// If Priority All or not set
-	else
-	{
-		[self setFilteredMessages:[self.messages mutableCopy]];
-	}
-	
-	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
-	if(self.messagesType == 0)
-	{
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-	}
-	
-	[self setPriorityFilter:newPriorityFilter];
-	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableView reloadData];
-	});
 }
 
 // Delegate method from ArchivesViewController
@@ -286,8 +230,18 @@
 {
 	[self setIsLoaded:YES];
 	[self setMessages:messages];
-	
-	[self filterActiveMessages:self.priorityFilter];
+	[self setFilteredMessages:messages];
+
+	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
+	if(self.messagesType == 0)
+	{
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+	}
+
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView reloadData];
+	});
 	
 	[self.refreshControl endRefreshing];
 }

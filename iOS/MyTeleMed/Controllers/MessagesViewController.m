@@ -65,8 +65,7 @@
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
 	if([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 11 (Keep Swipe Message there as it will simply be hidden under the Container View and we can still use the top border of it)
-		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
+		self.constraintTopSpace.constant = 0;
 	}
 	
 	[self toggleToolbarButtons:NO];
@@ -109,15 +108,6 @@
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Archive Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
 	
     [alertView show];
-}
-
-// User clicked one of the UISegmented Control options: (All, Stat, Priority, Normal)
-- (IBAction)setPriorityFilter:(id)sender
-{
-	if([self.messagesTableViewController respondsToSelector:@selector(filterActiveMessages:)])
-	{
-		[self.messagesTableViewController filterActiveMessages:(int)[self.segmentedControl selectedSegmentIndex]];
-	}
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
