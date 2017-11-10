@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MessageDetailParentViewController.h"
-#import "MessageModel.h"
 
 @interface MessageHistoryViewController : MessageDetailParentViewController <UITableViewDelegate, UITableViewDataSource>
 

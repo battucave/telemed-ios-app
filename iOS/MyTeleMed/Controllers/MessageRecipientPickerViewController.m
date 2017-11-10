@@ -65,33 +65,52 @@
 	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
 	[self.searchController.searchBar sizeToFit];
 	
-	// Add auto-generated constraints that allow Search Bar to animate without disappearing
-	//[self.searchController.searchBar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-	[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
-	
-	// Add Search Bar to Search Bar's Container View
-	[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
-	
-	// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
-	for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+	// iOS 11+ navigation bar has support for search controller
+	if(@available(iOS 11.0, *))
 	{
-		if(constraint.firstItem == self.searchBar)
+		[self.navigationItem setSearchController:self.searchController];
+		
+		[self.viewSearchBarContainer setHidden:YES];
+		
+		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
-			[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-		}
-		else if(constraint.secondItem == self.searchBar)
-		{
-			[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			if(constraint.firstAttribute == NSLayoutAttributeHeight)
+			{
+				[constraint setConstant:0.0f];
+				break;
+			}
 		}
 	}
-	
-	for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+	// iOS < 11 places search controller under navigation bar
+	else
 	{
-		[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		// Add auto-generated constraints that allow Search Bar to animate without disappearing
+		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
+		
+		// Add Search Bar to Search Bar's Container View
+		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
+		
+		// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
+		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+		{
+			if(constraint.firstItem == self.searchBar)
+			{
+				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			}
+			else if(constraint.secondItem == self.searchBar)
+			{
+				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			}
+		}
+		
+		for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+		{
+			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		}
+		
+		// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
+		[self.searchBar setHidden:YES];
 	}
-	
-	// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
-	[self.searchBar setHidden:YES];
 	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
@@ -125,7 +144,12 @@
 			
 			[confirmGroupChatController addAction:actionNo];
 			[confirmGroupChatController addAction:actionYes];
-			[confirmGroupChatController setPreferredAction:actionYes];
+			
+			// PreferredAction only supported in 9.0+
+			if([confirmGroupChatController respondsToSelector:@selector(setPreferredAction:)])
+			{
+				[confirmGroupChatController setPreferredAction:actionYes];
+			}
 			
 			// Show Alert
 			[self presentViewController:confirmGroupChatController animated:YES completion:nil];
@@ -158,7 +182,7 @@
 	// Get Recipients for Forward Message
 	else if([self.messageRecipientType isEqualToString:@"Forward"])
 	{
-		[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.message.MessageDeliveryID];
+		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
 	}
 	// Get Recipients for New Message
 	else
@@ -297,7 +321,6 @@
 	MessageRecipientModel *messageRecipient;
 	
 	// Set up the cell
-	[tableView deselectRowAtIndexPath:indexPath animated:NO];
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Search Results Table
@@ -354,28 +377,36 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// If no Filtered Message Recipients, then user clicked "No results."
+		if([self.filteredMessageRecipients count] == 0)
+		{
+			// Close Search Results
+			[self.searchController setActive:NO];
+			
+			return;
+		}
+		
+		// Set Message Recipient
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
+		
+		// Close Search Results
+		[self.searchController setActive:NO];
 		
 		// Get cell in Message Recipients Table
 		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Select cell
-		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 	// Message Recipients Table
 	else
 	{
+		// Set Message Recipient
 		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
 		
 		// Get cell in Message Recipients Table
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Reset Search Results (put here because it's possible for it to be active, but without any entered text)
-	if(self.searchController.active)
-	{
-		[self.searchController setActive:NO];
 	}
 	
 	// Add Message Recipient to selected Message Recipients
@@ -393,6 +424,9 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// Close Search Results
+		[self.searchController setActive:NO];
+		
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 		
 		// Get cell in Message Recipients Table
@@ -409,12 +443,6 @@
 		
 		// Get cell in Message Recipients Table
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Reset Search Results (put here because it's possible for it to be active, but without any entered text)
-	if(self.searchController.active)
-	{
-		[self.searchController setActive:NO];
 	}
 	
 	// Find index of Message Recipient in selected Message Recipients

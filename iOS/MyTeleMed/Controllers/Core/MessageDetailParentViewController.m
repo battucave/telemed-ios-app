@@ -32,6 +32,44 @@
 	[self setFilteredMessageEvents:[NSMutableArray array]];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	// Set Buttons for Archived Message Details
+	if(self.message.messageType == 1)
+	{
+		[self.buttonArchive setEnabled:NO];
+	}
+	// Set buttons for Sent Message Details
+	else if(self.message.messageType == 2)
+	{
+		CGFloat buttonWidth = self.buttonReturnCall.frame.size.width;
+		CGFloat spaceAdjustment = (buttonWidth / 2);
+		
+		// Disable Archive and Return Call buttons
+		[self.buttonArchive setEnabled:NO];
+		[self.buttonArchive.superview setHidden:YES];
+		[self.buttonReturnCall setEnabled:NO];
+		[self.buttonReturnCall.superview setHidden:YES];
+		
+		[self.constraintButtonForwardLeadingSpace setConstant:-spaceAdjustment];
+		[self.constraintButtonForwardTrailingSpace setConstant:spaceAdjustment];
+		[self.constraintButtonHistoryLeadingSpace setConstant:spaceAdjustment];
+		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
+	}
+	
+	// Set Message Priority color (defaults to "Normal" green color)
+	if([self.message.Priority isEqualToString:@"Priority"])
+	{
+		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+	}
+	else if([self.message.Priority isEqualToString:@"Stat"])
+	{
+		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+	}
+}
+
 - (IBAction)returnCall:(id)sender
 {
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Return Call", @"Return & Record Call", nil];
@@ -50,6 +88,12 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	// Prevent Sent Messages from Returning Call or Archiving (should never reach this point)
+	if( ! self.message.MessageDeliveryID)
+	{
+		return;
+	}
+	
 	switch(alertView.tag)
     {
 		// Return Call

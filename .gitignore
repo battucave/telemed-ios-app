@@ -1,3 +1,8 @@
+# Source Files #
+################
+source\ files/AppIcon-assets/*
+
+
 #########################
 # .gitignore file for Xcode 7 Source Projects
 # can be used for watchOS, tvOS, iOS, OSX, Swift development

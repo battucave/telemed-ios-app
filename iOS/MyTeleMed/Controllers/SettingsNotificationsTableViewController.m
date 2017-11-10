@@ -44,24 +44,34 @@
 	// Set Notification Settings Type as string
 	switch(self.notificationSettingsType)
 	{
-		// Stat Settings
-		case 1:
+		// Stat Message Settings
+		case 0:
 			[self setNotificationSettingsName:@"stat"];
+			[self.navigationItem setTitle:@"Stat Messages"];
 			break;
 		
-		// Priority Settings
-		case 2:
+		// Priority Message Settings
+		case 1:
 			[self setNotificationSettingsName:@"priority"];
+			[self.navigationItem setTitle:@"Priority Messages"];
 			break;
 		
-		// Normal Settings
-		case 3:
+		// Normal Message Settings
+		case 2:
 			[self setNotificationSettingsName:@"normal"];
+			[self.navigationItem setTitle:@"Normal Messages"];
+			break;
+		
+		// Chat Message Settings
+		case 3:
+			[self setNotificationSettingsName:@"chat"];
+			[self.navigationItem setTitle:@"Secure Chat Messages"];
 			break;
 		
 		// Comment Settings
 		case 4:
 			[self setNotificationSettingsName:@"comment"];
+			[self.navigationItem setTitle:@"Comments"];
 			break;
 	}
 	
@@ -146,34 +156,6 @@
 	[errorAlertView show];
 }*/
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	// Set Notification Settings Type as string
-	switch(self.notificationSettingsType)
-	{
-		// Stat Settings
-		case 1:
-			return @"Stat Messages";
-			break;
-		
-		// Priority Settings
-		case 2:
-			return @"Priority Messages";
-			break;
-		
-		// Normal Settings
-		case 3:
-			return @"Normal Messages";
-			break;
-		
-		case 4:
-			return @"Comments";
-			break;
-	}
-	
-	return @"";
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0 : 46.0;
@@ -206,8 +188,6 @@
 		case 1:
 		{
 			// Set Tone text
-			NSLog(@"Tone: %@", self.notificationSettings.Tone);
-			NSLog(@"ToneTitle: %@", self.notificationSettings.ToneTitle);
 			[cell.detailTextLabel setText:self.notificationSettings.ToneTitle];
 			break;
 		}

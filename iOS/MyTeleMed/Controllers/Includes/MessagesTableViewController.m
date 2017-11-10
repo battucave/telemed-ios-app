@@ -10,10 +10,13 @@
 #import "MessageDetailViewController.h"
 #import "MessageCell.h"
 #import "MessageModel.h"
+#import "SentMessageModel.h"
+#import "MessageStub.h"
 
 @interface MessagesTableViewController ()
 
 @property (nonatomic) MessageModel *messageModel;
+@property (nonatomic) SentMessageModel *sentMessageModel;
 
 @property (nonatomic) UIRefreshControl *savedRefreshControl;
 @property (nonatomic) NSMutableArray *messages;
@@ -21,8 +24,7 @@
 @property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
 
-@property (nonatomic) int messagesType; // 0 = Active, 1 = Archived
-@property (nonatomic) int priorityFilter; // 0 = All, 1 = Stat, 2 = Priority, 3 = Normal
+@property (nonatomic) int messagesType; // 0 = Active, 1 = Archived, 2 = Sent
 @property (nonatomic) NSNumber *archiveAccountID;
 @property (nonatomic) NSDate *archiveStartDate;
 @property (nonatomic) NSDate *archiveEndDate;
@@ -49,6 +51,10 @@
 	// Initialize Message Model
 	[self setMessageModel:[[MessageModel alloc] init]];
 	[self.messageModel setDelegate:self];
+	
+	// Initialize Sent Message Model
+	[self setSentMessageModel:[[SentMessageModel alloc] init]];
+	[self.sentMessageModel setDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,67 +93,12 @@
 			self.refreshControl = self.savedRefreshControl;
 		}
 	}
-	// If Messages Type is Archives, disable Refresh Control
+	// If Messages Type is Archives or Sent, disable Refresh Control
 	else
 	{
 		self.savedRefreshControl = self.refreshControl;
 		self.refreshControl = nil;
 	}
-}
-
-- (void)filterActiveMessages:(int)newPriorityFilter
-{
-	NSString *priorityString = nil;
-	
-	[self.filteredMessages removeAllObjects];
-	
-	switch(newPriorityFilter)
-	{
-		// Stat
-		case 1:
-			priorityString = @"Stat";
-			break;
-		
-		// Priority
-		case 2:
-			priorityString = @"Priority";
-			break;
-		
-		// Normal
-		case 3:
-			priorityString = @"Normal";
-			break;
-	}
-	
-	// If Priority set
-	if(priorityString != nil)
-	{
-		for(MessageModel *message in self.messages)
-		{
-			if([message.Priority isEqualToString:priorityString])
-			{
-				[self.filteredMessages addObject:message];
-			}
-		}
-	}
-	// If Priority All or not set
-	else
-	{
-		[self setFilteredMessages:[self.messages mutableCopy]];
-	}
-	
-	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
-	if(self.messagesType == 0)
-	{
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-	}
-	
-	[self setPriorityFilter:newPriorityFilter];
-	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableView reloadData];
-	});
 }
 
 // Delegate method from ArchivesViewController
@@ -238,7 +189,7 @@
 		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
-	// Update delegate's list of selected messages
+	// Update delegate's list of Selected Messages
 	[self.delegate setSelectedMessages:self.selectedMessages];
 }
 
@@ -254,15 +205,23 @@
 // Reload Messages
 - (void)reloadMessages
 {
-	// Get Archived Messages
-	if(self.messagesType == 1)
+	switch(self.messagesType)
 	{
-		[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
-	}
-	// Get Active Messages
-	else
-	{
-		[self.messageModel getActiveMessages];
+		// Get Archived Messages
+		case 1:
+			[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
+			break;
+		
+		// Get Sent Messages
+		case 2:
+			[self.sentMessageModel getSentMessages];
+			break;
+			
+		// Get Active Messages
+		case 0:
+		default:
+			[self.messageModel getActiveMessages];
+			break;
 	}
 }
 
@@ -271,8 +230,18 @@
 {
 	[self setIsLoaded:YES];
 	[self setMessages:messages];
-	
-	[self filterActiveMessages:self.priorityFilter];
+	[self setFilteredMessages:messages];
+
+	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
+	if(self.messagesType == 0)
+	{
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+	}
+
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView reloadData];
+	});
 	
 	[self.refreshControl endRefreshing];
 }
@@ -286,6 +255,21 @@
 	
 	// Show error message
 	[self.messageModel showError:error];
+}
+
+// Return Sent Messages from SentMessageModel delegate
+- (void)updateSentMessages:(NSMutableArray *)sentMessages
+{
+	[self updateMessages:sentMessages];
+}
+
+// Return error from SentMessageModel delegate
+- (void)updateSentMessagesError:(NSError *)error
+{
+	[self setIsLoaded:YES];
+	
+	// Show error message
+	[self.sentMessageModel showError:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -306,7 +290,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are Filtered Messages and Hidden Messages and row is not the only row in the table
-	if([self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
+	if(self.messagesType != 2 && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
 	{
 		MessageModel *message = [self.filteredMessages objectAtIndex:indexPath.row];
 		
@@ -335,15 +319,32 @@
 	
 	static NSString *cellIdentifier = @"MessageCell";
 	MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	id message = [self.filteredMessages objectAtIndex:indexPath.row];
 	
-	// Set up the cell
-	MessageModel *message = [self.filteredMessages objectAtIndex:indexPath.row];
-	
+	// Sent Messages
+	if(self.messagesType == 2)
+	{
+		return [self cellForSentMessage:cell withMessage:message atIndexPath:indexPath];
+	}
+	// Active and Archived Messages
+	else
+	{
+		return [self cellForReceivedMessage:cell withMessage:message atIndexPath:indexPath];
+	}
+}
+
+- (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(MessageModel *)message atIndexPath:(NSIndexPath *)indexPath
+{
 	// Hide Hidden Messages
 	if([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
 	{
 		[cell setHidden:YES];
 	}
+	
+	// Set Name, Phone Number, and Message
+	[cell.labelName setText:message.SenderName];
+	[cell.labelPhoneNumber setText:message.SenderContact];
+	[cell.labelMessage setText:message.FormattedMessageText];
 	
 	// Set Date and Time
 	if(message.TimeReceived_LCL)
@@ -369,11 +370,6 @@
 		[cell.labelTime setText:time];
 	}
 	
-	// Set Name, Phone Number, and Message
-	[cell.labelName setText:message.SenderName];
-	[cell.labelPhoneNumber setText:message.SenderContact];
-	[cell.labelMessage setText:message.FormattedMessageText];
-	
 	// If Message has been read, change Status image to Unread icon
 	if([message.State isEqualToString:@"Unread"])
 	{
@@ -385,19 +381,19 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if defined(DEBUG)
-	[cell.labelName setText:@"TeleMed"];
-	[cell.labelPhoneNumber setText:@"800-420-4695"];
-	[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
-	
-	if(indexPath.row < 3)
-	{
-		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
-	}
-	else
-	{
-		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
-	}
+	#if DEBUG
+		[cell.labelName setText:@"TeleMed"];
+		[cell.labelPhoneNumber setText:@"800-420-4695"];
+		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
+		
+		if(indexPath.row < 3)
+		{
+			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
+		}
+		else
+		{
+			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
+		}
 	#endif
 	// END TESTING ONLY*/
 	
@@ -407,6 +403,58 @@
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
 	}
 	else if([message.Priority isEqualToString:@"Stat"])
+	{
+		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+	}
+	else
+	{
+		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:19.0/255.0 green:182.0/255.0 blue:38.0/255.0 alpha:1]];
+	}
+	
+	return cell;
+}
+
+- (UITableViewCell *)cellForSentMessage:(MessageCell *)cell withMessage:(SentMessageModel *)sentMessage atIndexPath:(NSIndexPath *)indexPath
+{
+	// Set Name, Phone Number, and Message
+	[cell.labelName setText:[sentMessage.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
+	[cell.labelPhoneNumber setText:@""];
+	[cell.labelMessage setText:sentMessage.FormattedMessageText];
+	
+	// Set Date and Time
+	if(sentMessage.FirstSent_LCL)
+	{
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+		NSDate *dateTime = [dateFormatter dateFromString:sentMessage.FirstSent_LCL];
+		
+		// If date is nil, it may have been formatted incorrectly
+		if(dateTime == nil)
+		{
+			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+			dateTime = [dateFormatter dateFromString:sentMessage.FirstSent_LCL];
+		}
+		
+		[dateFormatter setDateFormat:@"M/dd/yy"];
+		NSString *date = [dateFormatter stringFromDate:dateTime];
+		
+		[dateFormatter setDateFormat:@"h:mm a"];
+		NSString *time = [dateFormatter stringFromDate:dateTime];
+		
+		[cell.labelDate setText:date];
+		[cell.labelTime setText:time];
+	}
+	
+	// Hide Status image
+	[cell.imageStatus setHidden:YES];
+	[cell.constraintNameLeadingSpace setConstant:7.0f];
+	
+	// Set Message Priority color
+	if([sentMessage.Priority isEqualToString:@"Priority"])
+	{
+		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+	}
+	else if([sentMessage.Priority isEqualToString:@"Stat"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
 	}
@@ -482,7 +530,7 @@
 		
 		if([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
 		{
-			MessageModel *message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
+			MessageStub *message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
 			[message setMessageType:self.messagesType];
 			[messageDetailViewController setMessage:message];

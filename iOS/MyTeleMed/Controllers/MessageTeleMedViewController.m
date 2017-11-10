@@ -9,7 +9,6 @@
 #import "MessageTeleMedViewController.h"
 #import "MessageTeleMedComposeTableViewController.h"
 #import "EmailTelemedModel.h"
-#import "MessageModel.h"
 
 @interface MessageTeleMedViewController ()
 
@@ -33,7 +32,16 @@
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];
 	[self.emailTelemedModel setDelegate:self];
 	
-	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
+	// If Active or Archived Message, include its Message Delivery ID
+	if(self.message.MessageDeliveryID)
+	{
+		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
+	}
+	// If Sent Message
+	else
+	{
+		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
+	}
 }
 
 // Return pending from EmailTelemedModel delegate

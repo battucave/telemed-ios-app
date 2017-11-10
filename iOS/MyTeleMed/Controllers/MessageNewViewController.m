@@ -8,7 +8,7 @@
 
 #import "MessageNewViewController.h"
 #import "MessageComposeTableViewController.h"
-#import "MessageAccountPickerViewController.h"
+#import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
 #import "AccountModel.h"
 #import "NewMessageModel.h"
@@ -122,7 +122,7 @@
 	[errorAlertView show];
 }*/
 
-// Fired from MessageComposeTable to perform segue to either MessageAccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker
+// Fired from MessageComposeTable to perform segue to either AccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender
 {
 	// User only has one Account so skip the Account selection screen and go straight to MessageRecipientPickerTableViewController
@@ -130,10 +130,10 @@
 	{
 		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageNew" sender:sender];
 	}
-	// If user has more than one Account (or Accounts haven't loaded yet due to slow connection), then they must first select an Account from MessageAccountPickerTableViewController
+	// If user has more than one Account (or Accounts haven't loaded yet due to slow connection), then they must first select an Account from AccountPickerTableViewController
 	else
 	{
-		[self performSegueWithIdentifier:@"showMessageAccountPickerFromMessageNew" sender:sender];
+		[self performSegueWithIdentifier:@"showAccountPickerFromMessageNew" sender:sender];
 	}
 }
 
@@ -153,18 +153,18 @@
 		
 		[self.messageComposeTableViewController setDelegate:self];
 	}
-	else if([segue.identifier isEqualToString:@"showMessageAccountPickerFromMessageNew"])
+	else if([segue.identifier isEqualToString:@"showAccountPickerFromMessageNew"])
 	{
-		MessageAccountPickerViewController *messageAccountPickerViewController = segue.destinationViewController;
+		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
 		// Set Accounts
-		[messageAccountPickerViewController setAccounts:self.accounts];
+		[accountPickerViewController setAccounts:self.accounts];
 		
 		// Set Selected Account if previously set
-		[messageAccountPickerViewController setSelectedAccount:self.selectedAccount];
+		[accountPickerViewController setSelectedAccount:self.selectedAccount];
 		
 		// Set selected Message Recipients if previously set (to pass through to MessageRecipientPickerTableViewController)
-		[messageAccountPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+		[accountPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 	else if([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageNew"])
 	{

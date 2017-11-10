@@ -7,6 +7,14 @@
 //
 
 #import "CoreTableViewController.h"
+#import "NotificationSettingModel.h"
+#import <AudioToolbox/AudioServices.h>
+
+@interface CoreTableViewController ()
+
+@property (nonatomic) SystemSoundID systemSoundID;
+
+@end
 
 @implementation CoreTableViewController
 
@@ -55,9 +63,10 @@
 	
 	NSDictionary *aps = [userInfo objectForKey:@"aps"];
 	NSString *notificationType = [userInfo objectForKey:@"NotificationType"];
-	NSNumber *deliveryID = [userInfo objectForKey:@"DeliveryID"];
 	id alert = [aps objectForKey:@"alert"];
+	NSNumber *deliveryID;
 	NSString *message = nil;
+	NSString *tone = [aps objectForKey:@"sound"];
 	
 	// If no NotificationType was sent, assume it's a message.
 	if( ! notificationType)
@@ -69,6 +78,16 @@
 		{
 			notificationType = @"Comment";
 		}
+	}
+	
+	// Extract Delivery ID or Chat Message ID
+	if([notificationType isEqualToString:@"Comment"])
+	{
+		deliveryID = [userInfo objectForKey:@"DeliveryID"];
+	}
+	else if([notificationType isEqualToString:@"Chat"])
+	{
+		deliveryID = [userInfo objectForKey:@"ChatMsgID"];
 	}
 	
 	// Determine whether message was sent as an object or a string.
@@ -89,16 +108,57 @@
 	// If message does not exist, then this is a reminder. Ignore reminders.
 	if(message != nil)
 	{
-		[self handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
+		[self handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	}
 }
 
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
-	// Present user with the message from notification
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"MyTeleMed" message:message delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+	// Play notification sound
+	if(tone != nil)
+	{
+		// If tone is "default", then use iOS7's default tone (there is no way to retrieve system's default alert sound)
+		if([tone isEqualToString:@"default"])
+		{
+			NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
+			NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
+			
+			if([tones count] > 8)
+			{
+				tone = [notificationSettingModel getToneFromToneTitle:[tones objectAtIndex:8]]; // Default to Note tone
+			}
+		}
+		
+		NSString *tonePath = [[NSBundle mainBundle] pathForResource:tone ofType:nil];
 	
-	[alertView show];
+		if(tonePath != nil)
+		{
+			AudioServicesDisposeSystemSoundID(self.systemSoundID);
+			
+			NSURL *toneURL = [NSURL fileURLWithPath:tonePath];
+			AudioServicesCreateSystemSoundID((__bridge CFURLRef)toneURL, &_systemSoundID);
+			AudioServicesPlaySystemSound(self.systemSoundID);
+		}
+	}
+	
+	// Present user with the message from notification
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"MyTeleMed" message:message preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		// Stop notification sound
+		AudioServicesDisposeSystemSoundID(self.systemSoundID);
+	}];
+	
+	[alertController addAction:actionClose];
+	
+	// PreferredAction only supported in 9.0+
+	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[alertController setPreferredAction:actionClose];
+	}
+	
+	// Show Alert
+	[self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)dealloc

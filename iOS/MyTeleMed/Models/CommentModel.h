@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
 @protocol CommentDelegate <NSObject>
 
@@ -23,7 +23,7 @@
 
 @property (weak) id delegate;
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID;
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage;
+- (void)addMessageComment:(MessageStub*)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID;
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage;
 
 @end

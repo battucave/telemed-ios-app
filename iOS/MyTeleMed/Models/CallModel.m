@@ -32,9 +32,6 @@
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	NSLog(@"CallTeleMed");
-	NSLog(@"%@", parameters);
-	
 	// This Rest Service Method only returns after the phone call has been answered so increase timeout interval
 	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	

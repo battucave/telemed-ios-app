@@ -7,7 +7,7 @@
 //
 
 #import "CommentModel.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
 @interface CommentModel ()
 
@@ -19,17 +19,17 @@
 
 @implementation CommentModel
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
 {
 	[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:NO];
 }
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
 {
 	[self addMessageComment:message comment:comment withPendingID:nil toForwardMessage:toForwardMessage];
 }
 
-- (void)addMessageComment:(MessageModel *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
+- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
 {
 	// Show Activity Indicator only if not being added with Forward Message
 	if( ! toForwardMessage)
@@ -92,7 +92,7 @@
 		}
 		else
 		{
-			NSString *errorMessage = (toForwardMessage ? @"Message forward successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
+			NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Add Comment Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
@@ -120,7 +120,7 @@
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
-		NSString *errorMessage = (toForwardMessage ? @"Message forward successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
+		NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:errorMessage andTitle:@"Add Comment Error"];
 		
 		// Show error even if user has navigated to another screen

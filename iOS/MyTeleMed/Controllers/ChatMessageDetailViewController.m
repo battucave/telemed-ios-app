@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewChatMessage;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
+@property (nonatomic) NSString *navigationBarTitle;
 @property (nonatomic) NSString *textViewChatMessagePlaceholder;
 
 @property (nonatomic) BOOL isLoaded;
@@ -43,6 +44,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	// Store Navigation Bar Title
+	[self setNavigationBarTitle:self.navigationItem.title];
 	
 	// Set Current User ID
 	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
@@ -72,8 +76,8 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Get Chat Messages for Conversation ID if this is not a new Chat
-	if( ! self.isNewChat)
+	// Get Chat Messages for Conversation ID if its set (not a new Chat)
+	if(self.conversationID)
 	{
 		NSLog(@"Conversation ID: %@", self.conversationID);
 		
@@ -84,6 +88,10 @@
 		
 		// Hide Add Chat Participant button
 		[self.buttonAddChatParticipant setHidden:YES];
+	}
+	// Update navigation bar title if this is a new Chat
+	else if(self.isNewChat) {
+		[self.navigationItem setTitle:@"New Secure Chat"];
 	}
 	
 	// Detect taps on Text View Chat Participants to allow for toggling Participants list AND scrolling the textview
@@ -196,6 +204,9 @@
 				// Reset Is Loaded flag to show loading message
 				[self setIsLoaded:NO];
 				
+				// Update navigation bar title to reflect existing Conversation
+				[self.navigationItem setTitle:self.navigationBarTitle];
+				
 				break;
 			}
 		}
@@ -247,9 +258,10 @@
 			chatParticipantNames = [chatParticipantNamesArray componentsJoinedByString:@"\n"];
 			
 			/*/ TESTING ONLY
-			#if defined(DEBUG)
+			#if DEBUG
 				chatParticipantNames = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n", chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames];
-			#endif//*/
+			#endif
+			//*/
 		}
 		else
 		{
@@ -317,14 +329,14 @@
 }
 
 // Override default Remote Notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
 	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
 	
 	// Reload Chat Messages if remote notification is a Chat Message specifically for the current Conversation
-	if(self.conversationID && [notificationType isEqualToString:@"Chat"] && deliveryID && [deliveryID isEqualToNumber:self.conversationID])
+	if([notificationType isEqualToString:@"Chat"] && deliveryID && self.conversationID && [deliveryID isEqualToNumber:self.conversationID])
 	{
-		NSLog(@"Refresh Comments with Conversation ID: %@", deliveryID);
+		NSLog(@"Refresh Chat Messages with Conversation ID: %@", deliveryID);
 		
 		// Cancel queued Chat Messages refresh
 		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
@@ -335,7 +347,7 @@
 	}
 	
 	// If remote notification is NOT a Chat Message specifically for the current Conversation, execute the default notification message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
+	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 }
 
 // Reset Chat Messages back to Loading state
@@ -410,7 +422,7 @@
 		self.chatMessageCount = chatMessageCount;
 	});
 	
-	// Refresh Chat Messages again after delay
+	// Refresh Chat Messages again after 15 second delay
 	[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:15.0];
 }
 
@@ -426,6 +438,11 @@
 // Return pending from NewChatMessageModel delegate
 - (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
+	// Update navigation bar title to reflect existing Conversation
+	if(self.isNewChat) {
+		[self.navigationItem setTitle:self.navigationBarTitle];
+	}
+	
 	// Add Chat Message to Chat Messages Array
 	ChatMessageModel *chatMessage = [[ChatMessageModel alloc] init];
 	NSDate *currentDate = [[NSDate alloc] init];

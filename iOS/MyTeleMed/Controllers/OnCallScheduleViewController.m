@@ -241,7 +241,7 @@
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? ([self.segmentedControl selectedSegmentIndex] == 0 ? @"You are currently not on call." : @"You have no upcoming on call entries.") : @"Loading...")];
+		[emptyCell.textLabel setText:(self.isLoaded ? ([self.segmentedControl selectedSegmentIndex] == 0 ? @"You are not currently on call." : @"You have no upcoming on call entries.") : @"Loading...")];
 		
 		return emptyCell;
 	}

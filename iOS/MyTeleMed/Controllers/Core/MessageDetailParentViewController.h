@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 #import "MessageModel.h"
+#import "MessageStub.h"
 
 @interface MessageDetailParentViewController : CoreViewController
 
-@property (nonatomic) MessageModel *message;
+@property (nonatomic) MessageStub *message;
 @property (nonatomic) MessageModel *messageModel;
 
 @property (nonatomic) NSArray *messageEvents;
@@ -20,5 +21,12 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonArchive;
 @property (weak, nonatomic) IBOutlet UIButton *buttonForward;
+@property (weak, nonatomic) IBOutlet UIButton *buttonReturnCall;
+@property (weak, nonatomic) IBOutlet UIView *viewPriority;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonForwardLeadingSpace;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonForwardTrailingSpace;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonHistoryLeadingSpace;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonHistoryTrailingSpace;
 
 @end

@@ -62,7 +62,7 @@
 {
 	NSInteger selectedChatMessageCount = [self.selectedChatMessages count];
 	NSInteger unreadChatMessageCount = 0;
-	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this chat message" : @"these chat messages")];
+	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this secure chat message" : @"these secure chat messages")];
 	
 	// Ensure at least one selected Chat Message (should never happen as Delete button should be disabled when no Messages selected)
 	if(selectedChatMessageCount < 1)
@@ -81,15 +81,15 @@
 	// Update notification message if all of these Messages are Unread
 	if(unreadChatMessageCount == selectedChatMessageCount)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not yet been read. Selecting Continue will delete %@ from our system. Are you sure you want to continue?", (unreadChatMessageCount == 1 ? @"This chat message has" : @"These chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will delete %@ from our system.", (unreadChatMessageCount == 1 ? @"This secure chat message has" : @"These secure chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
 	else if(unreadChatMessageCount > 0)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these chat messages %@ not yet been read. Selecting Continue will delete %@ from our system. Are you sure you want to continue?", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not been read yet. Selecting Continue will delete %@ from our system.", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
 	
     [alertView show];
 }
@@ -110,15 +110,17 @@
 }
 
 // Override default Remote Notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
+	NSLog(@"Received Remote Notification ChatMessagesViewController");
+	
 	// Execute the default Notification Message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
+	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	
 	// Reload Chat Messages list to get the new Chat Message only if the notification was for a Chat Message
-	if([notificationType isEqualToString:@"Chat Message"])
+	if([notificationType isEqualToString:@"Chat"])
 	{
-		NSLog(@"Received Remote Notification ChatMessagesViewController");
+		NSLog(@"Refresh Chat Messages");
 		
 		[self.chatMessagesTableViewController reloadChatMessages];
 	}

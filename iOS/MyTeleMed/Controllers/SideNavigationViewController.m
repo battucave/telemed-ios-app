@@ -21,7 +21,6 @@
 @property (nonatomic) int onCallScheduleDefaultSegmentControlIndex;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableHeight;
 
 @property (nonatomic) BOOL isStatusLoaded;
 
@@ -33,9 +32,7 @@
 {
     [super viewDidLoad];
 	
-	//[self setMenuItems:@[@"Messages", @"Sent", @"Archives", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
-	//[self setMenuItems:@[@"Messages", @"Archives", @"Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
-	[self setMenuItems:@[@"Messages", @"Archives", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
+	[self setMenuItems:@[@"Messages", @"Sent", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
 	[self setMyStatusModel:[MyStatusModel sharedInstance]];
 }
@@ -44,10 +41,10 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Adjust Table Height to match number of Menu Items to avoid extra separator lines
-	self.constraintTableHeight.constant = [self.menuItems count] * 44 + 23;
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// Update Message Counts on Messages Row and On Call Date on On Call Schedule Row
+	// Update Message Counts on Messages row and On Call Date on On Call Schedule row
 	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 	{
 		[self setIsStatusLoaded:YES];
@@ -89,9 +86,14 @@
 	// Fix issue in iPad where background defaulted to White (unfixable in IB because of bug)
 	[cell setBackgroundColor:[UIColor clearColor]];
 	
-	// Force left inset of 15.0 for iOS 8+
-	if([cell respondsToSelector:@selector(setLayoutMargins:)])
+	// Fix bugs on iOS < 10
+	if( ! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 	{
+		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
+		[cell setPreservesSuperviewLayoutMargins:NO];
+		[cell.contentView setPreservesSuperviewLayoutMargins:NO];
+		
+		// Fix issue in iOS 8-9 where label has too much left margin
 		[cell setLayoutMargins:UIEdgeInsetsZero];
 	}
 }
@@ -102,8 +104,8 @@
 	NSString *CellIdentifier = [self.menuItems objectAtIndex:indexPath.row];
 	SideNavigationCountCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	
-	// If cell is for Chat or Messages
-	if([CellIdentifier isEqualToString:@"Chat"] || [CellIdentifier isEqualToString:@"Messages"])
+	// If cell is for Secure Chat or Messages
+	if([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
 	{
 		// Hide Message Counts by default
 		[cell.labelCounts setHidden:YES];
@@ -111,8 +113,8 @@
 		// If StatusModel has finished loading
 		if(self.isStatusLoaded)
 		{
-			// If cell is for Chat, set Chat Counts
-			if([CellIdentifier isEqualToString:@"Chat"])
+			// If cell is for Secure Chat, set Chat Counts
+			if([CellIdentifier isEqualToString:@"Secure Chat"])
 			{
 				[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
 			}
@@ -134,8 +136,8 @@
 			CGRect newFrame = cell.labelCounts.frame;
 			
 			// Increase new frame size and restore its old height
-			newFrame.size.width = newFrame.size.width + 12.0;
-			newFrame.size.height = oldFrame.size.height;
+			newFrame.size.width = newFrame.size.width + 22.0;
+			newFrame.size.height = oldFrame.size.height+ 4.0;
 			
 			[cell.labelCounts setFrame:newFrame];
 			[cell.constraintCountsWidth setConstant:newFrame.size.width];
@@ -184,7 +186,7 @@
 			else
 			{
 				// Add right padding to On Call Schedule cell
-				[cell setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 35.0f)];
+				[cell setLayoutMargins:UIEdgeInsetsZero];
 			}
 			
 			[cell.detailTextLabel setText:nextOnCallDate];
@@ -196,7 +198,8 @@
 	if(indexPath.row == 0)
 	{
 		UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-		topLineView.backgroundColor = [UIColor colorWithRed:105.0/255.0 green:105.0/255.0 blue:105.0/255.0 alpha:1];
+		topLineView.backgroundColor = [UIColor colorWithRed:125.0/255.0 green:125.0/255.0 blue:125.0/255.0 alpha:1];
+		
 		[cell.contentView addSubview:topLineView];
 	}
 	

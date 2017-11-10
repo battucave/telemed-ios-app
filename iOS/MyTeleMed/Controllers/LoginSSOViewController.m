@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *changeIDPRoviderButton;
 
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isRetry;
@@ -33,6 +34,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	// TEMPORARY: Client requested to hide Change ID Provider button
+	[self.changeIDPRoviderButton setTitle:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,7 +130,8 @@
 	
 	for(NSHTTPCookie *cookie in [cookieStorage cookies])
 	{
-		NSRange domainRange = [[cookie domain] rangeOfString:BASE_DOMAIN];
+		NSString *baseDomain = [BASE_URL stringByReplacingOccurrencesOfString:@"https://" withString:@""];
+		NSRange domainRange = [[cookie domain] rangeOfString:baseDomain];
 		
 		if(domainRange.length > 0)
 		{
@@ -330,11 +335,39 @@
 		// Update background to be transparent
 		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
 		
-		#if defined(DEBUG)
-			[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'shanegoodwin'; document.getElementById('passwordTextBox').value = 'tm4321$$';"];
-			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'mattrogers'; document.getElementById('passwordTextBox').value = 'tm4321$$';"];
-			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'bturner'; document.getElementById('passwordTextBox').value = 'passw0rd';"];
-			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'jhutchison'; document.getElementById('passwordTextBox').value = 'passw0rd';"];
+		#if DEBUG
+			NSString *javascript = [NSString stringWithFormat:@
+				"var $userName = document.getElementById('userNameTextBox');"
+				"var $password = document.getElementById('passwordTextBox');"
+				
+				/* Not supported in UIWebView
+				"const $dataList = document.createElement('datalist'); $dataList.setAttribute('userNameDataList');"
+				"['shanegoodwin', 'bturner', 'jhutchison', 'mattrogers'].forEach(function(userName) {"
+					"var $option = document.createElement('option');"
+					"$option.value = userName;"
+					"$dataList.appendChild($option);"
+				"});"
+				"$userName.setAttribute('userNameDataList');"
+				"$userName.parentNode.insertBefore($dataList, $userName.nextSibling);"*/
+				
+				// "$userName.value = 'shanegoodwin'; $password.value = 'tm4321$$';"
+				// "$userName.value = 'mattrogers'; $password.value = 'tm4321$$';"
+				// "$userName.value = 'bturner'; $password.value = 'passw0rd';"
+				// "$userName.value = 'jhutchison'; $password.value = 'passw0rd';"
+				
+				"$userName.setAttribute('placeholder', 'User Name 1st Letter');"
+				
+				"$userName.addEventListener('blur', function(event) {"
+					"switch ($userName.value) {"
+						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
+						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
+						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+					"}"
+				"});"
+			];
+		
+			[self.webView stringByEvaluatingJavaScriptFromString:javascript];
 		#endif
 	}
 	// URL is the Forgot Password screen

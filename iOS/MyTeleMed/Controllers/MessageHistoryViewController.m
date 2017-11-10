@@ -52,12 +52,6 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Disable Archive Button for already Archived messages
-	if(self.isArchived)
-	{
-		[self.buttonArchive setEnabled:NO];
-	}
-	
 	// Disable Forward Button if no Message Recipients available
 	if( ! self.canForward)
 	{
@@ -165,13 +159,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// iOS8+ Auto Height
-	if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		return UITableViewAutomaticDimension;
-	}
+	return UITableViewAutomaticDimension;
 	
-	// Manually determine height for < iOS8
-	static NSString *cellIdentifier = @"MessageEventCell";
+	// Deprecated: Manually determine height for < iOS8
+	/*static NSString *cellIdentifier = @"MessageEventCell";
 	MessageEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
@@ -191,7 +182,7 @@
 		cellHeight = 40.0f;
 	}
 	
-	return cellHeight;
+	return cellHeight;*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

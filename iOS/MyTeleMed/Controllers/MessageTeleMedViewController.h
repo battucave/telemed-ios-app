@@ -7,10 +7,10 @@
 //
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
 @interface MessageTeleMedViewController : CoreViewController
 
-@property (nonatomic) MessageModel *message;
+@property (nonatomic) MessageStub *message;
 
 @end

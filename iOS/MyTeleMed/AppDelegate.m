@@ -55,13 +55,13 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
-	#if !(TARGET_IPHONE_SIMULATOR) && !defined(DEBUG)
+	#if !TARGET_IPHONE_SIMULATOR && !DEBUG
 		// Initialize Carrier
 		CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
 		CTCarrier *carrier = [networkInfo subscriberCellularProvider];
 	
 		// AT&T and T-Mobile are guaranteed to support Voice and Data simultaneously, so turn off CDMAVoiceData message by default for them
-		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"] || [carrier.carrierName hasPrefix:@"T-M"])
+		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
 		{
 			[settings setBool:YES forKey:@"CDMAVoiceDataDisabled"];
 		}
@@ -128,7 +128,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+	// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 	
 	// Remove view over app that was used to obsure screenshot (calling it here speeds up dismissal of screenshot when returning from background)
 	[self toggleScreenshotView:YES];
@@ -191,7 +191,7 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-	NSLog(@"My token is: %@", deviceToken);
+	NSLog(@"My Device Token: %@", deviceToken);
     
     // Convert the token to a hex string and make sure it's all caps  
     NSMutableString *tokenString = [NSMutableString stringWithString:[[deviceToken description] uppercaseString]];  
@@ -230,51 +230,64 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
 	// IMPORTANT: TeleMed's test and production servers both send push notifications through Apple's production server. Only apps signed with Ad Hoc or Distribution provisioning profiles can receive these notifications - not Debug.
-	// To test on debug, find/generate a Sandbox Push Notification Certificate for TeleMed (com.solutionbuilt.telemed-debug) and save its .cer file somewhere. Then use "APN Tester Free" Mac app to send push notifications to a specific device using its Device Token.
-		// Sample Notifications that can be used with APNS Tester Free (these are real notifications that come from TeleMed)
-		/* Message Push Notification
-		{
-			"aps":
-			{
-				"alert":"3 new messages.",
-				"badge":3,
-				"sound":"note"
-			},
-			"NotificationType":"Message"
-		}*/
-
-		/* Comment Push Notification
-		{
-			"aps":
-			{
-				"alert":"Dr. Matt Rogers added a comment to a message.",
-				"sound":"circles"
-			},
-			"DeliveryID":5133538688695397,
-			"NotificationType":"Comment"
-		}*/
+	// See project's ReadMe.md for instructions on how to test push notifications using APN Tester Free.
 	
-		/* Chat Push Notification
+	// Sample Notifications that can be used with APN Tester Free (these are real notifications that come from TeleMed)
+	/* Message Push Notification
+	{
+		"NotificationType":"Message",
+		"aps":
 		{
-			"aps":
-			{
-				"alert":"Matt Rogers:What's happening?",
-				"sound":"note"
-			},
-			"ChatMsgID":12345,
-			"NotificationType":"Chat"
-		}*/
+			"alert":"3 new messages.",
+			"badge":3,
+			"sound":"note.caf"
+		}
+	}*/
+
+	/* Comment Push Notification
+	{
+		"DeliveryID":5133538688695397,
+		"NotificationType":"Comment",
+		"aps":
+		{
+			"alert":"Dr. Matt Rogers added a comment to a message.",
+			"sound":"circles.caf"
+		}
+	}*/
+
+	/* Chat Push Notification
+	{
+		"ChatMsgID":5594182060867965,
+		"NotificationType":"Chat",
+		"aps":
+		{
+			"alert":"Matt Rogers:What's happening?",
+			"sound":"nuclear.caf"
+		}
+	}*/
 	
 	/*/ TESTING ONLY (push notifications can generally only be tested in Ad Hoc mode where nothing can be logged, so show result in an alert instead)
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		// No action needed
+	}];
 	
-	[alertView show];
+	[alertController addAction:actionClose];
+	
+	// PreferredAction only supported in 9.0+
+	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[alertController setPreferredAction:actionClose];
+	}
+	
+	// Show Alert
+	[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	
 	// END TESTING ONLY*/
 	
-	UIApplicationState state = [application applicationState];
-	
 	// Handle Push Notification when App is Active.
-	if(state == UIApplicationStateActive)
+	if([application applicationState] == UIApplicationStateActive)
 	{
 		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
@@ -381,8 +394,8 @@
 					NSLog(@"Phone Number Invalid");
 					
 					// If using Simulator, skip Phone Number step because it is always invalid
-					#if defined(DEBUG)
-					//#if (TARGET_IPHONE_SIMULATOR)
+					// #if DEBUG
+					#if TARGET_IPHONE_SIMULATOR
 						NSLog(@"Skip Phone Number step when on Simulator or Debugging");
 						
 						[self showMainScreen];

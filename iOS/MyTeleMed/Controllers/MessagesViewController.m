@@ -24,8 +24,6 @@
 
 @property (weak, nonatomic) MessagesTableViewController *messagesTableViewController;
 
-@property (nonatomic) MessageModel *messageModel;
-
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonArchive; // (Must be strong reference)
@@ -67,8 +65,7 @@
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
 	if([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 11 (Keep Swipe Message there as it will simply be hidden under the Container View and we can still use the top border of it)
-		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
+		self.constraintTopSpace.constant = 0;
 	}
 	
 	[self toggleToolbarButtons:NO];
@@ -100,12 +97,12 @@
 	// Update notification message if all of these messages are Unread
 	if(unreadMessageCount == selectedMessageCount)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not yet been read. Selecting Continue will archive and close out %@ from our system. Are you sure you want to continue?", (unreadMessageCount == 1 ? @"This message has" : @"These messages have"), (unreadMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (unreadMessageCount == 1 ? @"This message has" : @"These messages have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
 	else if(unreadMessageCount > 0)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these messages %@ not yet been read. Selecting Continue will archive and close out %@ from our system. Are you sure you want to continue?", (long)unreadMessageCount, (unreadMessageCount == 1 ? @"has" : @"have"), (unreadMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these messages %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (long)unreadMessageCount, (unreadMessageCount == 1 ? @"has" : @"have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Archive Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
@@ -113,40 +110,29 @@
     [alertView show];
 }
 
-// User clicked one of the UISegmented Control options: (All, Stat, Priority, Normal)
-- (IBAction)setPriorityFilter:(id)sender
-{
-	if([self.messagesTableViewController respondsToSelector:@selector(filterActiveMessages:)])
-	{
-		[self.messagesTableViewController filterActiveMessages:(int)[self.segmentedControl selectedSegmentIndex]];
-	}
-}
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if(buttonIndex > 0)
 	{
-		// Added this because a minority of users were complaining that Archiving sometimes causes crash
-		if(self.messageModel == nil)
-		{
-			[self setMessageModel:[[MessageModel alloc] init]];
-			[self.messageModel setDelegate:self];
-		}
+		MessageModel *messageModel = [[MessageModel alloc] init];
+		[messageModel setDelegate:self];
 		
-		[self.messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
+		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
 	}
 }
 
 // Override default Remote Notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
+	NSLog(@"Received Remote Notification MessagesViewController");
+	
 	// Execute the default Notification Message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
+	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	
 	// Reload Messages list to get the new Message only if the notification was for a Message
 	if([notificationType isEqualToString:@"Message"])
 	{
-		NSLog(@"Received Remote Notification MessagesViewController");
+		NSLog(@"Refresh Messages");
 		
 		[self.messagesTableViewController reloadMessages];
 	}
@@ -249,52 +235,6 @@
 	// Update Selected Messages to only the Failed Messages
 	self.selectedMessages = failedMessages;
 }
-
-/*/ Return Multiple Message States success from MessageModel delegate (no longer used)
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
-{
-	// Remove selected rows from MessagesTableViewController
-	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
-	
-	[self setEditing:NO animated:YES];
-}
-
-// Return Multiple Message States error from MessageModel delegate (no longer used)
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state
-{
-	// Default to all Messages failed to send
-	NSString *errorMessage = @"There was a problem archiving your Messages. Please try again.";
-	
-	// Only some Messages failed to send
-	if([failedMessageIDs count] > 0 && [failedMessageIDs count] != [self.selectedMessages count])
-	{
-		errorMessage = @"There was a problem archiving some of your Messages. Please try again.";
-		
-		// Remove rows of successfully archived Messages in MessagesTableViewController
-		NSMutableArray *messagesForRemoval = [[NSMutableArray alloc] initWithArray:[self.selectedMessages copy]];
-		
-		// If Message failed to archive, exclude it from Messages to be removed
-		for(NSString *failedMessageID in failedMessageIDs)
-		{
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", failedMessageID];
-			NSArray *results = [messagesForRemoval filteredArrayUsingPredicate:predicate];
-			
-			if([results count] > 0)
-			{
-				MessageModel *message = [results objectAtIndex:0];
-				
-				[messagesForRemoval removeObject:message];
-			}
-		}
-		
-		[self.messagesTableViewController removeSelectedMessages:messagesForRemoval];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Archive Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
-}*/
-
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController

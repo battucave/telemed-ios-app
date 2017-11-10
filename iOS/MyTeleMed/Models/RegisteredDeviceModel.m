@@ -74,13 +74,13 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback
 {
 	// Device Simulator has no Phone Number and no Device Token. Continuing will cause Web Service Error
-	#if defined(DEBUG)
-	//#if (TARGET_IPHONE_SIMULATOR)
-	NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
-	
-	callback(YES, nil);
-	
-	return;
+	// #if DEBUG
+	#if TARGET_IPHONE_SIMULATOR
+		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
+		
+		callback(YES, nil);
+		
+		return;
 	#endif
 	
 	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from [AppDelegate didRegisterForRemoteNotificationsWithDeviceToken]
