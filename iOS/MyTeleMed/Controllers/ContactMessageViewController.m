@@ -6,11 +6,11 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
-#import "ContactEmailViewController.h"
+#import "ContactMessageViewController.h"
 #import "MessageTeleMedComposeTableViewController.h"
 #import "EmailTelemedModel.h"
 
-@interface ContactEmailViewController ()
+@interface ContactMessageViewController ()
 
 @property (nonatomic) MessageTeleMedComposeTableViewController *messageTeleMedComposeTableViewController;
 
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation ContactEmailViewController
+@implementation ContactMessageViewController
 
 - (void)viewDidLoad
 {

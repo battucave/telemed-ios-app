@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 
-@interface ContactEmailViewController : CoreViewController
+@interface ContactMessageViewController : CoreViewController
 
 @end

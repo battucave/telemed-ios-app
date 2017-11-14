@@ -335,12 +335,13 @@
 		// Update background to be transparent
 		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
 		
+		// Debug mode login shortcuts
 		#if DEBUG
 			NSString *javascript = [NSString stringWithFormat:@
 				"var $userName = document.getElementById('userNameTextBox');"
 				"var $password = document.getElementById('passwordTextBox');"
 				
-				/* Not supported in UIWebView
+				/* Convert input text to a dropdown (not supported in UIWebView)
 				"const $dataList = document.createElement('datalist'); $dataList.setAttribute('userNameDataList');"
 				"['shanegoodwin', 'bturner', 'jhutchison', 'mattrogers'].forEach(function(userName) {"
 					"var $option = document.createElement('option');"
@@ -350,19 +351,23 @@
 				"$userName.setAttribute('userNameDataList');"
 				"$userName.parentNode.insertBefore($dataList, $userName.nextSibling);"*/
 				
-				// "$userName.value = 'shanegoodwin'; $password.value = 'tm4321$$';"
-				// "$userName.value = 'mattrogers'; $password.value = 'tm4321$$';"
-				// "$userName.value = 'bturner'; $password.value = 'passw0rd';"
-				// "$userName.value = 'jhutchison'; $password.value = 'passw0rd';"
-				
+				// Update username placeholder to remind me of shortcut
 				"$userName.setAttribute('placeholder', 'User Name 1st Letter');"
 				
+				// Add event on username to auto-populate form on blur if value matches shortcut value
 				"$userName.addEventListener('blur', function(event) {"
 					"switch ($userName.value) {"
 						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
 						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
 						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
 						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+					"}"
+				"});"
+				
+				// Add event on username to automatically submit form when Enter key pressed
+				"$userName.addEventListener('keypress', function(event) {"
+					"if (event.code == 'Enter' && $userName.value.length == 1) {"
+						"$userName.blur();"
 					"}"
 				"});"
 			];
