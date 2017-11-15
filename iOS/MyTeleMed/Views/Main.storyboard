@@ -400,7 +400,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Prq-9q-GCl">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MyTeleMed" translatesAutoresizingMaskIntoConstraints="NO" id="Prq-9q-GCl">
                                 <rect key="frame" x="48" y="30" width="280" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="S7G-Au-N4w"/>
@@ -4552,7 +4552,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </scene>
     </scenes>
     <resources>
-        <image name="Logo" width="300" height="75"/>
+        <image name="Logo-MyTeleMed" width="300" height="75"/>
         <image name="button-AddComment.png" width="60" height="45"/>
         <image name="button-Contact-Call.png" width="62" height="82"/>
         <image name="button-Contact-Mail.png" width="62" height="82"/>

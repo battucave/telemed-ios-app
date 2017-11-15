@@ -27,9 +27,6 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window;
-
-
 #pragma mark - Application Delegate Methods
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -488,22 +485,11 @@
 		// Only show Screenshot View if it is not already visible
 		if(screenshotView == nil)
 		{
-			UIImageView *screenshotView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LaunchImage"]];
+			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"Launch Screen" owner:self options:nil] objectAtIndex:0];
 			UIScreen *screen = [UIScreen mainScreen];
 			
-			// iPhone 6+
-			if(screen.currentMode.size.width == 1242)
-			{
-				screenshotView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LaunchImage-800-Portrait-736h@3x"]];
-			}
-			// iPhone 6
-			else if(screen.currentMode.size.width == 750)
-			{
-				screenshotView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LaunchImage-800-667h@2x"]];
-			}
-			
 			[screenshotView setContentMode:UIViewContentModeScaleAspectFill];
-			[screenshotView setFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+			[screenshotView setFrame:CGRectMake(0.0f, 0.0f, screen.bounds.size.width, screen.bounds.size.height)];
 			[screenshotView setTag:8353633];
 			[self.window addSubview:screenshotView];
 			[self.window bringSubviewToFront:screenshotView];

@@ -7,11 +7,11 @@
 //
 
 /**
- * WEB SERVICES
+ * BASE_URL
  * Set in project's Build Settings' Preprocessor Macros
  */
 
-#define API_BASE_URL BASE_URL @"/MyTmdWebApi/api/"
+#define API_BASE_URL BASE_URL @"/" API_PREFIX @"/api/"
 #define AUTHENTICATION_BASE_URL BASE_URL @"/Auth/"
 #define AUTHENTICATION_CALLBACK_PAGE @"Authentication/Success"
 

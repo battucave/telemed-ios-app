@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MyTeleMed" translatesAutoresizingMaskIntoConstraints="NO" id="vFU-OY-4yh">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="vFU-OY-4yh">
                                 <rect key="frame" x="40.5" y="296" width="294" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="294" id="aRt-pq-dNg"/>
@@ -53,7 +53,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MyTeleMed" translatesAutoresizingMaskIntoConstraints="NO" id="QCH-SR-qFX">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="QCH-SR-qFX">
                                 <rect key="frame" x="47.5" y="30" width="280" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="ZBb-02-OoK"/>
@@ -165,7 +165,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MyTeleMed" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-HG-IID">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-HG-IID">
                                 <rect key="frame" x="47.5" y="30" width="280" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="lZZ-2S-GjF"/>
@@ -297,7 +297,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MyTeleMed" translatesAutoresizingMaskIntoConstraints="NO" id="8nY-Zs-edb">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="8nY-Zs-edb">
                                 <rect key="frame" x="47.5" y="30" width="280" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="8me-Mc-jNa"/>
@@ -408,7 +408,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Logo-MyTeleMed" width="300" height="75"/>
+        <image name="Logo" width="300" height="75"/>
         <image name="background-PhoneNumber.png" width="300" height="45"/>
         <image name="button-Cancel.png" width="74" height="15"/>
         <image name="button-Continue.png" width="90" height="15"/>
