@@ -232,8 +232,13 @@
 			
 			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], settings.Tone);
 			
+			// Priority Message Notification Settings removed in version 3.85. If saving Notification Settings for Normal Messages, then also save them for Priority Messages
+			if([name isEqualToString:@"normal"])
+			{
+				[self saveNotificationSettingsByName:@"priority" settings:settings];
+			}
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
+			else if([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
 			}

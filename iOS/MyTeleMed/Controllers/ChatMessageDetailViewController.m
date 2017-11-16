@@ -252,7 +252,7 @@
 			[self.textViewChatMessage resignFirstResponder];
 			
 			// Extract Formatted Names into array
-			NSArray *chatParticipantNamesArray = [self.selectedChatParticipants valueForKey:@"FormattedNameLNF"];
+			NSArray *chatParticipantNamesArray = [chatParticipants valueForKey:@"FormattedNameLNF"];
 			
 			// Flatten array into string with line breaks
 			chatParticipantNames = [chatParticipantNamesArray componentsJoinedByString:@"\n"];

@@ -35,7 +35,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	// If Notification Settings are not nil, then we are returning from MessageRecipientPickerViewController and don't want to reset the settings
+	// If Notification Settings are not nil, then we are returning from SettingsNotificationsPickerViewController and don't want to reset the settings
 	if(self.notificationSettings != nil)
 	{
 		return;
@@ -50,26 +50,20 @@
 			[self.navigationItem setTitle:@"Stat Messages"];
 			break;
 		
-		// Priority Message Settings
-		case 1:
-			[self setNotificationSettingsName:@"priority"];
-			[self.navigationItem setTitle:@"Priority Messages"];
-			break;
-		
 		// Normal Message Settings
-		case 2:
+		case 1:
 			[self setNotificationSettingsName:@"normal"];
 			[self.navigationItem setTitle:@"Normal Messages"];
 			break;
 		
 		// Chat Message Settings
-		case 3:
+		case 2:
 			[self setNotificationSettingsName:@"chat"];
 			[self.navigationItem setTitle:@"Secure Chat Messages"];
 			break;
 		
 		// Comment Settings
-		case 4:
+		case 3:
 			[self setNotificationSettingsName:@"comment"];
 			[self.navigationItem setTitle:@"Comments"];
 			break;
@@ -164,7 +158,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide everything except Alert Sound for Comments
-	return (self.notificationSettingsType == 4 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	return (self.notificationSettingsType == 3 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

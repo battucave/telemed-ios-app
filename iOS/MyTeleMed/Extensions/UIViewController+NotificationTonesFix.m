@@ -27,7 +27,7 @@
 	[settings removeObjectForKey:@"notificationTonesConverted"];
 	
 	[self verifyNotificationToneForName:@"stat"];
-	[self verifyNotificationToneForName:@"priority"];
+	// [self verifyNotificationToneForName:@"priority"]; // Version 3.85+ saves priority settings with normal settings
 	[self verifyNotificationToneForName:@"normal"];
 	[self verifyNotificationToneForName:@"comment"];
 	
