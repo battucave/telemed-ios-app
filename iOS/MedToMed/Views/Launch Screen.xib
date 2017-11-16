@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="YbA-iH-AFQ">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MedToMed" translatesAutoresizingMaskIntoConstraints="NO" id="YbA-iH-AFQ">
                     <rect key="frame" x="40.5" y="296" width="294" height="75"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="75" id="515-Z1-Arg"/>
@@ -33,6 +33,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Logo" width="300" height="75"/>
+        <image name="Logo-MedToMed" width="300" height="75"/>
     </resources>
 </document>

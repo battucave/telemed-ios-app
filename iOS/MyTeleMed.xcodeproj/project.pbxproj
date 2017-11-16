@@ -319,7 +319,6 @@
 		E250374C1FBB88F400099C7E /* bamboo.caf in Resources */ = {isa = PBXBuildFile; fileRef = 283DF29B18CA09EE00A344D2 /* bamboo.caf */; };
 		E250374D1FBB88F400099C7E /* button-Navigation-Sent@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567271CDB85B80054FD3F /* button-Navigation-Sent@3x.png */; };
 		E250374E1FBB88F400099C7E /* button-MessageDetail-Archive.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567721CDB85B80054FD3F /* button-MessageDetail-Archive.png */; };
-		E250374F1FBB88F400099C7E /* image-SideNavigationLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673D1CDB85B80054FD3F /* image-SideNavigationLogo@2x.png */; };
 		E25037501FBB88F400099C7E /* minuet.caf in Resources */ = {isa = PBXBuildFile; fileRef = 283DF2BB18CA09EE00A344D2 /* minuet.caf */; };
 		E25037511FBB88F400099C7E /* fanfare.caf in Resources */ = {isa = PBXBuildFile; fileRef = 283DF2C818CA09EE00A344D2 /* fanfare.caf */; };
 		E25037521FBB88F400099C7E /* news_flash.caf in Resources */ = {isa = PBXBuildFile; fileRef = E28307F01AD83170006FDD6D /* news_flash.caf */; };
@@ -364,10 +363,8 @@
 		E25037791FBB88F400099C7E /* button-Navigation-Messages.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672B1CDB85B80054FD3F /* button-Navigation-Messages.png */; };
 		E250377A1FBB88F400099C7E /* button-Contact-Mail@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567531CDB85B80054FD3F /* button-Contact-Mail@3x.png */; };
 		E250377B1FBB88F400099C7E /* button-AddComment@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5675B1CDB85B80054FD3F /* button-AddComment@3x.png */; };
-		E250377C1FBB88F400099C7E /* image-SideNavigationLogo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674C1CDB85B80054FD3F /* image-SideNavigationLogo@3x.png */; };
 		E250377D1FBB88F400099C7E /* alarm.caf in Resources */ = {isa = PBXBuildFile; fileRef = 283DF2B918CA09EE00A344D2 /* alarm.caf */; };
 		E250377E1FBB88F400099C7E /* background-Login.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5671B1CDB85B80054FD3F /* background-Login.png */; };
-		E250377F1FBB88F400099C7E /* image-SideNavigationLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567311CDB85B80054FD3F /* image-SideNavigationLogo.png */; };
 		E25037801FBB88F400099C7E /* choo_choo.caf in Resources */ = {isa = PBXBuildFile; fileRef = 283DF30518CA13BB00A344D2 /* choo_choo.caf */; };
 		E25037811FBB88F400099C7E /* suspense.caf in Resources */ = {isa = PBXBuildFile; fileRef = 283DF2C518CA09EE00A344D2 /* suspense.caf */; };
 		E25037821FBB88F400099C7E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 28CCCD4817F517A50093CEE2 /* InfoPlist.strings */; };
@@ -509,7 +506,6 @@
 		E2D567951CDB85B80054FD3F /* button-Navigation-LogOut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */; };
 		E2D567961CDB85B80054FD3F /* background-PhoneNumber@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */; };
 		E2D567971CDB85B80054FD3F /* button-Continue.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567301CDB85B80054FD3F /* button-Continue.png */; };
-		E2D567981CDB85B80054FD3F /* image-SideNavigationLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567311CDB85B80054FD3F /* image-SideNavigationLogo.png */; };
 		E2D567991CDB85B80054FD3F /* background-Login@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567321CDB85B80054FD3F /* background-Login@3x.png */; };
 		E2D5679A1CDB85B80054FD3F /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567331CDB85B80054FD3F /* menu.png */; };
 		E2D5679B1CDB85B80054FD3F /* icon-Mail-Read@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */; };
@@ -521,7 +517,6 @@
 		E2D567A11CDB85B80054FD3F /* indicator-CommentLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */; };
 		E2D567A21CDB85B80054FD3F /* button-Help-PDF@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */; };
 		E2D567A31CDB85B80054FD3F /* button-Save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */; };
-		E2D567A41CDB85B80054FD3F /* image-SideNavigationLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673D1CDB85B80054FD3F /* image-SideNavigationLogo@2x.png */; };
 		E2D567A51CDB85B80054FD3F /* background-PhoneNumber@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */; };
 		E2D567A61CDB85B80054FD3F /* button-AddComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */; };
 		E2D567A71CDB85B80054FD3F /* button-Navigation-ForgotPassword@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567401CDB85B80054FD3F /* button-Navigation-ForgotPassword@3x.png */; };
@@ -536,7 +531,6 @@
 		E2D567B01CDB85B80054FD3F /* button-Help-Video@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567491CDB85B80054FD3F /* button-Help-Video@3x.png */; };
 		E2D567B11CDB85B80054FD3F /* button-Help-PDF.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */; };
 		E2D567B21CDB85B80054FD3F /* indicator-CommentRight.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */; };
-		E2D567B31CDB85B80054FD3F /* image-SideNavigationLogo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674C1CDB85B80054FD3F /* image-SideNavigationLogo@3x.png */; };
 		E2D567B41CDB85B80054FD3F /* button-Navigation-ContactTeleMed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674D1CDB85B80054FD3F /* button-Navigation-ContactTeleMed@2x.png */; };
 		E2D567B51CDB85B80054FD3F /* button-Cancel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674E1CDB85B80054FD3F /* button-Cancel@3x.png */; };
 		E2D567B61CDB85B80054FD3F /* button-Navigation-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674F1CDB85B80054FD3F /* button-Navigation-Help@3x.png */; };
@@ -994,7 +988,6 @@
 		E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-LogOut@2x.png"; sourceTree = "<group>"; };
 		E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-PhoneNumber@3x.png"; sourceTree = "<group>"; };
 		E2D567301CDB85B80054FD3F /* button-Continue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Continue.png"; sourceTree = "<group>"; };
-		E2D567311CDB85B80054FD3F /* image-SideNavigationLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-SideNavigationLogo.png"; sourceTree = "<group>"; };
 		E2D567321CDB85B80054FD3F /* background-Login@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-Login@3x.png"; sourceTree = "<group>"; };
 		E2D567331CDB85B80054FD3F /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-Mail-Read@2x.png"; sourceTree = "<group>"; };
@@ -1006,7 +999,6 @@
 		E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentLeft.png"; sourceTree = "<group>"; };
 		E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help-PDF@2x.png"; sourceTree = "<group>"; };
 		E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Save@3x.png"; sourceTree = "<group>"; };
-		E2D5673D1CDB85B80054FD3F /* image-SideNavigationLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-SideNavigationLogo@2x.png"; sourceTree = "<group>"; };
 		E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-PhoneNumber@2x.png"; sourceTree = "<group>"; };
 		E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-AddComment@2x.png"; sourceTree = "<group>"; };
 		E2D567401CDB85B80054FD3F /* button-Navigation-ForgotPassword@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ForgotPassword@3x.png"; sourceTree = "<group>"; };
@@ -1021,7 +1013,6 @@
 		E2D567491CDB85B80054FD3F /* button-Help-Video@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help-Video@3x.png"; sourceTree = "<group>"; };
 		E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help-PDF.png"; sourceTree = "<group>"; };
 		E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRight.png"; sourceTree = "<group>"; };
-		E2D5674C1CDB85B80054FD3F /* image-SideNavigationLogo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-SideNavigationLogo@3x.png"; sourceTree = "<group>"; };
 		E2D5674D1CDB85B80054FD3F /* button-Navigation-ContactTeleMed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ContactTeleMed@2x.png"; sourceTree = "<group>"; };
 		E2D5674E1CDB85B80054FD3F /* button-Cancel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Cancel@3x.png"; sourceTree = "<group>"; };
 		E2D5674F1CDB85B80054FD3F /* button-Navigation-Help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-Help@3x.png"; sourceTree = "<group>"; };
@@ -1816,9 +1807,6 @@
 				E2D567451CDB85B80054FD3F /* image-ContactLogo.png */,
 				E2D567381CDB85B80054FD3F /* image-ContactLogo@2x.png */,
 				E2D5672D1CDB85B80054FD3F /* image-ContactLogo@3x.png */,
-				E2D567311CDB85B80054FD3F /* image-SideNavigationLogo.png */,
-				E2D5673D1CDB85B80054FD3F /* image-SideNavigationLogo@2x.png */,
-				E2D5674C1CDB85B80054FD3F /* image-SideNavigationLogo@3x.png */,
 				E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */,
 				E2D567241CDB85B80054FD3F /* indicator-CommentLeft@2x.png */,
 				E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */,
@@ -2082,7 +2070,6 @@
 				283DF2D718CA09EE00A344D2 /* bamboo.caf in Resources */,
 				E2D5678E1CDB85B80054FD3F /* button-Navigation-Sent@3x.png in Resources */,
 				E2D567D91CDB85B80054FD3F /* button-MessageDetail-Archive.png in Resources */,
-				E2D567A41CDB85B80054FD3F /* image-SideNavigationLogo@2x.png in Resources */,
 				283DF2F418CA09EE00A344D2 /* minuet.caf in Resources */,
 				283DF30118CA09EE00A344D2 /* fanfare.caf in Resources */,
 				E28307F11AD83170006FDD6D /* news_flash.caf in Resources */,
@@ -2127,10 +2114,8 @@
 				E2D567921CDB85B80054FD3F /* button-Navigation-Messages.png in Resources */,
 				E2D567BA1CDB85B80054FD3F /* button-Contact-Mail@3x.png in Resources */,
 				E2D567C21CDB85B80054FD3F /* button-AddComment@3x.png in Resources */,
-				E2D567B31CDB85B80054FD3F /* image-SideNavigationLogo@3x.png in Resources */,
 				283DF2F218CA09EE00A344D2 /* alarm.caf in Resources */,
 				E2D567821CDB85B80054FD3F /* background-Login.png in Resources */,
-				E2D567981CDB85B80054FD3F /* image-SideNavigationLogo.png in Resources */,
 				283DF30718CA13BB00A344D2 /* choo_choo.caf in Resources */,
 				283DF2FE18CA09EE00A344D2 /* suspense.caf in Resources */,
 				28CCCD4A17F517A50093CEE2 /* InfoPlist.strings in Resources */,
@@ -2255,7 +2240,6 @@
 				E250374C1FBB88F400099C7E /* bamboo.caf in Resources */,
 				E250374D1FBB88F400099C7E /* button-Navigation-Sent@3x.png in Resources */,
 				E250374E1FBB88F400099C7E /* button-MessageDetail-Archive.png in Resources */,
-				E250374F1FBB88F400099C7E /* image-SideNavigationLogo@2x.png in Resources */,
 				E25037501FBB88F400099C7E /* minuet.caf in Resources */,
 				E25037511FBB88F400099C7E /* fanfare.caf in Resources */,
 				E25037521FBB88F400099C7E /* news_flash.caf in Resources */,
@@ -2302,10 +2286,8 @@
 				E25037791FBB88F400099C7E /* button-Navigation-Messages.png in Resources */,
 				E250377A1FBB88F400099C7E /* button-Contact-Mail@3x.png in Resources */,
 				E250377B1FBB88F400099C7E /* button-AddComment@3x.png in Resources */,
-				E250377C1FBB88F400099C7E /* image-SideNavigationLogo@3x.png in Resources */,
 				E250377D1FBB88F400099C7E /* alarm.caf in Resources */,
 				E250377E1FBB88F400099C7E /* background-Login.png in Resources */,
-				E250377F1FBB88F400099C7E /* image-SideNavigationLogo.png in Resources */,
 				E25037801FBB88F400099C7E /* choo_choo.caf in Resources */,
 				E25037811FBB88F400099C7E /* suspense.caf in Resources */,
 				E25037821FBB88F400099C7E /* InfoPlist.strings in Resources */,

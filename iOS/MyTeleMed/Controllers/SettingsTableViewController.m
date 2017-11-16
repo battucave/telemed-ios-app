@@ -51,7 +51,7 @@
 	{
 		if( ! [preferences boolForKey:@"timeoutAlert"])
 		{
-			UIAlertView *confirmAlert = [[UIAlertView alloc] initWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards recommend a time-out. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+			UIAlertView *confirmAlert = [[UIAlertView alloc] initWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
 			
 			[confirmAlert setDelegate:self];
 			[confirmAlert show];
