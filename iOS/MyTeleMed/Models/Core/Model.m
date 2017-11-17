@@ -7,7 +7,6 @@
 //
 
 #import "Model.h"
-//#import "AppDelegate.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "CustomAlertView.h"
 #import "ErrorAlertController.h"
