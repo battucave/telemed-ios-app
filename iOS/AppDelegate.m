@@ -10,6 +10,7 @@
 #import "ELCUIApplication.h"
 #import "ErrorAlertController.h"
 #import "TeleMedHTTPRequestOperationManager.h"
+#import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
@@ -20,6 +21,10 @@
 	#import "MyProfileModel.h"
 	#import "MyStatusModel.h"
 	#import "RegisteredDeviceModel.h"
+#endif
+
+#ifdef MEDTOMED
+	#import "UserProfileModel.h"
 #endif
 
 @interface AppDelegate()
@@ -152,7 +157,7 @@
 	#ifdef MYTELEMED
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 	
-		[myProfileModel getWithCallback:^(BOOL success, MyProfileModel *profile, NSError *error)
+		[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 		{
 			if(success)
 			{
@@ -250,15 +255,43 @@
 	// If user has timeout disabled and a RefreshToken already exists, attempt to bypass Login screen
 	if( ! timeoutEnabled && authenticationModel.RefreshToken != nil)
 	{
+		id <ProfileProtocol> profileProtocol;
+		
 		#ifdef MYTELEMED
-			[self verifyMyTeleMed];
+			profileProtocol = [MyProfileModel sharedInstance];
 		
 		#elif defined(MEDTOMED)
-			[self verifyMedToMed];
+			profileProtocol = [UserProfileModel sharedInstance];
 		
 		#else
 			[self showLoginSSOScreen];
+		
+			return;
 		#endif
+
+		// Verify Account is Valid
+		[profileProtocol getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+		{
+			if(success)
+			{
+				// Update Timeout Period to the value sent from server
+				[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
+				
+				// MyTeleMed - Validate device registration with server
+				#ifdef MYTELEMED
+					[self validateRegistration:profile];
+				
+				// Nothing to validate - just go to main screen
+				#else
+					[self showMainScreen];
+				#endif
+			}
+			// Account is no longer valid so go to Login screen
+			else
+			{
+				[self showLoginSSOScreen];
+			}
+		}];
 	}
 	// Go to Login screen by default
 	else
@@ -288,12 +321,12 @@
 	
 	NSLog(@"Current Storyboard: %@", currentStoryboardName);
 	
-	// Already on LoginSSOStoryboard
+	// Already on LoginSSO storyboard
 	if([currentStoryboardName isEqualToString:@"LoginSSO"])
 	{
 		loginSSOStoryboard = currentStoryboard;
 	}
-	// Go to LoginSSOStoryboard
+	// Go to LoginSSO storyboard
 	else
 	{
 		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
@@ -477,84 +510,58 @@
 	}
 }
 
-- (void)verifyMyTeleMed
+- (void)validateRegistration:(id <ProfileProtocol>)profile
 {
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 
-	// Verify Account is Valid
-	[myProfileModel getWithCallback:^(BOOL success, MyProfileModel *profile, NSError *error)
+	NSLog(@"User ID: %@", profile.ID);
+	NSLog(@"Preferred Account ID: %@", profile.MyPreferredAccount.ID);
+	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
+	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
+	
+	// Check if device is already registered with TeleMed service
+	if(registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
 	{
-		if(success)
+		// Phone Number is already registered with Web Service, so we just need to update Device Token (Device Token can change randomly so this keeps it up to date)
+		[registeredDeviceModel setShouldRegister:YES];
+		
+		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
 		{
-			// Update Timeout Period to the value sent from Server
-			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
-			
-			NSLog(@"User ID: %@", myProfileModel.ID);
-			NSLog(@"Preferred Account ID: %@", myProfileModel.MyPreferredAccount.ID);
-			NSLog(@"Device ID: %@", registeredDeviceModel.ID);
-			NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
-			
-			// Check if device is already registered with TeleMed service
-			if(registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
+			// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
+			if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 			{
-				// Phone Number is already registered with Web Service, so we just need to update Device Token (Device Token can change randomly so this keeps it up to date)
-				[registeredDeviceModel setShouldRegister:YES];
+				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 				
-				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
-				{
-					// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-					if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
-					{
-						ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-						
-						[errorAlertController show:error];
-					}
-					
-					// Go to Main Storyboard regardless of whether there was an error (no need to force re-login here because Account is valid, there was just an error updating device for push notifications)
-					[self showMainScreen];
-				}];
+				[errorAlertController show:registeredDeviceError];
 			}
-			// Account is Valid, but Phone Number is not yet registered with TeleMed, so go directly to Phone Number screen
-			else
-			{
-				NSLog(@"Phone Number Invalid");
-				
-				// If using Simulator, skip Phone Number step because it is always invalid
-				// #ifdef DEBUG
-				#if TARGET_IPHONE_SIMULATOR
-					NSLog(@"Skip Phone Number step when on Simulator or Debugging");
-				
-					[self showMainScreen];
-				
-				#else
-					// Phone Number invalid, so direct user to enter it
-					/*UIViewController *phoneNumberViewController = [self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
-					UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:phoneNumberViewController];
-					
-					[self.window setRootViewController:navigationController];*/
-				
-					// Force user to re-login to eliminate issue of user trying to login as another user and getting permanently stuck on phone number screen (even after re-install of app)
-					[self showLoginSSOScreen];
-				#endif
-			}
-		}
-		// Account is no longer valid so go to LoginSSO screen
-		else
-		{
+			
+			// Go to main screen regardless of whether there was an error (no need to force re-login here because Account is valid, there was just an error updating device for push notifications)
+			[self showMainScreen];
+		}];
+	}
+	// Account is Valid, but Phone Number is not yet registered with TeleMed, so go directly to Phone Number screen
+	else
+	{
+		NSLog(@"Phone Number Invalid");
+		
+		// If using Simulator, skip Phone Number step because it is always invalid
+		// #ifdef DEBUG
+		#if TARGET_IPHONE_SIMULATOR
+			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
+		
+			[self showMainScreen];
+		
+		#else
+			// Phone Number invalid, so direct user to enter it
+			/*UIViewController *phoneNumberViewController = [self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
+			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:phoneNumberViewController];
+			
+			[self.window setRootViewController:navigationController];*/
+		
+			// Force user to re-login to eliminate issue of user trying to login as another user and getting permanently stuck on phone number screen (even after re-install of app)
 			[self showLoginSSOScreen];
-		}
-	}];
-}
-#endif
-
-
-#pragma mark - MedToMed
-
-#ifdef MEDTOMED
-- (void)verifyMedToMed
-{
-	NSLog(@"VERIFY MEDTOMED");
+		#endif
+	}
 }
 #endif
 

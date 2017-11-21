@@ -18,7 +18,7 @@
 @property (nonatomic) NSString *error;
 @property (nonatomic) BOOL isWorking;
 
-+ (AuthenticationModel *)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (void)getNewTokensWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 - (BOOL)accessTokenIsValid;

@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "ProfileProtocol.h"
 #import "AccountModel.h"
 
-// Primary Model
-@interface MyProfileModel : Model
+@interface MyProfileModel : Model <ProfileProtocol>
 
 @property (weak) id delegate;
 
@@ -25,9 +25,9 @@
 @property (nonatomic) NSDictionary *MyTimeZone;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
-+ (MyProfileModel *)sharedInstance;
++ (id <ProfileProtocol>)sharedInstance;
 
-- (void)getWithCallback:(void (^)(BOOL success, MyProfileModel *profile, NSError *error))callback;
+- (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback;
 - (void)restoreMyPreferredAccount;
 
 @end

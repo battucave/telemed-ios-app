@@ -7,6 +7,7 @@
 //
 
 #import "MyProfileModel.h"
+#import "ProfileProtocol.h"
 #import "AccountModel.h"
 #import "RegisteredDeviceModel.h"
 #import "MyProfileXMLParser.h"
@@ -19,15 +20,14 @@
 
 @implementation MyProfileModel
 
-static MyProfileModel *sharedMyProfileInstance = nil;
-
-+ (MyProfileModel *)sharedInstance
++ (id <ProfileProtocol>)sharedInstance
 {
 	static dispatch_once_t token;
+	static id <ProfileProtocol> sharedMyProfileInstance = nil;
 	
 	dispatch_once(&token, ^
 	{
-		sharedMyProfileInstance = [[super alloc] init];
+		sharedMyProfileInstance = [[self alloc] init];
 	});
 	
 	return sharedMyProfileInstance;
@@ -48,7 +48,7 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 	}
 }
 
-- (void)getWithCallback:(void (^)(BOOL success, MyProfileModel *profile, NSError *error))callback
+- (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
 	[self.operationManager GET:@"MyProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -64,12 +64,12 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 			// Search user's Registered Devices to determine whether any match the current device. If so, update the current device with the new Phone Number
 			[self setCurrentDevice];
 			
-			callback(YES, self, nil);
+			callback(YES, (id <ProfileProtocol>)self, nil);
 		}
 		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Account.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Profile Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Profile.", NSLocalizedDescriptionKey, nil]];
 			
 			callback(NO, nil, error);
 		}
@@ -79,7 +79,7 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 		NSLog(@"MyProfileModel Error: %@", error);
 		
 		// Build a generic error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Account." andTitle:@"Account Error"];
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Profile." andTitle:@"Profile Error"];
 		
 		callback(NO, nil, error);
 	}];

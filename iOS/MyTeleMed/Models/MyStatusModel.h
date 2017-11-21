@@ -24,7 +24,7 @@
 @property (nonatomic) NSArray *CurrentOnCallEntries;
 @property (nonatomic) NSArray *FutureOnCallEntries;
 
-+ (MyStatusModel *)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (void)getWithCallback:(void (^)(BOOL success, MyStatusModel *status, NSError *error))callback;
 

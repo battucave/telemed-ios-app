@@ -10,6 +10,7 @@
 #import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
+#import "ProfileProtocol.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -28,13 +29,13 @@
 	
 	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 	
-	[myProfileModel getWithCallback:^(BOOL success, MyProfileModel *profile, NSError *error)
+	[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 	{
 		if(success)
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
-			// Update Timeout Period to the value sent from Server
+			// Update Timeout Period to the value sent from server
 			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
 			
 			NSLog(@"User ID: %@", myProfileModel.ID);

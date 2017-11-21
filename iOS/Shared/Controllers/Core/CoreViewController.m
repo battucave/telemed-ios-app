@@ -47,11 +47,28 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Show CDMA Voice Data screen if it hasn't already been disabled or hidden
-	if(self.storyboard && [[self.storyboard valueForKey:@"name"] isEqualToString:@"Main"] && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
+	if(self.storyboard && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
 	{
-		UIViewController *CDMAVoiceDataViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"CDMAVoiceDataViewController"];
+		UIStoryboard *mainStoryboard;
+		NSString *storyboardName = [self.storyboard valueForKey:@"name"];
 		
-		[self presentViewController:CDMAVoiceDataViewController animated:NO completion:nil];
+		// If currently on Main storyboard
+		if([storyboardName isEqualToString:@"Main"])
+		{
+			mainStoryboard = self.storyboard;
+		}
+		// If currently on MedToMed storyboard
+		else if([storyboardName isEqualToString:@"MedToMed"])
+		{
+			mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+		}
+		
+		if(mainStoryboard != nil)
+		{
+			UIViewController *CDMAVoiceDataViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"CDMAVoiceDataViewController"];
+			
+			[self presentViewController:CDMAVoiceDataViewController animated:NO completion:nil];
+		}
 	}
 }
 

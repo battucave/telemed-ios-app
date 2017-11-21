@@ -19,7 +19,7 @@
 
 @property (nonatomic) BOOL shouldRegister;
 
-+ (RegisteredDeviceModel *)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback;
 

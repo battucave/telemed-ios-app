@@ -329,6 +329,7 @@
 		E275C2111D3836E1004C0744 /* image-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20E1D3836E1004C0744 /* image-logo@3x.png */; };
 		E275C2121D3836E1004C0744 /* image-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20F1D3836E1004C0744 /* image-logo.png */; };
 		E275C2131D3836E1004C0744 /* image-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C2101D3836E1004C0744 /* image-logo@2x.png */; };
+		E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */; };
 		E27B84D71B14B96A00AD50C6 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84B11B14B96A00AD50C6 /* Model.m */; };
 		E27B84E81B14B96A00AD50C6 /* AuthenticationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */; };
 		E27B84EB1B14CF6A00AD50C6 /* AccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */; };
@@ -757,6 +758,8 @@
 		E275C20E1D3836E1004C0744 /* image-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo@3x.png"; sourceTree = "<group>"; };
 		E275C20F1D3836E1004C0744 /* image-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo.png"; sourceTree = "<group>"; };
 		E275C2101D3836E1004C0744 /* image-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo@2x.png"; sourceTree = "<group>"; };
+		E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserProfileXMLParser.h; sourceTree = "<group>"; };
+		E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserProfileXMLParser.m; sourceTree = "<group>"; };
 		E27B84B11B14B96A00AD50C6 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 		E27B84B21B14B96A00AD50C6 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationModel.m; sourceTree = "<group>"; };
@@ -826,6 +829,7 @@
 		E2C7C1BB1FC4917100E50F07 /* UserProfileModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserProfileModel.h; sourceTree = "<group>"; };
 		E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserProfileModel.m; sourceTree = "<group>"; };
 		E2C7C1C31FC4948600E50F07 /* MessageProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageProtocol.h; sourceTree = "<group>"; };
+		E2C7C1C61FC4B63900E50F07 /* ProfileProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileProtocol.h; sourceTree = "<group>"; };
 		E2C9FE041CD9251D00B64D88 /* EmailTelemedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailTelemedModel.h; sourceTree = "<group>"; };
 		E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailTelemedModel.m; sourceTree = "<group>"; };
 		E2CDEFA11D25752100728F1A /* ChatParticipantXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatParticipantXMLParser.h; sourceTree = "<group>"; };
@@ -1352,6 +1356,7 @@
 				E211D5781FBF551800263497 /* Controllers */,
 				E211D5771FBF4EE800263497 /* Extensions */,
 				28CCCD7417F517FC0093CEE2 /* Libraries */,
+				E2C7C1C41FC4B61300E50F07 /* Models */,
 				E211D5711FBF4A6C00263497 /* Resources */,
 				E211D5721FBF4A8900263497 /* Views */,
 			);
@@ -1528,28 +1533,28 @@
 		E211D57B1FBF571B00263497 /* Includes */ = {
 			isa = PBXGroup;
 			children = (
-				E211D57C1FBF571B00263497 /* ChatMessageCell.h */,
-				E211D57D1FBF571B00263497 /* CommentCell.h */,
-				E211D57E1FBF571B00263497 /* OnCallSummaryCell.h */,
-				E211D57F1FBF571B00263497 /* MessageTeleMedComposeTableViewController.m */,
-				E211D5801FBF571B00263497 /* MessageEventCell.h */,
-				E211D5811FBF571B00263497 /* AutoGrowingTextView.h */,
-				E211D5821FBF571B00263497 /* ChatMessagesTableViewController.h */,
-				E211D5831FBF571B00263497 /* MessagesTableViewController.h */,
+				E211D5911FBF571B00263497 /* AccountCell.h */,
 				E211D5841FBF571B00263497 /* AccountCell.m */,
-				E211D5851FBF571B00263497 /* MessageComposeTableViewController.m */,
-				E211D5861FBF571B00263497 /* MessageCell.h */,
-				E211D5871FBF571B00263497 /* OnCallSummaryCell.m */,
-				E211D5881FBF571B00263497 /* CommentCell.m */,
-				E211D5891FBF571B00263497 /* ChatMessageCell.m */,
-				E211D58A1FBF571B00263497 /* MessageEventCell.m */,
-				E211D58B1FBF571B00263497 /* MessageTeleMedComposeTableViewController.h */,
-				E211D58C1FBF571B00263497 /* MessagesTableViewController.m */,
-				E211D58D1FBF571B00263497 /* ChatMessagesTableViewController.m */,
+				E211D5811FBF571B00263497 /* AutoGrowingTextView.h */,
 				E211D58E1FBF571B00263497 /* AutoGrowingTextView.m */,
+				E211D57C1FBF571B00263497 /* ChatMessageCell.h */,
+				E211D5891FBF571B00263497 /* ChatMessageCell.m */,
+				E211D5821FBF571B00263497 /* ChatMessagesTableViewController.h */,
+				E211D58D1FBF571B00263497 /* ChatMessagesTableViewController.m */,
+				E211D57D1FBF571B00263497 /* CommentCell.h */,
+				E211D5881FBF571B00263497 /* CommentCell.m */,
+				E211D5861FBF571B00263497 /* MessageCell.h */,
 				E211D58F1FBF571B00263497 /* MessageCell.m */,
 				E211D5901FBF571B00263497 /* MessageComposeTableViewController.h */,
-				E211D5911FBF571B00263497 /* AccountCell.h */,
+				E211D5851FBF571B00263497 /* MessageComposeTableViewController.m */,
+				E211D5801FBF571B00263497 /* MessageEventCell.h */,
+				E211D58A1FBF571B00263497 /* MessageEventCell.m */,
+				E211D5831FBF571B00263497 /* MessagesTableViewController.h */,
+				E211D58C1FBF571B00263497 /* MessagesTableViewController.m */,
+				E211D58B1FBF571B00263497 /* MessageTeleMedComposeTableViewController.h */,
+				E211D57F1FBF571B00263497 /* MessageTeleMedComposeTableViewController.m */,
+				E211D57E1FBF571B00263497 /* OnCallSummaryCell.h */,
+				E211D5871FBF571B00263497 /* OnCallSummaryCell.m */,
 			);
 			path = Includes;
 			sourceTree = "<group>";
@@ -1646,14 +1651,21 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		E275D2F91FC4D4DD00AF3651 /* XML Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */,
+				E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */,
+			);
+			path = "XML Parsers";
+			sourceTree = "<group>";
+		};
 		E27B84AF1B14B96A00AD50C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				E27B84B01B14B96A00AD50C6 /* Core */,
 				E2C7C1C21FC4944F00E50F07 /* Protocols */,
 				E27B85101B14D09400AD50C6 /* XML Parsers */,
-				E27B84E91B14CF6A00AD50C6 /* AccountModel.h */,
-				E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */,
 				E27B84D61B14B96A00AD50C6 /* AuthenticationModel.h */,
 				E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */,
 				E27B84EC1B14CF7400AD50C6 /* CallModel.h */,
@@ -1754,6 +1766,7 @@
 		E2C7C1BA1FC4914700E50F07 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E275D2F91FC4D4DD00AF3651 /* XML Parsers */,
 				E2C7C1BB1FC4917100E50F07 /* UserProfileModel.h */,
 				E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */,
 			);
@@ -1764,6 +1777,24 @@
 			isa = PBXGroup;
 			children = (
 				E2C7C1C31FC4948600E50F07 /* MessageProtocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		E2C7C1C41FC4B61300E50F07 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E2C7C1C51FC4B62400E50F07 /* Protocols */,
+				E27B84E91B14CF6A00AD50C6 /* AccountModel.h */,
+				E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E2C7C1C51FC4B62400E50F07 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E2C7C1C61FC4B63900E50F07 /* ProfileProtocol.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2423,6 +2454,7 @@
 				E25036E31FBB88F400099C7E /* PreferredAccountModel.m in Sources */,
 				E25036E41FBB88F400099C7E /* HelpUserGuideViewController.m in Sources */,
 				E25036E71FBB88F400099C7E /* MyProfileModel.m in Sources */,
+				E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */,
 				E25036E81FBB88F400099C7E /* ELCUIApplication.m in Sources */,
 				E25036ED1FBB88F400099C7E /* AFHTTPSessionManager.m in Sources */,
 				E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */,

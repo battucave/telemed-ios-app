@@ -9,6 +9,9 @@
 #import "LoginSSOMedToMedViewController.h"
 #import "NewAccountViewController.h"
 #import "AppDelegate.h"
+#import "ELCUIApplication.h"
+#import "ProfileProtocol.h"
+#import "UserProfileModel.h"
 
 @implementation LoginSSOMedToMedViewController
 
@@ -23,12 +26,15 @@
 {
 	NSLog(@"Finalize MedToTeleMed Login");
 	
-	/* UserProfileModel *userProfileModel = [UserProfileModel sharedInstance];
+	UserProfileModel *userProfileModel = [UserProfileModel sharedInstance];
 	
-	[userProfileModel getWithCallback:^(BOOL success, UserProfileModel *profile, NSError *error)
+	[userProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 	{
 		if(success)
 		{
+			// Update Timeout Period to the value sent from sserver
+			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
+			
 			// Go to Main Storyboard
 			[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
 		}
@@ -39,7 +45,7 @@
 			// Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
 			[self showWebViewError:[NSString stringWithFormat:@"There was a problem completing the login process:<br>%@", error.localizedDescription]];
 		}
-	}];*/
+	}];
 	
 	[super finalizeLogin];
 }

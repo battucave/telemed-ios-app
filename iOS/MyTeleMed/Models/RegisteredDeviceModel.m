@@ -15,13 +15,13 @@
 
 static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 
-+ (RegisteredDeviceModel *)sharedInstance
++ (instancetype)sharedInstance
 {
 	static dispatch_once_t token;
 	
 	dispatch_once(&token, ^
 	{
-		sharedRegisteredDeviceInstance = [[super alloc] init];
+		sharedRegisteredDeviceInstance = [[self alloc] init];
 	});
 	
 	return sharedRegisteredDeviceInstance;

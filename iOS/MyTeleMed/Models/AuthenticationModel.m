@@ -26,15 +26,14 @@
 
 @synthesize AccessTokenExpiration = _AccessTokenExpiration;
 
-static AuthenticationModel *sharedAuthenticationInstance = nil;
-
-+ (AuthenticationModel *)sharedInstance
++ (instancetype)sharedInstance
 {
 	static dispatch_once_t token;
+	static AuthenticationModel *sharedAuthenticationInstance = nil;
 	
 	dispatch_once(&token, ^
 	{
-		sharedAuthenticationInstance = [[super alloc] init];
+		sharedAuthenticationInstance = [[self alloc] init];
 	});
 	
 	return sharedAuthenticationInstance;

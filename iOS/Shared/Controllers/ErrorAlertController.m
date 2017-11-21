@@ -29,7 +29,7 @@
 	
 	dispatch_once(&token, ^
 	{
-		sharedAlertInstance = [[super alloc] init];
+		sharedAlertInstance = [[self alloc] init];
 		
 		sharedAlertInstance.windows = [NSMutableArray arrayWithCapacity:0];
 	});

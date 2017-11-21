@@ -11,15 +11,14 @@
 
 @implementation MyStatusModel
 
-static MyStatusModel *sharedMyStatusInstance = nil;
-
-+ (MyStatusModel *)sharedInstance
++ (instancetype)sharedInstance
 {
 	static dispatch_once_t token;
+	static MyStatusModel *sharedMyStatusInstance = nil;
 	
 	dispatch_once(&token, ^
 	{
-		sharedMyStatusInstance = [[super alloc] init];
+		sharedMyStatusInstance = [[self alloc] init];
 	});
 	
 	return sharedMyStatusInstance;
