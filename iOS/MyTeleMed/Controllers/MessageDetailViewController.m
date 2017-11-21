@@ -133,7 +133,7 @@
 			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
 			
 			/*/ TESTING ONLY (set message back to unread)
-			#if DEBUG
+			#ifdef DEBUG
 				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unread"];
 			#endif
 			// END TESTING ONLY*/
@@ -141,7 +141,7 @@
 		/*/ TESTING ONLY (unarchive archived messages)
 		else if(self.message.messageType == 1)
 		{
-			#if DEBUG
+			#ifdef DEBUG
 				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
 			#endif
 		}
@@ -184,7 +184,7 @@
 	NSLog(@"Received Remote Notification MessageDetailViewController");
 	
 	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message)
-	#if DEBUG
+	#ifdef DEBUG
 		message = @"Shane Goodwin added a comment to a message.";
 		type = @"comment";
 		deliveryId = 5133538688695397;
@@ -238,7 +238,7 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if DEBUG
+	#ifdef DEBUG
 		[self.filteredMessageEvents removeAllObjects];
 		
 		for(int i = 0; i < 3; i++)
@@ -497,7 +497,7 @@
 	[self.textViewMessage setText:self.message.FormattedMessageText];
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if DEBUG
+	#ifdef DEBUG
 		[self.labelName setText:@"TeleMed"];
 		[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
 		[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];

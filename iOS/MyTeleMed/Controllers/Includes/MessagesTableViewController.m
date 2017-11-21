@@ -381,7 +381,7 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating Screenshots)
-	#if DEBUG
+	#ifdef DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelPhoneNumber setText:@"800-420-4695"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];

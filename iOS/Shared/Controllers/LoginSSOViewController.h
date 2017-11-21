@@ -11,4 +11,7 @@
 
 @interface LoginSSOViewController : CoreViewController <UIScrollViewDelegate, UIWebViewDelegate>
 
+- (void)finalizeLogin;
+- (void)showWebViewError:(NSString *)errorMessage;
+
 @end

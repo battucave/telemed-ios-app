@@ -41,10 +41,10 @@
             </objects>
             <point key="canvasLocation" x="290" y="258"/>
         </scene>
-        <!--LoginSSO View Controller-->
+        <!--LoginSSO My Tele Med View Controller-->
         <scene sceneID="qUb-3F-ygI">
             <objects>
-                <viewController storyboardIdentifier="LoginSSOViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FjD-qd-sAh" customClass="LoginSSOViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginSSOViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FjD-qd-sAh" customClass="LoginSSOMyTeleMedViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="JD0-rd-UJu"/>
                         <viewControllerLayoutGuide type="bottom" id="MgN-VK-5OH"/>
@@ -60,9 +60,10 @@
                                     <constraint firstAttribute="height" constant="70" id="zs7-ni-0Vu"/>
                                 </constraints>
                             </imageView>
-                            <webView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HAU-mb-TqS">
+                            <webView hidden="YES" opaque="NO" contentMode="scaleToFill" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAU-mb-TqS">
                                 <rect key="frame" x="0.0" y="108" width="375" height="515"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
                                 <connections>
                                     <outlet property="delegate" destination="FjD-qd-sAh" id="9By-kA-lnQ"/>
                                 </connections>
@@ -95,8 +96,9 @@
                                     <constraint firstAttribute="bottom" secondItem="uAX-g6-qZp" secondAttribute="bottom" constant="8" id="yCy-Q7-xUu"/>
                                 </constraints>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="e5G-nr-thO">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e5G-nr-thO">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="vba-gW-ZEz"/>
                                 </constraints>
@@ -106,24 +108,38 @@
                                             <action selector="goBackWebView:" destination="FjD-qd-sAh" id="4QF-sv-Vp4"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="12" style="plain" systemItem="fixedSpace" id="5qx-gn-HUh"/>
+                                    <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="5qx-gn-HUh"/>
                                     <barButtonItem style="plain" systemItem="refresh" id="LYd-JO-N7d">
                                         <connections>
                                             <action selector="refreshWebView:" destination="FjD-qd-sAh" id="K6I-oe-fU3"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
+                                    <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="he5-gv-e9L"/>
                                     <barButtonItem enabled="NO" title="Change ID Provider?" style="plain" id="qFS-93-Wf5">
                                         <connections>
                                             <segue destination="5BC-59-clT" kind="show" identifier="showSSOProvider" id="axa-Zz-Ja4"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="2" style="plain" systemItem="fixedSpace" id="2yr-Wn-zE2"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
+                                    <barButtonItem title="Login" width="62" style="plain" id="as0-45-LXf">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eZi-Wo-MRE">
+                                            <rect key="frame" x="297" y="11.5" width="62" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Login" image="button-WebViewForward.png"/>
+                                            <connections>
+                                                <action selector="doLogin:" destination="FjD-qd-sAh" eventType="touchUpInside" id="mhS-Gx-23C"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.20000000000000001" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="e5G-nr-thO" firstAttribute="top" secondItem="HAU-mb-TqS" secondAttribute="bottom" id="8WT-2l-UVL"/>
                             <constraint firstItem="HAU-mb-TqS" firstAttribute="top" secondItem="QCH-SR-qFX" secondAttribute="bottom" constant="8" id="9Vk-Xf-J6K"/>
@@ -141,10 +157,10 @@
                     <navigationItem key="navigationItem" id="q1K-Cr-ScC"/>
                     <connections>
                         <outlet property="activityIndicator" destination="veN-bL-Vga" id="pSD-cl-WyW"/>
-                        <outlet property="backButton" destination="L6n-6o-7ZE" id="5kh-tp-omg"/>
-                        <outlet property="changeIDPRoviderButton" destination="qFS-93-Wf5" id="YPk-gx-WBY"/>
+                        <outlet property="buttonBack" destination="L6n-6o-7ZE" id="Zev-OQ-XxH"/>
+                        <outlet property="buttonChangeIDPRovider" destination="qFS-93-Wf5" id="dfM-D9-cAK"/>
+                        <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="Rgv-gr-GBL"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>
-                        <outlet property="refreshButton" destination="LYd-JO-N7d" id="77r-L0-PWP"/>
                         <outlet property="webView" destination="HAU-mb-TqS" id="QO0-LX-oBu"/>
                         <segue destination="2av-Uk-df6" kind="show" identifier="showPhoneNumber" id="ajQ-dD-4Bo"/>
                     </connections>
@@ -321,10 +337,10 @@
                                 </constraints>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone Number" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="CrA-Ex-elv">
-                                <rect key="frame" x="43.5" y="181" width="288" height="40"/>
+                                <rect key="frame" x="44" y="181" width="288" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="phonePad" returnKeyType="go" enablesReturnKeyAutomatically="YES" textContentType="tel"/>
                                 <connections>
                                     <outlet property="delegate" destination="2av-Uk-df6" id="TbU-5c-eoL"/>
                                 </connections>
@@ -344,44 +360,56 @@
                                     <action selector="getPhoneNumberHelp:" destination="2av-Uk-df6" eventType="touchUpInside" id="OVO-j5-b0n"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gm9-BN-gJl">
-                                <rect key="frame" x="44.5" y="231" width="56" height="23"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gm9-BN-gJl">
+                                <rect key="frame" x="44" y="234" width="52" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="23" id="4wI-4o-Lrk"/>
-                                    <constraint firstAttribute="width" constant="56" id="T9E-sA-aPr"/>
+                                    <constraint firstAttribute="height" constant="16" id="4wI-4o-Lrk"/>
+                                    <constraint firstAttribute="width" constant="52" id="T9E-sA-aPr"/>
                                 </constraints>
-                                <state key="normal" image="button-Navigation-Help.png">
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="titleEdgeInsets" minX="-10" minY="2" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="42" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="HELP" image="button-Help.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="showHelp:" destination="2av-Uk-df6" eventType="touchUpInside" id="lt0-IA-3NY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-Co-e3d">
-                                <rect key="frame" x="207.5" y="232" width="140" height="40"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKv-ru-MdQ">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Auy-Y8-JAv"/>
-                                    <constraint firstAttribute="width" constant="140" id="vfm-lf-4S7"/>
+                                    <constraint firstAttribute="height" constant="44" id="D0J-uC-CXe"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <inset key="imageEdgeInsets" minX="25" minY="5" maxX="25" maxY="20"/>
-                                <state key="normal" image="button-Continue.png">
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="XkV-pR-5dq"/>
-                                </connections>
-                            </button>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="0FG-7A-7C8"/>
+                                    <barButtonItem width="90" style="plain" id="BSk-l6-cFo" userLabel="Continue">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="DP3-Qz-7Jb">
+                                            <rect key="frame" x="269" y="11.5" width="90" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="77.5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Continue" image="button-WebViewForward.png"/>
+                                            <connections>
+                                                <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="MLf-cI-382"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="mjW-gH-UIm" secondAttribute="centerX" id="4l9-zD-Dno"/>
-                            <constraint firstItem="kQc-Co-e3d" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="9" id="FqW-mL-cHY"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="trailing" secondItem="mjW-gH-UIm" secondAttribute="trailing" constant="-6" id="IS5-wh-UUg"/>
-                            <constraint firstItem="Gm9-BN-gJl" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="8" id="O8K-cs-WBq"/>
+                            <constraint firstItem="Gm9-BN-gJl" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="11" id="O8K-cs-WBq"/>
                             <constraint firstItem="Li6-va-OV1" firstAttribute="centerY" secondItem="CrA-Ex-elv" secondAttribute="centerY" id="U6N-eR-fAN"/>
                             <constraint firstItem="mjW-gH-UIm" firstAttribute="top" secondItem="TNx-l8-qo5" secondAttribute="bottom" constant="5" id="Ws2-Oc-nyd"/>
-                            <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="Gm9-BN-gJl" secondAttribute="leading" constant="-1" id="YOD-Ue-xz6"/>
+                            <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="Gm9-BN-gJl" secondAttribute="leading" id="YOD-Ue-xz6"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="trailing" secondItem="TNx-l8-qo5" secondAttribute="trailing" id="aPh-7K-ngM"/>
                             <constraint firstItem="Li6-va-OV1" firstAttribute="trailing" secondItem="CrA-Ex-elv" secondAttribute="trailing" id="cCL-N3-b6x"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="TNx-l8-qo5" secondAttribute="leading" id="ccN-oL-5Mr"/>
@@ -390,14 +418,18 @@
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="top" constant="3" id="lj2-ZZ-fED"/>
                             <constraint firstAttribute="centerX" secondItem="8nY-Zs-edb" secondAttribute="centerX" id="ljj-qL-TRB"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="bottom" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="-2" id="mRQ-O8-qvY"/>
+                            <constraint firstAttribute="trailing" secondItem="bKv-ru-MdQ" secondAttribute="trailing" id="msq-pG-j8n"/>
                             <constraint firstItem="8nY-Zs-edb" firstAttribute="top" secondItem="Unv-Tw-FB5" secondAttribute="bottom" constant="10" id="nUv-cE-rLz"/>
-                            <constraint firstItem="kQc-Co-e3d" firstAttribute="trailing" secondItem="CrA-Ex-elv" secondAttribute="trailing" constant="16" id="t9f-pX-rZL"/>
+                            <constraint firstItem="bKv-ru-MdQ" firstAttribute="leading" secondItem="HGa-4g-TRT" secondAttribute="leading" id="nh3-ay-Vil"/>
+                            <constraint firstItem="2ZQ-v6-yqz" firstAttribute="top" secondItem="bKv-ru-MdQ" secondAttribute="bottom" id="r6D-M3-AsE"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="dIx-OW-dxU"/>
                     <connections>
                         <outlet property="buttonHelp" destination="Li6-va-OV1" id="6An-ZW-7Cv"/>
+                        <outlet property="constraintFormTop" destination="iBQ-Qa-fwJ" id="lvc-uA-e44"/>
                         <outlet property="textPhoneNumber" destination="CrA-Ex-elv" id="uAc-KN-WQg"/>
+                        <outlet property="toolbar" destination="bKv-ru-MdQ" id="0Aj-jt-WiJ"/>
                         <segue destination="bXr-xs-BMc" kind="unwind" identifier="unwindFromPhoneNumber" unwindAction="unwindFromPhoneNumber:" id="5IF-db-Wcg"/>
                     </connections>
                 </viewController>
@@ -411,10 +443,10 @@
         <image name="Logo-MyTeleMed" width="300" height="75"/>
         <image name="background-PhoneNumber.png" width="300" height="45"/>
         <image name="button-Cancel.png" width="74" height="15"/>
-        <image name="button-Continue.png" width="90" height="15"/>
-        <image name="button-Navigation-Help.png" width="56" height="23"/>
+        <image name="button-Help.png" width="10" height="14"/>
         <image name="button-Save.png" width="61" height="15"/>
         <image name="button-TextField-Help.png" width="20" height="20"/>
         <image name="button-WebViewBack.png" width="12" height="21"/>
+        <image name="button-WebViewForward.png" width="12" height="21"/>
     </resources>
 </document>

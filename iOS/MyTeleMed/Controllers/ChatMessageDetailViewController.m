@@ -258,7 +258,7 @@
 			chatParticipantNames = [chatParticipantNamesArray componentsJoinedByString:@"\n"];
 			
 			/*/ TESTING ONLY
-			#if DEBUG
+			#ifdef DEBUG
 				chatParticipantNames = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n", chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames];
 			#endif
 			//*/

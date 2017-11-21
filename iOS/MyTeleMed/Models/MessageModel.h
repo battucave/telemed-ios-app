@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "MessageProtocol.h"
 
 @protocol MessageDelegate <NSObject>
 
@@ -25,7 +26,7 @@
 
 @end
 
-@interface MessageModel : Model
+@interface MessageModel : Model <MessageProtocol>
 
 @property (weak) id delegate;
 

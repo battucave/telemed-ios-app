@@ -14,10 +14,12 @@
 
 @interface PhoneNumberViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *textPhoneNumber;
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
+@property (weak, nonatomic) IBOutlet UITextField *textPhoneNumber;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
-@end
+@end                              
 
 @implementation PhoneNumberViewController
 
@@ -32,10 +34,20 @@
 	
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
-	[self.textPhoneNumber setAutocorrectionType:UITextAutocorrectionTypeNo];
+	// Shift form up for screens 480 or less in height
+	if([UIScreen mainScreen].bounds.size.height <= 480)
+	{
+		[self.constraintFormTop setConstant:12.0f];
+	}
+	
+	// Auto-focus phone number field
 	[self.textPhoneNumber becomeFirstResponder];
 	
-	#if DEBUG
+	// Attach toolbar to top of keyboard
+	[self.textPhoneNumber setInputAccessoryView:self.toolbar];
+	[self.toolbar removeFromSuperview];
+	
+	#ifdef DEBUG
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 		
 		switch([myProfileModel.ID integerValue])

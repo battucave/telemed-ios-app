@@ -1,28 +1,26 @@
 //
 //  LoginSSOViewController.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 5/20/15.
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
 #import "LoginSSOViewController.h"
-#import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
-#import "ELCUIApplication.h"
+#import "AFNetworkReachabilityManager.h"
 #import "AuthenticationModel.h"
-#import "MyProfileModel.h"
-#import "RegisteredDeviceModel.h"
 #import "SSOProviderModel.h"
 
 @interface LoginSSOViewController ()
 
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
-@property (weak, nonatomic) IBOutlet UIView *loadingView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *changeIDPRoviderButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonBack;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonLogin;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonChangeIDPRovider;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintToolbarBottom;
+@property (weak, nonatomic) IBOutlet UIView *loadingView;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isRetry;
@@ -36,7 +34,7 @@
 	[super viewDidLoad];
 	
 	// TEMPORARY: Client requested to hide Change ID Provider button
-	[self.changeIDPRoviderButton setTitle:@""];
+	[self.buttonChangeIDPRovider setTitle:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -51,31 +49,43 @@
 	// Set is loading to false
 	self.isLoading = NO;
 	
+	// Reset toolbar to bottom of view
+	[self.constraintToolbarBottom setConstant:0.0f];
+	
 	// Add Reachability Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWebView:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	
+	// Add Keyboard Observers
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-	[super viewDidDisappear:animated];
+	[super viewWillDisappear:animated];
 	
 	// Stop WebView
 	[self.webView stopLoading];
 	
-	 // Remove Reachability Observer
+	// Remove Keyboard Observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	
+	// Remove Reachability Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
-}
-
-// Unwind Segue from PhoneNumberViewController
-- (IBAction)unwindFromPhoneNumber:(UIStoryboardSegue *)segue
-{
-	NSLog(@"unwindFromPhoneNumber");
 }
 
 // Unwind Segue from SSOProviderViewController
 - (IBAction)unwindFromSSOProvider:(UIStoryboardSegue *)segue
 {
 	NSLog(@"unwindFromSSOProvider");
+}
+
+- (IBAction)doLogin:(id)sender
+{
+	NSLog(@"Trigger login");
+	// Trigger click on UIWebView form's login button
+	[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('loginButton').click();"];
 }
 
 - (IBAction)goBackWebView:(id)sender
@@ -148,10 +158,18 @@
 	NSURL *url = [NSURL URLWithString:fullURL];
 	NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 	
-	 // Fix for issue that causes UIWebView to shift left when keyboard appears (see viewForZoomingInScrollView)
-	[self.webView.scrollView setDelegate:self];
-	[self.webView.scrollView setScrollEnabled:NO];
+	// Prevent scrolling in UIWebView for screens taller than 480
+	if([UIScreen mainScreen].bounds.size.height > 480)
+	{
+		[self.webView.scrollView setScrollEnabled:NO];
+	}
+	// Prevent horizontal scrolling in UIWebView for screens 480 or less in height
+	else
+	{
+		[self.webView.scrollView setShowsHorizontalScrollIndicator:NO];
+	}
 	
+	[self.webView.scrollView setDelegate:self];
 	[self.webView loadRequest:urlRequest];
 	
 	// Alternative method using NSURLSession (doesn't send the correct user agent)
@@ -178,65 +196,42 @@
 {
 	NSLog(@"Finalize Login");
 	
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-	
-	[myProfileModel getWithCallback:^(BOOL success, MyProfileModel *profile, NSError *error)
-	{
-		if(success)
-		{
-			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-			
-			// Update Timeout Period to the value sent from Server
-			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
-			
-			NSLog(@"User ID: %@", myProfileModel.ID);
-			NSLog(@"Preferred Account ID: %@", myProfileModel.MyPreferredAccount.ID);
-			NSLog(@"Device ID: %@", registeredDeviceModel.ID);
-			NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
-			
-			// Check if device is already registered with TeleMed service
-			if(registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
-			{
-				// Phone Number is already registered with Web Service, so we just need to update Device Token (Device Token can change randomly so this keeps it up to date)
-				[registeredDeviceModel setShouldRegister:YES];
-				
-				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
-				{
-					// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-					if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
-					{
-						[self showWebViewError:[NSString stringWithFormat:@"There was a problem registering your device on our network:<br>%@", registeredDeviceError.localizedDescription]];
-					}
-					
-					if(success)
-					{
-						// Go to Main Storyboard
-						[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
-					}
-					// Error updating Device Token so show Phone Number screen so user can register correct phone number
-					else
-					{
-						[self performSegueWithIdentifier:@"showPhoneNumber" sender:self];
-					}
-				}];
-			}
-			// Device ID is not yet registered with TeleMed, so show Phone Number screen to register
-			else
-			{
-				[self performSegueWithIdentifier:@"showPhoneNumber" sender:self];
-			}
-		}
-		else
-		{
-			NSLog(@"LoginSSOViewController Error: %@", error);
-			
-			// Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
-			[self showWebViewError:[NSString stringWithFormat:@"There was a problem completing the login process:<br>%@", error.localizedDescription]];
-		}
-	}];
-	
 	// Set is loading to false
 	self.isLoading = NO;
+}
+
+// Move toolbar above keyboard
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+	// Obtain Keyboard Size
+	CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	
+	// Animate toolbar above keyboard
+	[UIView beginAnimations:@"ToolbarAboveKeyboard" context:nil];
+	[UIView setAnimationDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+	[UIView setAnimationCurve:[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+	
+	[self.constraintToolbarBottom setConstant:keyboardFrame.size.height];
+	[self.view layoutIfNeeded];
+	
+	[UIView commitAnimations];
+}
+
+// Move toolbar back to bottom of view
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+	// Animate keyboard to bottom of view
+	[UIView beginAnimations:@"ToolbarAboveKeyboard" context:nil];
+	[UIView setAnimationDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+	[UIView setAnimationCurve:[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+	
+	[self.constraintToolbarBottom setConstant:0.0f];
+	[self.view layoutIfNeeded];
+	
+	[UIView commitAnimations];
+	
+	// Reset scroll position of webview
+	[self.webView.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 - (void)updateWebViewLoading:(BOOL)isLoading
@@ -261,7 +256,7 @@
 		[self.webView setHidden:isLoading];
 		
 		// Toggle Back Button
-		[self.backButton setEnabled:self.webView.canGoBack];
+		[self.buttonBack setEnabled:self.webView.canGoBack];
 	});
 }
 
@@ -274,17 +269,6 @@
 	errorMessage = [NSString stringWithFormat:@"<div style=\"margin: 50px 10px 0; color: #fff; font-size: 16px;\"><p>%@</p><p>Please check your network connection and press the refresh button below to try again.</p></div>", errorMessage];
 	
 	[self.webView loadHTMLString:errorMessage baseURL:nil];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-	if([segue.identifier isEqualToString:@"showPhoneNumber"])
-	{
-		PhoneNumberViewController *phoneNumberViewController = segue.destinationViewController;
-		
-		// Set delegate
-		[phoneNumberViewController setDelegate:self];
-	}
 }
 
 
@@ -330,18 +314,29 @@
 	if([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
 	{
 		// Prevent users from being able to go back to about:blank
-		[self.backButton setEnabled:NO];
+		[self.buttonBack setEnabled:NO];
 		
-		// Update background to be transparent
-		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
+		// Update background to be transparent and hide login button
+		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent'; document.getElementById('loginButton').style.display = 'none';"];
 		
 		// Debug mode login shortcuts
-		#if DEBUG
+		#ifdef DEBUG
 			NSString *javascript = [NSString stringWithFormat:@
-				"var $userName = document.getElementById('userNameTextBox');"
+				"var $loginButton = document.getElementById('loginButton');"
 				"var $password = document.getElementById('passwordTextBox');"
+				"var $userName = document.getElementById('userNameTextBox');"
 				
-				/* Convert input text to a dropdown (not supported in UIWebView)
+				// Auto-populate form if value matches shortcut value
+				"var autoPopulate = function(event) {"
+					"switch ($userName.value) {"
+						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
+						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
+						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+					"}"
+				"};"
+				
+				/* Convert input text to a dropdown (not supported until UIWebView converted to WKWebView)
 				"const $dataList = document.createElement('datalist'); $dataList.setAttribute('userNameDataList');"
 				"['shanegoodwin', 'bturner', 'jhutchison', 'mattrogers'].forEach(function(userName) {"
 					"var $option = document.createElement('option');"
@@ -355,13 +350,13 @@
 				"$userName.setAttribute('placeholder', 'User Name 1st Letter');"
 				
 				// Add event on username to auto-populate form on blur if value matches shortcut value
-				"$userName.addEventListener('blur', function(event) {"
-					"switch ($userName.value) {"
-						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
-						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
-						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
-						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
-					"}"
+				"$userName.addEventListener('blur', autoPopulate);"
+				
+				// Add event on login button to auto-populate form on click if value matches shortcut value
+				"var doLogin = $loginButton.onclick;"
+				"$loginButton.addEventListener('click', function(event) {"
+					"autoPopulate(event);"
+					"doLogin(event);"
 				"});"
 				
 				// Add event on username to automatically submit form when Enter key pressed
@@ -385,7 +380,7 @@
 	else if([currentURL isEqualToString:@"about:blank"])
 	{
 		// Prevent users from being able to go back to about:blank
-		[self.backButton setEnabled:NO];
+		[self.buttonBack setEnabled:NO];
 	}
 	
 	// Hide Loading Screen
@@ -428,10 +423,27 @@
 	[self showWebViewError:[NSString stringWithFormat:@"There was a problem loading the login page:<br>%@", error.localizedDescription]];
 }
 
-// Fix for issue that causes UIWebView to shift left when keyboard appears
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-	return nil;
+	// Prevent zooming UIWebView for screens taller than 480
+	if([UIScreen mainScreen].bounds.size.height > 480)
+	{
+		return nil;
+	}
+	// Allow zooming UIWebView for screens 480 or less in height
+	else
+	{
+		return self.webView;
+	}
+}
+
+// Prevent horizontal scroll in UIWebView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	if(scrollView.contentOffset.x > 0)
+	{
+		[scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y)];
+	}
 }
 
 

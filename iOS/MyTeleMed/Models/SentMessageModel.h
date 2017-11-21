@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "MessageProtocol.h"
 
 @protocol SentMessageDelegate <NSObject>
 
@@ -19,7 +20,7 @@
 
 @end
 
-@interface SentMessageModel : Model
+@interface SentMessageModel : Model <MessageProtocol>
 
 @property (weak) id delegate;
 
@@ -30,7 +31,7 @@
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSString *LastSent_LCL;
 @property (nonatomic) NSString *LastSent_UTC;
-@property (nonatomic) NSString *MessageDeliveryID; // Placeholder property for compatibility with MessageModel (not set by web services)
+@property (nonatomic) NSNumber *MessageDeliveryID; // Placeholder property for compatibility with MessageModel (not set by web services)
 @property (nonatomic) NSNumber *MessageID;
 @property (nonatomic) NSString *PatientName;
 @property (nonatomic) NSString *Priority;

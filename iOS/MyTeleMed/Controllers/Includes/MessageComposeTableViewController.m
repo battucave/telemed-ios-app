@@ -40,8 +40,6 @@
 	
 	self.cellMessageHeight = self.cellMessage.frame.size.height;
 	
-	[self.textViewMessage setAutocorrectionType:UITextAutocorrectionTypeNo];
-	
 	// Only set placeholder if it has not already been set (otherwise the placeholder will update to anything the user previously typed when returning from MessageRecipientPickerTableViewController)
 	if( ! self.textViewMessagePlaceholder)
 	{
