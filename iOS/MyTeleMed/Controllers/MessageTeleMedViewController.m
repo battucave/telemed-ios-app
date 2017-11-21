@@ -33,7 +33,7 @@
 	[self.emailTelemedModel setDelegate:self];
 	
 	// If Active or Archived Message, include its Message Delivery ID
-	if(self.message.MessageDeliveryID)
+	if([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID)
 	{
 		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
 	}

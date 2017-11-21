@@ -24,14 +24,13 @@
 
 @property (weak) id delegate;
 
-// Any additional properties added here must also be added to MessageStub
+// Any additional properties added here must also be added to MessageProtocol
 
 @property (nonatomic) NSString *FirstSent_LCL;
 @property (nonatomic) NSString *FirstSent_UTC;
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSString *LastSent_LCL;
 @property (nonatomic) NSString *LastSent_UTC;
-@property (nonatomic) NSNumber *MessageDeliveryID; // Placeholder property for compatibility with MessageModel (not set by web services)
 @property (nonatomic) NSNumber *MessageID;
 @property (nonatomic) NSString *PatientName;
 @property (nonatomic) NSString *Priority;

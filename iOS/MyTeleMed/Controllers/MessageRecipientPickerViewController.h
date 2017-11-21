@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 #import "AccountModel.h"
-#import "MessageStub.h"
+#import "MessageProtocol.h"
 
 @interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) MessageStub *message;
+@property (nonatomic) id <MessageProtocol> message;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 @property (nonatomic) NSString *messageRecipientType;

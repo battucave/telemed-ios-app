@@ -89,7 +89,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	// Prevent Sent Messages from Returning Call or Archiving (should never reach this point)
-	if( ! self.message.MessageDeliveryID)
+	if( ! [self.message respondsToSelector:@selector(MessageDeliveryID)] || ! self.message.MessageDeliveryID)
 	{
 		return;
 	}

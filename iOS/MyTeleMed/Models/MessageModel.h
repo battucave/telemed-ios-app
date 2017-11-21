@@ -30,7 +30,7 @@
 
 @property (weak) id delegate;
 
-// Any additional properties added here must also be added to MessageStub
+// Any additional properties added here must also be added to MessageProtocol
 
 @property (nonatomic) NSNumber *ID; // Deprecated in favor of MessageDeliveryID (they are identical)
 @property (nonatomic) NSString *FormattedMessageText;

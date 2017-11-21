@@ -7,8 +7,8 @@
 //
 
 #import "ForwardMessageModel.h"
+#import "MessageProtocol.h"
 #import "CommentModel.h"
-#import "MessageStub.h"
 
 @interface ForwardMessageModel ()
 
@@ -18,7 +18,7 @@
 
 @implementation ForwardMessageModel
 
-- (void)forwardMessage:(MessageStub *)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment
+- (void)forwardMessage:(id <MessageProtocol>)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment
 {
 	// Show Activity Indicator
 	[self showActivityIndicator];
@@ -41,7 +41,7 @@
 		"</FwdMsg>";
 	
 	// Forward with Message Delivery ID
-	if(message.MessageDeliveryID)
+	if([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
 		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, xmlRecipients];
 	}

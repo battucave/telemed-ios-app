@@ -80,7 +80,7 @@
 	
 	NSLog(@"Message ID: %@", self.message.MessageID);
 	
-	if(self.message.MessageDeliveryID)
+	if([self.message respondsToSelector:@selector(MessageDeliveryID)])
 	{
 		NSLog(@"Message Delivery ID: %@", self.message.MessageDeliveryID);
 	}
@@ -126,7 +126,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 	
 	// Mark message as read if active and unread
-	if([self.message respondsToSelector:@selector(State)])
+	if([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID && [self.message respondsToSelector:@selector(State)] && self.message.State)
 	{
 		if(self.message.messageType == 0 && [self.message.State isEqualToString:@"Unread"])
 		{
@@ -195,7 +195,7 @@
 	if([notificationType isEqualToString:@"Comment"] && deliveryID)
 	{
 		// Received Messages
-		if(self.message.MessageDeliveryID && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
+		if([self.message respondsToSelector:@selector(MessageDeliveryID)] && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
 		{
 			NSLog(@"Refresh Comments with Message Delivery ID: %@", deliveryID);
 			

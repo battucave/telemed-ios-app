@@ -211,7 +211,6 @@
 		E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB641B3471C00024D970 /* AuthenticationHTTPSessionManager.m */; };
 		E25036F41FBB88F400099C7E /* SSOProviderXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB5B1B33223C0024D970 /* SSOProviderXMLParser.m */; };
-		E25036F51FBB88F400099C7E /* MessageStub.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F93E6C1E845B33003273B2 /* MessageStub.m */; };
 		E25036F61FBB88F400099C7E /* MessageRecipientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */; };
 		E25036F71FBB88F400099C7E /* RevealTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661E1418353B630071FADF /* RevealTableViewController.m */; };
 		E25036F81FBB88F400099C7E /* NSObject+Swizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */; };
@@ -474,7 +473,6 @@
 		E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */; };
 		E2ECFB691B3471C00024D970 /* AuthenticationHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB641B3471C00024D970 /* AuthenticationHTTPSessionManager.m */; };
 		E2ED891F1D9DB2EE0094214C /* NewChatMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ED891E1D9DB2EE0094214C /* NewChatMessageModel.m */; };
-		E2F93E6E1E845B33003273B2 /* MessageStub.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F93E6C1E845B33003273B2 /* MessageStub.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -950,8 +948,6 @@
 		E2ECFB651B3471C00024D970 /* AuthenticationHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationHTTPSessionManager.h; sourceTree = "<group>"; };
 		E2ED891D1D9DB2EE0094214C /* NewChatMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewChatMessageModel.h; sourceTree = "<group>"; };
 		E2ED891E1D9DB2EE0094214C /* NewChatMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewChatMessageModel.m; sourceTree = "<group>"; };
-		E2F93E6C1E845B33003273B2 /* MessageStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageStub.m; sourceTree = "<group>"; };
-		E2F93E6D1E845B33003273B2 /* MessageStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageStub.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1655,7 +1651,6 @@
 			children = (
 				E27B84B01B14B96A00AD50C6 /* Core */,
 				E2C7C1C21FC4944F00E50F07 /* Protocols */,
-				E2F93E6B1E845B33003273B2 /* Stubs */,
 				E27B85101B14D09400AD50C6 /* XML Parsers */,
 				E27B84E91B14CF6A00AD50C6 /* AccountModel.h */,
 				E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */,
@@ -1812,15 +1807,6 @@
 				E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */,
 			);
 			path = "AFNetworking HTTP Managers";
-			sourceTree = "<group>";
-		};
-		E2F93E6B1E845B33003273B2 /* Stubs */ = {
-			isa = PBXGroup;
-			children = (
-				E2F93E6D1E845B33003273B2 /* MessageStub.h */,
-				E2F93E6C1E845B33003273B2 /* MessageStub.m */,
-			);
-			path = Stubs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2349,7 +2335,6 @@
 				E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */,
 				28DAB3541A9687E600400553 /* MessageDetailParentViewController.m in Sources */,
 				E2ECFB5C1B33223C0024D970 /* SSOProviderXMLParser.m in Sources */,
-				E2F93E6E1E845B33003273B2 /* MessageStub.m in Sources */,
 				E27B85031B14CFE600AD50C6 /* MessageRecipientModel.m in Sources */,
 				28661E1818353B630071FADF /* RevealTableViewController.m in Sources */,
 				E2AE66371CE0DD7300953EFA /* NSObject+Swizzle.m in Sources */,
@@ -2443,7 +2428,6 @@
 				E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */,
 				E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */,
 				E25036F41FBB88F400099C7E /* SSOProviderXMLParser.m in Sources */,
-				E25036F51FBB88F400099C7E /* MessageStub.m in Sources */,
 				E25036F61FBB88F400099C7E /* MessageRecipientModel.m in Sources */,
 				E25036F71FBB88F400099C7E /* RevealTableViewController.m in Sources */,
 				E25036F81FBB88F400099C7E /* NSObject+Swizzle.m in Sources */,

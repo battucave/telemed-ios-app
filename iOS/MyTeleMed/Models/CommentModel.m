@@ -7,7 +7,7 @@
 //
 
 #import "CommentModel.h"
-#import "MessageStub.h"
+#import "MessageProtocol.h"
 
 @interface CommentModel ()
 
@@ -19,17 +19,17 @@
 
 @implementation CommentModel
 
-- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
+- (void)addMessageComment:(id <MessageProtocol>)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID
 {
 	[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:NO];
 }
 
-- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
+- (void)addMessageComment:(id <MessageProtocol>)message comment:(NSString *)comment toForwardMessage:(BOOL)toForwardMessage
 {
 	[self addMessageComment:message comment:comment withPendingID:nil toForwardMessage:toForwardMessage];
 }
 
-- (void)addMessageComment:(MessageStub *)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
+- (void)addMessageComment:(id <MessageProtocol>)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
 {
 	// Show Activity Indicator only if not being added with Forward Message
 	if( ! toForwardMessage)
@@ -50,7 +50,7 @@
 		"</Comment>";
 	
 	// Comment with Message Delivery ID
-	if(message.MessageDeliveryID)
+	if([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
 		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, comment];
 	}

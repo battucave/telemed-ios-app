@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 #import "MessageModel.h"
-#import "MessageStub.h"
+#import "MessageProtocol.h"
 
 @interface MessageDetailParentViewController : CoreViewController
 
-@property (nonatomic) MessageStub *message;
+@property (nonatomic) id <MessageProtocol> message;
 @property (nonatomic) MessageModel *messageModel;
 
 @property (nonatomic) NSArray *messageEvents;

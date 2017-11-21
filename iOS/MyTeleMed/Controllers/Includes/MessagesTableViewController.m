@@ -9,9 +9,9 @@
 #import "MessagesTableViewController.h"
 #import "MessageDetailViewController.h"
 #import "MessageCell.h"
+#import "MessageProtocol.h"
 #import "MessageModel.h"
 #import "SentMessageModel.h"
-#import "MessageStub.h"
 
 @interface MessagesTableViewController ()
 
@@ -530,7 +530,7 @@
 		
 		if([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
 		{
-			MessageStub *message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
+			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
 			[message setMessageType:self.messagesType];
 			[messageDetailViewController setMessage:message];
