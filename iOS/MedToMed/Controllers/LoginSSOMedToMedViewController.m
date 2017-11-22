@@ -7,10 +7,11 @@
 //
 
 #import "LoginSSOMedToMedViewController.h"
-#import "NewAccountViewController.h"
+#import "AccountNewViewController.h"
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
 #import "ProfileProtocol.h"
+#import "AccountModel.h"
 #import "UserProfileModel.h"
 
 @implementation LoginSSOMedToMedViewController
@@ -59,7 +60,7 @@
 {
 	if([segue.identifier isEqualToString:@"showNewAccount"])
 	{
-		NewAccountViewController *newAccountViewController = segue.destinationViewController;
+		AccountNewViewController *newAccountViewController = segue.destinationViewController;
 		
 		// Set delegate
 		[newAccountViewController setDelegate:self];

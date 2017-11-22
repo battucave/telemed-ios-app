@@ -75,15 +75,6 @@
 	#endif
 }
 
-- (IBAction)showHelp:(id)sender
-{
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-	HelpViewController *helpViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"HelpViewController"];
-	
-	[helpViewController setShowBackButton:YES];
-	[self.navigationController pushViewController:helpViewController animated:YES];
-}
-
 - (IBAction)submitPhoneNumber:(id)sender
 {
 	NSString *phoneNumber = self.textPhoneNumber.text;
@@ -192,6 +183,16 @@
 	self.buttonHelp.hidden = NO;
 		
 	return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if([segue.identifier isEqualToString:@"showHelpFromPhoneNumber"])
+	{
+		HelpViewController *helpViewController = segue.destinationViewController;
+		
+		[helpViewController setShowBackButton:YES];
+	}
 }
 
 - (void)didReceiveMemoryWarning

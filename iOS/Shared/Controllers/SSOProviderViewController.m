@@ -76,15 +76,6 @@
 	}];
 }
 
-- (IBAction)showHelp:(id)sender
-{
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-	HelpViewController *helpViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"HelpViewController"];
-	
-	[helpViewController setShowBackButton:YES];
-	[self.navigationController pushViewController:helpViewController animated:YES];
-}
-
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
 	NSString *textString = [textField.text stringByReplacingCharactersInRange:range withString:string];
@@ -107,6 +98,16 @@
 	self.buttonHelp.hidden = NO;
 	
 	return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if([segue.identifier isEqualToString:@"showHelpFromSSOProvider"])
+	{
+		HelpViewController *helpViewController = segue.destinationViewController;
+		
+		[helpViewController setShowBackButton:YES];
+	}
 }
 
 - (void)didReceiveMemoryWarning

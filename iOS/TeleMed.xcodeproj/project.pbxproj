@@ -135,7 +135,7 @@
 		E232D7041E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */; };
 		E232D7071E675E7800B797E1 /* indicator-CommentRightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */; };
 		E232D7081E675E7800B797E1 /* indicator-CommentRightBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */; };
-		E23A4F471FC3273A00DC899D /* NewAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F461FC3273A00DC899D /* NewAccountViewController.m */; };
+		E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F461FC3273A00DC899D /* AccountNewViewController.m */; };
 		E23A4F4A1FC3325C00DC899D /* LoginSSOMedToMedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */; };
 		E240EE6D1F54A462009D8ED1 /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
@@ -305,6 +305,8 @@
 		E25037AC1FBB88F400099C7E /* button-Help-PDF@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5671C1CDB85B80054FD3F /* button-Help-PDF@3x.png */; };
 		E25037AE1FBB88F400099C7E /* button-Help-PDF.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */; };
 		E25037AF1FBB88F400099C7E /* menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672C1CDB85B80054FD3F /* menu@3x.png */; };
+		E2622D0C1FC5F8B0008BCFF3 /* MessageNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0B1FC5F8B0008BCFF3 /* MessageNewViewController.m */; };
+		E2622D0F1FC5F9A4008BCFF3 /* MessageNew2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0E1FC5F9A4008BCFF3 /* MessageNew2ViewController.m */; };
 		E270ED5F1B1758C900DD43B8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */; };
 		E270ED601B1758C900DD43B8 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */; };
 		E270ED611B1758C900DD43B8 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3C1B1758C900DD43B8 /* AFSecurityPolicy.m */; };
@@ -696,8 +698,8 @@
 		E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@3x.png"; sourceTree = "<group>"; };
 		E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue.png"; sourceTree = "<group>"; };
 		E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue@2x.png"; sourceTree = "<group>"; };
-		E23A4F431FC3269F00DC899D /* NewAccountViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewAccountViewController.h; sourceTree = "<group>"; };
-		E23A4F461FC3273A00DC899D /* NewAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewAccountViewController.m; sourceTree = "<group>"; };
+		E23A4F431FC3269F00DC899D /* AccountNewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountNewViewController.h; sourceTree = "<group>"; };
+		E23A4F461FC3273A00DC899D /* AccountNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountNewViewController.m; sourceTree = "<group>"; };
 		E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginSSOMedToMedViewController.h; sourceTree = "<group>"; };
 		E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginSSOMedToMedViewController.m; sourceTree = "<group>"; };
 		E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IBDesignable.h"; sourceTree = "<group>"; };
@@ -710,6 +712,10 @@
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
 		E25037B71FBB88F400099C7E /* MedToMed Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MedToMed Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2622D0A1FC5F8B0008BCFF3 /* MessageNewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNewViewController.h; sourceTree = "<group>"; };
+		E2622D0B1FC5F8B0008BCFF3 /* MessageNewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNewViewController.m; sourceTree = "<group>"; };
+		E2622D0D1FC5F9A4008BCFF3 /* MessageNew2ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNew2ViewController.h; sourceTree = "<group>"; };
+		E2622D0E1FC5F9A4008BCFF3 /* MessageNew2ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNew2ViewController.m; sourceTree = "<group>"; };
 		E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTeleMed.entitlements; sourceTree = "<group>"; };
 		E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
 		E270ED391B1758C900DD43B8 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -1562,10 +1568,14 @@
 		E211D5A01FBF5F1900263497 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E23A4F431FC3269F00DC899D /* AccountNewViewController.h */,
+				E23A4F461FC3273A00DC899D /* AccountNewViewController.m */,
 				E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */,
 				E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */,
-				E23A4F431FC3269F00DC899D /* NewAccountViewController.h */,
-				E23A4F461FC3273A00DC899D /* NewAccountViewController.m */,
+				E2622D0A1FC5F8B0008BCFF3 /* MessageNewViewController.h */,
+				E2622D0B1FC5F8B0008BCFF3 /* MessageNewViewController.m */,
+				E2622D0D1FC5F9A4008BCFF3 /* MessageNew2ViewController.h */,
+				E2622D0E1FC5F9A4008BCFF3 /* MessageNew2ViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2397,10 +2407,12 @@
 				E25036981FBB88F400099C7E /* UIButton+AFNetworking.m in Sources */,
 				E25036991FBB88F400099C7E /* NotificationSettingXMLParser.m in Sources */,
 				E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */,
+				E2622D0F1FC5F9A4008BCFF3 /* MessageNew2ViewController.m in Sources */,
 				E250369B1FBB88F400099C7E /* NewChatMessageModel.m in Sources */,
 				E250369C1FBB88F400099C7E /* ForwardMessageModel.m in Sources */,
 				E250369D1FBB88F400099C7E /* CoreViewController.m in Sources */,
 				E250369F1FBB88F400099C7E /* AFURLRequestSerialization.m in Sources */,
+				E2622D0C1FC5F8B0008BCFF3 /* MessageNewViewController.m in Sources */,
 				E25036A31FBB88F400099C7E /* SentMessageModel.m in Sources */,
 				E25036A51FBB88F400099C7E /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				E25036A71FBB88F400099C7E /* Model.m in Sources */,
@@ -2418,7 +2430,7 @@
 				E25036B61FBB88F400099C7E /* CallModel.m in Sources */,
 				E25036B71FBB88F400099C7E /* SSOProviderViewController.m in Sources */,
 				E25036B81FBB88F400099C7E /* CustomAlertView.m in Sources */,
-				E23A4F471FC3273A00DC899D /* NewAccountViewController.m in Sources */,
+				E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */,
 				E25036B91FBB88F400099C7E /* OnePixelLayoutConstraint.m in Sources */,
 				E25036BA1FBB88F400099C7E /* AFURLConnectionOperation.m in Sources */,
 				E25036BC1FBB88F400099C7E /* UIRefreshControl+AFNetworking.m in Sources */,

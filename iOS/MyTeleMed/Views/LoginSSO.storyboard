@@ -109,7 +109,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="he5-gv-e9L"/>
-                                    <barButtonItem enabled="NO" title="Change ID Provider?" style="plain" id="qFS-93-Wf5">
+                                    <barButtonItem title="Change ID Provider?" style="plain" id="qFS-93-Wf5">
                                         <connections>
                                             <segue destination="5BC-59-clT" kind="show" identifier="showSSOProvider" id="axa-Zz-Ja4"/>
                                         </connections>
@@ -227,7 +227,7 @@
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="showHelp:" destination="5BC-59-clT" eventType="touchUpInside" id="bl2-X6-cLq"/>
+                                    <segue destination="aua-Qa-l8H" kind="show" identifier="showHelpFromSSOProvider" id="7Cm-Eo-Uci"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTd-DT-7HF">
@@ -361,7 +361,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="showHelp:" destination="2av-Uk-df6" eventType="touchUpInside" id="lt0-IA-3NY"/>
+                                    <segue destination="aua-Qa-l8H" kind="show" identifier="showHelpFromPhoneNumber" id="EId-x6-V12"/>
                                 </connections>
                             </button>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKv-ru-MdQ">
@@ -427,6 +427,14 @@
             </objects>
             <point key="canvasLocation" x="1738" y="258"/>
         </scene>
+        <!--HelpViewController-->
+        <scene sceneID="7MW-Oo-Dby">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="HelpViewController" id="aua-Qa-l8H" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EDn-Si-4b6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2406" y="600"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Logo-MyTeleMed" width="300" height="75"/>
@@ -438,4 +446,7 @@
         <image name="button-WebViewBack.png" width="12" height="21"/>
         <image name="button-WebViewForward.png" width="12" height="21"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="EId-x6-V12"/>
+    </inferredMetricsTieBreakers>
 </document>

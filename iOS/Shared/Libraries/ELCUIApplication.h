@@ -7,9 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-// Default # of minutes before application times out (overwritten with value from User Info Model)
-#define kDefaultTimeoutPeriodMins 10
-
 // Notification that gets sent when the timeout occurs
 #define kApplicationDidTimeoutNotification @"ApplicationDidTimeout"
 

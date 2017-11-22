@@ -1,15 +1,15 @@
 //
-//  NewAccountViewController.m
+//  AccountNewViewController.m
 //  MedToMed
 //
 //  Created by Shane Goodwin on 11/20/17.
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import "NewAccountViewController.h"
+#import "AccountNewViewController.h"
 #import "HelpViewController.h"
 
-@interface NewAccountViewController ()
+@interface AccountNewViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation NewAccountViewController
+@implementation AccountNewViewController
 
 - (void)viewDidLoad
 {
@@ -45,15 +45,6 @@
 	// Attach toolbar to top of keyboard
 	[self.textAccountCode setInputAccessoryView:self.toolbar];
 	[self.toolbar removeFromSuperview];
-}
-
-- (IBAction)showHelp:(id)sender
-{
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-	HelpViewController *helpViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"HelpViewController"];
-	
-	[helpViewController setShowBackButton:YES];
-	[self.navigationController pushViewController:helpViewController animated:YES];
 }
 
 - (IBAction)submitAccountCode:(id)sender
@@ -95,6 +86,16 @@
 	self.buttonHelp.hidden = NO;
 	
 	return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if([segue.identifier isEqualToString:@"showHelp"])
+	{
+		HelpViewController *helpViewController = segue.destinationViewController;
+		
+		[helpViewController setShowBackButton:YES];
+	}
 }
 
 - (void)didReceiveMemoryWarning

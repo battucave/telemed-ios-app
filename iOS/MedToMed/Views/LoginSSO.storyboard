@@ -291,10 +291,10 @@
             </objects>
             <point key="canvasLocation" x="1738" y="974"/>
         </scene>
-        <!--New Account View Controller-->
+        <!--Account New View Controller-->
         <scene sceneID="Ywa-UN-9m2">
             <objects>
-                <viewController storyboardIdentifier="NewAccountViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2av-Uk-df6" customClass="NewAccountViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewAccountViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2av-Uk-df6" customClass="AccountNewViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HGa-4g-TRT">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -360,7 +360,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="showHelp:" destination="2av-Uk-df6" eventType="touchUpInside" id="lt0-IA-3NY"/>
+                                    <segue destination="xFW-3Q-c8J" kind="show" identifier="showHelp" id="5jM-Mm-F6a"/>
                                 </connections>
                             </button>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uoX-dw-aZx">
@@ -437,6 +437,14 @@
                 <exit id="bXr-xs-BMc" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1736.25" y="257.74647887323943"/>
+        </scene>
+        <!--HelpViewController-->
+        <scene sceneID="F0H-cY-P0S">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="HelpViewController" id="xFW-3Q-c8J" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LDj-19-C8b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2317" y="257"/>
         </scene>
     </scenes>
     <resources>

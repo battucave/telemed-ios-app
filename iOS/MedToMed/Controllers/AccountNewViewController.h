@@ -1,5 +1,5 @@
 //
-//  NewAccountViewController.h
+//  AccountNewViewController.h
 //  MedToMed
 //
 //  Created by Shane Goodwin on 11/20/17.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 
-@interface NewAccountViewController : CoreViewController <UITextFieldDelegate>
+@interface AccountNewViewController : CoreViewController <UITextFieldDelegate>
 
 @property (weak) id delegate;
 

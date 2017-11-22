@@ -32,7 +32,7 @@
 {
     [super viewDidLoad];
 	
-	[self setMenuItems:@[@"Messages", @"Sent", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
+	[self setMenuItems:@[@"Messages", @"Sent Messages", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
 	[self setMyStatusModel:[MyStatusModel sharedInstance]];
 }

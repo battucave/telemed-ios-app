@@ -11,10 +11,19 @@
  * Set in project's Build Settings' Preprocessor Macros
  */
 
+
+/**
+ * API URL'S
+ */
 #define API_BASE_URL BASE_URL @"/" API_PREFIX @"/api/"
 #define AUTHENTICATION_BASE_URL BASE_URL @"/Auth/"
 #define AUTHENTICATION_CALLBACK_PAGE @"Authentication/Success"
 
+
+/**
+ * TIMEOUT/EXPIRATION PERIODS
+ */
+#define DEFAULT_APP_TIMEOUT_PERIOD_MINS 10
 #define ACCESS_TOKEN_EXPIRATION_TIME 28.0
 #define NSURLREQUEST_TIMEOUT_INTERVAL 12.0
 #define NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL 60.0 // All requests that submit data to server need longer timeout

@@ -34,7 +34,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="166.40000000000001" y="-547.82608695652175"/>
+            <point key="canvasLocation" x="166" y="-548"/>
         </scene>
         <!--Side Navigation View Controller-->
         <scene sceneID="txS-we-mOc">
@@ -134,7 +134,7 @@
                                                     <segue destination="2Ma-B1-RxK" kind="custom" identifier="showMessages" customClass="SWRevealViewControllerSegue" id="FA7-fW-yLW"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Sent" textLabel="YSS-sg-iQ8" style="IBUITableViewCellStyleDefault" id="zq8-hX-NNR">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Sent Messages" textLabel="YSS-sg-iQ8" style="IBUITableViewCellStyleDefault" id="zq8-hX-NNR">
                                                 <rect key="frame" x="0.0" y="45" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="zq8-hX-NNR" id="YfP-bh-Nft">
@@ -393,7 +393,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="178-wK-Ghl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1082.4000000000001" y="-1196.8515742128936"/>
+            <point key="canvasLocation" x="1082" y="-1216"/>
         </scene>
         <!--CDMA Voice Data-->
         <scene sceneID="hcB-w6-3xy">
@@ -523,7 +523,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gqx-LD-Abx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="166.40000000000001" y="-1196.4017991004498"/>
+            <point key="canvasLocation" x="166" y="-1216"/>
         </scene>
         <!--Messages-->
         <scene sceneID="C4g-wv-3iX">
@@ -838,15 +838,15 @@
                                 <rect key="frame" x="0.0" y="108" width="375" height="441"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
-                                        <rect key="frame" x="0.0" y="1" width="600" height="44"/>
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
+                                        <rect key="frame" x="0.0" y="1" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="Upo-gR-JBa" id="B7b-n4-kLc">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g6D-99-BDF">
-                                                    <rect key="frame" x="15" y="0.0" width="570" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2392,7 +2392,7 @@
         <scene sceneID="Bla-bT-Nrp">
             <objects>
                 <tableViewController storyboardIdentifier="SettingsTableViewController" id="dAQ-yX-cuG" customClass="SettingsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="ESE-Wx-j82">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="ESE-Wx-j82">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.89411764705882346" green="0.89411764705882346" blue="0.89411764705882346" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2406,14 +2406,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9VP-gf-edv">
-                                                    <rect key="frame" x="309" y="6" width="51" height="31"/>
-                                                    <connections>
-                                                        <action selector="updateTimeout:" destination="dAQ-yX-cuG" eventType="valueChanged" id="3E0-Pu-r2a"/>
-                                                    </connections>
-                                                </switch>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timeout Enabled" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ylM-Vr-5XF">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="10.5" width="160" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="160" id="Aq4-dW-MxI"/>
                                                     </constraints>
@@ -2421,6 +2415,12 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9VP-gf-edv">
+                                                    <rect key="frame" x="309" y="6" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="updateTimeout:" destination="dAQ-yX-cuG" eventType="valueChanged" id="3E0-Pu-r2a"/>
+                                                    </connections>
+                                                </switch>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="9VP-gf-edv" secondAttribute="centerY" id="KUx-oP-XM4"/>
@@ -2969,7 +2969,7 @@
         <!--Messages-->
         <scene sceneID="b7b-5i-pin">
             <objects>
-                <navigationController storyboardIdentifier="MessagesNavigationController" title="Messages" automaticallyAdjustsScrollViewInsets="NO" id="kay-ex-DkM" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MessagesNavigationController" title="Messages" id="kay-ex-DkM" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="36Z-Y6-gYL">
@@ -2991,7 +2991,7 @@
         <!--Archives-->
         <scene sceneID="z2B-oZ-hDQ">
             <objects>
-                <navigationController storyboardIdentifier="ArchivesNavigationController" title="Archives" automaticallyAdjustsScrollViewInsets="NO" id="fY8-cz-G5N" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ArchivesNavigationController" title="Archives" id="fY8-cz-G5N" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3aa-Cu-Olp">
@@ -3010,7 +3010,7 @@
         <!--Contact TeleMed-->
         <scene sceneID="ESO-HR-nzf">
             <objects>
-                <navigationController storyboardIdentifier="ContactTeleMedNavigationController" title="Contact TeleMed" automaticallyAdjustsScrollViewInsets="NO" id="oHW-SL-SG3" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ContactTeleMedNavigationController" title="Contact TeleMed" id="oHW-SL-SG3" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="g6x-Ow-cck">
@@ -3029,7 +3029,7 @@
         <!--On Call Schedule-->
         <scene sceneID="bPB-Ps-b4g">
             <objects>
-                <navigationController storyboardIdentifier="OnCallScheduleNavigationController" title="On Call Schedule" automaticallyAdjustsScrollViewInsets="NO" id="pSq-Ov-kIV" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="OnCallScheduleNavigationController" title="On Call Schedule" id="pSq-Ov-kIV" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="WVc-ka-KGK">
@@ -3048,7 +3048,7 @@
         <!--Settings-->
         <scene sceneID="6I9-aC-9Bk">
             <objects>
-                <navigationController storyboardIdentifier="SettingsNavigationController" title="Settings" automaticallyAdjustsScrollViewInsets="NO" id="euq-Vs-znu" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SettingsNavigationController" title="Settings" id="euq-Vs-znu" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="lTT-dt-mC3">
@@ -3343,7 +3343,7 @@
         <!--Help-->
         <scene sceneID="4Qw-wf-C0f">
             <objects>
-                <navigationController storyboardIdentifier="HelpNavigationController" title="Help" automaticallyAdjustsScrollViewInsets="NO" id="RiU-mF-mtB" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="HelpNavigationController" title="Help" id="RiU-mF-mtB" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="NiP-2j-RT2"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -3870,7 +3870,7 @@
         <!--Secure Chat-->
         <scene sceneID="nrp-Zm-uBa">
             <objects>
-                <navigationController storyboardIdentifier="ChatNavigationController" title="Secure Chat" automaticallyAdjustsScrollViewInsets="NO" id="xvU-lO-4ac" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ChatNavigationController" title="Secure Chat" id="xvU-lO-4ac" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rT8-Ee-hw5">
@@ -4516,7 +4516,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="ejp-fl-nDj"/>
         <segue reference="j8k-kI-sFx"/>
         <segue reference="ZfR-s3-nyT"/>
-        <segue reference="9Rx-MN-6ah"/>
+        <segue reference="5dH-85-6Q3"/>
         <segue reference="xeH-nb-wrL"/>
         <segue reference="c1m-Px-Iwz"/>
         <segue reference="V9Q-rq-EEe"/>

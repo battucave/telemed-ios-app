@@ -260,10 +260,12 @@
 		#ifdef MYTELEMED
 			profileProtocol = [MyProfileModel sharedInstance];
 		
-		#elif defined(MEDTOMED)
+		#elif defined MEDTOMED
 			profileProtocol = [UserProfileModel sharedInstance];
 		
 		#else
+			NSLog(@"Error - Target is neither MyTeleMed nor MedToMed");
+		
 			[self showLoginSSOScreen];
 		
 			return;
@@ -281,10 +283,12 @@
 				#ifdef MYTELEMED
 					[self validateRegistration:profile];
 				
-				// Nothing to validate - just go to main screen
-				#else
-					[self showMainScreen];
+				// MedToMed - Validate at least one account is authorized
+				#elif defined MEDTOMED
+					[self validateMedToMedAuthorization];
 				#endif
+				
+				// Don't need an else condition here because logic already handles it before calling profile's getWithCallback method
 			}
 			// Account is no longer valid so go to Login screen
 			else
@@ -562,6 +566,22 @@
 			[self showLoginSSOScreen];
 		#endif
 	}
+}
+#endif
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+- (void)validateMedToMedAuthorization
+{
+	// Fetch Accounts and check the authorization status for each
+		// If at least one account has "Authorized" status, then
+			// Go to Main Storyboard
+			[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+
+		// Else
+			// Go to MedToMed's Settings screen and include messaging about what user needs to do to be able to send messages
 }
 #endif
 
