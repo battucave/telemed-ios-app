@@ -35,8 +35,13 @@
 			// Update Timeout Period to the value sent from sserver
 			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
 			
-			// Go to Main Storyboard
-			[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+			// Fetch Accounts and check the authorization status for each
+				// If at least one account has "Authorized" status, then
+					// Go to Main Storyboard
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+			
+				// Else
+					// Go to MedToMed's Settings screen and include messaging about what user needs to do to be able to send messages
 		}
 		else
 		{
