@@ -16,10 +16,10 @@
 
 @implementation LoginSSOMedToMedViewController
 
-// Unwind Segue from NewAccountViewController
-- (IBAction)unwindFromNewAccount:(UIStoryboardSegue *)segue
+// Unwind Segue from AccountNewViewController
+- (IBAction)unwindFromAccountNew:(UIStoryboardSegue *)segue
 {
-	NSLog(@"unwindFromNewAccount");
+	NSLog(@"unwindFromAccountNew");
 }
 
 // Obtain User Data from server and initialize app

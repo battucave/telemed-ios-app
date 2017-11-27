@@ -7,6 +7,7 @@
 //
 
 #import "CoreViewController.h"
+#import "CDMAVoiceDataViewController.h"
 #import "NotificationSettingModel.h"
 #import <AudioToolbox/AudioServices.h>
 
@@ -46,29 +47,12 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// Show CDMA Voice Data screen if it hasn't already been disabled or hidden
-	if(self.storyboard && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
+	// Show CDMA Voice Data after LoginSSO storyboard process had resolved if it hasn't already been disabled or hidden
+	if(! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
 	{
-		UIStoryboard *mainStoryboard;
-		NSString *storyboardName = [self.storyboard valueForKey:@"name"];
+		CDMAVoiceDataViewController *cdmaVoiceDataViewController = [[CDMAVoiceDataViewController alloc] initWithNibName:@"CDMAVoiceData" bundle:nil];
 		
-		// If currently on Main storyboard
-		if([storyboardName isEqualToString:@"Main"])
-		{
-			mainStoryboard = self.storyboard;
-		}
-		// If currently on MedToMed storyboard
-		else if([storyboardName isEqualToString:@"MedToMed"])
-		{
-			mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-		}
-		
-		if(mainStoryboard != nil)
-		{
-			UIViewController *CDMAVoiceDataViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"CDMAVoiceDataViewController"];
-			
-			[self presentViewController:CDMAVoiceDataViewController animated:NO completion:nil];
-		}
+		[self presentViewController:cdmaVoiceDataViewController animated:NO completion:nil];
 	}
 }
 

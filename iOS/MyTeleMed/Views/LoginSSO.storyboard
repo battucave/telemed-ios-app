@@ -109,7 +109,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="he5-gv-e9L"/>
-                                    <barButtonItem title="Change ID Provider?" style="plain" id="qFS-93-Wf5">
+                                    <barButtonItem enabled="NO" title="Change ID Provider?" style="plain" id="qFS-93-Wf5">
                                         <connections>
                                             <segue destination="5BC-59-clT" kind="show" identifier="showSSOProvider" id="axa-Zz-Ja4"/>
                                         </connections>
@@ -154,6 +154,7 @@
                         <outlet property="activityIndicator" destination="veN-bL-Vga" id="pSD-cl-WyW"/>
                         <outlet property="buttonBack" destination="L6n-6o-7ZE" id="Zev-OQ-XxH"/>
                         <outlet property="buttonChangeIDPRovider" destination="qFS-93-Wf5" id="dfM-D9-cAK"/>
+                        <outlet property="buttonLogin" destination="eZi-Wo-MRE" id="cc4-So-gqe"/>
                         <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="Rgv-gr-GBL"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>
                         <outlet property="webView" destination="HAU-mb-TqS" id="QO0-LX-oBu"/>
@@ -230,53 +231,70 @@
                                     <segue destination="aua-Qa-l8H" kind="show" identifier="showHelpFromSSOProvider" id="7Cm-Eo-Uci"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTd-DT-7HF">
-                                <rect key="frame" x="27.5" y="288" width="126" height="40"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWY-Sk-ivO">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgb-mk-ii5">
+                                        <rect key="frame" x="16" y="11.5" width="74" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="74" id="9Ev-Ra-aRF"/>
+                                            <constraint firstAttribute="height" constant="21" id="PcH-q0-xfY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="titleEdgeInsets" minX="7" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Cancel" image="button-WebViewBack.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="Frn-L8-EDA" kind="unwind" identifier="unwindFromSSOProvider" unwindAction="unwindFromSSOProvider:" id="DEz-tk-Ek0"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j2Q-cv-cgY">
+                                        <rect key="frame" x="302" y="11.5" width="57" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="57" id="GMh-Wo-2Xz"/>
+                                            <constraint firstAttribute="height" constant="21" id="LEN-Vb-U9X"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="45" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Save" image="button-WebViewForward.png"/>
+                                        <connections>
+                                            <action selector="submitSSOProvider:" destination="5BC-59-clT" eventType="touchUpInside" id="PB2-bj-qdF"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="126" id="KWj-V3-pBq"/>
-                                    <constraint firstAttribute="height" constant="40" id="rSK-CU-2cb"/>
+                                    <constraint firstAttribute="trailing" secondItem="j2Q-cv-cgY" secondAttribute="trailing" constant="16" id="1Qz-5b-Iat"/>
+                                    <constraint firstItem="pgb-mk-ii5" firstAttribute="leading" secondItem="MWY-Sk-ivO" secondAttribute="leading" constant="16" id="AO2-hk-VKw"/>
+                                    <constraint firstAttribute="height" constant="44" id="L0Q-5f-Vk4"/>
+                                    <constraint firstItem="pgb-mk-ii5" firstAttribute="centerY" secondItem="MWY-Sk-ivO" secondAttribute="centerY" id="ULY-XN-WcE"/>
+                                    <constraint firstItem="j2Q-cv-cgY" firstAttribute="centerY" secondItem="MWY-Sk-ivO" secondAttribute="centerY" id="bSu-yv-Pee"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <inset key="imageEdgeInsets" minX="17" minY="5" maxX="35" maxY="20"/>
-                                <state key="normal" image="button-Cancel.png">
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="Frn-L8-EDA" kind="unwind" identifier="unwindFromSSOProvider" unwindAction="unwindFromSSOProvider:" id="FQT-Pp-FM4"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6PA-TH-ixb">
-                                <rect key="frame" x="234.5" y="288" width="115" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="K8w-fv-b43"/>
-                                    <constraint firstAttribute="width" constant="115" id="hZY-et-6BQ"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="25" minY="5" maxX="25" maxY="20"/>
-                                <state key="normal" image="button-Save.png"/>
-                                <connections>
-                                    <action selector="submitSSOProvider:" destination="5BC-59-clT" eventType="touchUpInside" id="LvR-kg-Nu5"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="sGk-HG-IID" firstAttribute="top" secondItem="r63-GT-mcY" secondAttribute="top" constant="10" id="02y-Mp-VPw"/>
+                            <constraint firstItem="MWY-Sk-ivO" firstAttribute="bottom" secondItem="r63-GT-mcY" secondAttribute="bottom" id="6YG-dL-Xgh"/>
+                            <constraint firstItem="MWY-Sk-ivO" firstAttribute="trailing" secondItem="r63-GT-mcY" secondAttribute="trailing" id="7eD-xf-aBM"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="leading" secondItem="SBj-Vd-cPA" secondAttribute="leading" id="DMT-Yg-e4k"/>
                             <constraint firstItem="SpO-Dz-0I6" firstAttribute="centerY" secondItem="Yjw-jX-gad" secondAttribute="centerY" id="DMz-I6-IDn"/>
                             <constraint firstItem="r63-GT-mcY" firstAttribute="centerX" secondItem="SmX-0A-xkH" secondAttribute="centerX" id="EBO-8z-COg"/>
                             <constraint firstItem="SmX-0A-xkH" firstAttribute="top" secondItem="sGk-HG-IID" secondAttribute="bottom" constant="6" id="EDl-ja-SuY"/>
                             <constraint firstItem="SBj-Vd-cPA" firstAttribute="top" secondItem="SmX-0A-xkH" secondAttribute="bottom" constant="19" id="EQm-y6-lp8"/>
-                            <constraint firstItem="oTd-DT-7HF" firstAttribute="leading" secondItem="Yjw-jX-gad" secondAttribute="leading" constant="-16" id="Kld-g3-qKs"/>
                             <constraint firstItem="r63-GT-mcY" firstAttribute="centerX" secondItem="sGk-HG-IID" secondAttribute="centerX" id="M1j-sP-pNP"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="trailing" secondItem="FYg-5w-oKo" secondAttribute="trailing" constant="-6" id="MHh-zr-3Ca"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="leading" secondItem="FYg-5w-oKo" secondAttribute="leading" constant="6" id="Oyo-v8-Ve1"/>
                             <constraint firstItem="SpO-Dz-0I6" firstAttribute="trailing" secondItem="Yjw-jX-gad" secondAttribute="trailing" id="P0e-vo-Ufy"/>
-                            <constraint firstItem="6PA-TH-ixb" firstAttribute="trailing" secondItem="Yjw-jX-gad" secondAttribute="trailing" constant="18" id="QDE-zS-Avu"/>
+                            <constraint firstItem="MWY-Sk-ivO" firstAttribute="leading" secondItem="r63-GT-mcY" secondAttribute="leading" id="Pb8-gH-cPr"/>
                             <constraint firstItem="FYg-5w-oKo" firstAttribute="top" secondItem="SBj-Vd-cPA" secondAttribute="bottom" constant="5" id="Vek-4r-180"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="trailing" secondItem="SBj-Vd-cPA" secondAttribute="trailing" id="XDd-Y5-DVX"/>
-                            <constraint firstItem="6PA-TH-ixb" firstAttribute="top" secondItem="FYg-5w-oKo" secondAttribute="bottom" constant="9" id="YMc-ge-Sko"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="top" secondItem="FYg-5w-oKo" secondAttribute="top" constant="3" id="e13-rm-Lwv"/>
-                            <constraint firstItem="oTd-DT-7HF" firstAttribute="top" secondItem="FYg-5w-oKo" secondAttribute="bottom" constant="9" id="fgd-xO-veC"/>
                             <constraint firstItem="r63-GT-mcY" firstAttribute="centerX" secondItem="FYg-5w-oKo" secondAttribute="centerX" id="lZ1-J4-jzJ"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="bottom" secondItem="FYg-5w-oKo" secondAttribute="bottom" constant="-2" id="zv0-a7-BEy"/>
                         </constraints>
@@ -286,12 +304,13 @@
                     <connections>
                         <outlet property="buttonHelp" destination="SpO-Dz-0I6" id="3bp-pw-yHM"/>
                         <outlet property="textSSOProvider" destination="Yjw-jX-gad" id="ZYh-sW-xe3"/>
+                        <outlet property="viewToolbar" destination="MWY-Sk-ivO" id="5Wv-Gm-sSf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YGw-OH-T0q" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Frn-L8-EDA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1738" y="974"/>
+            <point key="canvasLocation" x="1736.8" y="973.76311844077964"/>
         </scene>
         <!--Phone Number View Controller-->
         <scene sceneID="Ywa-UN-9m2">
@@ -364,52 +383,56 @@
                                     <segue destination="aua-Qa-l8H" kind="show" identifier="showHelpFromPhoneNumber" id="EId-x6-V12"/>
                                 </connections>
                             </button>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKv-ru-MdQ">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vlM-42-BSe">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="D0J-uC-CXe"/>
-                                </constraints>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="0FG-7A-7C8"/>
-                                    <barButtonItem width="90" style="plain" id="BSk-l6-cFo" userLabel="Continue">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="DP3-Qz-7Jb">
-                                            <rect key="frame" x="269" y="11.5" width="90" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                            <inset key="imageEdgeInsets" minX="77.5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                            <state key="normal" title="Continue" image="button-WebViewForward.png"/>
-                                            <connections>
-                                                <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="MLf-cI-382"/>
-                                            </connections>
-                                        </button>
-                                    </barButtonItem>
-                                </items>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VnA-dr-oLF">
+                                        <rect key="frame" x="269" y="11.5" width="90" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="90" id="Jnd-kD-yCA"/>
+                                            <constraint firstAttribute="height" constant="21" id="OFb-EU-i8Q"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="77.5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Continue" image="button-WebViewForward.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="8kV-5p-fUR"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="barTintColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
-                            </toolbar>
+                                <constraints>
+                                    <constraint firstItem="VnA-dr-oLF" firstAttribute="centerY" secondItem="vlM-42-BSe" secondAttribute="centerY" id="3Nc-va-bMY"/>
+                                    <constraint firstAttribute="trailing" secondItem="VnA-dr-oLF" secondAttribute="trailing" constant="16" id="hn3-cE-JGm"/>
+                                    <constraint firstAttribute="height" constant="44" id="zXs-PB-Ysj"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="2Rk-A7-EG8" firstAttribute="centerX" secondItem="mjW-gH-UIm" secondAttribute="centerX" id="4l9-zD-Dno"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="trailing" secondItem="mjW-gH-UIm" secondAttribute="trailing" constant="-6" id="IS5-wh-UUg"/>
                             <constraint firstItem="Gm9-BN-gJl" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="11" id="O8K-cs-WBq"/>
+                            <constraint firstItem="vlM-42-BSe" firstAttribute="bottom" secondItem="2Rk-A7-EG8" secondAttribute="bottom" id="QNj-t7-JFV"/>
                             <constraint firstItem="Li6-va-OV1" firstAttribute="centerY" secondItem="CrA-Ex-elv" secondAttribute="centerY" id="U6N-eR-fAN"/>
                             <constraint firstItem="mjW-gH-UIm" firstAttribute="top" secondItem="TNx-l8-qo5" secondAttribute="bottom" constant="5" id="Ws2-Oc-nyd"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="Gm9-BN-gJl" secondAttribute="leading" id="YOD-Ue-xz6"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="trailing" secondItem="TNx-l8-qo5" secondAttribute="trailing" id="aPh-7K-ngM"/>
                             <constraint firstItem="Li6-va-OV1" firstAttribute="trailing" secondItem="CrA-Ex-elv" secondAttribute="trailing" id="cCL-N3-b6x"/>
+                            <constraint firstItem="vlM-42-BSe" firstAttribute="trailing" secondItem="2Rk-A7-EG8" secondAttribute="trailing" id="cE9-qd-Sc4"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="TNx-l8-qo5" secondAttribute="leading" id="ccN-oL-5Mr"/>
                             <constraint firstItem="TNx-l8-qo5" firstAttribute="top" secondItem="8nY-Zs-edb" secondAttribute="bottom" constant="52" id="iBQ-Qa-fwJ"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="mjW-gH-UIm" secondAttribute="leading" constant="6" id="lOg-Gm-pPJ"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="top" constant="3" id="lj2-ZZ-fED"/>
                             <constraint firstItem="2Rk-A7-EG8" firstAttribute="centerX" secondItem="8nY-Zs-edb" secondAttribute="centerX" id="ljj-qL-TRB"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="bottom" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="-2" id="mRQ-O8-qvY"/>
-                            <constraint firstItem="2Rk-A7-EG8" firstAttribute="trailing" secondItem="bKv-ru-MdQ" secondAttribute="trailing" id="msq-pG-j8n"/>
                             <constraint firstItem="8nY-Zs-edb" firstAttribute="top" secondItem="2Rk-A7-EG8" secondAttribute="top" constant="10" id="nUv-cE-rLz"/>
-                            <constraint firstItem="bKv-ru-MdQ" firstAttribute="leading" secondItem="2Rk-A7-EG8" secondAttribute="leading" id="nh3-ay-Vil"/>
-                            <constraint firstItem="2Rk-A7-EG8" firstAttribute="bottom" secondItem="bKv-ru-MdQ" secondAttribute="bottom" id="r6D-M3-AsE"/>
+                            <constraint firstItem="vlM-42-BSe" firstAttribute="leading" secondItem="2Rk-A7-EG8" secondAttribute="leading" id="ohR-YC-HjM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2Rk-A7-EG8"/>
                     </view>
@@ -418,7 +441,7 @@
                         <outlet property="buttonHelp" destination="Li6-va-OV1" id="6An-ZW-7Cv"/>
                         <outlet property="constraintFormTop" destination="iBQ-Qa-fwJ" id="lvc-uA-e44"/>
                         <outlet property="textPhoneNumber" destination="CrA-Ex-elv" id="uAc-KN-WQg"/>
-                        <outlet property="toolbar" destination="bKv-ru-MdQ" id="0Aj-jt-WiJ"/>
+                        <outlet property="viewToolbar" destination="vlM-42-BSe" id="jJ2-aQ-T13"/>
                         <segue destination="bXr-xs-BMc" kind="unwind" identifier="unwindFromPhoneNumber" unwindAction="unwindFromPhoneNumber:" id="5IF-db-Wcg"/>
                     </connections>
                 </viewController>
@@ -439,9 +462,7 @@
     <resources>
         <image name="Logo-MyTeleMed" width="300" height="75"/>
         <image name="background-PhoneNumber.png" width="300" height="45"/>
-        <image name="button-Cancel.png" width="74" height="15"/>
         <image name="button-Help.png" width="10" height="14"/>
-        <image name="button-Save.png" width="61" height="15"/>
         <image name="button-TextField-Help.png" width="20" height="20"/>
         <image name="button-WebViewBack.png" width="12" height="21"/>
         <image name="button-WebViewForward.png" width="12" height="21"/>

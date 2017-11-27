@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CDMAVoiceDataViewController">
+            <connections>
+                <outlet property="barButtonOK" destination="boj-V7-dpd" id="FO2-h2-6J8"/>
+                <outlet property="barButtonShowOnStartup" destination="wbU-Ma-dmj" id="VK7-G4-Ixy"/>
+                <outlet property="switchCDMAVoiceData" destination="5xg-fI-ylR" id="glj-q7-RQb"/>
+                <outlet property="view" destination="bQE-NG-6hS" id="xxj-ha-4jT"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="bQE-NG-6hS">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="PtA-Kb-x72">
+                    <rect key="frame" x="47.5" y="30" width="280" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="280" id="GCi-y9-NxB"/>
+                        <constraint firstAttribute="height" constant="70" id="onn-OS-2Ox"/>
+                    </constraints>
+                </imageView>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="QMQ-ZG-JE1">
+                    <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="wJJ-7F-MEY"/>
+                    </constraints>
+                    <items>
+                        <barButtonItem style="plain" id="PCl-sd-0aX">
+                            <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="5xg-fI-ylR">
+                                <rect key="frame" x="16" y="6.5" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.18772074580000001" green="0.51381963490000004" blue="0.98369586470000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="toggleCDMAVoiceDataDisabled:" destination="-1" eventType="valueChanged" id="1DK-26-3ff"/>
+                                </connections>
+                            </switch>
+                        </barButtonItem>
+                        <barButtonItem title="Show on Startup" id="wbU-Ma-dmj">
+                            <connections>
+                                <action selector="toggleSwitchCDMAVoiceData:" destination="-1" id="lJO-8U-VdL"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="qU5-ji-nVt"/>
+                        <barButtonItem title="OK" style="plain" id="boj-V7-dpd">
+                            <connections>
+                                <action selector="dismissViewController:" destination="-1" id="qg1-Se-YjO"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="2" style="plain" systemItem="fixedSpace" id="2NB-jK-aoc"/>
+                    </items>
+                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </toolbar>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9vp-7b-CSn">
+                    <rect key="frame" x="16" y="106" width="343" height="501"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WARNING" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yef-xp-rmc">
+                            <rect key="frame" x="5" y="5" width="333" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="S2e-jp-LOi"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BEg-u1-ITj">
+                            <rect key="frame" x="0.0" y="26" width="343" height="145"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="145" id="XOb-h8-9Nq"/>
+                            </constraints>
+                            <string key="text">This application requires an internet connection at all times. However some mobile carriers, including Sprint and Verizon Wireless, do not support voice and cellular data simultaneously. This means depending on your mobile carrier, you may not be able to use the MyTeleMed application while on a phone call.</string>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VERIZON WIRELESS SUBSCRIBERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRt-ph-wWP">
+                            <rect key="frame" x="5" y="181" width="333" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="H5h-lu-QnR"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="W4g-CE-9wJ">
+                            <rect key="frame" x="0.0" y="202" width="343" height="145"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="145" id="Uip-gz-eyM"/>
+                            </constraints>
+                            <string key="text">If your device is an iPhone 6 or newer device, then this limitation may not apply to you. To enable simultaneous voice and data, open the Settings app, then navigate to Cellular &gt; Enable LTE &gt; select "Voice &amp; Data". If the option is greyed out, please call Verizon Wireless Customer Service to enable this on your account.</string>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="yef-xp-rmc" firstAttribute="leading" secondItem="9vp-7b-CSn" secondAttribute="leading" constant="5" id="6Jg-oT-Gm9"/>
+                        <constraint firstAttribute="trailing" secondItem="W4g-CE-9wJ" secondAttribute="trailing" id="FyH-Dj-4os"/>
+                        <constraint firstItem="BEg-u1-ITj" firstAttribute="leading" secondItem="9vp-7b-CSn" secondAttribute="leading" id="IN7-Jx-3eP"/>
+                        <constraint firstAttribute="trailing" secondItem="BEg-u1-ITj" secondAttribute="trailing" id="Isu-w4-wHq"/>
+                        <constraint firstAttribute="bottom" secondItem="W4g-CE-9wJ" secondAttribute="bottom" constant="5" id="OnZ-Ry-3OA"/>
+                        <constraint firstItem="BEg-u1-ITj" firstAttribute="top" secondItem="yef-xp-rmc" secondAttribute="bottom" id="Rq1-Xz-qGH"/>
+                        <constraint firstItem="RRt-ph-wWP" firstAttribute="top" secondItem="BEg-u1-ITj" secondAttribute="bottom" constant="10" id="VEt-73-FMl"/>
+                        <constraint firstItem="yef-xp-rmc" firstAttribute="top" secondItem="9vp-7b-CSn" secondAttribute="top" constant="5" id="VMN-MJ-cob"/>
+                        <constraint firstItem="W4g-CE-9wJ" firstAttribute="top" secondItem="RRt-ph-wWP" secondAttribute="bottom" id="YYQ-n4-wIa"/>
+                        <constraint firstItem="RRt-ph-wWP" firstAttribute="leading" secondItem="9vp-7b-CSn" secondAttribute="leading" constant="5" id="cig-fH-QPR"/>
+                        <constraint firstItem="yef-xp-rmc" firstAttribute="width" secondItem="9vp-7b-CSn" secondAttribute="width" constant="-10" id="d9j-nz-cZI"/>
+                        <constraint firstItem="W4g-CE-9wJ" firstAttribute="leading" secondItem="9vp-7b-CSn" secondAttribute="leading" id="fVt-NZ-I3H"/>
+                        <constraint firstAttribute="trailing" secondItem="RRt-ph-wWP" secondAttribute="trailing" constant="5" id="h3w-Le-Rcq"/>
+                        <constraint firstAttribute="trailing" secondItem="yef-xp-rmc" secondAttribute="trailing" constant="5" id="kVV-4U-vbX"/>
+                    </constraints>
+                </scrollView>
+            </subviews>
+            <color key="backgroundColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="9vp-7b-CSn" firstAttribute="top" secondItem="PtA-Kb-x72" secondAttribute="bottom" constant="6" id="BD8-2b-Scj"/>
+                <constraint firstItem="QMQ-ZG-JE1" firstAttribute="leading" secondItem="W1f-Pr-LTI" secondAttribute="leading" id="FZb-yX-2fD"/>
+                <constraint firstItem="QMQ-ZG-JE1" firstAttribute="top" secondItem="9vp-7b-CSn" secondAttribute="bottom" constant="16" id="GrX-Ee-w9T"/>
+                <constraint firstItem="W1f-Pr-LTI" firstAttribute="trailing" secondItem="QMQ-ZG-JE1" secondAttribute="trailing" id="ZEK-xs-rHP"/>
+                <constraint firstItem="W1f-Pr-LTI" firstAttribute="bottom" secondItem="QMQ-ZG-JE1" secondAttribute="bottom" id="ZZ2-wQ-LKw"/>
+                <constraint firstItem="W1f-Pr-LTI" firstAttribute="trailing" secondItem="9vp-7b-CSn" secondAttribute="trailing" constant="16" id="ezw-7d-Jyu"/>
+                <constraint firstItem="9vp-7b-CSn" firstAttribute="leading" secondItem="W1f-Pr-LTI" secondAttribute="leading" constant="16" id="i3W-cQ-8Wt"/>
+                <constraint firstItem="PtA-Kb-x72" firstAttribute="top" secondItem="W1f-Pr-LTI" secondAttribute="top" constant="10" id="kHD-YN-Jpj"/>
+                <constraint firstItem="PtA-Kb-x72" firstAttribute="centerX" secondItem="W1f-Pr-LTI" secondAttribute="centerX" id="pyH-uv-wqn"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="W1f-Pr-LTI"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Logo" width="300" height="75"/>
+    </resources>
+</document>

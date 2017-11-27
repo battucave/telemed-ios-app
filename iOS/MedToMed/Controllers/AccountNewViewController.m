@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
 @property (weak, nonatomic) IBOutlet UITextField *textAccountCode;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
 
 @end
 
@@ -43,8 +43,8 @@
 	[self.textAccountCode becomeFirstResponder];
 	
 	// Attach toolbar to top of keyboard
-	[self.textAccountCode setInputAccessoryView:self.toolbar];
-	[self.toolbar removeFromSuperview];
+	[self.textAccountCode setInputAccessoryView:self.viewToolbar];
+	[self.viewToolbar removeFromSuperview];
 }
 
 - (IBAction)submitAccountCode:(id)sender
@@ -52,8 +52,8 @@
 	NSLog(@"Submit Account Code");
 	
 	// Submit Account Code web service
-		// Go to Main Storyboard
-		// [(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+		// Account Code saved successfully so return to Login
+		[self performSegueWithIdentifier:@"unwindFromAccountNew" sender:sender];
 	// End Submit Account Code web service
 }
 

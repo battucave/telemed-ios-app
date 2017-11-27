@@ -76,7 +76,6 @@
 		2888C48317FA00B100729D20 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2888C48217FA00B100729D20 /* CFNetwork.framework */; };
 		2892578018D38BFA00AB649A /* sonic_reverb.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2892577F18D38BFA00AB649A /* sonic_reverb.caf */; };
 		28990CEB194F3A7E009BA9E0 /* HelpUserGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28990CEA194F3A7E009BA9E0 /* HelpUserGuideViewController.m */; };
-		289F37F119C788CE005036F0 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 289F37F019C788CE005036F0 /* Launch Screen.xib */; };
 		28A57D101832E938005855AC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A57D0F1832E938005855AC /* AudioToolbox.framework */; };
 		28A57D301833F2B0005855AC /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A57D2F1833F2B0005855AC /* MessageUI.framework */; };
 		28A57D33183418AC005855AC /* CustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A57D32183418AC005855AC /* CustomAlertView.m */; };
@@ -138,6 +137,9 @@
 		E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F461FC3273A00DC899D /* AccountNewViewController.m */; };
 		E23A4F4A1FC3325C00DC899D /* LoginSSOMedToMedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */; };
 		E240EE6D1F54A462009D8ED1 /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
+		E24A44321FCC6DF900A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
+		E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
+		E24A44341FCC844D00A06EE8 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20295091FBBA53500811DA6 /* Launch Screen.xib */; };
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
@@ -603,7 +605,6 @@
 		2892577F18D38BFA00AB649A /* sonic_reverb.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sonic_reverb.caf; sourceTree = "<group>"; };
 		28990CE9194F3A7E009BA9E0 /* HelpUserGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpUserGuideViewController.h; sourceTree = "<group>"; };
 		28990CEA194F3A7E009BA9E0 /* HelpUserGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpUserGuideViewController.m; sourceTree = "<group>"; };
-		289F37F019C788CE005036F0 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		28A57D0F1832E938005855AC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		28A57D2F1833F2B0005855AC /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		28A57D31183418AC005855AC /* CustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAlertView.h; sourceTree = "<group>"; };
@@ -704,6 +705,7 @@
 		E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginSSOMedToMedViewController.m; sourceTree = "<group>"; };
 		E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IBDesignable.h"; sourceTree = "<group>"; };
 		E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+IBDesignable.m"; sourceTree = "<group>"; };
+		E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CDMAVoiceData.xib; sourceTree = "<group>"; };
 		E24B3D941F91221300684782 /* MyTeleMedWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedWatch Extension.entitlements"; sourceTree = "<group>"; };
 		E24D45031E8948E700B36DD6 /* SettingsPasswordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsPasswordTableViewController.h; sourceTree = "<group>"; };
 		E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPasswordTableViewController.m; sourceTree = "<group>"; };
@@ -1267,7 +1269,6 @@
 		28E0CD701822AF8100729B4A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				289F37F019C788CE005036F0 /* Launch Screen.xib */,
 				087C00C11B04FD73004E35DE /* LoginSSO.storyboard */,
 			);
 			path = Views;
@@ -1296,7 +1297,6 @@
 		E20294FE1FBB933F00811DA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E20295091FBBA53500811DA6 /* Launch Screen.xib */,
 				E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */,
 				E20295001FBB934F00811DA6 /* MedToMed.storyboard */,
 			);
@@ -1382,6 +1382,8 @@
 			isa = PBXGroup;
 			children = (
 				E21C14611D33DFC30025B6ED /* Constraints */,
+				E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */,
+				E20295091FBBA53500811DA6 /* Launch Screen.xib */,
 				28E0CD721822AF8100729B4A /* Main.storyboard */,
 			);
 			path = Views;
@@ -2063,9 +2065,9 @@
 				283DF2ED18CA09EE00A344D2 /* horn.caf in Resources */,
 				283DF2FD18CA09EE00A344D2 /* descent.caf in Resources */,
 				E2D567CA1CDB85B80054FD3F /* button-Navigation-Help.png in Resources */,
-				289F37F119C788CE005036F0 /* Launch Screen.xib in Resources */,
 				283DF2D518CA09EE00A344D2 /* popcorn.caf in Resources */,
 				283DF30C18CA13D300A344D2 /* digital_alarm_2.caf in Resources */,
+				E24A44321FCC6DF900A06EE8 /* CDMAVoiceData.xib in Resources */,
 				E2D567A81CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png in Resources */,
 				283DF2D318CA09EE00A344D2 /* aurora.caf in Resources */,
 				283DF2DC18CA09EE00A344D2 /* sonar.caf in Resources */,
@@ -2147,6 +2149,7 @@
 				E2D567CC1CDB85B80054FD3F /* button-TextField-Help.png in Resources */,
 				E2D567B01CDB85B80054FD3F /* button-Help-Video@3x.png in Resources */,
 				E2D567AE1CDB85B80054FD3F /* button-Continue@3x.png in Resources */,
+				E24A44341FCC844D00A06EE8 /* Launch Screen.xib in Resources */,
 				E2D567B91CDB85B80054FD3F /* button-Save@2x.png in Resources */,
 				283DF2CC18CA09EE00A344D2 /* pulse.caf in Resources */,
 				E2D5679A1CDB85B80054FD3F /* menu.png in Resources */,
@@ -2212,6 +2215,7 @@
 				E2C7C1B91FC3911000E50F07 /* button-Help@3x.png in Resources */,
 				E25037551FBB88F400099C7E /* button-Navigation-ContactTeleMed@2x.png in Resources */,
 				E20295061FBBA47600811DA6 /* Main.xcassets in Resources */,
+				E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */,
 				E25037561FBB88F400099C7E /* button-Cancel@2x.png in Resources */,
 				E2C7C1B71FC3910A00E50F07 /* button-Help.png in Resources */,
 				E25037581FBB88F400099C7E /* indicator-CommentRight.png in Resources */,

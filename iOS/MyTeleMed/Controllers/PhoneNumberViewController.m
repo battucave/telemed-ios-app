@@ -17,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
 @property (weak, nonatomic) IBOutlet UITextField *textPhoneNumber;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
 
 @end                              
 
@@ -44,8 +44,8 @@
 	[self.textPhoneNumber becomeFirstResponder];
 	
 	// Attach toolbar to top of keyboard
-	[self.textPhoneNumber setInputAccessoryView:self.toolbar];
-	[self.toolbar removeFromSuperview];
+	[self.textPhoneNumber setInputAccessoryView:self.viewToolbar];
+	[self.viewToolbar removeFromSuperview];
 	
 	#ifdef DEBUG
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];

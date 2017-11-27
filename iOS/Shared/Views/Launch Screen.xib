@@ -30,7 +30,7 @@
                 <constraint firstAttribute="centerX" secondItem="YbA-iH-AFQ" secondAttribute="centerX" id="lrN-Iu-Xnx"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <viewLayoutGuide key="safeArea" id="TcJ-tE-t3D"/>
+            <viewLayoutGuide key="safeArea" id="jMa-Sq-TYp"/>
             <point key="canvasLocation" x="914" y="370"/>
         </view>
     </objects>

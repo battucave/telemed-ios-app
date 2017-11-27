@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *textSSOProvider;
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
+@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
 
 @property (nonatomic) SSOProviderModel *ssoProviderModel;
 
@@ -33,10 +34,15 @@
 	
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
-	// Initialize SSO Provider Model
+	// Auto-populate and auto-focus sso provider field
 	self.ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	[self.textSSOProvider setText:self.ssoProviderModel.Name];
+	[self.textSSOProvider becomeFirstResponder];
+	
+	// Attach toolbar to top of keyboard
+	[self.textSSOProvider setInputAccessoryView:self.viewToolbar];
+	[self.viewToolbar removeFromSuperview];
 }
 
 - (IBAction)submitSSOProvider:(id)sender

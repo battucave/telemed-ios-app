@@ -10,9 +10,9 @@
 
 @interface CDMAVoiceDataViewController ()
 
-@property (weak, nonatomic) IBOutlet UISwitch *switchCDMAVoiceData;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonShowOnStartup;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonOK;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *barButtonShowOnStartup;
+@property (weak, nonatomic) IBOutlet UISwitch *switchCDMAVoiceData;
 
 @property (weak, nonatomic) NSUserDefaults *settings;
 

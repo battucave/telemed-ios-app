@@ -490,7 +490,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y5M-Y1-Ayy">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-MedToMed" translatesAutoresizingMaskIntoConstraints="NO" id="klk-mH-P3U">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="klk-mH-P3U">
                                                 <rect key="frame" x="10" y="5" width="240" height="60"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="klk-mH-P3U" secondAttribute="height" multiplier="4:1" id="1Tk-Eu-toe"/>
@@ -680,7 +680,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Logo-MedToMed" width="300" height="75"/>
+        <image name="Logo" width="300" height="75"/>
         <image name="button-Navigation-ContactTeleMed.png" width="27" height="23"/>
         <image name="button-Navigation-Help.png" width="56" height="23"/>
         <image name="button-Navigation-LogOut.png" width="89" height="23"/>

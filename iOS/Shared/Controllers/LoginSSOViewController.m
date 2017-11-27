@@ -16,8 +16,8 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonBack;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonLogin;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonChangeIDPRovider;
+@property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintToolbarBottom;
 @property (weak, nonatomic) IBOutlet UIView *loadingView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -51,6 +51,9 @@
 	
 	// Reset toolbar to bottom of view
 	[self.constraintToolbarBottom setConstant:0.0f];
+	
+	// Dynamically add a width constraint to Login button to resolve iOS 11 issue
+	[self.buttonLogin.widthAnchor constraintEqualToConstant:62.0].active = YES;
 	
 	// Add Reachability Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWebView:) name:AFNetworkingReachabilityDidChangeNotification object:nil];

@@ -136,13 +136,13 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	{
 		if(failure)
 		{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wgnu"
+			#pragma clang diagnostic push
+			#pragma clang diagnostic ignored "-Wgnu"
 			dispatch_async(self.completionQueue ?: dispatch_get_main_queue(), ^
 			{
 				failure(nil, serializationError);
 			});
-#pragma clang diagnostic pop
+			#pragma clang diagnostic pop
 		}
 
 		return nil;
