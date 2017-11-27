@@ -2757,6 +2757,7 @@
 					MYTELEMED,
 					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"API_PREFIX=\\@\\\"MyTmdWebApi\\\"",
+					"AUTHENTICATION_AUDIENCE=\\@\\\"mytmd\\\"",
 				);
 				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2880,6 +2881,7 @@
 					MYTELEMED,
 					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"API_PREFIX=\\@\\\"MyTmdWebApi\\\"",
+					"AUTHENTICATION_AUDIENCE=\\@\\\"mytmd\\\"",
 				);
 				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2910,6 +2912,7 @@
 					MYTELEMED,
 					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
 					"API_PREFIX=\\@\\\"MyTmdWebApi\\\"",
+					"AUTHENTICATION_AUDIENCE=\\@\\\"mytmd\\\"",
 				);
 				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2940,6 +2943,7 @@
 					MEDTOMED,
 					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
+					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 				);
 				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2970,6 +2974,7 @@
 					MEDTOMED,
 					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
+					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 				);
 				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -3000,6 +3005,7 @@
 					MEDTOMED,
 					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
+					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 				);
 				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

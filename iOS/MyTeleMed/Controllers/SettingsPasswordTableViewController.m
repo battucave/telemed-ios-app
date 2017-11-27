@@ -89,16 +89,6 @@
 	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0 : 46.0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-	
-	// Remove selection highlight
-	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	
-    return cell;
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

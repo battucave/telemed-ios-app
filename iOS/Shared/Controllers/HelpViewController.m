@@ -48,6 +48,12 @@
 	[self presentMoviePlayerViewControllerAnimated:player];
 }
 
+// Override CoreViewController's logic to prevent showing CDMA Voice Data screen
+- (void)showCDMAVoiceDataViewController:(NSNotification *)notification
+{
+	// Don't show CDMA Voice Data screen
+}
+
 - (void)didReceiveMemoryWarning
 {
 	[super didReceiveMemoryWarning];

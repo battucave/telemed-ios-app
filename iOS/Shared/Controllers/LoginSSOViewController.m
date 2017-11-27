@@ -52,7 +52,7 @@
 	// Reset toolbar to bottom of view
 	[self.constraintToolbarBottom setConstant:0.0f];
 	
-	// Dynamically add a width constraint to Login button to resolve iOS 11 issue
+	// Dynamically add a width constraint to Login button to resolve iOS 11 issue (if this doesn't work, then replace entire UIToolbar with UIView - see PhoneNumber view)
 	[self.buttonLogin.widthAnchor constraintEqualToConstant:62.0].active = YES;
 	
 	// Add Reachability Observer
@@ -154,7 +154,7 @@
 	
 	NSString *fullURL = [NSString stringWithFormat:AUTHENTICATION_BASE_URL @"Authentication?idp=%@&aud=%@",
 						 ssoProviderModel.Name,
-						 @"mytmd"];
+						 AUTHENTICATION_AUDIENCE];
 	
 	NSLog(@"Login URL: %@", fullURL);
 	

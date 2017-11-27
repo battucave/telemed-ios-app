@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CoreTableViewController.h"
 
 @protocol MessageComposeTableDelegate <NSObject>
 
@@ -18,7 +19,7 @@
 
 @end
 
-@interface MessageComposeTableViewController : UITableViewController <UITextViewDelegate>
+@interface MessageComposeTableViewController : CoreTableViewController <UITextViewDelegate>
 
 @property (weak) id delegate;
 @property (weak, nonatomic) IBOutlet UITextView *textViewMessage;

@@ -9,7 +9,15 @@
 #import "SettingsTableViewController.h"
 #import "AccountPickerViewController.h"
 #import "SettingsNotificationsTableViewController.h"
-#import "MyProfileModel.h"
+#import "ProfileProtocol.h"
+
+#ifdef MYTELEMED
+	#import "MyProfileModel.h"
+#endif
+
+#ifdef MEDTOMED
+	#import "UserProfileModel.h"
+#endif
 
 @interface SettingsTableViewController ()
 
@@ -34,9 +42,19 @@
 	[super viewWillAppear:animated];
 	
 	// Set May Disable Timeout value
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	id <ProfileProtocol> profileProtocol;
 	
-	self.mayDisableTimeout = myProfileModel.MayDisableTimeout;
+	#ifdef MYTELEMED
+		profileProtocol = [MyProfileModel sharedInstance];
+
+	#elif defined MEDTOMED
+		profileProtocol = [UserProfileModel sharedInstance];
+	#endif
+	
+	if(profileProtocol)
+	{
+		self.mayDisableTimeout = profileProtocol.MayDisableTimeout;
+	}
 }
 
 - (IBAction)updateTimeout:(id)sender
@@ -122,23 +140,17 @@
 {
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
-	// Remove selection highlight from Session Timeout and About MyTeleMed section cells
-	if(indexPath.section == 0 || indexPath.section == 3)
+	// Set Timeout Value
+	if(indexPath.section == 0)
 	{
-		[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
 		
-		// Set Timeout Value
-		if(indexPath.section == 0)
-		{
-			NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-			
-			[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
-		}
-		// Add Version Number to Version cell
-		else if(indexPath.section == 3)
-		{
-			[cell.detailTextLabel setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-		}
+		[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
+	}
+	// Add Version Number to Version cell
+	else if(indexPath.section == 3)
+	{
+		[cell.detailTextLabel setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 	}
 	
     return cell;

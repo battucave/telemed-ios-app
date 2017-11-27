@@ -231,9 +231,6 @@
 	// Set option text
 	[cell.textLabel setText:optionText];
 	
-	// Remove selection style
-	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	
 	// Fix iOS8 Issue that prevents detailText from appearing
 	[cell layoutSubviews];
 	   

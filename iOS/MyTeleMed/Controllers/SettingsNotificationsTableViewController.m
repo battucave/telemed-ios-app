@@ -172,9 +172,6 @@
 		{
 			// Set Reminders value
 			[self.switchReminders setOn:self.notificationSettings.isReminderOn];
-			
-			// Prevent cell selection
-			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 			break;
 		}
 		
