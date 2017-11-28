@@ -633,26 +633,29 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="161" id="0fm-Jq-zNP">
-                                        <rect key="frame" x="0.0" y="44" width="375" height="161"/>
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="144" id="0fm-Jq-zNP">
+                                        <rect key="frame" x="0.0" y="44" width="375" height="144"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="0fm-Jq-zNP" id="1Rc-nS-JUn">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="160.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="143.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Message:" translatesAutoresizingMaskIntoConstraints="NO" id="9Ug-G8-F2I">
-                                                    <rect key="frame" x="11" y="23" width="353" height="135"/>
+                                                    <rect key="frame" x="11" y="4" width="353" height="135"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="textColor" red="0.38431372549019605" green="0.38431372549019605" blue="0.38431372549019605" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="Tcd-A0-vuW" id="q5D-Fd-ecu"/>
+                                                    </connections>
                                                 </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="9Ug-G8-F2I" secondAttribute="bottom" constant="-8" id="8ay-W9-oRu"/>
-                                                <constraint firstItem="9Ug-G8-F2I" firstAttribute="top" secondItem="1Rc-nS-JUn" secondAttribute="topMargin" constant="-8" id="Uvk-qp-9Xs"/>
-                                                <constraint firstItem="9Ug-G8-F2I" firstAttribute="leading" secondItem="1Rc-nS-JUn" secondAttribute="leadingMargin" constant="-5" id="ejB-fW-d6O"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="9Ug-G8-F2I" secondAttribute="trailing" constant="-5" id="wug-GB-qFt"/>
+                                                <constraint firstItem="9Ug-G8-F2I" firstAttribute="top" secondItem="1Rc-nS-JUn" secondAttribute="top" constant="4" id="1F4-ab-ME0"/>
+                                                <constraint firstAttribute="trailing" secondItem="9Ug-G8-F2I" secondAttribute="trailing" constant="11" id="91E-NT-BQI"/>
+                                                <constraint firstItem="9Ug-G8-F2I" firstAttribute="leading" secondItem="1Rc-nS-JUn" secondAttribute="leading" constant="11" id="dXx-qb-Gpa"/>
+                                                <constraint firstAttribute="bottom" secondItem="9Ug-G8-F2I" secondAttribute="bottom" constant="4.5" id="xQg-TS-4PD"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -4222,6 +4225,23 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Iyn-Mu-NnV" customClass="InsetTextField">
+                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="gEy-R4-JhG"/>
+                                                    </constraints>
+                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
+                                                            <integer key="value" value="164"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="mFh-or-YlY"/>
+                                                    </connections>
+                                                </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCG-8B-ZoU">
                                                     <rect key="frame" x="16" y="11" width="160" height="21"/>
                                                     <constraints>
@@ -4230,21 +4250,9 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Iyn-Mu-NnV">
-                                                    <rect key="frame" x="180" y="7" width="179" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="gEy-R4-JhG"/>
-                                                    </constraints>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
-                                                    <connections>
-                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="mFh-or-YlY"/>
-                                                    </connections>
-                                                </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Iyn-Mu-NnV" firstAttribute="leading" secondItem="SCG-8B-ZoU" secondAttribute="trailing" constant="4" id="5kS-iW-w3Z"/>
+                                                <constraint firstItem="Iyn-Mu-NnV" firstAttribute="leading" secondItem="SCG-8B-ZoU" secondAttribute="trailing" constant="-160" id="5kS-iW-w3Z"/>
                                                 <constraint firstAttribute="centerY" secondItem="Iyn-Mu-NnV" secondAttribute="centerY" constant="-0.5" id="DbT-4P-Ek6"/>
                                                 <constraint firstAttribute="trailing" secondItem="Iyn-Mu-NnV" secondAttribute="trailing" constant="16" id="atc-hA-hPA"/>
                                                 <constraint firstAttribute="centerY" secondItem="SCG-8B-ZoU" secondAttribute="centerY" id="ioe-0x-W7S"/>
@@ -4259,6 +4267,23 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Te3-TJ-q9X" customClass="InsetTextField">
+                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="5TN-uj-lc2"/>
+                                                    </constraints>
+                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
+                                                            <integer key="value" value="164"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="V8k-jP-qlp"/>
+                                                    </connections>
+                                                </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgw-vt-vLu">
                                                     <rect key="frame" x="16" y="11" width="160" height="21"/>
                                                     <constraints>
@@ -4267,23 +4292,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Te3-TJ-q9X">
-                                                    <rect key="frame" x="180" y="7" width="179" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="5TN-uj-lc2"/>
-                                                    </constraints>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
-                                                    <connections>
-                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="V8k-jP-qlp"/>
-                                                    </connections>
-                                                </textField>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="Te3-TJ-q9X" secondAttribute="trailing" constant="16" id="60i-Oi-4vN"/>
                                                 <constraint firstItem="cgw-vt-vLu" firstAttribute="leading" secondItem="uhn-eF-uE4" secondAttribute="leadingMargin" id="QYs-Sm-u9H"/>
-                                                <constraint firstItem="Te3-TJ-q9X" firstAttribute="leading" secondItem="cgw-vt-vLu" secondAttribute="trailing" constant="4" id="RSk-WD-LSu"/>
+                                                <constraint firstItem="Te3-TJ-q9X" firstAttribute="leading" secondItem="cgw-vt-vLu" secondAttribute="trailing" constant="-160" id="RSk-WD-LSu"/>
                                                 <constraint firstAttribute="centerY" secondItem="Te3-TJ-q9X" secondAttribute="centerY" constant="-0.5" id="oDO-r7-0Sg"/>
                                                 <constraint firstAttribute="centerY" secondItem="cgw-vt-vLu" secondAttribute="centerY" id="oWF-6d-9WA"/>
                                             </constraints>
@@ -4296,6 +4309,23 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7gF-pf-45E" customClass="InsetTextField">
+                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="yea-0G-rvi"/>
+                                                    </constraints>
+                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
+                                                            <integer key="value" value="164"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="L9a-wI-GIu"/>
+                                                    </connections>
+                                                </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm New" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o4b-gi-602">
                                                     <rect key="frame" x="16" y="11" width="160" height="21"/>
                                                     <constraints>
@@ -4304,23 +4334,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7gF-pf-45E">
-                                                    <rect key="frame" x="180" y="7" width="179" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="yea-0G-rvi"/>
-                                                    </constraints>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
-                                                    <connections>
-                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="L9a-wI-GIu"/>
-                                                    </connections>
-                                                </textField>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="7gF-pf-45E" secondAttribute="trailing" constant="16" id="8L0-qi-eVa"/>
                                                 <constraint firstAttribute="centerY" secondItem="o4b-gi-602" secondAttribute="centerY" id="N7l-UN-cc4"/>
-                                                <constraint firstItem="7gF-pf-45E" firstAttribute="leading" secondItem="o4b-gi-602" secondAttribute="trailing" constant="4" id="TIB-79-Jgv"/>
+                                                <constraint firstItem="7gF-pf-45E" firstAttribute="leading" secondItem="o4b-gi-602" secondAttribute="trailing" constant="-160" id="TIB-79-Jgv"/>
                                                 <constraint firstAttribute="centerY" secondItem="7gF-pf-45E" secondAttribute="centerY" constant="-0.5" id="ikv-HV-sJb"/>
                                                 <constraint firstItem="o4b-gi-602" firstAttribute="leading" secondItem="Jrk-6b-Gmu" secondAttribute="leadingMargin" id="mOd-Q8-lfG"/>
                                             </constraints>

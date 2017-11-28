@@ -1,59 +1,45 @@
 //
-//  AccountPickerViewController.m
-//  MyTeleMed
+//  HospitalPickerViewController.m
+//  TeleMed
 //
-//  Created by SolutionBuilt on 5/11/16.
-//  Copyright (c) 2016 SolutionBuilt. All rights reserved.
+//  Created by Shane Goodwin on 11/28/17.
+//  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import "AccountPickerViewController.h"
-#import "MessageRecipientPickerViewController.h"
-#import "AccountCell.h"
-#import "AccountModel.h"
-#import "MyProfileModel.h"
-#import "PreferredAccountModel.h"
+#import "HospitalPickerViewController.h"
+#import "HospitalCell.h"
+//#import "HospitalModel.h"
 
-@interface AccountPickerViewController ()
+@interface HospitalPickerViewController ()
 
-@property (nonatomic) AccountModel *accountModel;
+//@property (nonatomic) HospitalModel *hospitalModel;
 
 @property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
-@property (nonatomic) IBOutlet UITableView *tableAccounts;
+@property (nonatomic) IBOutlet UITableView *tableHospitals;
 
 @property (nonatomic, strong) UISearchController *searchController;
 
-@property (nonatomic) NSMutableArray *filteredAccounts;
+@property (nonatomic) NSMutableArray *filteredHospitals;
 @property (nonatomic) BOOL isLoaded;
 
 @end
 
-@implementation AccountPickerViewController
+@implementation HospitalPickerViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	
-	// If accounts were not pre-loaded (slow connection in MessageNewViewController), then load them here
-	if([self.accounts count] == 0)
+	// If hospitals were not pre-loaded (slow connection in MessageNewViewController), then load them here
+	if([self.hospitals count] == 0)
 	{
-		// Initialize Account Model
-		[self setAccountModel:[[AccountModel alloc] init]];
-		[self.accountModel setDelegate:self];
+		// Initialize Hospital Model
+		/*[self setHospitalModel:[[HospitalModel alloc] init]];
+		[self.hospitalModel setDelegate:self];
 		
-		// Get list of Accounts
-		[self.accountModel getAccounts];
-	}
-	
-	// If Selected Account not already set, then set it to MyProfileModel's MyPreferredAccount
-	if( ! self.selectedAccount)
-	{
-		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-		
-		if(myProfileModel.MyPreferredAccount)
-		{
-			[self setSelectedAccount:myProfileModel.MyPreferredAccount];
-		}
+		// Get list of Hospitals
+		[self.hospitalModel getHospitals];*/
 	}
 	
 	// Initialize Search Controller
@@ -68,7 +54,7 @@
 	
 	// Initialize Search Bar
 	[self.searchController.searchBar setDelegate:self];
-	[self.searchController.searchBar setPlaceholder:@"Search Accounts"];
+	[self.searchController.searchBar setPlaceholder:@"Search Hospitals"];
 	[self.searchController.searchBar sizeToFit];
 	
 	// iOS 11+ navigation bar has support for search controller
@@ -119,20 +105,6 @@
 	}
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	// If account was previously selected, scroll to it
-	if(self.selectedAccount && [self.accounts count] > 0)
-	{
-		[self.tableAccounts reloadData];
-		
-		// Scroll to selected Account
-		[self scrollToSelectedAccount];
-	}
-}
-
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
@@ -144,60 +116,26 @@
 	}
 }
 
-// Return Accounts from AccountModel delegate
-- (void)updateAccounts:(NSMutableArray *)newAccounts
+// Return Hospitals from HospitalModel delegate
+- (void)updateHospitals:(NSMutableArray *)newHospitals
 {
-	[self setAccounts:newAccounts];
+	[self setHospitals:newHospitals];
 	
 	self.isLoaded = YES;
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[self.tableAccounts reloadData];
-		
-		// If account was previously selected, scroll to it
-		if(self.selectedAccount)
-		{
-			// Scroll to selected Account
-			[self scrollToSelectedAccount];
-		}
+		[self.tableHospitals reloadData];
 	});
 }
 
-// Return error from AccountModel delegate
-- (void)updateAccountsError:(NSError *)error
+// Return error from HospitalModel delegate
+- (void)updateHospitalsError:(NSError *)error
 {
 	self.isLoaded = YES;
 	
 	// Show error message
-	[self.accountModel showError:error];
-}
-
-// Return pending from PreferredAccountModel delegate
-- (void)savePreferredAccountPending
-{
-	// Go back to Settings (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)scrollToSelectedAccount
-{
-	// Find Selected Account in Accounts (can be used to find Account even if it was not originally extracted from Accounts array - i.e. MyProfile.MyPreferredAccount)
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
-	NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
-	
-	if([results count] > 0)
-	{
-		// Find and delete table cell that contains Comment
-		AccountModel *account = [results objectAtIndex:0];
-		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
-		
-		// Scroll to cell
-		if(indexPath)
-		{
-			[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
-		}
-	}
+	//[self.hospitalModel showError:error];
 }
 
 // Delegate Method for Updating Search Results
@@ -208,10 +146,10 @@
 	
 	NSLog(@"Text: %@", text);
 	
-	// Reset Filtered Accounts
-	[self.filteredAccounts removeAllObjects];
+	// Reset Filtered Hospitals
+	[self.filteredHospitals removeAllObjects];
 	
-	// Filter Accounts when search string contains space if Name and PublicKey begin with the parts of search text
+	// Filter Hospitals when search string contains space if Name and PublicKey begin with the parts of search text
 	if([text rangeOfString:@" "].location != NSNotFound)
 	{
 		NSArray *textParts = [text componentsSeparatedByString:@" "];
@@ -219,15 +157,15 @@
 		NSString *name = [textParts objectAtIndex:1];
 		predicate = [NSPredicate predicateWithFormat:@"(SELF.Name CONTAINS[c] %@) OR (SELF.Name CONTAINS[c] %@ AND SELF.PublicKey BEGINSWITH[c] %@) OR (SELF.Name CONTAINS[c] %@ AND SELF.PublicKey BEGINSWITH[c] %@)", text, publicKey, name, name, publicKey];
 	}
-	// Filter Accounts if Name or PublicKey begins with search text
+	// Filter Hospitals if Name or PublicKey begins with search text
 	else
 	{
 		predicate = [NSPredicate predicateWithFormat:@"SELF.Name CONTAINS[c] %@ OR SELF.PublicKey BEGINSWITH[c] %@", text, text];
 	}
 	
-	[self setFilteredAccounts:[NSMutableArray arrayWithArray:[self.accounts filteredArrayUsingPredicate:predicate]]];
+	[self setFilteredHospitals:[NSMutableArray arrayWithArray:[self.hospitals filteredArrayUsingPredicate:predicate]]];
 	
-	[self.tableAccounts reloadData];
+	[self.tableHospitals reloadData];
 }
 
 // Delegate Method for clicking Cancel button on Search Results
@@ -235,9 +173,6 @@
 {
 	// Close Search Results
 	[self.searchController setActive:NO];
-	
-	// Scroll to selected Account
-	[self scrollToSelectedAccount];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -250,22 +185,22 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if([self.filteredAccounts count] == 0)
+		if([self.filteredHospitals count] == 0)
 		{
 			return 1;
 		}
 		
-		return [self.filteredAccounts count];
+		return [self.filteredHospitals count];
 	}
-	// Accounts Table
+	// Hospitals Table
 	else
 	{
-		if([self.accounts count] == 0)
+		if([self.hospitals count] == 0)
 		{
 			return 1;
 		}
-			
-		return [self.accounts count];
+		
+		return [self.hospitals count];
 	}
 }
 
@@ -276,8 +211,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Return default height if no Accounts available
-	if([self.accounts count] == 0)
+	// Return default height if no Hospitals available
+	if([self.hospitals count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
@@ -287,7 +222,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.accounts count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] == 0))
+	if([self.hospitals count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredHospitals count] == 0))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -295,8 +230,8 @@
 		// [emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		
-		// Accounts table
-		if([self.accounts count] == 0)
+		// Hospitals table
+		if([self.hospitals count] == 0)
 		{
 			[emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
 		}
@@ -309,9 +244,9 @@
 		return emptyCell;
 	}
 	
-	static NSString *cellIdentifier = @"AccountCell";
-	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
-	AccountModel *account;
+	static NSString *cellIdentifier = @"HospitalCell";
+	HospitalCell *cell = [self.tableHospitals dequeueReusableCellWithIdentifier:cellIdentifier];
+	HospitalModel *hospital;
 	
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
@@ -319,26 +254,26 @@
 	// Search Results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		account = [self.filteredAccounts objectAtIndex:indexPath.row];
+		hospital = [self.filteredHospitals objectAtIndex:indexPath.row];
 	}
-	// Accounts table
+	// Hospitals table
 	else
 	{
-		account = [self.accounts objectAtIndex:indexPath.row];
+		hospital = [self.hospitals objectAtIndex:indexPath.row];
 	}
 	
-	// Set previously selected Account as selected and add checkmark
-	if(self.selectedAccount && [account.ID isEqualToNumber:self.selectedAccount.ID])
+	// Set previously selected Hospital as selected and add checkmark
+	if(self.selectedHospital && [hospital.ID isEqualToNumber:self.selectedHospital.ID])
 	{
 		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	}
 	
-	// Set Account Name label
-	[cell.accountName setText:account.Name];
+	// Set Hospital Name label
+	[cell.hospitalName setText:hospital.Name];
 	
-	// Set Account Number label
-	[cell.accountPublicKey setText:account.PublicKey];
+	// Set Hospital Number label
+	[cell.hospitalPublicKey setText:hospital.PublicKey];
 	
 	return cell;
 }
@@ -350,55 +285,55 @@
 	// Search Results Table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no Filtered Accounts, then user clicked "No results."
-		if([self.filteredAccounts count] == 0)
+		// If no Filtered Hospitals, then user clicked "No results."
+		if([self.filteredHospitals count] == 0)
 		{
-			// Close Search Results (must execute before scrolling to selected Account
+			// Close Search Results (must execute before scrolling to selected Hospital
 			[self.searchController setActive:NO];
 			
-			// Scroll to selected Account
-			[self scrollToSelectedAccount];
+			// Scroll to selected Hospital
+			[self scrollToSelectedHospital];
 			
 			return;
 		}
 		
-		// Set selected Account (in case user presses back button from next screen)
-		[self setSelectedAccount:[self.filteredAccounts objectAtIndex:indexPath.row]];
+		// Set selected Hospital (in case user presses back button from next screen)
+		[self setSelectedHospital:[self.filteredHospitals objectAtIndex:indexPath.row]];
 		
-		// Get cell in Accounts Table
-		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
-		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
+		// Get cell in Hospitals Table
+		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
+		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
-		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected Account)
-		//[self.tableAccounts selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected Hospital)
+		//[self.tableHospitals selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
-	// Accounts Table
+	// Hospitals Table
 	else
 	{
-		// Set selected Account (in case user presses back button from next screen)
-		[self setSelectedAccount:[self.accounts objectAtIndex:indexPath.row]];
+		// Set selected Hospital (in case user presses back button from next screen)
+		[self setSelectedHospital:[self.hospitals objectAtIndex:indexPath.row]];
 		
-		// Get cell in Accounts Table
-		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
+		// Get cell in Hospitals Table
+		cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Add checkmark of selected Account
+	// Add checkmark of selected Hospital
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// If using SettingsPreferredAccountPicker view from storyboard
-	if(self.shouldSetPreferredAccount)
+	// If using SettingsPreferredHospitalPicker view from storyboard
+	if(self.shouldSetPreferredHospital)
 	{
-		// Save Preferred Account to server
-		PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
+		// Save Preferred Hospital to server
+		PreferredHospitalModel *preferredHospitalModel = [[PreferredHospitalModel alloc] init];
 		
-		[preferredAccountModel setDelegate:self];
-		[preferredAccountModel savePreferredAccount:self.selectedAccount];
+		[preferredHospitalModel setDelegate:self];
+		[preferredHospitalModel savePreferredHospital:self.selectedHospital];
 	}
-	// If using NewMessageAccountPicker view from storyboard
+	// If using NewMessageHospitalPicker view from storyboard
 	else
 	{
 		// Go to MessageRecipientPickerTableViewController
-		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
+		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromHospitalPicker" sender:cell];
 	}
 }
 
@@ -412,42 +347,42 @@
 		// Close Search Results
 		[self.searchController setActive:NO];
 		
-		// Get cell in Message Accounts Table
-		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
-		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
+		// Get cell in Message Hospitals Table
+		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
+		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Deselect cell
-		[self.tableAccounts deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
+		[self.tableHospitals deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
 	}
-	// Accounts Table
+	// Hospitals Table
 	else
 	{
-		// Get cell in Accounts Table
-		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
+		// Get cell in Hospitals Table
+		cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Remove selected Account
-	[self setSelectedAccount:nil];
+	// Remove selected Hospital
+	[self setSelectedHospital:nil];
 	
-	// Remove checkmark of selected Account
+	// Remove checkmark of selected Hospital
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Set Account for MessageRecipientPickerTableViewController
-	if([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
+	// Set Hospital for MessageRecipientPickerTableViewController
+	if([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromHospitalPicker"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set Account
-		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
+		// Set Hospital
+		[messageRecipientPickerViewController setSelectedHospital:self.selectedHospital];
 		
 		// Set selected Message Recipients if previously set (this is simply passed through from Message New)
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
-	// If no Accounts, ensure nothing happens when going back
-	else if([self.accounts count] == 0)
+	// If no Hospitals, ensure nothing happens when going back
+	else if([self.hospitals count] == 0)
 	{
 		return;
 	}

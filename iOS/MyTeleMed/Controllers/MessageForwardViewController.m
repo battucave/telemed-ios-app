@@ -63,7 +63,7 @@
 	NSString *comment = self.messageComposeTableViewController.textViewMessage.text;
 	
 	// Remove placeholder comment
-	if([self.messageComposeTableViewController.textViewMessage.text isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
+	if([comment isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
 	{
 		comment = @"";
 	}

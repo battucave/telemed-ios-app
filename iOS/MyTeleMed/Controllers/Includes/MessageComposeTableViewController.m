@@ -20,13 +20,6 @@
 
 @implementation MessageComposeTableViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
-	[self.textViewMessage setDelegate:self];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -92,8 +85,9 @@
 	// Obtain Keyboard Size
 	CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 	
-	// Calculate New Height for Message Cell -> Use Parent View Controller to account for Navigation Controller
-	[self setCellMessageHeight:self.parentViewController.view.frame.size.height - keyboardSize.height - self.cellMessageRecipient.bounds.size.height];
+	// Calculate New Height for Message Cell
+	int cellMessagePadding = 20;
+	[self setCellMessageHeight:self.parentViewController.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - keyboardSize.height - self.cellMessageRecipient.frame.size.height - cellMessagePadding];
 	
 	// Force a refresh on the table
 	[self.tableView beginUpdates];

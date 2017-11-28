@@ -140,6 +140,10 @@
 		E24A44321FCC6DF900A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
 		E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
 		E24A44341FCC844D00A06EE8 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20295091FBBA53500811DA6 /* Launch Screen.xib */; };
+		E24A44371FCDFDCC00A06EE8 /* InsetTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A44361FCDFDCC00A06EE8 /* InsetTextField.m */; };
+		E24A44381FCDFDCC00A06EE8 /* InsetTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A44361FCDFDCC00A06EE8 /* InsetTextField.m */; };
+		E24A443C1FCE181A00A06EE8 /* HospitalPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */; };
+		E24A44401FCE1C7C00A06EE8 /* HospitalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */; };
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
@@ -706,6 +710,12 @@
 		E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IBDesignable.h"; sourceTree = "<group>"; };
 		E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+IBDesignable.m"; sourceTree = "<group>"; };
 		E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CDMAVoiceData.xib; sourceTree = "<group>"; };
+		E24A44351FCDFDCC00A06EE8 /* InsetTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InsetTextField.h; sourceTree = "<group>"; };
+		E24A44361FCDFDCC00A06EE8 /* InsetTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InsetTextField.m; sourceTree = "<group>"; };
+		E24A44391FCE181A00A06EE8 /* HospitalPickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalPickerViewController.h; sourceTree = "<group>"; };
+		E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HospitalPickerViewController.m; sourceTree = "<group>"; };
+		E24A443E1FCE1C7C00A06EE8 /* HospitalCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalCell.h; sourceTree = "<group>"; };
+		E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HospitalCell.m; sourceTree = "<group>"; };
 		E24B3D941F91221300684782 /* MyTeleMedWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedWatch Extension.entitlements"; sourceTree = "<group>"; };
 		E24D45031E8948E700B36DD6 /* SettingsPasswordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsPasswordTableViewController.h; sourceTree = "<group>"; };
 		E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPasswordTableViewController.m; sourceTree = "<group>"; };
@@ -1481,6 +1491,8 @@
 				E2AE66351CE0DD7300953EFA /* NSObject+Swizzle.h */,
 				E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */,
 				E2AE663A1CE0E7A700953EFA /* ReadMe.md */,
+				E24A44351FCDFDCC00A06EE8 /* InsetTextField.h */,
+				E24A44361FCDFDCC00A06EE8 /* InsetTextField.m */,
 				E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */,
 				E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */,
 			);
@@ -1570,8 +1582,11 @@
 		E211D5A01FBF5F1900263497 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E24A443D1FCE1C2B00A06EE8 /* Includes */,
 				E23A4F431FC3269F00DC899D /* AccountNewViewController.h */,
 				E23A4F461FC3273A00DC899D /* AccountNewViewController.m */,
+				E24A44391FCE181A00A06EE8 /* HospitalPickerViewController.h */,
+				E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */,
 				E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */,
 				E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */,
 				E2622D0A1FC5F8B0008BCFF3 /* MessageNewViewController.h */,
@@ -1589,6 +1604,15 @@
 				E21C14681D33E2240025B6ED /* OnePixelLayoutConstraint.m */,
 			);
 			path = Constraints;
+			sourceTree = "<group>";
+		};
+		E24A443D1FCE1C2B00A06EE8 /* Includes */ = {
+			isa = PBXGroup;
+			children = (
+				E24A443E1FCE1C7C00A06EE8 /* HospitalCell.h */,
+				E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */,
+			);
+			path = Includes;
 			sourceTree = "<group>";
 		};
 		E270ED371B1758C900DD43B8 /* AFNetworking */ = {
@@ -2290,6 +2314,7 @@
 				E27B85341B14D11D00AD50C6 /* MyProfileXMLParser.m in Sources */,
 				E270ED661B1758C900DD43B8 /* UIButton+AFNetworking.m in Sources */,
 				E27B851D1B14D09400AD50C6 /* NotificationSettingXMLParser.m in Sources */,
+				E24A44371FCDFDCC00A06EE8 /* InsetTextField.m in Sources */,
 				E240EE6D1F54A462009D8ED1 /* UIView+IBDesignable.m in Sources */,
 				E2ED891F1D9DB2EE0094214C /* NewChatMessageModel.m in Sources */,
 				E27B84F41B14CF8F00AD50C6 /* ForwardMessageModel.m in Sources */,
@@ -2429,6 +2454,7 @@
 				E25036B01FBB88F400099C7E /* ChatParticipantModel.m in Sources */,
 				E25036B21FBB88F400099C7E /* UIAlertView+AFNetworking.m in Sources */,
 				E25036B31FBB88F400099C7E /* AccountXMLParser.m in Sources */,
+				E24A44401FCE1C7C00A06EE8 /* HospitalCell.m in Sources */,
 				E25036B41FBB88F400099C7E /* ScreenshotAlertModel.m in Sources */,
 				E25036B51FBB88F400099C7E /* AppDelegate.m in Sources */,
 				E25036B61FBB88F400099C7E /* CallModel.m in Sources */,
@@ -2476,6 +2502,8 @@
 				E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */,
 				E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */,
 				E25036F41FBB88F400099C7E /* SSOProviderXMLParser.m in Sources */,
+				E24A443C1FCE181A00A06EE8 /* HospitalPickerViewController.m in Sources */,
+				E24A44381FCDFDCC00A06EE8 /* InsetTextField.m in Sources */,
 				E25036F61FBB88F400099C7E /* MessageRecipientModel.m in Sources */,
 				E25036F71FBB88F400099C7E /* RevealTableViewController.m in Sources */,
 				E25036F81FBB88F400099C7E /* NSObject+Swizzle.m in Sources */,

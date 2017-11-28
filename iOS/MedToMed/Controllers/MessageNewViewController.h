@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "RevealTableViewController.h"
 
-@interface MessageNewViewController : RevealTableViewController
+@interface MessageNewViewController : RevealTableViewController <UITextFieldDelegate>
 
 @end
