@@ -244,7 +244,7 @@
 		}
 	}*/
 
-	/* Comment Push Notification
+	/* Message Comment Push Notification
 	{
 		"DeliveryID":5133538688695397,
 		"NotificationType":"Comment",
@@ -254,6 +254,18 @@
 			"sound":"circles.caf"
 		}
 	}*/
+    
+    /* Sent Message Comment Push Notification
+     {
+         "DeliveryID":"",
+         "MessageID":5646855541685471,
+         "NotificationType":"Comment",
+         "aps":
+         {
+             "alert":"Dr. Matt Rogers added a comment to a message.",
+             "sound":"circles.caf"
+         }
+     }*/
 
 	/* Chat Push Notification
 	{

@@ -80,14 +80,21 @@
 		}
 	}
 	
-	// Extract Delivery ID or Chat Message ID
+	// Extract Delivery ID, Message ID, or Chat Message ID
 	if([notificationType isEqualToString:@"Comment"])
 	{
-		deliveryID = [userInfo objectForKey:@"DeliveryID"];
+		// MessageID is used for sent messages; DeliveryID is used for received messages
+		deliveryID = ([userInfo objectForKey:@"MessageID"] ?: [userInfo objectForKey:@"DeliveryID"]);
 	}
 	else if([notificationType isEqualToString:@"Chat"])
 	{
 		deliveryID = [userInfo objectForKey:@"ChatMsgID"];
+	}
+	
+	// Convert deliveryID to a number if it is not already
+	if(! [deliveryID isKindOfClass:[NSNumber class]])
+	{
+		deliveryID = [NSNumber numberWithInteger:[deliveryID integerValue]];
 	}
 	
 	// Determine whether message was sent as an object or a string.
