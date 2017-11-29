@@ -17,7 +17,6 @@
 @property (nonatomic) NSDictionary *MyTimeZone;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
-@optional
 + (id <ProfileProtocol>)sharedInstance;
 
 // MyProfileModel only
