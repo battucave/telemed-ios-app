@@ -37,15 +37,15 @@
 	// If accounts were not pre-loaded (slow connection in MessageNewViewController), then load them here
 	if([self.accounts count] == 0)
 	{
-		// Initialize Account Model
+		// Initialize account model
 		[self setAccountModel:[[AccountModel alloc] init]];
 		[self.accountModel setDelegate:self];
 		
-		// Get list of Accounts
+		// Get list of accounts
 		[self.accountModel getAccounts];
 	}
 	
-	// If Selected Account not already set, then set it to MyProfileModel's MyPreferredAccount
+	// If selected account not already set, then set it to my profile model's MyPreferredAccount
 	if( ! self.selectedAccount)
 	{
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
@@ -56,7 +56,7 @@
 		}
 	}
 	
-	// Initialize Search Controller
+	// Initialize search controller
 	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
 	
 	[self.searchController setDelegate:self];
@@ -66,7 +66,7 @@
 	
 	self.definesPresentationContext = YES;
 	
-	// Initialize Search Bar
+	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar setPlaceholder:@"Search Accounts"];
 	[self.searchController.searchBar sizeToFit];
@@ -90,13 +90,13 @@
 	// iOS < 11 places search controller under navigation bar
 	else
 	{
-		// Add auto-generated constraints that allow Search Bar to animate without disappearing
+		// Add auto-generated constraints that allow search bar to animate without disappearing
 		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
 		
-		// Add Search Bar to Search Bar's Container View
+		// Add search bar to search bar's container view
 		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
 		
-		// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
+		// Copy constraints from Storyboard's placeholder search bar onto the search controller's search bar
 		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
 			if(constraint.firstItem == self.searchBar)
@@ -114,7 +114,7 @@
 			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 		}
 		
-		// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
+		// Hide placeholder search bar from Storyboard (UISearchController and its search bar cannot be implemented in Storyboard so we use a placeholder search bar instead)
 		[self.searchBar setHidden:YES];
 	}
 }
@@ -124,11 +124,11 @@
 	[super viewWillAppear:animated];
 	
 	// If account was previously selected, scroll to it
-	if(self.selectedAccount && [self.accounts count] > 0)
+	if([self.accounts count] > 0)
 	{
 		[self.tableAccounts reloadData];
 		
-		// Scroll to selected Account
+		// Scroll to selected account
 		[self scrollToSelectedAccount];
 	}
 }
@@ -137,14 +137,14 @@
 {
 	[super viewDidDisappear:animated];
 	
-	// Reset Search Results (put here because it's animation must occur AFTER any segue)
+	// Reset search results (put here because it's animation must occur AFTER any segue)
 	if(self.searchController.active)
 	{
 		[self.searchController setActive:NO];
 	}
 }
 
-// Return Accounts from AccountModel delegate
+// Return accounts from account model delegate
 - (void)updateAccounts:(NSMutableArray *)newAccounts
 {
 	[self setAccounts:newAccounts];
@@ -156,15 +156,11 @@
 		[self.tableAccounts reloadData];
 		
 		// If account was previously selected, scroll to it
-		if(self.selectedAccount)
-		{
-			// Scroll to selected Account
-			[self scrollToSelectedAccount];
-		}
+		[self scrollToSelectedAccount];
 	});
 }
 
-// Return error from AccountModel delegate
+// Return error from account model delegate
 - (void)updateAccountsError:(NSError *)error
 {
 	self.isLoaded = YES;
@@ -173,22 +169,28 @@
 	[self.accountModel showError:error];
 }
 
-// Return pending from PreferredAccountModel delegate
+// Return pending from preferred account model delegate
 - (void)savePreferredAccountPending
 {
-	// Go back to Settings (assume success)
+	// Go back to settings (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)scrollToSelectedAccount
 {
-	// Find Selected Account in Accounts (can be used to find Account even if it was not originally extracted from Accounts array - i.e. MyProfile.MyPreferredAccount)
+	// Cancel if no account is selected
+	if(! self.selectedAccount)
+	{
+		return;
+	}
+	
+	// Find selected account in accounts (can be used to find account even if it was not originally extracted from accounts array - i.e. MyProfile.MyPreferredAccount)
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
 	NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
 	
 	if([results count] > 0)
 	{
-		// Find and delete table cell that contains Comment
+		// Find table cell that contains selected account
 		AccountModel *account = [results objectAtIndex:0];
 		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
 		
@@ -200,7 +202,7 @@
 	}
 }
 
-// Delegate Method for Updating Search Results
+// Delegate method for updating search results
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
 	NSPredicate *predicate;
@@ -208,10 +210,10 @@
 	
 	NSLog(@"Text: %@", text);
 	
-	// Reset Filtered Accounts
+	// Reset filtered accounts
 	[self.filteredAccounts removeAllObjects];
 	
-	// Filter Accounts when search string contains space if Name and PublicKey begin with the parts of search text
+	// Filter accounts when search string contains space if name and publickey begin with the parts of search text
 	if([text rangeOfString:@" "].location != NSNotFound)
 	{
 		NSArray *textParts = [text componentsSeparatedByString:@" "];
@@ -219,7 +221,7 @@
 		NSString *name = [textParts objectAtIndex:1];
 		predicate = [NSPredicate predicateWithFormat:@"(SELF.Name CONTAINS[c] %@) OR (SELF.Name CONTAINS[c] %@ AND SELF.PublicKey BEGINSWITH[c] %@) OR (SELF.Name CONTAINS[c] %@ AND SELF.PublicKey BEGINSWITH[c] %@)", text, publicKey, name, name, publicKey];
 	}
-	// Filter Accounts if Name or PublicKey begins with search text
+	// Filter accounts if name or publickey begins with search text
 	else
 	{
 		predicate = [NSPredicate predicateWithFormat:@"SELF.Name CONTAINS[c] %@ OR SELF.PublicKey BEGINSWITH[c] %@", text, text];
@@ -230,13 +232,13 @@
 	[self.tableAccounts reloadData];
 }
 
-// Delegate Method for clicking Cancel button on Search Results
+// Delegate method for clicking cancel button on search results
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-	// Close Search Results
+	// Close search results
 	[self.searchController setActive:NO];
 	
-	// Scroll to selected Account
+	// Scroll to selected account
 	[self scrollToSelectedAccount];
 }
 
@@ -247,7 +249,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	// Search Results Table
+	// search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		if([self.filteredAccounts count] == 0)
@@ -257,7 +259,7 @@
 		
 		return [self.filteredAccounts count];
 	}
-	// Accounts Table
+	// Accounts table
 	else
 	{
 		if([self.accounts count] == 0)
@@ -276,7 +278,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Return default height if no Accounts available
+	// Return default height if no accounts available
 	if([self.accounts count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
@@ -292,13 +294,12 @@
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		// [emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		
 		// Accounts table
 		if([self.accounts count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No accounts found." : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -316,7 +317,7 @@
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// Search Results table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		account = [self.filteredAccounts objectAtIndex:indexPath.row];
@@ -327,17 +328,17 @@
 		account = [self.accounts objectAtIndex:indexPath.row];
 	}
 	
-	// Set previously selected Account as selected and add checkmark
+	// Set previously selected account as selected and add checkmark
 	if(self.selectedAccount && [account.ID isEqualToNumber:self.selectedAccount.ID])
 	{
 		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	}
 	
-	// Set Account Name label
+	// Set account name label
 	[cell.accountName setText:account.Name];
 	
-	// Set Account Number label
+	// Set account number label
 	[cell.accountPublicKey setText:account.PublicKey];
 	
 	return cell;
@@ -347,13 +348,13 @@
 {
 	UITableViewCell *cell;
 	
-	// Search Results Table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no Filtered Accounts, then user clicked "No results."
+		// If no filtered accounts, then user clicked "No results."
 		if([self.filteredAccounts count] == 0)
 		{
-			// Close Search Results (must execute before scrolling to selected Account
+			// Close search results (must execute before scrolling to selected account)
 			[self.searchController setActive:NO];
 			
 			// Scroll to selected Account
@@ -362,33 +363,33 @@
 			return;
 		}
 		
-		// Set selected Account (in case user presses back button from next screen)
+		// Set selected account (in case user presses back button from next screen)
 		[self setSelectedAccount:[self.filteredAccounts objectAtIndex:indexPath.row]];
 		
-		// Get cell in Accounts Table
+		// Get cell in accounts table
 		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
 		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
-		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected Account)
+		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected account)
 		//[self.tableAccounts selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
-	// Accounts Table
+	// Accounts table
 	else
 	{
-		// Set selected Account (in case user presses back button from next screen)
+		// Set selected account (in case user presses back button from next screen)
 		[self setSelectedAccount:[self.accounts objectAtIndex:indexPath.row]];
 		
-		// Get cell in Accounts Table
+		// Get cell in accounts table
 		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Add checkmark of selected Account
+	// Add checkmark of selected account
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
 	// If using SettingsPreferredAccountPicker view from storyboard
 	if(self.shouldSetPreferredAccount)
 	{
-		// Save Preferred Account to server
+		// Save preferred account to server
 		PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
 		
 		[preferredAccountModel setDelegate:self];
@@ -406,30 +407,30 @@
 {
 	UITableViewCell *cell;
 	
-	// Search Results Table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// Close Search Results
+		// Close search results
 		[self.searchController setActive:NO];
 		
-		// Get cell in Message Accounts Table
+		// Get cell in message accounts table
 		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
 		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Deselect cell
 		[self.tableAccounts deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
 	}
-	// Accounts Table
+	// Accounts table
 	else
 	{
-		// Get cell in Accounts Table
+		// Get cell in accounts table
 		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Remove selected Account
+	// Remove selected account
 	[self setSelectedAccount:nil];
 	
-	// Remove checkmark of selected Account
+	// Remove checkmark of selected account
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 }
 
@@ -440,13 +441,13 @@
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set Account
+		// Set account
 		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// Set selected Message Recipients if previously set (this is simply passed through from Message New)
+		// Set selected message recipients if previously set (this is simply passed through from MessageNewViewController)
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
-	// If no Accounts, ensure nothing happens when going back
+	// If no accounts, ensure nothing happens when going back
 	else if([self.accounts count] == 0)
 	{
 		return;

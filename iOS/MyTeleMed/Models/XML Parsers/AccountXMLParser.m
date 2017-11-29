@@ -30,7 +30,7 @@
 {
 	if([elementName isEqualToString:@"Account"])
 	{
-		// Initialize the Account
+		// Initialize the account
 		self.account = [[AccountModel alloc] init];
 	}
 	else if([elementName isEqualToString:@"TimeZone"])

@@ -17,6 +17,6 @@
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 @property (nonatomic) NSString *messageRecipientType;
-@property (nonatomic) BOOL isGroupChat; // Only used for Chat Participants
+@property (nonatomic) BOOL isGroupChat; // Only used for chat participants
 
 @end
