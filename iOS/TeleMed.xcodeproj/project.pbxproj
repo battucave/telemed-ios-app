@@ -376,6 +376,8 @@
 		E2C7C1B91FC3911000E50F07 /* button-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */; };
 		E2C7C1BD1FC4917100E50F07 /* UserProfileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */; };
 		E2C9FE061CD9251D00B64D88 /* EmailTelemedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */; };
+		E2CD93A01FCF0D88006ED66F /* HospitalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CD939F1FCF0D88006ED66F /* HospitalModel.m */; };
+		E2CD93A31FCF1411006ED66F /* HospitalXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CD93A21FCF1411006ED66F /* HospitalXMLParser.m */; };
 		E2CDEFA51D25752100728F1A /* ChatParticipantXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */; };
 		E2CDEFA61D25752100728F1A /* ChatMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFA41D25752100728F1A /* ChatMessageXMLParser.m */; };
 		E2CDEFAB1D25753400728F1A /* ChatMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFA81D25753400728F1A /* ChatMessageModel.m */; };
@@ -850,6 +852,10 @@
 		E2C7C1C61FC4B63900E50F07 /* ProfileProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileProtocol.h; sourceTree = "<group>"; };
 		E2C9FE041CD9251D00B64D88 /* EmailTelemedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailTelemedModel.h; sourceTree = "<group>"; };
 		E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailTelemedModel.m; sourceTree = "<group>"; };
+		E2CD939E1FCF0D88006ED66F /* HospitalModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalModel.h; sourceTree = "<group>"; };
+		E2CD939F1FCF0D88006ED66F /* HospitalModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HospitalModel.m; sourceTree = "<group>"; };
+		E2CD93A11FCF1411006ED66F /* HospitalXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalXMLParser.h; sourceTree = "<group>"; };
+		E2CD93A21FCF1411006ED66F /* HospitalXMLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HospitalXMLParser.m; sourceTree = "<group>"; };
 		E2CDEFA11D25752100728F1A /* ChatParticipantXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatParticipantXMLParser.h; sourceTree = "<group>"; };
 		E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatParticipantXMLParser.m; sourceTree = "<group>"; };
 		E2CDEFA31D25752100728F1A /* ChatMessageXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageXMLParser.h; sourceTree = "<group>"; };
@@ -1690,6 +1696,8 @@
 		E275D2F91FC4D4DD00AF3651 /* XML Parsers */ = {
 			isa = PBXGroup;
 			children = (
+				E2CD93A11FCF1411006ED66F /* HospitalXMLParser.h */,
+				E2CD93A21FCF1411006ED66F /* HospitalXMLParser.m */,
 				E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */,
 				E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */,
 			);
@@ -1803,6 +1811,8 @@
 			isa = PBXGroup;
 			children = (
 				E275D2F91FC4D4DD00AF3651 /* XML Parsers */,
+				E2CD939E1FCF0D88006ED66F /* HospitalModel.h */,
+				E2CD939F1FCF0D88006ED66F /* HospitalModel.m */,
 				E2C7C1BB1FC4917100E50F07 /* UserProfileModel.h */,
 				E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */,
 			);
@@ -2451,6 +2461,7 @@
 				E25036AD1FBB88F400099C7E /* SentMessageXMLParser.m in Sources */,
 				E25036AE1FBB88F400099C7E /* MessageRecipientXMLParser.m in Sources */,
 				E25036AF1FBB88F400099C7E /* RegisteredDeviceModel.m in Sources */,
+				E2CD93A31FCF1411006ED66F /* HospitalXMLParser.m in Sources */,
 				E25036B01FBB88F400099C7E /* ChatParticipantModel.m in Sources */,
 				E25036B21FBB88F400099C7E /* UIAlertView+AFNetworking.m in Sources */,
 				E25036B31FBB88F400099C7E /* AccountXMLParser.m in Sources */,
@@ -2493,6 +2504,7 @@
 				E25036DD1FBB88F400099C7E /* AccountModel.m in Sources */,
 				E25036DF1FBB88F400099C7E /* EmailTelemedModel.m in Sources */,
 				E25036E01FBB88F400099C7E /* AFNetworkActivityLogger.m in Sources */,
+				E2CD93A01FCF0D88006ED66F /* HospitalModel.m in Sources */,
 				E25036E31FBB88F400099C7E /* PreferredAccountModel.m in Sources */,
 				E25036E41FBB88F400099C7E /* HelpUserGuideViewController.m in Sources */,
 				E25036E71FBB88F400099C7E /* MyProfileModel.m in Sources */,

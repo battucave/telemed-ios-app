@@ -7,12 +7,13 @@
 //
 
 #import "HospitalPickerViewController.h"
+#import "MessageNewViewController.h"
 #import "HospitalCell.h"
-//#import "HospitalModel.h"
+#import "HospitalModel.h"
 
 @interface HospitalPickerViewController ()
 
-//@property (nonatomic) HospitalModel *hospitalModel;
+@property (nonatomic) HospitalModel *hospitalModel;
 
 @property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
@@ -34,15 +35,15 @@
 	// If hospitals were not pre-loaded (slow connection in MessageNewViewController), then load them here
 	if([self.hospitals count] == 0)
 	{
-		// Initialize Hospital Model
-		/*[self setHospitalModel:[[HospitalModel alloc] init]];
+		// Initialize hospital model
+		[self setHospitalModel:[[HospitalModel alloc] init]];
 		[self.hospitalModel setDelegate:self];
 		
-		// Get list of Hospitals
-		[self.hospitalModel getHospitals];*/
+		// Get list of hospitals
+		[self.hospitalModel getHospitals];
 	}
 	
-	// Initialize Search Controller
+	// Initialize search controller
 	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
 	
 	[self.searchController setDelegate:self];
@@ -52,7 +53,7 @@
 	
 	self.definesPresentationContext = YES;
 	
-	// Initialize Search Bar
+	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar setPlaceholder:@"Search Hospitals"];
 	[self.searchController.searchBar sizeToFit];
@@ -79,10 +80,10 @@
 		// Add auto-generated constraints that allow Search Bar to animate without disappearing
 		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
 		
-		// Add Search Bar to Search Bar's Container View
+		// Add search bar to search bar's container view
 		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
 		
-		// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
+		// Copy constraints from storyboard's placeholder search bar onto the search controller's search bar
 		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
 			if(constraint.firstItem == self.searchBar)
@@ -100,8 +101,22 @@
 			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 		}
 		
-		// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
+		// Hide placholder search bar from storyboard (UISearchController and its search bar cannot be implemented in storyboard so we use a placeholder search bar instead)
 		[self.searchBar setHidden:YES];
+	}
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	// If hospital was previously selected, scroll to it
+	if([self.hospitals count] > 0)
+	{
+		[self.tableHospitals reloadData];
+		
+		// Scroll to selected hospital
+		[self scrollToSelectedHospital];
 	}
 }
 
@@ -109,14 +124,14 @@
 {
 	[super viewDidDisappear:animated];
 	
-	// Reset Search Results (put here because it's animation must occur AFTER any segue)
+	// Reset search results (put here because it's animation must occur AFTER any segue)
 	if(self.searchController.active)
 	{
 		[self.searchController setActive:NO];
 	}
 }
 
-// Return Hospitals from HospitalModel delegate
+// Return hospitals from hospital model delegate
 - (void)updateHospitals:(NSMutableArray *)newHospitals
 {
 	[self setHospitals:newHospitals];
@@ -126,19 +141,48 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableHospitals reloadData];
+		
+		// If hospital was previously selected, scroll to it
+		[self scrollToSelectedHospital];
 	});
 }
 
-// Return error from HospitalModel delegate
+// Return error from hospital model delegate
 - (void)updateHospitalsError:(NSError *)error
 {
 	self.isLoaded = YES;
 	
 	// Show error message
-	//[self.hospitalModel showError:error];
+	[self.hospitalModel showError:error];
 }
 
-// Delegate Method for Updating Search Results
+- (void)scrollToSelectedHospital
+{
+	// Cancel if no hospital is selected
+	if(! self.selectedHospital)
+	{
+		return;
+	}
+	
+	// Find selected hospital in hospitals
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedHospital.ID];
+	NSArray *results = [self.hospitals filteredArrayUsingPredicate:predicate];
+	
+	if([results count] > 0)
+	{
+		// Find table cell that contains hospital
+		HospitalModel *hospital = [results objectAtIndex:0];
+		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.hospitals indexOfObject:hospital] inSection:0];
+		
+		// Scroll to cell
+		if(indexPath)
+		{
+			[self.tableHospitals scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+		}
+	}
+}
+
+// Delegate method for updating search results
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
 	NSPredicate *predicate;
@@ -146,33 +190,25 @@
 	
 	NSLog(@"Text: %@", text);
 	
-	// Reset Filtered Hospitals
+	// Reset filtered hospitals
 	[self.filteredHospitals removeAllObjects];
 	
-	// Filter Hospitals when search string contains space if Name and PublicKey begin with the parts of search text
-	if([text rangeOfString:@" "].location != NSNotFound)
-	{
-		NSArray *textParts = [text componentsSeparatedByString:@" "];
-		NSString *publicKey = [textParts objectAtIndex:0];
-		NSString *name = [textParts objectAtIndex:1];
-		predicate = [NSPredicate predicateWithFormat:@"(SELF.Name CONTAINS[c] %@) OR (SELF.Name CONTAINS[c] %@ AND SELF.PublicKey BEGINSWITH[c] %@) OR (SELF.Name CONTAINS[c] %@ AND SELF.PublicKey BEGINSWITH[c] %@)", text, publicKey, name, name, publicKey];
-	}
-	// Filter Hospitals if Name or PublicKey begins with search text
-	else
-	{
-		predicate = [NSPredicate predicateWithFormat:@"SELF.Name CONTAINS[c] %@ OR SELF.PublicKey BEGINSWITH[c] %@", text, text];
-	}
+	// Filter hospitals if name begins with search text
+	predicate = [NSPredicate predicateWithFormat:@"SELF.Name CONTAINS[c] %@", text];
 	
 	[self setFilteredHospitals:[NSMutableArray arrayWithArray:[self.hospitals filteredArrayUsingPredicate:predicate]]];
 	
 	[self.tableHospitals reloadData];
 }
 
-// Delegate Method for clicking Cancel button on Search Results
+// Delegate method for clicking cancel button on search results
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-	// Close Search Results
+	// Close search results
 	[self.searchController setActive:NO];
+	
+	// Scroll to selected hospital
+	[self scrollToSelectedHospital];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -182,7 +218,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	// Search Results Table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		if([self.filteredHospitals count] == 0)
@@ -192,7 +228,7 @@
 		
 		return [self.filteredHospitals count];
 	}
-	// Hospitals Table
+	// Hospitals table
 	else
 	{
 		if([self.hospitals count] == 0)
@@ -227,13 +263,12 @@
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		// [emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		
 		// Hospitals table
 		if([self.hospitals count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No hospitals found." : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -251,7 +286,7 @@
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// Search Results table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		hospital = [self.filteredHospitals objectAtIndex:indexPath.row];
@@ -262,18 +297,15 @@
 		hospital = [self.hospitals objectAtIndex:indexPath.row];
 	}
 	
-	// Set previously selected Hospital as selected and add checkmark
+	// Set previously selected hospital as selected and add checkmark
 	if(self.selectedHospital && [hospital.ID isEqualToNumber:self.selectedHospital.ID])
 	{
 		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	}
 	
-	// Set Hospital Name label
+	// Set hospital name label
 	[cell.hospitalName setText:hospital.Name];
-	
-	// Set Hospital Number label
-	[cell.hospitalPublicKey setText:hospital.PublicKey];
 	
 	return cell;
 }
@@ -282,104 +314,88 @@
 {
 	UITableViewCell *cell;
 	
-	// Search Results Table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no Filtered Hospitals, then user clicked "No results."
+		// If no filtered hospitals, then user clicked "No results."
 		if([self.filteredHospitals count] == 0)
 		{
-			// Close Search Results (must execute before scrolling to selected Hospital
+			// Close search results (must execute before scrolling to selected hospital)
 			[self.searchController setActive:NO];
 			
-			// Scroll to selected Hospital
+			// Scroll to selected hospital
 			[self scrollToSelectedHospital];
 			
 			return;
 		}
 		
-		// Set selected Hospital (in case user presses back button from next screen)
+		// Set selected hospital (in case user presses back button from next screen)
 		[self setSelectedHospital:[self.filteredHospitals objectAtIndex:indexPath.row]];
 		
-		// Get cell in Hospitals Table
+		// Get cell in hospitals table
 		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
 		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected Hospital)
 		//[self.tableHospitals selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
-	// Hospitals Table
+	// Hospitals table
 	else
 	{
-		// Set selected Hospital (in case user presses back button from next screen)
+		// Set selected hospital (in case user presses back button from next screen)
 		[self setSelectedHospital:[self.hospitals objectAtIndex:indexPath.row]];
 		
-		// Get cell in Hospitals Table
+		// Get cell in hospitals table
 		cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Add checkmark of selected Hospital
+	// Add checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// If using SettingsPreferredHospitalPicker view from storyboard
-	if(self.shouldSetPreferredHospital)
-	{
-		// Save Preferred Hospital to server
-		PreferredHospitalModel *preferredHospitalModel = [[PreferredHospitalModel alloc] init];
-		
-		[preferredHospitalModel setDelegate:self];
-		[preferredHospitalModel savePreferredHospital:self.selectedHospital];
-	}
-	// If using NewMessageHospitalPicker view from storyboard
-	else
-	{
-		// Go to MessageRecipientPickerTableViewController
-		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromHospitalPicker" sender:cell];
-	}
+	// Go to MessageNewViewController
+	[self performSegueWithIdentifier:@"showMessageNewFromHospitalPicker" sender:cell];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell;
 	
-	// Search Results Table
+	// Search results table
 	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// Close Search Results
+		// Close search results
 		[self.searchController setActive:NO];
 		
-		// Get cell in Message Hospitals Table
+		// Get cell in hospitals table
 		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
 		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Deselect cell
 		[self.tableHospitals deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
 	}
-	// Hospitals Table
+	// Hospitals table
 	else
 	{
-		// Get cell in Hospitals Table
+		// Get cell in hospitals table
 		cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Remove selected Hospital
+	// Remove selected hospital
 	[self setSelectedHospital:nil];
 	
-	// Remove checkmark of selected Hospital
+	// Remove checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Set Hospital for MessageRecipientPickerTableViewController
-	if([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromHospitalPicker"])
+	// Set hospital for MessageNewViewController
+	if([[segue identifier] isEqualToString:@"showMessageNewFromHospitalPicker"])
 	{
-		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
+		MessageNewViewController *messageNewViewController = segue.destinationViewController;
 		
-		// Set Hospital
-		[messageRecipientPickerViewController setSelectedHospital:self.selectedHospital];
-		
-		// Set selected Message Recipients if previously set (this is simply passed through from Message New)
-		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+		// Set hospital
+		[messageNewViewController setSelectedHospital:self.selectedHospital];
 	}
 	// If no Hospitals, ensure nothing happens when going back
 	else if([self.hospitals count] == 0)

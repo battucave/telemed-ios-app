@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "RevealTableViewController.h"
+#import "AccountModel.h"
+#import "HospitalModel.h"
 
 @interface MessageNewViewController : RevealTableViewController <UITextFieldDelegate>
+
+@property (nonatomic) AccountModel *selectedAccount;
+@property (nonatomic) HospitalModel *selectedHospital;
 
 @end
