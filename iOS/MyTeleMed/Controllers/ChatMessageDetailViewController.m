@@ -332,18 +332,16 @@
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
 	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
-	
-	// Reload Chat Messages if remote notification is a Chat Message specifically for the current Conversation
-	if([notificationType isEqualToString:@"Chat"] && deliveryID && self.conversationID && [deliveryID isEqualToNumber:self.conversationID])
+    
+    // Reload Chat Messages if remote notification is a Chat Message (there is no way to verify that the message is specifically for the current conversation because the deliveryID will be a newly generated value that won't match conversationID)
+	if([notificationType isEqualToString:@"Chat"]/* && deliveryID && self.conversationID && [deliveryID isEqualToNumber:self.conversationID]*/)
 	{
-		NSLog(@"Refresh Chat Messages with Conversation ID: %@", deliveryID);
+		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
 		
 		// Cancel queued Chat Messages refresh
 		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
 		
 		[self.chatMessageModel getChatMessagesByID:self.conversationID];
-		
-		//return;
 	}
 	
 	// If remote notification is NOT a Chat Message specifically for the current Conversation, execute the default notification message action

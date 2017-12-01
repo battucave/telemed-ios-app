@@ -126,9 +126,6 @@
 {
 	NSLog(@"Received Remote Notification MessagesViewController");
 	
-	// Execute the default Notification Message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
-	
 	// Reload Messages list to get the new Message only if the notification was for a Message
 	if([notificationType isEqualToString:@"Message"])
 	{
@@ -136,6 +133,9 @@
 		
 		[self.messagesTableViewController reloadMessages];
 	}
+    
+    // Execute the default Notification Message action
+    [super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 }
 
 // Override selectedMessages setter

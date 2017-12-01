@@ -190,7 +190,7 @@
 		deliveryId = 5133538688695397;
 	#endif
 	//*/
-	
+    
 	// Reload Message Events if remote notification is a comment specifically for the current message
 	if([notificationType isEqualToString:@"Comment"] && deliveryID)
 	{

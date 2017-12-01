@@ -114,9 +114,6 @@
 {
 	NSLog(@"Received Remote Notification ChatMessagesViewController");
 	
-	// Execute the default Notification Message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
-	
 	// Reload Chat Messages list to get the new Chat Message only if the notification was for a Chat Message
 	if([notificationType isEqualToString:@"Chat"])
 	{
@@ -124,6 +121,9 @@
 		
 		[self.chatMessagesTableViewController reloadChatMessages];
 	}
+    
+    // Execute the default Notification Message action
+    [super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 }
 
 // Override selectedChatMessages setter
