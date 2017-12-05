@@ -1,26 +1,33 @@
 //
-//  MessageComposeTableViewController.m
+//  MessageTeleMedComposeTableViewController.m
 //  MyTeleMed
 //
-//  Created by SolutionBuilt on 11/7/13.
-//  Copyright (c) 2013 SolutionBuilt. All rights reserved.
+//  Created by SolutionBuilt on 5/3/16.
+//  Copyright (c) 2016 SolutionBuilt. All rights reserved.
 //
 
-#import "MessageComposeTableViewController.h"
-#import "MessageRecipientPickerViewController.h"
-#import "MessageRecipientModel.h"
+#import "MessageTeleMedComposeTableViewController.h"
+#import "ProfileProtocol.h"
 
-@interface MessageComposeTableViewController ()
+#ifdef MYTELEMED
+	#import "MyProfileModel.h"
+#endif
+
+#ifdef MEDTOMED
+	#import "UserProfileModel.h"
+#endif
+
+@interface MessageTeleMedComposeTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessageRecipient;
+@property (weak, nonatomic) IBOutlet UITableViewCell *cellMessageSender;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessage;
-@property (weak, nonatomic) IBOutlet UILabel *labelMessageRecipient;
 
 @property (nonatomic) CGFloat cellMessageHeight;
 
 @end
 
-@implementation MessageComposeTableViewController
+@implementation MessageTeleMedComposeTableViewController
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -40,6 +47,21 @@
 	{
 		self.textViewMessagePlaceholder = self.textViewMessage.text;
 	}
+	
+	// Set User Email Address
+	id <ProfileProtocol> profileProtocol;
+	
+	#ifdef MYTELEMED
+		profileProtocol = [MyProfileModel sharedInstance];
+
+	#elif defined MEDTOMED
+		profileProtocol = [UserProfileModel sharedInstance];
+	#endif
+	
+	if(profileProtocol)
+	{
+		[self.textFieldSender setText:profileProtocol.Email];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -49,36 +71,6 @@
 	// Remove Keyboard Observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
-
-// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
-- (IBAction)performSegueToMessageRecipientPicker:(id)sender
-{
-	[self.delegate performSegueToMessageRecipientPicker:(id)sender];
-}
-
-// Method fired from MessageNewViewController/MessageForwardViewController
-- (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients
-{
-	NSString *messageRecipientNames = @"";
-	NSInteger messageRecipientsCount = [messageRecipients count];
-	
-	if(messageRecipientsCount > 0)
-	{
-		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
-		
-		if(messageRecipientsCount > 1)
-		{
-			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
-		}
-		else
-		{
-			messageRecipientNames = messageRecipient.Name;
-		}
-	}
-	
-	// Update Message Recipient Label with Message Recipient Name
-	[self.labelMessageRecipient setText:messageRecipientNames];
 }
 
 // Resize Message Text View to match available space between top of Table Cell and Keyboard
@@ -112,12 +104,21 @@
 	[textView becomeFirstResponder];
 }
 
+- (IBAction)textFieldDidChangeEditing:(UITextField *)textField
+{
+	// Validate form in delegate
+	if([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])
+	{
+		[self.delegate validateForm:self.textViewMessage.text senderEmailAddress:self.textFieldSender.text];
+	}
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
 	// Validate form in delegate
-	if([self.delegate respondsToSelector:@selector(validateForm:)])
+	if([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])
 	{
-		[self.delegate validateForm:self.textViewMessage.text];
+		[self.delegate validateForm:self.textViewMessage.text senderEmailAddress:self.textFieldSender.text];
 	}
 }
 
@@ -136,8 +137,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Set each row's height independently
-	return (indexPath.row == 1 ? self.cellMessageHeight : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	if(indexPath.row == 2)
+	{
+		return self.cellMessageHeight;
+	}
+	
+	// Can't use super here because it would call MessageComposeTableViewController which has different heights
+	return [[[UITableViewController alloc] init] tableView:tableView heightForRowAtIndexPath:indexPath];
 }
 
 - (void)didReceiveMemoryWarning

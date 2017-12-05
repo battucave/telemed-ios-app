@@ -8,8 +8,11 @@
 
 #import "CoreTableViewController.h"
 #import "CDMAVoiceDataViewController.h"
-#import "NotificationSettingModel.h"
 #import <AudioToolbox/AudioServices.h>
+
+#ifdef MYTELEMED
+	#import "NotificationSettingModel.h"
+#endif
 
 @interface CoreTableViewController ()
 
@@ -27,20 +30,25 @@
 	
 	[super viewWillAppear:animated];
 	
-	// Add Application Did Become Active Notification Observer
+	// Add application did become active notification observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCDMAVoiceDataViewController:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	
-	// Add Application Did Receive Remote Notification Observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
+	// MyTeleMed - Add application did receive remote notification observer
+	#ifdef MYTELEMED
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
+	#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Notification Observers
+	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
+	
+	#ifdef MYTELEMED
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
+	#endif
 }
 
 - (void)showCDMAVoiceDataViewController:(NSNotification *)notification
@@ -56,6 +64,20 @@
 	}
 }
 
+- (void)dealloc
+{
+	// Remove notification observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+	
+	#ifdef MYTELEMED
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
+	#endif
+}
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
 - (void)didReceiveRemoteNotification:(NSNotification *)notification
 {
 	NSDictionary *userInfo = notification.object;
@@ -168,12 +190,6 @@
 	// Show Alert
 	[self presentViewController:alertController animated:YES completion:nil];
 }
-
-- (void)dealloc
-{
-	// Remove Notification Observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
-}
+#endif
 
 @end

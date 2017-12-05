@@ -72,10 +72,7 @@
 	
 	// Configure Alert Controller
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		// No action necessary
-	}];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
 	[alertController addAction:actionOK];
 	

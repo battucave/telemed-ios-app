@@ -300,7 +300,7 @@
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
-                                                    <segue destination="EUw-72-fK4" kind="custom" identifier="showContactTeleMed" customClass="SWRevealViewControllerSegue" id="SWX-Rd-no8"/>
+                                                    <segue destination="EUw-72-fK4" kind="custom" identifier="showContact" customClass="SWRevealViewControllerSegue" id="SWX-Rd-no8"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Settings" textLabel="bX8-tZ-0yi" style="IBUITableViewCellStyleDefault" id="6iH-fp-anm">
@@ -329,6 +329,7 @@
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
+                                        <sections/>
                                         <connections>
                                             <outlet property="dataSource" destination="W1Q-1B-CLM" id="NtW-2L-F25"/>
                                             <outlet property="delegate" destination="W1Q-1B-CLM" id="6N6-0S-Wkr"/>
@@ -3331,6 +3332,9 @@
                                                     <color key="textColor" red="0.38431372549999998" green="0.38431372549999998" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="vUd-oo-bvD" id="JMN-rT-UzF"/>
+                                                    </connections>
                                                 </textView>
                                             </subviews>
                                             <constraints>
@@ -4413,7 +4417,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="duc-Go-Hul"/>
         <segue reference="tkY-Nl-aTH"/>
         <segue reference="O2m-UP-1tm"/>
-        <segue reference="yVi-an-TG3"/>
+        <segue reference="HXd-Da-xht"/>
         <segue reference="Wxx-iI-zqX"/>
         <segue reference="dmg-yj-Han"/>
         <segue reference="FA7-fW-yLW"/>

@@ -7,13 +7,10 @@
 //
 
 #import "ContactViewController.h"
-#import "CallModel.h"
 
-@interface ContactViewController ()
-
-@property (nonatomic) CallModel *callModel;
-
-@end
+#ifdef MYTELEMED
+	#import "CallModel.h"
+#endif
 
 @implementation ContactViewController
 
@@ -24,20 +21,58 @@
 
 - (IBAction)callTeleMed:(id)sender
 {
-	UIAlertView *confirmAlertView = [[UIAlertView alloc] initWithTitle:@"Call TeleMed" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Call", nil];
+	// MedToMed - Use phone dialer to make call
+	#ifdef MEDTOMED
+		// Tel works same as telprompt in iOS 10.3+
+		// TODO: Replace phone number
+		NSURL *urlCallTeleMed = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@", @"+18001111111"]];
 	
-	[confirmAlertView setTag:1];
-	[confirmAlertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if(alertView.tag == 1 && buttonIndex > 0)
-	{
-		[self setCallModel:[[CallModel alloc] init]];
-		[self.callModel setDelegate:self];
-		[self.callModel callTeleMed];
-	}
+		// Verify that device can make phone calls
+		if ([[UIApplication sharedApplication] canOpenURL:urlCallTeleMed])
+		{
+			[[UIApplication sharedApplication] openURL:urlCallTeleMed];
+		}
+		else
+		{
+			UIAlertController *alertCallUnavailableController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"Telephone service is unavailable." preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+			
+			[alertCallUnavailableController addAction:actionOK];
+			
+			// PreferredAction only supported in 9.0+
+			if([alertCallUnavailableController respondsToSelector:@selector(setPreferredAction:)])
+			{
+				[alertCallUnavailableController setPreferredAction:actionOK];
+			}
+			
+			// Show Alert
+			[self presentViewController:alertCallUnavailableController animated:YES completion:nil];
+		}
+	
+	// MyTeleMed - Use calls api to request a callback
+	#elif defined MYTELEMED
+		UIAlertController *confirmCallTeleMedController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+		UIAlertAction *actionCall = [UIAlertAction actionWithTitle:@"Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+		{
+			CallModel *callModel = [[CallModel alloc] init];
+			
+			[callModel setDelegate:self];
+			[callModel callTeleMed];
+		}];
+	
+		[confirmCallTeleMedController addAction:actionClose];
+		[confirmCallTeleMedController addAction:actionCall];
+	
+		// PreferredAction only supported in 9.0+
+		if([confirmCallTeleMedController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[confirmCallTeleMedController setPreferredAction:actionCall];
+		}
+	
+		// Show Alert
+		[self presentViewController:confirmCallTeleMedController animated:YES completion:nil];
+	#endif
 }
 
 // Return success from CallTeleMedModel delegate (no longer used)
@@ -52,7 +87,10 @@
 	// If device offline, show offline message
 	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
-		return [self.callModel showOfflineError];
+	// Create reference to generic model to show offline error
+		CallModel *callModel = [[CallModel alloc] init];
+
+		return [callModel showErrorOfflineError];
 	}
 	
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Call TeleMed Error" message:@"There was a problem requesting a Return Call. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];

@@ -86,7 +86,6 @@
 
 - (IBAction)doLogin:(id)sender
 {
-	NSLog(@"Trigger login");
 	// Trigger click on UIWebView form's login button
 	[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('loginButton').click();"];
 }

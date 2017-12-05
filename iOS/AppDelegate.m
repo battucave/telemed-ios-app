@@ -501,17 +501,14 @@
 	
 	/*/ TESTING ONLY (push notifications can generally only be tested in Ad Hoc mode where nothing can be logged, so show result in an alert instead)
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		// No action needed
-	}];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
-	[alertController addAction:actionClose];
+	[alertController addAction:actionOK];
 	
 	// PreferredAction only supported in 9.0+
 	if([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[alertController setPreferredAction:actionClose];
+		[alertController setPreferredAction:actionOK];
 	}
 	
 	// Show Alert

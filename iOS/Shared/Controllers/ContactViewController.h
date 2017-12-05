@@ -8,6 +8,6 @@
 
 #import "RevealViewController.h"
 
-@interface ContactViewController : RevealViewController <UIAlertViewDelegate>
+@interface ContactViewController : RevealViewController
 
 @end

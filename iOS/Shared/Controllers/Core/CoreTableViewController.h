@@ -10,6 +10,8 @@
 
 @interface CoreTableViewController : UITableViewController
 
+#ifdef MYTELEMED
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone;
+#endif
 
 @end
