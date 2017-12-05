@@ -3493,6 +3493,9 @@
                                                     <color key="textColor" red="0.38431372549999998" green="0.38431372549999998" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="vUd-oo-bvD" id="P0X-7d-sdG"/>
+                                                    </connections>
                                                 </textView>
                                             </subviews>
                                             <constraints>
