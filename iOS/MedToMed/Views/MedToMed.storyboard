@@ -333,7 +333,7 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="SentMessagesViewController" id="T4v-Vo-WiU" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8mt-Mr-lVJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="700"/>
+            <point key="canvasLocation" x="1598" y="400"/>
         </scene>
         <!--ContactViewController-->
         <scene sceneID="3Bx-ew-XK4">
@@ -341,7 +341,7 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="ContactViewController" id="5G2-aM-cxw" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SHM-2c-A4S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="1400"/>
+            <point key="canvasLocation" x="1600" y="500"/>
         </scene>
         <!--Storyboard Reference-->
         <scene sceneID="dnJ-HO-53d">
@@ -349,7 +349,7 @@
                 <viewControllerPlaceholder id="Hqt-Cr-MUa" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BZo-Sl-DCU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="2100"/>
+            <point key="canvasLocation" x="1600" y="600"/>
         </scene>
         <!--HelpViewController-->
         <scene sceneID="AqT-RU-JDf">
@@ -357,7 +357,7 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="HelpViewController" id="Xza-UQ-T0N" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZcK-q4-6FM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="2800"/>
+            <point key="canvasLocation" x="1600" y="700"/>
         </scene>
         <!--New Message-->
         <scene sceneID="LhX-mb-nh8">

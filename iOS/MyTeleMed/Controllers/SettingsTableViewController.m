@@ -194,7 +194,6 @@
 		[accountPickerViewController setTitle:@"Preferred Account"];
 		[accountPickerViewController setShouldSetPreferredAccount:YES];
 	}
-	
 }
 
 - (void)didReceiveMemoryWarning

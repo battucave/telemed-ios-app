@@ -8,8 +8,6 @@
 
 @interface AutoGrowingTextView()
 
-@property (strong, nonatomic) NSLayoutConstraint *heightConstraint;
-
 @end
 
 @implementation AutoGrowingTextView

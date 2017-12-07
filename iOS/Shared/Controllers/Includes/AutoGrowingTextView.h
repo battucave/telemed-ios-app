@@ -13,4 +13,6 @@
 // TODO: @property (nonatomic) int maxLines;
 // TODO: @property (nonatomic) int minLines;
 
+@property (strong, nonatomic) NSLayoutConstraint *heightConstraint;
+
 @end

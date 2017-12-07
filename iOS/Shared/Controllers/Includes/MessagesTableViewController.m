@@ -10,12 +10,15 @@
 #import "MessageDetailViewController.h"
 #import "MessageCell.h"
 #import "MessageProtocol.h"
-#import "MessageModel.h"
 #import "SentMessageModel.h"
+
+#ifdef MYTELEMED
+	#import "MessageModel.h"
+#endif
 
 @interface MessagesTableViewController ()
 
-@property (nonatomic) MessageModel *messageModel;
+@property (nonatomic) id <MessageProtocol> messageModel;
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
 @property (nonatomic) UIRefreshControl *savedRefreshControl;
@@ -49,8 +52,10 @@
 	});
 	
 	// Initialize Message Model
-	[self setMessageModel:[[MessageModel alloc] init]];
-	[self.messageModel setDelegate:self];
+	#ifdef MYTELEMED
+		[self setMessageModel:[[MessageModel alloc] init]];
+		[self.messageModel setDelegate:self];
+	#endif
 	
 	// Initialize Sent Message Model
 	[self setSentMessageModel:[[SentMessageModel alloc] init]];
@@ -122,7 +127,7 @@
 	}
 	
 	// Add each Message to Hidden Messages
-	for(MessageModel *message in messages)
+	for(id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages addObject:message];
 	}
@@ -142,7 +147,7 @@
 	}
 	
 	// Remove each Message from Hidden Messages
-	for(MessageModel *message in messages)
+	for(id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages removeObject:message];
 	}
@@ -165,7 +170,7 @@
 	}
 	
 	// Remove each Message from the source data, filtered data, hidden data, selected data, and the table itself
-	for(MessageModel *message in messages)
+	for(id <MessageProtocol> message in messages)
 	{
 		[self.messages removeObject:message];
 		[self.filteredMessages removeObject:message];
@@ -202,29 +207,6 @@
 	[self.tableView reloadData];
 }
 
-// Reload Messages
-- (void)reloadMessages
-{
-	switch(self.messagesType)
-	{
-		// Get Archived Messages
-		case 1:
-			[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
-			break;
-		
-		// Get Sent Messages
-		case 2:
-			[self.sentMessageModel getSentMessages];
-			break;
-			
-		// Get Active Messages
-		case 0:
-		default:
-			[self.messageModel getActiveMessages];
-			break;
-	}
-}
-
 // Return Messages from MessageModel delegate
 - (void)updateMessages:(NSMutableArray *)messages
 {
@@ -247,6 +229,7 @@
 }
 
 // Return error from MessageModel delegate
+#ifdef MYTELEMED
 - (void)updateMessagesError:(NSError *)error
 {
 	[self setIsLoaded:YES];
@@ -256,6 +239,7 @@
 	// Show error message
 	[self.messageModel showError:error];
 }
+#endif
 
 // Return Sent Messages from SentMessageModel delegate
 - (void)updateSentMessages:(NSMutableArray *)sentMessages
@@ -292,7 +276,7 @@
 	// If there are Filtered Messages and Hidden Messages and row is not the only row in the table
 	if(self.messagesType != 2 && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
 	{
-		MessageModel *message = [self.filteredMessages objectAtIndex:indexPath.row];
+		id <MessageProtocol> message = [self.filteredMessages objectAtIndex:indexPath.row];
 		
 		// Hide Hidden Messages by setting its height to 0
 		if([self.hiddenMessages containsObject:message])
@@ -333,7 +317,7 @@
 	}
 }
 
-- (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(MessageModel *)message atIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(id <MessageProtocol>)message atIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide Hidden Messages
 	if([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
@@ -549,5 +533,44 @@
 	// Remove Notification Observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+// Reload Messages
+- (void)reloadMessages
+{
+	switch(self.messagesType)
+	{
+		// Get Archived Messages
+		case 1:
+			[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
+			break;
+		
+		// Get Sent Messages
+		case 2:
+			[self.sentMessageModel getSentMessages];
+			break;
+			
+		// Get Active Messages
+		case 0:
+		default:
+			[self.messageModel getActiveMessages];
+			break;
+	}
+}
+#endif
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+// Reload Messages
+- (void)reloadMessages
+{
+	[self.sentMessageModel getSentMessages];
+}
+#endif
 
 @end
