@@ -72,57 +72,55 @@
 
 - (IBAction)returnCall:(id)sender
 {
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Return Call", @"Return & Record Call", nil];
-	
-	[alertView setTag:1];
-	[alertView show];
+	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionReturnCall = [UIAlertAction actionWithTitle:@"Return Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		[self setCallModel:[[CallModel alloc] init]];
+		[self.callModel setDelegate:self];
+		[self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"false"];
+	}];
+	UIAlertAction *actionReturnRecordCall = [UIAlertAction actionWithTitle:@"Return & Record Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		[self setCallModel:[[CallModel alloc] init]];
+		[self.callModel setDelegate:self];
+		[self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"true"];
+	}];
+
+	[returnCallAlertController addAction:actionCancel];
+	[returnCallAlertController addAction:actionReturnCall];
+	[returnCallAlertController addAction:actionReturnRecordCall];
+
+	// PreferredAction only supported in 9.0+
+	if([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[returnCallAlertController setPreferredAction:actionReturnCall];
+	}
+
+	// Show Alert
+	[self presentViewController:returnCallAlertController animated:YES completion:nil];
 }
 
 - (IBAction)archiveMessage:(id)sender
 {
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Archive Message" message:@"Selecting Continue will archive this message. Archived messages can be accessed from the Main Menu." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
-	
-	[alertView setTag:2];
-	[alertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	// Prevent Sent Messages from Returning Call or Archiving (should never reach this point)
-	if( ! [self.message respondsToSelector:@selector(MessageDeliveryID)] || ! self.message.MessageDeliveryID)
+	UIAlertController *archiveMessageAlertController = [UIAlertController alertControllerWithTitle:@"Archive Message" message:@"Selecting Continue will archive this message. Archived messages can be accessed from the Main Menu." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		return;
+		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"archive"];
+	}];
+
+	[archiveMessageAlertController addAction:actionCancel];
+	[archiveMessageAlertController addAction:actionContinue];
+
+	// PreferredAction only supported in 9.0+
+	if([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[archiveMessageAlertController setPreferredAction:actionContinue];
 	}
-	
-	switch(alertView.tag)
-    {
-		// Return Call
-        case 1:
-        {
-            if(buttonIndex > 0)
-            {
-                [self setCallModel:[[CallModel alloc] init]];
-                [self.callModel setDelegate:self];
-                
-                NSString *recordCall = (buttonIndex == 2) ? @"true" : @"false";
-                
-                [self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:recordCall];
-            }
-            
-            break;
-        }
-		
-		// Archive Message
-        case 2:
-        {
-            if(buttonIndex > 0)
-            {
-                [self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"archive"];
-            }
-            
-            break;
-        }
-    }
+
+	// Show Alert
+	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
 }
 
 // Return Message State pending from MessageModel delegate

@@ -69,10 +69,31 @@
 	{
 		if( ! [preferences boolForKey:@"timeoutAlert"])
 		{
-			UIAlertView *confirmAlert = [[UIAlertView alloc] initWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
-			
-			[confirmAlert setDelegate:self];
-			[confirmAlert show];
+			UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+			{
+				[self.switchTimeout setOn:YES];
+			}];
+			UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+				
+				[preferences setBool:YES forKey:@"timeoutAlert"];
+				[preferences setBool:NO forKey:@"enableTimeout"];
+				[preferences synchronize];
+			}];
+		
+			[updateTimeoutAlertController addAction:actionCancel];
+			[updateTimeoutAlertController addAction:actionConfirm];
+		
+			// PreferredAction only supported in 9.0+
+			if([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
+			{
+				[updateTimeoutAlertController setPreferredAction:actionCancel];
+			}
+		
+			// Show Alert
+			[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];
 		}
 		else
 		{
@@ -81,22 +102,6 @@
 	}
 	
 	[preferences synchronize];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if(buttonIndex == 0)
-	{
-		[self.switchTimeout setOn:YES];
-	}
-	else
-	{
-		NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-		
-		[preferences setBool:YES forKey:@"timeoutAlert"];
-		[preferences setBool:NO forKey:@"enableTimeout"];
-		[preferences synchronize];
-	}
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

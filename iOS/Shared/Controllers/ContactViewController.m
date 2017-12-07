@@ -34,24 +34,24 @@
 		}
 		else
 		{
-			UIAlertController *alertCallUnavailableController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"Telephone service is unavailable." preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertController *callUnavailableAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"Telephone service is unavailable." preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 			
-			[alertCallUnavailableController addAction:actionOK];
+			[callUnavailableAlertController addAction:actionOK];
 			
 			// PreferredAction only supported in 9.0+
-			if([alertCallUnavailableController respondsToSelector:@selector(setPreferredAction:)])
+			if([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
 			{
-				[alertCallUnavailableController setPreferredAction:actionOK];
+				[callUnavailableAlertController setPreferredAction:actionOK];
 			}
 			
 			// Show Alert
-			[self presentViewController:alertCallUnavailableController animated:YES completion:nil];
+			[self presentViewController:callUnavailableAlertController animated:YES completion:nil];
 		}
 	
 	// MyTeleMed - Use calls api to request a callback
 	#elif defined MYTELEMED
-		UIAlertController *confirmCallTeleMedController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *callTeleMedAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"" preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 		UIAlertAction *actionCall = [UIAlertAction actionWithTitle:@"Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
@@ -61,17 +61,17 @@
 			[callModel callTeleMed];
 		}];
 	
-		[confirmCallTeleMedController addAction:actionClose];
-		[confirmCallTeleMedController addAction:actionCall];
+		[callTeleMedAlertController addAction:actionClose];
+		[callTeleMedAlertController addAction:actionCall];
 	
 		// PreferredAction only supported in 9.0+
-		if([confirmCallTeleMedController respondsToSelector:@selector(setPreferredAction:)])
+		if([callTeleMedAlertController respondsToSelector:@selector(setPreferredAction:)])
 		{
-			[confirmCallTeleMedController setPreferredAction:actionCall];
+			[callTeleMedAlertController setPreferredAction:actionCall];
 		}
 	
 		// Show Alert
-		[self presentViewController:confirmCallTeleMedController animated:YES completion:nil];
+		[self presentViewController:callTeleMedAlertController animated:YES completion:nil];
 	#endif
 }
 

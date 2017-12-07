@@ -124,7 +124,7 @@
 	{
 		if([self.selectedMessageRecipients count] > 1)
 		{
-			UIAlertController *confirmGroupChatController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 			{
 				// Disable group chat
@@ -142,17 +142,17 @@
 				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
 			}];
 			
-			[confirmGroupChatController addAction:actionNo];
-			[confirmGroupChatController addAction:actionYes];
+			[groupChatAlertController addAction:actionNo];
+			[groupChatAlertController addAction:actionYes];
 			
 			// PreferredAction only supported in 9.0+
-			if([confirmGroupChatController respondsToSelector:@selector(setPreferredAction:)])
+			if([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
 			{
-				[confirmGroupChatController setPreferredAction:actionYes];
+				[groupChatAlertController setPreferredAction:actionYes];
 			}
 			
 			// Show alert
-			[self presentViewController:confirmGroupChatController animated:YES completion:nil];
+			[self presentViewController:groupChatAlertController animated:YES completion:nil];
 		}
 		else
 		{

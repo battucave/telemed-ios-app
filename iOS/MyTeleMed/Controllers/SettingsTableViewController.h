@@ -8,6 +8,6 @@
 
 #import "RevealTableViewController.h"
 
-@interface SettingsTableViewController : RevealTableViewController <UIAlertViewDelegate>
+@interface SettingsTableViewController : RevealTableViewController
 
 @end
