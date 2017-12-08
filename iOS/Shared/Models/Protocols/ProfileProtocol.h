@@ -1,6 +1,6 @@
 //
 //  ProfileProtocol.h
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 11/21/17.
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
@@ -35,5 +35,6 @@
 
 @required
 - (void)getWithCallback:(void (^)(BOOL success, NSObject <ProfileProtocol> *profile, NSError *error))callback;
+- (id)valueForKey:(NSString *)key;
 
 @end

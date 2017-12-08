@@ -1,6 +1,6 @@
 //
 //  MessageDetailViewController.h
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 11/5/13.
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.

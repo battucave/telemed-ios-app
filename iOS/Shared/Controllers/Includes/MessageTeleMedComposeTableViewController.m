@@ -1,6 +1,6 @@
 //
 //  MessageTeleMedComposeTableViewController.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 5/3/16.
 //  Copyright (c) 2016 SolutionBuilt. All rights reserved.

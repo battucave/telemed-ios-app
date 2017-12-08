@@ -27,13 +27,10 @@
 
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
-	NSLog(@"UserProfile getWithCallback");
 	[self.operationManager GET:@"UserProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
 		UserProfileXMLParser *parser = [[UserProfileXMLParser alloc] init];
-		
-		NSLog(@"Got UserProfile Result");
 		
 		[parser setUserProfile:self];
 		[xmlParser setDelegate:parser];

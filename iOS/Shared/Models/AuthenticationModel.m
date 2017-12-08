@@ -1,6 +1,6 @@
 //
 //  AuthenticationModel.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 5/22/15.
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.

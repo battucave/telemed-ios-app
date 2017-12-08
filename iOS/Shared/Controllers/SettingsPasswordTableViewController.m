@@ -1,6 +1,6 @@
 //
 //  SettingsPasswordTableViewController.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 11/11/13.
 //  Copyright © 2013 SolutionBuilt. All rights reserved.
@@ -11,10 +11,10 @@
 
 @interface SettingsPasswordTableViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *textFieldCurrentPassword;
-@property (weak, nonatomic) IBOutlet UITextField *textFieldNewPassword;
-@property (weak, nonatomic) IBOutlet UITextField *textFieldConfirmNewPassword;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
+@property (weak, nonatomic) IBOutlet UITextField *textFieldCurrentPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textFieldConfirmNewPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textFieldNewPassword;
 
 @end
 
@@ -78,10 +78,28 @@
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-// Check required fields to determine if Form can be submitted
+// Check required fields to determine if form can be submitted
 - (void)validateForm
 {
 	[self.buttonSave setEnabled:( ! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	if(textField == self.textFieldCurrentPassword)
+	{
+		[self.textFieldNewPassword becomeFirstResponder];
+	}
+	else if(textField == self.textFieldNewPassword)
+	{
+		[self.textFieldConfirmNewPassword becomeFirstResponder];
+	}
+	else if(textField == self.textFieldConfirmNewPassword)
+	{
+		[self.textFieldConfirmNewPassword resignFirstResponder];
+	}
+	
+	return NO;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

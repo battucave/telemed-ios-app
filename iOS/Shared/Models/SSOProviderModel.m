@@ -1,6 +1,6 @@
 //
 //  SSOProviderModel.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 6/18/15.
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.

@@ -20,10 +20,16 @@
 {
 	[super viewWillAppear:animated];
 	
+	// TEST - Get text field identifier by its accessibility identifier (see SettingsProfileTableViewController's setTextFieldValues)
+	for (UITextField *textField in self.textFields)
+	{
+		NSLog(@"Identifier: %@", textField.accessibilityIdentifier);
+	}
+	
 	/*UIView *leftPaddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 154, 22)];
 	
 	for(UITextField *textField in self.textFields)
-	{
+{
 		[textField setLeftView:leftPaddingView];
 		[textField setLeftViewMode:UITextFieldViewModeAlways];
 	}*/

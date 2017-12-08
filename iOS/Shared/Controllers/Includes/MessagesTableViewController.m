@@ -1,6 +1,6 @@
 //
 //  MessagesTableViewController.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 10/31/13.
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
@@ -18,7 +18,10 @@
 
 @interface MessagesTableViewController ()
 
-@property (nonatomic) id <MessageProtocol> messageModel;
+#ifdef MYTELEMED
+	@property (nonatomic) MessageModel *messageModel;
+#endif
+
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
 @property (nonatomic) UIRefreshControl *savedRefreshControl;

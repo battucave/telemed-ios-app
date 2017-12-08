@@ -1,6 +1,6 @@
 //
 //  SSOProviderXMLParser.h
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 6/18/15.
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.

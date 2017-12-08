@@ -1,6 +1,6 @@
 //
 //  Model.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 11/13/13.
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.

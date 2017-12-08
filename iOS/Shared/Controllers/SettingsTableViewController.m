@@ -1,17 +1,18 @@
 //
 //  SettingsTableViewController.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 9/26/13.
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
 #import "SettingsTableViewController.h"
-#import "AccountPickerViewController.h"
-#import "SettingsNotificationsTableViewController.h"
+// #import "AccountPickerViewController.h"
 #import "ProfileProtocol.h"
 
 #ifdef MYTELEMED
+	#import "AccountPickerViewController.h"
+	#import "SettingsNotificationsTableViewController.h"
 	#import "MyProfileModel.h"
 #endif
 
@@ -161,44 +162,30 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	NSLog(@"Section: %ld", (long)indexPath.section);
-	
-	// Segue to Notification Settings
-	if(indexPath.section == 1)
-	{
-		[self performSegueWithIdentifier:@"showSettingsNotifications" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
-	}
-	// Segue to Change Password
-	else if(indexPath.section == 2 && indexPath.row == 0)
-	{
-		[self performSegueWithIdentifier:@"showSettingsPassword" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
-	}
-	// Segue to Preferred Account
-	else if(indexPath.section == 2 && indexPath.row == 1)
-	{
-		[self performSegueWithIdentifier:@"showAccountPickerFromSettings" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
-	}
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Embedded Table View Controller inside Container
-	if([segue.identifier isEqualToString:@"showSettingsNotifications"])
-	{
-		SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-		
-		// Set Notification Settings Type
-		[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
+	// TEMPORARY
+	#ifdef MYTELEMED
 	// Update title of AccountsPickerViewController
-	} else if([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
+	if([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
 		[accountPickerViewController setTitle:@"Preferred Account"];
 		[accountPickerViewController setShouldSetPreferredAccount:YES];
 	}
+	#endif
+	
+	#ifdef MYTELEMED
+		// Embedded Table View Controller inside Container
+		else if([segue.identifier isEqualToString:@"showSettingsNotifications"])
+		{
+			SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
+			NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+			
+			// Set Notification Settings Type
+			[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
+		}
+	#endif
 }
 
 - (void)didReceiveMemoryWarning
@@ -206,5 +193,21 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// Segue to Notification Settings
+	if(indexPath.section == 1)
+	{
+		[self performSegueWithIdentifier:@"showSettingsNotifications" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+	}
+	
+	// MyProfile cells use segues directly from table cell
+}
+#endif
 
 @end
