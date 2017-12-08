@@ -26,7 +26,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"MyTimeZone"])
+	if ([elementName isEqualToString:@"MyTimeZone"])
 	{
 		self.timeZone = [[NSMutableDictionary alloc] init];
 	}
@@ -34,7 +34,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -46,24 +46,24 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+	if ([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
 	{
 		[self.timeZone setValue:self.currentElementValue forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"MyTimeZone"])
+	else if ([elementName isEqualToString:@"MyTimeZone"])
 	{
 		self.userProfile.MyTimeZone = self.timeZone;
 		self.timeZone = nil;
 	}
-	else if( ! [elementName isEqualToString:@"UserProfile"])
+	else if ( ! [elementName isEqualToString:@"UserProfile"])
 	{
 		@try
 		{
-			if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"TimeoutPeriodMins"])
+			if ([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"TimeoutPeriodMins"])
 			{
 				[self.userProfile setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 			}
-			else if([elementName isEqualToString:@"MayDisableTimeout"])
+			else if ([elementName isEqualToString:@"MayDisableTimeout"])
 			{
 				self.userProfile.MayDisableTimeout = [self.currentElementValue boolValue];
 			}

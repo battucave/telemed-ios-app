@@ -18,7 +18,7 @@
 	
 	BOOL methodAdded = class_addMethod([self class], originalSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));
 	
-	if(methodAdded)
+	if (methodAdded)
 	{
 		class_replaceMethod([self class], newSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
 	}

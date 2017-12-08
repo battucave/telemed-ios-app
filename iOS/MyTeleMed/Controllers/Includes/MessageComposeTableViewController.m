@@ -36,7 +36,7 @@
 	self.cellMessageHeight = self.cellMessage.frame.size.height;
 	
 	// Only set placeholder if it has not already been set (otherwise the placeholder will update to anything the user previously typed when returning from MessageRecipientPickerTableViewController)
-	if( ! self.textViewMessagePlaceholder)
+	if ( ! self.textViewMessagePlaceholder)
 	{
 		self.textViewMessagePlaceholder = self.textViewMessage.text;
 	}
@@ -63,11 +63,11 @@
 	NSString *messageRecipientNames = @"";
 	NSInteger messageRecipientsCount = [messageRecipients count];
 	
-	if(messageRecipientsCount > 0)
+	if (messageRecipientsCount > 0)
 	{
 		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
 		
-		if(messageRecipientsCount > 1)
+		if (messageRecipientsCount > 1)
 		{
 			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
 		}
@@ -102,7 +102,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if([textView.text isEqualToString:self.textViewMessagePlaceholder])
+	if ([textView.text isEqualToString:self.textViewMessagePlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -115,7 +115,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
 	// Validate form in delegate
-	if([self.delegate respondsToSelector:@selector(validateForm:)])
+	if ([self.delegate respondsToSelector:@selector(validateForm:)])
 	{
 		[self.delegate validateForm:self.textViewMessage.text];
 	}
@@ -124,7 +124,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 	// Show placeholder
-	if([textView.text isEqualToString:@""])
+	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewMessagePlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];

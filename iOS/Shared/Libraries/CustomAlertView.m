@@ -31,9 +31,9 @@ CGFloat buttonSpacerHeight = 0;
 {
 	self = [super init];
 	
-	if(self)
+	if (self)
 	{
-		if(_parentView)
+		if (_parentView)
 		{
 			self.frame = _parentView.frame;
 			parentView = _parentView;
@@ -69,8 +69,8 @@ CGFloat buttonSpacerHeight = 0;
 	self.layer.shouldRasterize = YES;
 	self.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 
-	#if(defined(__IPHONE_7_0))
-	if(useMotionEffects)
+	#if (defined(__IPHONE_7_0))
+	if (useMotionEffects)
 	{
 		[self applyMotionEffects];
 	}
@@ -85,7 +85,7 @@ CGFloat buttonSpacerHeight = 0;
 
 	// Can be attached to a view or to the top most window
 	// Attached to a view:
-	if(parentView != NULL)
+	if (parentView != NULL)
 	{
 		[parentView addSubview:self];
 
@@ -144,7 +144,7 @@ CGFloat buttonSpacerHeight = 0;
 	[indicator startAnimating];
 	[self addSubview:indicator];
 	
-	if( ! [message isEqualToString:@""])
+	if ( ! [message isEqualToString:@""])
 	{
 		// Add Label to Alert View to hold Message
 		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(dialogView.frame.origin.x, dialogView.frame.origin.y + dialogView.frame.size.height - 40, dialogView.frame.size.width, 30)];
@@ -159,12 +159,12 @@ CGFloat buttonSpacerHeight = 0;
 // Button has touched
 - (IBAction)customDialogButtonTouchUpInside:(id)sender
 {
-	if(delegate != NULL)
+	if (delegate != NULL)
 	{
 		[delegate customDialogButtonTouchUpInside:self clickedButtonAtIndex:[sender tag]];
 	}
 
-	if(onButtonTouchUpInside != NULL)
+	if (onButtonTouchUpInside != NULL)
 	{
 		onButtonTouchUpInside(self, (int)[sender tag]);
 	}
@@ -216,7 +216,7 @@ CGFloat buttonSpacerHeight = 0;
 // Creates the container view here: create the dialog, then add the custom content and buttons
 - (UIView *)createContainerView
 {
-	if([buttonTitles count] > 0)
+	if ([buttonTitles count] > 0)
 	{
 		buttonHeight	   = kCustomAlertViewDefaultButtonHeight;
 		buttonSpacerHeight = kCustomAlertViewDefaultButtonSpacerHeight;
@@ -227,7 +227,7 @@ CGFloat buttonSpacerHeight = 0;
 		buttonSpacerHeight = 0;
 	}
 
-	if(containerView == NULL)
+	if (containerView == NULL)
 	{
 		containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 150)];
 	}
@@ -239,7 +239,7 @@ CGFloat buttonSpacerHeight = 0;
 	CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
 
 	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-	if(UIInterfaceOrientationIsLandscape(interfaceOrientation))
+	if (UIInterfaceOrientationIsLandscape(interfaceOrientation))
 	{
 		CGFloat tmp = screenWidth;
 		screenWidth = screenHeight;
@@ -312,7 +312,7 @@ CGFloat buttonSpacerHeight = 0;
 	}
 }
 
-#if(defined(__IPHONE_7_0))
+#if (defined(__IPHONE_7_0))
 // Add motion effects
 - (void)applyMotionEffects
 {
@@ -337,7 +337,7 @@ CGFloat buttonSpacerHeight = 0;
 - (void)deviceOrientationDidChange: (NSNotification *)notification
 {
 	// If dialog is attached to the parent view, it probably wants to handle the orientation change itself
-	if(parentView != NULL)
+	if (parentView != NULL)
 	{
 		return;
 	}

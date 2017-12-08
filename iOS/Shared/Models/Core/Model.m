@@ -22,7 +22,7 @@
 
 - (id)init
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		// Initialize Operation Manager
 		self.operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
@@ -40,7 +40,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		if(self.activityIndicatorView == nil)
+		if (self.activityIndicatorView == nil)
 		{
 			[self setActivityIndicatorView:[[CustomAlertView alloc] init]];
 			[self.activityIndicatorView showWithDialog:message];
@@ -52,7 +52,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		if(self.activityIndicatorView != nil)
+		if (self.activityIndicatorView != nil)
 		{
 			[self.activityIndicatorView close];
 			
@@ -70,7 +70,7 @@
 	[xmlParser setDelegate:parser];
 	
 	// Parse the XML file to obtain Error Message
-	if([xmlParser parse] && ! [parser.error isEqualToString:@"An error has occurred."])
+	if ([xmlParser parse] && ! [parser.error isEqualToString:@"An error has occurred."])
 	{
 		errorString = parser.error;
 	}

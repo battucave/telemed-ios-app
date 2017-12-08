@@ -58,7 +58,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"showNewAccount"])
+	if ([segue.identifier isEqualToString:@"showNewAccount"])
 	{
 		AccountNewViewController *newAccountViewController = segue.destinationViewController;
 		

@@ -94,7 +94,7 @@
 	NSUInteger currentIndex = [self.textFields indexOfObject:textField];
 	NSUInteger nextIndex = currentIndex + 1;
 	
-	if(nextIndex < [self.textFields count])
+	if (nextIndex < [self.textFields count])
 	{
 		[[self.textFields objectAtIndex:nextIndex] becomeFirstResponder];
 	}

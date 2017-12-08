@@ -33,18 +33,18 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If ID is not already set, check User Preferences
-	if( ! _ID)
+	if ( ! _ID)
 	{
 		_ID = [settings valueForKey:@"UDDIDevice"];
 	}
 	
 	// ID not already stored so generate it
-	if( ! _ID)
+	if ( ! _ID)
 	{
 		// Generate Device ID
 		CFUUIDRef theUUID = CFUUIDCreate(kCFAllocatorDefault);
 		
-		if(theUUID)
+		if (theUUID)
 		{
 			_ID = (__bridge NSString *)(CFUUIDCreateString(kCFAllocatorDefault, theUUID));
 			
@@ -63,7 +63,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 - (NSString *)AppVersionInfo
 {
 	// If AppVersionInfo is not already set, check bundle version
-	if( ! _AppVersionInfo)
+	if ( ! _AppVersionInfo)
 	{
 		_AppVersionInfo = [NSString stringWithFormat:@"Version: %@; Build: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
 	}
@@ -85,9 +85,9 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	
 	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from [AppDelegate didRegisterForRemoteNotificationsWithDeviceToken]
 	// Also ensure that device actually needs to register
-	if(self.Token == NULL || self.PhoneNumber == NULL || ! self.shouldRegister)
+	if (self.Token == NULL || self.PhoneNumber == NULL || ! self.shouldRegister)
 	{
-		if(self.Token == NULL)
+		if (self.Token == NULL)
 		{
 			NSLog(@"IMPORTANT: Device does not have a token so it is not being registered with TeleMed. If this persists, make sure that an explicit provisioning profile is being used for MyTeleMed and that its certificate has Push Notifications enabled.");
 		}
@@ -112,7 +112,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	[self.operationManager POST:@"RegisteredDevices" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Disable Future Registration until next login
 			self.shouldRegister = NO;

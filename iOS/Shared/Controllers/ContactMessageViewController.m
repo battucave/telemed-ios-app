@@ -72,7 +72,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedContactEmailTable"])
+	if ([segue.identifier isEqualToString:@"embedContactEmailTable"])
 	{
 		[self setMessageTeleMedComposeTableViewController:segue.destinationViewController];
 		

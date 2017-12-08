@@ -41,7 +41,7 @@
 
 - (id)init
 {
-	if(self = [super init])
+	if (self = [super init])
 	{
 		// TEMPORARY: (Version 3.3) - Remove old Login Keychain items - This logic can be removed in a future update.
 		KeychainItemWrapper *keyChainLogin = [[KeychainItemWrapper alloc] initWithIdentifier:@"Login" accessGroup:nil];
@@ -56,13 +56,13 @@
 - (NSString *)RefreshToken
 {
 	// If RefreshToken is not already set, check Keychain
-	if( ! _RefreshToken)
+	if ( ! _RefreshToken)
 	{
 		KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
 		
 		_RefreshToken = [keyChainRefreshToken objectForKey:(__bridge id)kSecValueData];
 		
-		if([_RefreshToken isEqualToString:@""])
+		if ([_RefreshToken isEqualToString:@""])
 		{
 			_RefreshToken = nil;
 		}
@@ -74,11 +74,11 @@
 // Override AccessToken setter to also store Access Token's Expiration
 - (void)setAccessToken:(NSString *)newAccessToken
 {
-	if(_AccessToken != newAccessToken)
+	if (_AccessToken != newAccessToken)
 	{
 		_AccessTokenExpiration = nil;
 		
-		if(newAccessToken != nil)
+		if (newAccessToken != nil)
 		{
 			_AccessTokenExpiration = [[NSDate date] dateByAddingTimeInterval:ACCESS_TOKEN_EXPIRATION_TIME];
 		}
@@ -92,7 +92,7 @@
 // Override RefreshToken setter to store value in Keychain
 - (void)setRefreshToken:(NSString *)newRefreshToken
 {
-	if(_RefreshToken != newRefreshToken)
+	if (_RefreshToken != newRefreshToken)
 	{
 		KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
 		
@@ -113,7 +113,7 @@
 - (void)getNewTokensWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure isRetry:(BOOL)isRetry
 {
 	// If no Refresh Token found, then tokens cannot be refreshed
-	if( ! self.RefreshToken)
+	if ( ! self.RefreshToken)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -147,10 +147,10 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			// Set Tokens if found in response
-			if( ! [self.AccessToken isEqualToString:@""] && ! [self.RefreshToken isEqualToString:@""])
+			if ( ! [self.AccessToken isEqualToString:@""] && ! [self.RefreshToken isEqualToString:@""])
 			{
 				NSLog(@"New Access Token: %@", self.AccessToken);
 				NSLog(@"New Refresh Token: %@", self.RefreshToken);
@@ -182,7 +182,7 @@
 		NSLog(@"Refresh Tokens Error %ld: %@", (long)error.code, [[NSString alloc] initWithData:[NSData dataWithData:data] encoding:NSUTF8StringEncoding]);
 		
 		// First retry the operation again after a delay
-		if( ! isRetry)
+		if ( ! isRetry)
 		{
 			NSLog(@"Retry Refreshing Tokens");
 			
@@ -192,7 +192,7 @@
 			});
 		}
 		// Handle timeout issues differently if not in LoginSSO Storyboard
-		else if( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
+		else if ( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
 		{
 			NSLog(@"Refreshing Tokens Timed Out: %@", error);
 			
@@ -200,7 +200,7 @@
 			self.isWorking = NO;
 			
 			// Control timeout errors by setting them to a standard code (except for NSURLErrorTimedOut)
-			if(error.code != NSURLErrorTimedOut)
+			if (error.code != NSURLErrorTimedOut)
 			{
 				error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:error.userInfo];
 			}
@@ -258,7 +258,7 @@
 	
 	NSLog(@"Current Storyboard: %@", currentStoryboardName);
 	
-	if([currentStoryboardName isEqualToString:@"LoginSSO"])
+	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
 	{
 		loginSSOStoryboard = currentStoryboard;
 	}

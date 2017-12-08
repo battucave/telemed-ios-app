@@ -29,7 +29,7 @@
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 	
 	// Remove menu button if showing Back button. This MUST happen before [super viewWillAppear] so that Back Button will be added (Back button only shown when navigating from Login.storyboard View Controllers)
-	if(self.showBackButton)
+	if (self.showBackButton)
 	{
 		self.navigationItem.leftBarButtonItem = nil;
 	}

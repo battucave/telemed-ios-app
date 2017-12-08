@@ -36,10 +36,10 @@
 // Override MyPreferredAccount setter to also store existing MyPreferredAccount
 - (void)setMyPreferredAccount:(AccountModel *)account
 {
-	if(_MyPreferredAccount != account)
+	if (_MyPreferredAccount != account)
 	{
 		// Store reference to previous value to be restored (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
-		if(_MyPreferredAccount != nil)
+		if (_MyPreferredAccount != nil)
 		{
 			_oldMyPreferredAccount = _MyPreferredAccount;
 		}
@@ -59,7 +59,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			// Search user's Registered Devices to determine whether any match the current device. If so, update the current device with the new Phone Number
 			[self setCurrentDevice];
@@ -88,7 +88,7 @@
 // Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
 - (void)restoreMyPreferredAccount
 {
-	if(_oldMyPreferredAccount != nil)
+	if (_oldMyPreferredAccount != nil)
 	{
 		_MyPreferredAccount = _oldMyPreferredAccount;
 	}
@@ -96,7 +96,7 @@
 
 - (void)setCurrentDevice
 {
-	if([self.MyRegisteredDevices count] == 0)
+	if ([self.MyRegisteredDevices count] == 0)
 	{
 		return;
 	}
@@ -107,7 +107,7 @@
 	for(RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
 	{
 		// If found, set the current device's Phone Number
-		if([registeredDevice.ID caseInsensitiveCompare:myRegisteredDevice.ID] == NSOrderedSame)
+		if ([registeredDevice.ID caseInsensitiveCompare:myRegisteredDevice.ID] == NSOrderedSame)
 		{
 			myRegisteredDevice.PhoneNumber = registeredDevice.PhoneNumber;
 			

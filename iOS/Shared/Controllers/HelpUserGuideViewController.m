@@ -53,7 +53,7 @@
 	{
 		view = [view.subviews firstObject];
 		
-		if([NSStringFromClass([view class]) isEqualToString:@"UIWebPDFView"])
+		if ([NSStringFromClass([view class]) isEqualToString:@"UIWebPDFView"])
 		{
 			[view setBackgroundColor:[UIColor whiteColor]];
 			

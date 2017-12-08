@@ -52,10 +52,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
 			}
@@ -71,7 +71,7 @@
 				[self sendNewMessage:message accountID:accountID messageRecipientIDs:messageRecipientIDs];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			}*/
@@ -97,7 +97,7 @@
 			[self sendNewMessage:message accountID:accountID messageRecipientIDs:messageRecipientIDs];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			[self.delegate sendMessageError:error];
 		}*/
@@ -114,7 +114,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		[self.delegate sendMessagePending];
 	}

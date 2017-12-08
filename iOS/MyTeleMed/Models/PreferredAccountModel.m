@@ -45,10 +45,10 @@
 		[self hideActivityIndicator];
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
+			if ([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
 			{
 				[self.delegate savePreferredAccountSuccess];
 			}
@@ -67,7 +67,7 @@
 				[self savePreferredAccount:account];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
+			/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
 				[self.delegate changePasswordError:error];
 			}*/
@@ -96,7 +96,7 @@
 			[self savePreferredAccount:account];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
+		/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
 		}*/
@@ -116,7 +116,7 @@
 	[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
 	
 	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
+	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 	{
 		[self.delegate savePreferredAccountPending];
 	}

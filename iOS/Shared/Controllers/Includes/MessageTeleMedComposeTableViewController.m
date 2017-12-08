@@ -43,7 +43,7 @@
 	self.cellMessageHeight = self.cellMessage.frame.size.height;
 	
 	// Only set placeholder if it has not already been set (otherwise the placeholder will update to anything the user previously typed when returning from MessageRecipientPickerTableViewController)
-	if( ! self.textViewMessagePlaceholder)
+	if ( ! self.textViewMessagePlaceholder)
 	{
 		self.textViewMessagePlaceholder = self.textViewMessage.text;
 	}
@@ -58,7 +58,7 @@
 		profileProtocol = [UserProfileModel sharedInstance];
 	#endif
 	
-	if(profileProtocol)
+	if (profileProtocol)
 	{
 		[self.textFieldSender setText:profileProtocol.Email];
 	}
@@ -94,7 +94,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if([textView.text isEqualToString:self.textViewMessagePlaceholder])
+	if ([textView.text isEqualToString:self.textViewMessagePlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -107,7 +107,7 @@
 - (IBAction)textFieldDidChangeEditing:(UITextField *)textField
 {
 	// Validate form in delegate
-	if([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])
+	if ([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])
 	{
 		[self.delegate validateForm:self.textViewMessage.text senderEmailAddress:self.textFieldSender.text];
 	}
@@ -116,7 +116,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
 	// Validate form in delegate
-	if([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])
+	if ([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])
 	{
 		[self.delegate validateForm:self.textViewMessage.text senderEmailAddress:self.textFieldSender.text];
 	}
@@ -125,7 +125,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 	// Show placeholder
-	if([textView.text isEqualToString:@""])
+	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewMessagePlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];
@@ -137,7 +137,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if(indexPath.row == 2)
+	if (indexPath.row == 2)
 	{
 		return self.cellMessageHeight;
 	}

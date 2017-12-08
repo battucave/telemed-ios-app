@@ -51,10 +51,10 @@
 	
 	[self.pickerViewDefault setHidden:YES];
 	
-	if([self.dates count] > self.selectedDateIndex)
+	if ([self.dates count] > self.selectedDateIndex)
 	{
 		// Set date button title to preselected row if any
-		if(self.selectedDateIndex > 0)
+		if (self.selectedDateIndex > 0)
 		{
 			[self.buttonDate setTitle:[self.dates objectAtIndex:self.selectedDateIndex] forState:UIControlStateNormal];
 			[self.buttonDate setTitle:[self.dates objectAtIndex:self.selectedDateIndex] forState:UIControlStateSelected];
@@ -100,7 +100,7 @@
 	[accounts insertObject:accountAll atIndex:0];
 	
 	// Set account button title to preselected row if any
-	if(self.selectedAccountIndex > 0 && [self.accounts count] > self.selectedAccountIndex)
+	if (self.selectedAccountIndex > 0 && [self.accounts count] > self.selectedAccountIndex)
 	{
 		// Set selected account if any
 		[self setSelectedAccount:[self.accounts objectAtIndex:self.selectedAccountIndex]];
@@ -114,7 +114,7 @@
 - (void)updateAccountsError:(NSError *)error
 {
 	// Customize error message if device not offline
-	if(error.code != NSURLErrorNotConnectedToInternet)
+	if (error.code != NSURLErrorNotConnectedToInternet)
 	{
 		error = [self.accountModel buildError:error usingData:nil withGenericMessage:@"There was a problem retrieving the Accounts. Will default to All Accounts." andTitle:error.localizedFailureReason];
 	}
@@ -136,7 +136,7 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
 	// Date row
-	if(self.pickerType == 0)
+	if (self.pickerType == 0)
 	{
 		return [self.dates objectAtIndex:row];
 	}
@@ -147,7 +147,7 @@
 		AccountModel *account = [self.accounts objectAtIndex:row];
 		
 		// If account is generic all accounts, then just return name
-		if(account.ID == 0)
+		if (account.ID == 0)
 		{
 			return account.Name;
 		}
@@ -162,7 +162,7 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
 	// Set selected date
-	if(self.pickerType == 0)
+	if (self.pickerType == 0)
 	{
 		[self setSelectedDateIndex:row];
 		[self setSelectedDate:[self.dates objectAtIndex:row]];
@@ -193,7 +193,7 @@
 	{
 		[self setSelectedAccountIndex:row];
 		
-		if([self.accounts count] > row)
+		if ([self.accounts count] > row)
 		{
 			[self setSelectedAccount:[self.accounts objectAtIndex:row]];
 			

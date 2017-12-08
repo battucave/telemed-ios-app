@@ -62,7 +62,7 @@
 		CTCarrier *carrier = [networkInfo subscriberCellularProvider];
 	
 		// AT&T and T-Mobile are guaranteed to support Voice and Data simultaneously, so turn off CDMAVoiceData message by default for them
-		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
+		if ([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
 		{
 			[settings setBool:YES forKey:@"CDMAVoiceDataDisabled"];
 		}
@@ -75,7 +75,7 @@
 	
 	[self.callCenter setCallEventHandler:^(CTCall *call)
 	{
-		if([[call callState] isEqual:CTCallStateDisconnected])
+		if ([[call callState] isEqual:CTCallStateDisconnected])
 		{
 			NSLog(@"Call disconnected");
 			
@@ -97,7 +97,7 @@
 	
 	// MyTeleMed - Push Notification Registration
 	#ifdef MYTELEMED
-		if([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+		if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
 		{
 			// iOS 8+ Push Notifications
 			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
@@ -147,7 +147,7 @@
 	// If more than 15 minutes have passed since app was closed, then reset CDMAVoiceDataHidden value
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	if(fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 900)
+	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 900)
 	{
 		[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
 		[settings synchronize];
@@ -159,7 +159,7 @@
 	
 		[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 		{
-			if(success)
+			if (success)
 			{
 				MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 				
@@ -174,7 +174,7 @@
 				NSLog(@"Error %ld: %@", (long)error.code, error.localizedDescription);
 				
 				// If error is not because device is offline, then Account not valid so go to Login Screen
-				if(error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
+				if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 				{
 					AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 					
@@ -219,7 +219,7 @@
 	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
 	// Only log user out if timeout is enabled and user is not currently on phone call
-	if(timeoutEnabled && ! [self isCallConnected])
+	if (timeoutEnabled && ! [self isCallConnected])
 	{
 		// Delay logout to ensure application is fully loaded
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -240,10 +240,10 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
-	if( ! timeoutEnabled)
+	if ( ! timeoutEnabled)
 	{
 		// If Enable Timeout string is NULL, then it has never been set. Set it to True
-		if([settings objectForKey:@"enableTimeout"] == nil)
+		if ([settings objectForKey:@"enableTimeout"] == nil)
 		{
 			[settings setBool:YES forKey:@"enableTimeout"];
 			[settings synchronize];
@@ -253,7 +253,7 @@
 	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
 	
 	// If user has timeout disabled and a RefreshToken already exists, attempt to bypass Login screen
-	if( ! timeoutEnabled && authenticationModel.RefreshToken != nil)
+	if ( ! timeoutEnabled && authenticationModel.RefreshToken != nil)
 	{
 		id <ProfileProtocol> profileProtocol;
 		
@@ -274,7 +274,7 @@
 		// Verify Account is Valid
 		[profileProtocol getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 		{
-			if(success)
+			if (success)
 			{
 				// Update Timeout Period to the value sent from server
 				[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
@@ -308,7 +308,7 @@
 {
 	for(CTCall *call in self.callCenter.currentCalls)
 	{
-		if(call.callState == CTCallStateConnected)
+		if (call.callState == CTCallStateConnected)
 		{
 			return YES;
 		}
@@ -326,7 +326,7 @@
 	NSLog(@"Current Storyboard: %@", currentStoryboardName);
 	
 	// Already on LoginSSO storyboard
-	if([currentStoryboardName isEqualToString:@"LoginSSO"])
+	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
 	{
 		loginSSOStoryboard = currentStoryboard;
 	}
@@ -368,9 +368,9 @@
 	UIView *screenshotView = [self.window viewWithTag:8353633];
 	
 	// Remove view over app that was used to obsure screenshot
-	if(shouldHide)
+	if (shouldHide)
 	{
-		if(screenshotView != nil)
+		if (screenshotView != nil)
 		{
 			[UIView animateWithDuration:0.25f animations:^
 			{
@@ -386,7 +386,7 @@
 	else
 	{
 		// Only show Screenshot View if it is not already visible
-		if(screenshotView == nil)
+		if (screenshotView == nil)
 		{
 			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"Launch Screen" owner:self options:nil] objectAtIndex:0];
 			UIScreen *screen = [UIScreen mainScreen];
@@ -428,7 +428,7 @@
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 	{
 		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-		if(error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
+		if (error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 		{
 			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			
@@ -506,7 +506,7 @@
 	[alertController addAction:actionOK];
 	
 	// PreferredAction only supported in 9.0+
-	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
 		[alertController setPreferredAction:actionOK];
 	}
@@ -517,7 +517,7 @@
 	// END TESTING ONLY*/
 	
 	// Handle Push Notification when App is Active.
-	if([application applicationState] == UIApplicationStateActive)
+	if ([application applicationState] == UIApplicationStateActive)
 	{
 		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
@@ -534,7 +534,7 @@
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 	
 	// Check if device is already registered with TeleMed service
-	if(registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
+	if (registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
 	{
 		// Phone Number is already registered with Web Service, so we just need to update Device Token (Device Token can change randomly so this keeps it up to date)
 		[registeredDeviceModel setShouldRegister:YES];
@@ -542,7 +542,7 @@
 		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
 		{
 			// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-			if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
+			if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 			{
 				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 				

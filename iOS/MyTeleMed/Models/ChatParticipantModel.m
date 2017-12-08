@@ -21,7 +21,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			// Sort Chat Participants by Last Name, First Name
 			NSArray *chatParticipants = [[parser chatParticipants] sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
@@ -29,7 +29,7 @@
 				return [chatParticipantModelA.FormattedNameLNF compare:chatParticipantModelB.FormattedNameLNF];
 			}];
 			
-			if([self.delegate respondsToSelector:@selector(updateChatParticipants:)])
+			if ([self.delegate respondsToSelector:@selector(updateChatParticipants:)])
 			{
 				[self.delegate updateChatParticipants:[chatParticipants mutableCopy]];
 			}
@@ -40,7 +40,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Participants Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Participants.", NSLocalizedDescriptionKey, nil]];
 			
 			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
+			if ([self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
 			{
 				[self.delegate updateChatParticipantsError:error];
 			}
@@ -54,7 +54,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Participants." andTitle:@"Chat Participants Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
+		if ([self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
 		{
 			[self.delegate updateChatParticipantsError:error];
 		}

@@ -28,7 +28,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"MsgRecip"])
+	if ([elementName isEqualToString:@"MsgRecip"])
 	{
 		// Initialize the Message Event.
 		self.messageRecipient = [[MessageRecipientModel alloc] init];
@@ -37,7 +37,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -49,22 +49,22 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"MsgRecip"])
+	if ([elementName isEqualToString:@"MsgRecip"])
 	{
 		[self.messageRecipients addObject:self.messageRecipient];
 		
 		self.messageRecipient = nil;
 	}
-	else if([elementName isEqualToString:@"ID"])
+	else if ([elementName isEqualToString:@"ID"])
 	{
 		[self.messageRecipient setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"Name"])
+	else if ([elementName isEqualToString:@"Name"])
 	{
 		[self.messageRecipient setValue:self.currentElementValue forKey:elementName];
 		
 		// Most names are of the following format: Lastname, Firstname
-		if([self.currentElementValue rangeOfString:@", "].location != NSNotFound)
+		if ([self.currentElementValue rangeOfString:@", "].location != NSNotFound)
 		{
 			NSArray *nameParts = [self.currentElementValue componentsSeparatedByString:@", "];
 			

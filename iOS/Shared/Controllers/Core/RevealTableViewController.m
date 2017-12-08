@@ -30,12 +30,12 @@
 - (void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position
 {
 	// If position is open
-	if(position == FrontViewPositionRight)
+	if (position == FrontViewPositionRight)
 	{
 		// Prevent user interaction on everything except the Navigation Bar (so that menu button is still clickable)
 		for(id subview in [revealController.frontViewController.view subviews])
 		{
-			if( ! [subview isKindOfClass:[UINavigationBar class]])
+			if ( ! [subview isKindOfClass:[UINavigationBar class]])
 			{
 				[subview setUserInteractionEnabled:NO];
 			}

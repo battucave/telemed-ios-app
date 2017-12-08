@@ -98,7 +98,7 @@
 - (IBAction)refreshWebView:(id)sender
 {
 	// If webview is loading, let it finish before refreshing again
-	if(self.isLoading)
+	if (self.isLoading)
 	{
 		return;
 	}
@@ -107,7 +107,7 @@
 	self.isLoading = YES;
 	
 	// If webview is currently showing a blank screen or error message, then redirect to login page
-	if([self.webView.request.URL.absoluteString isEqualToString:@"about:blank"])
+	if ([self.webView.request.URL.absoluteString isEqualToString:@"about:blank"])
 	{
 		// Show Loading Screen
 		[self updateWebViewLoading:YES];
@@ -145,7 +145,7 @@
 		NSString *baseDomain = [BASE_URL stringByReplacingOccurrencesOfString:@"https://" withString:@""];
 		NSRange domainRange = [[cookie domain] rangeOfString:baseDomain];
 		
-		if(domainRange.length > 0)
+		if (domainRange.length > 0)
 		{
 			[cookieStorage deleteCookie:cookie];
 		}
@@ -161,7 +161,7 @@
 	NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 	
 	// Prevent scrolling in UIWebView for screens taller than 480
-	if([UIScreen mainScreen].bounds.size.height > 480)
+	if ([UIScreen mainScreen].bounds.size.height > 480)
 	{
 		[self.webView.scrollView setScrollEnabled:NO];
 	}
@@ -242,7 +242,7 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		// Toggle Activity Indicator
-		if(isLoading)
+		if (isLoading)
 		{
 			[self.activityIndicator startAnimating];
 		}
@@ -285,7 +285,7 @@
 	NSString *targetURL = AUTHENTICATION_BASE_URL AUTHENTICATION_CALLBACK_PAGE;
 	
 	// Observe current URL of page. If it is the Success page, then handle it separately so that the header tokens can be extracted (UIWebView provides no way to extract response headers)
-	if([request.URL.absoluteString hasPrefix:targetURL])
+	if ([request.URL.absoluteString hasPrefix:targetURL])
 	{
 		[NSURLConnection connectionWithRequest:request delegate:self];
 		
@@ -313,7 +313,7 @@
 	// Success screen will never load here because it is not loaded by WebView. Instead it is handled by NSURLConnection didReceiveResponse method.
 	
 	// URL is the Login screen
-	if([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
+	if ([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
 	{
 		// Prevent users from being able to go back to about:blank
 		[self.buttonBack setEnabled:NO];
@@ -373,13 +373,13 @@
 		#endif
 	}
 	// URL is the Forgot Password screen
-	else if([currentURL rangeOfString:@"ForgotPassword"].location != NSNotFound)
+	else if ([currentURL rangeOfString:@"ForgotPassword"].location != NSNotFound)
 	{
 		// Update background to be transparent
 		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
 	}
 	// URL is a blank screen
-	else if([currentURL isEqualToString:@"about:blank"])
+	else if ([currentURL isEqualToString:@"about:blank"])
 	{
 		// Prevent users from being able to go back to about:blank
 		[self.buttonBack setEnabled:NO];
@@ -389,7 +389,7 @@
 	[self updateWebViewLoading:NO];
 	
 	// If url is any page other than about:blank, then reset isRetry
-	if( ! [currentURL isEqualToString:@"about:blank"])
+	if ( ! [currentURL isEqualToString:@"about:blank"])
 	{
 		self.isRetry = NO;
 	}
@@ -406,12 +406,12 @@
 	self.isLoading = NO;
 	
 	// When login process redirects to Success page, the webView:shouldStartLoadWithRequest captures it and prevents the WebView from loading it which results in an error with code 102. Don't show an error for this.
-	if(error.code == 102)
+	if (error.code == 102)
 	{
 		return;
 	}
 	// After a device goes back online, there is an unknown delay until device can access network which causes and error with code -999 to be returned. Retry the request once again if this happens.
-	else if(error.code == -999 && ! self.isRetry)
+	else if (error.code == -999 && ! self.isRetry)
 	{
 		NSLog(@"Retry Login");
 		
@@ -428,7 +428,7 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
 	// Prevent zooming UIWebView for screens taller than 480
-	if([UIScreen mainScreen].bounds.size.height > 480)
+	if ([UIScreen mainScreen].bounds.size.height > 480)
 	{
 		return nil;
 	}
@@ -442,7 +442,7 @@
 // Prevent horizontal scroll in UIWebView
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-	if(scrollView.contentOffset.x > 0)
+	if (scrollView.contentOffset.x > 0)
 	{
 		[scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y)];
 	}
@@ -456,7 +456,7 @@
 // UIWebView provides no way to extract response headers, but we need the Access and Refresh Tokens contained in those headers. webView:shouldStartLoadWithRequest will capture the Success page and create a request that sends its result here where the headers can be extracted.
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	if([response isKindOfClass:[NSHTTPURLResponse class]])
+	if ([response isKindOfClass:[NSHTTPURLResponse class]])
 	{
 		AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 		
@@ -470,7 +470,7 @@
 		NSString *accessToken = [headers valueForKey:@"X-TeleMed-AccessToken"];
 		NSString *refreshToken = [headers valueForKey:@"X-TeleMed-RefreshToken"];
 		
-		if(accessToken && refreshToken)
+		if (accessToken && refreshToken)
 		{
 			[authenticationModel setAccessToken:accessToken];
 			[authenticationModel setRefreshToken:refreshToken];

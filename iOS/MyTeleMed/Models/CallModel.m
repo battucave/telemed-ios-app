@@ -42,10 +42,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
+			if ([self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
 			{
 				[self.delegate callTeleMedSuccess];
 			}
@@ -61,7 +61,7 @@
 				[self callTeleMed];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			/*if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
 			}*/
@@ -87,7 +87,7 @@
 			[self callTeleMed];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+		/*if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
 			[self.delegate callTeleMedError:error];
 		}*/
@@ -127,10 +127,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(callSenderSuccess)])
+			if ([self.delegate respondsToSelector:@selector(callSenderSuccess)])
 			{
 				[self.delegate callSenderSuccess];
 			}
@@ -146,7 +146,7 @@
 				[self callSenderForMessage:messageID recordCall:recordCall];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(callSenderError:)])
+			/*if ([self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
 			}*/
@@ -172,7 +172,7 @@
 			[self callSenderForMessage:messageID recordCall:recordCall];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(callSenderError:)])
+		/*if ([self.delegate respondsToSelector:@selector(callSenderError:)])
 		{
 			[self.delegate callSenderError:error];
 		}*/
@@ -191,16 +191,16 @@
 	// Remove Network Activity Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	if( ! self.pendingComplete)
+	if ( ! self.pendingComplete)
 	{
 		// Notify delegate that TeleMed Call Request has been sent to server
-		if([self.delegate respondsToSelector:@selector(callTeleMedPending)])
+		if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
 		{
 			[self.delegate callTeleMedPending];
 		}
 		
 		// Notify delegate that Sender Call Request has been sent to server
-		if([self.delegate respondsToSelector:@selector(callSenderPending)])
+		if ([self.delegate respondsToSelector:@selector(callSenderPending)])
 		{
 			[self.delegate callSenderPending];
 		}

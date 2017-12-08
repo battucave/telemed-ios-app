@@ -15,7 +15,7 @@
 	[super sendEvent:event];
 	
 	// Fire up the timer upon first event
-	if( ! _idleTimer)
+	if ( ! _idleTimer)
 	{
 		[self resetIdleTimer];
 	}
@@ -23,11 +23,11 @@
 	// Check to see if there was a touch event
 	NSSet *allTouches = [event allTouches];
 	
-    if([allTouches count] > 0)
+    if ([allTouches count] > 0)
 	{
 		UITouchPhase phase = ((UITouch *)[allTouches anyObject]).phase;
 		
-		if(phase == UITouchPhaseBegan)
+		if (phase == UITouchPhaseBegan)
 		{
 			[self resetIdleTimer];
 		}
@@ -44,13 +44,13 @@
 
 - (void)resetIdleTimer
 {
-    if(_idleTimer)
+    if (_idleTimer)
 	{
 		[_idleTimer invalidate];
 	}
 	
 	// Default Timeout period to 10 minutes
-	if(self.timeoutPeriodMins < 1)
+	if (self.timeoutPeriodMins < 1)
 	{
 		_timeoutPeriodMins = DEFAULT_APP_TIMEOUT_PERIOD_MINS;
 	}

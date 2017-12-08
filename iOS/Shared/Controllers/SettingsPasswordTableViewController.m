@@ -39,7 +39,7 @@
 	[passwordChangeModel setDelegate:self];
 	
 	// Verify that New Password matches Confirm Password
-	if( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
+	if ( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password do not match.", NSLocalizedDescriptionKey, nil]];
 		
@@ -86,15 +86,15 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	if(textField == self.textFieldCurrentPassword)
+	if (textField == self.textFieldCurrentPassword)
 	{
 		[self.textFieldNewPassword becomeFirstResponder];
 	}
-	else if(textField == self.textFieldNewPassword)
+	else if (textField == self.textFieldNewPassword)
 	{
 		[self.textFieldConfirmNewPassword becomeFirstResponder];
 	}
-	else if(textField == self.textFieldConfirmNewPassword)
+	else if (textField == self.textFieldConfirmNewPassword)
 	{
 		[self.textFieldConfirmNewPassword resignFirstResponder];
 	}

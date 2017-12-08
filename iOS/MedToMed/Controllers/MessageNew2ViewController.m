@@ -27,7 +27,7 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// Only set placeholder if it has not already been set
-	if( ! self.textViewAdditionalInformationPlaceholder)
+	if ( ! self.textViewAdditionalInformationPlaceholder)
 	{
 		self.textViewAdditionalInformationPlaceholder = self.textViewAdditionalInformation.text;
 	}
@@ -38,7 +38,7 @@
 	NSUInteger currentIndex = [self.textFields indexOfObject:textField];
 	NSUInteger nextIndex = currentIndex + 1;
 	
-	if(nextIndex < [self.textFields count])
+	if (nextIndex < [self.textFields count])
 	{
 		[[self.textFields objectAtIndex:nextIndex] becomeFirstResponder];
 	}
@@ -53,7 +53,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
+	if ([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -66,7 +66,7 @@
 /*- (void)textViewDidChange:(UITextView *)textView
 {
 	// Validate form in delegate
-	if([self.delegate respondsToSelector:@selector(validateForm:)])
+	if ([self.delegate respondsToSelector:@selector(validateForm:)])
 	{
 		[self.delegate validateForm:self.textViewMessage.text];
 	}
@@ -75,7 +75,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 	// Show placeholder
-	if([textView.text isEqualToString:@""])
+	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewAdditionalInformationPlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:142.0/255.0 alpha:1]];

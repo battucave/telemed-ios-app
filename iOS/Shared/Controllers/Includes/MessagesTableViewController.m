@@ -94,9 +94,9 @@
 	self.messagesType = newMessagesType;
 	
 	// If Messages Type is Active, re-enable Refresh Control
-	if(newMessagesType == 0)
+	if (newMessagesType == 0)
 	{
-		if(self.refreshControl == nil)
+		if (self.refreshControl == nil)
 		{
 			self.refreshControl = self.savedRefreshControl;
 		}
@@ -124,7 +124,7 @@
 	self.hiddenMessages = [NSMutableArray new];
 	
 	// If no Messages to hide, cancel
-	if(messages == nil || [messages count] == 0)
+	if (messages == nil || [messages count] == 0)
 	{
 		return;
 	}
@@ -144,7 +144,7 @@
 - (void)unHideSelectedMessages:(NSArray *)messages
 {
 	// If no Messages to hide, cancel
-	if(messages == nil || [messages count] == 0)
+	if (messages == nil || [messages count] == 0)
 	{
 		return;
 	}
@@ -167,7 +167,7 @@
 	NSArray *filteredMessagesCopy = [NSArray arrayWithArray:[self.filteredMessages copy]];
 	
 	// If no Messages to remove, cancel
-	if(messages == nil || [messages count] == 0)
+	if (messages == nil || [messages count] == 0)
 	{
 		return;
 	}
@@ -184,7 +184,7 @@
 	}
 	
 	// Remove rows
-	if([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
+	if ([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
@@ -218,7 +218,7 @@
 	[self setFilteredMessages:messages];
 
 	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
-	if(self.messagesType == 0)
+	if (self.messagesType == 0)
 	{
 		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
@@ -266,7 +266,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if([self.filteredMessages count] == 0)
+	if ([self.filteredMessages count] == 0)
 	{
 		return 1;
 	}
@@ -277,12 +277,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are Filtered Messages and Hidden Messages and row is not the only row in the table
-	if(self.messagesType != 2 && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
+	if (self.messagesType != 2 && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
 	{
 		id <MessageProtocol> message = [self.filteredMessages objectAtIndex:indexPath.row];
 		
 		// Hide Hidden Messages by setting its height to 0
-		if([self.hiddenMessages containsObject:message])
+		if ([self.hiddenMessages containsObject:message])
 		{
 			return 0.0f;
 		}
@@ -293,7 +293,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.filteredMessages count] == 0 || (indexPath.row == 0 && [self.filteredMessages count] == [self.hiddenMessages count]))
+	if ([self.filteredMessages count] == 0 || (indexPath.row == 0 && [self.filteredMessages count] == [self.hiddenMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -309,7 +309,7 @@
 	id message = [self.filteredMessages objectAtIndex:indexPath.row];
 	
 	// Sent Messages
-	if(self.messagesType == 2)
+	if (self.messagesType == 2)
 	{
 		return [self cellForSentMessage:cell withMessage:message atIndexPath:indexPath];
 	}
@@ -323,7 +323,7 @@
 - (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(id <MessageProtocol>)message atIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide Hidden Messages
-	if([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
+	if ([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
 	{
 		[cell setHidden:YES];
 	}
@@ -334,14 +334,14 @@
 	[cell.labelMessage setText:message.FormattedMessageText];
 	
 	// Set Date and Time
-	if(message.TimeReceived_LCL)
+	if (message.TimeReceived_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
 		NSDate *dateTime = [dateFormatter dateFromString:message.TimeReceived_LCL];
 		
 		// If date is nil, it may have been formatted incorrectly
-		if(dateTime == nil)
+		if (dateTime == nil)
 		{
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 			dateTime = [dateFormatter dateFromString:message.TimeReceived_LCL];
@@ -358,7 +358,7 @@
 	}
 	
 	// If Message has been read, change Status image to Unread icon
-	if([message.State isEqualToString:@"Unread"])
+	if ([message.State isEqualToString:@"Unread"])
 	{
 		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
 	}
@@ -373,7 +373,7 @@
 		[cell.labelPhoneNumber setText:@"800-420-4695"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 		
-		if(indexPath.row < 3)
+		if (indexPath.row < 3)
 		{
 			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
 		}
@@ -385,11 +385,11 @@
 	// END TESTING ONLY*/
 	
 	// Set Message Priority color
-	if([message.Priority isEqualToString:@"Priority"])
+	if ([message.Priority isEqualToString:@"Priority"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
 	}
-	else if([message.Priority isEqualToString:@"Stat"])
+	else if ([message.Priority isEqualToString:@"Stat"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
 	}
@@ -409,14 +409,14 @@
 	[cell.labelMessage setText:sentMessage.FormattedMessageText];
 	
 	// Set Date and Time
-	if(sentMessage.FirstSent_LCL)
+	if (sentMessage.FirstSent_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
 		NSDate *dateTime = [dateFormatter dateFromString:sentMessage.FirstSent_LCL];
 		
 		// If date is nil, it may have been formatted incorrectly
-		if(dateTime == nil)
+		if (dateTime == nil)
 		{
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 			dateTime = [dateFormatter dateFromString:sentMessage.FirstSent_LCL];
@@ -437,11 +437,11 @@
 	[cell.constraintNameLeadingSpace setConstant:7.0f];
 	
 	// Set Message Priority color
-	if([sentMessage.Priority isEqualToString:@"Priority"])
+	if ([sentMessage.Priority isEqualToString:@"Priority"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
 	}
-	else if([sentMessage.Priority isEqualToString:@"Stat"])
+	else if ([sentMessage.Priority isEqualToString:@"Stat"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
 	}
@@ -456,14 +456,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are no Filtered Messages, then user clicked the No Messages found cell so do nothing
-	if([self.filteredMessages count] == 0)
+	if ([self.filteredMessages count] == 0)
 	{
 		return;
 	}
 	// If in editing mode, toggle the Archive button in MessagesViewController
-	else if(self.editing)
+	else if (self.editing)
 	{
-		if([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
+		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
 		{
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedMessages = [NSMutableArray new];
@@ -481,9 +481,9 @@
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If in editing mode, toggle the Archive button in MessagesViewController
-	if(self.editing)
+	if (self.editing)
 	{
-		if([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
+		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
 		{
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedMessages = [NSMutableArray new];
@@ -501,7 +501,7 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
 	// If navigating to Message Detail, but there are no Filtered Messages, then user clicked the No Messages found cell
-	if([identifier isEqualToString:@"showMessageDetail"])
+	if ([identifier isEqualToString:@"showMessageDetail"])
 	{
 		return ! self.editing && [self.filteredMessages count] > 0;
 	}
@@ -511,11 +511,11 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([[segue identifier] isEqualToString:@"showMessageDetail"])
+	if ([[segue identifier] isEqualToString:@"showMessageDetail"])
 	{
 		MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
 		
-		if([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
+		if ([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
 		{
 			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
@@ -544,7 +544,7 @@
 // Reload Messages
 - (void)reloadMessages
 {
-	switch(self.messagesType)
+	switch (self.messagesType)
 	{
 		// Get Archived Messages
 		case 1:

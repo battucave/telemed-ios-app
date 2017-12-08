@@ -41,12 +41,12 @@
 		"</FwdMsg>";
 	
 	// Forward with Message Delivery ID
-	if([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
+	if ([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
 		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, xmlRecipients];
 	}
 	// Forward with Message ID
-	else if(message.MessageID)
+	else if (message.MessageID)
 	{
 		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageID", message.MessageID, xmlRecipients];
 	}
@@ -66,10 +66,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Add comment if present
-			if( ! [comment isEqualToString:@""])
+			if ( ! [comment isEqualToString:@""])
 			{
 				CommentModel *commentModel = [[CommentModel alloc] init];
 				
@@ -77,7 +77,7 @@
 			}
 			
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
 			}
@@ -93,7 +93,7 @@
 				[self forwardMessage:message messageRecipientIDs:messageRecipientIDs withComment:comment];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			}*/
@@ -119,7 +119,7 @@
 			[self forwardMessage:message messageRecipientIDs:messageRecipientIDs withComment:comment];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			[self.delegate sendMessageError:error];
 		}*/
@@ -136,7 +136,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		[self.delegate sendMessagePending];
 	}

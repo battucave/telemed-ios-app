@@ -25,9 +25,9 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
-			if([self.delegate respondsToSelector:@selector(updateSentMessages:)])
+			if ([self.delegate respondsToSelector:@selector(updateSentMessages:)])
 			{
 				[self.delegate updateSentMessages:[parser sentMessages]];
 			}
@@ -38,7 +38,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Sent Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Sent Messages.", NSLocalizedDescriptionKey, nil]];
 			
 			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
+			if ([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
 			{
 				[self.delegate updateSentMessagesError:error];
 			}
@@ -52,7 +52,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Sent Messages." andTitle:@"Sent Messages Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
+		if ([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
 		{
 			[self.delegate updateSentMessagesError:error];
 		}
@@ -73,7 +73,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			// Handle Success
 		}

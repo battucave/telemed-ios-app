@@ -42,7 +42,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
-	if([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		// Change top layout constraint to 11 (Keep Swipe Message there as it will simply be hidden under the Container View and we can still use the top border of it)
 		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
@@ -67,7 +67,7 @@
 	NSLog(@"Selected Account Index: %ld", (long)self.selectedAccountIndex);
 	NSLog(@"Selected Account: %@", self.archivesPickerViewController.selectedAccount);
 	
-	if(self.archivesPickerViewController.selectedAccount == nil)
+	if (self.archivesPickerViewController.selectedAccount == nil)
 	{
 		self.archivesPickerViewController.selectedAccount = [[AccountModel alloc] init];
 		
@@ -80,7 +80,7 @@
 	[self.labelResults setText:[NSString stringWithFormat:@"Results from %@ for %@", self.archivesPickerViewController.selectedDate, self.archivesPickerViewController.selectedAccount.Name]];
 	
 	// Update MessagesTableViewController with updated messages
-	if([self.messagesTableViewController respondsToSelector:@selector(filterArchiveMessages:startDate:endDate:)])
+	if ([self.messagesTableViewController respondsToSelector:@selector(filterArchiveMessages:startDate:endDate:)])
 	{
 		[self.messagesTableViewController filterArchiveMessages:self.archivesPickerViewController.selectedAccount.ID startDate:self.archivesPickerViewController.startDate endDate:self.archivesPickerViewController.endDate];
 	}
@@ -96,7 +96,7 @@
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open
-	if(revealController.frontViewPosition == FrontViewPositionRight)
+	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
@@ -108,14 +108,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedArchivedMessagesTable"])
+	if ([segue.identifier isEqualToString:@"embedArchivedMessagesTable"])
 	{
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set Messages Type to Archived
 		[self.messagesTableViewController initMessagesWithType:1];
 	}
-	else if([segue.identifier isEqualToString:@"showArchivesPicker"])
+	else if ([segue.identifier isEqualToString:@"showArchivesPicker"])
 	{
 		[self setArchivesPickerViewController:segue.destinationViewController];
 		

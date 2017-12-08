@@ -53,7 +53,7 @@
 	[self.ssoProviderModel validate:name withCallback:^(BOOL success, NSError *error)
 	{
 		// SSO Provider is valid so save it and return to Login
-		if(success)
+		if (success)
 		{
 			[self.ssoProviderModel setName:name];
 			
@@ -63,7 +63,7 @@
 		else
 		{
 			// If device offline, show offline message
-			/*if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+			/*if (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
 			{
 				// Create reference to generic model to show offline error
 				Model *model = [[Model alloc] init];
@@ -87,7 +87,7 @@
 	NSString *textString = [textField.text stringByReplacingCharactersInRange:range withString:string];
 	textString = [textString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	if(textString.length)
+	if (textString.length)
 	{
 		self.buttonHelp.hidden = YES;
 	}
@@ -108,7 +108,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"showHelpFromSSOProvider"])
+	if ([segue.identifier isEqualToString:@"showHelpFromSSOProvider"])
 	{
 		HelpViewController *helpViewController = segue.destinationViewController;
 		

@@ -65,7 +65,7 @@
 	NSLog(@"Show: %@", error.localizedDescription);
 	
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self showOffline];
 	}
@@ -92,7 +92,7 @@
 	NSString *errorMessage = error.localizedDescription;
 	
 	// If device offline, add offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		errorMessage = [NSString stringWithFormat:@"%@ %@", errorMessage, [self getOfflineMessage]];
 	}
@@ -116,7 +116,7 @@
 	[alertController addAction:actionRetry];
 	
 	// PreferredAction only supported in 9.0+
-	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
 		[alertController setPreferredAction:actionRetry];
 	}
@@ -137,9 +137,9 @@
 	NSLog(@"Offline Error Message: %@", alertMessage);
 	
 	// Only show error message if it has never been shown or has been 2+ seconds since last shown
-	if( ! self.dateLastOfflineError || [[NSDate date] compare:[self.dateLastOfflineError dateByAddingTimeInterval:2.0]] == NSOrderedDescending)
+	if ( ! self.dateLastOfflineError || [[NSDate date] compare:[self.dateLastOfflineError dateByAddingTimeInterval:2.0]] == NSOrderedDescending)
 	{
-		if( ! self.isErrorAlertShowing)
+		if ( ! self.isErrorAlertShowing)
 		{
 			// Configure Alert Controller
 			self.offlineAlertController = [ErrorAlertController alertControllerWithTitle:@"Data Connection Unavailable" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
@@ -203,7 +203,7 @@
 	// Update messaging if a call is currently connected
 	for(CTCall *call in callCenter.currentCalls)
 	{
-		if(call.callState == CTCallStateConnected)
+		if (call.callState == CTCallStateConnected)
 		{
 			offlineMessage = @"Your device does not support simultaneous voice and cellular data connections. You must connect to a Wi-Fi network to continue.";
 		}

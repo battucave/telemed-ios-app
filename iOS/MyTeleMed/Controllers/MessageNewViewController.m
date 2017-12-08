@@ -57,7 +57,7 @@
 	[self setSelectedMessageRecipients:messageRecipientPickerViewController.selectedMessageRecipients];
 	
 	// Update MessageComposeTableViewController with selected Message Recipient Names
-	if([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
+	if ([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
 	{
 		[self.messageComposeTableViewController updateSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
@@ -80,7 +80,7 @@
 	[self setAccounts:newAccounts];
 	
 	// If user has only one Account, automatically set it as the selected Account
-	if([newAccounts count] == 1)
+	if ([newAccounts count] == 1)
 	{
 		self.selectedAccount = (AccountModel *)[newAccounts objectAtIndex:0];
 	}
@@ -112,7 +112,7 @@
 - (void)sendMessageError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.newMessageModel showOfflineError];
 	}
@@ -126,7 +126,7 @@
 - (void)performSegueToMessageRecipientPicker:(id)sender
 {
 	// User only has one Account so skip the Account selection screen and go straight to MessageRecipientPickerTableViewController
-	if([self.accounts count] == 1)
+	if ([self.accounts count] == 1)
 	{
 		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageNew" sender:sender];
 	}
@@ -147,13 +147,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedMessageNewTable"])
+	if ([segue.identifier isEqualToString:@"embedMessageNewTable"])
 	{
 		[self setMessageComposeTableViewController:segue.destinationViewController];
 		
 		[self.messageComposeTableViewController setDelegate:self];
 	}
-	else if([segue.identifier isEqualToString:@"showAccountPickerFromMessageNew"])
+	else if ([segue.identifier isEqualToString:@"showAccountPickerFromMessageNew"])
 	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
@@ -166,7 +166,7 @@
 		// Set selected Message Recipients if previously set (to pass through to MessageRecipientPickerTableViewController)
 		[accountPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
-	else if([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageNew"])
+	else if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageNew"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		

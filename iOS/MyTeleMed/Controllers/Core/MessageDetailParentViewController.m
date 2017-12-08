@@ -37,12 +37,12 @@
 	[super viewWillAppear:animated];
 	
 	// Set Buttons for Archived Message Details
-	if(self.message.messageType == 1)
+	if (self.message.messageType == 1)
 	{
 		[self.buttonArchive setEnabled:NO];
 	}
 	// Set buttons for Sent Message Details
-	else if(self.message.messageType == 2)
+	else if (self.message.messageType == 2)
 	{
 		CGFloat buttonWidth = self.buttonReturnCall.frame.size.width;
 		CGFloat spaceAdjustment = (buttonWidth / 2);
@@ -60,11 +60,11 @@
 	}
 	
 	// Set Message Priority color (defaults to "Normal" green color)
-	if([self.message.Priority isEqualToString:@"Priority"])
+	if ([self.message.Priority isEqualToString:@"Priority"])
 	{
 		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
 	}
-	else if([self.message.Priority isEqualToString:@"Stat"])
+	else if ([self.message.Priority isEqualToString:@"Stat"])
 	{
 		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
 	}
@@ -92,7 +92,7 @@
 	[returnCallAlertController addAction:actionReturnRecordCall];
 
 	// PreferredAction only supported in 9.0+
-	if([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
+	if ([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
 		[returnCallAlertController setPreferredAction:actionReturnCall];
 	}
@@ -114,7 +114,7 @@
 	[archiveMessageAlertController addAction:actionContinue];
 
 	// PreferredAction only supported in 9.0+
-	if([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
+	if ([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
 		[archiveMessageAlertController setPreferredAction:actionContinue];
 	}
@@ -127,7 +127,7 @@
 - (void)modifyMessageStatePending:(NSString *)state
 {
     // If finished Archiving message, send user back
-    if([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
+    if ([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
 		{
@@ -140,7 +140,7 @@
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
     // If finished Archiving message, send user back
-    if([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
+    if ([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
 		{
@@ -153,7 +153,7 @@
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
 	// Show error message
-	if([state isEqualToString:@"archive"])
+	if ([state isEqualToString:@"archive"])
     {
 		[self.messageModel showError:error];
     }
@@ -169,7 +169,7 @@
 - (void)callSenderError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.callModel showOfflineError];
 	}
@@ -181,13 +181,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([[segue identifier] isEqualToString:@"showMessageForwardFromMessageDetail"] || [[segue identifier] isEqualToString:@"showMessageForwardFromMessageHistory"])
+    if ([[segue identifier] isEqualToString:@"showMessageForwardFromMessageDetail"] || [[segue identifier] isEqualToString:@"showMessageForwardFromMessageHistory"])
     {
         MessageForwardViewController *messageForwardViewController = [segue destinationViewController];
         
         [messageForwardViewController setMessage:self.message];
     }
-	else if([[segue identifier] isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [[segue identifier] isEqualToString:@"showMessageTeleMedFromMessageHistory"])
+	else if ([[segue identifier] isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [[segue identifier] isEqualToString:@"showMessageTeleMedFromMessageHistory"])
 	{
 		MessageTeleMedViewController *messageTeleMedViewController = [segue destinationViewController];
 		

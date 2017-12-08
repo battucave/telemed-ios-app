@@ -12,7 +12,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -24,7 +24,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Name"])
+	if ([elementName isEqualToString:@"Name"])
 	{
 		[self.ssoProvider setName:self.currentElementValue];
 	}

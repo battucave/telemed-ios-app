@@ -28,10 +28,10 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"NotificationSettings"])
+	if ([elementName isEqualToString:@"NotificationSettings"])
 	{
 		// Initialize the Notification Setting (Only when retrieving ALL Notification Settings. When retrieving a single Notification Setting, this will already be initialized)
-		if( ! self.notificationSetting)
+		if ( ! self.notificationSetting)
 		{
 			self.notificationSetting = [[NotificationSettingModel alloc] init];
 		}
@@ -40,7 +40,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -52,17 +52,17 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"NotificationSettings"])
+	if ([elementName isEqualToString:@"NotificationSettings"])
 	{
 		[self.notificationSettings addObject:self.notificationSetting];
 		
 		self.notificationSetting = nil;
 	}
-	else if([elementName isEqualToString:@"Enabled"])
+	else if ([elementName isEqualToString:@"Enabled"])
 	{
 		self.notificationSetting.Enabled = [self.currentElementValue boolValue];
 	}
-	else if([elementName isEqualToString:@"Interval"])
+	else if ([elementName isEqualToString:@"Interval"])
 	{
 		[self.numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
 		

@@ -20,7 +20,7 @@
 	_sideNavigationButton.action = @selector(revealToggle:);
 	
 	// HelpViewController may not have revealViewController when navigated to from LoginViewController or PhoneNumberViewController
-	if(self.revealViewController)
+	if (self.revealViewController)
 	{
 		// Set revealViewController delegate
 		[self.revealViewController setDelegate:self];
@@ -34,12 +34,12 @@
 - (void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position
 {
 	// If position is open
-	if(position == FrontViewPositionRight)
+	if (position == FrontViewPositionRight)
 	{
 		// Prevent user interaction on everything except the Navigation Bar (so that menu button is still clickable)
 		for(id subview in [revealController.frontViewController.view subviews])
 		{
-			if( ! [subview isKindOfClass:[UINavigationBar class]])
+			if ( ! [subview isKindOfClass:[UINavigationBar class]])
 			{
 				[subview setUserInteractionEnabled:NO];
 			}

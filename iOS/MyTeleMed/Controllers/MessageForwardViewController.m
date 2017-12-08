@@ -49,7 +49,7 @@
 	[self setSelectedMessageRecipients:messageRecipientPickerViewController.selectedMessageRecipients];
 	
 	// Update MessageComposeTableViewController with selected Message Recipient Names
-	if([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
+	if ([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
 	{
 		[self.messageComposeTableViewController updateSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
@@ -63,7 +63,7 @@
 	NSString *comment = self.messageComposeTableViewController.textViewMessage.text;
 	
 	// Remove placeholder comment
-	if([comment isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
+	if ([comment isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
 	{
 		comment = @"";
 	}
@@ -96,7 +96,7 @@
 - (void)sendMessageError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.forwardMessageModel showOfflineError];
 	}
@@ -122,13 +122,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedMessageForwardTable"])
+	if ([segue.identifier isEqualToString:@"embedMessageForwardTable"])
 	{
 		[self setMessageComposeTableViewController:segue.destinationViewController];
 		
 		[self.messageComposeTableViewController setDelegate:self];
 	}
-	else if([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageForward"])
+	else if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageForward"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		

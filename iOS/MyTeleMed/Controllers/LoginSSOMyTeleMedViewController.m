@@ -31,7 +31,7 @@
 	
 	[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 	{
-		if(success)
+		if (success)
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
@@ -44,7 +44,7 @@
 			NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 			
 			// Check if device is already registered with TeleMed service
-			if(registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
+			if (registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
 			{
 				// Phone Number is already registered with Web Service, so we just need to update Device Token (Device Token can change randomly so this keeps it up to date)
 				[registeredDeviceModel setShouldRegister:YES];
@@ -52,12 +52,12 @@
 				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
 				{
 					// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-					if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
+					if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 					{
 						[self showWebViewError:[NSString stringWithFormat:@"There was a problem registering your device on our network:<br>%@", registeredDeviceError.localizedDescription]];
 					}
 					
-					if(success)
+					if (success)
 					{
 						// Go to Main Storyboard
 						[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
@@ -89,7 +89,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"showPhoneNumber"])
+	if ([segue.identifier isEqualToString:@"showPhoneNumber"])
 	{
 		PhoneNumberViewController *phoneNumberViewController = segue.destinationViewController;
 		

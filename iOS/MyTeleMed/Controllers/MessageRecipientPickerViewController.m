@@ -42,7 +42,7 @@
 	[self.messageRecipientModel setDelegate:self];
 	
 	// Initialize selected recipients
-	if(self.selectedMessageRecipients == nil)
+	if (self.selectedMessageRecipients == nil)
 	{
 		[self setSelectedMessageRecipients:[[NSMutableArray alloc] init]];
 	}
@@ -66,7 +66,7 @@
 	[self.searchController.searchBar sizeToFit];
 	
 	// iOS 11+ navigation bar has support for search controller
-	if(@available(iOS 11.0, *))
+	if (@available(iOS 11.0, *))
 	{
 		[self.navigationItem setSearchController:self.searchController];
 		
@@ -74,7 +74,7 @@
 		
 		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
-			if(constraint.firstAttribute == NSLayoutAttributeHeight)
+			if (constraint.firstAttribute == NSLayoutAttributeHeight)
 			{
 				[constraint setConstant:0.0f];
 				break;
@@ -93,11 +93,11 @@
 		// Copy constraints from storyboard's placeholder search bar onto the search controller's search bar
 		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
-			if(constraint.firstItem == self.searchBar)
+			if (constraint.firstItem == self.searchBar)
 			{
 				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 			}
-			else if(constraint.secondItem == self.searchBar)
+			else if (constraint.secondItem == self.searchBar)
 			{
 				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 			}
@@ -120,9 +120,9 @@
 - (IBAction)unwind:(id)sender
 {
 	// Unwind to chat message detail
-	if([self.messageRecipientType isEqualToString:@"Chat"])
+	if ([self.messageRecipientType isEqualToString:@"Chat"])
 	{
-		if([self.selectedMessageRecipients count] > 1)
+		if ([self.selectedMessageRecipients count] > 1)
 		{
 			UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
@@ -146,7 +146,7 @@
 			[groupChatAlertController addAction:actionYes];
 			
 			// PreferredAction only supported in 9.0+
-			if([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
+			if ([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
 			{
 				[groupChatAlertController setPreferredAction:actionYes];
 			}
@@ -175,12 +175,12 @@
 - (void)reloadMessageRecipients
 {
 	// Get participants for chat
-	if([self.messageRecipientType isEqualToString:@"Chat"])
+	if ([self.messageRecipientType isEqualToString:@"Chat"])
 	{
 		[self.chatParticipantModel getChatParticipants];
 	}
 	// Get recipients for forward message
-	else if([self.messageRecipientType isEqualToString:@"Forward"])
+	else if ([self.messageRecipientType isEqualToString:@"Forward"])
 	{
 		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
 	}
@@ -233,7 +233,7 @@
 		}];
 		
 		// If selected message recipient does not exist in message recipients, remove it
-		if(messageRecipientIndex == NSNotFound)
+		if (messageRecipientIndex == NSNotFound)
 		{
 			[removeIndexes addIndex:index];
 		}
@@ -267,7 +267,7 @@
 	[self.filteredMessageRecipients removeAllObjects];
 	
 	// Filter message recipients when search string contains space if first and last names begin with the name parts of search text
-	if([text rangeOfString:@" "].location != NSNotFound)
+	if ([text rangeOfString:@" "].location != NSNotFound)
 	{
 		NSArray *nameParts = [text componentsSeparatedByString:@" "];
 		NSString *firstName = [nameParts objectAtIndex:0];
@@ -293,9 +293,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if([self.filteredMessageRecipients count] == 0)
+		if ([self.filteredMessageRecipients count] == 0)
 		{
 			return 1;
 		}
@@ -305,7 +305,7 @@
 	// Message recipients table
 	else
 	{
-		if([self.messageRecipients count] == 0)
+		if ([self.messageRecipients count] == 0)
 		{
 			return 1;
 		}
@@ -324,10 +324,10 @@
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// If no filtered message recipients, create a not found message
-		if([self.filteredMessageRecipients count] == 0)
+		if ([self.filteredMessageRecipients count] == 0)
 		{
 			[cell.textLabel setText:@"No results."];
 			
@@ -340,7 +340,7 @@
 	else
 	{
 		// If no message recipients, create a not found message
-		if([self.messageRecipients count] == 0)
+		if ([self.messageRecipients count] == 0)
 		{
 			[cell.textLabel setText:(self.isLoaded ? @"No valid recipients available." : @"Loading...")];
 			
@@ -357,7 +357,7 @@
 	}];
 	
 	// Set previously selected message recipients as selected and add checkmark
-	if(messageRecipientIndex != NSNotFound)
+	if (messageRecipientIndex != NSNotFound)
 	{
 		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -375,10 +375,10 @@
 	UITableViewCell *cell;
 	
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// If no filtered message recipients, then user clicked "No results."
-		if([self.filteredMessageRecipients count] == 0)
+		if ([self.filteredMessageRecipients count] == 0)
 		{
 			// Close search results
 			[self.searchController setActive:NO];
@@ -422,7 +422,7 @@
 	UITableViewCell *cell;
 	
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// Close search results
 		[self.searchController setActive:NO];
@@ -462,7 +462,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// If no message recipients, ensure nothing happens when going back
-	if([self.messageRecipients count] == 0)
+	if ([self.messageRecipients count] == 0)
 	{
 		return;
 	}

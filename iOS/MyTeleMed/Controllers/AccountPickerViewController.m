@@ -35,7 +35,7 @@
     [super viewDidLoad];
 	
 	// If accounts were not pre-loaded (slow connection in MessageNewViewController), then load them here
-	if([self.accounts count] == 0)
+	if ([self.accounts count] == 0)
 	{
 		// Initialize account model
 		[self setAccountModel:[[AccountModel alloc] init]];
@@ -46,11 +46,11 @@
 	}
 	
 	// If selected account not already set, then set it to my profile model's MyPreferredAccount
-	if( ! self.selectedAccount)
+	if ( ! self.selectedAccount)
 	{
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 		
-		if(myProfileModel.MyPreferredAccount)
+		if (myProfileModel.MyPreferredAccount)
 		{
 			[self setSelectedAccount:myProfileModel.MyPreferredAccount];
 		}
@@ -72,7 +72,7 @@
 	[self.searchController.searchBar sizeToFit];
 	
 	// iOS 11+ navigation bar has support for search controller
-	if(@available(iOS 11.0, *))
+	if (@available(iOS 11.0, *))
 	{
 		[self.navigationItem setSearchController:self.searchController];
 		
@@ -80,7 +80,7 @@
 		
 		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
-			if(constraint.firstAttribute == NSLayoutAttributeHeight)
+			if (constraint.firstAttribute == NSLayoutAttributeHeight)
 			{
 				[constraint setConstant:0.0f];
 				break;
@@ -99,11 +99,11 @@
 		// Copy constraints from Storyboard's placeholder search bar onto the search controller's search bar
 		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
-			if(constraint.firstItem == self.searchBar)
+			if (constraint.firstItem == self.searchBar)
 			{
 				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 			}
-			else if(constraint.secondItem == self.searchBar)
+			else if (constraint.secondItem == self.searchBar)
 			{
 				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 			}
@@ -124,7 +124,7 @@
 	[super viewWillAppear:animated];
 	
 	// If account was previously selected, scroll to it
-	if([self.accounts count] > 0)
+	if ([self.accounts count] > 0)
 	{
 		[self.tableAccounts reloadData];
 		
@@ -138,7 +138,7 @@
 	[super viewDidDisappear:animated];
 	
 	// Reset search results (put here because it's animation must occur AFTER any segue)
-	if(self.searchController.active)
+	if (self.searchController.active)
 	{
 		[self.searchController setActive:NO];
 	}
@@ -179,7 +179,7 @@
 - (void)scrollToSelectedAccount
 {
 	// Cancel if no account is selected
-	if(! self.selectedAccount)
+	if (! self.selectedAccount)
 	{
 		return;
 	}
@@ -188,14 +188,14 @@
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
 	NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
 	
-	if([results count] > 0)
+	if ([results count] > 0)
 	{
 		// Find table cell that contains selected account
 		AccountModel *account = [results objectAtIndex:0];
 		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
 		
 		// Scroll to cell
-		if(indexPath)
+		if (indexPath)
 		{
 			[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 		}
@@ -214,7 +214,7 @@
 	[self.filteredAccounts removeAllObjects];
 	
 	// Filter accounts when search string contains space if name and publickey begin with the parts of search text
-	if([text rangeOfString:@" "].location != NSNotFound)
+	if ([text rangeOfString:@" "].location != NSNotFound)
 	{
 		NSArray *textParts = [text componentsSeparatedByString:@" "];
 		NSString *publicKey = [textParts objectAtIndex:0];
@@ -250,9 +250,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if([self.filteredAccounts count] == 0)
+		if ([self.filteredAccounts count] == 0)
 		{
 			return 1;
 		}
@@ -262,7 +262,7 @@
 	// Accounts table
 	else
 	{
-		if([self.accounts count] == 0)
+		if ([self.accounts count] == 0)
 		{
 			return 1;
 		}
@@ -279,7 +279,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Return default height if no accounts available
-	if([self.accounts count] == 0)
+	if ([self.accounts count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
@@ -289,7 +289,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.accounts count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] == 0))
+	if ([self.accounts count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] == 0))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -297,7 +297,7 @@
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		
 		// Accounts table
-		if([self.accounts count] == 0)
+		if ([self.accounts count] == 0)
 		{
 			[emptyCell.textLabel setText:(self.isLoaded ? @"No accounts found." : @"Loading...")];
 		}
@@ -318,7 +318,7 @@
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		account = [self.filteredAccounts objectAtIndex:indexPath.row];
 	}
@@ -329,7 +329,7 @@
 	}
 	
 	// Set previously selected account as selected and add checkmark
-	if(self.selectedAccount && [account.ID isEqualToNumber:self.selectedAccount.ID])
+	if (self.selectedAccount && [account.ID isEqualToNumber:self.selectedAccount.ID])
 	{
 		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -349,10 +349,10 @@
 	UITableViewCell *cell;
 	
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// If no filtered accounts, then user clicked "No results."
-		if([self.filteredAccounts count] == 0)
+		if ([self.filteredAccounts count] == 0)
 		{
 			// Close search results (must execute before scrolling to selected account)
 			[self.searchController setActive:NO];
@@ -387,7 +387,7 @@
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
 	// If using SettingsPreferredAccountPicker view from storyboard
-	if(self.shouldSetPreferredAccount)
+	if (self.shouldSetPreferredAccount)
 	{
 		// Save preferred account to server
 		PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
@@ -408,7 +408,7 @@
 	UITableViewCell *cell;
 	
 	// Search results table
-	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
+	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// Close search results
 		[self.searchController setActive:NO];
@@ -437,7 +437,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Set Account for MessageRecipientPickerTableViewController
-	if([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
+	if ([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
@@ -448,7 +448,7 @@
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 	// If no accounts, ensure nothing happens when going back
-	else if([self.accounts count] == 0)
+	else if ([self.accounts count] == 0)
 	{
 		return;
 	}

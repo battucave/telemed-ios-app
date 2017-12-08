@@ -38,7 +38,7 @@
 	[self setSelectedTempOption:self.selectedOption];
 	
 	// Set Picker Options
-	switch(self.pickerType)
+	switch (self.pickerType)
 	{
 		// Subcategory Tones
 		case 0:
@@ -90,7 +90,7 @@
 
 - (void)playNotificationTone:(NSInteger)selectedRow
 {
-	if([self.pickerOptions count] <= selectedRow)
+	if ([self.pickerOptions count] <= selectedRow)
 	{
 		return;
 	}
@@ -101,7 +101,7 @@
 	
 	NSLog(@"Tone Path: %@", tonePath);
 	
-	if(tonePath != nil)
+	if (tonePath != nil)
 	{
 		AudioServicesDisposeSystemSoundID(self.systemSoundID);
 		
@@ -128,7 +128,7 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	switch(self.pickerType)
+	switch (self.pickerType)
 	{
 		case 1:
 			return @"REPEAT ALERT INCREMENTS";
@@ -140,12 +140,12 @@
 		case 5:
 		{
 			// Get Subcategory from array
-			if([self.subCategories count] > self.pickerType - 2)
+			if ([self.subCategories count] > self.pickerType - 2)
 			{
 				NSString *subCategory = [self.subCategories objectAtIndex:self.pickerType - 2];
 				
 				// Singularize Subcategory
-				if([[subCategory substringFromIndex:[subCategory length] - 1] isEqualToString:@"s"])
+				if ([[subCategory substringFromIndex:[subCategory length] - 1] isEqualToString:@"s"])
 				{
 					subCategory = [subCategory substringToIndex:[subCategory length] - 1];
 				}
@@ -174,7 +174,7 @@
 	UITableViewCell *cell;
 	
 	// Notification Tone Subcategory
-	if(self.pickerType == 0 && [self.subCategories containsObject:optionText])
+	if (self.pickerType == 0 && [self.subCategories containsObject:optionText])
 	{
 		NSArray *notificationTonesArray;
 		
@@ -183,7 +183,7 @@
 		// Set custom tag value to be used in prepareForSegue for determining which Notification Tones to display
 		[cell setTag:[self.subCategories indexOfObject:optionText] + 2];
 		
-		switch(cell.tag)
+		switch (cell.tag)
 		{
 			case 2:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil];
@@ -203,7 +203,7 @@
 		}
 		
 		// Add checkmark and set Detail Text on selected subcategory option
-		if([notificationTonesArray containsObject:self.selectedOption])
+		if ([notificationTonesArray containsObject:self.selectedOption])
 		{
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 			[cell.detailTextLabel setText:self.selectedOption];
@@ -220,7 +220,7 @@
 		[cell setAccessoryType:UITableViewCellAccessoryNone];
 		
 		// Add checkmark to selected option
-		if([optionText isEqualToString:self.selectedTempOption])
+		if ([optionText isEqualToString:self.selectedTempOption])
 		{
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 			
@@ -242,12 +242,12 @@
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	
 	// If showing Notification Intervals, make selection final
-	if(self.pickerType == 1)
+	if (self.pickerType == 1)
 	{
 		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
 	}
 	// If showing standard Notification Tones, add checkmark to selected option and play sound
-	else if(cell.tag == 0)
+	else if (cell.tag == 0)
 	{
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 		[self setSelectedTempOption: [self.pickerOptions objectAtIndex:indexPath.row]];
@@ -261,7 +261,7 @@
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	
 	// Replace checkmark with disclosure indicator and remove detail text
-	if(cell.tag > 0)
+	if (cell.tag > 0)
 	{
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 		[cell.detailTextLabel setText:@""];
@@ -276,7 +276,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Notification Tone Subcategory selected
-	if([segue.identifier isEqualToString:@"showSettingsNotificationsSubcategoryPicker"])
+	if ([segue.identifier isEqualToString:@"showSettingsNotificationsSubcategoryPicker"])
 	{
 		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self.tableView indexPathForSelectedRow]];
 		
@@ -292,7 +292,7 @@
 		NSInteger selectedRow = [[self.tableView indexPathForSelectedRow] row];
 		
 		// Set Selected Option
-		if([self.pickerOptions count] > selectedRow)
+		if ([self.pickerOptions count] > selectedRow)
 		{
 			[self setSelectedOption:[self.pickerOptions objectAtIndex:selectedRow]];
 		}

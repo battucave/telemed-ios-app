@@ -56,7 +56,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Show CDMA Voice Data after LoginSSO storyboard process has resolved if it hasn't already been disabled or hidden
-	if(! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
+	if (! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
 	{
 		CDMAVoiceDataViewController *cdmaVoiceDataViewController = [[CDMAVoiceDataViewController alloc] initWithNibName:@"CDMAVoiceData" bundle:nil];
 		
@@ -92,40 +92,40 @@
 	NSString *tone = [aps objectForKey:@"sound"];
 	
 	// If no NotificationType was sent, assume it's a message.
-	if( ! notificationType)
+	if ( ! notificationType)
 	{
 		notificationType = @"Message";
 		
 		// If message contains specific substring, then it's a notification for comment.
-		if([message rangeOfString:@" added a comment to a message"].location != NSNotFound)
+		if ([message rangeOfString:@" added a comment to a message"].location != NSNotFound)
 		{
 			notificationType = @"Comment";
 		}
 	}
 	
 	// Extract Delivery ID, Message ID, or Chat Message ID
-	if([notificationType isEqualToString:@"Comment"])
+	if ([notificationType isEqualToString:@"Comment"])
 	{
 		// MessageID is used for sent messages; DeliveryID is used for received messages
 		deliveryID = ([userInfo objectForKey:@"MessageID"] ?: [userInfo objectForKey:@"DeliveryID"]);
 	}
-	else if([notificationType isEqualToString:@"Chat"])
+	else if ([notificationType isEqualToString:@"Chat"])
 	{
 		deliveryID = [userInfo objectForKey:@"ChatMsgID"];
 	}
 	
 	// Convert deliveryID to a number if it is not already
-	if(! [deliveryID isKindOfClass:[NSNumber class]])
+	if (! [deliveryID isKindOfClass:[NSNumber class]])
 	{
 		deliveryID = [NSNumber numberWithInteger:[deliveryID integerValue]];
 	}
 	
 	// Determine whether message was sent as an object or a string.
-	if([alert isKindOfClass:[NSString class]])
+	if ([alert isKindOfClass:[NSString class]])
 	{
 		message = alert;
 	}
-	else if([alert isKindOfClass:[NSDictionary class]])
+	else if ([alert isKindOfClass:[NSDictionary class]])
 	{
 		message = [alert objectForKey:@"body"];
 	}
@@ -136,7 +136,7 @@
 	NSLog(@"Message: %@", message);
 	
 	// If message does not exist, then this is a reminder. Ignore reminders.
-	if(message != nil)
+	if (message != nil)
 	{
 		[self handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 	}
@@ -145,15 +145,15 @@
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
 	// Play notification sound
-	if(tone != nil)
+	if (tone != nil)
 	{
 		// If tone is "default", then use iOS7's default tone (there is no way to retrieve system's default alert sound)
-		if([tone isEqualToString:@"default"])
+		if ([tone isEqualToString:@"default"])
 		{
 			NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
 			NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
 			
-			if([tones count] > 8)
+			if ([tones count] > 8)
 			{
 				tone = [notificationSettingModel getToneFromToneTitle:[tones objectAtIndex:8]]; // Default to Note tone
 			}
@@ -161,7 +161,7 @@
 		
 		NSString *tonePath = [[NSBundle mainBundle] pathForResource:tone ofType:nil];
 	
-		if(tonePath != nil)
+		if (tonePath != nil)
 		{
 			AudioServicesDisposeSystemSoundID(self.systemSoundID);
 			
@@ -182,7 +182,7 @@
 	[alertController addAction:actionClose];
 	
 	// PreferredAction only supported in 9.0+
-	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
 		[alertController setPreferredAction:actionClose];
 	}

@@ -24,14 +24,14 @@
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
 	// Validate email address
-	if( ! [self isValidEmailAddress:fromEmailAddress])
+	if ( ! [self isValidEmailAddress:fromEmailAddress])
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"From field must be a valid email address.", NSLocalizedDescriptionKey, nil]];
 		
 		// Show error even if user has navigated to another screen
 		[self showError:error];
 		
-		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			[self.delegate sendMessageError:error];
 		}*/
@@ -63,10 +63,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Not currently used
-			if([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
 			}
@@ -82,7 +82,7 @@
 				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			}*/
@@ -108,7 +108,7 @@
 			[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
 		}];
 		
-		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			[self.delegate sendMessageError:error];
 		}*/
@@ -125,7 +125,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		[self.delegate sendMessagePending];
 	}
@@ -136,7 +136,7 @@
 
 - (BOOL)isValidEmailAddress:(NSString *)emailAddress
 {
-	if( ! [emailAddress length])
+	if ( ! [emailAddress length])
 	{
 		return NO;
 	}
@@ -146,7 +146,7 @@
 	NSArray *matches = [detector matchesInString:emailAddress options:0 range:entireRange];
  
 	// should only a single match
-	if([matches count] != 1)
+	if ([matches count] != 1)
 	{
 		return NO;
 	}
@@ -154,25 +154,25 @@
 	NSTextCheckingResult *result = [matches firstObject];
  
 	// result should be a link
-	if(result.resultType != NSTextCheckingTypeLink)
+	if (result.resultType != NSTextCheckingTypeLink)
 	{
 		return NO;
 	}
  
 	// result should be a recognized mail address
-	if( ! [result.URL.scheme isEqualToString:@"mailto"])
+	if ( ! [result.URL.scheme isEqualToString:@"mailto"])
 	{
 		return NO;
 	}
  
 	// match must be entire string
-	if( ! NSEqualRanges(result.range, entireRange))
+	if ( ! NSEqualRanges(result.range, entireRange))
 	{
 		return NO;
 	}
  
 	// but schould not have the mail URL scheme
-	if([emailAddress hasPrefix:@"mailto:"])
+	if ([emailAddress hasPrefix:@"mailto:"])
 	{
 		return NO;
 	}

@@ -81,7 +81,7 @@
 			profileProtocol = [UserProfileModel sharedInstance];
 	#endif
 	
-	if(profileProtocol)
+	if (profileProtocol)
 	{
 		self.currentUserID = profileProtocol.ID;
 	}
@@ -111,13 +111,13 @@
 	
 	NSLog(@"Message ID: %@", self.message.MessageID);
 	
-	if([self.message respondsToSelector:@selector(MessageDeliveryID)])
+	if ([self.message respondsToSelector:@selector(MessageDeliveryID)])
 	{
 		NSLog(@"Message Delivery ID: %@", self.message.MessageDeliveryID);
 	}
 	
 	// Set sent message details
-	if(self.message.messageType == 2)
+	if (self.message.messageType == 2)
 	{
 		[self setSentMessageDetails];
 		
@@ -161,9 +161,9 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 	
 		// Mark message as read if active and unread
-		if([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID && [self.message respondsToSelector:@selector(State)] && self.message.State)
+		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID && [self.message respondsToSelector:@selector(State)] && self.message.State)
 		{
-			if(self.message.messageType == 0 && [self.message.State isEqualToString:@"Unread"])
+			if (self.message.messageType == 0 && [self.message.State isEqualToString:@"Unread"])
 			{
 				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
 				
@@ -174,7 +174,7 @@
 				// END TESTING ONLY*/
 			}
 			/*/ TESTING ONLY (unarchive archived messages)
-			else if(self.message.messageType == 1)
+			else if (self.message.messageType == 1)
 			{
 				#ifdef DEBUG
 					[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
@@ -210,7 +210,7 @@
 	NSDate *dateTime = [dateFormatter dateFromString:self.message.FirstSent_LCL];
 	
 	// If date is nil, it may have been formatted incorrectly
-	if(dateTime == nil)
+	if (dateTime == nil)
 	{
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 		dateTime = [dateFormatter dateFromString:self.message.FirstSent_LCL];
@@ -233,7 +233,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if([self.filteredMessageEvents count] == 0)
+	if ([self.filteredMessageEvents count] == 0)
 	{
 		return 1;
 	}
@@ -249,7 +249,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Return default height if no comments available
-	if([self.filteredMessageEvents count] == 0)
+	if ([self.filteredMessageEvents count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
@@ -310,10 +310,10 @@
 	//*/
 	
 	// Reload message events if remote notification is a comment specifically for the current message
-	if([notificationType isEqualToString:@"Comment"] && deliveryID)
+	if ([notificationType isEqualToString:@"Comment"] && deliveryID)
 	{
 		// Received messages
-		if([self.message respondsToSelector:@selector(MessageDeliveryID)] && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
+		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
 		{
 			NSLog(@"Refresh Comments with Message Delivery ID: %@", deliveryID);
 			
@@ -323,7 +323,7 @@
 			[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
 		}
 		// Sent messages
-		else if(self.message.MessageID && [deliveryID isEqualToNumber:self.message.MessageID])
+		else if (self.message.MessageID && [deliveryID isEqualToNumber:self.message.MessageID])
 		{
 			NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
 			
@@ -349,7 +349,7 @@
 	// Add only comments from basic events
 	for(MessageEventModel *messageEvent in newMessageEvents)
 	{
-		if([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
+		if ([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
 		{
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
@@ -367,21 +367,21 @@
 			[messageEvent setValue:@"Comment" forKey:@"Type"];
 	 
 			// Test message from Jason
-			if(i == 0)
+			if (i == 0)
 			{
 				[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
 				[messageEvent setValue:@"2015-04-11T13:24:06.444" forKey:@"Time_LCL"];
 				[messageEvent setValue:@"Introducing the new TeleMed comments section" forKey:@"Detail"];
 			}
 			// Test message from me (ensure entered by id matches own logged in id)
-			else if(i == 1)
+			else if (i == 1)
 			{
 				[messageEvent setValue:[numberFormatter numberFromString:@"14140220"] forKey:@"EnteredByID"];
 				[messageEvent setValue:@"2015-04-11T15:46:06.444" forKey:@"Time_LCL"];
 				[messageEvent setValue:@"Tap on the message field at the bottom of the screen to send messages back and forth." forKey:@"Detail"];
 			}
 			// Test message from Jason
-			else if(i == 2)
+			else if (i == 2)
 			{
 				[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
 				[messageEvent setValue:@"2015-04-12T10:58:39.444" forKey:@"Time_LCL"];
@@ -398,7 +398,7 @@
 		[self.tableComments reloadData];
 		
 		// Scroll to bottom of comments after table reloads data only if a new comment has been added since last check
-		if(self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount)
+		if (self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount)
 		{
 			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 		}
@@ -419,7 +419,7 @@
 	self.isLoaded = YES;
 	
 	// Show error message only if device offline
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		[self.messageEventModel showError:error];
 	}
@@ -429,7 +429,7 @@
 - (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients
 {
 	// Disable forward button if there are no valid message recipients to forward to
-	if([newMessageRecipients count] > 0)
+	if ([newMessageRecipients count] > 0)
 	{
 		[self.buttonForward setEnabled:YES];
 	}
@@ -441,7 +441,7 @@
 	NSLog(@"There was a problem retrieving recipients for the Message");
 	
 	// Show error message only if device offline
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		[self.messageRecipientModel showError:error];
 	}
@@ -477,7 +477,7 @@
 	[self.tableComments beginUpdates];
 	
 	// If adding first comment/event
-	if([self.filteredMessageEvents count] == 1)
+	if ([self.filteredMessageEvents count] == 1)
 	{
 		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
 		
@@ -513,7 +513,7 @@
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
 	NSArray *results = [self.filteredMessageEvents filteredArrayUsingPredicate:predicate];
 	
-	if([results count] > 0)
+	if ([results count] > 0)
 	{
 		// Find and delete table cell that contains comment
 		MessageEventModel *messageEvent = [results objectAtIndex:0];
@@ -523,7 +523,7 @@
 		[self.filteredMessageEvents removeObject:messageEvent];
 		
 		// If removing the only comment/event
-		if([self.filteredMessageEvents count] == 0)
+		if ([self.filteredMessageEvents count] == 0)
 		{
 			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 		}
@@ -562,7 +562,7 @@
 	[self.tableComments beginUpdates];
  
 	// If adding first comment
-	if([self.filteredMessageEvents count] == 1)
+	if ([self.filteredMessageEvents count] == 1)
 	{
 		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
  
@@ -595,7 +595,7 @@
 - (void)saveCommentError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.commentModel showOfflineError];
 	}
@@ -628,7 +628,7 @@
 	NSDate *dateTime = [dateFormatter dateFromString:self.message.TimeReceived_LCL];
 	
 	// If date is nil, it may have been formatted incorrectly
-	if(dateTime == nil)
+	if (dateTime == nil)
 	{
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 		dateTime = [dateFormatter dateFromString:self.message.TimeReceived_LCL];
@@ -649,7 +649,7 @@
 {
 	CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height + self.scrollView.contentInset.bottom);
 	
-	if(bottomOffset.y > 0)
+	if (bottomOffset.y > 0)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -706,7 +706,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if([textView.text isEqualToString:self.textViewCommentPlaceholder])
+	if ([textView.text isEqualToString:self.textViewCommentPlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -719,7 +719,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 	// Show placeholder
-	if([textView.text isEqualToString:@""])
+	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewCommentPlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];
@@ -740,7 +740,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set default message if no comments available
-	if([self.filteredMessageEvents count] == 0)
+	if ([self.filteredMessageEvents count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -768,14 +768,14 @@
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(isComment ? (currentUserIsSender ? cellIdentifierSent : cellIdentifier) : cellIdentifierEvent)];
 	
 	// Set message event date and time
-	if(messageEvent.Time_LCL)
+	if (messageEvent.Time_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
 		NSDate *dateTime = [dateFormatter dateFromString:messageEvent.Time_LCL];
 		
 		// If date is nil, it may have been formatted incorrectly
-		if(dateTime == nil)
+		if (dateTime == nil)
 		{
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 			dateTime = [dateFormatter dateFromString:messageEvent.Time_LCL];
@@ -791,7 +791,7 @@
 	[cell.labelDetail setText:messageEvent.Detail];
 	
 	// Set message event sender (only applies to comments)
-	if(isComment && ! currentUserIsSender)
+	if (isComment && ! currentUserIsSender)
 	{
 		[cell.labelEnteredBy setText:messageEvent.EnteredBy];
 	}
@@ -806,7 +806,7 @@
 {
 	[super prepareForSegue:segue sender:sender];
 	
-	if([[segue identifier] isEqualToString:@"showMessageHistory"])
+	if ([[segue identifier] isEqualToString:@"showMessageHistory"])
 	{
 		MessageHistoryViewController *messageHistoryViewController = [segue destinationViewController];
 		

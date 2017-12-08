@@ -34,7 +34,7 @@
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
 	// Shift form up for screens 480 or less in height
-	if([UIScreen mainScreen].bounds.size.height <= 480)
+	if ([UIScreen mainScreen].bounds.size.height <= 480)
 	{
 		[self.constraintFormTop setConstant:12.0f];
 	}
@@ -69,7 +69,7 @@
 	NSString *textString = [textField.text stringByReplacingCharactersInRange:range withString:string];
 	textString = [textString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	if(textString.length)
+	if (textString.length)
 	{
 		self.buttonHelp.hidden = YES;
 	}
@@ -90,7 +90,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"showHelp"])
+	if ([segue.identifier isEqualToString:@"showHelp"])
 	{
 		HelpViewController *helpViewController = segue.destinationViewController;
 		

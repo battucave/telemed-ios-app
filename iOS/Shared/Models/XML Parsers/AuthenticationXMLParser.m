@@ -12,7 +12,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -24,15 +24,15 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"AccessToken"])
+	if ([elementName isEqualToString:@"AccessToken"])
 	{
 		[self.authentication setAccessToken:self.currentElementValue];
 	}
-	else if([elementName isEqualToString:@"RefreshToken"])
+	else if ([elementName isEqualToString:@"RefreshToken"])
 	{
 		[self.authentication setRefreshToken:self.currentElementValue];
 	}
-	else if([elementName isEqualToString:@"Message"])
+	else if ([elementName isEqualToString:@"Message"])
 	{
 		[self.authentication setError:self.currentElementValue];
 	}

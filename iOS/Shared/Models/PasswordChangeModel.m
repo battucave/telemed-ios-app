@@ -20,14 +20,14 @@
 {
 	// Simple validation to ensure that both passwords are set
 	// Don't do any further password validations. The server should be the only source of truth for passwords
-	if([newPassword length] < 1 || [oldPassword length] < 1)
+	if ([newPassword length] < 1 || [oldPassword length] < 1)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"Current password and new password values are required.", NSLocalizedDescriptionKey, nil]];
 		
 		// Show error
 		[self showError:error];
 		
-		/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
+		/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
 		}*/
@@ -56,9 +56,9 @@
 		[self hideActivityIndicator];
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
-			if([self.delegate respondsToSelector:@selector(changePasswordSuccess)])
+			if ([self.delegate respondsToSelector:@selector(changePasswordSuccess)])
 			{
 				[self.delegate changePasswordSuccess];
 			}
@@ -70,7 +70,7 @@
 			// Show error
 			[self showError:error];
 			
-			/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
+			/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
 				[self.delegate changePasswordError:error];
 			}*/
@@ -92,7 +92,7 @@
 		// Show error
 		[self showError:error];
 		
-		/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
+		/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
 		}*/
@@ -109,7 +109,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(changePasswordPending)])
+	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(changePasswordPending)])
 	{
 		[self.delegate changePasswordPending];
 	}

@@ -36,7 +36,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			callback(YES, (id <ProfileProtocol>)self, nil);
 		}

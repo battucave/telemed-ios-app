@@ -25,7 +25,7 @@
 
 - (instancetype)initWithBaseURL:(NSURL *)url
 {
-	if(self = [super initWithBaseURL:url])
+	if (self = [super initWithBaseURL:url])
 	{
 		self.requestSerializer = [AFHTTPRequestSerializer serializer];
 		self.responseSerializer = [AFXMLParserResponseSerializer serializer];
@@ -52,9 +52,9 @@
 	
 	[request setHTTPBody:[xmlBody dataUsingEncoding:NSUTF8StringEncoding]];
 	
-	if(serializationError)
+	if (serializationError)
 	{
-		if(failure)
+		if (failure)
 		{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu"
@@ -71,16 +71,16 @@
 	__block NSURLSessionDataTask *dataTask;
 	dataTask = [self dataTaskWithRequest:request completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error)
 	{
-		if(error)
+		if (error)
 		{
-			if(failure)
+			if (failure)
 			{
 				failure(dataTask, error);
 			}
 		}
 		else
 		{
-			if(success)
+			if (success)
 			{
 				success(dataTask, responseObject);
 			}

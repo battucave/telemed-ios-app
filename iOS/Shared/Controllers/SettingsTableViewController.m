@@ -52,7 +52,7 @@
 		profileProtocol = [UserProfileModel sharedInstance];
 	#endif
 	
-	if(profileProtocol)
+	if (profileProtocol)
 	{
 		self.mayDisableTimeout = profileProtocol.MayDisableTimeout;
 	}
@@ -62,13 +62,13 @@
 {
 	NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
 	
-	if(self.switchTimeout.isOn)
+	if (self.switchTimeout.isOn)
 	{
 		[preferences setBool:YES forKey:@"enableTimeout"];
 	}
 	else
 	{
-		if( ! [preferences boolForKey:@"timeoutAlert"])
+		if ( ! [preferences boolForKey:@"timeoutAlert"])
 		{
 			UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
@@ -88,7 +88,7 @@
 			[updateTimeoutAlertController addAction:actionConfirm];
 		
 			// PreferredAction only supported in 9.0+
-			if([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
+			if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
 			{
 				[updateTimeoutAlertController setPreferredAction:actionCancel];
 			}
@@ -108,7 +108,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide Session Timeout section
-    if(section == 0 && ! self.mayDisableTimeout)
+    if (section == 0 && ! self.mayDisableTimeout)
 	{
 		return 0;
 	}
@@ -147,14 +147,14 @@
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
 	// Set Timeout Value
-	if(indexPath.section == 0)
+	if (indexPath.section == 0)
 	{
 		NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
 		
 		[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
 	}
 	// Add Version Number to Version cell
-	else if(indexPath.section == 3)
+	else if (indexPath.section == 3)
 	{
 		[cell.detailTextLabel setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 	}
@@ -167,7 +167,7 @@
 	// TEMPORARY
 	#ifdef MYTELEMED
 	// Update title of AccountsPickerViewController
-	if([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
+	if ([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
 		[accountPickerViewController setTitle:@"Preferred Account"];
@@ -177,7 +177,7 @@
 	
 	#ifdef MYTELEMED
 		// Embedded Table View Controller inside Container
-		else if([segue.identifier isEqualToString:@"showSettingsNotifications"])
+		else if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
 		{
 			SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
 			NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -201,7 +201,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Segue to Notification Settings
-	if(indexPath.section == 1)
+	if (indexPath.section == 1)
 	{
 		[self performSegueWithIdentifier:@"showSettingsNotifications" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}

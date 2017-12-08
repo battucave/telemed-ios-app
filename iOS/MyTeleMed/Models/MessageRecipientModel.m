@@ -49,7 +49,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			// Sort Message Recipients by Last Name, First Name
 			NSArray *messageRecipients = [[parser messageRecipients] sortedArrayUsingComparator:^NSComparisonResult(MessageRecipientModel *messageRecipientModelA, MessageRecipientModel *messageRecipientModelB)
@@ -57,7 +57,7 @@
 				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
 			}];
 			
-			if([self.delegate respondsToSelector:@selector(updateMessageRecipients:)])
+			if ([self.delegate respondsToSelector:@selector(updateMessageRecipients:)])
 			{
 				[self.delegate updateMessageRecipients:[messageRecipients mutableCopy]];
 			}
@@ -68,7 +68,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Recipients Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Recipients.", NSLocalizedDescriptionKey, nil]];
 			
 			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
+			if ([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
 			{
 				[self.delegate updateMessageRecipientsError:error];
 			}
@@ -82,7 +82,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Recipients." andTitle:@"Message Recipients Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
+		if ([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
 		{
 			[self.delegate updateMessageRecipientsError:error];
 		}

@@ -29,7 +29,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"NextOncallEntry"] || [elementName isEqualToString:@"OnCallNowEntry"])
+	if ([elementName isEqualToString:@"NextOncallEntry"] || [elementName isEqualToString:@"OnCallNowEntry"])
 	{
 		// Initialize an OnCall Entry
 		self.onCallEntry = [[OnCallEntryModel alloc] init];
@@ -38,7 +38,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -50,25 +50,25 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"OnCallNow"])
+	if ([elementName isEqualToString:@"OnCallNow"])
 	{
 		self.myStatus.OnCallNow = [self.currentElementValue boolValue];
 	}
-	else if([elementName isEqualToString:@"NextOnCallEntries"])
+	else if ([elementName isEqualToString:@"NextOnCallEntries"])
 	{
 		self.myStatus.FutureOnCallEntries = self.futureOnCallEntries;
 	}
-	else if([elementName isEqualToString:@"OnCallNowEntries"])
+	else if ([elementName isEqualToString:@"OnCallNowEntries"])
 	{
 		self.myStatus.CurrentOnCallEntries = self.currentOnCallEntries;
 	}
-	else if([elementName isEqualToString:@"NextOncallEntry"])
+	else if ([elementName isEqualToString:@"NextOncallEntry"])
 	{
 		[self.futureOnCallEntries addObject:self.onCallEntry];
 		
 		self.onCallEntry = nil;
 	}
-	else if([elementName isEqualToString:@"OnCallNowEntry"])
+	else if ([elementName isEqualToString:@"OnCallNowEntry"])
 	{
 		[self.currentOnCallEntries addObject:self.onCallEntry];
 		
@@ -79,7 +79,7 @@
 		SEL selector = NSSelectorFromString(elementName);
 		
 		// Store date strings as NSDate
-		if([elementName isEqualToString:@"NextOnCall"] || [elementName isEqualToString:@"Started"] || [elementName isEqualToString:@"WillEnd"] || [elementName isEqualToString:@"WillStart"])
+		if ([elementName isEqualToString:@"NextOnCall"] || [elementName isEqualToString:@"Started"] || [elementName isEqualToString:@"WillEnd"] || [elementName isEqualToString:@"WillStart"])
 		{
 			//@"2016-10-03T10:55:17.7924093-0400"
 			self.currentElementValue = (NSMutableString *)[NSString stringWithFormat:@"%@.1234567-04:00", self.currentElementValue];
@@ -88,13 +88,13 @@
 			//NSDate *UTCDate;
 			NSDate *localDate;
 			
-			if(self.currentElementValue != nil && ! [self.currentElementValue isEqualToString:@"Never"])
+			if (self.currentElementValue != nil && ! [self.currentElementValue isEqualToString:@"Never"])
 			{
 				// Get date in UTC timezone (not needed at this time, but keep here for future changes)
 				/*[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
 				UTCDate = [dateFormatter dateFromString:self.currentElementValue];
 				
-				if(UTCDate == nil)
+				if (UTCDate == nil)
 				{
 					[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 					UTCDate = [dateFormatter dateFromString:self.currentElementValue];
@@ -109,18 +109,18 @@
 			}
 			
 			// Store dates as NSDate
-			if([self.myStatus respondsToSelector:selector])
+			if ([self.myStatus respondsToSelector:selector])
 			{
 				[self.myStatus setValue:localDate forKey:elementName];
 			}
-			else if([self.onCallEntry respondsToSelector:selector])
+			else if ([self.onCallEntry respondsToSelector:selector])
 			{
 				[self.onCallEntry setValue:localDate forKey:elementName];
 			}
 		}
-		else if([self.myStatus respondsToSelector:selector])
+		else if ([self.myStatus respondsToSelector:selector])
 		{
-			if([@[@"ActiveChatConvoCount", @"ActiveMessageCount", @"UnopenedChatConvoCount", @"UnreadMessageCount"] containsObject:elementName])
+			if ([@[@"ActiveChatConvoCount", @"ActiveMessageCount", @"UnopenedChatConvoCount", @"UnreadMessageCount"] containsObject:elementName])
 			{
 				NSLog(@"NumberFromString: %@", elementName);
 				[self.myStatus setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
@@ -130,9 +130,9 @@
 				[self.myStatus setValue:self.currentElementValue forKey:elementName];
 			}
 		}
-		else if([self.onCallEntry respondsToSelector:selector])
+		else if ([self.onCallEntry respondsToSelector:selector])
 		{
-			if([elementName isEqualToString:@"AccountID"] || [elementName isEqualToString:@"AccountKey"] || [elementName isEqualToString:@"SlotID"])
+			if ([elementName isEqualToString:@"AccountID"] || [elementName isEqualToString:@"AccountKey"] || [elementName isEqualToString:@"SlotID"])
 			{
 				[self.onCallEntry setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 			}

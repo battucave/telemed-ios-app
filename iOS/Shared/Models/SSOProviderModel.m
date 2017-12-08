@@ -19,7 +19,7 @@
 - (NSString *)Name
 {
 	// If SSOProvider is not already set, check User Preferences
-	if( ! _Name)
+	if ( ! _Name)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		_Name = [settings valueForKey:@"SSOProvider"];
@@ -31,7 +31,7 @@
 // Override Name setter to store value in User Preferences
 - (void)setName:(NSString *)newName
 {
-	if(_Name != newName)
+	if (_Name != newName)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
@@ -45,7 +45,7 @@
 - (void)validate:(NSString *)newName withCallback:(void(^)(BOOL success, NSError *error))callback
 {
 	// Allow user to clear out SSO Provider in order to use the default provider
-	if(newName.length == 0)
+	if (newName.length == 0)
 	{
 		return callback(YES, nil);
 	}
@@ -63,9 +63,9 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
-			if( ! [self.Name isEqualToString:@""])
+			if ( ! [self.Name isEqualToString:@""])
 			{
 				return callback(YES, nil);
 			}
@@ -88,7 +88,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file to obtain Error Message
-		if([xmlParser parse] && ! [parser.error isEqualToString:@"An error has occurred."])
+		if ([xmlParser parse] && ! [parser.error isEqualToString:@"An error has occurred."])
 		{
 			errorString = parser.error;
 		}

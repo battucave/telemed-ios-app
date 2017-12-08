@@ -39,7 +39,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
-	if([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		// Change top layout constraint to 0 (Keep Swipe Message there as it will simply be hidden under the Container View)
 		self.constraintTopSpace.constant = 0;
@@ -61,7 +61,7 @@
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open
-	if(revealController.frontViewPosition == FrontViewPositionRight)
+	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
@@ -73,7 +73,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Embedded Table View Controller inside Container
-	if([segue.identifier isEqualToString:@"embedSentMessagesTable"])
+	if ([segue.identifier isEqualToString:@"embedSentMessagesTable"])
 	{
 		[self setMessagesTableViewController:segue.destinationViewController];
 		

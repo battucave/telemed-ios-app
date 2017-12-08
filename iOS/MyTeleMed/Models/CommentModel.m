@@ -32,7 +32,7 @@
 - (void)addMessageComment:(id <MessageProtocol>)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
 {
 	// Show Activity Indicator only if not being added with Forward Message
-	if( ! toForwardMessage)
+	if ( ! toForwardMessage)
 	{
 		[self showActivityIndicator];
 	}
@@ -50,12 +50,12 @@
 		"</Comment>";
 	
 	// Comment with Message Delivery ID
-	if([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
+	if ([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
 		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, comment];
 	}
 	// Comment with Message ID
-	else if(message.MessageID)
+	else if (message.MessageID)
 	{
 		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageID", message.MessageID, comment];
 	}
@@ -69,7 +69,7 @@
 		[self showError:error];
 		
 		// Still being used
-		if([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
 			[self.delegate saveCommentError:error withPendingID:pendingID];
 		}
@@ -82,10 +82,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Still being used
-			if([self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
+			if ([self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
 			{
 				[self.delegate saveCommentSuccess:comment withPendingID:pendingID];
 			}
@@ -103,7 +103,7 @@
 			}];
 			
 			// Still being used
-			if([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+			if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 			{
 				[self.delegate saveCommentError:error withPendingID:pendingID];
 			}
@@ -131,7 +131,7 @@
 		}];
 		
 		// Still being used
-		if([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
 			[self.delegate saveCommentError:error withPendingID:pendingID];
 		}
@@ -148,7 +148,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Comment has been sent to server
-	if(/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
+	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 	{
 		[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
 	}

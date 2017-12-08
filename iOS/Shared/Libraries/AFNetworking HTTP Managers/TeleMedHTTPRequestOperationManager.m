@@ -44,7 +44,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 
 - (instancetype)initWithBaseURL:(NSURL *)url
 {
-	if(self = [super initWithBaseURL:url])
+	if (self = [super initWithBaseURL:url])
 	{
 		__weak typeof(self) weakSelf = self;
 		
@@ -82,7 +82,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 			[weakSelf.operationQueue setSuspended: ! weakSelf.reachabilityManager.isReachable];
 			
 			// If status changed to isReachable and any operations are queued, then refresh Access Token and execute the Queue
-			if(weakSelf.reachabilityManager.isReachable)
+			if (weakSelf.reachabilityManager.isReachable)
 			{
 				// Delay here is required because there is a slight delay between device going back online and requests actually going through
 				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -132,9 +132,9 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	NSError *serializationError = nil;
 	NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
 	
-	if(serializationError)
+	if (serializationError)
 	{
-		if(failure)
+		if (failure)
 		{
 			#pragma clang diagnostic push
 			#pragma clang diagnostic ignored "-Wgnu"
@@ -164,9 +164,9 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	NSError *serializationError = nil;
 	NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:&serializationError];
 	
-	if(serializationError)
+	if (serializationError)
 	{
-		if(failure)
+		if (failure)
 		{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu"
@@ -198,9 +198,9 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	
 	[request setHTTPBody:[xmlBody dataUsingEncoding:NSUTF8StringEncoding]];
 	
-	if(serializationError)
+	if (serializationError)
 	{
-		if(failure)
+		if (failure)
 		{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu"
@@ -224,7 +224,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Shorten timeout for GET requests
-	if(self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
+	if (self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
 	{
 		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 	}
@@ -244,7 +244,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Shorten timeout for HEAD requests
-	if(self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
+	if (self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
 	{
 		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 	}
@@ -256,7 +256,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	
 	return [self addAuthenticatedRequest:request success:^(AFHTTPRequestOperation *requestOperation, __unused id responseObject)
 	{
-		if(success)
+		if (success)
 		{
 			success(requestOperation);
 		}
@@ -271,7 +271,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if( ! self.reachabilityManager.isReachable)
+	if ( ! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -297,7 +297,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if( ! self.reachabilityManager.isReachable)
+	if ( ! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -322,7 +322,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if( ! self.reachabilityManager.isReachable)
+	if ( ! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -346,7 +346,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if( ! self.reachabilityManager.isReachable)
+	if ( ! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -371,7 +371,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if( ! self.reachabilityManager.isReachable)
+	if ( ! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -396,7 +396,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if( ! self.reachabilityManager.isReachable)
+	if ( ! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -439,10 +439,10 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		AFHTTPRequestOperation *newOperation = [self duplicateOperation:operation success:success failure:wrappedFailure];
 		
 		// If response returned 401 Not Authorized Error
-		if(operation.response.statusCode == 401)
+		if (operation.response.statusCode == 401)
 		{
 			// Request has already been retried so refresh token is now invalid. Redirect to login to re-authenticate
-			if(isRetry)
+			if (isRetry)
 			{
 				NSLog(@"Redirect to LoginSSO");
 				
@@ -462,7 +462,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 			}
 		}
 		// If the operation failed because device is definitely offline, then retry the operation after a short delay (NSURLErrorNotConnectedToInternet sometimes mistakenly occurs immediately after device goes back online)
-		else if(error.code == NSURLErrorNotConnectedToInternet && ! isRetry)
+		else if (error.code == NSURLErrorNotConnectedToInternet && ! isRetry)
 		{
 			NSLog(@"Retry Operation");
 			
@@ -474,7 +474,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		else
 		{
 			// If device is definitely offline even after a retry, then set offline error (do not show on NSURLErrorTimedOut)
-			if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost/* || error.code == NSURLErrorTimedOut*/)
+			if (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost/* || error.code == NSURLErrorTimedOut*/)
 			{
 				NSLog(@"Offline Error - Add to Pending Operations");
 				
@@ -516,7 +516,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 - (void)addAuthenticatedOperation:operation success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// If Access Token is still valid, immediately execute the request operation
-	if(self.authenticationModel.accessTokenIsValid)
+	if (self.authenticationModel.accessTokenIsValid)
 	{
 		NSLog(@"Access Token still valid");
 		
@@ -541,12 +541,12 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	NSURLRequest *request = operation.request;
 	
 	// Verify whether the request has already been added as a Pending Operation
-	if([self.pendingOperations count] > 0)
+	if ([self.pendingOperations count] > 0)
 	{
 		for(NSDictionary *pendingOperation in self.pendingOperations)
 		{
 			// If the request already exists, don't add it to Pending Operations
-			if([[request.URL absoluteString] isEqualToString:(NSString *)[pendingOperation objectForKey:@"url"]])
+			if ([[request.URL absoluteString] isEqualToString:(NSString *)[pendingOperation objectForKey:@"url"]])
 			{
 				return;
 			}
@@ -576,7 +576,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
 	
 	// Add any dependencies from original operation to new operation
-	if([originalOperation.dependencies count] > 0)
+	if ([originalOperation.dependencies count] > 0)
 	{
 		for(NSOperation *dependency in originalOperation.dependencies)
 		{
@@ -624,11 +624,11 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	};
 	
 	// If there are pending operations and Authentication Model is not already in the process of refreshing tokens, then refresh tokens using our Refresh Token
-	if([self.pendingOperations count] > 0 && ! self.authenticationModel.isWorking)
+	if ([self.pendingOperations count] > 0 && ! self.authenticationModel.isWorking)
 	{
 		[self.authenticationModel getNewTokensWithSuccess:authenticationSuccess failure:authenticationFailure];
 	}
-	else if(self.authenticationModel.isWorking)
+	else if (self.authenticationModel.isWorking)
 	{
 		// Dispatch AFNetworkingOperationDidStartNotification as shortcut to force models to execute pending callbacks
 		dispatch_async(dispatch_get_main_queue(), ^
@@ -641,7 +641,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 - (void)processPendingOperations
 {
 	// Add all Pending Operations to the Queue (have to do it this way because there is no way to modify headers of an already created AFHTTPOperation)
-	if([self.pendingOperations count] > 0)
+	if ([self.pendingOperations count] > 0)
 	{
 		NSLog(@"Authentication Success Pending Operations: %lu", (unsigned long)[self.pendingOperations count]);
 		
@@ -660,7 +660,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 - (void)processPendingFailures:(NSError *)error
 {
 	// Pending operations need to have their failure block executed manually. Note that we are not cancelling the operation - it will still fire when tokens are refreshed. But we are firing off it's failure block to allow the delegate to execute any necessary activities.
-	if([self.pendingOperations count] > 0)
+	if ([self.pendingOperations count] > 0)
 	{
 		NSLog(@"Authentication Failure Pending Operations: %lu", (unsigned long)[self.pendingOperations count]);
 		
@@ -677,14 +677,14 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 			pendingFailure([pendingOperation objectForKey:@"operation"], error);
 			
 			// If operation is a POST, PUT, PATCH, or DELETE request, then remove it from pending operations
-			if( ! [operation.request.HTTPMethod isEqualToString:@"GET"] && ! [operation.request.HTTPMethod isEqualToString:@"HEAD"])
+			if ( ! [operation.request.HTTPMethod isEqualToString:@"GET"] && ! [operation.request.HTTPMethod isEqualToString:@"HEAD"])
 			{
 				[deletePendingOperations addObject:pendingOperation];
 			}
 		}
 		
 		// Remove POST, PUT, PATCH, and DELETE requests from pending operations
-		if([deletePendingOperations count] > 0)
+		if ([deletePendingOperations count] > 0)
 		{
 			[self.pendingOperations removeObjectsInArray:deletePendingOperations];
 		}

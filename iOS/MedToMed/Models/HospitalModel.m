@@ -21,9 +21,9 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
-			if([self.delegate respondsToSelector:@selector(updateHospitals:)])
+			if ([self.delegate respondsToSelector:@selector(updateHospitals:)])
 			{
 				[self.delegate updateHospitals:[parser hospitals]];
 			}
@@ -34,7 +34,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Hospitals Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Hospitals.", NSLocalizedDescriptionKey, nil]];
 			
 			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
+			if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
 			{
 				[self.delegate updateHospitalsError:error];
 			}
@@ -48,7 +48,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Hospitals." andTitle:@"Hospitals Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
+		if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
 		{
 			[self.delegate updateHospitalsError:error];
 		}

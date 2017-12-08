@@ -21,7 +21,7 @@
 - (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID
 {
 	// Validate max length
-	if([[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] length] > 1000)
+	if ([[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] length] > 1000)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"Message field cannot exceed 1000 characters.", NSLocalizedDescriptionKey, nil]];
 		
@@ -29,7 +29,7 @@
 		[self showError:error];
 		
 		/*/ Not needed here
-		if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			[self.delegate sendChatMessageError:error withPendingID:pendingID];
 		}*/
@@ -54,7 +54,7 @@
 		[xmlParticipants appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", chatParticipantID]];
 	}
 	
-	if([chatParticipantIDs count] == 1)
+	if ([chatParticipantIDs count] == 1)
 	{
 		isGroupChat = NO;
 	}
@@ -76,10 +76,10 @@
 		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			// Still being used
-			if([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
+			if ([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
 			{
 				[self.delegate sendChatMessageSuccess:message withPendingID:pendingID];
 			}
@@ -96,7 +96,7 @@
 			}];
 			
 			// Still being used
-			if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
@@ -123,7 +123,7 @@
 		}];
 		
 		// Still being used
-		if([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			[self.delegate sendChatMessageError:error withPendingID:pendingID];
 		}
@@ -140,7 +140,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Chat Message has been sent to server
-	if(/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
+	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 	{
 		[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
 	}

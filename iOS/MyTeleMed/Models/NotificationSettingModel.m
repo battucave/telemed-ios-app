@@ -44,7 +44,7 @@
 	NotificationSettingModel *settings;
 	
 	// Load Notification Settings from device
-	if([preferences objectForKey:notificationKey] != nil)
+	if ([preferences objectForKey:notificationKey] != nil)
 	{
 		// In MyTeleMed versions 3.0 - 3.2, the Notification Settings were archived using a different class. Use this class as a substitute when unarchiving the object
 		[NSKeyedUnarchiver setClass:self.class forClassName:@"NotificationSettingsModel"];
@@ -54,7 +54,7 @@
 	}
 	
 	// If Notification Settings for type not found on device, check server for previously saved Notification Settings
-	if(settings == nil || settings.Tone == nil)
+	if (settings == nil || settings.Tone == nil)
 	{
 		// Check server for previously saved Notification Settings
 		[self getServerNotificationSettingsByName:name];
@@ -70,7 +70,7 @@
 		[settings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
 		
 		// Intervals should always exist
-		if([intervals count] > 0)
+		if ([intervals count] > 0)
 		{
 			[settings setInterval:[NSNumber numberWithInt:(int)[[intervals objectAtIndex:0] integerValue]]];
 		}
@@ -96,7 +96,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
 		}
@@ -119,7 +119,7 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
 			NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
 			
@@ -127,19 +127,19 @@
 			[self setIsReminderOn:([self.Interval integerValue] > 0)];
 			
 			// Prevent Interval of 0 on device (Interval of 0 is used by server to denote that reminders are off. Interval can be null however for Comment type)
-			if(self.Interval != nil && [self.Interval integerValue] == 0)
+			if (self.Interval != nil && [self.Interval integerValue] == 0)
 			{
 				// Default Interval to 1
 				self.Interval = [NSNumber numberWithInt:1];
 			}
 			
 			// DEPRECATED: If the tone received from server is Default, change it to the iOS default: "Note"
-			/* if([self.Tone isEqualToString:@"Default"])
+			/* if ([self.Tone isEqualToString:@"Default"])
 			{
 				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
 				
 				// Tones should always exist
-				if([tones count] > 8)
+				if ([tones count] > 8)
 				{
 					[self setTone:[tones objectAtIndex:8]]; // iOS7 Defaults to Note tone
 				}
@@ -152,7 +152,7 @@
 			[preferences setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
 			[preferences synchronize];
 			
-			if([self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
+			if ([self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
 			{
 				[self.delegate updateNotificationSettings:self forName:name];
 			}
@@ -163,7 +163,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
 			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+			if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 			{
 				[self.delegate updateNotificationSettingsError:error];
 			}
@@ -177,7 +177,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
 		}
@@ -195,7 +195,7 @@
 	// Create Interval value (Comment setting does not include Interval)
 	NSString *interval;
 	
-	if([name isEqualToString:@"comment"] || settings.Interval == nil)
+	if ([name isEqualToString:@"comment"] || settings.Interval == nil)
 	{
 		interval = @"<Interval i:nil=\"true\" />";
 	}
@@ -222,7 +222,7 @@
 		NSString *notificationKey = [NSString stringWithFormat:@"%@Settings", name];
 		
 		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		if (operation.response.statusCode == 204)
 		{
 			NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
 			
@@ -233,12 +233,12 @@
 			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], settings.Tone);
 			
 			// Priority Message Notification Settings removed in version 3.85. If saving Notification Settings for Normal Messages, then also save them for Priority Messages
-			if([name isEqualToString:@"normal"])
+			if ([name isEqualToString:@"normal"])
 			{
 				[self saveNotificationSettingsByName:@"priority" settings:settings];
 			}
 			// Not currently used
-			else if([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
+			else if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
 			}
@@ -255,7 +255,7 @@
 			}];
 			
 			// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
-			if([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
 			}
@@ -282,7 +282,7 @@
 		}];
 		
 		// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
-		if([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+		if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 		{
 			[self.delegate saveNotificationSettingsError:error];
 		}
@@ -299,7 +299,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Notification Settings has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 	{
 		[self.delegate saveNotificationSettingsPending];
 	}
@@ -319,7 +319,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if((self = [super init]))
+	if ((self = [super init]))
 	{
 		// Decode properties, other class vars
 		self.Enabled = [decoder decodeBoolForKey:@"Enabled"];

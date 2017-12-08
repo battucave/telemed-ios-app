@@ -35,7 +35,7 @@
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
 	// Shift form up for screens 480 or less in height
-	if([UIScreen mainScreen].bounds.size.height <= 480)
+	if ([UIScreen mainScreen].bounds.size.height <= 480)
 	{
 		[self.constraintFormTop setConstant:12.0f];
 	}
@@ -50,7 +50,7 @@
 	#ifdef DEBUG
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 		
-		switch([myProfileModel.ID integerValue])
+		switch ([myProfileModel.ID integerValue])
 		{
 			// Jason Hutchison
 			case 5320:
@@ -81,7 +81,7 @@
 	
 	[self.textPhoneNumber resignFirstResponder];
 	
-	if(phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
+	if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
 	{
 		UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Invalid Phone Number" message:@"Please enter a valid Phone Number." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		
@@ -109,7 +109,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	// Phone Number Confirmation Handler
-	if(alertView.tag == 1 && buttonIndex > 0)
+	if (alertView.tag == 1 && buttonIndex > 0)
 	{
 		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 		
@@ -122,7 +122,7 @@
 		// Run registerDevice web service
 		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 		{
-			if(success)
+			if (success)
 			{
 				// Go to Main Storyboard
 				[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
@@ -132,7 +132,7 @@
 				NSLog(@"PhoneNumberViewController Error: %@", error);
 				
 				// If device offline, show offline message
-				if(error.code == NSURLErrorNotConnectedToInternet)
+				if (error.code == NSURLErrorNotConnectedToInternet)
 				{
 					return [registeredDeviceModel showError:error];
 				}
@@ -145,10 +145,10 @@
 		}];
 	}
 	// If user received error when attempting to register their phone number and press Go Back, then send them back to login
-	else if(alertView.tag == 2 && buttonIndex == 0)
+	else if (alertView.tag == 2 && buttonIndex == 0)
 	{
 		// Go back to Login
-		if(self.delegate)
+		if (self.delegate)
 		{
 			[self performSegueWithIdentifier:@"unwindFromPhoneNumber" sender:self];
 		}
@@ -166,7 +166,7 @@
 	NSString *textString = [textField.text stringByReplacingCharactersInRange:range withString:string];
 	textString = [textString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		
-	if(textString.length)
+	if (textString.length)
 	{
 		self.buttonHelp.hidden = YES;
 	}
@@ -187,7 +187,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"showHelpFromPhoneNumber"])
+	if ([segue.identifier isEqualToString:@"showHelpFromPhoneNumber"])
 	{
 		HelpViewController *helpViewController = segue.destinationViewController;
 		

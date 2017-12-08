@@ -16,7 +16,7 @@
 {
 	self = [super initWithFrame:frame];
 	
-	if(self)
+	if (self)
 	{
 		[self commonInit];
 	}
@@ -36,7 +36,7 @@
 	// If we are using auto layouts, than get a handler to the height constraint.
 	for(NSLayoutConstraint *constraint in self.constraints)
 	{
-		if(constraint.firstAttribute == NSLayoutAttributeHeight)
+		if (constraint.firstAttribute == NSLayoutAttributeHeight)
 		{
 			self.heightConstraint = constraint;
 			
@@ -44,7 +44,7 @@
 		}
 	}
 	
-	if( ! self.heightConstraint)
+	if ( ! self.heightConstraint)
 	{
 		// TODO: We might use auto layouts but set the height of the textView by using a top + bottom constraints. In this case we would want to manually create a height constraint	
 	}
@@ -54,7 +54,7 @@
 {
 	[super layoutSubviews];
 	
-	if(self.heightConstraint)
+	if (self.heightConstraint)
 	{
 		[self handleLayoutWithAutoLayouts];
 	}
@@ -66,7 +66,7 @@
 	// Center vertically
 	// We're  supposed to have a maximum height constraint in code for the text view which will makes the intrinsicSide eventually higher then the height of the text view - if we had enough text.
 	// This code only center vertically the text view while the context size is smaller/equal to the text view frame.
-	if(self.intrinsicContentSize.height <= self.bounds.size.height)
+	if (self.intrinsicContentSize.height <= self.bounds.size.height)
 	{
 		CGFloat topCorrect = (self.bounds.size.height - self.contentSize.height * [self zoomScale])/2.0;
 		topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
@@ -79,12 +79,12 @@
 {
 	CGSize intrinsicSize = self.intrinsicContentSize;
 	
-	if(self.minHeight)
+	if (self.minHeight)
 	{
 		intrinsicSize.height = MAX(intrinsicSize.height, self.minHeight);
 	}
 	
-	if(self.maxHeight)
+	if (self.maxHeight)
 	{
 		intrinsicSize.height = MIN(intrinsicSize.height, self.maxHeight);
 	}

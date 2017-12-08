@@ -99,7 +99,7 @@
 	[cell setBackgroundColor:[UIColor clearColor]];
 	
 	// Fix bugs on iOS < 10
-	if( ! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
+	if ( ! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 	{
 		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
 		[cell setPreservesSuperviewLayoutMargins:NO];
@@ -118,21 +118,21 @@
 	
 	#ifdef MYTELEMED
 		// If cell is for Secure Chat or Messages
-		if([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
+		if ([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
 		{
 			// Hide Message Counts by default
 			[cell.labelCounts setHidden:YES];
 			
 			// If StatusModel has finished loading
-			if(self.isStatusLoaded)
+			if (self.isStatusLoaded)
 			{
 				// If cell is for Secure Chat, set Chat Counts
-				if([CellIdentifier isEqualToString:@"Secure Chat"])
+				if ([CellIdentifier isEqualToString:@"Secure Chat"])
 				{
 					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
 				}
 				// If cell is for Messages, set Message Counts
-				else if([CellIdentifier isEqualToString:@"Messages"])
+				else if ([CellIdentifier isEqualToString:@"Messages"])
 				{
 					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnreadMessageCount, self.myStatusModel.ActiveMessageCount]];
 					
@@ -160,10 +160,10 @@
 			}
 		}
 		// If cell is for On Call Schedule and StatusModel has finished loading
-		else if([CellIdentifier isEqualToString:@"On Call Schedule"] && self.isStatusLoaded)
+		else if ([CellIdentifier isEqualToString:@"On Call Schedule"] && self.isStatusLoaded)
 		{
 			// If user is Currently On Call
-			if(self.myStatusModel.OnCallNow)
+			if (self.myStatusModel.OnCallNow)
 			{
 				// Direct users to "Current" on call items on On Call Schedule screen
 				self.onCallScheduleDefaultSegmentControlIndex = 0;
@@ -184,7 +184,7 @@
 				NSString *nextOnCallDate = @"None";
 				NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 			
-				if(self.myStatusModel.NextOnCall != nil)
+				if (self.myStatusModel.NextOnCall != nil)
 				{
 					[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 					[dateFormatter setDateFormat:@"M/dd h:mma"];
@@ -209,7 +209,7 @@
 	#endif
 	
 	// Draw top border only on first cell
-	if(indexPath.row == 0)
+	if (indexPath.row == 0)
 	{
 		UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
 		topLineView.backgroundColor = [UIColor colorWithRed:125.0/255.0 green:125.0/255.0 blue:125.0/255.0 alpha:1];
@@ -222,7 +222,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue isKindOfClass:[SWRevealViewControllerSegue class]])
+	if ([segue isKindOfClass:[SWRevealViewControllerSegue class]])
 	{
 		SWRevealViewControllerSegue *swSegue = (SWRevealViewControllerSegue *)segue;
 		
@@ -230,7 +230,7 @@
 		{
 			// MyTeleMed - Set Default Segment Control Index for On Call Schedule
 			#ifdef MYTELEMED
-				if([segue.identifier isEqualToString:@"showOnCallSchedule"])
+				if ([segue.identifier isEqualToString:@"showOnCallSchedule"])
 				{
 					[(OnCallScheduleViewController *)destinationViewController setDefaultSegmentControlIndex:self.onCallScheduleDefaultSegmentControlIndex];
 				}
@@ -239,7 +239,7 @@
 			UINavigationController *navController = (UINavigationController *)self.revealViewController.frontViewController;
 			
 			// Workaround to remove observers on these view controllers since dealloc is not fired as expected
-			if([navController.viewControllers count] > 0)
+			if ([navController.viewControllers count] > 0)
 			{
 				[[NSNotificationCenter defaultCenter] removeObserver:[navController.viewControllers objectAtIndex:0]];
 			}

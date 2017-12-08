@@ -40,7 +40,7 @@
 			[callUnavailableAlertController addAction:actionOK];
 			
 			// PreferredAction only supported in 9.0+
-			if([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
+			if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
 			{
 				[callUnavailableAlertController setPreferredAction:actionOK];
 			}
@@ -65,7 +65,7 @@
 		[callTeleMedAlertController addAction:actionCall];
 	
 		// PreferredAction only supported in 9.0+
-		if([callTeleMedAlertController respondsToSelector:@selector(setPreferredAction:)])
+		if ([callTeleMedAlertController respondsToSelector:@selector(setPreferredAction:)])
 		{
 			[callTeleMedAlertController setPreferredAction:actionCall];
 		}
@@ -85,7 +85,7 @@
 - (void)callTeleMedError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
 	// Create reference to generic model to show offline error
 		CallModel *callModel = [[CallModel alloc] init];
