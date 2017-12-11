@@ -28,12 +28,12 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"Account"])
+	if ([elementName isEqualToString:@"Account"])
 	{
 		// Initialize the account
 		self.account = [[AccountModel alloc] init];
 	}
-	else if([elementName isEqualToString:@"TimeZone"])
+	else if ([elementName isEqualToString:@"TimeZone"])
 	{
 		self.timeZone = [[NSMutableDictionary alloc] init];
 	}
@@ -41,7 +41,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if ( ! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -53,21 +53,21 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Account"])
+	if ([elementName isEqualToString:@"Account"])
 	{
 		[self.accounts addObject:self.account];
 		
 		self.account = nil;
 	}
-	else if([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+	else if ([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
 	{
 		[self.timeZone setValue:self.currentElementValue forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"ID"])
+	else if ([elementName isEqualToString:@"ID"])
 	{
 		[self.account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"TimeZone"])
+	else if ([elementName isEqualToString:@"TimeZone"])
 	{
 		self.account.TimeZone = self.timeZone;
 		self.timeZone = nil;

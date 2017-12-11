@@ -11,7 +11,7 @@
 #import "AccountModel.h"
 #import "HospitalModel.h"
 
-@interface MessageNewViewController : RevealTableViewController <UITextFieldDelegate>
+@interface MessageNewTableViewController : RevealTableViewController <UITextFieldDelegate>
 
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) HospitalModel *selectedHospital;

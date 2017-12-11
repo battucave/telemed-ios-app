@@ -34,7 +34,7 @@
         <!--New Message-->
         <scene sceneID="KSA-F1-vtg">
             <objects>
-                <tableViewController id="UuL-n9-GMi" customClass="MessageNewViewController" sceneMemberID="viewController">
+                <tableViewController id="UuL-n9-GMi" customClass="MessageNewTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="30c-99-7JY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -358,7 +358,7 @@
         <!--New Message-->
         <scene sceneID="LhX-mb-nh8">
             <objects>
-                <tableViewController id="J3R-fF-WwB" customClass="MessageNew2ViewController" sceneMemberID="viewController">
+                <tableViewController id="J3R-fF-WwB" customClass="MessageNew2TableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="KNk-HO-GuF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

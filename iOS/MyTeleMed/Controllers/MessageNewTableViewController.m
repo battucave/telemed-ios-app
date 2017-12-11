@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import "MessageNewViewController.h"
+#import "MessageNewTableViewController.h"
 #import "MessageComposeTableViewController.h"
 #import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
 #import "AccountModel.h"
 #import "NewMessageModel.h"
 
-@interface MessageNewViewController ()
+@interface MessageNewTableViewController ()
 
 @property (nonatomic) MessageComposeTableViewController *messageComposeTableViewController;
 
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation MessageNewViewController
+@implementation MessageNewTableViewController
 
 - (void)viewDidLoad
 {

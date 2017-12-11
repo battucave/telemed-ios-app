@@ -566,12 +566,6 @@
 			[self showMainScreen];
 		
 		#else
-			// Phone Number invalid, so direct user to enter it
-			/*UIViewController *phoneNumberViewController = [self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
-			UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:phoneNumberViewController];
-			
-			[self.window setRootViewController:navigationController];*/
-		
 			// Force user to re-login to eliminate issue of user trying to login as another user and getting permanently stuck on phone number screen (even after re-install of app)
 			[self showLoginSSOScreen];
 		#endif

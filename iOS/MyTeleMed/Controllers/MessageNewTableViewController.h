@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 
-@interface MessageNewViewController : CoreViewController
+@interface MessageNewTableViewController : CoreViewController
 
 @end

@@ -13,6 +13,11 @@
 
 - (void)getAccounts
 {
+	[self getAccountsWithCallback:nil];
+}
+
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *newAccounts, NSError *error))callback
+{
 	[self.operationManager GET:@"Accounts" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
@@ -21,9 +26,15 @@
 		[xmlParser setDelegate:parser];
 		
 		// Parse the XML file
-		if([xmlParser parse])
+		if ([xmlParser parse])
 		{
-			if([self.delegate respondsToSelector:@selector(updateAccounts:)])
+			// Handle success via callback block
+			if (callback)
+			{
+				callback(YES, [parser accounts], nil);
+			}
+			// Handle success via delegate
+			else if ([self.delegate respondsToSelector:@selector(updateAccounts:)])
 			{
 				[self.delegate updateAccounts:[parser accounts]];
 			}
@@ -33,8 +44,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Accounts Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Accounts.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateAccountsError:)])
+			// Handle error via callback block
+			if (callback)
+			{
+				callback(NO, nil, error);
+			}
+			// Handle error via delegate
+			else if ([self.delegate respondsToSelector:@selector(updateAccountsError:)])
 			{
 				[self.delegate updateAccountsError:error];
 			}
@@ -48,10 +64,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Accounts." andTitle:@"Accounts Error"];
 		
 		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateAccountsError:)])
-		{
-			[self.delegate updateAccountsError:error];
-		}
+		callback(NO, nil, error);
 	}];
 }
 

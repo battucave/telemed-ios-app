@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "CoreTableViewController.h"
 
-@interface MessageNew2ViewController : CoreTableViewController <UITextFieldDelegate, UITextViewDelegate>
+@interface MessageNew2TableViewController : CoreTableViewController <UITextFieldDelegate, UITextViewDelegate>
 
 @end

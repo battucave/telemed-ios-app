@@ -6,15 +6,15 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import "MessageNewViewController.h"
+#import "MessageNewTableViewController.h"
 
-@interface MessageNewViewController ()
+@interface MessageNewTableViewController ()
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
 @end
 
-@implementation MessageNewViewController
+@implementation MessageNewTableViewController
 
 - (void)viewWillAppear:(BOOL)animated
 {

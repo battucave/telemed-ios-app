@@ -27,9 +27,24 @@
 @property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *PublicKey;
 @property (nonatomic) NSDictionary *TimeZone;
+@property (nonatomic) NSString *MyAuthorizationStatus; // Possible values: Unauthorized, Pending, Authorized
 
 - (void)getAccounts;
-//- (void)getAccountByID:(NSNumber *)accountID;
-//- (void)getAccountByPublicKey:(NSNumber *)publicKey;
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *newAccounts, NSError *error))callback;
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+- (void)getAccountByID:(NSNumber *)accountID;
+- (void)getAccountByPublicKey:(NSNumber *)publicKey;
+#endif
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+- (void)getAccountsByHospital:(NSNumber *)hospitalID;
+#endif
 
 @end
