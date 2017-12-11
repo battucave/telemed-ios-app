@@ -71,19 +71,19 @@
 	[super viewDidLoad];
 	
 	// Set current user id
-	id <ProfileProtocol> profileProtocol;
+	id <ProfileProtocol> profile;
 	self.currentUserID = 0;
 	
 	#ifdef MYTELEMED
-	 	profileProtocol = [MyProfileModel sharedInstance];
+	 	profile = [MyProfileModel sharedInstance];
 	
 	#elif defined MEDTOMED
-			profileProtocol = [UserProfileModel sharedInstance];
+			profile = [UserProfileModel sharedInstance];
 	#endif
 	
-	if (profileProtocol)
+	if (profile)
 	{
-		self.currentUserID = profileProtocol.ID;
+		self.currentUserID = profile.ID;
 	}
 	
 	#ifdef MYTELEMED

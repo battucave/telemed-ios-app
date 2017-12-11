@@ -40,9 +40,6 @@
 		// Initialize account model
 		[self setAccountModel:[[AccountModel alloc] init]];
 		[self.accountModel setDelegate:self];
-		
-		// Get list of accounts
-		[self.accountModel getAccounts];
 	}
 	
 	// If selected account not already set, then set it to my profile model's MyPreferredAccount
@@ -123,8 +120,13 @@
 {
 	[super viewWillAppear:animated];
 	
+	// Get list of accounts
+	if ([self.accounts count] == 0)
+	{
+		[self.accountModel getAccounts];
+	}
 	// If account was previously selected, scroll to it
-	if ([self.accounts count] > 0)
+	else
 	{
 		[self.tableAccounts reloadData];
 		

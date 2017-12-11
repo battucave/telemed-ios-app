@@ -22,11 +22,6 @@
 
 @implementation MessageTeleMedViewController
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
-
 - (IBAction)sendTeleMedMessage:(id)sender
 {
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];

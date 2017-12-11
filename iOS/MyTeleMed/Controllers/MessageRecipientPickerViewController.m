@@ -111,6 +111,11 @@
 		// Hide placeholder search bar from storyboard (UISearchController and its search bar cannot be implemented in storyboard so we use a placeholder search bar instead)
 		[self.searchBar setHidden:YES];
 	}
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
 	
 	// Load list of message recipients
 	[self reloadMessageRecipients];

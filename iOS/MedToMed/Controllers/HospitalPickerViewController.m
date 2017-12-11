@@ -7,7 +7,7 @@
 //
 
 #import "HospitalPickerViewController.h"
-#import "MessageNewViewController.h"
+#import "MessageNewTableViewController.h"
 #import "HospitalCell.h"
 #import "HospitalModel.h"
 
@@ -38,9 +38,6 @@
 		// Initialize hospital model
 		[self setHospitalModel:[[HospitalModel alloc] init]];
 		[self.hospitalModel setDelegate:self];
-		
-		// Get list of hospitals
-		[self.hospitalModel getHospitals];
 	}
 	
 	// Initialize search controller
@@ -110,8 +107,13 @@
 {
 	[super viewWillAppear:animated];
 	
+	// Get list of hospitals
+	if ([self.hospitals count] == 0)
+	{
+		[self.hospitalModel getHospitals];
+	}
 	// If hospital was previously selected, scroll to it
-	if ([self.hospitals count] > 0)
+	else
 	{
 		[self.tableHospitals reloadData];
 		
@@ -392,7 +394,7 @@
 	// Set hospital for MessageNewViewController
 	if ([[segue identifier] isEqualToString:@"showMessageNewFromHospitalPicker"])
 	{
-		MessageNewViewController *messageNewViewController = segue.destinationViewController;
+		MessageNewTableViewController *messageNewViewController = segue.destinationViewController;
 		
 		// Set hospital
 		[messageNewViewController setSelectedHospital:self.selectedHospital];

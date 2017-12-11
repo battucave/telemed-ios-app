@@ -39,9 +39,6 @@
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	
-	// Get list of accounts
-	[self.accountModel getAccounts];
-	
 	[self.pickerViewDefault selectRow:0 inComponent:0 animated:NO];
 }
 
@@ -63,6 +60,9 @@
 		// Set selected date
 		[self setSelectedDate:[self.dates objectAtIndex:self.selectedDateIndex]];
 	}
+	
+	// Get list of accounts
+	[self.accountModel getAccounts];
 	
 	// Note: Account button title set to preselected row in updateAccounts method
 }

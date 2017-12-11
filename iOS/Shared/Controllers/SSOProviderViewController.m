@@ -23,11 +23,6 @@
 
 @implementation SSOProviderViewController
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];

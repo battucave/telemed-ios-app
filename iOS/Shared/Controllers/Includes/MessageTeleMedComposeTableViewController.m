@@ -49,18 +49,18 @@
 	}
 	
 	// Set User Email Address
-	id <ProfileProtocol> profileProtocol;
+	id <ProfileProtocol> profile;
 	
 	#ifdef MYTELEMED
-		profileProtocol = [MyProfileModel sharedInstance];
+		profile = [MyProfileModel sharedInstance];
 
 	#elif defined MEDTOMED
-		profileProtocol = [UserProfileModel sharedInstance];
+		profile = [UserProfileModel sharedInstance];
 	#endif
 	
-	if (profileProtocol)
+	if (profile)
 	{
-		[self.textFieldSender setText:profileProtocol.Email];
+		[self.textFieldSender setText:profile.Email];
 	}
 }
 

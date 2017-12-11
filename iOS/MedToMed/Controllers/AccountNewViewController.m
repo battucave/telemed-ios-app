@@ -20,13 +20,6 @@
 
 @implementation AccountNewViewController
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-	
-	NSLog(@"Create New Account");
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];

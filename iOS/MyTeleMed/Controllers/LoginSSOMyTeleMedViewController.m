@@ -10,7 +10,6 @@
 #import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
-#import "ProfileProtocol.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -29,7 +28,7 @@
 	
 	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 	
-	[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+	[myProfileModel getWithCallback:^(BOOL success, MyProfileModel *profile, NSError *error)
 	{
 		if (success)
 		{

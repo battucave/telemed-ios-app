@@ -32,11 +32,6 @@
 
 @implementation ArchivesViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];

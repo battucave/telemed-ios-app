@@ -43,18 +43,18 @@
 	[super viewWillAppear:animated];
 	
 	// Set May Disable Timeout value
-	id <ProfileProtocol> profileProtocol;
+	id <ProfileProtocol> profile;
 	
 	#ifdef MYTELEMED
-		profileProtocol = [MyProfileModel sharedInstance];
+		profile = [MyProfileModel sharedInstance];
 
 	#elif defined MEDTOMED
-		profileProtocol = [UserProfileModel sharedInstance];
+		profile = [UserProfileModel sharedInstance];
 	#endif
 	
-	if (profileProtocol)
+	if (profile)
 	{
-		self.mayDisableTimeout = profileProtocol.MayDisableTimeout;
+		self.mayDisableTimeout = profile.MayDisableTimeout;
 	}
 }
 

@@ -14,11 +14,6 @@
 
 @implementation ContactViewController
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
-
 - (IBAction)callTeleMed:(id)sender
 {
 	// MedToMed - Use phone dialer to make call

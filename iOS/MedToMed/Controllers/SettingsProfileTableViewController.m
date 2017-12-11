@@ -7,7 +7,6 @@
 //
 
 #import "SettingsProfileTableViewController.h"
-#import "ProfileProtocol.h"
 #import "UserProfileModel.h"
 
 @interface SettingsProfileTableViewController ()
@@ -19,29 +18,24 @@
 
 @implementation SettingsProfileTableViewController
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
 	[[self.textFields objectAtIndex:0] becomeFirstResponder];
 	
-	id <ProfileProtocol> profileProtocol = [UserProfileModel sharedInstance];
+	UserProfileModel *profile = [UserProfileModel sharedInstance];
 	
 	// Initialize text field values
-	[self setTextFieldValues: profileProtocol];
+	[self setTextFieldValues: profile];
 	
 	// Refresh user profile and update text field values
-	[profileProtocol getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+	[profile getWithCallback:^(BOOL success, UserProfileModel *profile, NSError *error)
 	{
 		// Update text field values with new data
 		if (success)
 		{
-			[self setTextFieldValues: profileProtocol];
+			[self setTextFieldValues: profile];
 		}
 	}];
 }
@@ -59,15 +53,15 @@
 }
 
 // MedToMed phase 2 - figure out how to prevent updating value for field if user has already begun typing in it
-- (void)setTextFieldValues:(id <ProfileProtocol>) profileProtocol
+- (void)setTextFieldValues:(id <ProfileProtocol>) profile
 {
 	for (UITextField *textField in self.textFields)
 	{
 		NSString *identifier = textField.accessibilityIdentifier;
 		
-		if ([profileProtocol respondsToSelector:NSSelectorFromString(identifier)])
+		if ([profile respondsToSelector:NSSelectorFromString(identifier)])
 		{
-			[textField setText:[profileProtocol valueForKey:identifier]];
+			[textField setText:[profile valueForKey:identifier]];
 		}
 	}
 }

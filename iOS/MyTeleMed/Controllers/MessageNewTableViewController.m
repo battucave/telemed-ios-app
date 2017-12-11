@@ -39,6 +39,11 @@
 	// Initialize Account Model
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
 	
 	// Get list of Accounts
 	[self.accountModel getAccounts];
