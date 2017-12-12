@@ -34,7 +34,7 @@
 {
     [super viewDidLoad];
 	
-	// If accounts were not pre-loaded (slow connection in MessageNewViewController), then load them here
+	// If accounts were not pre-loaded (slow connection in MessageNewTableViewController), then load them here
 	if ([self.accounts count] == 0)
 	{
 		// Initialize account model
@@ -446,7 +446,7 @@
 		// Set account
 		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// Set selected message recipients if previously set (this is simply passed through from MessageNewViewController)
+		// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 	// If no accounts, ensure nothing happens when going back

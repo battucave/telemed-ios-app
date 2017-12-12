@@ -1,5 +1,5 @@
 //
-//  MessageNewViewController.m
+//  MessageNewTableViewController.m
 //  MedToMed
 //
 //  Created by Shane Goodwin on 11/22/17.

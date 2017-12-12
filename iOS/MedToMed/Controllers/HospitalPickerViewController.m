@@ -32,7 +32,7 @@
 {
     [super viewDidLoad];
 	
-	// If hospitals were not pre-loaded (slow connection in MessageNewViewController), then load them here
+	// If hospitals were not pre-loaded (slow connection in MessageNewTableViewController), then load them here
 	if ([self.hospitals count] == 0)
 	{
 		// Initialize hospital model

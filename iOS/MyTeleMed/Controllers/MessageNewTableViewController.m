@@ -1,5 +1,5 @@
 //
-//  MessageNewViewController.m
+//  MessageNewTableViewController.m
 //  MyTeleMed
 //
 //  Created by SolutionBuilt on 11/5/13.

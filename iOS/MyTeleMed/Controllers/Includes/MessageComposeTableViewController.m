@@ -51,13 +51,13 @@
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
+// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewTableViewController delegate to simplify the passing of data to Message Recipient Picker
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self.delegate performSegueToMessageRecipientPicker:(id)sender];
 }
 
-// Method fired from MessageNewViewController/MessageForwardViewController
+// Method fired from MessageNewTableViewController/MessageForwardViewController
 - (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients
 {
 	NSString *messageRecipientNames = @"";
