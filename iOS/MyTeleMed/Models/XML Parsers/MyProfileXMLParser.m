@@ -136,6 +136,10 @@
 				{
 					self.myProfile.BlockCallerID = [self.currentElementValue boolValue];
 				}
+				else if ([elementName isEqualToString:@"IsAuthorized"])
+				{
+					self.myProfile.IsAuthorized = [self.currentElementValue boolValue];
+				}
 				else if ([elementName isEqualToString:@"MayDisableTimeout"])
 				{
 					self.myProfile.MayDisableTimeout = [self.currentElementValue boolValue];

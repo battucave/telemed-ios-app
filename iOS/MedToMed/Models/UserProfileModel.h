@@ -13,6 +13,7 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
+@property (nonatomic) BOOL IsAuthorized;
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) NSString *FirstName;
 @property (nonatomic) NSString *JobTitlePrefix;

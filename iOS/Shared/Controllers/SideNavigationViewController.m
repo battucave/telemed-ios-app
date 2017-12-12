@@ -16,6 +16,11 @@
 	#import "MyStatusModel.h"
 #endif
 
+#ifdef MEDTOMED
+	#import "ProfileProtocol.h"
+	#import "UserProfileModel.h"
+#endif
+
 @interface SideNavigationViewController ()
 
 @property (nonatomic) NSArray *menuItems;
@@ -116,6 +121,15 @@
 	NSString *CellIdentifier = [self.menuItems objectAtIndex:indexPath.row];
 	SideNavigationCountCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	
+	// Draw top border only on first cell
+	if (indexPath.row == 0)
+	{
+		UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
+		topLineView.backgroundColor = [UIColor colorWithRed:125.0/255.0 green:125.0/255.0 blue:125.0/255.0 alpha:1];
+		
+		[cell.contentView addSubview:topLineView];
+	}
+	
 	#ifdef MYTELEMED
 		// If cell is for Secure Chat or Messages
 		if ([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
@@ -208,15 +222,6 @@
 		}
 	#endif
 	
-	// Draw top border only on first cell
-	if (indexPath.row == 0)
-	{
-		UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-		topLineView.backgroundColor = [UIColor colorWithRed:125.0/255.0 green:125.0/255.0 blue:125.0/255.0 alpha:1];
-		
-		[cell.contentView addSubview:topLineView];
-	}
-	
 	return cell;
 }
 
@@ -255,5 +260,30 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// Determine which screen to go to depending on whether user is authorized
+	if (indexPath.row == 0)
+	{
+		id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+		
+		// Show message new screen
+		if (profile.IsAuthorized)
+		{
+			[self performSegueWithIdentifier:@"showMessageNew" sender:[tableView cellForRowAtIndexPath:indexPath]];
+		}
+		// Show message new unauthorized screen
+		else
+		{
+			[self performSegueWithIdentifier:@"showMessageNewUnauthorized" sender:[tableView cellForRowAtIndexPath:indexPath]];
+		}
+	}
+}
+#endif
 
 @end

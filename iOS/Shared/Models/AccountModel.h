@@ -30,7 +30,7 @@
 @property (nonatomic) NSString *MyAuthorizationStatus; // Possible values: Unauthorized, Pending, Authorized
 
 - (void)getAccounts;
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *newAccounts, NSError *error))callback;
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
 
 
 #pragma mark - MyTeleMed
@@ -45,6 +45,8 @@
 
 #ifdef MEDTOMED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID;
+- (BOOL)isAccountAuthorized:(AccountModel *)account;
+- (BOOL)isAccountPending:(AccountModel *)account;
 #endif
 
 @end

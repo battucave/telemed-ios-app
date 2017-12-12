@@ -376,6 +376,7 @@
 		E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */; };
 		E2964B471E675860002FF97B /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E2964B4A1E67587F002FF97B /* SideNavigationCountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B491E67587F002FF97B /* SideNavigationCountCell.m */; };
+		E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */; };
 		E2A607D41FDB27930014F1E2 /* AccountXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85191B14D09400AD50C6 /* AccountXMLParser.m */; };
 		E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */; };
 		E2AE66371CE0DD7300953EFA /* NSObject+Swizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */; };
@@ -851,6 +852,8 @@
 		E2964B461E675860002FF97B /* ErrorAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorAlertController.m; sourceTree = "<group>"; };
 		E2964B481E67587F002FF97B /* SideNavigationCountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideNavigationCountCell.h; sourceTree = "<group>"; };
 		E2964B491E67587F002FF97B /* SideNavigationCountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideNavigationCountCell.m; sourceTree = "<group>"; };
+		E2A4BBF31FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNewUnauthorizedTableViewController.h; sourceTree = "<group>"; };
+		E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNewUnauthorizedTableViewController.m; sourceTree = "<group>"; };
 		E2AE66351CE0DD7300953EFA /* NSObject+Swizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Swizzle.h"; sourceTree = "<group>"; };
 		E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Swizzle.m"; sourceTree = "<group>"; };
 		E2AE663A1CE0E7A700953EFA /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
@@ -1629,6 +1632,8 @@
 				E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */,
 				E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */,
 				E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */,
+				E2A4BBF31FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.h */,
+				E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */,
 				E2622D0A1FC5F8B0008BCFF3 /* MessageNewTableViewController.h */,
 				E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */,
 				E2622D0D1FC5F9A4008BCFF3 /* MessageNew2TableViewController.h */,
@@ -2496,6 +2501,7 @@
 				E2CD93A31FCF1411006ED66F /* HospitalXMLParser.m in Sources */,
 				E25036B21FBB88F400099C7E /* UIAlertView+AFNetworking.m in Sources */,
 				E24A44401FCE1C7C00A06EE8 /* HospitalCell.m in Sources */,
+				E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */,
 				E25036B41FBB88F400099C7E /* ScreenshotAlertModel.m in Sources */,
 				E25036B51FBB88F400099C7E /* AppDelegate.m in Sources */,
 				E25036B71FBB88F400099C7E /* SSOProviderViewController.m in Sources */,

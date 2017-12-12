@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
 #import "ErrorAlertController.h"
+#import "SWRevealViewController.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
@@ -24,6 +25,7 @@
 #endif
 
 #ifdef MEDTOMED
+	#import "AccountModel.h"
 	#import "UserProfileModel.h"
 #endif
 
@@ -285,7 +287,7 @@
 				
 				// MedToMed - Validate at least one account is authorized
 				#elif defined MEDTOMED
-					[self validateMedToMedAuthorization];
+					[self validateMedToMedAuthorization:profile];
 				#endif
 				
 				// Don't need an else condition here because logic already handles it before calling profile's getWithCallback method
@@ -340,26 +342,6 @@
 	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:loginSSOViewController];
 	
 	[self.window setRootViewController:navigationController];
-	[self.window makeKeyAndVisible];
-}
-
-/*
- * Show main screen:
- * MyTeleMed: MessagesViewController
- * MedToMed: NewMessageViewController
- */
-- (void)showMainScreen
-{
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-	
-	// MEDTOMED - Main screen is in MedToMed's own storyboard
-	#ifdef MEDTOMED
-		mainStoryboard = [UIStoryboard storyboardWithName:@"MedToMed" bundle:nil];
-	#endif
-	
-	UIViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
-	
-	[self.window setRootViewController:initialViewController];
 	[self.window makeKeyAndVisible];
 }
 
@@ -524,6 +506,18 @@
 	}
 }
 
+/*
+ * Show main screen: MessagesViewController
+ */
+- (void)showMainScreen
+{
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
+	
+	[self.window setRootViewController:initialViewController];
+	[self.window makeKeyAndVisible];
+}
+
 - (void)validateRegistration:(id <ProfileProtocol>)profile
 {
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
@@ -577,15 +571,65 @@
 #pragma mark - MedToMed
 
 #ifdef MEDTOMED
-- (void)validateMedToMedAuthorization
+
+
+/*
+ * Show main screen: MessageNewTableViewController or MessageNewUnauthorizedTableViewController
+ */
+- (void)showMainScreen
+{
+	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MedToMed" bundle:nil];
+	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
+	UINavigationController *navigationController;
+	
+	// If user has at least one authorized account, then show message new screen
+	if (profile.IsAuthorized)
+	{
+		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewNavigationController"];
+	}
+	// Else show message new unauthorized screen
+	else
+	{
+		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewUnauthorizedNavigationController"];
+	}
+	
+	[initialViewController setFrontViewController:navigationController];
+	
+	[self.window setRootViewController:initialViewController];
+	[self.window makeKeyAndVisible];
+}
+
+- (void)validateMedToMedAuthorization:(id <ProfileProtocol>)profile
 {
 	// Fetch Accounts and check the authorization status for each
-		// If at least one account has "Authorized" status, then
+	AccountModel *accountModel = [[AccountModel alloc] init];
+	
+	[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	{
+		if (success)
+		{
+			// Check if user is authorized for at least one account
+			for (AccountModel *account in accounts)
+			{
+				if ([accountModel isAccountAuthorized:account])
+				{
+					[profile setIsAuthorized:YES];
+				}
+				
+				NSLog(@"Account Name: %@; Status: %@", account.Name, account.MyAuthorizationStatus);
+			}
+			
 			// Go to Main Storyboard
-			[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
-
-		// Else
-			// Go to MedToMed's Settings screen and include messaging about what user needs to do to be able to send messages
+			[self showMainScreen];
+		}
+		else if (error)
+		{
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
+		}
+	}];
 }
 #endif
 

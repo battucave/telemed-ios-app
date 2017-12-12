@@ -16,7 +16,7 @@
 	[self getAccountsWithCallback:nil];
 }
 
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *newAccounts, NSError *error))callback
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
 {
 	[self.operationManager GET:@"Accounts" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -63,20 +63,53 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Accounts." andTitle:@"Accounts Error"];
 		
-		// Only handle error if user still on same screen
-		callback(NO, nil, error);
+		// Handle error via callback block
+		if (callback)
+		{
+			callback(NO, nil, error);
+		}
+		// Handle error via delegate
+		else if ([self.delegate respondsToSelector:@selector(updateAccountsError:)])
+		{
+			[self.delegate updateAccountsError:error];
+		}
 	}];
 }
 
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
 - (void)getAccountByID:(NSNumber *)accountID
 {
-	
+	NSLog(@"Get Account By ID: %@", accountID);
 }
 
 - (void)getAccountByPublicKey:(NSNumber *)publicKey
 {
-	
+	NSLog(@"Get Account By Public Key: %@", publicKey);
 }
+#endif
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+- (void)getAccountsByHospital:(NSNumber *)hospitalID
+{
+	NSLog(@"Get Accounts By Hospital: %@", hospitalID);
+}
+
+- (BOOL)isAccountAuthorized:(AccountModel *)account
+{
+	return [account.MyAuthorizationStatus isEqualToString:@"Authorized"];
+}
+
+- (BOOL)isAccountPending:(AccountModel *)account
+{
+	return [account.MyAuthorizationStatus isEqualToString:@"Pending"];
+}
+#endif
 
 
 @end

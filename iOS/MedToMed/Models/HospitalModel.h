@@ -29,5 +29,11 @@
 @property (nonatomic) NSString *MyAuthenticationStatus; // Possible values: NONE, Requested, OK, Admin, Denied, Blocked
 
 - (void)getHospitals;
+- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSMutableArray *hospitals, NSError *error))callback;
+- (BOOL)isHospitalAdmin:(HospitalModel *)hospital;
+- (BOOL)isHospitalAuthorized:(HospitalModel *)hospital;
+- (BOOL)isHospitalBlocked:(HospitalModel *)hospital;
+- (BOOL)isHospitalDenied:(HospitalModel *)hospital;
+- (BOOL)isHospitalPending:(HospitalModel *)hospital;
 
 @end

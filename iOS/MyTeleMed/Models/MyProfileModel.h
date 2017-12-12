@@ -19,6 +19,7 @@
 @property (nonatomic) BOOL BlockCallerID;
 @property (nonatomic) NSString *CallTelemedNumber;
 @property (nonatomic) NSString *Email;
+@property (nonatomic) BOOL IsAuthorized;
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) AccountModel *MyPreferredAccount;
 @property (nonatomic) NSArray *MyRegisteredDevices;

@@ -13,6 +13,7 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
+@property (nonatomic) BOOL IsAuthorized; // MedToMed manually sets this separately from web service
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) NSDictionary *MyTimeZone;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;

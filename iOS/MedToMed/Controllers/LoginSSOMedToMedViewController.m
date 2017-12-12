@@ -10,7 +10,6 @@
 #import "AccountNewViewController.h"
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
-#import "ProfileProtocol.h"
 #import "AccountModel.h"
 #import "UserProfileModel.h"
 
@@ -27,22 +26,43 @@
 {
 	NSLog(@"Finalize MedToTeleMed Login");
 	
-	UserProfileModel *userProfileModel = [UserProfileModel sharedInstance];
+	AccountModel *accountModel = [[AccountModel alloc] init];
+	UserProfileModel *profile = [UserProfileModel sharedInstance];
 	
-	[userProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+	[profile getWithCallback:^(BOOL success, UserProfileModel *profile, NSError *error)
 	{
-		if(success)
+		if (success)
 		{
 			// Update Timeout Period to the value sent from sserver
 			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
 			
 			// Fetch Accounts and check the authorization status for each
-				// If at least one account has "Authorized" status, then
+			[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+			{
+				if (success)
+				{
+					// Check if user is authorized for at least one account
+					for (AccountModel *account in accounts)
+					{
+						if ([accountModel isAccountAuthorized:account])
+						{
+							[profile setIsAuthorized:YES];
+						}
+						
+						NSLog(@"Account Name: %@; Status: %@", account.Name, account.MyAuthorizationStatus);
+					}
+					
 					// Go to Main Storyboard
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
-			
-				// Else
-					// Go to MedToMed's Settings screen and include messaging about what user needs to do to be able to send messages
+				}
+				else
+				{
+					NSLog(@"LoginSSOMedToMedViewController Error: %@", error);
+					
+					// Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
+					[self showWebViewError:[NSString stringWithFormat:@"There was a problem completing the login process:<br>%@", error.localizedDescription]];
+				}
+			}];
 		}
 		else
 		{

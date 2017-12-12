@@ -13,6 +13,11 @@
 
 - (void)getHospitals
 {
+	[self getHospitalsWithCallback:nil];
+}
+
+- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSMutableArray *hospitals, NSError *error))callback
+{
 	[self.operationManager GET:@"Hospitals" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
@@ -23,7 +28,13 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			if ([self.delegate respondsToSelector:@selector(updateHospitals:)])
+			// Handle success via callback block
+			if (callback)
+			{
+				callback(YES, [parser hospitals], nil);
+			}
+			// Handle success via delegate
+			else if ([self.delegate respondsToSelector:@selector(updateHospitals:)])
 			{
 				[self.delegate updateHospitals:[parser hospitals]];
 			}
@@ -33,8 +44,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Hospitals Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Hospitals.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
-			if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
+			// Handle error via callback block
+			if (callback)
+			{
+				callback(NO, nil, error);
+			}
+			// Handle error via delegate
+			else if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
 			{
 				[self.delegate updateHospitalsError:error];
 			}
@@ -47,12 +63,42 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Hospitals." andTitle:@"Hospitals Error"];
 		
-		// Only handle error if user still on same screen
-		if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
+		// Handle error via callback block
+		if (callback)
+		{
+			callback(NO, nil, error);
+		}
+		// Handle error via delegate
+		else if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
 		{
 			[self.delegate updateHospitalsError:error];
 		}
 	}];
+}
+
+- (BOOL)isHospitalAdmin:(HospitalModel *)hospital
+{
+	return [hospital.MyAuthenticationStatus isEqualToString:@"Admin"];
+}
+
+- (BOOL)isHospitalAuthorized:(HospitalModel *)hospital
+{
+	return ([self isHospitalAdmin:hospital] || [hospital.MyAuthenticationStatus isEqualToString:@"OK"]);
+}
+
+- (BOOL)isHospitalBlocked:(HospitalModel *)hospital
+{
+	return [hospital.MyAuthenticationStatus isEqualToString:@"Blocked"];
+}
+
+- (BOOL)isHospitalDenied:(HospitalModel *)hospital
+{
+	return [hospital.MyAuthenticationStatus isEqualToString:@"Denied"];
+}
+
+- (BOOL)isHospitalPending:(HospitalModel *)hospital
+{
+	return [hospital.MyAuthenticationStatus isEqualToString:@"Requested"];
 }
 
 @end
