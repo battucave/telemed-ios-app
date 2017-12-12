@@ -49,17 +49,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Choose Hospital" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gYv-pe-YnB">
-                                                    <rect key="frame" x="16" y="12" width="126" height="20.5"/>
+                                                    <rect key="frame" x="16" y="13" width="113" height="18"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BQS-Nf-YY5">
-                                                    <rect key="frame" x="302.5" y="15" width="37.5" height="17"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BQS-Nf-YY5">
+                                                    <rect key="frame" x="302.5" y="14" width="37.5" height="17"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -76,17 +76,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Choose Medical Group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Dio-sJ-jBo">
-                                                    <rect key="frame" x="16" y="12" width="174.5" height="20.5"/>
+                                                    <rect key="frame" x="16" y="13" width="156.5" height="18"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ev2-AI-7zp">
-                                                    <rect key="frame" x="302.5" y="15" width="37.5" height="17"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ev2-AI-7zp">
+                                                    <rect key="frame" x="302.5" y="14" width="37.5" height="17"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -319,6 +319,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="labelHospital" destination="BQS-Nf-YY5" id="3Z0-4j-u0Q"/>
+                        <outlet property="labelMedicalGroup" destination="Ev2-AI-7zp" id="1Yf-au-h33"/>
                         <outlet property="sideNavigationButton" destination="zfS-jn-zhV" id="NjC-Md-O4Z"/>
                         <outletCollection property="textFields" destination="ZAy-bY-e38" id="vfm-NV-j0X"/>
                         <outletCollection property="textFields" destination="VXO-be-6m6" id="r1b-3C-eEU"/>
@@ -598,7 +600,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EcX-hZ-Vc9">
-                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <subviews>
                                     <searchBar contentMode="redraw" text="" placeholder="Search Hospitals (this is a placeholder only)" translatesAutoresizingMaskIntoConstraints="NO" id="YzY-BS-Us5">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -622,57 +624,27 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="XHJ-kj-frf">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="HospitalCell" rowHeight="66" id="E53-nW-YPl" customClass="HospitalCell">
-                                        <rect key="frame" x="0.0" y="1" width="375" height="66"/>
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="HospitalCell" textLabel="Bfa-83-xT8" style="IBUITableViewCellStyleDefault" id="E53-nW-YPl" customClass="HospitalCell">
+                                        <rect key="frame" x="0.0" y="1" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="E53-nW-YPl" id="bTd-oW-Yv0">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hospital Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brf-gM-a7u">
-                                                    <rect key="frame" x="15" y="11" width="345" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hospital Address:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bbj-4u-d7N">
-                                                    <rect key="frame" x="15" y="38" width="115" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="17" id="BVh-5H-HEz"/>
-                                                        <constraint firstAttribute="width" constant="115" id="hSx-H9-rHF"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{Address}" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GW1-f6-5LN">
-                                                    <rect key="frame" x="128" y="38" width="232" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="17" id="ars-Uc-ZT4"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Hospital Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bfa-83-xT8">
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="brf-gM-a7u" firstAttribute="leading" secondItem="bTd-oW-Yv0" secondAttribute="leadingMargin" id="3JZ-qz-DOd"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="bbj-4u-d7N" secondAttribute="bottom" constant="0.5" id="88w-mS-zeS"/>
-                                                <constraint firstItem="brf-gM-a7u" firstAttribute="trailing" secondItem="bTd-oW-Yv0" secondAttribute="trailingMargin" id="AO5-nh-cxs"/>
-                                                <constraint firstItem="GW1-f6-5LN" firstAttribute="top" secondItem="brf-gM-a7u" secondAttribute="bottom" constant="6" id="CKt-Qc-V2X"/>
-                                                <constraint firstItem="brf-gM-a7u" firstAttribute="leading" secondItem="bbj-4u-d7N" secondAttribute="leading" id="FIu-vn-Vcb"/>
-                                                <constraint firstItem="GW1-f6-5LN" firstAttribute="trailing" secondItem="brf-gM-a7u" secondAttribute="trailing" id="FKy-TY-jsc"/>
-                                                <constraint firstItem="bbj-4u-d7N" firstAttribute="centerY" secondItem="GW1-f6-5LN" secondAttribute="centerY" id="GbU-Mk-XEe"/>
-                                                <constraint firstItem="bbj-4u-d7N" firstAttribute="leading" secondItem="bTd-oW-Yv0" secondAttribute="leadingMargin" id="SDk-Eq-YNJ"/>
-                                                <constraint firstItem="brf-gM-a7u" firstAttribute="top" secondItem="bTd-oW-Yv0" secondAttribute="topMargin" id="cuI-Bo-9Cg"/>
-                                                <constraint firstItem="GW1-f6-5LN" firstAttribute="leading" secondItem="bbj-4u-d7N" secondAttribute="trailing" constant="-2" id="nSV-bU-Ytg"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="hospitalName" destination="brf-gM-a7u" id="FzJ-Es-JBt"/>
+                                            <outlet property="hospitalName" destination="Bfa-83-xT8" id="LJs-tK-8l1"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -699,9 +671,11 @@
                         <outlet property="searchBar" destination="YzY-BS-Us5" id="7pG-Qx-grx"/>
                         <outlet property="tableHospitals" destination="XHJ-kj-frf" id="srQ-rg-zuG"/>
                         <outlet property="viewSearchBarContainer" destination="EcX-hZ-Vc9" id="hDl-Un-mxR"/>
+                        <segue destination="Mbd-Jc-dVd" kind="unwind" identifier="setHospital" unwindAction="setHospital:" id="WDb-iL-Gaq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wd7-Ju-rqa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Mbd-Jc-dVd" userLabel="Exit" sceneMemberID="exit"/>
                 <searchDisplayController id="4Pl-a6-ic8">
                     <connections>
                         <outlet property="delegate" destination="1Oi-aW-MdN" id="C6m-mS-noe"/>
@@ -1085,7 +1059,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="1Oi-aW-MdN" kind="show" identifier="showSettingsMyHospitals" id="I95-64-Mdk"/>
+                                            <segue destination="1Oi-aW-MdN" kind="show" identifier="showMyHospitalsFromSettings" id="I95-64-Mdk"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="zb9-rM-vSU" style="IBUITableViewCellStyleDefault" id="ut1-5i-ffB">
@@ -1468,7 +1442,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="ojM-FY-erA"/>
-        <segue reference="I95-64-Mdk"/>
+        <segue reference="6bW-Sj-6zP"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>
 </document>

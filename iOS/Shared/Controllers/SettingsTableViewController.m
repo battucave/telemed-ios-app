@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchTimeout;
 
 @property (nonatomic) BOOL mayDisableTimeout;
+@property (nonatomic) NSInteger versionNumberSection;
 
 @end
 
@@ -36,6 +37,13 @@
 	
 	// Initialize May Disable Timeout value
 	self.mayDisableTimeout = NO;
+	
+	#ifdef MEDTOMED
+		[self setVersionNumberSection:2];
+	
+	#else
+		[self setVersionNumberSection:3];
+	#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -154,7 +162,7 @@
 		[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
 	}
 	// Add Version Number to Version cell
-	else if (indexPath.section == 3)
+	else if (indexPath.section == self.versionNumberSection)
 	{
 		[cell.detailTextLabel setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 	}

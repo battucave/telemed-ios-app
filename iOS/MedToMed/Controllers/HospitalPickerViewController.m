@@ -107,6 +107,15 @@
 {
 	[super viewWillAppear:animated];
 	
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableHospitals setTableFooterView:[[UIView alloc] init]];
+	
+	// If user navigated from settings screen, disallow selection of hospitals
+	if (! self.shouldSetHospital)
+	{
+		[self.tableHospitals setAllowsSelection:NO];
+	}
+	
 	// Get list of hospitals
 	if ([self.hospitals count] == 0)
 	{
@@ -354,8 +363,8 @@
 	// Add checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// Go to MessageNewViewController
-	[self performSegueWithIdentifier:@"showMessageNewFromHospitalPicker" sender:cell];
+	// // Execute unwind segue
+	[self performSegueWithIdentifier:@"setHospital" sender:self];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -387,23 +396,6 @@
 	
 	// Remove checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-	// Set hospital for MessageNewViewController
-	if ([[segue identifier] isEqualToString:@"showMessageNewFromHospitalPicker"])
-	{
-		MessageNewTableViewController *messageNewViewController = segue.destinationViewController;
-		
-		// Set hospital
-		[messageNewViewController setSelectedHospital:self.selectedHospital];
-	}
-	// If no Hospitals, ensure nothing happens when going back
-	else if ([self.hospitals count] == 0)
-	{
-		return;
-	}
 }
 
 - (void)didReceiveMemoryWarning

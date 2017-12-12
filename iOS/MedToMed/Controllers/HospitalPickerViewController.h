@@ -13,5 +13,6 @@
 
 @property (nonatomic) NSMutableArray *hospitals;
 @property (nonatomic) HospitalModel *selectedHospital;
+@property (nonatomic) BOOL shouldSetHospital;
 
 @end
