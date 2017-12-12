@@ -40,10 +40,6 @@
 /*/ Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];
-	
 	// Go back to Message Detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -51,9 +47,9 @@
 // Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+
+	[errorAlertController show:error];
 }*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate

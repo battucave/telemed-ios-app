@@ -108,23 +108,15 @@
 /*/ Return success from NewMessageModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"New Message" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];
+ 
 }
 
 // Return error from NewMessageModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	// If device offline, show offline message
-	if (error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.newMessageModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"New Message Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+
+	[errorAlertController show:error];
 }*/
 
 // Fired from MessageComposeTable to perform segue to either AccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker

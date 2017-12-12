@@ -65,10 +65,6 @@
 // Return success from PasswordChangeModel delegate
 - (void)changePasswordSuccess
 {
-	/*UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Change Password" message:@"Password changed successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];*/
-	
 	// Go back to Settings
 	[self.navigationController popViewControllerAnimated:YES];
 }

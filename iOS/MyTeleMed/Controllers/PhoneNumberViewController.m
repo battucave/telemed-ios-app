@@ -8,6 +8,7 @@
 
 #import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
+#import "ErrorAlertController.h"
 #import "HelpViewController.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
@@ -78,82 +79,120 @@
 	
 	if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
 	{
-		UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Invalid Phone Number" message:@"Please enter a valid Phone Number." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		
-		[errorAlertView show];
+		UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"Invalid Phone Number" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	
+		[errorAlertController addAction:actionOK];
+	
+		// PreferredAction only supported in 9.0+
+		if ([errorAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[errorAlertController setPreferredAction:actionOK];
+		}
+	
+		// Show Alert
+		[self presentViewController:errorAlertController animated:YES completion:nil];
 	}
 	else
 	{
 		NSString *messagestring = [NSString stringWithFormat:@"Is %@ the correct Phone Number for this device? Your TeleMed profile will be updated.",
 								  phoneNumber];
 		
-		UIAlertView *confirmAlertView = [[UIAlertView alloc] initWithTitle:@"Confirm Phone Number" message:messagestring delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-		
-		[confirmAlertView setTag:1];
-		[confirmAlertView show];
+		UIAlertController *confirmPhoneNumberAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Phone Number" message:messagestring preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
+		UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+		{
+			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+			
+			// Register Phone Number along with new Device Token
+			[registeredDeviceModel setShouldRegister:YES];
+			
+			// Save Phone Number to Device
+			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
+			
+			// Run registerDevice web service
+			[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
+			{
+				if (success)
+				{
+					// Go to Main Storyboard
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+				}
+				else
+				{
+					NSLog(@"PhoneNumberViewController Error: %@", error);
+					
+					// If device offline, show offline message
+					if (error.code == NSURLErrorNotConnectedToInternet)
+					{
+						ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+
+						[errorAlertController show:error];
+						
+						return;
+					}
+					
+					UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+					UIAlertAction *actionGoBack = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+					{
+						// Go back to Login
+						if (self.delegate)
+						{
+							[self performSegueWithIdentifier:@"unwindFromPhoneNumber" sender:self];
+						}
+						// User was automatically redirected to PhoneNumberViewController from AppDelegate
+						else
+						{
+							UIViewController *loginSSOViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
+							[self.navigationController setViewControllers:@[loginSSOViewController] animated:YES];
+						}
+					}];
+					UIAlertAction *actionRetry = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
+				
+					[errorAlertController addAction:actionGoBack];
+					[errorAlertController addAction:actionRetry];
+				
+					// PreferredAction only supported in 9.0+
+					if ([errorAlertController respondsToSelector:@selector(setPreferredAction:)])
+					{
+						[errorAlertController setPreferredAction:actionCancel];
+					}
+				
+					// Show Alert
+					[self presentViewController:errorAlertController animated:YES completion:nil];
+				}
+			}];
+		}];
+
+		[confirmPhoneNumberAlertController addAction:actionNo];
+		[confirmPhoneNumberAlertController addAction:actionYes];
+
+		// PreferredAction only supported in 9.0+
+		if ([confirmPhoneNumberAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[confirmPhoneNumberAlertController setPreferredAction:actionYes];
+		}
+
+		// Show Alert
+		[self presentViewController:confirmPhoneNumberAlertController animated:YES completion:nil];
 	}
 }
 
 - (IBAction)getPhoneNumberHelp:(id)sender
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"What's This For?" message:@"As a security precaution, Apple requires apps that use your Phone Number to ask you for it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[alert show];
-}
+	UIAlertController *phoneNumberHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"As a security precaution, Apple requires apps that use your Phone Number to ask you for it." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	// Phone Number Confirmation Handler
-	if (alertView.tag == 1 && buttonIndex > 0)
+	[phoneNumberHelpAlertController addAction:actionOK];
+
+	// PreferredAction only supported in 9.0+
+	if ([phoneNumberHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-		
-		// Register Phone Number along with new Device Token
-		[registeredDeviceModel setShouldRegister:YES];
-		
-		// Save Phone Number to Device
-		[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
-		
-		// Run registerDevice web service
-		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
-		{
-			if (success)
-			{
-				// Go to Main Storyboard
-				[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
-			}
-			else
-			{
-				NSLog(@"PhoneNumberViewController Error: %@", error);
-				
-				// If device offline, show offline message
-				if (error.code == NSURLErrorNotConnectedToInternet)
-				{
-					return [registeredDeviceModel showError:error];
-				}
-				
-				UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] delegate:self cancelButtonTitle:@"Go Back" otherButtonTitles:@"Try Again", nil];
-				errorAlertView.tag = 2;
-				
-				[errorAlertView show];
-			}
-		}];
+		[phoneNumberHelpAlertController setPreferredAction:actionOK];
 	}
-	// If user received error when attempting to register their phone number and press Go Back, then send them back to login
-	else if (alertView.tag == 2 && buttonIndex == 0)
-	{
-		// Go back to Login
-		if (self.delegate)
-		{
-			[self performSegueWithIdentifier:@"unwindFromPhoneNumber" sender:self];
-		}
-		// User was automatically redirected to PhoneNumberViewController from AppDelegate
-		else
-		{
-			UIViewController *loginSSOViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
-			[self.navigationController setViewControllers:@[loginSSOViewController] animated:YES];
-		}
-	}
+
+	// Show Alert
+	[self presentViewController:phoneNumberHelpAlertController animated:YES completion:nil];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

@@ -89,14 +89,9 @@
 		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not been read yet. Selecting Continue will delete %@ from our system.", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
-	
-    [alertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if (buttonIndex > 0)
+	UIAlertController *deleteChatMessagesAlertController = [UIAlertController alertControllerWithTitle:@"Delete Chat Messages" message:notificationMessage preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Added this because a minority of users were complaining that Chat sometimes causes crash
 		if (self.chatMessageModel == nil)
@@ -106,7 +101,19 @@
 		}
 		
 		[self.chatMessageModel deleteMultipleChatMessages:self.selectedChatMessages];
+	}];
+
+	[deleteChatMessagesAlertController addAction:actionCancel];
+	[deleteChatMessagesAlertController addAction:actionContinue];
+
+	// PreferredAction only supported in 9.0+
+	if ([deleteChatMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[deleteChatMessagesAlertController setPreferredAction:actionContinue];
 	}
+
+	// Show Alert
+	[self presentViewController:deleteChatMessagesAlertController animated:YES completion:nil];
 }
 
 // Override default Remote Notification action from CoreViewController

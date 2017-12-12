@@ -134,15 +134,9 @@
 // Return Save error from NotificationSettingModel delegate (no longer used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
-	// If device offline, show offline message
-	if (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.notificationSettingModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Notification Settings Error" message:@"There was a problem saving your Notification Settings. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+
+	[errorAlertController show:error];
 }*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

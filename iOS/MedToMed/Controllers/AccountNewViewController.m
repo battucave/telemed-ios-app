@@ -52,9 +52,19 @@
 
 - (IBAction)getAccountCodeHelp:(id)sender
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"What's This For?" message:@"To create your new account, you must enter the code sent to you by TeleMed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[alert show];
+	UIAlertController *accountCodeHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"To create your new account, you must enter the code sent to you by TeleMed." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+
+	[accountCodeHelpAlertController addAction:actionOK];
+
+	// PreferredAction only supported in 9.0+
+	if ([accountCodeHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[accountCodeHelpAlertController setPreferredAction:actionOK];
+	}
+
+	// Show Alert
+	[self presentViewController:accountCodeHelpAlertController animated:YES completion:nil];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

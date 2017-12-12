@@ -105,20 +105,27 @@
 		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these messages %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (long)unreadMessageCount, (unreadMessageCount == 1 ? @"has" : @"have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Archive Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
-	
-    [alertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if (buttonIndex > 0)
+	UIAlertController *archiveMessagesAlertController = [UIAlertController alertControllerWithTitle:@"Archive Messages" message:notificationMessage preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		MessageModel *messageModel = [[MessageModel alloc] init];
 		[messageModel setDelegate:self];
 		
 		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
+	}];
+
+	[archiveMessagesAlertController addAction:actionCancel];
+	[archiveMessagesAlertController addAction:actionContinue];
+
+	// PreferredAction only supported in 9.0+
+	if ([archiveMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[archiveMessagesAlertController setPreferredAction:actionContinue];
 	}
+
+	// Show Alert
+	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
 }
 
 // Override default Remote Notification action from CoreViewController

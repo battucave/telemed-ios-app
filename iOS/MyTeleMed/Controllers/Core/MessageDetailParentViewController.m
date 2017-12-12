@@ -168,15 +168,9 @@
 // Return error from CallTeleMedModel delegate (no longer used)
 - (void)callSenderError:(NSError *)error
 {
-	// If device offline, show offline message
-	if (error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.callModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Return Call Error" message:@"There was a problem requesting a Return Call. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+
+	[errorAlertController show:error];
 }*/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

@@ -594,15 +594,9 @@
 // Return error from CommentModel delegate (no longer used)
 - (void)saveCommentError:(NSError *)error
 {
-	// If device offline, show offline message
-	if (error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.commentModel showOfflineError];
-	}
- 
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Add Comment Error" message:@"There was a problem adding your Comment. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
- 
-	[errorAlertView show];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+
+	[errorAlertController show:error];
 }*/
 
 - (void)setMessageDetails
