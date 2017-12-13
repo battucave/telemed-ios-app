@@ -126,7 +126,7 @@
 					if (error.code == NSURLErrorNotConnectedToInternet)
 					{
 						ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-
+						
 						[errorAlertController show:error];
 						
 						return;
@@ -151,12 +151,6 @@
 				
 					[errorAlertController addAction:actionGoBack];
 					[errorAlertController addAction:actionRetry];
-				
-					// PreferredAction only supported in 9.0+
-					if ([errorAlertController respondsToSelector:@selector(setPreferredAction:)])
-					{
-						[errorAlertController setPreferredAction:actionCancel];
-					}
 				
 					// Show Alert
 					[self presentViewController:errorAlertController animated:YES completion:nil];

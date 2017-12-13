@@ -8,6 +8,7 @@
 
 #import "ChatMessagesTableViewController.h"
 #import "ChatMessageDetailViewController.h"
+#import "ErrorAlertController.h"
 #import "ChatMessageCell.h"
 #import "ChatMessageModel.h"
 #import "ChatParticipantModel.h"
@@ -191,7 +192,9 @@
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
-	[self.chatMessageModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -397,7 +400,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([[segue identifier] isEqualToString:@"showChatMessageDetail"])
+	if ([segue.identifier isEqualToString:@"showChatMessageDetail"])
 	{
 		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;
 		

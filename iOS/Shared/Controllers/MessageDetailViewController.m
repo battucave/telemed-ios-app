@@ -7,6 +7,7 @@
 //
 
 #import "MessageDetailViewController.h"
+#import "ErrorAlertController.h"
 #import "AutoGrowingTextView.h"
 #import "ProfileProtocol.h"
 #import <QuartzCore/QuartzCore.h>
@@ -171,7 +172,7 @@
 				#ifdef DEBUG
 					[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unread"];
 				#endif
-				// END TESTING ONLY*/
+				// END TESTING ONLY */
 			}
 			/*/ TESTING ONLY (unarchive archived messages)
 			else if (self.message.messageType == 1)
@@ -180,7 +181,7 @@
 					[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
 				#endif
 			}
-			// END TESTING ONLY*/
+			// END TESTING ONLY */
 		}
 	#endif
 	
@@ -391,7 +392,7 @@
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
 	#endif
-	// END TESTING ONLY*/
+	// END TESTING ONLY */
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
@@ -421,7 +422,9 @@
 	// Show error message only if device offline
 	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
-		[self.messageEventModel showError:error];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		
+		[errorAlertController show:error];
 	}
 }
 
@@ -443,7 +446,9 @@
 	// Show error message only if device offline
 	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
-		[self.messageRecipientModel showError:error];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		
+		[errorAlertController show:error];
 	}
 }
 
@@ -595,7 +600,7 @@
 - (void)saveCommentError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-
+ 
 	[errorAlertController show:error];
 }*/
 
@@ -614,7 +619,7 @@
 		[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
 		[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 	#endif
-	// END TESTING ONLY*/
+	// END TESTING ONLY */
 	
 	// Set message date and time
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -800,7 +805,7 @@
 {
 	[super prepareForSegue:segue sender:sender];
 	
-	if ([[segue identifier] isEqualToString:@"showMessageHistory"])
+	if ([segue.identifier isEqualToString:@"showMessageHistory"])
 	{
 		MessageHistoryViewController *messageHistoryViewController = [segue destinationViewController];
 		

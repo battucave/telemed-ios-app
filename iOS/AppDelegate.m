@@ -496,7 +496,7 @@
 	// Show Alert
 	[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
 	
-	// END TESTING ONLY*/
+	// END TESTING ONLY */
 	
 	// Handle Push Notification when App is Active.
 	if ([application applicationState] == UIApplicationStateActive)
@@ -623,7 +623,7 @@
 			// Go to Main Storyboard
 			[self showMainScreen];
 		}
-		else if (error)
+		else
 		{
 			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			

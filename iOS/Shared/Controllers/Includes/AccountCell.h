@@ -10,7 +10,7 @@
 
 @interface AccountCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *accountName;
-@property (weak, nonatomic) IBOutlet UILabel *accountPublicKey;
+@property (weak, nonatomic) IBOutlet UILabel *labelName;
+@property (weak, nonatomic) IBOutlet UILabel *labelPublicKey;
 
 @end

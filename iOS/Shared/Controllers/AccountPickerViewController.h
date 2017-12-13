@@ -10,13 +10,17 @@
 #import "CoreViewController.h"
 #import "AccountModel.h"
 
-// NOTE: This ViewController is shared by 2 different Storyboard Views: New Message Account Picker and Settings Preferred Account
-
 @interface AccountPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) BOOL shouldSetPreferredAccount;
 @property (nonatomic) NSMutableArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
-@property (nonatomic) NSMutableArray *selectedMessageRecipients;
+
+#ifdef MYTELEMED
+	@property (nonatomic) NSMutableArray *selectedMessageRecipients;
+	@property (nonatomic) BOOL shouldSetPreferredAccount;
+
+#elif defined MEDTOMED
+	@property (nonatomic) BOOL shouldSelectAccount;
+#endif
 
 @end

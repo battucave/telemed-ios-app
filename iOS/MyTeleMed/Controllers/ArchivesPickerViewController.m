@@ -7,6 +7,7 @@
 //
 
 #import "ArchivesPickerViewController.h"
+#import "ErrorAlertController.h"
 #import "AccountModel.h"
 
 @interface ArchivesPickerViewController ()
@@ -120,7 +121,9 @@
 	}
 	
 	// Show error message
-	[self.accountModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView

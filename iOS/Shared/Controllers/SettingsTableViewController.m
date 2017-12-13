@@ -7,11 +7,10 @@
 //
 
 #import "SettingsTableViewController.h"
-// #import "AccountPickerViewController.h"
+#import "AccountPickerViewController.h"
 #import "ProfileProtocol.h"
 
 #ifdef MYTELEMED
-	#import "AccountPickerViewController.h"
 	#import "SettingsNotificationsTableViewController.h"
 	#import "MyProfileModel.h"
 #endif
@@ -172,20 +171,23 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// TEMPORARY
-	#ifdef MYTELEMED
 	// Update title of AccountsPickerViewController
 	if ([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
-		[accountPickerViewController setTitle:@"Preferred Account"];
-		[accountPickerViewController setShouldSetPreferredAccount:YES];
+		#ifdef MYTELEMED
+			[accountPickerViewController setTitle:@"Preferred Account"];
+			[accountPickerViewController setShouldSetPreferredAccount:YES];
+		
+		#elif defined MEDTOMED
+			[accountPickerViewController setTitle:@"My Medical Groups"];
+			[accountPickerViewController setShouldSelectAccount:NO];
+		#endif
 	}
-	#endif
 	
 	#ifdef MYTELEMED
 		// Embedded Table View Controller inside Container
-		else if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
+		if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
 		{
 			SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
 			NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];

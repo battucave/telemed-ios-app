@@ -178,6 +178,8 @@
 		E24A44381FCDFDCC00A06EE8 /* InsetTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A44361FCDFDCC00A06EE8 /* InsetTextField.m */; };
 		E24A443C1FCE181A00A06EE8 /* HospitalPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */; };
 		E24A44401FCE1C7C00A06EE8 /* HospitalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */; };
+		E24C2A3E1FE085A00050E68B /* AccountPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */; };
+		E24C2A3F1FE085B30050E68B /* AccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D5841FBF571B00263497 /* AccountCell.m */; };
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
@@ -1252,8 +1254,6 @@
 			children = (
 				28661E1318353B630071FADF /* Core */,
 				E211D57B1FBF571B00263497 /* Includes */,
-				E21EC5CF1CE37C880027AA14 /* AccountPickerViewController.h */,
-				E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */,
 				283D4C841828440200EF9CD2 /* ArchivesPickerViewController.h */,
 				283D4C851828440200EF9CD2 /* ArchivesPickerViewController.m */,
 				28CCCD8917F535DD0093CEE2 /* ArchivesViewController.h */,
@@ -1539,6 +1539,8 @@
 			children = (
 				E211D5791FBF55D400263497 /* Core */,
 				E211D57A1FBF55D900263497 /* Includes */,
+				E21EC5CF1CE37C880027AA14 /* AccountPickerViewController.h */,
+				E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */,
 				E2D83FB31C761502008D26A8 /* CDMAVoiceDataViewController.h */,
 				E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */,
 				E2D5670F1CD95C500054FD3F /* ContactMessageViewController.h */,
@@ -1587,6 +1589,8 @@
 		E211D57A1FBF55D900263497 /* Includes */ = {
 			isa = PBXGroup;
 			children = (
+				E211D5911FBF571B00263497 /* AccountCell.h */,
+				E211D5841FBF571B00263497 /* AccountCell.m */,
 				E211D5811FBF571B00263497 /* AutoGrowingTextView.h */,
 				E211D58E1FBF571B00263497 /* AutoGrowingTextView.m */,
 				E211D5861FBF571B00263497 /* MessageCell.h */,
@@ -1604,8 +1608,6 @@
 		E211D57B1FBF571B00263497 /* Includes */ = {
 			isa = PBXGroup;
 			children = (
-				E211D5911FBF571B00263497 /* AccountCell.h */,
-				E211D5841FBF571B00263497 /* AccountCell.m */,
 				E211D57C1FBF571B00263497 /* ChatMessageCell.h */,
 				E211D5891FBF571B00263497 /* ChatMessageCell.m */,
 				E211D5821FBF571B00263497 /* ChatMessagesTableViewController.h */,
@@ -2526,6 +2528,7 @@
 				E25036D01FBB88F400099C7E /* main.m in Sources */,
 				E25036D11FBB88F400099C7E /* AFHTTPRequestOperation.m in Sources */,
 				E25036D31FBB88F400099C7E /* CoreTableViewController.m in Sources */,
+				E24C2A3E1FE085A00050E68B /* AccountPickerViewController.m in Sources */,
 				E25036D61FBB88F400099C7E /* AFURLResponseSerialization.m in Sources */,
 				E25036D71FBB88F400099C7E /* HelpViewController.m in Sources */,
 				E25036D91FBB88F400099C7E /* AuthenticationModel.m in Sources */,
@@ -2554,6 +2557,7 @@
 				E25036F91FBB88F400099C7E /* AFNetworkReachabilityManager.m in Sources */,
 				E25036FA1FBB88F400099C7E /* PasswordChangeModel.m in Sources */,
 				E25036FB1FBB88F400099C7E /* SWRevealViewController.m in Sources */,
+				E24C2A3F1FE085B30050E68B /* AccountCell.m in Sources */,
 				E25036FD1FBB88F400099C7E /* SideNavigationCountCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

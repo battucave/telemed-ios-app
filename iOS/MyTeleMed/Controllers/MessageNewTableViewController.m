@@ -7,6 +7,7 @@
 //
 
 #import "MessageNewTableViewController.h"
+#import "ErrorAlertController.h"
 #import "MessageComposeTableViewController.h"
 #import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
@@ -95,7 +96,9 @@
 - (void)updateAccountsError:(NSError *)error
 {
 	// Show error message
-	[self.accountModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 // Return pending from NewMessageModel delegate
@@ -115,7 +118,7 @@
 - (void)sendMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-
+ 
 	[errorAlertController show:error];
 }*/
 

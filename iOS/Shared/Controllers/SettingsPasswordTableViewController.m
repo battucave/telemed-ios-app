@@ -7,6 +7,7 @@
 //
 
 #import "SettingsPasswordTableViewController.h"
+#import "ErrorAlertController.h"
 #import "PasswordChangeModel.h"
 
 @interface SettingsPasswordTableViewController ()
@@ -36,9 +37,11 @@
 	// Verify that New Password matches Confirm Password
 	if ( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
+		// Show error message
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password do not match.", NSLocalizedDescriptionKey, nil]];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 		
-		[passwordChangeModel showError:error];
+		[errorAlertController show:error];
 		
 		[self.textFieldConfirmNewPassword setText:@""];
 		[self.textFieldConfirmNewPassword becomeFirstResponder];

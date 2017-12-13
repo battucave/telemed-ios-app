@@ -7,6 +7,7 @@
 //
 
 #import "SettingsNotificationsTableViewController.h"
+#import "ErrorAlertController.h"
 #import "SettingsNotificationsPickerTableViewController.h"
 #import "NotificationSettingModel.h"
 
@@ -121,7 +122,9 @@
 	// Show error message only if device offline
 	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
-		[self.notificationSettingModel showError:error];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		
+		[errorAlertController show:error];
 	}
 }
 
@@ -135,7 +138,7 @@
 -(void)saveNotificationSettingsError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-
+	
 	[errorAlertController show:error];
 }*/
 

@@ -7,6 +7,7 @@
 //
 
 #import "OnCallScheduleViewController.h"
+#import "ErrorAlertController.h"
 #import "OnCallSummaryCell.h"
 #import "MyStatusModel.h"
 
@@ -83,7 +84,9 @@
 			NSLog(@"OnCallScheduleViewController Error: %@", error);
 			
 			// Show error message
-			[self.myStatusModel showError:error];
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
 		}
 	}];
 }

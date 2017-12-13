@@ -11,14 +11,10 @@
 
 @implementation AccountModel
 
-- (void)getAccounts
+// Private method used for all accounts lookups
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback parameters:(NSDictionary *)parameters
 {
-	[self getAccountsWithCallback:nil];
-}
-
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
-{
-	[self.operationManager GET:@"Accounts" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
+	[self.operationManager GET:@"Accounts" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
 		AccountXMLParser *parser = [[AccountXMLParser alloc] init];
@@ -28,6 +24,21 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
+			/*/ TESTING ONLY (generate fictitious accounts for testing)
+			NSMutableArray *accounts = [parser accounts];
+			
+			for (int i = 0; i < 20; i++)
+			{
+				AccountModel *account = [[AccountModel alloc] init];
+				
+				[account setID:[NSNumber numberWithInt:i]];
+				[account setName:[NSString stringWithFormat:@"Account %d", i]];
+				[account setPublicKey:[NSString stringWithFormat:@"%d", i]];
+				
+				[accounts addObject:account];
+			}
+			// END TESTING ONLY */
+			
 			// Handle success via callback block
 			if (callback)
 			{
@@ -76,6 +87,16 @@
 	}];
 }
 
+- (void)getAccounts
+{
+	[self getAccountsWithCallback:nil parameters:nil];
+}
+
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
+{
+	[self getAccountsWithCallback:callback parameters:nil];
+}
+
 
 #pragma mark - MyTeleMed
 
@@ -97,7 +118,16 @@
 #ifdef MEDTOMED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID
 {
-	NSLog(@"Get Accounts By Hospital: %@", hospitalID);
+	[self getAccountsByHospital:hospitalID withCallback:nil];
+}
+
+- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL, NSMutableArray *, NSError *))callback
+{
+	NSDictionary *parameters = @{
+		@"hospID"	: hospitalID
+	};
+	
+	[self getAccountsWithCallback:callback parameters:parameters];
 }
 
 - (BOOL)isAccountAuthorized:(AccountModel *)account

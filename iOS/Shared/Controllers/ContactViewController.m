@@ -80,7 +80,7 @@
 - (void)callTeleMedError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-
+	
 	[errorAlertController show:error];
 }*/
 

@@ -155,7 +155,9 @@
 	// Show error message
 	if ([state isEqualToString:@"archive"])
     {
-		[self.messageModel showError:error];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+ 
+		[errorAlertController show:error];
     }
 }*/
 
@@ -169,19 +171,19 @@
 - (void)callSenderError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-
+	
 	[errorAlertController show:error];
 }*/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showMessageForwardFromMessageDetail"] || [[segue identifier] isEqualToString:@"showMessageForwardFromMessageHistory"])
+    if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])
     {
         MessageForwardViewController *messageForwardViewController = [segue destinationViewController];
         
         [messageForwardViewController setMessage:self.message];
     }
-	else if ([[segue identifier] isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [[segue identifier] isEqualToString:@"showMessageTeleMedFromMessageHistory"])
+	else if ([segue.identifier isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageTeleMedFromMessageHistory"])
 	{
 		MessageTeleMedViewController *messageTeleMedViewController = [segue destinationViewController];
 		

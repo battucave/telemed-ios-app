@@ -3429,7 +3429,7 @@
         <!--Select Account-->
         <scene sceneID="QQi-Sg-SyM">
             <objects>
-                <viewController storyboardIdentifier="NewMessageAccountPicker" id="VQu-Ge-aJV" customClass="AccountPickerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MessageNewAccountPicker" id="VQu-Ge-aJV" customClass="AccountPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a0L-Ge-VkQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3509,8 +3509,8 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accountName" destination="N5V-QR-cal" id="t6h-Tu-lgq"/>
-                                            <outlet property="accountPublicKey" destination="PSX-WE-s2o" id="yqc-ZC-3J6"/>
+                                            <outlet property="labelName" destination="N5V-QR-cal" id="orn-r0-jr8"/>
+                                            <outlet property="labelPublicKey" destination="PSX-WE-s2o" id="O0L-18-Ycq"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -3538,9 +3538,11 @@
                         <outlet property="tableAccounts" destination="QZ7-a8-rYA" id="Ye1-JO-GxR"/>
                         <outlet property="viewSearchBarContainer" destination="pUs-a0-7Pa" id="rIK-mX-COl"/>
                         <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromAccountPicker" id="Wxx-iI-zqX"/>
+                        <segue destination="cOi-kn-978" kind="unwind" identifier="setAccount" unwindAction="setAccount:" id="402-LO-fNm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f8a-3B-esZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="cOi-kn-978" userLabel="Exit" sceneMemberID="exit"/>
                 <searchDisplayController id="Eh5-nq-miB">
                     <connections>
                         <outlet property="delegate" destination="VQu-Ge-aJV" id="QHB-aL-4mY"/>

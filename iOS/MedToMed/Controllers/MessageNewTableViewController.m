@@ -7,17 +7,40 @@
 //
 
 #import "MessageNewTableViewController.h"
+#import "AccountPickerViewController.h"
+#import "ErrorAlertController.h"
 #import "HospitalPickerViewController.h"
+#import "AccountModel.h"
 
 @interface MessageNewTableViewController ()
 
+@property (nonatomic) AccountModel *accountModel;
+
+@property (nonatomic) IBOutlet UIBarButtonItem *buttonNext;
 @property (nonatomic) IBOutlet UILabel *labelHospital;
 @property (nonatomic) IBOutlet UILabel *labelMedicalGroup;
+@property (nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
+@property (nonatomic) IBOutlet UIView *viewSectionFooter;
+
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
+@property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;
+
+@property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) BOOL hasSubmitted;
+@property (nonatomic) BOOL isLoading;
 
 @end
 
 @implementation MessageNewTableViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	
+	// Initialize Account Model
+	[self setAccountModel:[[AccountModel alloc] init]];
+	[self.accountModel setDelegate:self];
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -26,22 +49,53 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// TEST - Get text field identifier by its accessibility identifier (see SettingsProfileTableViewController's setTextFieldValues)
-	for (UITextField *textField in self.textFields)
+	// Fix iOS 11+ issue with next button that occurs when returning back from MessageNew2 screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
+	if (self.hasSubmitted)
 	{
-		NSLog(@"Identifier: %@", textField.accessibilityIdentifier);
+		if (@available(iOS 11.0, *))
+		{
+			// Workaround the issue by completely replacing the next button with a brand new one
+			[self setButtonNext:[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageNew2:)]];
+			
+			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:self.buttonNext, nil]];
+		}
 	}
-	
-	/*UIView *leftPaddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 154, 22)];
-	
-	for(UITextField *textField in self.textFields)
-{
-		[textField setLeftView:leftPaddingView];
-		[textField setLeftViewMode:UITextFieldViewModeAlways];
-	}*/
 }
 
-// Unwind Segue from HospitalPickerViewController
+- (IBAction)showMessageNew2:(id)sender
+{
+	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+	
+	[self setHasSubmitted:YES];
+}
+
+// Unwind segue from AccountPickerViewController
+- (IBAction)setAccount:(UIStoryboardSegue *)segue
+{
+	// Obtain reference to source view controller
+	AccountPickerViewController *accountPickerViewController = segue.sourceViewController;
+	
+	// Save selected account
+	[self setSelectedAccount:accountPickerViewController.selectedAccount];
+	
+	// Update medical group label with medical group (account) name
+	[self.labelMedicalGroup setText:self.selectedAccount.Name];
+	
+	// Show form field cells
+	[self.tableView beginUpdates];
+	
+	for (UITableViewCell *cellFormField in self.cellFormFields)
+	{
+		[cellFormField setHidden:NO];
+	}
+	
+	[self.tableView endUpdates];
+	
+	// Validate form
+	[self validateForm];
+}
+
+// Unwind segue from HospitalPickerViewController
 - (IBAction)setHospital:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
@@ -50,8 +104,80 @@
 	// Save selected hospital
 	[self setSelectedHospital:hospitalPickerViewController.selectedHospital];
 	
+	[self.tableView beginUpdates];
+	
+	// Show loading indicator in table footer
+	[self setIsLoading:YES];
+	
 	// Update hospital label with hospital name
 	[self.labelHospital setText:self.selectedHospital.Name];
+	
+	[self.tableView endUpdates];
+	
+	// Load accounts for hospital
+	[self.accountModel getAccountsByHospital:self.selectedHospital.ID withCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	{
+		if (success)
+		{
+			// Filter and store only authorized accounts
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@", @"Authorized"];
+			[self setAccounts:[[accounts filteredArrayUsingPredicate:predicate] mutableCopy]];
+			
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				// Show medical group cell
+				[self.cellMedicalGroup setHidden:NO];
+				
+				// Hide loading indicator in table footer
+				[self setIsLoading:NO];
+				[self.tableView reloadData];
+			});
+		}
+		else
+		{
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
+		}
+	}];
+	
+	// Validate form
+	[self validateForm];
+}
+
+- (IBAction)textFieldDidChange:(id)sender
+{
+	// Validate form
+	[self validateForm];
+}
+
+// Check required fields to determine if form can continue to next page
+- (void)validateForm
+{
+	// Verify that an account and hospital have been selected
+	BOOL isValidated = (self.selectedAccount != nil && self.selectedHospital != nil);
+	
+	if (isValidated)
+	{
+		for (UITextField *textField in self.textFields)
+		{
+			// Verify that callback number is a valid phone number
+			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackNumber"])
+			{
+				if ([textField.text length] < 7)
+				{
+					isValidated = NO;
+				}
+			}
+			// Verify that field is not empty
+			else if ([textField.text isEqualToString:@""])
+			{
+				isValidated = NO;
+			}
+		}
+	}
+	
+	[self.buttonNext setEnabled:isValidated];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -71,17 +197,67 @@
 	return NO;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	return (self.isLoading ? self.viewSectionFooter.frame.size.height : 0.1);
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+	return 0.1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+	
+	return (cell.hidden ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	/*UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+	UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 10.0f, self.tableView.bounds.size.width, 54.0f)];
+	
+	[activityIndicatorView startAnimating];
+	[activityIndicatorView setFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 44.0f)];
+	[activityIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin];
+	
+	[containerView addSubview:activityIndicatorView];
+
+	return containerView;*/
+	
+	// Only show table footer if loading is enabled
+	return (self.isLoading ? self.viewSectionFooter : nil);
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([segue.identifier isEqualToString:@"showMyHospitalsFromMessageNew"])
+	if ([segue.identifier isEqualToString:@"showHospitalPickerFromMessageNew"])
 	{
 		HospitalPickerViewController *hospitalPickerViewController = segue.destinationViewController;
 		
 		// Enable hospital selection on hospital picker screen
-		[hospitalPickerViewController setShouldSetHospital:YES];
+		[hospitalPickerViewController setShouldSelectHospital:YES];
 		
 		// Set selected hospital if previously set
 		[hospitalPickerViewController setSelectedHospital:self.selectedHospital];
+	}
+	else if ([segue.identifier isEqualToString:@"showAccountPickerFromMessageNew"])
+	{
+		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
+		
+		// Update title
+		[accountPickerViewController setTitle:@"Choose Medical Group"];
+		
+		// Enable account selection on account picker screen
+		[accountPickerViewController setShouldSelectAccount:YES];
+		
+		// Set Accounts
+		[accountPickerViewController setAccounts:self.accounts];
+		
+		// Set selected account if previously set
+		[accountPickerViewController setSelectedAccount:self.selectedAccount];
 	}
 }
 

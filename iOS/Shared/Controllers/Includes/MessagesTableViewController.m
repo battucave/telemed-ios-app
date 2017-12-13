@@ -7,6 +7,7 @@
 //
 
 #import "MessagesTableViewController.h"
+#import "ErrorAlertController.h"
 #import "MessageDetailViewController.h"
 #import "MessageCell.h"
 #import "MessageProtocol.h"
@@ -240,7 +241,9 @@
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
-	[self.messageModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 #endif
 
@@ -256,7 +259,9 @@
 	[self setIsLoaded:YES];
 	
 	// Show error message
-	[self.sentMessageModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -382,7 +387,7 @@
 			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
 		}
 	#endif
-	// END TESTING ONLY*/
+	// END TESTING ONLY */
 	
 	// Set Message Priority color
 	if ([message.Priority isEqualToString:@"Priority"])
@@ -511,7 +516,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([[segue identifier] isEqualToString:@"showMessageDetail"])
+	if ([segue.identifier isEqualToString:@"showMessageDetail"])
 	{
 		MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
 		

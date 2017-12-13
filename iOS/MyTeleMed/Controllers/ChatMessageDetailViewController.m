@@ -7,6 +7,7 @@
 //
 
 #import "ChatMessageDetailViewController.h"
+#import "ErrorAlertController.h"
 #import "MessageRecipientPickerViewController.h"
 #import "AutoGrowingTextView.h"
 #import "CommentCell.h"
@@ -430,7 +431,9 @@
 	[self setIsLoaded:YES];
 	
 	// Show error message
-	[self.chatMessageModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 // Return pending from NewChatMessageModel delegate

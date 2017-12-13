@@ -7,15 +7,17 @@
 //
 
 #import "AccountPickerViewController.h"
-#import "MessageRecipientPickerViewController.h"
+#import "ErrorAlertController.h"
 #import "AccountCell.h"
 #import "AccountModel.h"
-#import "MyProfileModel.h"
-#import "PreferredAccountModel.h"
+
+#ifdef MYTELEMED
+	#import "MessageRecipientPickerViewController.h"
+	#import "MyProfileModel.h"
+	#import "PreferredAccountModel.h"
+#endif
 
 @interface AccountPickerViewController ()
-
-@property (nonatomic) AccountModel *accountModel;
 
 @property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
@@ -25,6 +27,7 @@
 
 @property (nonatomic) NSMutableArray *filteredAccounts;
 @property (nonatomic) BOOL isLoaded;
+@property (nonatomic) NSString *textAccount;
 
 @end
 
@@ -34,24 +37,13 @@
 {
     [super viewDidLoad];
 	
-	// If accounts were not pre-loaded (slow connection in MessageNewTableViewController), then load them here
-	if ([self.accounts count] == 0)
-	{
-		// Initialize account model
-		[self setAccountModel:[[AccountModel alloc] init]];
-		[self.accountModel setDelegate:self];
-	}
+	// MedToMed refers to accounts as medical groups
+    #ifdef MEDTOMED
+    	[self setTextAccount:@"Medical Group"];
 	
-	// If selected account not already set, then set it to my profile model's MyPreferredAccount
-	if ( ! self.selectedAccount)
-	{
-		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-		
-		if (myProfileModel.MyPreferredAccount)
-		{
-			[self setSelectedAccount:myProfileModel.MyPreferredAccount];
-		}
-	}
+	#else
+		[self setTextAccount:@"Account"];
+	#endif
 	
 	// Initialize search controller
 	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -61,11 +53,12 @@
 	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
 	
-	self.definesPresentationContext = YES;
+	// Commented out because it causes issues when attempting to navigate to another screen on search result selection
+	// self.definesPresentationContext = YES;
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
-	[self.searchController.searchBar setPlaceholder:@"Search Accounts"];
+	[self.searchController.searchBar setPlaceholder:[NSString stringWithFormat:@"Search %@s", self.textAccount]];
 	[self.searchController.searchBar sizeToFit];
 	
 	// iOS 11+ navigation bar has support for search controller
@@ -114,32 +107,59 @@
 		// Hide placeholder search bar from Storyboard (UISearchController and its search bar cannot be implemented in Storyboard so we use a placeholder search bar instead)
 		[self.searchBar setHidden:YES];
 	}
+	
+	#ifdef MYTELEMED
+		// If selected account not already set, then set it to my profile model's MyPreferredAccount
+		if ( ! self.selectedAccount)
+		{
+			MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+			
+			if (myProfileModel.MyPreferredAccount)
+			{
+				[self setSelectedAccount:myProfileModel.MyPreferredAccount];
+			}
+		}
+	#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableAccounts setTableFooterView:[[UIView alloc] init]];
+	
 	// Get list of accounts
 	if ([self.accounts count] == 0)
 	{
-		[self.accountModel getAccounts];
+		// Initialize account model
+		AccountModel *accountModel = [[AccountModel alloc] init];
+		
+		[accountModel setDelegate:self];
+		[accountModel getAccounts];
 	}
 	// If account was previously selected, scroll to it
 	else
 	{
 		[self.tableAccounts reloadData];
 		
-		// Scroll to selected account
 		[self scrollToSelectedAccount];
 	}
+	
+	#ifdef MEDTOMED
+		// If user navigated from settings screen, disallow selection of accounts
+		if (! self.shouldSelectAccount)
+		{
+			[self.tableAccounts setAllowsSelection:NO];
+		}
+	#endif
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
 	
-	// Reset search results (put here because it's animation must occur AFTER any segue)
+	// Reset search results (put here because its animation must occur AFTER any segue)
 	if (self.searchController.active)
 	{
 		[self.searchController setActive:NO];
@@ -153,13 +173,10 @@
 	
 	self.isLoaded = YES;
 	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableAccounts reloadData];
-		
-		// If account was previously selected, scroll to it
-		[self scrollToSelectedAccount];
-	});
+	// If account was previously selected, scroll to it
+	[self.tableAccounts reloadData];
+	
+	[self scrollToSelectedAccount];
 }
 
 // Return error from account model delegate
@@ -168,7 +185,9 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	[self.accountModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 // Return pending from preferred account model delegate
@@ -199,7 +218,10 @@
 		// Scroll to cell
 		if (indexPath)
 		{
-			[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[self.tableAccounts scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+			});
 		}
 	}
 }
@@ -209,8 +231,6 @@
 {
 	NSPredicate *predicate;
 	NSString *text = [searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	
-	NSLog(@"Text: %@", text);
 	
 	// Reset filtered accounts
 	[self.filteredAccounts removeAllObjects];
@@ -251,7 +271,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	// search results table
+	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		if ([self.filteredAccounts count] == 0)
@@ -301,7 +321,7 @@
 		// Accounts table
 		if ([self.accounts count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No accounts found." : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s found.", [self.textAccount lowercaseString]] : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -338,10 +358,10 @@
 	}
 	
 	// Set account name label
-	[cell.accountName setText:account.Name];
+	[cell.labelName setText:account.Name];
 	
 	// Set account number label
-	[cell.accountPublicKey setText:account.PublicKey];
+	[cell.labelPublicKey setText:account.PublicKey];
 	
 	return cell;
 }
@@ -359,7 +379,7 @@
 			// Close search results (must execute before scrolling to selected account)
 			[self.searchController setActive:NO];
 			
-			// Scroll to selected Account
+			// Scroll to selected account
 			[self scrollToSelectedAccount];
 			
 			return;
@@ -388,21 +408,26 @@
 	// Add checkmark of selected account
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// If using SettingsPreferredAccountPicker view from storyboard
-	if (self.shouldSetPreferredAccount)
-	{
-		// Save preferred account to server
-		PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
-		
-		[preferredAccountModel setDelegate:self];
-		[preferredAccountModel savePreferredAccount:self.selectedAccount];
-	}
-	// If using NewMessageAccountPicker view from storyboard
-	else
-	{
-		// Go to MessageRecipientPickerTableViewController
-		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
-	}
+	#ifdef MYTELEMED
+		// If using SettingsPreferredAccountPicker view from storyboard
+		if (self.shouldSetPreferredAccount)
+		{
+			// Save preferred account to server
+			PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
+			
+			[preferredAccountModel setDelegate:self];
+			[preferredAccountModel savePreferredAccount:self.selectedAccount];
+		}
+		// If using MessageNewAccountPicker view from storyboard
+		else
+		{
+			// Go to MessageRecipientPickerTableViewController
+			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
+		}
+	
+	#elif MEDTOMED
+		[self performSegueWithIdentifier:@"setAccount" sender:self];
+	#endif
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -438,19 +463,29 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Set Account for MessageRecipientPickerTableViewController
-	if ([[segue identifier] isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
-	{
-		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
-		
-		// Set account
-		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
-		
-		// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
-		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
-	}
+	#ifdef MYTELEMED
+		// Set Account for MessageRecipientPickerTableViewController
+		if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
+		{
+			MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
+			
+			// Set account
+			[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
+			
+			// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
+			[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+		}
+	
+	#elif defined MEDTOMED
+		// Set account for MessageNewTableViewController
+		if ([segue.identifier isEqualToString:@"setAccount"])
+		{
+			NSLog(@"Select Medical Group");
+		}
+	#endif
+	
 	// If no accounts, ensure nothing happens when going back
-	else if ([self.accounts count] == 0)
+	if ([self.accounts count] == 0)
 	{
 		return;
 	}

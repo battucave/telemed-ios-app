@@ -7,6 +7,7 @@
 //
 
 #import "MessageRecipientPickerViewController.h"
+#import "ErrorAlertController.h"
 #import "ChatParticipantModel.h"
 #import "MessageRecipientModel.h"
 
@@ -58,7 +59,8 @@
 	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
 	
-	self.definesPresentationContext = YES;
+	// Commented out because it causes issues when attempting to navigate to another screen on search result selection
+	// self.definesPresentationContext = YES;
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
@@ -116,6 +118,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableMessageRecipients setTableFooterView:[[UIView alloc] init]];
 	
 	// Load list of message recipients
 	[self reloadMessageRecipients];
@@ -216,7 +221,9 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	[self.chatParticipantModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 // Return message recipients from message recipient model delegate
@@ -259,7 +266,9 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	[self.messageRecipientModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 // Delegate method for updating search results

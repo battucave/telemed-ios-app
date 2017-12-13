@@ -7,6 +7,7 @@
 //
 
 #import "HospitalPickerViewController.h"
+#import "ErrorAlertController.h"
 #import "MessageNewTableViewController.h"
 #import "HospitalCell.h"
 #import "HospitalModel.h"
@@ -48,7 +49,8 @@
 	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
 	
-	self.definesPresentationContext = YES;
+	// Commented out because it causes issues when attempting to navigate to another screen on search result selection
+	// self.definesPresentationContext = YES;
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
@@ -111,7 +113,7 @@
 	[self.tableHospitals setTableFooterView:[[UIView alloc] init]];
 	
 	// If user navigated from settings screen, disallow selection of hospitals
-	if (! self.shouldSetHospital)
+	if (! self.shouldSelectHospital)
 	{
 		[self.tableHospitals setAllowsSelection:NO];
 	}
@@ -125,8 +127,6 @@
 	else
 	{
 		[self.tableHospitals reloadData];
-		
-		// Scroll to selected hospital
 		[self scrollToSelectedHospital];
 	}
 }
@@ -149,13 +149,9 @@
 	
 	self.isLoaded = YES;
 	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableHospitals reloadData];
-		
-		// If hospital was previously selected, scroll to it
-		[self scrollToSelectedHospital];
-	});
+	// If hospital was previously selected, scroll to it
+	[self.tableHospitals reloadData];
+	[self scrollToSelectedHospital];
 }
 
 // Return error from hospital model delegate
@@ -164,7 +160,9 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	[self.hospitalModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 - (void)scrollToSelectedHospital
@@ -188,7 +186,10 @@
 		// Scroll to cell
 		if (indexPath)
 		{
-			[self.tableHospitals scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[self.tableHospitals scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+			});
 		}
 	}
 }
@@ -346,9 +347,6 @@
 		// Get cell in hospitals table
 		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
 		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
-		
-		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected Hospital)
-		//[self.tableHospitals selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 	// Hospitals table
 	else
@@ -363,7 +361,7 @@
 	// Add checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// // Execute unwind segue
+	// Execute unwind segue
 	[self performSegueWithIdentifier:@"setHospital" sender:self];
 }
 
