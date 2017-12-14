@@ -355,7 +355,7 @@
 		
 		// Show error message
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Archive Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
-		NSArray *failedMessages = [NSArray arrayWithArray:[self.failedMessages copy]];
+		NSArray *failedMessages = [self.failedMessages copy];
 		
 		// Show error even if user has navigated to another screen
 		[self showError:error withCallback:^(void)

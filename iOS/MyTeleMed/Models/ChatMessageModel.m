@@ -267,7 +267,7 @@
 		
 		// Show error message
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Delete Chat Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
-		NSArray *failedChatMessages = [NSArray arrayWithArray:[self.failedChatMessages copy]];
+		NSArray *failedChatMessages = [self.failedChatMessages copy];
 		
 		// Show error even if user has navigated to another screen
 		[self showError:error withCallback:^(void)

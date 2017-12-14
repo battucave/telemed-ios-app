@@ -123,7 +123,7 @@
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
 {
 	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSArray *chatMessagesCopy = [NSArray arrayWithArray:[self.chatMessages copy]];
+	NSArray *chatMessagesCopy = [self.chatMessages copy];
 	
 	// If no Chat Messages to remove, cancel
 	if (chatMessages == nil || [chatMessages count] == 0)

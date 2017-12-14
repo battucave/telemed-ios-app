@@ -214,7 +214,7 @@
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
 {
 	// Determine which Chat Messages were successfully Archived
-	NSMutableArray *successfulChatMessages = [NSMutableArray arrayWithArray:[self.selectedChatMessages copy]];
+	NSMutableArray *successfulChatMessages = [self.selectedChatMessages mutableCopy];
 	
 	[successfulChatMessages removeObjectsInArray:failedChatMessages];
 	

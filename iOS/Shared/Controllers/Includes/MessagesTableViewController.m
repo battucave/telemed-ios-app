@@ -165,7 +165,7 @@
 - (void)removeSelectedMessages:(NSArray *)messages
 {
 	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSArray *filteredMessagesCopy = [NSArray arrayWithArray:[self.filteredMessages copy]];
+	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
 	
 	// If no Messages to remove, cancel
 	if (messages == nil || [messages count] == 0)
