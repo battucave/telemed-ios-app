@@ -3327,7 +3327,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" textContentType="email"/>
                                                     <connections>
-                                                        <action selector="textFieldDidChangeEditing:" destination="vUd-oo-bvD" eventType="editingChanged" id="PYD-YW-LAI"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="vUd-oo-bvD" eventType="editingChanged" id="pCy-og-0FH"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -4266,7 +4266,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="mFh-or-YlY"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="GWb-kO-KBp"/>
                                                         <outlet property="delegate" destination="mdA-1q-HPh" id="bzs-4u-z8Z"/>
                                                     </connections>
                                                 </textField>
@@ -4309,7 +4309,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="V8k-jP-qlp"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="y2L-ph-Gua"/>
                                                         <outlet property="delegate" destination="mdA-1q-HPh" id="xO1-ZT-nPa"/>
                                                     </connections>
                                                 </textField>
@@ -4352,7 +4352,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="L9a-wI-GIu"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="mdA-1q-HPh" eventType="editingChanged" id="LeB-yj-dBv"/>
                                                         <outlet property="delegate" destination="mdA-1q-HPh" id="QnD-Ai-LOl"/>
                                                     </connections>
                                                 </textField>

@@ -46,7 +46,7 @@
 	NSLog(@"Save Profile");
 }
 
-- (IBAction)textFieldDidChange:(id)sender
+- (IBAction)textFieldDidEditingChange:(UITextField *)sender
 {
 	// Validate form
 	[self validateForm];

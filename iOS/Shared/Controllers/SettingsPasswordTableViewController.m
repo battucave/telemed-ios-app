@@ -52,7 +52,7 @@
 	[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
 }
 
-- (IBAction)textFieldDidChange:(id)sender
+- (IBAction)textFieldDidEditingChange:(UITextField *)sender
 {
 	// Validate form
 	[self validateForm];

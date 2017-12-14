@@ -10,6 +10,7 @@
 #import "AccountPickerViewController.h"
 #import "ErrorAlertController.h"
 #import "HospitalPickerViewController.h"
+#import "MessageNew2TableViewController.h"
 #import "AccountModel.h"
 
 @interface MessageNewTableViewController ()
@@ -20,6 +21,7 @@
 @property (nonatomic) IBOutlet UILabel *labelHospital;
 @property (nonatomic) IBOutlet UILabel *labelMedicalGroup;
 @property (nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
+@property (nonatomic) IBOutlet UISwitch *switchPriority;
 @property (nonatomic) IBOutlet UIView *viewSectionFooter;
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
@@ -128,8 +130,27 @@
 				// Show medical group cell
 				[self.cellMedicalGroup setHidden:NO];
 				
+				// If medical group (account) already selected, verify that it has access to this hospital
+				if (self.selectedAccount)
+				{
+					// Find selected account in accounts (can be used to find account even if it was not originally extracted from accounts array - i.e. MyProfile.MyPreferredAccount)
+					NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedAccount.ID];
+					NSArray *results = [self.accounts filteredArrayUsingPredicate:predicate];
+					
+					// Selected medical group (account) has no access to hospital so remove it
+					if ([results count] == 0)
+					{
+						[self setSelectedAccount:nil];
+						
+						// Remove medical group label name
+						[self.labelMedicalGroup setText:@""];
+					}
+				}
+				
 				// Hide loading indicator in table footer
 				[self setIsLoading:NO];
+				
+				// Force table section footer to update
 				[self.tableView reloadData];
 			});
 		}
@@ -145,7 +166,7 @@
 	[self validateForm];
 }
 
-- (IBAction)textFieldDidChange:(id)sender
+- (IBAction)textFieldDidEditingChange:(UITextField *)sender
 {
 	// Validate form
 	[self validateForm];
@@ -233,31 +254,46 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([segue.identifier isEqualToString:@"showHospitalPickerFromMessageNew"])
-	{
-		HospitalPickerViewController *hospitalPickerViewController = segue.destinationViewController;
-		
-		// Enable hospital selection on hospital picker screen
-		[hospitalPickerViewController setShouldSelectHospital:YES];
-		
-		// Set selected hospital if previously set
-		[hospitalPickerViewController setSelectedHospital:self.selectedHospital];
-	}
-	else if ([segue.identifier isEqualToString:@"showAccountPickerFromMessageNew"])
+	// Account picker
+	if ([segue.identifier isEqualToString:@"showAccountPickerFromMessageNew"])
 	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
-		// Update title
+		// Update account picker screen title
 		[accountPickerViewController setTitle:@"Choose Medical Group"];
 		
-		// Enable account selection on account picker screen
+		// Enable account selection, set accounts, and set selected account on account picker screen
 		[accountPickerViewController setShouldSelectAccount:YES];
-		
-		// Set Accounts
 		[accountPickerViewController setAccounts:self.accounts];
-		
-		// Set selected account if previously set
 		[accountPickerViewController setSelectedAccount:self.selectedAccount];
+	}
+	// Hospital picker
+	else if ([segue.identifier isEqualToString:@"showHospitalPickerFromMessageNew"])
+	{
+		HospitalPickerViewController *hospitalPickerViewController = segue.destinationViewController;
+		
+		// Enable hospital selection and set selected hospital on hospital picker screen
+		[hospitalPickerViewController setShouldSelectHospital:YES];
+		[hospitalPickerViewController setSelectedHospital:self.selectedHospital];
+	}
+	// Message new 2
+	else if ([segue.identifier isEqualToString:@"showMessageNew2"])
+	{
+		MessageNew2TableViewController *messageNew2TableViewController = segue.destinationViewController;
+		
+		// Set form values on message new 2 screen
+		NSMutableDictionary *formValues = [@{
+			@"AccountID"	: self.selectedAccount.ID,
+			@"HospitalID"	: self.selectedHospital.ID,
+			@"Priority"		: (self.switchPriority.isOn ? @"STAT" : @"NORMAL")
+		} mutableCopy];
+		
+		for (UITextField *textField in self.textFields)
+		{
+			[formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+		};
+		
+		[messageNew2TableViewController setFormValues:formValues];
 	}
 }
 

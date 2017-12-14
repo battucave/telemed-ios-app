@@ -104,7 +104,7 @@
 	[textView becomeFirstResponder];
 }
 
-- (IBAction)textFieldDidChangeEditing:(UITextField *)textField
+- (IBAction)textFieldDidEditingChange:(UITextField *)textField
 {
 	// Validate form in delegate
 	if ([self.delegate respondsToSelector:@selector(validateForm:senderEmailAddress:)])

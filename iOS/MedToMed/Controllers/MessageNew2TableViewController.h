@@ -11,4 +11,6 @@
 
 @interface MessageNew2TableViewController : CoreTableViewController <UITextFieldDelegate, UITextViewDelegate>
 
+@property (nonatomic) NSMutableDictionary *formValues;
+
 @end

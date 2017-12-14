@@ -35,15 +35,15 @@
 	[self.barButtonOK setTitleTextAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:20.0]} forState:UIControlStateNormal];
 }
 
-- (IBAction)toggleSwitchCDMAVoiceData:(id)sender
+- (IBAction)toggleSwitchCDMAVoiceData:(UISwitch *)sender
 {
 	[self.switchCDMAVoiceData setOn: ! self.switchCDMAVoiceData.isOn animated:YES];
 }
 
-- (IBAction)toggleCDMAVoiceDataDisabled:(id)sender
+- (IBAction)toggleCDMAVoiceDataDisabled:(UISwitch *)sender
 {
 	// Toggle CDMA Voice Data window on change of UISwitch
-	[self.settings setBool: ! [sender isOn] forKey:@"CDMAVoiceDataDisabled"];
+	[self.settings setBool: ! sender.isOn forKey:@"CDMAVoiceDataDisabled"];
 }
 
 - (IBAction)dismissViewController:(id)sender

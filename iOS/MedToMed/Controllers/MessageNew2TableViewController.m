@@ -7,13 +7,15 @@
 //
 
 #import "MessageNew2TableViewController.h"
+#import "MessageNewTableViewController.h"
+#import "NewMessageModel.h"
 
 @interface MessageNew2TableViewController ()
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
-@property (nonatomic) IBOutlet UITextView *textViewAdditionalInformation;
+@property (nonatomic) IBOutlet UITextView *textViewMessageText;
 
-@property (nonatomic) NSString *textViewAdditionalInformationPlaceholder;
+@property (nonatomic) NSString *textViewMessageTextPlaceholder;
 
 @end
 
@@ -27,11 +29,106 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// Only set placeholder if it has not already been set
-	if ( ! self.textViewAdditionalInformationPlaceholder)
+	if ( ! self.textViewMessageTextPlaceholder)
 	{
-		self.textViewAdditionalInformationPlaceholder = self.textViewAdditionalInformation.text;
+		self.textViewMessageTextPlaceholder = self.textViewMessageText.text;
+	}
+	
+	// Programmatically add textFieldDidEditingChange listener to each text field (will be needed in future when fields change depending on medical group)
+	for (UITextField *textField in self.textFields)
+	{
+		[textField addTarget:self action:@selector(textFieldDidEditingChange:) forControlEvents:UIControlEventEditingChanged];
 	}
 }
+
+- (IBAction)sendNewMessage:(id)sender
+{
+	NewMessageModel *newMessageModel = [[NewMessageModel alloc] init];
+	
+	[newMessageModel setDelegate:self];
+	[newMessageModel sendNewMessage:self.formValues];
+}
+
+- (IBAction)textFieldDidEditingChange:(UITextField *)textField
+{
+	// Remove empty value for text field's key from form values
+	if ([textField.text isEqualToString:@""])
+	{
+		[self.formValues removeObjectForKey:textField.accessibilityIdentifier];
+	}
+	// Add/update value to form values for text field's key
+	else
+	{
+		[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+	}
+}
+
+// Reset new message form by resetting navigation stack
+- (void)resetMessageNewForm
+{
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MedToMed" bundle:nil];
+	MessageNewTableViewController *messageNewTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewTableViewController"];
+
+	// Workaround to remove observers on these view controllers since dealloc is not fired as expected
+	if ([self.navigationController.viewControllers count] > 0)
+	{
+		[[NSNotificationCenter defaultCenter] removeObserver:[self.navigationController.viewControllers objectAtIndex:0]];
+	}
+
+	[self.navigationController setViewControllers:@[messageNewTableViewController] animated:YES];
+}
+
+// Return pending from NewMessageModel delegate
+- (void)sendMessagePending
+{
+	// TEMPORARY (remove when NewMsg web service completed)
+	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Send Message Incomplete" message:@"Web services are incomplete for sending messages." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		// Reset new message form (assume success)
+		[self resetMessageNewForm];
+	}];
+
+	[successAlertController addAction:actionOK];
+
+	// PreferredAction only supported in 9.0+
+	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[successAlertController setPreferredAction:actionOK];
+	}
+
+	// Show Alert
+	[self presentViewController:successAlertController animated:YES completion:nil];
+	// END TEMPORARY
+}
+
+// Return success from NewMessageModel delegate (no longer used)
+- (void)sendMessageSuccess
+{
+	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		// Reset new message form (assume success)
+		[self resetMessageNewForm];
+	}];
+
+	[successAlertController addAction:actionOK];
+
+	// PreferredAction only supported in 9.0+
+	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[successAlertController setPreferredAction:actionOK];
+	}
+
+	// Show Alert
+	[self presentViewController:successAlertController animated:YES completion:nil];
+}
+
+/*/ Return error from NewMessageModel delegate (no longer used)
+- (void)sendMessageError:(NSError *)error
+{
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
+}*/
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -44,16 +141,30 @@
 	}
 	else
 	{
-		[self.textViewAdditionalInformation becomeFirstResponder];
+		[self.textViewMessageText becomeFirstResponder];
 	}
 	
 	return NO;
 }
 
+- (void)textViewDidChange:(UITextView *)textView
+{
+	// Remove empty value for text field's key from form values
+	if ([textView.text isEqualToString:@""])
+	{
+		[self.formValues removeObjectForKey:textView.accessibilityIdentifier];
+	}
+	// Add/update value to form values for text field's key
+	else
+	{
+		[self.formValues setValue:textView.text forKey:textView.accessibilityIdentifier];
+	}
+}
+
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if ([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
+	if ([textView.text isEqualToString:self.textViewMessageTextPlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -77,7 +188,7 @@
 	// Show placeholder
 	if ([textView.text isEqualToString:@""])
 	{
-		[textView setText:self.textViewAdditionalInformationPlaceholder];
+		[textView setText:self.textViewMessageTextPlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:142.0/255.0 alpha:1]];
 		[textView setFont:[UIFont systemFontOfSize:15.0]];
 	}

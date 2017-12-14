@@ -147,7 +147,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="PHd-OL-PfL"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="08k-aP-bsx"/>
                                                         <outlet property="delegate" destination="UuL-n9-GMi" id="4yB-a9-WIg"/>
                                                     </connections>
                                                 </textField>
@@ -193,7 +193,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="Vu7-HG-K90"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="KMb-Ad-rdC"/>
                                                         <outlet property="delegate" destination="UuL-n9-GMi" id="MmK-OE-ywl"/>
                                                     </connections>
                                                 </textField>
@@ -239,7 +239,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="udP-0s-1af"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="gqJ-fJ-3hh"/>
                                                         <outlet property="delegate" destination="UuL-n9-GMi" id="CuN-Z4-Q6S"/>
                                                     </connections>
                                                 </textField>
@@ -285,7 +285,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="OsA-r7-ZXc"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="UuL-n9-GMi" eventType="editingChanged" id="bTH-vG-Knu"/>
                                                         <outlet property="delegate" destination="UuL-n9-GMi" id="C96-Dw-MoO"/>
                                                     </connections>
                                                 </textField>
@@ -362,6 +362,7 @@
                         <outlet property="labelHospital" destination="BQS-Nf-YY5" id="3Z0-4j-u0Q"/>
                         <outlet property="labelMedicalGroup" destination="Ev2-AI-7zp" id="1Yf-au-h33"/>
                         <outlet property="sideNavigationButton" destination="zfS-jn-zhV" id="NjC-Md-O4Z"/>
+                        <outlet property="switchPriority" destination="mJm-xO-9KK" id="4bH-bI-6vq"/>
                         <outlet property="viewSectionFooter" destination="KfO-RV-ia8" id="eO4-gl-fjt"/>
                         <outletCollection property="textFields" destination="ZAy-bY-e38" id="vfm-NV-j0X"/>
                         <outletCollection property="textFields" destination="VXO-be-6m6" id="r1b-3C-eEU"/>
@@ -449,6 +450,7 @@
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="K5e-bM-Dpd" customClass="InsetTextField">
                                                     <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="PatientLocation"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="R0H-fd-hET"/>
                                                     </constraints>
@@ -493,6 +495,7 @@
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-Dy-jEa" customClass="InsetTextField">
                                                     <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="Vitals"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="2hk-oo-UNy"/>
                                                     </constraints>
@@ -537,6 +540,7 @@
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="fN3-yA-K1l" customClass="InsetTextField">
                                                     <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="PostOperationInfo"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="mN4-8L-2RM"/>
                                                     </constraints>
@@ -582,6 +586,7 @@
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Additional Information:" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0NP-Dd-c7E">
                                                     <rect key="frame" x="11" y="4" width="353" height="135"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="MessageText"/>
                                                     <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -607,11 +612,15 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="New Message" id="urf-9T-16D">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="hTZ-VE-BlK"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="hTZ-VE-BlK">
+                            <connections>
+                                <action selector="sendNewMessage:" destination="J3R-fF-WwB" id="em6-xO-glT"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="textViewAdditionalInformation" destination="0NP-Dd-c7E" id="9ru-df-bmt"/>
+                        <outlet property="textViewMessageText" destination="0NP-Dd-c7E" id="pHt-62-LGQ"/>
                         <outletCollection property="textFields" destination="K5e-bM-Dpd" id="cC1-Yf-bOT"/>
                         <outletCollection property="textFields" destination="UJe-Dy-jEa" id="81e-Ak-ahH"/>
                         <outletCollection property="textFields" destination="fN3-yA-K1l" id="dsd-f8-zwy"/>
@@ -1239,7 +1248,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="NaA-FX-NPa"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="Uu0-bI-MiA"/>
                                                         <outlet property="delegate" destination="IPb-ix-3H5" id="WSH-Og-9ux"/>
                                                     </connections>
                                                 </textField>
@@ -1283,7 +1292,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="D02-8H-y45"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="ypo-6Z-eox"/>
                                                         <outlet property="delegate" destination="IPb-ix-3H5" id="HMh-JH-IiD"/>
                                                     </connections>
                                                 </textField>
@@ -1327,7 +1336,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="Zqw-wS-UcE"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="BI1-DC-tno"/>
                                                         <outlet property="delegate" destination="IPb-ix-3H5" id="b5r-sT-97Y"/>
                                                     </connections>
                                                 </textField>
@@ -1371,7 +1380,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="QTx-aL-kvQ"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="N6z-In-q88"/>
                                                         <outlet property="delegate" destination="IPb-ix-3H5" id="3ll-OO-UlL"/>
                                                     </connections>
                                                 </textField>
@@ -1415,7 +1424,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="textFieldDidChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="lZt-xZ-NAc"/>
+                                                        <action selector="textFieldDidEditingChange:" destination="IPb-ix-3H5" eventType="editingChanged" id="gjg-c8-Hvt"/>
                                                         <outlet property="delegate" destination="IPb-ix-3H5" id="3cM-ea-7Jr"/>
                                                     </connections>
                                                 </textField>

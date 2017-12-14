@@ -321,6 +321,7 @@
 		E25037AC1FBB88F400099C7E /* button-Help-PDF@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5671C1CDB85B80054FD3F /* button-Help-PDF@3x.png */; };
 		E25037AE1FBB88F400099C7E /* button-Help-PDF.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */; };
 		E25037AF1FBB88F400099C7E /* menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672C1CDB85B80054FD3F /* menu@3x.png */; };
+		E254E3781FE2FDD700B3014F /* NewMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E254E3761FE2FDD400B3014F /* NewMessageModel.m */; };
 		E2622D0C1FC5F8B0008BCFF3 /* MessageNewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */; };
 		E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */; };
 		E270ED5F1B1758C900DD43B8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */; };
@@ -741,6 +742,8 @@
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
 		E25037B71FBB88F400099C7E /* MedToMed Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MedToMed Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E254E3761FE2FDD400B3014F /* NewMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageModel.m; sourceTree = "<group>"; };
+		E254E3771FE2FDD700B3014F /* NewMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageModel.h; sourceTree = "<group>"; };
 		E2622D0A1FC5F8B0008BCFF3 /* MessageNewTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNewTableViewController.h; sourceTree = "<group>"; };
 		E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNewTableViewController.m; sourceTree = "<group>"; };
 		E2622D0D1FC5F9A4008BCFF3 /* MessageNew2TableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNew2TableViewController.h; sourceTree = "<group>"; };
@@ -1833,6 +1836,8 @@
 				E275D2F91FC4D4DD00AF3651 /* XML Parsers */,
 				E2CD939E1FCF0D88006ED66F /* HospitalModel.h */,
 				E2CD939F1FCF0D88006ED66F /* HospitalModel.m */,
+				E254E3771FE2FDD700B3014F /* NewMessageModel.h */,
+				E254E3761FE2FDD400B3014F /* NewMessageModel.m */,
 				E2C7C1BB1FC4917100E50F07 /* UserProfileModel.h */,
 				E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */,
 			);
@@ -2540,6 +2545,7 @@
 				E25036E01FBB88F400099C7E /* AFNetworkActivityLogger.m in Sources */,
 				E2CD93A01FCF0D88006ED66F /* HospitalModel.m in Sources */,
 				E25036E41FBB88F400099C7E /* HelpUserGuideViewController.m in Sources */,
+				E254E3781FE2FDD700B3014F /* NewMessageModel.m in Sources */,
 				E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */,
 				E25036E81FBB88F400099C7E /* ELCUIApplication.m in Sources */,
 				E25036ED1FBB88F400099C7E /* AFHTTPSessionManager.m in Sources */,
