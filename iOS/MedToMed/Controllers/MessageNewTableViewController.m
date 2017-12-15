@@ -64,11 +64,62 @@
 	}
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Hide keyboard when leaving view
+	[self.view endEditing:YES];
+}
+
+// Unwind Segue from MessageNew2TableViewController
+- (IBAction)resetMessageNewForm:(UIStoryboardSegue *)segue
+{
+	// NOTE: Static cells do not reset when [self.tableView reloadData] is called so instead, manually reset all data
+	
+	// Reset selected medical group (account)
+	[self setSelectedAccount:nil];
+	
+	// Reset selected hospital
+	[self setSelectedHospital:nil];
+	
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView beginUpdates];
+		
+		// Clear hospital label
+		[self.labelHospital setText:@""];
+		
+		// Clear medical group label
+		[self.labelMedicalGroup setText:@""];
+		
+		// Clear form fields
+		for (UITextField *textField in self.textFields)
+		{
+			[textField setText:@""];
+		}
+		
+		// Reset priority switch
+		[self.switchPriority setOn:NO];
+		
+		// Hide medical group cell
+		[self.cellMedicalGroup setHidden:YES];
+		
+		// Hide form field cells
+		for (UITableViewCell *cellFormField in self.cellFormFields)
+		{
+			[cellFormField setHidden:YES];
+		}
+		
+		[self.tableView endUpdates];
+	});
+}
+
 - (IBAction)showMessageNew2:(id)sender
 {
-	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
-	
 	[self setHasSubmitted:YES];
+	
+	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 }
 
 // Unwind segue from AccountPickerViewController
@@ -80,12 +131,12 @@
 	// Save selected account
 	[self setSelectedAccount:accountPickerViewController.selectedAccount];
 	
+	[self.tableView beginUpdates];
+	
 	// Update medical group label with medical group (account) name
 	[self.labelMedicalGroup setText:self.selectedAccount.Name];
 	
 	// Show form field cells
-	[self.tableView beginUpdates];
-	
 	for (UITableViewCell *cellFormField in self.cellFormFields)
 	{
 		[cellFormField setHidden:NO];

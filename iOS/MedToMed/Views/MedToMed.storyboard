@@ -624,9 +624,11 @@
                         <outletCollection property="textFields" destination="K5e-bM-Dpd" id="cC1-Yf-bOT"/>
                         <outletCollection property="textFields" destination="UJe-Dy-jEa" id="81e-Ak-ahH"/>
                         <outletCollection property="textFields" destination="fN3-yA-K1l" id="dsd-f8-zwy"/>
+                        <segue destination="CEW-Eo-LzX" kind="unwind" identifier="resetMessageNewForm" unwindAction="resetMessageNewForm:" id="Tcj-Gb-xQm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0UZ-zN-8aD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="CEW-Eo-LzX" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2450" y="0.0"/>
         </scene>

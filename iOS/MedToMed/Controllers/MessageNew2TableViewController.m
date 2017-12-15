@@ -63,29 +63,14 @@
 	}
 }
 
-// Reset new message form by resetting navigation stack
-- (void)resetMessageNewForm
-{
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MedToMed" bundle:nil];
-	MessageNewTableViewController *messageNewTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewTableViewController"];
-
-	// Workaround to remove observers on these view controllers since dealloc is not fired as expected
-	if ([self.navigationController.viewControllers count] > 0)
-	{
-		[[NSNotificationCenter defaultCenter] removeObserver:[self.navigationController.viewControllers objectAtIndex:0]];
-	}
-
-	[self.navigationController setViewControllers:@[messageNewTableViewController] animated:YES];
-}
-
 // Return pending from NewMessageModel delegate
 - (void)sendMessagePending
 {
 	// TEMPORARY (remove when NewMsg web service completed)
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Send Message Incomplete" message:@"Web services are incomplete for sending messages." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		// Reset new message form (assume success)
-		[self resetMessageNewForm];
+		// Unwind to first screen of message new form (assume success)
+		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
 	}];
 
 	[successAlertController addAction:actionOK];
@@ -101,13 +86,13 @@
 	// END TEMPORARY
 }
 
-// Return success from NewMessageModel delegate (no longer used)
+// Return success from NewMessageModel delegate (this should be called when NewMsg web service completed)
 - (void)sendMessageSuccess
 {
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		// Reset new message form (assume success)
-		[self resetMessageNewForm];
+		// Unwind to first screen of message new form
+		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
 	}];
 
 	[successAlertController addAction:actionOK];
