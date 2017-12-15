@@ -26,4 +26,9 @@
 
 - (void)sendNewMessage:(NSDictionary *)data;
 
+// Header files are shared by both MedToMed and MyTeleMed targets so have to include MyTeleMed's method as well.
+#ifdef MYTELEMED
+	- (void)sendNewMessage:(NSString *)message accountID:(NSNumber *)accountID messageRecipientIDs:(NSArray *)messageRecipientIDs;
+#endif
+
 @end

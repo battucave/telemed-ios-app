@@ -1826,92 +1826,76 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image-ContactLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="FBW-t9-sJ1">
-                                <rect key="frame" x="15" y="97" width="59" height="75"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-Black" translatesAutoresizingMaskIntoConstraints="NO" id="pnb-4E-CaM">
+                                <rect key="frame" x="37.5" y="85" width="300" height="75"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="75" id="5fM-wr-bRs"/>
-                                    <constraint firstAttribute="width" constant="59" id="V9b-wW-0h0"/>
+                                    <constraint firstAttribute="width" secondItem="pnb-4E-CaM" secondAttribute="height" multiplier="4:1" id="jTg-3V-bKl"/>
+                                    <constraint firstAttribute="width" constant="300" id="pcg-S3-Ybf"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zva-Qz-lPM">
-                                <rect key="frame" x="0.0" y="206" width="375" height="122"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jHQ-QN-m0A">
-                                        <rect key="frame" x="0.0" y="1" width="375" height="120"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V5q-5B-RNH">
-                                                <rect key="frame" x="196" y="19" width="62" height="82"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="82" id="uCx-59-jP2"/>
-                                                    <constraint firstAttribute="width" constant="62" id="uKs-R6-HJm"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <state key="normal" title="Message" backgroundImage="button-Contact-Mail.png">
-                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="2G6-Jo-3PP" kind="show" id="Cyb-2h-e4c"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agT-PF-w6M">
-                                                <rect key="frame" x="118" y="19" width="62" height="82"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="82" id="O8q-mR-ZOC"/>
-                                                    <constraint firstAttribute="width" constant="62" id="XM7-aM-p0S"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
-                                                <state key="normal" title="Call" backgroundImage="button-Contact-Call.png">
-                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="callTeleMed:" destination="EUw-72-fK4" eventType="touchUpInside" id="4Ib-Gz-q1s"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstItem="V5q-5B-RNH" firstAttribute="top" secondItem="jHQ-QN-m0A" secondAttribute="top" constant="19" id="7Ve-Fi-zfg"/>
-                                            <constraint firstItem="V5q-5B-RNH" firstAttribute="leading" secondItem="agT-PF-w6M" secondAttribute="trailing" constant="16" id="83a-gJ-ZA1"/>
-                                            <constraint firstItem="agT-PF-w6M" firstAttribute="top" secondItem="jHQ-QN-m0A" secondAttribute="top" constant="19" id="qRH-Rr-puv"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                                <rect key="frame" x="0.0" y="300" width="375" height="1"/>
                                 <color key="backgroundColor" red="0.78431372549019607" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="jHQ-QN-m0A" secondAttribute="trailing" id="5fl-bc-QR3"/>
-                                    <constraint firstItem="jHQ-QN-m0A" firstAttribute="top" secondItem="zva-Qz-lPM" secondAttribute="top" constant="1" id="8IM-CA-buH" customClass="OnePixelLayoutConstraint"/>
-                                    <constraint firstAttribute="centerX" secondItem="V5q-5B-RNH" secondAttribute="centerX" constant="-39" id="IqG-E0-REl"/>
-                                    <constraint firstAttribute="height" constant="122" id="L4x-9T-DSl"/>
-                                    <constraint firstItem="agT-PF-w6M" firstAttribute="centerX" secondItem="zva-Qz-lPM" secondAttribute="centerX" constant="-39" id="PD4-2N-KUE"/>
-                                    <constraint firstItem="jHQ-QN-m0A" firstAttribute="leading" secondItem="zva-Qz-lPM" secondAttribute="leading" id="TXd-k8-Uhf"/>
-                                    <constraint firstAttribute="bottom" secondItem="jHQ-QN-m0A" secondAttribute="bottom" constant="1" id="X1M-GP-dpl" customClass="OnePixelLayoutConstraint"/>
+                                    <constraint firstAttribute="height" constant="1" id="BQT-8d-MLJ"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k0e-pN-UHi">
-                                <rect key="frame" x="89" y="84" width="275" height="102"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jHQ-QN-m0A">
+                                <rect key="frame" x="92" y="180" width="192" height="120"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agT-PF-w6M">
+                                        <rect key="frame" x="10" y="19" width="62" height="82"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="82" id="O8q-mR-ZOC"/>
+                                            <constraint firstAttribute="width" constant="62" id="XM7-aM-p0S"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
+                                        <state key="normal" title="Call" backgroundImage="button-Contact-Call.png">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="callTeleMed:" destination="EUw-72-fK4" eventType="touchUpInside" id="4Ib-Gz-q1s"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V5q-5B-RNH">
+                                        <rect key="frame" x="120" y="19" width="62" height="82"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="82" id="uCx-59-jP2"/>
+                                            <constraint firstAttribute="width" constant="62" id="uKs-R6-HJm"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Message" backgroundImage="button-Contact-Mail.png">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="2G6-Jo-3PP" kind="show" id="Cyb-2h-e4c"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="102" id="FlI-F5-Pkl"/>
+                                    <constraint firstItem="agT-PF-w6M" firstAttribute="leading" secondItem="jHQ-QN-m0A" secondAttribute="leading" constant="10" id="4aA-Jw-LAv"/>
+                                    <constraint firstAttribute="width" constant="192" id="A6C-6E-pwR"/>
+                                    <constraint firstItem="V5q-5B-RNH" firstAttribute="centerY" secondItem="agT-PF-w6M" secondAttribute="centerY" id="Lh5-b2-QsL"/>
+                                    <constraint firstAttribute="trailing" secondItem="V5q-5B-RNH" secondAttribute="trailing" constant="10" id="RNc-uE-eTl"/>
+                                    <constraint firstItem="V5q-5B-RNH" firstAttribute="leading" secondItem="agT-PF-w6M" secondAttribute="trailing" constant="48" id="VeR-sI-mAu"/>
+                                    <constraint firstAttribute="height" constant="120" id="X2L-aP-OWZ"/>
+                                    <constraint firstItem="agT-PF-w6M" firstAttribute="centerY" secondItem="jHQ-QN-m0A" secondAttribute="centerY" id="qAC-Gy-3G5"/>
                                 </constraints>
-                                <string key="text">Come and find out why so many medical practices, clinics, hospitals, and hospice firms ranging from local to national come to TeleMed, and most importantly why they stay.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="zva-Qz-lPM" firstAttribute="leading" secondItem="dqL-C9-bbl" secondAttribute="leading" id="04i-ma-oos"/>
                             <constraint firstItem="dqL-C9-bbl" firstAttribute="trailing" secondItem="zva-Qz-lPM" secondAttribute="trailing" id="AyP-IK-qI6"/>
-                            <constraint firstItem="k0e-pN-UHi" firstAttribute="leading" secondItem="FBW-t9-sJ1" secondAttribute="trailing" constant="15" id="FOy-Hz-zuO"/>
-                            <constraint firstItem="FBW-t9-sJ1" firstAttribute="centerY" secondItem="k0e-pN-UHi" secondAttribute="centerY" constant="-0.5" id="WtT-GC-2CY"/>
-                            <constraint firstItem="k0e-pN-UHi" firstAttribute="top" secondItem="dqL-C9-bbl" secondAttribute="top" constant="20" id="eWj-mT-dGx"/>
-                            <constraint firstItem="dqL-C9-bbl" firstAttribute="trailing" secondItem="k0e-pN-UHi" secondAttribute="trailing" constant="11" id="eyV-Dw-d2A"/>
-                            <constraint firstItem="zva-Qz-lPM" firstAttribute="top" secondItem="k0e-pN-UHi" secondAttribute="bottom" constant="20" id="kkf-Sh-tJ3"/>
-                            <constraint firstItem="FBW-t9-sJ1" firstAttribute="leading" secondItem="dqL-C9-bbl" secondAttribute="leading" constant="15" id="sK6-EE-NjR"/>
+                            <constraint firstItem="jHQ-QN-m0A" firstAttribute="centerX" secondItem="e3u-D5-LWe" secondAttribute="centerX" id="Bs6-eM-mmk"/>
+                            <constraint firstItem="pnb-4E-CaM" firstAttribute="top" secondItem="dqL-C9-bbl" secondAttribute="top" constant="21" id="YCG-jB-aGq"/>
+                            <constraint firstItem="jHQ-QN-m0A" firstAttribute="top" secondItem="pnb-4E-CaM" secondAttribute="bottom" constant="20" id="oGI-bP-wey"/>
+                            <constraint firstItem="pnb-4E-CaM" firstAttribute="centerX" secondItem="e3u-D5-LWe" secondAttribute="centerX" id="ulc-Rm-qN8"/>
+                            <constraint firstItem="zva-Qz-lPM" firstAttribute="top" secondItem="jHQ-QN-m0A" secondAttribute="bottom" id="wJR-gr-fBw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dqL-C9-bbl"/>
                     </view>
@@ -4403,6 +4387,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </scene>
     </scenes>
     <resources>
+        <image name="Logo-Black" width="300" height="75"/>
         <image name="Logo-MyTeleMed" width="300" height="75"/>
         <image name="button-AddComment.png" width="60" height="45"/>
         <image name="button-Contact-Call.png" width="62" height="82"/>
@@ -4446,6 +4431,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="HXd-Da-xht"/>
         <segue reference="Wxx-iI-zqX"/>
         <segue reference="dmg-yj-Han"/>
-        <segue reference="FA7-fW-yLW"/>
+        <segue reference="rKc-RT-hpR"/>
     </inferredMetricsTieBreakers>
 </document>
