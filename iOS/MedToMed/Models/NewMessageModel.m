@@ -1,6 +1,6 @@
 //
 //  NewMessageModel.m
-//  MyTeleMed
+//  MedToMed
 //
 //  Created by Shane Goodwin on 5/26/15.
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
@@ -16,28 +16,42 @@
 
 @implementation NewMessageModel
 
-- (void)sendNewMessage:(NSDictionary *)messageData
+- (void)sendNewMessage:(NSDictionary *)messageData withOrder:(NSArray *)sortedKeys
 {
+	NSArray *parameters = @[@"AccountID", @"CallbackName", @"CallbackNumber", @"HospitalID", @"MessageText", @"PatientFirstName", @"PatientLastName", @"Priority"];
+	
 	// Show Activity Indicator
 	[self showActivityIndicator];
 	
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Sort dictionary keys alphabetically
-	NSArray *sortedKeys = [[messageData allKeys] sortedArrayUsingSelector:@selector(compare:)];
-	NSMutableData *xmlData = [[NSMutableData alloc] init];
+	// Sort dictionary keys alphabetically (if custom order is required, utilize the "sortedKeys" method parameter)
+	// NSArray *sortedKeys = [[messageData allKeys] sortedArrayUsingSelector:@selector(compare:)];
+	NSMutableArray *messageText = [NSMutableArray array];
 	
+	// Add optional fields to message text array
 	for (NSString *key in sortedKeys)
 	{
-		[xmlData appendData:[[NSString stringWithFormat:@"<%@>%@</%@>", key, [messageData valueForKey:key], key] dataUsingEncoding:NSUTF8StringEncoding]];
+		// Exclude explicitly added parameters
+		if ([messageData objectForKey:key] && ! [parameters containsObject:key])
+		{
+			[messageText addObject:[NSString stringWithFormat:@"%@: %@", key, [messageData valueForKey:key]]];
+		}
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<NewMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-			"%@"
+			"<AccountID>%@</AccountID>"
+			"<CallbackName>%@</CallbackName>"
+			"<CallbackNumber>%@</CallbackNumber>"
+			"<HospitalID>%@</HospitalID>"
+			"<MessageText>%@</MessageText>"
+			"<PatientFirstName>%@</PatientFirstName>"
+			"<PatientLastName>%@</PatientLastName>"
+			"<Priority>%@</Priority>"
 		"</NewMsg>",
-		[[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding]];
+		[messageData valueForKey:@"AccountID"], [messageData valueForKey:@"CallbackName"], [messageData valueForKey:@"CallbackNumber"], [messageData valueForKey:@"HospitalID"], [messageText componentsJoinedByString:@"\n"], [messageData valueForKey:@"PatientFirstName"], [messageData valueForKey:@"PatientLastName"], [messageData valueForKey:@"Priority"]];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
@@ -68,7 +82,7 @@
 			[self showError:error withCallback:^(void)
 			{
 				// Include callback to retry the request
-				[self sendNewMessage:messageData];
+				[self sendNewMessage:messageData withOrder:sortedKeys];
 			}];
 			
 			/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
@@ -94,7 +108,7 @@
 		[self showError:error withCallback:^(void)
 		{
 			// Include callback to retry the request
-			[self sendNewMessage:messageData];
+			[self sendNewMessage:messageData withOrder:sortedKeys];
 		}];
 		
 		/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])

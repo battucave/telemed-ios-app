@@ -42,6 +42,9 @@
 	// Initialize Account Model
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
+	
+	// Initialize form values
+	[self setFormValues:[[NSMutableDictionary alloc] init]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -82,6 +85,9 @@
 	
 	// Reset selected hospital
 	[self setSelectedHospital:nil];
+	
+	// Reset form values
+	[self.formValues removeAllObjects];
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
@@ -131,6 +137,9 @@
 	// Save selected account
 	[self setSelectedAccount:accountPickerViewController.selectedAccount];
 	
+	// Add/update account id to form values
+	[self.formValues setValue:self.selectedAccount.ID forKey:@"AccountID"];
+	
 	[self.tableView beginUpdates];
 	
 	// Update medical group label with medical group (account) name
@@ -156,6 +165,9 @@
 	
 	// Save selected hospital
 	[self setSelectedHospital:hospitalPickerViewController.selectedHospital];
+	
+	// Add/update hospital id to form values
+	[self.formValues setValue:self.selectedHospital.ID forKey:@"HospitalID"];
 	
 	[self.tableView beginUpdates];
 	
@@ -217,8 +229,19 @@
 	[self validateForm];
 }
 
-- (IBAction)textFieldDidEditingChange:(UITextField *)sender
+- (IBAction)textFieldDidEditingChange:(UITextField *)textField
 {
+	// Remove empty value for text field's key from form values
+	if ([textField.text isEqualToString:@""])
+	{
+		[self.formValues removeObjectForKey:textField.accessibilityIdentifier];
+	}
+	// Add/update value to form values for text field's key
+	else
+	{
+		[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+	}
+	
 	// Validate form
 	[self validateForm];
 }
@@ -332,19 +355,11 @@
 	{
 		MessageNew2TableViewController *messageNew2TableViewController = segue.destinationViewController;
 		
-		// Set form values on message new 2 screen
-		NSMutableDictionary *formValues = [@{
-			@"AccountID"	: self.selectedAccount.ID,
-			@"HospitalID"	: self.selectedHospital.ID,
-			@"Priority"		: (self.switchPriority.isOn ? @"STAT" : @"NORMAL")
-		} mutableCopy];
+		// Update form values with priority value
+		[self.formValues setValue:(self.switchPriority.isOn ? @"Stat" : @"Normal") forKey:@"Priority"];
 		
-		for (UITextField *textField in self.textFields)
-		{
-			[formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
-		};
-		
-		[messageNew2TableViewController setFormValues:formValues];
+		[messageNew2TableViewController setDelegate:self];
+		[messageNew2TableViewController setFormValues:self.formValues];
 	}
 }
 

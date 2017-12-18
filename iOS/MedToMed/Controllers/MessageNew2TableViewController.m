@@ -13,9 +13,9 @@
 @interface MessageNew2TableViewController ()
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
-@property (nonatomic) IBOutlet UITextView *textViewMessageText;
+@property (nonatomic) IBOutlet UITextView *textViewAdditionalInformation;
 
-@property (nonatomic) NSString *textViewMessageTextPlaceholder;
+@property (nonatomic) NSString *textViewAdditionalInformationPlaceholder;
 
 @end
 
@@ -29,24 +29,58 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// Only set placeholder if it has not already been set
-	if ( ! self.textViewMessageTextPlaceholder)
+	if ( ! self.textViewAdditionalInformationPlaceholder)
 	{
-		self.textViewMessageTextPlaceholder = self.textViewMessageText.text;
+		self.textViewAdditionalInformationPlaceholder = self.textViewAdditionalInformation.text;
 	}
 	
-	// Programmatically add textFieldDidEditingChange listener to each text field (will be needed in future when fields change depending on medical group)
 	for (UITextField *textField in self.textFields)
 	{
+		// Set text field's value if it was previously set (user entered text on this screen, then went back to MessageNewTableViewController, then clicked "Next" to return here again)
+		[textField setText:[self.formValues objectForKey:textField.accessibilityIdentifier]];
+		
+		// Programmatically add textFieldDidEditingChange listener to each text field (will be required in future when fields change depending on medical group)
 		[textField addTarget:self action:@selector(textFieldDidEditingChange:) forControlEvents:UIControlEventEditingChanged];
+	}
+	
+	// Set additional information's value if it was previously set (user entered text on this screen, then went back to MessageNewTableViewController, then clicked "Next" to return here again)
+	NSString *additionalInformationValue = [self.formValues objectForKey:@"Additional Information"];
+	
+	if (additionalInformationValue)
+	{
+		[self.textViewAdditionalInformation setText:additionalInformationValue];
+		
+		// Turn off placeholder styling
+		[self.textViewAdditionalInformation setTextColor:[UIColor blackColor]];
+		[self.textViewAdditionalInformation setFont:[UIFont systemFontOfSize:14.0]];
+	}
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
+	{
+		[self.delegate setFormValues:self.formValues];
 	}
 }
 
 - (IBAction)sendNewMessage:(id)sender
 {
 	NewMessageModel *newMessageModel = [[NewMessageModel alloc] init];
+	NSMutableArray *sortedKeys = [NSMutableArray array];
+	
+	// Create custom sort for optional form values
+	for (UITextField *textField in self.textFields)
+	{
+		[sortedKeys addObject:textField.accessibilityIdentifier];
+	}
+	
+	[sortedKeys addObject:@"Additional Information"];
 	
 	[newMessageModel setDelegate:self];
-	[newMessageModel sendNewMessage:self.formValues];
+	[newMessageModel sendNewMessage:self.formValues withOrder:sortedKeys];
 }
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
@@ -126,7 +160,7 @@
 	}
 	else
 	{
-		[self.textViewMessageText becomeFirstResponder];
+		[self.textViewAdditionalInformation becomeFirstResponder];
 	}
 	
 	return NO;
@@ -134,12 +168,12 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-	// Remove empty value for text field's key from form values
+	// Remove empty value for text view's key from form values
 	if ([textView.text isEqualToString:@""])
 	{
 		[self.formValues removeObjectForKey:textView.accessibilityIdentifier];
 	}
-	// Add/update value to form values for text field's key
+	// Add/update value to form values for text view's key
 	else
 	{
 		[self.formValues setValue:textView.text forKey:textView.accessibilityIdentifier];
@@ -149,7 +183,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if ([textView.text isEqualToString:self.textViewMessageTextPlaceholder])
+	if ([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -159,21 +193,12 @@
 	[textView becomeFirstResponder];
 }
 
-/*- (void)textViewDidChange:(UITextView *)textView
-{
-	// Validate form in delegate
-	if ([self.delegate respondsToSelector:@selector(validateForm:)])
-	{
-		[self.delegate validateForm:self.textViewMessage.text];
-	}
-}*/
-
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 	// Show placeholder
 	if ([textView.text isEqualToString:@""])
 	{
-		[textView setText:self.textViewMessageTextPlaceholder];
+		[textView setText:self.textViewAdditionalInformationPlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:142.0/255.0 alpha:1]];
 		[textView setFont:[UIFont systemFontOfSize:15.0]];
 	}

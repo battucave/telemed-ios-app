@@ -13,6 +13,7 @@
 
 @interface MessageNewTableViewController : RevealTableViewController <UITextFieldDelegate>
 
+@property (nonatomic) NSMutableDictionary *formValues;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) HospitalModel *selectedHospital;
 

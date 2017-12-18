@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
+// This file is exact duplicate of MyTeleMed's NewMessageModel.h
+
 #import <Foundation/Foundation.h>
 #import "Model.h"
 
@@ -24,6 +26,14 @@
 @property (nonatomic) BOOL Success;
 @property (nonatomic) NSString *Message;
 
-- (void)sendNewMessage:(NSString *)message accountID:(NSNumber *)accountID messageRecipientIDs:(NSArray *)messageRecipientIDs;
+// Header files are shared by all targets so have to include the method signatures used by both MyTeleMed and MedToMed.
+
+#ifdef MYTELEMED
+	- (void)sendNewMessage:(NSString *)message accountID:(NSNumber *)accountID messageRecipientIDs:(NSArray *)messageRecipientIDs;
+#endif
+
+#ifdef MEDTOMED
+	- (void)sendNewMessage:(NSDictionary *)data;
+#endif
 
 @end

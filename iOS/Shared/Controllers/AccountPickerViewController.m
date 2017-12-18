@@ -475,14 +475,9 @@
 			// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
 			[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 		}
-	
-	#elif defined MEDTOMED
-		// Set account for MessageNewTableViewController
-		if ([segue.identifier isEqualToString:@"setAccount"])
-		{
-			NSLog(@"Select Medical Group");
-		}
 	#endif
+	
+	// MedToMed - Account for MessageNewTableViewController set by unwind segue
 	
 	// If no accounts, ensure nothing happens when going back
 	if ([self.accounts count] == 0)
