@@ -16,9 +16,9 @@
 
 @property (nonatomic) HospitalModel *hospitalModel;
 
-@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
-@property (nonatomic) IBOutlet UISearchBar *searchBar;
-@property (nonatomic) IBOutlet UITableView *tableHospitals;
+@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableHospitals;
 
 @property (nonatomic, strong) UISearchController *searchController;
 

@@ -17,12 +17,12 @@
 
 @property (nonatomic) AccountModel *accountModel;
 
-@property (nonatomic) IBOutlet UIBarButtonItem *buttonNext;
-@property (nonatomic) IBOutlet UILabel *labelHospital;
-@property (nonatomic) IBOutlet UILabel *labelMedicalGroup;
-@property (nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
-@property (nonatomic) IBOutlet UISwitch *switchPriority;
-@property (nonatomic) IBOutlet UIView *viewSectionFooter;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonNext;
+@property (weak, nonatomic) IBOutlet UILabel *labelHospital;
+@property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
+@property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
+@property (weak, nonatomic) IBOutlet UISwitch *switchPriority;
+@property (weak, nonatomic) IBOutlet UIView *viewSectionFooter;
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 @property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;

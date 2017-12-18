@@ -172,7 +172,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Update title of AccountsPickerViewController
-	if ([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
+	if ([segue.identifier isEqualToString:@"showAccountPickerFromSettings"])
+	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
 		#ifdef MYTELEMED

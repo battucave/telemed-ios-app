@@ -22,6 +22,19 @@
 
 @implementation ContactMessageViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	#ifdef MEDTOMED
+		[self.navigationItem setTitle:@"Contact TeleMed"];
+	
+	// Remove menu button if showing Back button. This MUST happen before [super viewWillAppear] so that Back Button will be added in its place (Back button only shown when navigating from Login.storyboard View Controllers)
+	#else
+		self.navigationItem.leftBarButtonItem = nil;
+	#endif
+}
+
 - (IBAction)sendTeleMedMessage:(id)sender
 {
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];
@@ -33,8 +46,33 @@
 // Return pending from EmailTeleMedModel delegate
 - (void)sendMessagePending
 {
+	#ifdef MEDTOMED
+		// Reset message text
+		[self.messageTeleMedComposeTableViewController.textViewMessage setText:@""];
+		[self.messageTeleMedComposeTableViewController.textViewMessage resignFirstResponder];
+
+		// Invalidate form
+		[self.buttonSend setEnabled:NO];
+	
+		// Show succcess message (assume success)
+		UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Contact TeleMed" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+
+		[successAlertController addAction:actionOK];
+
+		// PreferredAction only supported in 9.0+
+		if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[successAlertController setPreferredAction:actionOK];
+		}
+
+		// Show Alert
+		[self presentViewController:successAlertController animated:YES completion:nil];
+	
 	// Go back to Messages (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
+	#else
+		[self.navigationController popViewControllerAnimated:YES];
+	#endif
 }
 
 /*/ Return success from EmailTelemedModel delegate (no longer used)

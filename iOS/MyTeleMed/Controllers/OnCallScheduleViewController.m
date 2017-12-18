@@ -65,7 +65,8 @@
 			[self setCurrentOnCallEntries:status.CurrentOnCallEntries];
 			
 			// Sort On Call Now Entries by StartTime
-			self.currentOnCallEntries = [self.currentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
+			self.currentOnCallEntries = [self.currentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
+			{
 				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
 			}];
 			
@@ -73,7 +74,8 @@
 			[self setFutureOnCallEntries:status.FutureOnCallEntries];
 			
 			// Sort Next On Call Entries by StartTime
-			self.futureOnCallEntries = [self.futureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
+			self.futureOnCallEntries = [self.futureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
+			{
 				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
 			}];
 			

@@ -13,7 +13,7 @@
 @interface MessageNew2TableViewController ()
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
-@property (nonatomic) IBOutlet UITextView *textViewAdditionalInformation;
+@property (weak, nonatomic) IBOutlet UITextView *textViewAdditionalInformation;
 
 @property (nonatomic) NSString *textViewAdditionalInformationPlaceholder;
 
@@ -102,7 +102,8 @@
 {
 	// TEMPORARY (remove when NewMsg web service completed)
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Send Message Incomplete" message:@"Web services are incomplete for sending messages." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
 		// Unwind to first screen of message new form (assume success)
 		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
 	}];
@@ -124,7 +125,8 @@
 - (void)sendMessageSuccess
 {
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
 		// Unwind to first screen of message new form
 		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
 	}];

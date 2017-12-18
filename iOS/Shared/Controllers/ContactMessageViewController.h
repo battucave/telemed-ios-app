@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CoreViewController.h"
+#import "RevealViewController.h"
 
-@interface ContactMessageViewController : CoreViewController
+@interface ContactMessageViewController : RevealViewController
 
 @end

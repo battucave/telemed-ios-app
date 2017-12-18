@@ -91,7 +91,8 @@
 		[self.buttonAddChatParticipant setHidden:YES];
 	}
 	// Update navigation bar title if this is a new Chat
-	else if (self.isNewChat) {
+	else if (self.isNewChat)
+	{
 		[self.navigationItem setTitle:@"New Secure Chat"];
 	}
 	
@@ -440,7 +441,8 @@
 - (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
 	// Update navigation bar title to reflect existing Conversation
-	if (self.isNewChat) {
+	if (self.isNewChat)
+	{
 		[self.navigationItem setTitle:self.navigationBarTitle];
 	}
 	
