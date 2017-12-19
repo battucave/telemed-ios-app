@@ -16,9 +16,9 @@
 @implementation LoginSSOMedToMedViewController
 
 // Unwind Segue from AccountNewViewController
-- (IBAction)unwindFromAccountNew:(UIStoryboardSegue *)segue
+- (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
 {
-	NSLog(@"unwindFromAccountNew");
+	NSLog(@"unwindFromAccountRequest");
 }
 
 // Obtain User Data from server and initialize app
@@ -44,7 +44,7 @@
 					// Check if user is authorized for at least one account
 					for (AccountModel *account in accounts)
 					{
-						if ([accountModel isAccountAuthorized:account])
+						if ([account isAccountAuthorized])
 						{
 							[profile setIsAuthorized:YES];
 						}
@@ -80,10 +80,10 @@
 {
 	if ([segue.identifier isEqualToString:@"showNewAccount"])
 	{
-		AccountNewViewController *newAccountViewController = segue.destinationViewController;
+		AccountNewViewController *accountNewViewController = segue.destinationViewController;
 		
 		// Set delegate
-		[newAccountViewController setDelegate:self];
+		[accountNewViewController setDelegate:self];
 	}
 }
 

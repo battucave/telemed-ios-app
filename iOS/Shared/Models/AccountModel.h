@@ -46,8 +46,8 @@
 #ifdef MEDTOMED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID;
 - (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
-- (BOOL)isAccountAuthorized:(AccountModel *)account;
-- (BOOL)isAccountPending:(AccountModel *)account;
+- (BOOL)isAccountAuthorized;
+- (BOOL)isAccountPending;
 #endif
 
 @end

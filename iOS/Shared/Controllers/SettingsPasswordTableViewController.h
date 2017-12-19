@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RevealTableViewController.h"
+#import "CoreTableViewController.h"
 
-@interface SettingsPasswordTableViewController : RevealTableViewController <UITextFieldDelegate>
+@interface SettingsPasswordTableViewController : CoreTableViewController <UITextFieldDelegate>
 
 @end

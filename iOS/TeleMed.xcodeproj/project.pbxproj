@@ -390,6 +390,8 @@
 		E2C7C1B91FC3911000E50F07 /* button-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */; };
 		E2C7C1BD1FC4917100E50F07 /* UserProfileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */; };
 		E2C9FE061CD9251D00B64D88 /* EmailTelemedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */; };
+		E2CAB4441FE9B49A00202CCD /* HospitalRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CAB4431FE9B49A00202CCD /* HospitalRequestTableViewController.m */; };
+		E2CAB4471FE9D41100202CCD /* AccountRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CAB4461FE9D41100202CCD /* AccountRequestTableViewController.m */; };
 		E2CD93A01FCF0D88006ED66F /* HospitalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CD939F1FCF0D88006ED66F /* HospitalModel.m */; };
 		E2CD93A31FCF1411006ED66F /* HospitalXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CD93A21FCF1411006ED66F /* HospitalXMLParser.m */; };
 		E2CDEFA51D25752100728F1A /* ChatParticipantXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */; };
@@ -872,6 +874,10 @@
 		E2C7C1C61FC4B63900E50F07 /* ProfileProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileProtocol.h; sourceTree = "<group>"; };
 		E2C9FE041CD9251D00B64D88 /* EmailTelemedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailTelemedModel.h; sourceTree = "<group>"; };
 		E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailTelemedModel.m; sourceTree = "<group>"; };
+		E2CAB4421FE9B49A00202CCD /* HospitalRequestTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalRequestTableViewController.h; sourceTree = "<group>"; };
+		E2CAB4431FE9B49A00202CCD /* HospitalRequestTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HospitalRequestTableViewController.m; sourceTree = "<group>"; };
+		E2CAB4451FE9D41100202CCD /* AccountRequestTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountRequestTableViewController.h; sourceTree = "<group>"; };
+		E2CAB4461FE9D41100202CCD /* AccountRequestTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccountRequestTableViewController.m; sourceTree = "<group>"; };
 		E2CD939E1FCF0D88006ED66F /* HospitalModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalModel.h; sourceTree = "<group>"; };
 		E2CD939F1FCF0D88006ED66F /* HospitalModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HospitalModel.m; sourceTree = "<group>"; };
 		E2CD93A11FCF1411006ED66F /* HospitalXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HospitalXMLParser.h; sourceTree = "<group>"; };
@@ -1633,8 +1639,12 @@
 				E24A443D1FCE1C2B00A06EE8 /* Includes */,
 				E23A4F431FC3269F00DC899D /* AccountNewViewController.h */,
 				E23A4F461FC3273A00DC899D /* AccountNewViewController.m */,
+				E2CAB4451FE9D41100202CCD /* AccountRequestTableViewController.h */,
+				E2CAB4461FE9D41100202CCD /* AccountRequestTableViewController.m */,
 				E24A44391FCE181A00A06EE8 /* HospitalPickerViewController.h */,
 				E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */,
+				E2CAB4421FE9B49A00202CCD /* HospitalRequestTableViewController.h */,
+				E2CAB4431FE9B49A00202CCD /* HospitalRequestTableViewController.m */,
 				E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */,
 				E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */,
 				E2A4BBF31FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.h */,
@@ -2527,6 +2537,7 @@
 				E25036C81FBB88F400099C7E /* UIWebView+AFNetworking.m in Sources */,
 				E25036CC1FBB88F400099C7E /* AuthenticationXMLParser.m in Sources */,
 				E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */,
+				E2CAB4441FE9B49A00202CCD /* HospitalRequestTableViewController.m in Sources */,
 				E25036CD1FBB88F400099C7E /* SSOProviderModel.m in Sources */,
 				E25036CE1FBB88F400099C7E /* KeychainItemWrapper.m in Sources */,
 				E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */,
@@ -2549,6 +2560,7 @@
 				E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */,
 				E25036E81FBB88F400099C7E /* ELCUIApplication.m in Sources */,
 				E25036ED1FBB88F400099C7E /* AFHTTPSessionManager.m in Sources */,
+				E2CAB4471FE9D41100202CCD /* AccountRequestTableViewController.m in Sources */,
 				E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */,
 				E22EF0961FD9DBFE00A2E6F6 /* SettingsPasswordTableViewController.m in Sources */,
 				E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */,

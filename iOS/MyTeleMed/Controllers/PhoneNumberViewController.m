@@ -71,6 +71,23 @@
 	#endif
 }
 
+- (IBAction)getPhoneNumberHelp:(id)sender
+{
+	UIAlertController *phoneNumberHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"As a security precaution, Apple requires apps that use your Phone Number to ask you for it." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+
+	[phoneNumberHelpAlertController addAction:actionOK];
+
+	// PreferredAction only supported in 9.0+
+	if ([phoneNumberHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[phoneNumberHelpAlertController setPreferredAction:actionOK];
+	}
+
+	// Show Alert
+	[self presentViewController:phoneNumberHelpAlertController animated:YES completion:nil];
+}
+
 - (IBAction)submitPhoneNumber:(id)sender
 {
 	NSString *phoneNumber = self.textPhoneNumber.text;
@@ -172,43 +189,21 @@
 	}
 }
 
-- (IBAction)getPhoneNumberHelp:(id)sender
+- (IBAction)textFieldDidEditingChange:(UITextField *)sender
 {
-	UIAlertController *phoneNumberHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"As a security precaution, Apple requires apps that use your Phone Number to ask you for it." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-
-	[phoneNumberHelpAlertController addAction:actionOK];
-
-	// PreferredAction only supported in 9.0+
-	if ([phoneNumberHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
+	if ([sender.text isEqualToString:@""])
 	{
-		[phoneNumberHelpAlertController setPreferredAction:actionOK];
-	}
-
-	// Show Alert
-	[self presentViewController:phoneNumberHelpAlertController animated:YES completion:nil];
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-	NSString *textString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-	textString = [textString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-		
-	if (textString.length)
-	{
-		self.buttonHelp.hidden = YES;
+		[self.buttonHelp setHidden:NO];
 	}
 	else
 	{
-		self.buttonHelp.hidden = NO;
+		[self.buttonHelp setHidden:YES];
 	}
-	
-	return YES;
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
-	self.buttonHelp.hidden = NO;
+	[self.buttonHelp setHidden:NO];
 		
 	return YES;
 }

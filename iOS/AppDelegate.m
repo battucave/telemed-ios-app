@@ -257,13 +257,11 @@
 	// If user has timeout disabled and a RefreshToken already exists, attempt to bypass Login screen
 	if ( ! timeoutEnabled && authenticationModel.RefreshToken != nil)
 	{
-		id <ProfileProtocol> profile;
-		
 		#ifdef MYTELEMED
-			profile = [MyProfileModel sharedInstance];
+			id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 		
 		#elif defined MEDTOMED
-			profile = [UserProfileModel sharedInstance];
+			id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
 		
 		#else
 			NSLog(@"Error - Target is neither MyTeleMed nor MedToMed");
@@ -612,7 +610,7 @@
 			// Check if user is authorized for at least one account
 			for (AccountModel *account in accounts)
 			{
-				if ([accountModel isAccountAuthorized:account])
+				if ([account isAccountAuthorized])
 				{
 					[profile setIsAuthorized:YES];
 				}

@@ -81,14 +81,14 @@
 }
 
 // Return Accounts from AccountModel delegate
-- (void)updateAccounts:(NSMutableArray *)newAccounts
+- (void)updateAccounts:(NSMutableArray *)accounts
 {
-	[self setAccounts:newAccounts];
+	[self setAccounts:accounts];
 	
 	// If user has only one Account, automatically set it as the selected Account
-	if ([newAccounts count] == 1)
+	if ([accounts count] == 1)
 	{
-		self.selectedAccount = (AccountModel *)[newAccounts objectAtIndex:0];
+		self.selectedAccount = (AccountModel *)[accounts objectAtIndex:0];
 	}
 }
 

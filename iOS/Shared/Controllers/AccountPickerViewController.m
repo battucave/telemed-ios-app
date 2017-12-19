@@ -147,10 +147,17 @@
 	}
 	
 	#ifdef MEDTOMED
-		// If user navigated from settings screen, disallow selection of accounts
+		// If user navigated from settings screen
 		if (! self.shouldSelectAccount)
 		{
+			// Disallow selection of medical groups (accounts)
 			[self.tableAccounts setAllowsSelection:NO];
+			
+			// Add "+" button to allow user to request new medical group (account)
+			UIBarButtonItem *buttonSend = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAccountRequest)];
+			
+			// [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:buttonSend, nil]];
+			[self.navigationItem setRightBarButtonItem:buttonSend];
 		}
 	#endif
 }
@@ -167,9 +174,26 @@
 }
 
 // Return accounts from account model delegate
-- (void)updateAccounts:(NSMutableArray *)newAccounts
+- (void)updateAccounts:(NSMutableArray *)accounts
 {
-	[self setAccounts:newAccounts];
+	#ifdef MEDTOMED
+		// Filter and store only authorized or pending medical groups (accounts)
+		NSPredicate *predicate;
+	
+		// When selecting medical group (account) for new message, only show authorized medical groups
+		if (self.shouldSelectAccount)
+		{
+		 	predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@", @"Authorized"];
+		}
+		// When viewing "My Medical Groups", show authorized and pending medical groups
+		else
+		{
+			predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@ OR MyAuthorizationStatus = %@", @"Authorized", @"Pending"];
+		}
+		accounts = [[accounts filteredArrayUsingPredicate:predicate] mutableCopy];
+	#endif
+	
+	[self setAccounts:accounts];
 	
 	self.isLoaded = YES;
 	
@@ -332,12 +356,7 @@
 		return emptyCell;
 	}
 	
-	static NSString *cellIdentifier = @"AccountCell";
-	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	AccountModel *account;
-	
-	// Set up the cell
-	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
@@ -350,6 +369,19 @@
 		account = [self.accounts objectAtIndex:indexPath.row];
 	}
 	
+	static NSString *cellIdentifier = @"AccountCell";
+	static NSString *cellIdentifierPending = @"AccountPendingCell";
+	
+	#ifdef MEDTOMED
+		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:([account isAccountPending] ? cellIdentifierPending : cellIdentifier)];
+	
+	#else
+		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
+	#endif
+	
+	// Set up the cell
+	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	
 	// Set previously selected account as selected and add checkmark
 	if (self.selectedAccount && [account.ID isEqualToNumber:self.selectedAccount.ID])
 	{
@@ -360,8 +392,11 @@
 	// Set account name label
 	[cell.labelName setText:account.Name];
 	
-	// Set account number label
-	[cell.labelPublicKey setText:account.PublicKey];
+	// Set account number label (MedToMed's AccountPendingCell has no
+	if ([cell respondsToSelector:@selector(labelPublicKey)])
+	{
+		[cell.labelPublicKey setText:account.PublicKey];
+	}
 	
 	return cell;
 }
@@ -497,5 +532,15 @@
 	// Avoid superfluous warning that "Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior <UISearchController>"
 	[self.searchController.view removeFromSuperview];
 }
+
+
+# pragma mark - MedToMed
+
+#ifdef MEDTOMED
+- (void)showAccountRequest
+{
+	[self performSegueWithIdentifier:@"showAccountRequest" sender:self];
+}
+#endif
 
 @end

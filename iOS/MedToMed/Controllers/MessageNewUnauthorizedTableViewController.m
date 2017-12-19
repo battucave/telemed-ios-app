@@ -38,7 +38,7 @@
 			// Check if user is pending for at least one account
 			for (AccountModel *account in accounts)
 			{
-				if ([accountModel isAccountPending:account])
+				if ([account isAccountPending])
 				{
 					//isAccountPending = YES;
 				}
@@ -66,25 +66,25 @@
 			else
 			{
 				HospitalModel *hospitalModel = [[HospitalModel alloc] init];
-				
+	 
 				[hospitalModel getHospitalsWithCallback:^(BOOL success, NSMutableArray *hospitals, NSError *error)
 				{
 					if (success)
 					{
 						BOOL isHospitalAuthorized = NO;
-						BOOL isHospitalPending = NO;
+						BOOL isHospitalRequested = NO;
 						NSString *textHeader = @"Please get started by requesting access to a Hospital using the button below.";
 						
 						// Check if user is authorized or pending for at least one hospital
 						for (HospitalModel *hospital in hospitals)
 						{
-							if ([hospitalModel isHospitalAuthorized:hospital])
+							if ([hospital isHospitalAuthorized])
 							{
 								isHospitalAuthorized = YES;
 							}
-							else if ([hospitalModel isHospitalPending:hospital])
+							else if ([hospital isHospitalRequested])
 							{
-								isHospitalPending = YES;
+								isHospitalRequested = YES;
 							}
 						}
 						
@@ -94,7 +94,7 @@
 							textHeader = @"Please request access to a Medical Group using the button below.";
 						}
 						// If user is pending for at least one hospital, then their next step is to wait for approval
-						else if (isHospitalPending)
+						else if (isHospitalRequested)
 						{
 							textHeader = @"Your requested Hospital is still pending approval.";
 						}

@@ -668,7 +668,6 @@
                             <outlet property="delegate" destination="Tcd-A0-vuW" id="3k9-W3-NYQ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="3cb-7Z-occ"/>
                     <connections>
                         <outlet property="cellMessage" destination="0fm-Jq-zNP" id="aOR-DD-Stf"/>
                         <outlet property="cellMessageRecipient" destination="QeF-dj-nIj" id="tGj-n3-W1Q"/>
@@ -679,6 +678,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aga-lG-6Xk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5025.6000000000004" y="-892.3538230884559"/>
+        </scene>
+        <!--AccountRequestTableViewController-->
+        <scene sceneID="nDs-tK-Q6S">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MedToMed" referencedIdentifier="AccountRequestTableViewController" id="xJG-LZ-YxZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lO8-9R-w1n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6614" y="-1345"/>
         </scene>
         <!--Select Recipient-->
         <scene sceneID="wOT-n3-ILL">
@@ -709,7 +716,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="441"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
@@ -909,7 +916,7 @@
         <!--Message Detail-->
         <scene sceneID="Wjq-0V-bgG">
             <objects>
-                <viewController id="5rm-Th-Y7w" customClass="MessageDetailViewController" sceneMemberID="viewController">
+                <viewController title="Message Detail" id="5rm-Th-Y7w" customClass="MessageDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wat-Vb-eeV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1512,7 +1519,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NHB-L4-Gle"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Message Detail" id="CdY-bJ-wJd"/>
                     <connections>
                         <outlet property="buttonArchive" destination="uTM-AQ-NUV" id="dVS-e3-oFn"/>
                         <outlet property="buttonForward" destination="agi-X5-zzP" id="sjV-k9-0Lz"/>
@@ -2611,7 +2617,7 @@
         <!--User Guide-->
         <scene sceneID="Oa9-51-8nC">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="ZBZ-8V-igo" customClass="HelpUserGuideViewController" sceneMemberID="viewController">
+                <viewController title="User Guide" automaticallyAdjustsScrollViewInsets="NO" id="ZBZ-8V-igo" customClass="HelpUserGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aZK-BF-j1U">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2651,7 +2657,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NzF-WP-Cpx"/>
                     </view>
-                    <navigationItem key="navigationItem" title="User Guide" id="DeJ-lg-yf5"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="activityIndicator" destination="Q3c-8o-XvK" id="8XI-kb-263"/>
@@ -2666,7 +2671,7 @@
         <!--Notifications-->
         <scene sceneID="NHM-eT-Y0I">
             <objects>
-                <tableViewController id="Fu1-Mj-dMW" customClass="SettingsNotificationsTableViewController" sceneMemberID="viewController">
+                <tableViewController title="Notifications" id="Fu1-Mj-dMW" customClass="SettingsNotificationsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="wWv-Fr-5N9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2761,7 +2766,6 @@
                             <outlet property="delegate" destination="Fu1-Mj-dMW" id="7dM-SV-ynD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Notifications" id="3h5-ko-gjr"/>
                     <connections>
                         <outlet property="cellInterval" destination="b2S-Jb-bBW" id="PoD-3e-dou"/>
                         <outlet property="cellTone" destination="9sc-qU-2ni" id="Mnh-ID-Thw"/>
@@ -3244,7 +3248,7 @@
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="vUd-oo-bvD" customClass="MessageTeleMedComposeTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Dig-LM-hY9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <sections>
@@ -3415,7 +3419,7 @@
         <!--Select Account-->
         <scene sceneID="QQi-Sg-SyM">
             <objects>
-                <viewController storyboardIdentifier="MessageNewAccountPicker" id="VQu-Ge-aJV" customClass="AccountPickerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MessageNewAccountPicker" title="Select Account" id="VQu-Ge-aJV" customClass="AccountPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a0L-Ge-VkQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3444,7 +3448,7 @@
                                     <constraint firstItem="3Vd-pP-0g9" firstAttribute="top" secondItem="pUs-a0-7Pa" secondAttribute="top" id="f1m-Sz-Fzx"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="QZ7-a8-rYA">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="QZ7-a8-rYA">
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -3499,6 +3503,43 @@
                                             <outlet property="labelPublicKey" destination="PSX-WE-s2o" id="O0L-18-Ycq"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AccountPendingCell" rowHeight="66" id="0vZ-vs-xYU" customClass="AccountCell">
+                                        <rect key="frame" x="0.0" y="67" width="375" height="66"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="0vZ-vs-xYU" id="aQX-Fh-zPn">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M3C-Ig-XdL">
+                                                    <rect key="frame" x="15" y="11" width="345" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authorization Pending" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SsF-Zw-114">
+                                                    <rect key="frame" x="15" y="38" width="345" height="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="17" id="gUW-h4-nSX"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
+                                                    <color key="textColor" red="0.38431372549019605" green="0.38431372549019605" blue="0.38431372549019605" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="M3C-Ig-XdL" firstAttribute="trailing" secondItem="aQX-Fh-zPn" secondAttribute="trailingMargin" id="2uk-ti-Z4v"/>
+                                                <constraint firstItem="M3C-Ig-XdL" firstAttribute="top" secondItem="aQX-Fh-zPn" secondAttribute="topMargin" id="K2n-m7-uEq"/>
+                                                <constraint firstItem="M3C-Ig-XdL" firstAttribute="leading" secondItem="aQX-Fh-zPn" secondAttribute="leadingMargin" id="MVP-ya-4LX"/>
+                                                <constraint firstItem="SsF-Zw-114" firstAttribute="top" secondItem="M3C-Ig-XdL" secondAttribute="bottom" constant="6" id="PJc-1t-Y7S"/>
+                                                <constraint firstItem="SsF-Zw-114" firstAttribute="trailing" secondItem="M3C-Ig-XdL" secondAttribute="trailing" id="vG2-4A-llT"/>
+                                                <constraint firstAttribute="bottom" secondItem="SsF-Zw-114" secondAttribute="bottom" constant="10.5" id="wpb-SF-ZVT"/>
+                                                <constraint firstItem="SsF-Zw-114" firstAttribute="leading" secondItem="M3C-Ig-XdL" secondAttribute="leading" id="zmW-hp-ybs"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="labelName" destination="M3C-Ig-XdL" id="fQL-MZ-aTg"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="VQu-Ge-aJV" id="fgB-xD-6ch"/>
@@ -3518,13 +3559,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QBu-X5-CQw"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Select Account" id="a7F-8v-kyb"/>
                     <connections>
                         <outlet property="searchBar" destination="3Vd-pP-0g9" id="ZaX-4w-7Ga"/>
                         <outlet property="tableAccounts" destination="QZ7-a8-rYA" id="Ye1-JO-GxR"/>
                         <outlet property="viewSearchBarContainer" destination="pUs-a0-7Pa" id="rIK-mX-COl"/>
                         <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromAccountPicker" id="Wxx-iI-zqX"/>
                         <segue destination="cOi-kn-978" kind="unwind" identifier="setAccount" unwindAction="setAccount:" id="402-LO-fNm"/>
+                        <segue destination="xJG-LZ-YxZ" kind="show" identifier="showAccountRequest" id="fSt-vb-7aH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f8a-3B-esZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3538,7 +3579,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="5787.2000000000007" y="-892.3538230884559"/>
+            <point key="canvasLocation" x="5786.3999999999996" y="-892.80359820089961"/>
         </scene>
         <!--Secure Chat-->
         <scene sceneID="5KH-rU-3RM">
@@ -3775,7 +3816,7 @@
         <!--Secure Chat Detail-->
         <scene sceneID="Bes-wJ-IIe">
             <objects>
-                <viewController id="i1Q-xN-TGC" customClass="ChatMessageDetailViewController" sceneMemberID="viewController">
+                <viewController title="Secure Chat Detail" id="i1Q-xN-TGC" customClass="ChatMessageDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n38-BS-AWX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -4095,7 +4136,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="eRe-Zs-zkX"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Secure Chat Detail" id="dUm-S4-bfv"/>
                     <connections>
                         <outlet property="buttonAddChatParticipant" destination="njF-Wx-06J" id="Ecs-2K-N1C"/>
                         <outlet property="buttonSend" destination="lfb-qI-mik" id="kva-PV-cQd"/>
@@ -4417,11 +4457,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ejp-fl-nDj"/>
+        <segue reference="Qj5-xD-AWZ"/>
         <segue reference="j8k-kI-sFx"/>
         <segue reference="ZfR-s3-nyT"/>
         <segue reference="bgc-j8-Gjl"/>
-        <segue reference="xeH-nb-wrL"/>
+        <segue reference="jIb-YA-bfg"/>
         <segue reference="c1m-Px-Iwz"/>
         <segue reference="V9Q-rq-EEe"/>
         <segue reference="nDL-G3-d11"/>

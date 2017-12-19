@@ -179,13 +179,13 @@
 {
     if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])
     {
-        MessageForwardViewController *messageForwardViewController = [segue destinationViewController];
+        MessageForwardViewController *messageForwardViewController = segue.destinationViewController;
         
         [messageForwardViewController setMessage:self.message];
     }
 	else if ([segue.identifier isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageTeleMedFromMessageHistory"])
 	{
-		MessageTeleMedViewController *messageTeleMedViewController = [segue destinationViewController];
+		MessageTeleMedViewController *messageTeleMedViewController = segue.destinationViewController;
 		
 		[messageTeleMedViewController setMessage:self.message];
 	}

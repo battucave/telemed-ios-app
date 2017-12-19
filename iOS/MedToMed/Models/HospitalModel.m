@@ -28,15 +28,31 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
+			NSMutableArray *hospitals = [parser hospitals];
+			
+			/*/ TESTING ONLY (generate fictitious hospitals for testing)
+			for (int i = 0; i < 5; i++)
+			{
+				HospitalModel *hospital = [[HospitalModel alloc] init];
+				
+				[hospital setID:[NSNumber numberWithInt:i]];
+				[hospital setMyAuthenticationStatus:@"Requested"]; // NONE, Requested, OK, Admin, Denied, Blocked
+				[hospital setName:[NSString stringWithFormat:@"Hospital %d", i]];
+				[hospital setAbbreviatedName:[NSString stringWithFormat:@"Hospital %d", i]];
+			 
+				[hospitals addObject:hospital];
+			}
+			// END TESTING ONLY */
+			
 			// Handle success via callback block
 			if (callback)
 			{
-				callback(YES, [parser hospitals], nil);
+				callback(YES, hospitals, nil);
 			}
 			// Handle success via delegate
 			else if ([self.delegate respondsToSelector:@selector(updateHospitals:)])
 			{
-				[self.delegate updateHospitals:[parser hospitals]];
+				[self.delegate updateHospitals:hospitals];
 			}
 		}
 		// Error parsing XML file
@@ -76,29 +92,29 @@
 	}];
 }
 
-- (BOOL)isHospitalAdmin:(HospitalModel *)hospital
+- (BOOL)isHospitalAdmin
 {
-	return [hospital.MyAuthenticationStatus isEqualToString:@"Admin"];
+	return [self.MyAuthenticationStatus isEqualToString:@"Admin"];
 }
 
-- (BOOL)isHospitalAuthorized:(HospitalModel *)hospital
+- (BOOL)isHospitalAuthorized
 {
-	return ([self isHospitalAdmin:hospital] || [hospital.MyAuthenticationStatus isEqualToString:@"OK"]);
+	return ([self isHospitalAdmin] || [self.MyAuthenticationStatus isEqualToString:@"OK"]);
 }
 
-- (BOOL)isHospitalBlocked:(HospitalModel *)hospital
+- (BOOL)isHospitalBlocked
 {
-	return [hospital.MyAuthenticationStatus isEqualToString:@"Blocked"];
+	return [self.MyAuthenticationStatus isEqualToString:@"Blocked"];
 }
 
-- (BOOL)isHospitalDenied:(HospitalModel *)hospital
+- (BOOL)isHospitalDenied
 {
-	return [hospital.MyAuthenticationStatus isEqualToString:@"Denied"];
+	return [self.MyAuthenticationStatus isEqualToString:@"Denied"];
 }
 
-- (BOOL)isHospitalPending:(HospitalModel *)hospital
+- (BOOL)isHospitalRequested
 {
-	return [hospital.MyAuthenticationStatus isEqualToString:@"Requested"];
+	return [self.MyAuthenticationStatus isEqualToString:@"Requested"];
 }
 
 @end

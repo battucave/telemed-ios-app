@@ -13,7 +13,7 @@
 
 @interface SSOProviderViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *textSSOProvider;
+@property (weak, nonatomic) IBOutlet UITextField *textFieldSSOProvider;
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet UIView *viewToolbar;
 
@@ -32,17 +32,17 @@
 	// Auto-populate and auto-focus sso provider field
 	self.ssoProviderModel = [[SSOProviderModel alloc] init];
 	
-	[self.textSSOProvider setText:self.ssoProviderModel.Name];
-	[self.textSSOProvider becomeFirstResponder];
+	[self.textFieldSSOProvider setText:self.ssoProviderModel.Name];
+	[self.textFieldSSOProvider becomeFirstResponder];
 	
 	// Attach toolbar to top of keyboard
-	[self.textSSOProvider setInputAccessoryView:self.viewToolbar];
+	[self.textFieldSSOProvider setInputAccessoryView:self.viewToolbar];
 	[self.viewToolbar removeFromSuperview];
 }
 
 - (IBAction)submitSSOProvider:(id)sender
 {
-	NSString *name = [self.textSSOProvider.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+	NSString *name = [self.textFieldSSOProvider.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 	
 	// Validate SSO Provider using API
 	[self.ssoProviderModel validate:name withCallback:^(BOOL success, NSError *error)
@@ -64,26 +64,21 @@
 	}];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (IBAction)textFieldDidEditingChange:(UITextField *)sender
 {
-	NSString *textString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-	textString = [textString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	if (textString.length)
+	if ([sender.text isEqualToString:@""])
 	{
-		self.buttonHelp.hidden = YES;
+		[self.buttonHelp setHidden:NO];
 	}
 	else
 	{
-		self.buttonHelp.hidden = NO;
+		[self.buttonHelp setHidden:YES];
 	}
-	
-	return YES;
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
-	self.buttonHelp.hidden = NO;
+	[self.buttonHelp setHidden:NO];
 	
 	return YES;
 }

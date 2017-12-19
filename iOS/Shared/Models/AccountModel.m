@@ -24,14 +24,15 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			/*/ TESTING ONLY (generate fictitious accounts for testing)
 			NSMutableArray *accounts = [parser accounts];
 			
-			for (int i = 0; i < 20; i++)
+			/*/ TESTING ONLY (generate fictitious accounts for testing)
+			for (int i = 0; i < 5; i++)
 			{
 				AccountModel *account = [[AccountModel alloc] init];
-				
+			 
 				[account setID:[NSNumber numberWithInt:i]];
+				[account setMyAuthorizationStatus:@"Pending"]; // Unauthorized, Pending, Authorized
 				[account setName:[NSString stringWithFormat:@"Account %d", i]];
 				[account setPublicKey:[NSString stringWithFormat:@"%d", i]];
 				
@@ -42,12 +43,12 @@
 			// Handle success via callback block
 			if (callback)
 			{
-				callback(YES, [parser accounts], nil);
+				callback(YES, accounts, nil);
 			}
 			// Handle success via delegate
 			else if ([self.delegate respondsToSelector:@selector(updateAccounts:)])
 			{
-				[self.delegate updateAccounts:[parser accounts]];
+				[self.delegate updateAccounts:accounts];
 			}
 		}
 		// Error parsing XML file
@@ -130,14 +131,14 @@
 	[self getAccountsWithCallback:callback parameters:parameters];
 }
 
-- (BOOL)isAccountAuthorized:(AccountModel *)account
+- (BOOL)isAccountAuthorized
 {
-	return [account.MyAuthorizationStatus isEqualToString:@"Authorized"];
+	return [self.MyAuthorizationStatus isEqualToString:@"Authorized"];
 }
 
-- (BOOL)isAccountPending:(AccountModel *)account
+- (BOOL)isAccountPending
 {
-	return [account.MyAuthorizationStatus isEqualToString:@"Pending"];
+	return [self.MyAuthorizationStatus isEqualToString:@"Pending"];
 }
 #endif
 

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CoreViewController.h"
 #import "HospitalModel.h"
 
-@interface HospitalPickerViewController : UIViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
+@interface HospitalPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) NSMutableArray *hospitals;
 @property (nonatomic) HospitalModel *selectedHospital;

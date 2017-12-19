@@ -1,55 +1,34 @@
 //
-//  AccountNewViewController.m
+//  AccountRequestTableViewController.m
 //  MedToMed
 //
-//  Created by Shane Goodwin on 11/20/17.
+//  Created by Shane Goodwin on 12/19/17.
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import "AccountNewViewController.h"
-#import "HelpViewController.h"
+#import "AccountRequestTableViewController.h"
 
-@interface AccountNewViewController ()
+@interface AccountRequestTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldAccountCode;
-@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
 
 @end
 
-/*************************************************************************
-* THIS SCREEN SHOULD BE A NEW ACCOUNT FORM (PROFILE INFO AND PASSWORD)   *
-* CURRENT IMPLEMENTATION SUPERSEDED BY ACCOUNTREQUESTTABLEVIEWCONTROLLER *
-* SEE REVISED NEW USER PROCESS IN DOCUMENTATION                          *
-*************************************************************************/
-
-@implementation AccountNewViewController
+@implementation AccountRequestTableViewController
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
-	[self.navigationController setNavigationBarHidden:YES animated:YES];
-	
-	// Shift form up for screens 480 or less in height
-	if ([UIScreen mainScreen].bounds.size.height <= 480)
-	{
-		[self.constraintFormTop setConstant:12.0f];
-	}
-	
 	// Auto-focus account code field
 	[self.textFieldAccountCode becomeFirstResponder];
-	
-	// Attach toolbar to top of keyboard
-	[self.textFieldAccountCode setInputAccessoryView:self.viewToolbar];
-	[self.viewToolbar removeFromSuperview];
 }
 
 - (IBAction)getAccountCodeHelp:(id)sender
 {
-	UIAlertController *accountCodeHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"To create your new account, you must enter the code sent to you by TeleMed." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *accountCodeHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"To request access to a new medical group, you must enter the code provided to you by TeleMed." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
 	[accountCodeHelpAlertController addAction:actionOK];
@@ -66,11 +45,11 @@
 
 - (IBAction)submitAccountCode:(id)sender
 {
-	// TEMPORARY (remove when Hospital Request web service completed)
-	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Medical Group Authorization Incomplete" message:@"Web services are incomplete for requesting medical group authorization." preferredStyle:UIAlertControllerStyleAlert];
+	// TEMPORARY (remove when Account Request web service completed)
+	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Request Medical Group Incomplete" message:@"Web services are incomplete for requesting a medical group." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Account Code saved successfully so return to Login
+		// Go back to My Medical Groups
 		[self.navigationController popViewControllerAnimated:YES];
 	}];
 
@@ -97,6 +76,9 @@
 	{
 		[self.buttonHelp setHidden:YES];
 	}
+	
+	// Validate form
+	[self.buttonSend setEnabled: ! [self.textFieldAccountCode.text isEqualToString:@""]];
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
@@ -106,21 +88,22 @@
 	return YES;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-	if ([segue.identifier isEqualToString:@"showHelp"])
-	{
-		HelpViewController *helpViewController = segue.destinationViewController;
-		
-		[helpViewController setShowBackButton:YES];
-	}
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	[textField resignFirstResponder];
 	
 	return NO;
+}
+
+// Avoid upper case header
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+	if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
+	{
+		UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
+		
+		[headerView.textLabel setText:[super tableView:tableView titleForHeaderInSection:section]];
+	}
 }
 
 - (void)didReceiveMemoryWarning

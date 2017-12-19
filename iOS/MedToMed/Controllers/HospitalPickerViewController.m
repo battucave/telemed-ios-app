@@ -112,8 +112,13 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableHospitals setTableFooterView:[[UIView alloc] init]];
 	
+	// If user navigated from message new screen, remove "+" button
+	if (self.shouldSelectHospital)
+	{
+		[self.navigationItem setRightBarButtonItem:nil];
+	}
 	// If user navigated from settings screen, disallow selection of hospitals
-	if (! self.shouldSelectHospital)
+	else
 	{
 		[self.tableHospitals setAllowsSelection:NO];
 	}
@@ -143,9 +148,23 @@
 }
 
 // Return hospitals from hospital model delegate
-- (void)updateHospitals:(NSMutableArray *)newHospitals
+- (void)updateHospitals:(NSMutableArray *)hospitals
 {
-	[self setHospitals:newHospitals];
+	// Filter and store only authenticated or requested hospitals
+	NSPredicate *predicate;
+	
+	// When selecting hospital for new message, only show authenticated hospitals
+	if (self.shouldSelectHospital)
+	{
+		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
+	}
+	// When viewing "My Hospitals", show authenticated and requested hospitals
+	else
+	{
+		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin", @"Requested"];
+	}
+	
+	[self setHospitals:[[hospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
 	
 	self.isLoaded = YES;
 	
@@ -291,12 +310,7 @@
 		return emptyCell;
 	}
 	
-	static NSString *cellIdentifier = @"HospitalCell";
-	HospitalCell *cell = [self.tableHospitals dequeueReusableCellWithIdentifier:cellIdentifier];
 	HospitalModel *hospital;
-	
-	// Set up the cell
-	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
@@ -308,6 +322,14 @@
 	{
 		hospital = [self.hospitals objectAtIndex:indexPath.row];
 	}
+	
+	static NSString *cellIdentifier = @"HospitalCell";
+	static NSString *cellIdentifierRequested = @"HospitalRequestedCell";
+	
+	HospitalCell *cell = [self.tableHospitals dequeueReusableCellWithIdentifier:([hospital isHospitalRequested] ? cellIdentifierRequested : cellIdentifier)];
+	
+	// Set up the cell
+	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Set previously selected hospital as selected and add checkmark
 	if (self.selectedHospital && [hospital.ID isEqualToNumber:self.selectedHospital.ID])

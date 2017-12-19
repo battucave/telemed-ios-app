@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RevealTableViewController.h"
+#import "CoreTableViewController.h"
 
-@interface SettingsProfileTableViewController : RevealTableViewController <UITextFieldDelegate>
+@interface SettingsProfileTableViewController : CoreTableViewController <UITextFieldDelegate>
 
 @end
