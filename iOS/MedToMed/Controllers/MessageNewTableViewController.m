@@ -18,9 +18,10 @@
 @property (nonatomic) AccountModel *accountModel;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonNext;
+@property (weak, nonatomic) IBOutlet UITableViewCell *cellIntro;
+@property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelHospital;
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
-@property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
 @property (weak, nonatomic) IBOutlet UISwitch *switchPriority;
 @property (weak, nonatomic) IBOutlet UIView *viewSectionFooter;
 
@@ -92,6 +93,9 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableView beginUpdates];
+	
+		// Show intro cell
+		[self.cellIntro setHidden:NO];
 		
 		// Clear hospital label
 		[self.labelHospital setText:@""];
@@ -170,6 +174,9 @@
 	[self.formValues setValue:self.selectedHospital.ID forKey:@"HospitalID"];
 	
 	[self.tableView beginUpdates];
+	
+	// Hide intro cell
+	[self.cellIntro setHidden:YES];
 	
 	// Show loading indicator in table footer
 	[self setIsLoading:YES];

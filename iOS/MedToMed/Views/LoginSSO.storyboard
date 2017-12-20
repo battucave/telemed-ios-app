@@ -109,7 +109,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="SEC-L8-qvS"/>
-                                    <barButtonItem title="Create Account" id="UXd-lq-IaI">
+                                    <barButtonItem enabled="NO" title="Create Account" id="UXd-lq-IaI">
                                         <connections>
                                             <segue destination="2av-Uk-df6" kind="show" identifier="showAccountRequest" id="0GX-YG-Io4"/>
                                         </connections>
@@ -153,6 +153,7 @@
                     <connections>
                         <outlet property="activityIndicator" destination="veN-bL-Vga" id="pSD-cl-WyW"/>
                         <outlet property="buttonBack" destination="L6n-6o-7ZE" id="vLX-8e-EvT"/>
+                        <outlet property="buttonCreateAccount" destination="UXd-lq-IaI" id="GsW-fO-aMS"/>
                         <outlet property="buttonLogin" destination="TDP-rD-Tb8" id="IyR-dT-WfB"/>
                         <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="mKI-No-NAc"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>

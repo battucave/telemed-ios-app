@@ -24,7 +24,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchTimeout;
 
 @property (nonatomic) BOOL mayDisableTimeout;
-@property (nonatomic) NSInteger versionNumberSection;
+@property (nonatomic) NSInteger aboutTeleMedSection;
 
 @end
 
@@ -38,10 +38,10 @@
 	self.mayDisableTimeout = NO;
 	
 	#ifdef MEDTOMED
-		[self setVersionNumberSection:2];
+		[self setAboutTeleMedSection:2];
 	
 	#else
-		[self setVersionNumberSection:3];
+		[self setAboutTeleMedSection:3];
 	#endif
 }
 
@@ -49,7 +49,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Set May Disable Timeout value
+	// Set may disable timeout value
 	id <ProfileProtocol> profile;
 	
 	#ifdef MYTELEMED
@@ -100,7 +100,7 @@
 				[updateTimeoutAlertController setPreferredAction:actionCancel];
 			}
 		
-			// Show Alert
+			// Show alert
 			[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];
 		}
 		else
@@ -114,7 +114,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide Session Timeout section
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section
     if (section == 0 && ! self.mayDisableTimeout)
 	{
 		return 0;
@@ -125,26 +125,26 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide Session Timeout section by setting its header height to 0.1 (0.0 doesn't work)
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its header height to 0.1 (0.0 doesn't work)
 	return (section == 0 && ! self.mayDisableTimeout ? 0.1 : ([self tableView:tableView titleForHeaderInSection:section] == nil ? 22.0 : 46.0));
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide Session Timeout section by setting its footer height to 0.1 (0.0 doesn't work)
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its footer height to 0.1 (0.0 doesn't work)
 	return (section == 0 && ! self.mayDisableTimeout ? 0.1 : [super tableView:tableView heightForFooterInSection:section]);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide Session Timeout section by clearing its header title
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its header title
 	// Note: it is not enough to simply set the header height to 0.1 because user can still drag the screen down and see the text
 	return (section == 0 && ! self.mayDisableTimeout ? @"" : [super tableView:tableView titleForHeaderInSection:section]);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide Session Timeout section by clearing its footer title
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its footer title
 	// Note: it is not enough to simply set the footer height to 0.1 because user can still drag the screen down and see the text
 	return (section == 0 && ! self.mayDisableTimeout ? @"" : [super tableView:tableView titleForFooterInSection:section]);
 }
@@ -153,17 +153,23 @@
 {
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
-	// Set Timeout Value
+	// Set timeout value
 	if (indexPath.section == 0)
 	{
 		NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
 		
 		[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
 	}
-	// Add Version Number to Version cell
-	else if (indexPath.section == self.versionNumberSection)
+	// Add version and build numbers to version cell
+	else if (indexPath.section == self.aboutTeleMedSection)
 	{
-		[cell.detailTextLabel setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+		if (indexPath.row == 0)
+		{
+			NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+			NSString *versionNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+			
+			[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
+		}
 	}
 	
     return cell;
@@ -187,13 +193,13 @@
 	}
 	
 	#ifdef MYTELEMED
-		// Embedded Table View Controller inside Container
+		// Embedded table view controller inside container
 		if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
 		{
 			SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
 			NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 			
-			// Set Notification Settings Type
+			// Set notification settings type
 			[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
 		}
 	#endif
@@ -211,13 +217,13 @@
 #ifdef MYTELEMED
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Segue to Notification Settings
+	// Segue to notification settings
 	if (indexPath.section == 1)
 	{
 		[self performSegueWithIdentifier:@"showSettingsNotifications" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 	
-	// MyProfile cells use segues directly from table cell
+	// Note: MyProfile cells use segues directly from table cell
 }
 #endif
 

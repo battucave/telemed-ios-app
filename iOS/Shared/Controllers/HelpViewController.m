@@ -33,7 +33,10 @@
 	[super viewWillAppear:animated];
 	
 	// Update label version with app version from bundle
-	[self.labelVersion setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+	NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+	NSString *versionNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+	
+	[self.labelVersion setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
 	
 	// MedToMed
 	#ifdef MEDTOMED

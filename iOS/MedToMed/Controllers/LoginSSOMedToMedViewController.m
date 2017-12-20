@@ -13,7 +13,21 @@
 #import "AccountModel.h"
 #import "UserProfileModel.h"
 
+@interface LoginSSOMedToMedViewController ()
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonCreateAccount;
+
+@end
+
 @implementation LoginSSOMedToMedViewController
+
+- (void)viewDidLoad
+{
+	[super viewDidLoad];
+	
+	// TEMPORARY (remove code and enable button in storyboard in phase 2)
+	[self.buttonCreateAccount setTitle:@""];
+}
 
 // Unwind Segue from AccountNewViewController
 - (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue

@@ -46,6 +46,15 @@
 // Return pending from EmailTeleMedModel delegate
 - (void)sendMessagePending
 {
+	// Go back to Messages (assume success)
+	#ifdef MYTELEMED
+		[self.navigationController popViewControllerAnimated:YES];
+	#endif
+}
+
+// Return success from EmailTelemedModel delegate (no longer used)
+- (void)sendMessageSuccess
+{
 	#ifdef MEDTOMED
 		// Reset message text
 		[self.messageTeleMedComposeTableViewController.textViewMessage setText:@""];
@@ -68,21 +77,10 @@
 
 		// Show Alert
 		[self presentViewController:successAlertController animated:YES completion:nil];
-	
-	// Go back to Messages (assume success)
-	#else
-		[self.navigationController popViewControllerAnimated:YES];
 	#endif
 }
 
-/*/ Return success from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageSuccess
-{
-	// Go back to Message Detail
-	[self.navigationController popViewControllerAnimated:YES];
-}
-
-// Return error from EmailTelemedModel delegate (no longer used)
+/*/ Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
