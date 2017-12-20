@@ -147,6 +147,12 @@
 	}
 }
 
+// Required for unwind compatibility with MessageNewUnauthorizedTableViewController (both unwind from HospitalRequestTableViewController)
+- (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
+{
+	NSLog(@"Unwind from Hospital Request");
+}
+
 // Return hospitals from hospital model delegate
 - (void)updateHospitals:(NSMutableArray *)hospitals
 {

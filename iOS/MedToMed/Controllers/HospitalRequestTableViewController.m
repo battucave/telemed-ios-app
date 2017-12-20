@@ -49,8 +49,8 @@
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Request Hospital Incomplete" message:@"Web services are incomplete for requesting a hospital." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Go back to My Hospitals
-		[self.navigationController popViewControllerAnimated:YES];
+		// Go back to My Hospitals or Message New Unauthorized
+		[self performSegueWithIdentifier:@"unwindFromHospitalRequest" sender:self];
 	}];
 
 	[successAlertController addAction:actionOK];

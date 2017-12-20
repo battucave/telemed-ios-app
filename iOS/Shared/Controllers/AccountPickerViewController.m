@@ -537,6 +537,12 @@
 # pragma mark - MedToMed
 
 #ifdef MEDTOMED
+// Required for unwind compatibility with MessageNewUnauthorizedTableViewController (both unwind from AccountRequestTableViewController)
+- (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
+{
+	NSLog(@"Unwind from Account Request");
+}
+
 - (void)showAccountRequest
 {
 	[self performSegueWithIdentifier:@"showAccountRequest" sender:self];

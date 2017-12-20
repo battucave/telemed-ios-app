@@ -1012,7 +1012,7 @@
                         <sections>
                             <tableViewSection headerTitle="You are not yet authorized to send new messages." id="86M-hH-cKe">
                                 <cells>
-                                    <tableViewCell hidden="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Whh-el-Mpa" style="IBUITableViewCellStyleDefault" id="cU1-rl-C1o">
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Whh-el-Mpa" style="IBUITableViewCellStyleDefault" id="cU1-rl-C1o">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="cU1-rl-C1o" id="OVQ-Om-ZSK">
@@ -1028,8 +1028,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Tlt-Uk-j1n" kind="show" identifier="showHospitalRequestFromMessageNewUnauthorized" id="UlW-eW-Gmn"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell hidden="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="8FP-Mf-zwS" style="IBUITableViewCellStyleDefault" id="IyI-gU-IUI">
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="8FP-Mf-zwS" style="IBUITableViewCellStyleDefault" id="IyI-gU-IUI">
                                         <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="IyI-gU-IUI" id="cUu-Kw-ELx">
@@ -1045,6 +1048,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="For-gb-WKY" kind="show" identifier="showAccountRequestFromMessageNewUnauthorized" id="83k-y5-o1U"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1620,9 +1626,11 @@
                         <outlet property="buttonHelp" destination="snq-Jg-GYy" id="eeJ-Tx-syN"/>
                         <outlet property="buttonSend" destination="HZ6-EB-W3t" id="Xbx-d9-XFW"/>
                         <outlet property="textFieldHospitalCode" destination="I40-pu-pm3" id="kUA-br-azT"/>
+                        <segue destination="VxB-tn-cic" kind="unwind" identifier="unwindFromHospitalRequest" unwindAction="unwindFromHospitalRequest:" id="P4J-Vu-Ujh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ohc-rB-6kC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="VxB-tn-cic" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3316" y="1675"/>
         </scene>
@@ -1707,9 +1715,11 @@
                         <outlet property="buttonHelp" destination="Q2F-4Q-LSI" id="dth-sH-m6X"/>
                         <outlet property="buttonSend" destination="a75-bv-cp7" id="0Cw-6N-ky8"/>
                         <outlet property="textFieldAccountCode" destination="4YD-SE-Bhe" id="bsR-ZI-yH6"/>
+                        <segue destination="dqO-mi-JcR" kind="unwind" identifier="unwindFromAccountRequest" unwindAction="unwindFromAccountRequest:" id="Bch-oh-5hw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yfb-Vx-13h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="dqO-mi-JcR" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3316" y="2356"/>
         </scene>
@@ -1726,8 +1736,9 @@
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="UlW-eW-Gmn"/>
         <segue reference="rpH-Mr-Mcb"/>
-        <segue reference="ojM-FY-erA"/>
+        <segue reference="v49-7h-3me"/>
         <segue reference="HgO-po-FXF"/>
         <segue reference="6bW-Sj-6zP"/>
         <segue reference="10R-JR-NUE"/>

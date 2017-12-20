@@ -49,8 +49,8 @@
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Request Medical Group Incomplete" message:@"Web services are incomplete for requesting a medical group." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Go back to My Medical Groups
-		[self.navigationController popViewControllerAnimated:YES];
+		// Go back to My Medical Groups or Message New Unauthorized
+		[self performSegueWithIdentifier:@"unwindFromAccountRequest" sender:self];
 	}];
 
 	[successAlertController addAction:actionOK];
