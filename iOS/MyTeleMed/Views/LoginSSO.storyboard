@@ -117,7 +117,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
                                     <barButtonItem title="Login" width="62" style="plain" id="as0-45-LXf">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eZi-Wo-MRE">
-                                            <rect key="frame" x="305" y="11.5" width="54" height="21"/>
+                                            <rect key="frame" x="297" y="11.5" width="62" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -211,7 +211,7 @@
                                 <rect key="frame" x="43.5" y="237" width="288" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="textFieldDidEditingChange:" destination="5BC-59-clT" eventType="editingChanged" id="GVn-fV-hAd"/>
                                     <outlet property="delegate" destination="5BC-59-clT" id="M9y-tV-T5K"/>
@@ -348,7 +348,7 @@
                                 <rect key="frame" x="44" y="181" width="288" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="phonePad" returnKeyType="go" enablesReturnKeyAutomatically="YES" textContentType="tel"/>
+                                <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="continue" enablesReturnKeyAutomatically="YES" textContentType="tel"/>
                                 <connections>
                                     <action selector="textFieldDidEditingChange:" destination="2av-Uk-df6" eventType="editingChanged" id="sSO-0s-EeH"/>
                                     <outlet property="delegate" destination="2av-Uk-df6" id="TbU-5c-eoL"/>

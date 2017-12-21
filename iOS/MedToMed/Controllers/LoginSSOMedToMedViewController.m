@@ -90,15 +90,15 @@
 	[super finalizeLogin];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+/* - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([segue.identifier isEqualToString:@"showNewAccount"])
+	if ([segue.identifier isEqualToString:@"showAccountNew"])
 	{
 		AccountNewViewController *accountNewViewController = segue.destinationViewController;
 		
 		// Set delegate
 		[accountNewViewController setDelegate:self];
 	}
-}
+}*/
 
 @end

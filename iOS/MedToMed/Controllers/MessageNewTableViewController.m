@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelHospital;
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
 @property (weak, nonatomic) IBOutlet UISwitch *switchPriority;
-@property (weak, nonatomic) IBOutlet UIView *viewSectionFooter;
+@property (strong, nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 @property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;
@@ -123,13 +123,6 @@
 		
 		[self.tableView endUpdates];
 	});
-}
-
-- (IBAction)showMessageNew2:(id)sender
-{
-	[self setHasSubmitted:YES];
-	
-	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 }
 
 // Unwind segue from AccountPickerViewController
@@ -236,6 +229,13 @@
 	[self validateForm];
 }
 
+- (IBAction)showMessageNew2:(id)sender
+{
+	[self setHasSubmitted:YES];
+	
+	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+}
+
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
 {
 	// Remove empty value for text field's key from form values
@@ -318,16 +318,19 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-	/*UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-	UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 10.0f, self.tableView.bounds.size.width, 54.0f)];
-	
-	[activityIndicatorView startAnimating];
-	[activityIndicatorView setFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 44.0f)];
-	[activityIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin];
-	
-	[containerView addSubview:activityIndicatorView];
+	/* if (self.isLoading)
+	{
+		UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 10.0f, self.tableView.bounds.size.width, 54.0f)];
+		
+		[activityIndicatorView startAnimating];
+		[activityIndicatorView setFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 44.0f)];
+		[activityIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin];
+		
+		[containerView addSubview:activityIndicatorView];
 
-	return containerView;*/
+		return containerView;
+	}*/
 	
 	// Only show table footer if loading is enabled
 	return (self.isLoading ? self.viewSectionFooter : nil);

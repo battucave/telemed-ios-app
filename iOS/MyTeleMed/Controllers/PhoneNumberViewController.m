@@ -208,6 +208,17 @@
 	return YES;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	// Submit phone number
+	[self submitPhoneNumber:textField];
+	
+	// Hide keyboard
+	[textField resignFirstResponder];
+	
+	return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	if ([segue.identifier isEqualToString:@"showHelpFromPhoneNumber"])

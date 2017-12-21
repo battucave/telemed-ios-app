@@ -57,6 +57,9 @@
 		// SSO Provider is invalid so show error
 		else
 		{
+			// Re-show keyboard
+			[self.textFieldSSOProvider becomeFirstResponder];
+			
 			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			
 			[errorAlertController show:error];
@@ -79,6 +82,17 @@
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
 	[self.buttonHelp setHidden:NO];
+	
+	return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	// Submit sso provider
+	[self submitSSOProvider:textField];
+	
+	// Hide keyboard
+	[textField resignFirstResponder];
 	
 	return YES;
 }

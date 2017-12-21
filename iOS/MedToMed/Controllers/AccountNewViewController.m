@@ -106,21 +106,25 @@
 	return YES;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	// Submit account code
+	[self submitAccountCode:textField];
+	
+	// Hide keyboard
+	[textField resignFirstResponder];
+	
+	return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([segue.identifier isEqualToString:@"showHelp"])
+	if ([segue.identifier isEqualToString:@"showHelpFromAccountNew"])
 	{
 		HelpViewController *helpViewController = segue.destinationViewController;
 		
 		[helpViewController setShowBackButton:YES];
 	}
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-	[textField resignFirstResponder];
-	
-	return NO;
 }
 
 - (void)didReceiveMemoryWarning

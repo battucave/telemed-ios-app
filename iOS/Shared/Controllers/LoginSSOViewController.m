@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
+#import <objc/runtime.h>
 #import "LoginSSOViewController.h"
 #import "AppDelegate.h"
 #import "AFNetworkReachabilityManager.h"
@@ -32,6 +33,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	// Hide keyboard accessory view for UIWebView text fields
+	[self hideKeyboardAccessoryView:self.webView];
 	
 	// TEMPORARY: Client requested to hide Change ID Provider button
 	[self.buttonChangeIDPRovider setTitle:@""];
@@ -125,10 +129,37 @@
 	}
 }
 
+// Hide keyboard accessory view for UIWebView text fields
+ - (void)hideKeyboardAccessoryView:(UIView *)view
+{
+	for (UIView *subView in view.subviews)
+	{
+		if ([NSStringFromClass([subView class]) isEqualToString:@"UIWebBrowserView"])
+		{
+			Method method = class_getInstanceMethod(subView.class, @selector(inputAccessoryView));
+			IMP newImp = imp_implementationWithBlock(^(id _s)
+			{
+				if ([subView respondsToSelector:@selector(inputAssistantItem)])
+				{
+					UITextInputAssistantItem *inputAssistantItem = [subView inputAssistantItem];
+					inputAssistantItem.leadingBarButtonGroups = @[];
+					inputAssistantItem.trailingBarButtonGroups = @[];
+				}
+
+				return nil;
+			});
+
+			method_setImplementation(method, newImp);
+		}
+		else
+		{
+			[self hideKeyboardAccessoryView:subView];
+		}
+	}
+}
+
 - (void)initLogin
 {
-	NSLog(@"initLogin");
-	
 	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	// Set is loading to true

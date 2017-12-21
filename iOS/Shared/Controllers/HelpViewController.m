@@ -20,17 +20,23 @@
 
 @implementation HelpViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLoad
 {
-	[self.navigationController setNavigationBarHidden:NO animated:YES];
+	[super viewDidLoad];
 	
-	// Remove menu button if showing Back button. This MUST happen before [super viewWillAppear] so that Back Button will be added in its place (Back button only shown when navigating from Login.storyboard View Controllers)
+	// If showing Back button, remove existing menu button so that Back Button will be added in its place (Back button only shown when navigating from LoginSSO.storyboard view controllers)
 	if (self.showBackButton)
 	{
 		self.navigationItem.leftBarButtonItem = nil;
 	}
-	
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
 	[super viewWillAppear:animated];
+	
+	// Show navigation bar (if navigating from LoginSSO.storyboard view controllers)
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
 	
 	// Update label version with app version from bundle
 	NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];

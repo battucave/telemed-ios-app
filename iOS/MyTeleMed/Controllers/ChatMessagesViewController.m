@@ -271,7 +271,7 @@
 		[self.chatMessagesTableViewController.tableView setContentInset:tableInset];
 	}
 	// Set Conversations for Chat Message Detail to use for determining whether a message with selected Chat Participants already exists
-	else if ([segue.identifier isEqualToString:@"showNewChatMessageDetail"])
+	else if ([segue.identifier isEqualToString:@"showChatMessageNew"])
 	{
 		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;
 		

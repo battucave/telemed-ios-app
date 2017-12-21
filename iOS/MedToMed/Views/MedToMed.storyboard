@@ -34,12 +34,12 @@
         <scene sceneID="KSA-F1-vtg">
             <objects>
                 <tableViewController storyboardIdentifier="MessageNewTableViewController" id="UuL-n9-GMi" customClass="MessageNewTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" id="30c-99-7JY">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="44" estimatedSectionFooterHeight="-1" id="30c-99-7JY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="KfO-RV-ia8">
-                            <rect key="frame" x="0.0" y="396.5" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="423" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9GW-u5-mue">
@@ -1766,8 +1766,8 @@
         <segue reference="GBe-0v-zRW"/>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="v49-7h-3me"/>
-        <segue reference="HgO-po-FXF"/>
-        <segue reference="I95-64-Mdk"/>
+        <segue reference="FEU-cP-WQX"/>
+        <segue reference="6bW-Sj-6zP"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>
 </document>

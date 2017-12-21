@@ -111,7 +111,7 @@
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="SEC-L8-qvS"/>
                                     <barButtonItem enabled="NO" title="Create Account" id="UXd-lq-IaI">
                                         <connections>
-                                            <segue destination="2av-Uk-df6" kind="show" identifier="showAccountRequest" id="0GX-YG-Io4"/>
+                                            <segue destination="2av-Uk-df6" kind="show" identifier="showAccountNew" id="0GX-YG-Io4"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
@@ -210,7 +210,7 @@
                                 <rect key="frame" x="43.5" y="237" width="288" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="textFieldDidEditingChange:" destination="5BC-59-clT" eventType="editingChanged" id="Rxq-Ox-SdI"/>
                                     <outlet property="delegate" destination="5BC-59-clT" id="M9y-tV-T5K"/>
@@ -350,7 +350,7 @@
                                 <rect key="frame" x="44" y="181" width="288" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="textFieldDidEditingChange:" destination="2av-Uk-df6" eventType="editingChanged" id="UU2-uj-VBF"/>
                                     <outlet property="delegate" destination="2av-Uk-df6" id="TbU-5c-eoL"/>
@@ -385,7 +385,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="xFW-3Q-c8J" kind="show" identifier="showHelpFromAccountRequest" id="5jM-Mm-F6a"/>
+                                    <segue destination="xFW-3Q-c8J" kind="show" identifier="showHelpFromAccountNew" id="5jM-Mm-F6a"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Aj-tF-mqg">
@@ -490,6 +490,6 @@
         <image name="button-WebViewForward.png" width="12" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="5jM-Mm-F6a"/>
+        <segue reference="Nia-U8-BbV"/>
     </inferredMetricsTieBreakers>
 </document>

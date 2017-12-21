@@ -11,6 +11,4 @@
 
 @interface AccountNewViewController : CoreViewController <UITextFieldDelegate>
 
-@property (weak) id delegate;
-
 @end
