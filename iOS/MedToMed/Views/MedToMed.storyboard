@@ -1322,7 +1322,7 @@
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="given-name"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
-                                                            <integer key="value" value="164"/>
+                                                            <integer key="value" value="100"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
@@ -1331,9 +1331,9 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xd7-nA-pUZ">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="11" width="100" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="160" id="8QX-hw-ndD"/>
+                                                        <constraint firstAttribute="width" constant="100" id="8QX-hw-ndD"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
@@ -1343,7 +1343,7 @@
                                                 <constraint firstAttribute="centerY" secondItem="xd7-nA-pUZ" secondAttribute="centerY" id="Otd-L5-Gga"/>
                                                 <constraint firstAttribute="trailing" secondItem="roU-Xh-e9B" secondAttribute="trailing" constant="16" id="Y2A-R7-Hmv"/>
                                                 <constraint firstAttribute="centerY" secondItem="roU-Xh-e9B" secondAttribute="centerY" constant="-0.5" id="Z1h-kx-tg2"/>
-                                                <constraint firstItem="roU-Xh-e9B" firstAttribute="leading" secondItem="xd7-nA-pUZ" secondAttribute="trailing" constant="-160" id="klF-yG-rAS"/>
+                                                <constraint firstItem="roU-Xh-e9B" firstAttribute="leading" secondItem="xd7-nA-pUZ" secondAttribute="trailing" constant="-100" id="klF-yG-rAS"/>
                                                 <constraint firstItem="xd7-nA-pUZ" firstAttribute="leading" secondItem="JGs-so-SqD" secondAttribute="leadingMargin" id="pph-fX-6dV"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1366,7 +1366,7 @@
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="family-name"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
-                                                            <integer key="value" value="164"/>
+                                                            <integer key="value" value="100"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
@@ -1375,9 +1375,9 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5pL-j4-tok">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="11" width="100" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="160" id="Fhe-KQ-QcZ"/>
+                                                        <constraint firstAttribute="width" constant="100" id="Fhe-KQ-QcZ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
@@ -1388,7 +1388,7 @@
                                                 <constraint firstAttribute="centerY" secondItem="5pL-j4-tok" secondAttribute="centerY" id="OUd-su-5Rp"/>
                                                 <constraint firstItem="5pL-j4-tok" firstAttribute="leading" secondItem="iG5-DH-DEJ" secondAttribute="leadingMargin" id="WtA-Yi-Yjz"/>
                                                 <constraint firstAttribute="centerY" secondItem="Z8I-Nj-JA8" secondAttribute="centerY" constant="-0.5" id="c1V-Ww-ouD"/>
-                                                <constraint firstItem="Z8I-Nj-JA8" firstAttribute="leading" secondItem="5pL-j4-tok" secondAttribute="trailing" constant="-160" id="dDi-5u-7ba"/>
+                                                <constraint firstItem="Z8I-Nj-JA8" firstAttribute="leading" secondItem="5pL-j4-tok" secondAttribute="trailing" constant="-100" id="dDi-5u-7ba"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1410,7 +1410,7 @@
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" textContentType="email"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
-                                                            <integer key="value" value="164"/>
+                                                            <integer key="value" value="100"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
@@ -1419,9 +1419,9 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P5M-6Q-QqY">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="11" width="100" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="160" id="bLu-9O-W1l"/>
+                                                        <constraint firstAttribute="width" constant="100" id="bLu-9O-W1l"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
@@ -1429,7 +1429,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="rQK-Fv-mHV" secondAttribute="trailing" constant="16" id="9Qj-D2-tMW"/>
-                                                <constraint firstItem="rQK-Fv-mHV" firstAttribute="leading" secondItem="P5M-6Q-QqY" secondAttribute="trailing" constant="-160" id="MdF-0X-y0u"/>
+                                                <constraint firstItem="rQK-Fv-mHV" firstAttribute="leading" secondItem="P5M-6Q-QqY" secondAttribute="trailing" constant="-100" id="MdF-0X-y0u"/>
                                                 <constraint firstItem="P5M-6Q-QqY" firstAttribute="leading" secondItem="WOb-u8-oSt" secondAttribute="leadingMargin" id="W21-hO-8fu"/>
                                                 <constraint firstAttribute="centerY" secondItem="rQK-Fv-mHV" secondAttribute="centerY" constant="-0.5" id="btH-up-AKd"/>
                                                 <constraint firstAttribute="centerY" secondItem="P5M-6Q-QqY" secondAttribute="centerY" id="hVg-NR-n9q"/>
@@ -1454,7 +1454,7 @@
                                                     <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="next" textContentType="tel"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
-                                                            <integer key="value" value="164"/>
+                                                            <integer key="value" value="124"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
@@ -1463,16 +1463,16 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fQ7-ep-lIq">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="11" width="124" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="160" id="H6e-CL-Bqa"/>
+                                                        <constraint firstAttribute="width" constant="124" id="H6e-CL-Bqa"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="tmz-hj-GuV" firstAttribute="leading" secondItem="fQ7-ep-lIq" secondAttribute="trailing" constant="-160" id="D0r-Ft-hY9"/>
+                                                <constraint firstItem="tmz-hj-GuV" firstAttribute="leading" secondItem="fQ7-ep-lIq" secondAttribute="trailing" constant="-124" id="D0r-Ft-hY9"/>
                                                 <constraint firstAttribute="centerY" secondItem="fQ7-ep-lIq" secondAttribute="centerY" id="DYH-iQ-sIO"/>
                                                 <constraint firstAttribute="trailing" secondItem="tmz-hj-GuV" secondAttribute="trailing" constant="16" id="ZAY-9j-REa"/>
                                                 <constraint firstAttribute="centerY" secondItem="tmz-hj-GuV" secondAttribute="centerY" constant="-0.5" id="fsC-Jx-EUh"/>
@@ -1498,7 +1498,7 @@
                                                     <textInputTraits key="textInputTraits" textContentType="organization-title"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="leftInset">
-                                                            <integer key="value" value="164"/>
+                                                            <integer key="value" value="160"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
@@ -1597,7 +1597,7 @@
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="rightInset">
                                                             <integer key="value" value="30"/>
@@ -1686,7 +1686,7 @@
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="rightInset">
                                                             <integer key="value" value="30"/>

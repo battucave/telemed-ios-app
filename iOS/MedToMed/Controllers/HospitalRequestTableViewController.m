@@ -90,9 +90,13 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+	// Submit hospital code
+	[self submitHospitalCode:textField];
+	
+	// Hide keyboard
 	[textField resignFirstResponder];
 	
-	return NO;
+	return YES;
 }
 
 // Avoid upper case header

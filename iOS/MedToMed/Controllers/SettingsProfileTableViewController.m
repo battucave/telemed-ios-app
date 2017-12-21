@@ -97,7 +97,7 @@
 		[[self.textFields objectAtIndex:currentIndex] resignFirstResponder];
 	}
 	
-	return NO;
+	return YES;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

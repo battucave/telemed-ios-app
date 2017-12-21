@@ -93,6 +93,9 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableView beginUpdates];
+		
+		// Disable next button
+		[self.buttonNext setEnabled:NO];
 	
 		// Show intro cell
 		[self.cellIntro setHidden:NO];
@@ -296,7 +299,7 @@
 		[[self.textFields objectAtIndex:currentIndex] resignFirstResponder];
 	}
 	
-	return NO;
+	return YES;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

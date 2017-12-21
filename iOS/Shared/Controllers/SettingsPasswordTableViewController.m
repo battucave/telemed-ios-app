@@ -34,8 +34,19 @@
 	
 	[passwordChangeModel setDelegate:self];
 	
+	// Verify that form is valid (save button only enabled after form validated)
+	if (! self.buttonSave.isEnabled)
+	{
+		// Show error message
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		
+		[errorAlertController show:error];
+		
+		return;
+	}
 	// Verify that New Password matches Confirm Password
-	if ( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
+	else if ( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
 		// Show error message
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password do not match.", NSLocalizedDescriptionKey, nil]];
@@ -90,10 +101,13 @@
 	}
 	else if (textField == self.textFieldConfirmNewPassword)
 	{
+		// Submit change password
+		[self changePassword:textField];
+		
 		[self.textFieldConfirmNewPassword resignFirstResponder];
 	}
 	
-	return NO;
+	return YES;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

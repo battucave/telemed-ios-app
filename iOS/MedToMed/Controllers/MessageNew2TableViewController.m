@@ -165,7 +165,7 @@
 		[self.textViewAdditionalInformation becomeFirstResponder];
 	}
 	
-	return NO;
+	return YES;
 }
 
 - (void)textViewDidChange:(UITextView *)textView

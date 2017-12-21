@@ -90,9 +90,13 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+	// Submit account code
+	[self submitAccountCode:textField];
+	
+	// Hide keyboard
 	[textField resignFirstResponder];
 	
-	return NO;
+	return YES;
 }
 
 // Avoid upper case header
