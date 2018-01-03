@@ -21,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelHospital;
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
-@property (weak, nonatomic) IBOutlet UISwitch *switchPriority;
+@property (weak, nonatomic) IBOutlet UISwitch *switchUrgencyLevel;
 @property (strong, nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
@@ -111,8 +111,8 @@
 			[textField setText:@""];
 		}
 		
-		// Reset priority switch
-		[self.switchPriority setOn:NO];
+		// Reset urgency level switch
+		[self.switchUrgencyLevel setOn:NO];
 		
 		// Hide medical group cell
 		[self.cellMedicalGroup setHidden:YES];
@@ -265,8 +265,8 @@
 	{
 		for (UITextField *textField in self.textFields)
 		{
-			// Verify that callback number is a valid phone number
-			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackNumber"])
+			// Verify that callback phone number is a valid phone number
+			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
 				if ([textField.text length] < 7)
 				{
@@ -274,7 +274,7 @@
 				}
 			}
 			// Verify that field is not empty
-			else if ([textField.text isEqualToString:@""])
+			else if (! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] && [textField.text isEqualToString:@""])
 			{
 				isValidated = NO;
 			}
@@ -367,8 +367,8 @@
 	{
 		MessageNew2TableViewController *messageNew2TableViewController = segue.destinationViewController;
 		
-		// Update form values with priority value
-		[self.formValues setValue:(self.switchPriority.isOn ? @"Stat" : @"Normal") forKey:@"Priority"];
+		// Update form values with urgency value
+		[self.formValues setValue:(self.switchUrgencyLevel.isOn ? @"true" : @"false") forKey:@"STAT"];
 		
 		[messageNew2TableViewController setDelegate:self];
 		[messageNew2TableViewController setFormValues:self.formValues];

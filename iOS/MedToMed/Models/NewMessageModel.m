@@ -18,13 +18,21 @@
 
 - (void)sendNewMessage:(NSDictionary *)messageData withOrder:(NSArray *)sortedKeys
 {
-	NSArray *parameters = @[@"AccountID", @"CallbackName", @"CallbackNumber", @"HospitalID", @"MessageText", @"PatientFirstName", @"PatientLastName", @"Priority"];
+	NSArray *parameters = @[@"AccountID", @"CallbackFirstName", @"CallbackLastName", @"CallbackPhoneNumber", @"CallbackTitle", @"HospitalID", @"MessageText", @"PatientFirstName", @"PatientLastName", @"STAT"];
 	
 	// Show Activity Indicator
 	[self showActivityIndicator];
 	
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Set callback title xml if it is present in message data
+	NSString *callbackTitle = @"";
+	
+	if ([messageData objectForKey:@"CallbackTitle"])
+	{
+		callbackTitle = [NSString stringWithFormat:@"<CallbackTitle>%@</CallbackTitle>", [messageData valueForKey:@"CallbackTitle"]];
+	}
 	
 	// Sort dictionary keys alphabetically (if custom order is required, utilize the "sortedKeys" method parameter)
 	// NSArray *sortedKeys = [[messageData allKeys] sortedArrayUsingSelector:@selector(compare:)];
@@ -43,15 +51,17 @@
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<NewMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<AccountID>%@</AccountID>"
-			"<CallbackName>%@</CallbackName>"
-			"<CallbackNumber>%@</CallbackNumber>"
+			"%@"
+			"<CallbackFirstName>%@</CallbackFirstName>"
+			"<CallbackLastName>%@</CallbackLastName>"
+			"<CallbackPhone>%@</CallbackPhone>"
 			"<HospitalID>%@</HospitalID>"
 			"<MessageText>%@</MessageText>"
 			"<PatientFirstName>%@</PatientFirstName>"
 			"<PatientLastName>%@</PatientLastName>"
-			"<Priority>%@</Priority>"
+			"<STAT>%@</STAT>"
 		"</NewMsg>",
-		[messageData valueForKey:@"AccountID"], [messageData valueForKey:@"CallbackName"], [messageData valueForKey:@"CallbackNumber"], [messageData valueForKey:@"HospitalID"], [messageText componentsJoinedByString:@"\n"], [messageData valueForKey:@"PatientFirstName"], [messageData valueForKey:@"PatientLastName"], [messageData valueForKey:@"Priority"]];
+		[messageData valueForKey:@"AccountID"], callbackTitle, [messageData valueForKey:@"CallbackFirstName"], [messageData valueForKey:@"CallbackLastName"], [messageData valueForKey:@"CallbackPhoneNumber"], [messageData valueForKey:@"HospitalID"], [messageText componentsJoinedByString:@"\n"], [messageData valueForKey:@"PatientFirstName"], [messageData valueForKey:@"PatientLastName"], [messageData valueForKey:@"STAT"]];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
