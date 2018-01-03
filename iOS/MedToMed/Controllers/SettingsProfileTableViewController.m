@@ -11,7 +11,6 @@
 
 @interface SettingsProfileTableViewController ()
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
 @end
@@ -69,18 +68,18 @@
 // Check required fields to determine if form can be submitted
 - (void)validateForm
 {
-	BOOL buttonSaveEnabled = YES;
+	BOOL isSaveEnabled = YES;
 	
 	for (UITextField *textField in self.textFields)
 	{
 		// Loop through text fields - if any except job title are empty, then don't enable save button
 		if (! [textField.accessibilityIdentifier isEqualToString:@"JobTitle"] && [textField.text isEqualToString:@""])
 		{
-			buttonSaveEnabled = NO;
+			isSaveEnabled = NO;
 		}
 	}
 	
-	[self.buttonSave setEnabled:buttonSaveEnabled];
+	[self.navigationItem.rightBarButtonItem setEnabled:isSaveEnabled];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

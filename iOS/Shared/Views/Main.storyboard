@@ -545,7 +545,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="buttonSend" destination="aHW-Jr-KlG" id="nc5-c5-YcX"/>
                         <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromMessageNew" id="Xbj-Zr-yMr"/>
                         <segue destination="vsb-AD-Mfw" kind="unwind" identifier="unwindToMessagesFromMessageNew" unwindAction="unwindFromMessageNew:" id="ik7-IU-neF"/>
                         <segue destination="VQu-Ge-aJV" kind="show" identifier="showAccountPickerFromMessageNew" id="9Rx-MN-6ah"/>
@@ -1584,7 +1583,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="buttonSend" destination="5id-Ss-dzf" id="uG9-2G-d2a"/>
                         <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromMessageForward" id="AK6-cI-3jo"/>
                     </connections>
                 </viewController>
@@ -1623,9 +1621,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="buttonSend" destination="YaN-3w-2te" id="K0T-g0-5eg"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iqp-3Q-oDe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3408,7 +3403,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="buttonSend" destination="NPS-QO-iXQ" id="eZR-8G-0eB"/>
                         <outlet property="sideNavigationButton" destination="Q6A-zq-adV" id="BZG-ev-cdA"/>
                     </connections>
                 </viewController>
@@ -4417,7 +4411,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="buttonSave" destination="ySF-0s-9LG" id="46v-VO-q11"/>
                         <outlet property="textFieldConfirmNewPassword" destination="7gF-pf-45E" id="Fyr-Xi-Mgq"/>
                         <outlet property="textFieldCurrentPassword" destination="Iyn-Mu-NnV" id="wya-P4-KNC"/>
                         <outlet property="textFieldNewPassword" destination="Te3-TJ-q9X" id="AMe-aN-bEd"/>

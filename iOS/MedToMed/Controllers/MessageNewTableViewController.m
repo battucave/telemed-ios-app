@@ -17,7 +17,6 @@
 
 @property (nonatomic) AccountModel *accountModel;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonNext;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellIntro;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelHospital;
@@ -61,9 +60,9 @@
 		if (@available(iOS 11.0, *))
 		{
 			// Workaround the issue by completely replacing the next button with a brand new one
-			[self setButtonNext:[[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageNew2:)]];
+			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageNew2:)];
 			
-			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:self.buttonNext, nil]];
+			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
 		}
 	}
 }
@@ -95,7 +94,7 @@
 		[self.tableView beginUpdates];
 		
 		// Disable next button
-		[self.buttonNext setEnabled:NO];
+		[self.navigationItem.rightBarButtonItem setEnabled:NO];
 	
 		// Show intro cell
 		[self.cellIntro setHidden:NO];
@@ -282,7 +281,7 @@
 		}
 	}
 	
-	[self.buttonNext setEnabled:isValidated];
+	[self.navigationItem.rightBarButtonItem setEnabled:isValidated];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

@@ -12,7 +12,6 @@
 
 @interface SettingsPasswordTableViewController ()
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldConfirmNewPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldNewPassword;
@@ -35,7 +34,7 @@
 	[passwordChangeModel setDelegate:self];
 	
 	// Verify that form is valid (save button only enabled after form validated)
-	if (! self.buttonSave.isEnabled)
+	if (! self.navigationItem.rightBarButtonItem.isEnabled)
 	{
 		// Show error message
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
@@ -86,7 +85,7 @@
 // Check required fields to determine if form can be submitted
 - (void)validateForm
 {
-	[self.buttonSave setEnabled:( ! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
+	[self.navigationItem.rightBarButtonItem setEnabled:( ! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

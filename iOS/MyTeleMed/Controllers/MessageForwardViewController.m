@@ -20,8 +20,6 @@
 
 @property (nonatomic) CommentModel *commentModel;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
 @end
@@ -101,7 +99,7 @@
 {
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
+	[self.navigationItem.rightBarButtonItem setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
 }
 
 // Fired from MessageComposeTable to perform segue to MessageRecipientPickerTableViewController - simplifies passing of data to the picker

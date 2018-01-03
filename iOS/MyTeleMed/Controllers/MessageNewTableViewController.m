@@ -24,8 +24,6 @@
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-
 @end
 
 @implementation MessageNewTableViewController
@@ -142,7 +140,7 @@
 {
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:( ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder] && self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
+	[self.navigationItem.rightBarButtonItem setEnabled:( ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder] && self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

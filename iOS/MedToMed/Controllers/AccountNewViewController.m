@@ -12,7 +12,6 @@
 @interface AccountNewViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldAccountCode;
 @property (weak, nonatomic) IBOutlet UIView *viewToolbar;

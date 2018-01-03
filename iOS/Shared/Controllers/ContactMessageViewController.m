@@ -16,8 +16,6 @@
 
 @property (nonatomic) EmailTelemedModel *emailTelemedModel;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-
 @end
 
 @implementation ContactMessageViewController
@@ -61,7 +59,7 @@
 		[self.messageTeleMedComposeTableViewController.textViewMessage resignFirstResponder];
 
 		// Invalidate form
-		[self.buttonSend setEnabled:NO];
+		[self.navigationItem.rightBarButtonItem setEnabled:NO];
 	
 		// Show succcess message (assume success)
 		UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Contact TeleMed" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
@@ -94,7 +92,7 @@
 	senderEmailAddress = [senderEmailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:( ! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
+	[self.navigationItem.rightBarButtonItem setEnabled:( ! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
