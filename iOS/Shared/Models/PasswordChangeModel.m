@@ -42,7 +42,7 @@
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSString *xmlBody = [NSString stringWithFormat:
-		@"<PasswordChange xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+		@"<PasswordChange xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<NewPassword>%@</NewPassword>"
 			"<OldPassword>%@</OldPassword>"
 		"</PasswordChange>",

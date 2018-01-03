@@ -98,7 +98,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
-		@"<RegisteredDevice xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+		@"<RegisteredDevice xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<AppVersionInfo>%@</AppVersionInfo>"
 			"<ID>%@</ID>"
 			"<PhoneNumber>%@</PhoneNumber>"

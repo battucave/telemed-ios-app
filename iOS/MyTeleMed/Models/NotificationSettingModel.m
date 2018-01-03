@@ -205,7 +205,7 @@
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
-		@"<NotificationSetting xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+		@"<NotificationSetting xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<Enabled>%@</Enabled>"
 			"%@"
 			"<Name>%@</Name>"

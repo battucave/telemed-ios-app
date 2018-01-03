@@ -41,7 +41,7 @@
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
-		@"<NewMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+		@"<NewMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<AccountID>%@</AccountID>"
 			"<CallbackName>%@</CallbackName>"
 			"<CallbackNumber>%@</CallbackNumber>"

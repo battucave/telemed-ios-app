@@ -44,7 +44,7 @@
 	self.comment = comment;
 	self.pendingID = pendingID;
 	
-	NSString *xmlBody = @"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+	NSString *xmlBody = @"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<CommentText>%3$@</CommentText>"
 			"<%1$@>%2$@</%1$@>"
 		"</Comment>";
