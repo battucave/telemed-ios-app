@@ -11,13 +11,27 @@
 
 @implementation MessageEventModel
 
-- (void)getMessageEvents:(NSNumber *)messageID
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getMessageEvents:) object:messageID];
-	
 	NSDictionary *parameters = @{
-		@"mdid"	: messageID
+		@"mdid"	: messageDeliveryID
 	};
+	
+	[self getMessageEvents:parameters];
+}
+
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID
+{
+	NSDictionary *parameters = @{
+		@"mid"	: messageID
+	};
+	
+	[self getMessageEvents:parameters];
+}
+
+- (void)getMessageEvents:(NSDictionary *)parameters
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getMessageEvents:) object:parameters];
 	
 	[self.operationManager GET:@"MsgEvents" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -34,10 +48,12 @@
 				[self.delegate updateMessageEvents:[parser messageEvents]];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing Message Events.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Events Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Events.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateMessageEventsError:)])
 			{
 				[self.delegate updateMessageEventsError:error];
@@ -48,8 +64,10 @@
 	{
 		NSLog(@"MessageEventModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Events."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Events." andTitle:@"Message Events Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateMessageEventsError:)])
 		{
 			[self.delegate updateMessageEventsError:error];

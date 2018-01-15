@@ -11,7 +11,7 @@
 
 @implementation MessageRecipientModel
 
-- (void)getNewMessageRecipients:(NSNumber *)accountID
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID
 {
 	NSDictionary *parameters = @{
 		@"acctID"	: accountID
@@ -20,10 +20,19 @@
 	[self getMessageRecipients:parameters];
 }
 
-- (void)getForwardMessageRecipients:(NSNumber *)messageID
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
 	NSDictionary *parameters = @{
-		@"mdid"	: messageID
+		@"mdid"	: messageDeliveryID
+	};
+	
+	[self getMessageRecipients:parameters];
+}
+
+- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID
+{
+	NSDictionary *parameters = @{
+		@"mid"	: messageID
 	};
 	
 	[self getMessageRecipients:parameters];
@@ -42,15 +51,23 @@
 		// Parse the XML file
 		if([xmlParser parse])
 		{
+			// Sort Message Recipients by Last Name, First Name
+			NSArray *messageRecipients = [[parser messageRecipients] sortedArrayUsingComparator:^NSComparisonResult(MessageRecipientModel *messageRecipientModelA, MessageRecipientModel *messageRecipientModelB)
+			{
+				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
+			}];
+			
 			if([self.delegate respondsToSelector:@selector(updateMessageRecipients:)])
 			{
-				[self.delegate updateMessageRecipients:[parser messageRecipients]];
+				[self.delegate updateMessageRecipients:[messageRecipients mutableCopy]];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem retrieving the Message Recipients.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Recipients Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Recipients.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
 			{
 				[self.delegate updateMessageRecipientsError:error];
@@ -61,8 +78,10 @@
 	{
 		NSLog(@"MessageRecipientModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Recipients."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Recipients." andTitle:@"Message Recipients Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
 		{
 			[self.delegate updateMessageRecipientsError:error];

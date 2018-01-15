@@ -35,31 +35,31 @@
 	[self.textPhoneNumber setAutocorrectionType:UITextAutocorrectionTypeNo];
 	[self.textPhoneNumber becomeFirstResponder];
 	
-	#if defined(DEBUG)
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-	
-	switch([myProfileModel.ID integerValue])
-	{
-		// Jason Hutchison
-		case 5320:
-			self.textPhoneNumber.text = @"2762759018";
-			break;
+	#if DEBUG
+		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 		
-		// Brian Turner
-		case 31130:
-			self.textPhoneNumber.text = @"4049856441";
-			break;
-		
-		// Matt Rogers
-		case 829772:
-			self.textPhoneNumber.text = @"6784696061";
-			break;
+		switch([myProfileModel.ID integerValue])
+		{
+			// Jason Hutchison
+			case 5320:
+				self.textPhoneNumber.text = @"2762759018";
+				break;
 			
-		// Shane Goodwin
-		case 14140220:
-			self.textPhoneNumber.text = @"4049901383";
-			break;
-	}
+			// Brian Turner
+			case 31130:
+				self.textPhoneNumber.text = @"4049856441";
+				break;
+			
+			// Matt Rogers
+			case 829772:
+				self.textPhoneNumber.text = @"6784696061";
+				break;
+				
+			// Shane Goodwin
+			case 14140220:
+				self.textPhoneNumber.text = @"4049901383";
+				break;
+		}
 	#endif
 }
 
@@ -129,12 +129,12 @@
 				NSLog(@"PhoneNumberViewController Error: %@", error);
 				
 				// If device offline, show offline message
-				if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+				if(error.code == NSURLErrorNotConnectedToInternet)
 				{
-					return [registeredDeviceModel showOfflineError];
+					return [registeredDeviceModel showError:error];
 				}
 				
-				UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Registration Error" message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] delegate:self cancelButtonTitle:@"Go Back" otherButtonTitles:@"Try Again", nil];
+				UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] delegate:self cancelButtonTitle:@"Go Back" otherButtonTitles:@"Try Again", nil];
 				errorAlertView.tag = 2;
 				
 				[errorAlertView show];
@@ -145,10 +145,9 @@
 	else if(alertView.tag == 2 && buttonIndex == 0)
 	{
 		// Go back to Login
-		if([self.navigationController.viewControllers count] > 1)
+		if(self.delegate)
 		{
-			[self.navigationController popViewControllerAnimated:YES];
-		
+			[self performSegueWithIdentifier:@"unwindFromPhoneNumber" sender:self];
 		}
 		// User was automatically redirected to PhoneNumberViewController from AppDelegate
 		else

@@ -28,10 +28,12 @@
 				[self.delegate updateAccounts:[parser accounts]];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing Accounts.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Accounts Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Accounts.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateAccountsError:)])
 			{
 				[self.delegate updateAccountsError:error];
@@ -42,8 +44,10 @@
 	{
 		NSLog(@"AccountModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Accounts."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Accounts." andTitle:@"Accounts Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateAccountsError:)])
 		{
 			[self.delegate updateAccountsError:error];

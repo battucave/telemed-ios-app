@@ -27,7 +27,7 @@
 	[settings removeObjectForKey:@"notificationTonesConverted"];
 	
 	[self verifyNotificationToneForName:@"stat"];
-	[self verifyNotificationToneForName:@"priority"];
+	// [self verifyNotificationToneForName:@"priority"]; // Version 3.85+ saves priority settings with normal settings
 	[self verifyNotificationToneForName:@"normal"];
 	[self verifyNotificationToneForName:@"comment"];
 	
@@ -89,13 +89,13 @@
 	NSLog(@"Error loading notification settings");
 }
 
-// Return Save success from NotificationSettingModel delegate
+/*/ Return Save success from NotificationSettingModel delegate (no longer used)
 - (void)saveNotificationSettingsSuccess
 {
 	NSLog(@"Fixed Notification Settings saved to server successfully");
-}
+}*/
 
-// Return Save error from NotificationSettingsModel delegate
+// Return Save error from NotificationSettingsModel delegate (still used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];

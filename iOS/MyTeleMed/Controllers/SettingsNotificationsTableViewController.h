@@ -12,12 +12,7 @@
 
 @interface SettingsNotificationsTableViewController : CoreTableViewController
 
-@property (nonatomic) NSInteger notificationSettingsType; // 1 = Stat, 2 = Priority, 3 = Normal, 4 = Comment
+@property (nonatomic) NSInteger notificationSettingsType; // 0 = Stat Messages, 1 = PriorityMessages, 2 = NormalMessages, 3 = ChatMessages, 4 = Comments
 @property (nonatomic) NotificationSettingModel *notificationSettings;
-
-- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name;
-- (void)updateNotificationSettingsError:(NSError *)error;
-- (void)saveNotificationSettingsSuccess;
-- (void)saveNotificationSettingsError:(NSError *)error;
 
 @end

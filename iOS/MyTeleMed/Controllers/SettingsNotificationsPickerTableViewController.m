@@ -16,7 +16,7 @@
 @property (nonatomic) NSArray *pickerOptions;
 @property (nonatomic) NSString *selectedTempOption;
 
-@property (nonatomic) SystemSoundID toneSound;
+@property (nonatomic) SystemSoundID systemSoundID;
 
 @end
 
@@ -85,7 +85,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Stop sound
-	AudioServicesDisposeSystemSoundID(self.toneSound);
+	AudioServicesDisposeSystemSoundID(self.systemSoundID);
 }
 
 - (void)playNotificationTone:(NSInteger)selectedRow
@@ -103,11 +103,11 @@
 	
 	if(tonePath != nil)
 	{
-		AudioServicesDisposeSystemSoundID(self.toneSound);
+		AudioServicesDisposeSystemSoundID(self.systemSoundID);
 		
 		NSURL *toneURL = [NSURL fileURLWithPath:tonePath];
-		AudioServicesCreateSystemSoundID((__bridge CFURLRef)toneURL, &_toneSound);
-		AudioServicesPlaySystemSound(self.toneSound);
+		AudioServicesCreateSystemSoundID((__bridge CFURLRef)toneURL, &_systemSoundID);
+		AudioServicesPlaySystemSound(self.systemSoundID);
 	}
 }
 

@@ -13,9 +13,13 @@
 
 @required
 - (void)updateMessages:(NSMutableArray *)messages;
+
+@optional
 - (void)updateMessagesError:(NSError *)error;
+- (void)modifyMessageStatePending:(NSString *)state;
 - (void)modifyMessageStateSuccess:(NSString *)state;
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state;
+- (void)modifyMultipleMessagesStatePending:(NSString *)state;
 - (void)modifyMultipleMessagesStateSuccess:(NSString *)state;
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state;
 
@@ -25,8 +29,12 @@
 
 @property (weak) id delegate;
 
-@property (nonatomic) NSNumber *ID;
+// Any additional properties added here must also be added to MessageStub
+
+@property (nonatomic) NSNumber *ID; // Deprecated in favor of MessageDeliveryID (they are identical)
 @property (nonatomic) NSString *FormattedMessageText;
+@property (nonatomic) NSNumber *MessageDeliveryID;
+@property (nonatomic) NSNumber *MessageID;
 @property (nonatomic) NSString *PatientName;
 @property (nonatomic) NSString *Priority;
 @property (nonatomic) NSString *SenderContact;
@@ -36,7 +44,7 @@
 @property (nonatomic) NSString *TimeReceived_LCL;
 @property (nonatomic) NSString *TimeReceived_UTC;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (This property not set by XML)
+@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (This property not set by web service)
 
 - (void)getActiveMessages;
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;

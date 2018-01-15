@@ -8,13 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
 @interface MessageForwardViewController : CoreViewController
 
-@property (nonatomic) MessageModel *message;
-
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
+@property (nonatomic) MessageStub *message;
 
 @end

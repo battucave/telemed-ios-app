@@ -7,6 +7,7 @@
 //
 
 #import "SettingsTableViewController.h"
+#import "AccountPickerViewController.h"
 #import "SettingsNotificationsTableViewController.h"
 #import "MyProfileModel.h"
 
@@ -121,8 +122,8 @@
 {
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
-	// Remove selection background from Session Timeout and About MyTeleMed section cells
-	if(indexPath.section == 0 || indexPath.section == 2)
+	// Remove selection highlight from Session Timeout and About MyTeleMed section cells
+	if(indexPath.section == 0 || indexPath.section == 3)
 	{
 		[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		
@@ -134,7 +135,7 @@
 			[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
 		}
 		// Add Version Number to Version cell
-		else if(indexPath.section == 2)
+		else if(indexPath.section == 3)
 		{
 			[cell.detailTextLabel setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 		}
@@ -145,16 +146,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	NSLog(@"Section: %ld", (long)indexPath.section);
+	
 	// Segue to Notification Settings
 	if(indexPath.section == 1)
 	{
 		[self performSegueWithIdentifier:@"showSettingsNotifications" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
-	// Segue to Password Reset (functionality is purposely commented out in SSO version)
-	/*else if(indexPath.section == 2)
+	// Segue to Change Password
+	else if(indexPath.section == 2 && indexPath.row == 0)
 	{
 		[self performSegueWithIdentifier:@"showSettingsPassword" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
-	}*/
+	}
+	// Segue to Preferred Account
+	else if(indexPath.section == 2 && indexPath.row == 1)
+	{
+		[self performSegueWithIdentifier:@"showAccountPickerFromSettings" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
+	}
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -163,11 +171,18 @@
 	if([segue.identifier isEqualToString:@"showSettingsNotifications"])
 	{
 		SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
-		UITableViewCell *cell = (UITableViewCell *)sender;
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 		
 		// Set Notification Settings Type
-		[settingsNotificationsTableViewController setNotificationSettingsType:cell.tag];
+		[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
+	// Update title of AccountsPickerViewController
+	} else if([segue.identifier isEqualToString:@"showAccountPickerFromSettings"]) {
+		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
+		
+		[accountPickerViewController setTitle:@"Preferred Account"];
+		[accountPickerViewController setShouldSetPreferredAccount:YES];
 	}
+	
 }
 
 - (void)didReceiveMemoryWarning

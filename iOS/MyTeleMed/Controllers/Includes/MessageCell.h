@@ -18,4 +18,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelMessage;
 
+@property (nonatomic) IBOutlet NSLayoutConstraint *constraintNameLeadingSpace;
+
 @end

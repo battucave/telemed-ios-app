@@ -43,17 +43,14 @@
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
 	}
+	
+	// Reset Message Events to not include comments (required for Segment Control selections)
+	[self setMessageEvents:[self.filteredMessageEvents copy]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	// Disable Archive Button for already Archived messages
-	if(self.isArchived)
-	{
-		[self.buttonArchive setEnabled:NO];
-	}
 	
 	// Disable Forward Button if no Message Recipients available
 	if( ! self.canForward)
@@ -69,9 +66,13 @@
 {
 	[super viewDidAppear:animated];
 	
-	// Store original constraints for Basic Events Table
+	[self.tableMessageEvents layoutIfNeeded];
+	
 	self.originalTableMessageEventsBottom = self.constraintTableMessageEventsBottom.constant;
-	self.originalTableMessageEventsHeight = self.tableMessageEvents.bounds.size.height;
+	self.originalTableMessageEventsHeight = self.tableMessageEvents.frame.size.height;
+	
+	// Auto size Table Message Events to show all rows (in XCode 8+ this needs to be run again after table cells have rendered)
+	[self autoSizeTableEvents];
 }
 
 // User Clicked one of the UISegmented Control options: (All, Office Events, Comment, Telemed Events)
@@ -121,6 +122,22 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableMessageEvents reloadData];
+		
+		// Auto size Table Message Events to show all rows (in XCode 8+ this needs to be run again after table cells have rendered)
+		[self autoSizeTableEvents];
+	});
+}
+
+// Auto size Table Events height to show all rows
+- (void)autoSizeTableEvents
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableMessageEvents layoutIfNeeded];
+		
+		CGFloat newHeight = self.tableMessageEvents.contentSize.height;
+		
+		self.constraintTableMessageEventsBottom.constant = (self.originalTableMessageEventsHeight - newHeight > self.originalTableMessageEventsBottom ? self.originalTableMessageEventsHeight - newHeight : self.originalTableMessageEventsBottom);
 	});
 }
 
@@ -142,13 +159,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// iOS8+ Auto Height
-	if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-	{
-		return UITableViewAutomaticDimension;
-	}
+	return UITableViewAutomaticDimension;
 	
-	// Manually determine height for < iOS8
-	static NSString *cellIdentifier = @"MessageEventCell";
+	// Deprecated: Manually determine height for < iOS8
+	/*static NSString *cellIdentifier = @"MessageEventCell";
 	MessageEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
@@ -168,7 +182,7 @@
 		cellHeight = 40.0f;
 	}
 	
-	return cellHeight;
+	return cellHeight;*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -213,12 +227,7 @@
 	}
 	
 	// Auto size Table Message Events to show all rows
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		CGSize newSize = [self.tableMessageEvents sizeThatFits:CGSizeMake(self.tableMessageEvents.frame.size.width, MAXFLOAT)];
-		
-		self.constraintTableMessageEventsBottom.constant = (self.originalTableMessageEventsHeight - newSize.height > self.originalTableMessageEventsBottom ? self.originalTableMessageEventsHeight - newSize.height : self.originalTableMessageEventsBottom);
-	});
+	[self autoSizeTableEvents];
 	
 	return cell;
 }

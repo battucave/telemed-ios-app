@@ -13,10 +13,4 @@
 
 - (void)verifyNotificationTones;
 
-// Delegate Methods
-- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name;
-- (void)updateNotificationSettingsError:(NSError *)error;
-- (void)saveNotificationSettingsSuccess;
-- (void)saveNotificationSettingsError:(NSError *)error;
-
 @end

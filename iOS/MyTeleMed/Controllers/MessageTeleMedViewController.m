@@ -9,7 +9,6 @@
 #import "MessageTeleMedViewController.h"
 #import "MessageTeleMedComposeTableViewController.h"
 #import "EmailTelemedModel.h"
-#import "MessageModel.h"
 
 @interface MessageTeleMedViewController ()
 
@@ -33,25 +32,38 @@
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];
 	[self.emailTelemedModel setDelegate:self];
 	
-	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text messageID:self.message.ID];
+	// If Active or Archived Message, include its Message Delivery ID
+	if(self.message.MessageDeliveryID)
+	{
+		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
+	}
+	// If Sent Message
+	else
+	{
+		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
+	}
 }
 
-// Return success from EmailTelemedModel delegate
+// Return pending from EmailTelemedModel delegate
+- (void)sendMessagePending
+{
+	// Go back to Message Detail
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+/*/ Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
 	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[successAlertView show];
-	
-	// Go back to Message Detail
-	[self.navigationController popViewControllerAnimated:YES];
 }
 
-// Return error from EmailTelemedModel delegate
+// Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.emailTelemedModel showOfflineError];
 	}
@@ -59,7 +71,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress

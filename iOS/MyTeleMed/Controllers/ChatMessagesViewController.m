@@ -8,6 +8,7 @@
 
 #import "ChatMessagesViewController.h"
 #import "ChatMessagesTableViewController.h"
+#import "ChatMessageDetailViewController.h"
 #import "SWRevealViewController.h"
 #import "ChatMessageModel.h"
 
@@ -61,7 +62,7 @@
 {
 	NSInteger selectedChatMessageCount = [self.selectedChatMessages count];
 	NSInteger unreadChatMessageCount = 0;
-	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this chat message" : @"these chat messages")];
+	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this secure chat message" : @"these secure chat messages")];
 	
 	// Ensure at least one selected Chat Message (should never happen as Delete button should be disabled when no Messages selected)
 	if(selectedChatMessageCount < 1)
@@ -71,7 +72,7 @@
 	
 	for(ChatMessageModel *chatMessage in self.selectedChatMessages)
 	{
-		if([chatMessage.State isEqualToString:@"Unread"])
+		if(chatMessage.Unopened)
 		{
 			unreadChatMessageCount++;
 		}
@@ -80,15 +81,15 @@
 	// Update notification message if all of these Messages are Unread
 	if(unreadChatMessageCount == selectedChatMessageCount)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not yet been read. Selecting Continue will delete %@ from our system. Are you sure you want to continue?", (unreadChatMessageCount == 1 ? @"This chat message has" : @"These chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will delete %@ from our system.", (unreadChatMessageCount == 1 ? @"This secure chat message has" : @"These secure chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
 	else if(unreadChatMessageCount > 0)
 	{
-		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these chat messages %@ not yet been read. Selecting Continue will delete %@ from our system. Are you sure you want to continue?", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
+		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not been read yet. Selecting Continue will delete %@ from our system.", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
 	
     [alertView show];
 }
@@ -109,25 +110,27 @@
 }
 
 // Override default Remote Notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
-	// Execute the default Notification Message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID];
+	NSLog(@"Received Remote Notification ChatMessagesViewController");
 	
 	// Reload Chat Messages list to get the new Chat Message only if the notification was for a Chat Message
-	if([notificationType isEqualToString:@"Chat Message"])
+	if([notificationType isEqualToString:@"Chat"])
 	{
-		NSLog(@"Received Remote Notification ChatMessagesViewController");
+		NSLog(@"Refresh Chat Messages");
 		
 		[self.chatMessagesTableViewController reloadChatMessages];
 	}
+    
+    // Execute the default Notification Message action
+    [super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 }
 
 // Override selectedChatMessages setter
-- (void)setSelectedChatMessages:(NSArray *)theSelectedChatMessages
+- (void)setSelectedChatMessages:(NSArray *)selectedChatMessages
 {
-	_selectedChatMessages = [NSArray arrayWithArray:theSelectedChatMessages];
-	NSInteger selectedChatMessageCount = [theSelectedChatMessages count];
+	_selectedChatMessages = [NSArray arrayWithArray:selectedChatMessages];
+	NSInteger selectedChatMessageCount = [selectedChatMessages count];
 	
 	// Toggle Delete bar button on/off based on number of selected Chat Messages
 	[self.barButtonDelete setEnabled:(selectedChatMessageCount > 0)];
@@ -184,49 +187,42 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
-- (void)deleteMultipleChatMessagesSuccess
+// Return Delete Multiple Chat Message pending from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesPending
 {
-	// Remove selected rows from ChatMessagesTableViewController
-	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
+	// Hide selected rows from Chat Messages Table
+	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
 	
 	[self setEditing:NO animated:YES];
 }
 
-- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessageIDs
+// Return Delete Multiple Chat Message success from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesSuccess
 {
-	// Default to all Messages failed to send
-	NSString *errorMessage = @"There was a problem deleting your Chat Messages. Please try again.";
-	
-	// Only some Chat Messages failed to send
-	if([failedChatMessageIDs count] > 0 && [failedChatMessageIDs count] != [self.selectedChatMessages count])
-	{
-		errorMessage = @"There was a problem deleting some of your Chat Messages. Please try again.";
-		
-		// Remove rows of successfully deleted Messages in MessagesTableViewController
-		NSMutableArray *chatMessagesForRemoval = [[NSMutableArray alloc] initWithArray:[self.selectedChatMessages copy]];
-		
-		// If Chat Message failed to delete, exclude it from Chat Messages to be removed
-		for(NSString *failedChatMessageID in failedChatMessageIDs)
-		{
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", failedChatMessageID];
-			NSArray *results = [chatMessagesForRemoval filteredArrayUsingPredicate:predicate];
-			
-			if([results count] > 0)
-			{
-				ChatMessageModel *chatMessage = [results objectAtIndex:0];
-				
-				[chatMessagesForRemoval removeObject:chatMessage];
-			}
-		}
-		
-		[self.chatMessagesTableViewController removeSelectedChatMessages:chatMessagesForRemoval];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Message Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Remove selected rows from Chat Messages Table
+	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
 }
 
+// Return Delete Multiple Chat Message error from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
+{
+	// Determine which Chat Messages were successfully Archived
+	NSMutableArray *successfulChatMessages = [NSMutableArray arrayWithArray:[self.selectedChatMessages copy]];
+	
+	[successfulChatMessages removeObjectsInArray:failedChatMessages];
+	
+	// Remove selected all rows from Chat Messages Table that were successfully Archived
+	if([self.selectedChatMessages count] > 0)
+	{
+		[self.chatMessagesTableViewController removeSelectedChatMessages:successfulChatMessages];
+	}
+	
+	// Reload Chat Messages Table to re-show Chat Messages that were not Archived
+	[self.chatMessagesTableViewController unHideSelectedChatMessages:failedChatMessages];
+	
+	// Update Selected Messages to only the Failed Chat Messages
+	self.selectedChatMessages = failedChatMessages;
+}
 
 // Delegate method from SWRevealController that fires when a Recognized Gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
@@ -257,13 +253,23 @@
 		// Set Chat Messages
 		[self.chatMessagesTableViewController setDelegate:self];
 		
+		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
+		[self.toolbarBottom layoutIfNeeded];
+		
 		// Increase bottom inset of Messages Table so that its bottom scroll position rests above bottom Toolbar
 		UIEdgeInsets tableInset = self.chatMessagesTableViewController.tableView.contentInset;
 		CGSize toolbarSize = self.toolbarBottom.frame.size;
 		
 		tableInset.bottom = toolbarSize.height;
 		[self.chatMessagesTableViewController.tableView setContentInset:tableInset];
+	}
+	// Set Conversations for Chat Message Detail to use for determining whether a message with selected Chat Participants already exists
+	else if([segue.identifier isEqualToString:@"showNewChatMessageDetail"])
+	{
+		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;
 		
+		[chatMessageDetailViewController setIsNewChat:YES];
+		[chatMessageDetailViewController setConversations:self.chatMessagesTableViewController.chatMessages];
 	}
 }
 

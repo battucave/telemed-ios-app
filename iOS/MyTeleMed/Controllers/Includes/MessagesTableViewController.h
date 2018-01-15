@@ -22,12 +22,11 @@
 @property (weak) id delegate;
 
 - (void)initMessagesWithType:(int)newMessagesType;
-- (void)filterActiveMessages:(int)newPriorityFilter;
 - (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+- (void)hideSelectedMessages:(NSArray *)messages;
+- (void)reloadMessages;
 - (void)removeSelectedMessages:(NSArray *)messages;
 - (void)resetMessages;
-- (void)reloadMessages;
-- (void)updateMessages:(NSMutableArray *)messages;
-- (void)updateMessagesError:(NSError *)error;
+- (void)unHideSelectedMessages:(NSArray *)messages;
 
 @end

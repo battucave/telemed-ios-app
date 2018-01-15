@@ -11,6 +11,8 @@
 
 @interface ChatMessageDetailViewController : CoreViewController <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
+@property (nonatomic) BOOL isNewChat;
+@property (nonatomic) NSArray *conversations;
 @property (nonatomic) NSNumber *conversationID;
 
 @end

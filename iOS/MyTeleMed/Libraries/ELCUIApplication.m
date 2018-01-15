@@ -10,7 +10,6 @@
 @implementation ELCUIApplication
 
 
-
 - (void)sendEvent:(UIEvent *)event
 {
 	[super sendEvent:event];

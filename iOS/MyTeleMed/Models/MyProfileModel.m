@@ -11,6 +11,12 @@
 #import "RegisteredDeviceModel.h"
 #import "MyProfileXMLParser.h"
 
+@interface MyProfileModel()
+
+@property (nonatomic) AccountModel *oldMyPreferredAccount;
+
+@end
+
 @implementation MyProfileModel
 
 static MyProfileModel *sharedMyProfileInstance = nil;
@@ -25,6 +31,21 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 	});
 	
 	return sharedMyProfileInstance;
+}
+
+// Override MyPreferredAccount setter to also store existing MyPreferredAccount
+- (void)setMyPreferredAccount:(AccountModel *)account
+{
+	if(_MyPreferredAccount != account)
+	{
+		// Store reference to previous value to be restored (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
+		if(_MyPreferredAccount != nil)
+		{
+			_oldMyPreferredAccount = _MyPreferredAccount;
+		}
+		
+		_MyPreferredAccount = account;
+	}
 }
 
 - (void)getWithCallback:(void (^)(BOOL success, MyProfileModel *profile, NSError *error))callback
@@ -45,9 +66,10 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 			
 			callback(YES, self, nil);
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing My Profile.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Account.", NSLocalizedDescriptionKey, nil]];
 			
 			callback(NO, nil, error);
 		}
@@ -56,10 +78,20 @@ static MyProfileModel *sharedMyProfileInstance = nil;
 	{
 		NSLog(@"MyProfileModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Account."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving your Account." andTitle:@"Account Error"];
 		
 		callback(NO, nil, error);
 	}];
+}
+
+// Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
+- (void)restoreMyPreferredAccount
+{
+	if(_oldMyPreferredAccount != nil)
+	{
+		_MyPreferredAccount = _oldMyPreferredAccount;
+	}
 }
 
 - (void)setCurrentDevice

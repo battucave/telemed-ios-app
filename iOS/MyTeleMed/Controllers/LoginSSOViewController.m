@@ -7,6 +7,7 @@
 //
 
 #import "LoginSSOViewController.h"
+#import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
 #import "AuthenticationModel.h"
@@ -21,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *changeIDPRoviderButton;
 
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isRetry;
@@ -32,6 +34,9 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	
+	// TEMPORARY: Client requested to hide Change ID Provider button
+	[self.changeIDPRoviderButton setTitle:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -59,6 +64,12 @@
 	
 	 // Remove Reachability Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
+}
+
+// Unwind Segue from PhoneNumberViewController
+- (IBAction)unwindFromPhoneNumber:(UIStoryboardSegue *)segue
+{
+	NSLog(@"unwindFromPhoneNumber");
 }
 
 // Unwind Segue from SSOProviderViewController
@@ -119,7 +130,8 @@
 	
 	for(NSHTTPCookie *cookie in [cookieStorage cookies])
 	{
-		NSRange domainRange = [[cookie domain] rangeOfString:BASE_DOMAIN];
+		NSString *baseDomain = [BASE_URL stringByReplacingOccurrencesOfString:@"https://" withString:@""];
+		NSRange domainRange = [[cookie domain] rangeOfString:baseDomain];
 		
 		if(domainRange.length > 0)
 		{
@@ -264,6 +276,17 @@
 	[self.webView loadHTMLString:errorMessage baseURL:nil];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if([segue.identifier isEqualToString:@"showPhoneNumber"])
+	{
+		PhoneNumberViewController *phoneNumberViewController = segue.destinationViewController;
+		
+		// Set delegate
+		[phoneNumberViewController setDelegate:self];
+	}
+}
+
 
 /* ==========================
   UIWEBVIEW DELEGATE METHODS
@@ -312,11 +335,44 @@
 		// Update background to be transparent
 		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
 		
-		#if defined(DEBUG)
-			[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'shanegoodwin'; document.getElementById('passwordTextBox').value = 'tm4321$$';"];
-			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'mattrogers'; document.getElementById('passwordTextBox').value = 'tm4321$$';"];
-			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'bturner'; document.getElementById('passwordTextBox').value = 'passw0rd';"];
-			//[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('userNameTextBox').value = 'jhutchison'; document.getElementById('passwordTextBox').value = 'passw0rd';"];
+		// Debug mode login shortcuts
+		#if DEBUG
+			NSString *javascript = [NSString stringWithFormat:@
+				"var $userName = document.getElementById('userNameTextBox');"
+				"var $password = document.getElementById('passwordTextBox');"
+				
+				/* Convert input text to a dropdown (not supported in UIWebView)
+				"const $dataList = document.createElement('datalist'); $dataList.setAttribute('userNameDataList');"
+				"['shanegoodwin', 'bturner', 'jhutchison', 'mattrogers'].forEach(function(userName) {"
+					"var $option = document.createElement('option');"
+					"$option.value = userName;"
+					"$dataList.appendChild($option);"
+				"});"
+				"$userName.setAttribute('userNameDataList');"
+				"$userName.parentNode.insertBefore($dataList, $userName.nextSibling);"*/
+				
+				// Update username placeholder to remind me of shortcut
+				"$userName.setAttribute('placeholder', 'User Name 1st Letter');"
+				
+				// Add event on username to auto-populate form on blur if value matches shortcut value
+				"$userName.addEventListener('blur', function(event) {"
+					"switch ($userName.value) {"
+						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
+						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
+						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+					"}"
+				"});"
+				
+				// Add event on username to automatically submit form when Enter key pressed
+				"$userName.addEventListener('keypress', function(event) {"
+					"if (event.code == 'Enter' && $userName.value.length == 1) {"
+						"$userName.blur();"
+					"}"
+				"});"
+			];
+		
+			[self.webView stringByEvaluatingJavaScriptFromString:javascript];
 		#endif
 	}
 	// URL is the Forgot Password screen

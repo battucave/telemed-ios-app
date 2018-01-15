@@ -15,8 +15,11 @@
 @property (nonatomic) ChatParticipantModel *chatParticipantModel;
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
-@property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
+@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
+@property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
+
+@property (nonatomic, strong) UISearchController *searchController;
 
 @property (nonatomic) NSMutableArray *messageRecipients;
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
@@ -28,7 +31,7 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	// Initialize Chat Participant Model (only used for Chat)
 	[self setChatParticipantModel:[[ChatParticipantModel alloc] init]];
@@ -47,12 +50,125 @@
 	// Initialize Filtered Message Recipients
 	[self setFilteredMessageRecipients:[[NSMutableArray alloc] init]];
 	
+	// Initialize Search Controller
+	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+	
+	[self.searchController setDelegate:self];
+	[self.searchController setDimsBackgroundDuringPresentation:NO];
+	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
+	[self.searchController setSearchResultsUpdater:self];
+	
+	self.definesPresentationContext = YES;
+	
+	// Initialize Search Bar
+	[self.searchController.searchBar setDelegate:self];
+	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	[self.searchController.searchBar sizeToFit];
+	
+	// iOS 11+ navigation bar has support for search controller
+	if(@available(iOS 11.0, *))
+	{
+		[self.navigationItem setSearchController:self.searchController];
+		
+		[self.viewSearchBarContainer setHidden:YES];
+		
+		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+		{
+			if(constraint.firstAttribute == NSLayoutAttributeHeight)
+			{
+				[constraint setConstant:0.0f];
+				break;
+			}
+		}
+	}
+	// iOS < 11 places search controller under navigation bar
+	else
+	{
+		// Add auto-generated constraints that allow Search Bar to animate without disappearing
+		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
+		
+		// Add Search Bar to Search Bar's Container View
+		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
+		
+		// Copy constraints from Storyboard's placeholder Search Bar onto the Search Controller's Search Bar
+		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+		{
+			if(constraint.firstItem == self.searchBar)
+			{
+				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			}
+			else if(constraint.secondItem == self.searchBar)
+			{
+				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+			}
+		}
+		
+		for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+		{
+			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
+		}
+		
+		// Hide placholder Search Bar from Storyboard (UISearchController and its SearchBar cannot be implemented in Storyboard so we use a placeholder SearchBar instead)
+		[self.searchBar setHidden:YES];
+	}
+	
 	// Load list of Message Recipients
 	[self reloadMessageRecipients];
-	
-	// Set Search Delegates
-	self.searchBar.delegate = self;
-	self.searchDisplayController.delegate = self;
+}
+
+// Unwind to previous controller (Chat Message Detail, Forward Message, or New Message)
+- (IBAction)unwind:(id)sender
+{
+	// Unwind to Chat Message Detail
+	if([self.messageRecipientType isEqualToString:@"Chat"])
+	{
+		if([self.selectedMessageRecipients count] > 1)
+		{
+			UIAlertController *confirmGroupChatController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+			{
+				// Disable Group Chat
+				self.isGroupChat = NO;
+				
+				// Execute unwind segue
+				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+			}];
+			UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				// Enable Group Chat
+				self.isGroupChat = YES;
+				
+				// Execute unwind segue
+				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+			}];
+			
+			[confirmGroupChatController addAction:actionNo];
+			[confirmGroupChatController addAction:actionYes];
+			
+			// PreferredAction only supported in 9.0+
+			if([confirmGroupChatController respondsToSelector:@selector(setPreferredAction:)])
+			{
+				[confirmGroupChatController setPreferredAction:actionYes];
+			}
+			
+			// Show Alert
+			[self presentViewController:confirmGroupChatController animated:YES completion:nil];
+		}
+		else
+		{
+			// Disable Group Chat
+			self.isGroupChat = NO;
+			
+			// Execute unwind segue
+			[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+		}
+	}
+	// Unwind to Forward Message or New Message
+	else
+	{
+		// Execute unwind segue
+		[self performSegueWithIdentifier:@"setMessageRecipients" sender:self];
+	}
 }
 
 // Get Message Recipients
@@ -61,19 +177,17 @@
 	// Get Participants for Chat
 	if([self.messageRecipientType isEqualToString:@"Chat"])
 	{
-		// TEMPORARY
-		//[self.chatParticipantModel getChatParticipants];
-		[self.messageRecipientModel getNewMessageRecipients:[NSNumber numberWithInteger:250795]];
+		[self.chatParticipantModel getChatParticipants];
 	}
 	// Get Recipients for Forward Message
 	else if([self.messageRecipientType isEqualToString:@"Forward"])
 	{
-		[self.messageRecipientModel getForwardMessageRecipients:self.message.ID];
+		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
 	}
 	// Get Recipients for New Message
 	else
 	{
-		[self.messageRecipientModel getNewMessageRecipients:self.selectedAccount.ID];
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
 	}
 }
 
@@ -96,15 +210,8 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.chatParticipantModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Participants Error" message:@"There was a problem retrieving Participants for your Chat. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.chatParticipantModel showError:error];
 }
 
 // Return Message Recipients from MessageRecipientModel delegate
@@ -146,22 +253,15 @@
 {
 	self.isLoaded = YES;
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.messageRecipientModel showOfflineError];
-	}
-	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Recipients Error" message:@"There was a problem retrieving Recipients for your Message. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	// Show error message
+	[self.messageRecipientModel showError:error];
 }
 
-// Filter Search Results
-- (void)filterSearchResults:(NSString *)text scope:(NSString *)scope
+// Delegate Method for Updating Search Results
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
 	NSPredicate *predicate;
-	text = [[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"," withString:@""];
+	NSString *text = [[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"," withString:@""];
 	
 	// Reset Filtered Message Recipients
 	[self.filteredMessageRecipients removeAllObjects];
@@ -181,14 +281,8 @@
 	}
 	
 	[self setFilteredMessageRecipients:[NSMutableArray arrayWithArray:[self.messageRecipients filteredArrayUsingPredicate:predicate]]];
-}
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-	// Reload when search text changes
-	[self filterSearchResults:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
 	
-	return YES;
+	[self.tableMessageRecipients reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -199,7 +293,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// Search Results Table
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		if([self.filteredMessageRecipients count] == 0)
 		{
@@ -226,8 +320,11 @@
 	UITableViewCell *cell = [self.tableMessageRecipients dequeueReusableCellWithIdentifier:cellIdentifier];
 	MessageRecipientModel *messageRecipient;
 	
+	// Set up the cell
+	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	
 	// Search Results Table
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
 		// If no Filtered Message Recipients, create a not found message
 		if([self.filteredMessageRecipients count] == 0)
@@ -251,26 +348,22 @@
 		}
 		
 		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
-		
-		// Set up the cell
-		[tableView deselectRowAtIndexPath:indexPath animated:NO];
-		[cell setAccessoryType:UITableViewCellAccessoryNone];
-		
-		// Determine if Message Recipient already exists in selected Recipients
-		NSUInteger messageRecipientIndex = [self.selectedMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient2, NSUInteger foundIndex, BOOL *stop)
-		{
-			return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
-		}];
-		
-		// Set previously selected Message Recipients as selected and add checkmark
-		if(messageRecipientIndex != NSNotFound)
-		{
-			[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-		}
 	}
 	
-	// Set up the cell
+	// Determine if Message Recipient already exists in selected Recipients
+	NSUInteger messageRecipientIndex = [self.selectedMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient2, NSUInteger foundIndex, BOOL *stop)
+	{
+		return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
+	}];
+	
+	// Set previously selected Message Recipients as selected and add checkmark
+	if(messageRecipientIndex != NSNotFound)
+	{
+		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+	}
+	
+	// Set cell label
 	[cell.textLabel setText:messageRecipient.Name];
 	
 	return cell;
@@ -282,23 +375,34 @@
 	UITableViewCell *cell;
 	
 	// Search Results Table
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
+		// If no Filtered Message Recipients, then user clicked "No results."
+		if([self.filteredMessageRecipients count] == 0)
+		{
+			// Close Search Results
+			[self.searchController setActive:NO];
+			
+			return;
+		}
+		
+		// Set Message Recipient
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
+		
+		// Close Search Results
+		[self.searchController setActive:NO];
 		
 		// Get cell in Message Recipients Table
 		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
 		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 		
 		// Select cell
-		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-		
-		// Reset Search Results
-		[self.searchDisplayController setActive:NO animated:NO];
+		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 	// Message Recipients Table
 	else
 	{
+		// Set Message Recipient
 		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
 		
 		// Get cell in Message Recipients Table
@@ -314,16 +418,31 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-	MessageRecipientModel *messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
+	MessageRecipientModel *messageRecipient;
+	UITableViewCell *cell;
 	
-	// Should never be possible to Deselect row from Search Results, but just in case
-	if(tableView == self.searchDisplayController.searchResultsTableView)
+	// Search Results Table
+	if(self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// Reset Search Results
-		[self.searchDisplayController setActive:NO animated:NO];
+		// Close Search Results
+		[self.searchController setActive:NO];
 		
-		return;
+		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
+		
+		// Get cell in Message Recipients Table
+		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
+		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
+		
+		// Deselect cell
+		[self.tableMessageRecipients deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
+	}
+	// Message Recipients Table
+	else
+	{
+		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
+		
+		// Get cell in Message Recipients Table
+		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
 	}
 	
 	// Find index of Message Recipient in selected Message Recipients
@@ -351,8 +470,14 @@
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+	// Avoid superfluous warning that "Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior <UISearchController>"
+	[self.searchController.view removeFromSuperview];
 }
 
 @end

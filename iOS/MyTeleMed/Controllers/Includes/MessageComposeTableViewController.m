@@ -8,11 +8,13 @@
 
 #import "MessageComposeTableViewController.h"
 #import "MessageRecipientPickerViewController.h"
+#import "MessageRecipientModel.h"
 
 @interface MessageComposeTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessageRecipient;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessage;
+@property (weak, nonatomic) IBOutlet UILabel *labelMessageRecipient;
 
 @end
 
@@ -56,7 +58,7 @@
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Perform Segue to MessageAccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
+// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self.delegate performSegueToMessageRecipientPicker:(id)sender];
@@ -70,17 +72,20 @@
 	
 	if(messageRecipientsCount > 0)
 	{
-		messageRecipientNames = [[messageRecipients objectAtIndex:0] Name];
+		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
 		
 		if(messageRecipientsCount > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
+		}
+		else
+		{
+			messageRecipientNames = messageRecipient.Name;
 		}
 	}
 	
 	// Update Message Recipient Label with Message Recipient Name
-	[self.buttonMessageRecipient setTitle:messageRecipientNames forState:UIControlStateNormal];
-	[self.buttonMessageRecipient setTitle:messageRecipientNames forState:UIControlStateSelected];
+	[self.labelMessageRecipient setText:messageRecipientNames];
 }
 
 // Resize Message Text View to match available space between top of Table Cell and Keyboard
@@ -98,11 +103,6 @@
 	
 	// Scroll back to Top of Table
 	[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-}
-
-- (CGFloat)calculateCellMessageHeight:(CGFloat)keyboardHeight
-{
-	return self.parentViewController.view.frame.size.height - keyboardHeight - self.cellMessageRecipient.bounds.size.height;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

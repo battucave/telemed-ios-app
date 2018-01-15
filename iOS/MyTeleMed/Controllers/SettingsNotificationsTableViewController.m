@@ -35,7 +35,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	// If Notification Settings are not nil, then we are returning from MessageRecipientPickerViewController and don't want to reset the settings
+	// If Notification Settings are not nil, then we are returning from SettingsNotificationsPickerViewController and don't want to reset the settings
 	if(self.notificationSettings != nil)
 	{
 		return;
@@ -44,24 +44,28 @@
 	// Set Notification Settings Type as string
 	switch(self.notificationSettingsType)
 	{
-		// Stat Settings
-		case 1:
+		// Stat Message Settings
+		case 0:
 			[self setNotificationSettingsName:@"stat"];
+			[self.navigationItem setTitle:@"Stat Messages"];
 			break;
 		
-		// Priority Settings
-		case 2:
-			[self setNotificationSettingsName:@"priority"];
-			break;
-		
-		// Normal Settings
-		case 3:
+		// Normal Message Settings
+		case 1:
 			[self setNotificationSettingsName:@"normal"];
+			[self.navigationItem setTitle:@"Normal Messages"];
+			break;
+		
+		// Chat Message Settings
+		case 2:
+			[self setNotificationSettingsName:@"chat"];
+			[self.navigationItem setTitle:@"Secure Chat Messages"];
 			break;
 		
 		// Comment Settings
-		case 4:
+		case 3:
 			[self setNotificationSettingsName:@"comment"];
+			[self.navigationItem setTitle:@"Comments"];
 			break;
 	}
 	
@@ -119,20 +123,20 @@
 {
 	NSLog(@"Error loading notification settings");
 	
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	// Show error message only if device offline
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
-		return [self.notificationSettingModel showOfflineError];
+		[self.notificationSettingModel showError:error];
 	}
 }
 
-// Return Save success from NotificationSettingModel delegate
+/*/ Return Save success from NotificationSettingModel delegate (no longer used)
 - (void)saveNotificationSettingsSuccess
 {
 	NSLog(@"Notification Settings saved to server successfully");
 }
 
-// Return Save error from NotificationSettingModel delegate
+// Return Save error from NotificationSettingModel delegate (no longer used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
 	// If device offline, show offline message
@@ -144,35 +148,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Notification Settings Error" message:@"There was a problem saving your Notification Settings. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	// Set Notification Settings Type as string
-	switch(self.notificationSettingsType)
-	{
-		// Stat Settings
-		case 1:
-			return @"Stat Messages";
-			break;
-		
-		// Priority Settings
-		case 2:
-			return @"Priority Messages";
-			break;
-		
-		// Normal Settings
-		case 3:
-			return @"Normal Messages";
-			break;
-		
-		case 4:
-			return @"Comments";
-			break;
-	}
-	
-	return @"";
-}
+}*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -182,7 +158,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide everything except Alert Sound for Comments
-	return (self.notificationSettingsType == 4 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	return (self.notificationSettingsType == 3 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -206,8 +182,6 @@
 		case 1:
 		{
 			// Set Tone text
-			NSLog(@"Tone: %@", self.notificationSettings.Tone);
-			NSLog(@"ToneTitle: %@", self.notificationSettings.ToneTitle);
 			[cell.detailTextLabel setText:self.notificationSettings.ToneTitle];
 			break;
 		}

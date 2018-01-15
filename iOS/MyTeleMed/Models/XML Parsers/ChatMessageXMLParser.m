@@ -11,6 +11,7 @@
 
 @interface ChatMessageXMLParser()
 
+@property (nonatomic) BOOL isChatParticipant;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end
@@ -30,8 +31,20 @@
 {
 	if([elementName isEqualToString:@"ChatMessage"])
 	{
-		// Initialize the Message
+		// Initialize the Chat Message
 		self.chatMessage = [[ChatMessageModel alloc] init];
+	}
+	else if([elementName isEqualToString:@"Participants"])
+	{
+		// Initialize the Chat Participants
+		self.chatParticipants = [[NSMutableArray alloc] init];
+	}
+	else if([elementName isEqualToString:@"Person"])
+	{
+		// Initialize the Chat Participant
+		self.chatParticipant = [[ChatParticipantModel alloc] init];
+		
+		self.isChatParticipant = YES;
 	}
 }
 
@@ -55,15 +68,43 @@
 		
 		self.chatMessage = nil;
 	}
+	else if([elementName isEqualToString:@"Participants"])
+	{
+		[self.chatMessage setChatParticipants:self.chatParticipants];
+	}
+	else if([elementName isEqualToString:@"Person"])
+	{
+		[self.chatParticipants addObject:self.chatParticipant];
+		
+		self.isChatParticipant = NO;
+	}
 	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"SenderID"])
 	{
-		[self.chatMessage setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		if(self.isChatParticipant)
+		{
+			[self.chatParticipant setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+		else
+		{
+			[self.chatMessage setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+	}
+	else if([elementName isEqualToString:@"Unopened"])
+	{
+		self.chatMessage.Unopened = [self.currentElementValue boolValue];
 	}
 	else
 	{
 		@try
 		{
-			[self.chatMessage setValue:self.currentElementValue forKey:elementName];
+			if(self.isChatParticipant)
+			{
+				[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
+			}
+			else
+			{
+				[self.chatMessage setValue:self.currentElementValue forKey:elementName];
+			}
 		}
 		@catch(NSException *exception)
 		{

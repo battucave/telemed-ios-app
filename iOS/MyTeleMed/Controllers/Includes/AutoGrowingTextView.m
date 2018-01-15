@@ -28,6 +28,8 @@
 
 - (void)awakeFromNib
 {
+	[super awakeFromNib];
+	
 	[self commonInit];	
 }
 
@@ -101,11 +103,8 @@
 {
 	CGSize intrinsicContentSize = self.contentSize;
 	
-	if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-	{
-		intrinsicContentSize.width += (self.textContainerInset.left + self.textContainerInset.right ) / 2.0f;
-		intrinsicContentSize.height += (self.textContainerInset.top + self.textContainerInset.bottom) / 2.0f;
-	}
+	intrinsicContentSize.width += (self.textContainerInset.left + self.textContainerInset.right ) / 2.0f;
+	intrinsicContentSize.height += (self.textContainerInset.top + self.textContainerInset.bottom) / 2.0f;
 	
 	return intrinsicContentSize;
 }

@@ -32,6 +32,44 @@
 	[self setFilteredMessageEvents:[NSMutableArray array]];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	// Set Buttons for Archived Message Details
+	if(self.message.messageType == 1)
+	{
+		[self.buttonArchive setEnabled:NO];
+	}
+	// Set buttons for Sent Message Details
+	else if(self.message.messageType == 2)
+	{
+		CGFloat buttonWidth = self.buttonReturnCall.frame.size.width;
+		CGFloat spaceAdjustment = (buttonWidth / 2);
+		
+		// Disable Archive and Return Call buttons
+		[self.buttonArchive setEnabled:NO];
+		[self.buttonArchive.superview setHidden:YES];
+		[self.buttonReturnCall setEnabled:NO];
+		[self.buttonReturnCall.superview setHidden:YES];
+		
+		[self.constraintButtonForwardLeadingSpace setConstant:-spaceAdjustment];
+		[self.constraintButtonForwardTrailingSpace setConstant:spaceAdjustment];
+		[self.constraintButtonHistoryLeadingSpace setConstant:spaceAdjustment];
+		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
+	}
+	
+	// Set Message Priority color (defaults to "Normal" green color)
+	if([self.message.Priority isEqualToString:@"Priority"])
+	{
+		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+	}
+	else if([self.message.Priority isEqualToString:@"Stat"])
+	{
+		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+	}
+}
+
 - (IBAction)returnCall:(id)sender
 {
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Return Call", @"Return & Record Call", nil];
@@ -50,6 +88,12 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	// Prevent Sent Messages from Returning Call or Archiving (should never reach this point)
+	if( ! self.message.MessageDeliveryID)
+	{
+		return;
+	}
+	
 	switch(alertView.tag)
     {
 		// Return Call
@@ -62,7 +106,7 @@
                 
                 NSString *recordCall = (buttonIndex == 2) ? @"true" : @"false";
                 
-                [self.callModel callSenderForMessage:self.message.ID recordCall:recordCall];
+                [self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:recordCall];
             }
             
             break;
@@ -73,7 +117,7 @@
         {
             if(buttonIndex > 0)
             {
-                [self.messageModel modifyMessageState:self.message.ID state:@"archive"];
+                [self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"archive"];
             }
             
             break;
@@ -81,7 +125,20 @@
     }
 }
 
-// Return Modify Message State success from MessageModel delegate
+// Return Message State pending from MessageModel delegate
+- (void)modifyMessageStatePending:(NSString *)state
+{
+    // If finished Archiving message, send user back
+    if([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }
+}
+
+/*/ Return Message State success from MessageModel delegate
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
     // If finished Archiving message, send user back
@@ -94,34 +151,27 @@
     }
 }
 
-// Return Modify Message State error from MessageModel delegate
+// Return Message State error from MessageModel delegate
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.messageModel showOfflineError];
-	}
-	
+	// Show error message
 	if([state isEqualToString:@"archive"])
     {
-        UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Message Archive Error" message:@"There was a problem Archiving your Message. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        
-        [errorAlertView show];
+		[self.messageModel showError:error];
     }
-}
+}*/
 
-// Return success from CallTeleMedModel delegate
+/*/ Return success from CallTeleMedModel delegate (no longer used)
 - (void)callSenderSuccess
 {
 	NSLog(@"Call Message Sender request sent successfully");
 }
 
-// Return error from CallTeleMedModel delegate
+// Return error from CallTeleMedModel delegate (no longer used)
 - (void)callSenderError:(NSError *)error
 {
 	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+	if(error.code == NSURLErrorNotConnectedToInternet)
 	{
 		return [self.callModel showOfflineError];
 	}
@@ -129,7 +179,7 @@
 	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Return Call Error" message:@"There was a problem requesting a Return Call. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	
 	[errorAlertView show];
-}
+}*/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

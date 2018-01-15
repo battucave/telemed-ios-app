@@ -9,18 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 #import "AccountModel.h"
-#import "MessageModel.h"
+#import "MessageStub.h"
 
-@interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) MessageModel *message;
+@property (nonatomic) MessageStub *message;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 @property (nonatomic) NSString *messageRecipientType;
-
-- (void)updateChatParticipants:(NSMutableArray *)newRecipients;
-- (void)updateChatParticipantsError:(NSError *)error;
-- (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients;
-- (void)updateMessageRecipientsError:(NSError *)error;
+@property (nonatomic) BOOL isGroupChat; // Only used for Chat Participants
 
 @end

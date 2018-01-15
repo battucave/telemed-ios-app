@@ -9,6 +9,12 @@
 #import "NotificationSettingModel.h"
 #import "NotificationSettingXMLParser.h"
 
+@interface NotificationSettingModel ()
+
+@property BOOL pendingComplete;
+
+@end
+
 @implementation NotificationSettingModel
 
 // Override Tone setter to also store Tone Title (user friendly tone)
@@ -54,7 +60,6 @@
 		[self getServerNotificationSettingsByName:name];
 		
 		// Return default settings
-		NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
 		NSArray *intervals = [[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil];
 		
 		settings = [[NotificationSettingModel alloc] init];
@@ -62,11 +67,7 @@
 		[settings setEnabled:YES];
 		[settings setIsReminderOn:YES];
 		
-		// Tones should always exist
-		if([tones count] > 8)
-		{
-			[settings setToneTitle:[tones objectAtIndex:8]]; // iOS7 Defaults to Note tone
-		}
+		[settings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
 		
 		// Intervals should always exist
 		if([intervals count] > 0)
@@ -76,6 +77,30 @@
 	}
 	
 	return settings;
+}
+
+// Not currently used (only here to provide a method for viewing all notification settings)
+- (void)getServerNotificationSettings
+{
+	[self.operationManager GET:@"NotificationSettings" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
+	{
+		NSLog(@"Got Notification Settings - see log");
+		
+		// View results in debug log. Make sure AFNetworkActivityLogger is enabled in TeleMedHTTPRequestOperationManager.m
+	}
+	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
+	{
+		NSLog(@"NotificationSettingModel Error: %@", error);
+		
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
+		
+		// Only handle error if user still on same screen
+		if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		{
+			[self.delegate updateNotificationSettingsError:error];
+		}
+	}];
 }
 
 - (void)getServerNotificationSettingsByName:(NSString *)name
@@ -108,8 +133,8 @@
 				self.Interval = [NSNumber numberWithInt:1];
 			}
 			
-			// If the tone received from server is Default, change it to the iOS default: "Note"
-			if([self.Tone isEqualToString:@"Default"])
+			// DEPRECATED: If the tone received from server is Default, change it to the iOS default: "Note"
+			/* if([self.Tone isEqualToString:@"Default"])
 			{
 				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
 				
@@ -121,7 +146,7 @@
 				
 				// Save new default to server
 				[self saveNotificationSettingsByName:name settings:self];
-			}
+			}*/
 			
 			// Save Notification Settings for type to device
 			[preferences setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
@@ -132,10 +157,12 @@
 				[self.delegate updateNotificationSettings:self forName:name];
 			}
 		}
+		// Error parsing XML file
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Error parsing Notification Settings.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
+			// Only handle error if user still on same screen
 			if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 			{
 				[self.delegate updateNotificationSettingsError:error];
@@ -146,8 +173,10 @@
 	{
 		NSLog(@"NotificationSettingModel Error: %@", error);
 		
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings."];
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
 		
+		// Only handle error if user still on same screen
 		if([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
@@ -157,10 +186,23 @@
 
 - (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)settings
 {
-	[self showActivityIndicator:@"Saving..."];
+	// Show Activity Indicator
+	[self showActivityIndicator];
+	
+	// Add Network Activity Observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Create Interval value (Comment setting does not include Interval)
-	NSString *interval = ([name isEqualToString:@"comment"] ? @"<Interval i:nil=\"true\" />" : [NSString stringWithFormat:@"<Interval>%@</Interval>", (settings.isReminderOn ? settings.Interval : @"0")]);
+	NSString *interval;
+	
+	if([name isEqualToString:@"comment"] || settings.Interval == nil)
+	{
+		interval = @"<Interval i:nil=\"true\" />";
+	}
+	else
+	{
+		interval = [NSString stringWithFormat:@"<Interval>%@</Interval>", (settings.isReminderOn ? settings.Interval : @"0")];
+	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<NotificationSetting xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
@@ -175,8 +217,7 @@
 		
 	[self.operationManager POST:@"NotificationSettings" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
 		
 		NSString *notificationKey = [NSString stringWithFormat:@"%@Settings", name];
 		
@@ -191,15 +232,29 @@
 			
 			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], settings.Tone);
 			
-			if([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
+			// Priority Message Notification Settings removed in version 3.85. If saving Notification Settings for Normal Messages, then also save them for Priority Messages
+			if([name isEqualToString:@"normal"])
+			{
+				[self saveNotificationSettingsByName:@"priority" settings:settings];
+			}
+			// Not currently used
+			else if([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
 			}
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"There was a problem saving your Notification Settings.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem saving your Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^(void)
+			{
+				// Include callback to retry the request
+				[self saveNotificationSettingsByName:name settings:settings];
+			}];
+			
+			// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
 			if([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
@@ -213,14 +268,44 @@
 		// Close Activity Indicator
 		[self hideActivityIndicator];
 		
-		// IMPORTANT: revisit this when TeleMed fixes the error response to parse that response for error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your Notification Settings."];
+		// Remove Network Activity Observer
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your Notification Settings." andTitle:@"Notification Settings Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^(void)
+		{
+			// Include callback to retry the request
+			[self saveNotificationSettingsByName:name settings:settings];
+		}];
+		
+		// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
 		if([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 		{
 			[self.delegate saveNotificationSettingsError:error];
 		}
 	}];
+}
+
+// Network Request has been sent, but still awaiting response
+- (void)networkRequestDidStart:(NSNotification *)notification
+{
+	// Close Activity Indicator
+	[self hideActivityIndicator];
+	
+	// Remove Network Activity Observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	
+	// Notify delegate that Notification Settings has been sent to server
+	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+	{
+		[self.delegate saveNotificationSettingsPending];
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	self.pendingComplete = YES;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder

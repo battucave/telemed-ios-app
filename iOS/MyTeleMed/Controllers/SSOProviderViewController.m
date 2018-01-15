@@ -8,7 +8,7 @@
 
 #import "SSOProviderViewController.h"
 #import "HelpViewController.h"
-#import "Model.h"
+#import "ErrorAlertController.h"
 #import "SSOProviderModel.h"
 
 @interface SSOProviderViewController ()
@@ -57,17 +57,21 @@
 		else
 		{
 			// If device offline, show offline message
-			if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
+			/*if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
 			{
 				// Create reference to generic model to show offline error
 				Model *model = [[Model alloc] init];
 				
-				return [model showOfflineError];
+				return [model showError:error];
 			}
 			
-			UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"ID Provider Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			
-			[errorAlertView show];
+			[errorAlertView show];*/
+			
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				
+			[errorAlertController show:error];
 		}
 	}];
 }

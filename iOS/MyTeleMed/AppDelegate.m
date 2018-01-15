@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ELCUIApplication.h"
+#import "ErrorAlertController.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationModel.h"
 #import "MyProfileModel.h"
@@ -21,9 +22,6 @@
 @interface AppDelegate()
 
 @property (nonatomic) CTCallCenter *callCenter;
-@property (nonatomic) UIAlertView *errorAlertView;
-@property (nonatomic) BOOL isErrorAlertViewShowing;
-@property (nonatomic) NSDate *dateLastErrorMessage;
 
 @end
 
@@ -45,11 +43,6 @@
 		[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
 		[application registerForRemoteNotifications];
 	}
-	else
-	{
-		// iOS 7 Push Notifications
-		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-	}
 	
 	// Setup app Timeout feature
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:kApplicationDidTimeoutNotification object:nil];
@@ -62,20 +55,17 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
-	#if !(TARGET_IPHONE_SIMULATOR) && !defined(DEBUG)
+	#if !TARGET_IPHONE_SIMULATOR && !DEBUG
 		// Initialize Carrier
 		CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
 		CTCarrier *carrier = [networkInfo subscriberCellularProvider];
 	
 		// AT&T and T-Mobile are guaranteed to support Voice and Data simultaneously, so turn off CDMAVoiceData message by default for them
-		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"] || [carrier.carrierName hasPrefix:@"T-M"])
+		if([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
 		{
 			[settings setBool:YES forKey:@"CDMAVoiceDataDisabled"];
 		}
 	#endif
-	
-	// Set delegate for ErrorAlertView
-	[self.errorAlertView setDelegate:self];
 	
 	// Initialize CDMAVoiceData settings
 	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
@@ -84,7 +74,6 @@
 	
 	// Initialize Call Center
 	self.callCenter = [[CTCallCenter alloc] init];
-	__weak typeof(self) weakSelf = self;
 	
 	[self.callCenter setCallEventHandler:^(CTCall *call)
 	{
@@ -92,8 +81,10 @@
 		{
 			NSLog(@"Call disconnected");
 			
-			// Dismiss the ErrorAlertView if showing (after phone call has ended, user should not see Data Connection Unavailable error)
-			[weakSelf.errorAlertView dismissWithClickedButtonIndex:-1 animated:NO];
+			// Dismiss Error Alert if showing (after phone call has ended, user should not see Data Connection Unavailable error)
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController dismiss];
 			
 			// Post a notification to other files in the project
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
@@ -137,7 +128,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+	// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 	
 	// Remove view over app that was used to obsure screenshot (calling it here speeds up dismissal of screenshot when returning from background)
 	[self toggleScreenshotView:YES];
@@ -187,8 +178,10 @@
 	// Remove view over app that was used to obsure screenshot (calling it here is required when user double clicks home button and then clicks the already active TeleMed app - applicationWillEnterForeground is not called in this case)
 	[self toggleScreenshotView:YES];
 	
-	// Dismiss the ErrorAlertView if showing
-	[self.errorAlertView dismissWithClickedButtonIndex:-1 animated:NO];
+	// Dismiss Error Alert if showing
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController dismiss];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -198,7 +191,7 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-	NSLog(@"My token is: %@", deviceToken);
+	NSLog(@"My Device Token: %@", deviceToken);
     
     // Convert the token to a hex string and make sure it's all caps  
     NSMutableString *tokenString = [NSMutableString stringWithString:[[deviceToken description] uppercaseString]];  
@@ -217,15 +210,9 @@
 		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
 		if(error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 		{
-			self.errorAlertView = [[UIAlertView alloc] initWithTitle:@"Device Registration Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[self.errorAlertView setDelegate:self];
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			
-			if( ! self.isErrorAlertViewShowing)
-			{
-				[self.errorAlertView show];
-			}
-			
-			self.isErrorAlertViewShowing = YES;
+			[errorAlertController show:error];
 		}
 	}];
 }
@@ -243,76 +230,80 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
 	// IMPORTANT: TeleMed's test and production servers both send push notifications through Apple's production server. Only apps signed with Ad Hoc or Distribution provisioning profiles can receive these notifications - not Debug.
-	// To test on debug, find/generate a Sandbox Push Notification Certificate for TeleMed (com.solutionbuilt.telemed-debug) and save its .cer file somewhere. Then use "APN Tester Free" Mac app to send push notifications to a specific device using its Device Token.
-		// Sample Notifications that can be used with APNS Tester Free (these are real notifications that come from TeleMed)
-		/* Message Push Notification
+	// See project's ReadMe.md for instructions on how to test push notifications using APN Tester Free.
+	
+	// Sample Notifications that can be used with APN Tester Free (these are real notifications that come from TeleMed)
+	/* Message Push Notification
+	{
+		"NotificationType":"Message",
+		"aps":
 		{
-			"aps":
-			{
-				"alert":"3 new messages.",
-				"badge":3,
-				"sound":"note"
-			},
-			"NotificationType":"Message"
-		}*/
+			"alert":"3 new messages.",
+			"badge":3,
+			"sound":"note.caf"
+		}
+	}*/
 
-		/* Comment Push Notification
+	/* Message Comment Push Notification
+	{
+		"DeliveryID":5133538688695397,
+		"NotificationType":"Comment",
+		"aps":
 		{
-			"aps":
-			{
-				"alert":"Dr. Matt Rogers added a comment to a message.",
-				"sound":"circles"
-			},
-			"DeliveryID":5133538688695397,
-			"NotificationType":"Comment"
-		}*/
-	
-		/* Chat Push Notification
+			"alert":"Dr. Matt Rogers added a comment to a message.",
+			"sound":"circles.caf"
+		}
+	}*/
+    
+    /* Sent Message Comment Push Notification
+     {
+         "DeliveryID":"",
+         "MessageID":5646855541685471,
+         "NotificationType":"Comment",
+         "aps":
+         {
+             "alert":"Dr. Matt Rogers added a comment to a message.",
+             "sound":"circles.caf"
+         }
+     }*/
+
+	/* Chat Push Notification
+	{
+		"ChatMsgID":5594182060867965,
+		"NotificationType":"Chat",
+		"aps":
 		{
-			"aps":
-			{
-				"alert":"Matt Rogers:What's happening?",
-				"sound":"note"
-			},
-			"ChatMsgID":12345,
-			"NotificationType":"Chat"
-		}*/
+			"alert":"Matt Rogers:What's happening?",
+			"sound":"nuclear.caf"
+		}
+	}*/
 	
-	/*/ TESTING ONLY (push notifications can generally only be tested in AdHoc mode where nothing can be logged, so show result in an alert instead)
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	/*/ TESTING ONLY (push notifications can generally only be tested in Ad Hoc mode where nothing can be logged, so show result in an alert instead)
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		// No action needed
+	}];
 	
-	[alertView show];
+	[alertController addAction:actionClose];
+	
+	// PreferredAction only supported in 9.0+
+	if([alertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[alertController setPreferredAction:actionClose];
+	}
+	
+	// Show Alert
+	[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	
 	// END TESTING ONLY*/
 	
-	UIApplicationState state = [application applicationState];
-	
 	// Handle Push Notification when App is Active.
-	if(state == UIApplicationStateActive)
+	if([application applicationState] == UIApplicationStateActive)
 	{
 		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
 	}
-}
-
-
-#pragma mark - UIAlertView Delegate Methods
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	// Toggle ErrorAlertView to show again
-	self.isErrorAlertViewShowing = NO;
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-	// Toggle ErrorAlertView to show again
-	self.isErrorAlertViewShowing = NO;
-}
-
-- (void)alertViewCancel:(UIAlertView *)alertView
-{
-	// Toggle ErrorAlertView to show again
-	self.isErrorAlertViewShowing = NO;
 }
 
 
@@ -325,47 +316,6 @@
 	
 	[self.window setRootViewController:messagesViewController];
 	[self.window makeKeyAndVisible];
-}
-
-// Always fired from Model.m or any model that extends it, but executed from here
-- (void)showOfflineError
-{
-	NSLog(@"Show Offline Error");
-	
-	NSString *alertMessage = @"You must connect to a Wi-Fi or cellular data network to continue.";
-	CTCallCenter *callCenter = [[CTCallCenter alloc] init];
-	
-	// Update messaging if a call is currently connected
-	for(CTCall *call in callCenter.currentCalls)
-	{
-		if(call.callState == CTCallStateConnected)
-		{
-			alertMessage = @"Your device does not support simultaneous voice and cellular data connections. You must connect to a Wi-Fi network to continue.";
-		}
-	}
-	
-	NSLog(@"Alert Message: %@", alertMessage);
-	
-	// Only show error message if it has never been shown or has been 2+ seconds since last shown
-	if( ! self.dateLastErrorMessage || [[NSDate date] compare:[self.dateLastErrorMessage dateByAddingTimeInterval:2.0]] == NSOrderedDescending)
-	{
-		self.errorAlertView = [[UIAlertView alloc] initWithTitle:@"Data Connection Unavailable" message:alertMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[self.errorAlertView setDelegate:self];
-		
-		if( ! self.isErrorAlertViewShowing)
-		{
-			NSLog(@"Show Error Alert View");
-			
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				[self.errorAlertView show];
-			});
-		}
-		
-		self.isErrorAlertViewShowing = YES;
-	}
-	
-	self.dateLastErrorMessage = [NSDate date];
 }
 
 
@@ -441,15 +391,9 @@
 						// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
 						if(registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 						{
-							self.errorAlertView = [[UIAlertView alloc] initWithTitle:@"Device Registration Error" message:registeredDeviceError.localizedDescription delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-							[self.errorAlertView setDelegate:self];
+							ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 							
-							if( ! self.isErrorAlertViewShowing)
-							{
-								[self.errorAlertView show];
-							}
-							
-							self.isErrorAlertViewShowing = YES;
+							[errorAlertController show:error];
 						}
 						
 						// Go to Main Storyboard regardless of whether there was an error (no need to force re-login here because Account is valid, there was just an error updating device for push notifications)
@@ -462,18 +406,21 @@
 					NSLog(@"Phone Number Invalid");
 					
 					// If using Simulator, skip Phone Number step because it is always invalid
-					#if defined(DEBUG)
-					//#if (TARGET_IPHONE_SIMULATOR)
+					// #if DEBUG
+					#if TARGET_IPHONE_SIMULATOR
 						NSLog(@"Skip Phone Number step when on Simulator or Debugging");
 						
 						[self showMainScreen];
 					
 					#else
 						// Phone Number invalid, so direct user to enter it
-						UIViewController *phoneNumberViewController = [self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
+						/*UIViewController *phoneNumberViewController = [self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
 						UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:phoneNumberViewController];
 						
-						[self.window setRootViewController:navigationController];
+						[self.window setRootViewController:navigationController];*/
+					
+						// Force user to re-login to eliminate issue of user trying to login as another user and getting permanently stuck on phone number screen (even after re-install of app)
+						[self showLoginSSOScreen];
 					#endif
 				}
 			}

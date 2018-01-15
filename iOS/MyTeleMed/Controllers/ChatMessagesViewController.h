@@ -11,7 +11,5 @@
 @interface ChatMessagesViewController : RevealViewController
 
 //- (void)setSelectedMessages:(NSArray *)theSelectedMessages;
-//- (void)deleteMultipleMessagesSuccess;
-//- (void)deleteMultipleMessagesError:(NSArray *)failedMessageIDs;
 
 @end

@@ -11,7 +11,4 @@
 
 @interface MessageDetailViewController : MessageDetailParentViewController <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
-- (void)updateMessageRecipients:(NSMutableArray *)newRecipients;
-- (void)updateMessageRecipientsError:(NSError *)error;
-
 @end

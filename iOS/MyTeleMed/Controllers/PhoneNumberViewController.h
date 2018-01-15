@@ -11,4 +11,6 @@
 
 @interface PhoneNumberViewController : CoreViewController <UITextFieldDelegate>
 
+@property (weak) id delegate;
+
 @end
