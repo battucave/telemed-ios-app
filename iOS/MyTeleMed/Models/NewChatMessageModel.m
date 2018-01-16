@@ -7,6 +7,7 @@
 //
 
 #import "NewChatMessageModel.h"
+#import "NSString+XML.h"
 
 @interface NewChatMessageModel ()
 
@@ -67,7 +68,7 @@
 			"</Participants>"
 			"<Text>%@</Text>"
 		"</NewChatMsg>",
-		(isGroupChat ? @"true" : @"false"), xmlParticipants, message];
+		(isGroupChat ? @"true" : @"false"), xmlParticipants, [message escapeXML]];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	

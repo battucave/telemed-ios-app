@@ -8,6 +8,7 @@
 
 #import "NewMessageModel.h"
 #import "RegisteredDeviceModel.h"
+#import "NSString+XML.h"
 
 @interface NewMessageModel ()
 
@@ -43,7 +44,7 @@
 			"<MessageText>%@</MessageText>"
 			"<SenderDeviceID>%@</SenderDeviceID>"
 		"</NewMsg>",
-		accountID, xmlRecipients, message, registeredDeviceModel.ID];
+		accountID, xmlRecipients, [message escapeXML], registeredDeviceModel.ID];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	

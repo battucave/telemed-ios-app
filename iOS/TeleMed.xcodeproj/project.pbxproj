@@ -495,6 +495,8 @@
 		E2D567E51CDB85B80054FD3F /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677E1CDB85B80054FD3F /* logo.png */; };
 		E2D83FB51C761502008D26A8 /* CDMAVoiceDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */; };
 		E2E323D61D2F1DC000646201 /* UIViewController+NotificationTonesFix.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */; };
+		E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */; };
+		E2E7F6FC200E648F00648D61 /* NSString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6FA200E648F00648D61 /* NSString+XML.m */; };
 		E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB581B331F910024D970 /* SSOProviderModel.m */; };
 		E2ECFB5C1B33223C0024D970 /* SSOProviderXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB5B1B33223C0024D970 /* SSOProviderXMLParser.m */; };
 		E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */; };
@@ -992,6 +994,10 @@
 		E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDMAVoiceDataViewController.m; sourceTree = "<group>"; };
 		E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NotificationTonesFix.h"; sourceTree = "<group>"; };
 		E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NotificationTonesFix.m"; sourceTree = "<group>"; };
+		E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+XML.m"; sourceTree = "<group>"; };
+		E2E7F6F8200E648F00648D61 /* NSMutableString+XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+XML.h"; sourceTree = "<group>"; };
+		E2E7F6F9200E648F00648D61 /* NSString+XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XML.h"; sourceTree = "<group>"; };
+		E2E7F6FA200E648F00648D61 /* NSString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XML.m"; sourceTree = "<group>"; };
 		E2ECFB571B331F910024D970 /* SSOProviderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSOProviderModel.h; sourceTree = "<group>"; };
 		E2ECFB581B331F910024D970 /* SSOProviderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSOProviderModel.m; sourceTree = "<group>"; };
 		E2ECFB5A1B33223C0024D970 /* SSOProviderXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSOProviderXMLParser.h; sourceTree = "<group>"; };
@@ -1532,11 +1538,15 @@
 		E211D5771FBF4EE800263497 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				E2AE66351CE0DD7300953EFA /* NSObject+Swizzle.h */,
-				E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */,
-				E2AE663A1CE0E7A700953EFA /* ReadMe.md */,
 				E24A44351FCDFDCC00A06EE8 /* InsetTextField.h */,
 				E24A44361FCDFDCC00A06EE8 /* InsetTextField.m */,
+				E2E7F6F8200E648F00648D61 /* NSMutableString+XML.h */,
+				E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */,
+				E2AE66351CE0DD7300953EFA /* NSObject+Swizzle.h */,
+				E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */,
+				E2E7F6F9200E648F00648D61 /* NSString+XML.h */,
+				E2E7F6FA200E648F00648D61 /* NSString+XML.m */,
+				E2AE663A1CE0E7A700953EFA /* ReadMe.md */,
 				E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */,
 				E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */,
 			);
@@ -2411,6 +2421,7 @@
 				E27B85211B14D09400AD50C6 /* AccountXMLParser.m in Sources */,
 				E211D59B1FBF571B00263497 /* AutoGrowingTextView.m in Sources */,
 				E211D5941FBF571B00263497 /* MessageComposeTableViewController.m in Sources */,
+				E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */,
 				E27B850F1B14D03500AD50C6 /* ScreenshotAlertModel.m in Sources */,
 				28CCCD5017F517A50093CEE2 /* AppDelegate.m in Sources */,
 				E27B84EE1B14CF7400AD50C6 /* CallModel.m in Sources */,
@@ -2426,6 +2437,7 @@
 				E27B84FA1B14CFB700AD50C6 /* MessageModel.m in Sources */,
 				28CCCD9217F535DD0093CEE2 /* ContactViewController.m in Sources */,
 				E27B85001B14CFCB00AD50C6 /* MyStatusModel.m in Sources */,
+				E2E7F6FC200E648F00648D61 /* NSString+XML.m in Sources */,
 				E211D5991FBF571B00263497 /* MessagesTableViewController.m in Sources */,
 				E2D83FB51C761502008D26A8 /* CDMAVoiceDataViewController.m in Sources */,
 				28176C141829AB0F00801EC7 /* MessageDetailViewController.m in Sources */,
