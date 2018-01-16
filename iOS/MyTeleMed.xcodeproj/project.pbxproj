@@ -298,6 +298,8 @@
 		E2D567E61CDB85B80054FD3F /* button-Navigation-ForgotPassword.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677F1CDB85B80054FD3F /* button-Navigation-ForgotPassword.png */; };
 		E2D83FB51C761502008D26A8 /* CDMAVoiceDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */; };
 		E2E323D61D2F1DC000646201 /* UIViewController+NotificationTonesFix.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */; };
+		E2E7F6F5200E4AAC00648D61 /* NSMutableString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6F1200E4AAB00648D61 /* NSMutableString+XML.m */; };
+		E2E7F6F6200E4AAC00648D61 /* NSString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6F4200E4AAC00648D61 /* NSString+XML.m */; };
 		E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB581B331F910024D970 /* SSOProviderModel.m */; };
 		E2ECFB5C1B33223C0024D970 /* SSOProviderXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB5B1B33223C0024D970 /* SSOProviderXMLParser.m */; };
 		E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */; };
@@ -760,6 +762,10 @@
 		E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDMAVoiceDataViewController.m; sourceTree = "<group>"; };
 		E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NotificationTonesFix.h"; sourceTree = "<group>"; };
 		E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NotificationTonesFix.m"; sourceTree = "<group>"; };
+		E2E7F6F1200E4AAB00648D61 /* NSMutableString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+XML.m"; sourceTree = "<group>"; };
+		E2E7F6F2200E4AAC00648D61 /* NSString+XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XML.h"; sourceTree = "<group>"; };
+		E2E7F6F3200E4AAC00648D61 /* NSMutableString+XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+XML.h"; sourceTree = "<group>"; };
+		E2E7F6F4200E4AAC00648D61 /* NSString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XML.m"; sourceTree = "<group>"; };
 		E2ECFB571B331F910024D970 /* SSOProviderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSOProviderModel.h; sourceTree = "<group>"; };
 		E2ECFB581B331F910024D970 /* SSOProviderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSOProviderModel.m; sourceTree = "<group>"; };
 		E2ECFB5A1B33223C0024D970 /* SSOProviderXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSOProviderXMLParser.h; sourceTree = "<group>"; };
@@ -1326,13 +1332,17 @@
 		E2AE66311CE0DBF900953EFA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E2E7F6F3200E4AAC00648D61 /* NSMutableString+XML.h */,
+				E2E7F6F1200E4AAB00648D61 /* NSMutableString+XML.m */,
 				E2AE66351CE0DD7300953EFA /* NSObject+Swizzle.h */,
 				E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */,
+				E2E7F6F2200E4AAC00648D61 /* NSString+XML.h */,
+				E2E7F6F4200E4AAC00648D61 /* NSString+XML.m */,
 				E2AE663A1CE0E7A700953EFA /* ReadMe.md */,
-				E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */,
-				E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */,
 				E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */,
 				E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */,
+				E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */,
+				E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1811,6 +1821,7 @@
 				2802E7B91A9CC2AD004565BD /* CommentCell.m in Sources */,
 				E270ED6B1B1758C900DD43B8 /* AFURLRequestSerialization.m in Sources */,
 				28BA8E921A7009800042D769 /* MessageHistoryViewController.m in Sources */,
+				E2E7F6F6200E4AAC00648D61 /* NSString+XML.m in Sources */,
 				E2920C941E81AB04004BEF10 /* SentMessagesViewController.m in Sources */,
 				E21AE0AA1D231BB200EA13E4 /* ChatMessageCell.m in Sources */,
 				E2920C971E82BC73004BEF10 /* SentMessageModel.m in Sources */,
@@ -1865,6 +1876,7 @@
 				E27B84F71B14CFAA00AD50C6 /* MessageEventModel.m in Sources */,
 				E2CDEFAB1D25753400728F1A /* ChatMessageModel.m in Sources */,
 				E270ED6C1B1758C900DD43B8 /* AFURLResponseSerialization.m in Sources */,
+				E2E7F6F5200E4AAC00648D61 /* NSMutableString+XML.m in Sources */,
 				28EAB9EA194B585100903772 /* HelpViewController.m in Sources */,
 				E27B85371B14D12900AD50C6 /* MyStatusXMLParser.m in Sources */,
 				E27B84E81B14B96A00AD50C6 /* AuthenticationModel.m in Sources */,
@@ -2170,7 +2182,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTeleMedβ.entitlements";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2293,7 +2304,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTeleMedβ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2322,7 +2332,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTeleMedβ.entitlements";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
