@@ -168,7 +168,14 @@
 			NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 			NSString *versionNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 			
-			[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
+			// Show only the version number for release version to eliminate confusion for TeleMed's support staff
+			#if RELEASE
+				[cell.detailTextLabel setText:versionNumber];
+			
+			// Also show build number for debug and beta versions
+			#else
+				[cell.detailTextLabel setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
+			#endif
 		}
 	}
 	

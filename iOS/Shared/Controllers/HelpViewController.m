@@ -41,8 +41,15 @@
 	// Update label version with app version from bundle
 	NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	NSString *versionNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-	
-	[self.labelVersion setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
+
+	// Show only the version number for release version to eliminate confusion for TeleMed's support staff
+	#if RELEASE
+		[self.labelVersion setText:versionNumber];
+
+	// Also show build number for debug and beta versions
+	#else
+		[self.labelVersion setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
+	#endif
 	
 	// MedToMed
 	#ifdef MEDTOMED
