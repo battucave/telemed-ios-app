@@ -485,7 +485,6 @@
                         <outletCollection property="textFields" destination="ZAy-bY-e38" id="vfm-NV-j0X"/>
                         <outletCollection property="textFields" destination="VXO-be-6m6" id="r1b-3C-eEU"/>
                         <outletCollection property="textFields" destination="8Lg-q9-Skv" id="Smd-DV-AQ0"/>
-                        <outletCollection property="textFields" destination="00T-zd-9w9" id="zWX-Nn-mf9"/>
                         <outletCollection property="cellFormFields" destination="RGI-ZB-ShU" id="ewa-zN-MET"/>
                         <outletCollection property="cellFormFields" destination="ZLe-pT-Wiw" id="s2c-qW-l65"/>
                         <outletCollection property="cellFormFields" destination="uh4-R2-nlT" id="NCJ-dQ-vq0"/>
@@ -495,6 +494,7 @@
                         <outletCollection property="cellFormFields" destination="Z3I-gx-mmW" id="3ay-Yy-Jmj"/>
                         <outletCollection property="textFields" destination="tJ2-SW-pfe" id="BB0-0V-nSr"/>
                         <outletCollection property="textFields" destination="Hpg-oN-drg" id="Thx-Xe-1aW"/>
+                        <outletCollection property="textFields" destination="00T-zd-9w9" id="bQK-LW-pzh"/>
                         <segue destination="J3R-fF-WwB" kind="show" identifier="showMessageNew2" id="9cA-wY-RfV"/>
                     </connections>
                 </tableViewController>
