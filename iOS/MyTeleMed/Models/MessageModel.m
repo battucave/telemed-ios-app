@@ -145,24 +145,24 @@
 
 - (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state
 {
-	// State must be one of the following: read, unread, archive, unarchive
-	if( ! [state isEqualToString:@"read"] && ! [state isEqualToString:@"unread"] && ! [state isEqualToString:@"archive"] && ! [state isEqualToString:@"unarchive"])
+	// Validate state
+	if( ! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
-		state = @"read";
+		state = @"Read";
 	}
 	
 	// Show Activity Indicator
-	if([state isEqualToString:@"archive"])
+	if([state isEqualToString:@"Archive"])
 	{
 		[self showActivityIndicator:@"Archiving..."];
 	}
-	if([state isEqualToString:@"unarchive"])
+	else if([state isEqualToString:@"Unarchive"])
 	{
 		[self showActivityIndicator:@"Unarchiving..."];
 	}
 	
-	// Add Network Activity Observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	// Add Network Activity Observer (not currently used because client noticed "bug" when on a slow connection - the message will still show in Messages list until the archive process completes)
+	// [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Store state for modifyMessageStatePending method
 	self.messageState = state;
@@ -174,12 +174,12 @@
 	
 	[self.operationManager POST:@"Messages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		// Hide activity indicator
+		[self hideActivityIndicator];
 		
 		// Successful Post returns a 204 code with no response
 		if(operation.response.statusCode == 204)
 		{
-			// Not currently used
 			if([self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
 			{
 				[self.delegate modifyMessageStateSuccess:state];
@@ -187,10 +187,10 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"unarchive"] ? @"Unarchive" : @"Archive")], NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"unarchive"] ? @"Unarchiving" : @"Archiving")], NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")], NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")], NSLocalizedDescriptionKey, nil]];
 			
 			// Only show error if Archiving or Unarchiving
-			if([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
+			if([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 			{
 				// Show error even if user has navigated to another screen
 				[self showError:error withCallback:^(void)
@@ -217,10 +217,10 @@
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:[NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"unarchive"] ? @"Unarchiving" : @"Archiving")] andTitle:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"unarchive"] ? @"Unarchive" : @"Archive")]];
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:[NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")] andTitle:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")]];
 		
 		// Only show error if Archiving or Unarchiving
-		if([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
+		if([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 		{
 			// Show error even if user has navigated to another screen
 			[self showError:error withCallback:^(void)
@@ -246,18 +246,18 @@
 		return;
 	}
 	
-	// State must be one of the following: read, unread, archive, unarchive
-	if( ! [state isEqualToString:@"read"] && ! [state isEqualToString:@"unread"] && ! [state isEqualToString:@"archive"] && ! [state isEqualToString:@"unarchive"])
+	// Validate State
+	if( ! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
-		state = @"read";
+		state = @"Read";
 	}
 	
 	// Show Activity Indicator
-	if([state isEqualToString:@"archive"])
+	if([state isEqualToString:@"Archive"])
 	{
 		[self showActivityIndicator:@"Archiving..."];
 	}
-	if([state isEqualToString:@"unarchive"])
+	else if([state isEqualToString:@"Unarchive"])
 	{
 		[self showActivityIndicator:@"Unarchiving..."];
 	}

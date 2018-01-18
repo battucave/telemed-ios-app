@@ -9,15 +9,8 @@
 #import "Model.h"
 //#import "AppDelegate.h"
 #import "TeleMedHTTPRequestOperationManager.h"
-#import "CustomAlertView.h"
 #import "ErrorAlertController.h"
 #import "GenericErrorXMLParser.h"
-
-@interface Model ()
-
-@property (nonatomic) CustomAlertView *activityIndicatorView;
-
-@end
 
 @implementation Model
 
@@ -41,11 +34,34 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		if(self.activityIndicatorView == nil)
-		{
-			[self setActivityIndicatorView:[[CustomAlertView alloc] init]];
-			[self.activityIndicatorView showWithDialog:message];
-		}
+		// Initialize activity indicator
+		UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		UILabel *labelMessage = [[UILabel alloc] init];
+		UIAlertController *loadingAlertController = [UIAlertController alertControllerWithTitle:nil message:@"" preferredStyle:UIAlertControllerStyleAlert];
+		NSDictionary *views = NSDictionaryOfVariableBindings(loadingAlertController.view, activityIndicatorView, labelMessage);
+		
+		// Configure activity indicator
+		[activityIndicatorView setColor:[UIColor blackColor]];
+		[activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints:NO];
+		[activityIndicatorView setUserInteractionEnabled:NO];
+		[activityIndicatorView startAnimating];
+		
+		// Configure message
+		[labelMessage setTranslatesAutoresizingMaskIntoConstraints:NO];
+		[labelMessage setText:message];
+		
+		// Add activity indicator and message to alert controller
+		[loadingAlertController.view addSubview:activityIndicatorView];
+		[loadingAlertController.view addSubview:labelMessage];
+		
+		// Add constraints
+		NSArray *constraintsVertical = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[activityIndicatorView]-10-[labelMessage]-15-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views];
+		NSArray *constraintsHorizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[activityIndicatorView]|" options:0 metrics:nil views:views];
+		
+		[loadingAlertController.view addConstraints:[constraintsVertical arrayByAddingObjectsFromArray:constraintsHorizontal]];
+		
+		// Show activity indicator
+		[[self getRootViewController] presentViewController:loadingAlertController animated:YES completion:nil];
 	});
 }
 
@@ -53,12 +69,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		if(self.activityIndicatorView != nil)
-		{
-			[self.activityIndicatorView close];
-			
-			self.activityIndicatorView = nil;
-		}
+		[[self getRootViewController] dismissViewControllerAnimated:YES completion:nil];
 	});
 }
 
@@ -98,6 +109,22 @@
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
 	[errorAlertController show:error withCallback:callback];
+}
+
+- (id)getRootViewController
+{
+	id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+	
+	if([rootViewController isKindOfClass:[UINavigationController class]])
+	{
+		rootViewController = ((UINavigationController *) rootViewController).viewControllers.firstObject;
+	
+	} else if([rootViewController isKindOfClass:[UITabBarController class]])
+	{
+		rootViewController = ((UITabBarController *) rootViewController).selectedViewController;
+	}
+	
+	return rootViewController;
 }
 
 - (void)dealloc

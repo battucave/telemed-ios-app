@@ -7,6 +7,7 @@
 //
 
 #import "MessagesViewController.h"
+#import "MessageDetailViewController.h"
 #import "MessagesTableViewController.h"
 #import "SWRevealViewController.h"
 #import "MessageModel.h"
@@ -110,6 +111,15 @@
     [alertView show];
 }
 
+// Unwind segue from MessageDetailViewController (only after archive action)
+- (IBAction)archiveFromMessageDetailArchive:(UIStoryboardSegue *)segue
+{
+	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
+	
+	// Remove selected rows from Messages Table
+	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if(buttonIndex > 0)
@@ -117,7 +127,7 @@
 		MessageModel *messageModel = [[MessageModel alloc] init];
 		[messageModel setDelegate:self];
 		
-		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
+		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
 	}
 }
 

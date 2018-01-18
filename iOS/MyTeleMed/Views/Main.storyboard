@@ -1656,9 +1656,11 @@
                         <outlet property="textViewComment" destination="bUj-hm-VVC" id="9QM-Td-wHD"/>
                         <outlet property="textViewMessage" destination="Tij-lp-q26" id="hUi-oe-iA0"/>
                         <outlet property="viewPriority" destination="eRo-nv-eAF" id="hwN-Hb-3pc"/>
+                        <segue destination="Fgp-NY-2KQ" kind="unwind" identifier="archiveFromMessageDetailArchive" unwindAction="archiveFromMessageDetailArchive:" id="5jv-sF-fDb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1i-V9-Qf2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Fgp-NY-2KQ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2099" y="-609"/>
         </scene>
@@ -4578,7 +4580,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="SWX-Rd-no8"/>
         <segue reference="duc-Go-Hul"/>
         <segue reference="E1e-BY-bXG"/>
-        <segue reference="mD2-eT-how"/>
+        <segue reference="O2m-UP-1tm"/>
         <segue reference="yVi-an-TG3"/>
         <segue reference="Wxx-iI-zqX"/>
         <segue reference="dmg-yj-Han"/>

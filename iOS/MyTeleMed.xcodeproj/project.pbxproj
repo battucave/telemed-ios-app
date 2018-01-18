@@ -83,7 +83,6 @@
 		289F37F119C788CE005036F0 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 289F37F019C788CE005036F0 /* Launch Screen.xib */; };
 		28A57D101832E938005855AC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A57D0F1832E938005855AC /* AudioToolbox.framework */; };
 		28A57D301833F2B0005855AC /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A57D2F1833F2B0005855AC /* MessageUI.framework */; };
-		28A57D33183418AC005855AC /* CustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A57D32183418AC005855AC /* CustomAlertView.m */; };
 		28A8DA42182BDEBC00C9DB08 /* MessageForwardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA40182BDEBC00C9DB08 /* MessageForwardViewController.m */; };
 		28A8DA48182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */; };
 		28A8DA51182C55CE00C9DB08 /* MessageComposeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA50182C55CE00C9DB08 /* MessageComposeTableViewController.m */; };
@@ -444,8 +443,6 @@
 		289F37F019C788CE005036F0 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		28A57D0F1832E938005855AC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		28A57D2F1833F2B0005855AC /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		28A57D31183418AC005855AC /* CustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAlertView.h; sourceTree = "<group>"; };
-		28A57D32183418AC005855AC /* CustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAlertView.m; sourceTree = "<group>"; };
 		28A8DA3F182BDEBC00C9DB08 /* MessageForwardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageForwardViewController.h; sourceTree = "<group>"; };
 		28A8DA40182BDEBC00C9DB08 /* MessageForwardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageForwardViewController.m; sourceTree = "<group>"; };
 		28A8DA46182C3E5C00C9DB08 /* MessageRecipientPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRecipientPickerViewController.h; sourceTree = "<group>"; };
@@ -1024,8 +1021,6 @@
 			children = (
 				E270ED371B1758C900DD43B8 /* AFNetworking */,
 				E2ECFB601B3471C00024D970 /* AFNetworking HTTP Managers */,
-				28A57D31183418AC005855AC /* CustomAlertView.h */,
-				28A57D32183418AC005855AC /* CustomAlertView.m */,
 				28EF16101811D5D600889D2A /* ELCUIApplication.h */,
 				28EF16111811D5D600889D2A /* ELCUIApplication.m */,
 				283710CF17F9FD1D00A25053 /* KeychainItemWrapper.h */,
@@ -1845,7 +1840,6 @@
 				28CCCD5017F517A50093CEE2 /* AppDelegate.m in Sources */,
 				E27B84EE1B14CF7400AD50C6 /* CallModel.m in Sources */,
 				E272B8861B0D30B900A7154B /* SSOProviderViewController.m in Sources */,
-				28A57D33183418AC005855AC /* CustomAlertView.m in Sources */,
 				E21C14691D33E2240025B6ED /* OnePixelLayoutConstraint.m in Sources */,
 				E270ED6D1B1758C900DD43B8 /* AFURLConnectionOperation.m in Sources */,
 				28128B4C1A9D24EA007C82C1 /* AutoGrowingTextView.m in Sources */,
