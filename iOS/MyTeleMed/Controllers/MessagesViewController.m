@@ -7,6 +7,7 @@
 //
 
 #import "MessagesViewController.h"
+#import "MessageDetailViewController.h"
 #import "MessagesTableViewController.h"
 #import "SWRevealViewController.h"
 #import "MessageModel.h"
@@ -112,7 +113,7 @@
 		MessageModel *messageModel = [[MessageModel alloc] init];
 		[messageModel setDelegate:self];
 		
-		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
+		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
 	}];
 
 	[archiveMessagesAlertController addAction:actionCancel];
@@ -126,6 +127,15 @@
 
 	// Show Alert
 	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
+}
+
+// Unwind segue from MessageDetailViewController (only after archive action)
+- (IBAction)archiveFromMessageDetailArchive:(UIStoryboardSegue *)segue
+{
+	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
+	
+	// Remove selected rows from Messages Table
+	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
 }
 
 // Override default Remote Notification action from CoreViewController

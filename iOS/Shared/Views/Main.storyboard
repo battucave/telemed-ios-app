@@ -1544,9 +1544,11 @@
                         <outlet property="viewAddCommentContainer" destination="gcv-jw-qVF" id="gLI-Q1-pSG"/>
                         <outlet property="viewButtons" destination="yA3-gt-in8" id="9Wu-2v-9Pc"/>
                         <outlet property="viewPriority" destination="eRo-nv-eAF" id="hwN-Hb-3pc"/>
+                        <segue destination="1Dd-nf-09i" kind="unwind" identifier="archiveFromMessageDetailArchive" unwindAction="archiveFromMessageDetailArchive:" id="rBP-cQ-Q0T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1i-V9-Qf2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="1Dd-nf-09i" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3358.4000000000001" y="-547.82608695652175"/>
         </scene>

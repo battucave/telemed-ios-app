@@ -22,10 +22,10 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
-    // Initialize Message Model
-    [self setMessageModel:[[MessageModel alloc] init]];
+	// Initialize Message Model
+	[self setMessageModel:[[MessageModel alloc] init]];
 	[self.messageModel setDelegate:self];
 	
 	// Initialize Filtered Basic Events
@@ -107,7 +107,7 @@
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"archive"];
+		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Archive"];
 	}];
 
 	[archiveMessageAlertController addAction:actionCancel];
@@ -123,42 +123,60 @@
 	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
 }
 
-// Return Message State pending from MessageModel delegate
+/*/ Return Message State pending from MessageModel delegate (not used because client noticed "bug" when on a slow connection - the message will still show in Messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
 {
-    // If finished Archiving message, send user back
-    if ([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
-    {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+	// If finished Archiving message, send user back
+	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
+	{
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
 		{
-            [self.navigationController popViewControllerAnimated:YES];
-        });
-    }
-}
+			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
+			@try
+			{
+				[self performSegueWithIdentifier:@"archiveFromMessageDetailArchive" sender:self];
+			}
+			// Just in case the unwind segue isn't found, simply pop the view controller
+			@catch(NSException *exception)
+			{
+				[self.navigationController popViewControllerAnimated:YES];
+			}
+		});
+	}
+}*/
 
-/*/ Return Message State success from MessageModel delegate
+// Return Message State success from MessageModel delegate
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
-    // If finished Archiving message, send user back
-    if ([state isEqualToString:@"archive"] || [state isEqualToString:@"unarchive"])
-    {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+	// If finished Archiving message, send user back
+	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
+	{
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
 		{
-            [self.navigationController popViewControllerAnimated:YES];
-        });
-    }
+			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
+			@try
+			{
+				[self performSegueWithIdentifier:@"archiveFromMessageDetailArchive" sender:self];
+			}
+			// Just in case the unwind segue isn't found, simply pop the view controller
+			@catch(NSException *exception)
+			{
+				[self.navigationController popViewControllerAnimated:YES];
+			}
+		});
+	}
 }
 
-// Return Message State error from MessageModel delegate
+/*/ Return Message State error from MessageModel delegate
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
 	// Show error message
-	if ([state isEqualToString:@"archive"])
-    {
+	if ([state isEqualToString:@"Archive"])
+	{
 		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
  
 		[errorAlertController show:error];
-    }
+	}
 }*/
 
 /*/ Return success from CallTeleMedModel delegate (no longer used)
@@ -177,12 +195,12 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])
-    {
-        MessageForwardViewController *messageForwardViewController = segue.destinationViewController;
-        
-        [messageForwardViewController setMessage:self.message];
-    }
+	if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])
+	{
+		MessageForwardViewController *messageForwardViewController = segue.destinationViewController;
+		
+		[messageForwardViewController setMessage:self.message];
+	}
 	else if ([segue.identifier isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageTeleMedFromMessageHistory"])
 	{
 		MessageTeleMedViewController *messageTeleMedViewController = segue.destinationViewController;
