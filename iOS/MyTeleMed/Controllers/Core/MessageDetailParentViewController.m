@@ -123,7 +123,7 @@
 	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
 }
 
-/*/ Return Message State pending from MessageModel delegate (not used because client noticed "bug" when on a slow connection - the message will still show in Messages list until the archive process completes)
+/*/ Return Message State pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
 {
 	// If finished Archiving message, send user back

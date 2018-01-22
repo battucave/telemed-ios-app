@@ -161,7 +161,7 @@
 		[self showActivityIndicator:@"Unarchiving..."];
 	}
 	
-	// Add Network Activity Observer (not currently used because client noticed "bug" when on a slow connection - the message will still show in Messages list until the archive process completes)
+	// Add Network Activity Observer (not currently used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
 	// [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Store state for modifyMessageStatePending method
