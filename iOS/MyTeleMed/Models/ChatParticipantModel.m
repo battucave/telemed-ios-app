@@ -9,6 +9,13 @@
 #import "ChatParticipantModel.h"
 #import "ChatParticipantXMLParser.h"
 
+@interface ChatParticipantModel()
+
+@property (nonatomic) ChatParticipantModel *chatParticipant;
+@property (nonatomic) NSMutableString *currentElementValue;
+
+@end
+
 @implementation ChatParticipantModel
 
 - (void)getChatParticipants

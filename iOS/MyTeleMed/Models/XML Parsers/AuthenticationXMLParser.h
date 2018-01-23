@@ -12,6 +12,5 @@
 @interface AuthenticationXMLParser : NSObject <NSXMLParserDelegate>
 
 @property (nonatomic) AuthenticationModel *authentication;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

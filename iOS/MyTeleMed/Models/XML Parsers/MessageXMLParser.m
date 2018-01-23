@@ -12,7 +12,9 @@
 
 @interface MessageXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
 @property (nonatomic) NSString *currentModel;
+@property (nonatomic) MessageModel *message;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end

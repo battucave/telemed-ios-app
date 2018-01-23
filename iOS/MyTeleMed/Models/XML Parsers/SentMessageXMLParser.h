@@ -7,12 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SentMessageModel.h"
 
 @interface SentMessageXMLParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic) SentMessageModel *sentMessage;
 @property (nonatomic) NSMutableArray *sentMessages;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

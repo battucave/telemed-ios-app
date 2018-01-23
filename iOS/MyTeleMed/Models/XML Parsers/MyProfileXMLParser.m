@@ -13,7 +13,12 @@
 
 @interface MyProfileXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NSString *currentModel;
+@property (nonatomic) NSMutableArray *myRegisteredDevices;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
+@property (nonatomic) RegisteredDeviceModel *registeredDevice;
+@property (nonatomic) NSMutableDictionary *timeZone;
 
 @end
 
@@ -70,7 +75,7 @@
 	}
 	else if([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-		self.currentModel = @"MyProfileModel";
+			self.currentModel = @"MyProfileModel";
 	}
 	else if([elementName isEqualToString:@"MyRegisteredDevices"])
 	{

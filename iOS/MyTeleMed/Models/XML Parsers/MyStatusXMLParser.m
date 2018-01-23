@@ -11,7 +11,11 @@
 
 @interface MyStatusXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NSMutableArray *currentOnCallEntries;
+@property (nonatomic) NSMutableArray *futureOnCallEntries;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
+@property (nonatomic) OnCallEntryModel *onCallEntry;
 
 @end
 

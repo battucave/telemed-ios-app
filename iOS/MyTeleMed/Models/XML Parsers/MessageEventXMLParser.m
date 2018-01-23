@@ -11,6 +11,8 @@
 
 @interface MessageEventXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) MessageEventModel *messageEvent;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end

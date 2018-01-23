@@ -12,9 +12,5 @@
 @interface MyStatusXMLParser : NSObject <NSXMLParserDelegate>
 
 @property (nonatomic) MyStatusModel *myStatus;
-@property (nonatomic) OnCallEntryModel *onCallEntry;
-@property (nonatomic) NSMutableArray *currentOnCallEntries;
-@property (nonatomic) NSMutableArray *futureOnCallEntries;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

@@ -11,6 +11,5 @@
 @interface GenericErrorXMLParser : NSObject <NSXMLParserDelegate>
 
 @property (nonatomic) NSString *error;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end
