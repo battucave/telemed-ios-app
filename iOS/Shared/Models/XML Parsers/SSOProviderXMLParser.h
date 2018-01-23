@@ -12,6 +12,5 @@
 @interface SSOProviderXMLParser : NSObject <NSXMLParserDelegate>
 
 @property (nonatomic) SSOProviderModel *ssoProvider;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

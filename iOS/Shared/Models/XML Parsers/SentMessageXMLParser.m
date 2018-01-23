@@ -12,8 +12,10 @@
 
 @interface SentMessageXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
 @property (nonatomic) NSString *currentModel;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
+@property (nonatomic) SentMessageModel *sentMessage;
 
 @end
 

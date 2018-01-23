@@ -8,6 +8,12 @@
 
 #import "AuthenticationXMLParser.h"
 
+@interface AuthenticationXMLParser()
+
+@property (nonatomic) NSMutableString *currentElementValue;
+
+@end
+
 @implementation AuthenticationXMLParser
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string

@@ -7,15 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ChatMessageModel.h"
-#import "ChatParticipantModel.h"
 
 @interface ChatMessageXMLParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic) ChatMessageModel *chatMessage;
-@property (nonatomic) ChatParticipantModel *chatParticipant;
 @property (nonatomic) NSMutableArray *chatMessages;
-@property (nonatomic) NSMutableArray *chatParticipants;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

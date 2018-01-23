@@ -12,8 +12,5 @@
 @interface UserProfileXMLParser : NSObject <NSXMLParserDelegate>
 
 @property (nonatomic) UserProfileModel *userProfile;
-@property (nonatomic) NSMutableDictionary *timeZone;
-@property (nonatomic) NSMutableString *currentElementValue;
-@property (nonatomic) NSString *currentModel;
 
 @end

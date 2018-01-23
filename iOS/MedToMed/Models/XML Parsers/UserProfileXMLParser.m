@@ -11,7 +11,10 @@
 
 @interface UserProfileXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NSString *currentModel;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
+@property (nonatomic) NSMutableDictionary *timeZone;
 
 @end
 

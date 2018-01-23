@@ -8,6 +8,12 @@
 
 #import "GenericErrorXMLParser.h"
 
+@interface GenericErrorXMLParser()
+
+@property (nonatomic) NSMutableString *currentElementValue;
+
+@end
+
 @implementation GenericErrorXMLParser
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string

@@ -7,12 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MessageEventModel.h"
 
 @interface MessageEventXMLParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic) MessageEventModel *messageEvent;
 @property (nonatomic) NSMutableArray *messageEvents;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

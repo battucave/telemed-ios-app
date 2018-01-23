@@ -11,6 +11,8 @@
 
 @interface ChatParticipantXMLParser()
 
+@property (nonatomic) ChatParticipantModel *chatParticipant;
+@property (nonatomic) NSMutableString *currentElementValue;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end

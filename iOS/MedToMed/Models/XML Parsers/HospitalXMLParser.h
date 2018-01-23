@@ -7,12 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HospitalModel.h"
 
 @interface HospitalXMLParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic) HospitalModel *hospital;
 @property (nonatomic) NSMutableArray *hospitals;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

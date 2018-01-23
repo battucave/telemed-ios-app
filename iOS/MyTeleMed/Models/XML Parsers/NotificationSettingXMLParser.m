@@ -11,6 +11,7 @@
 
 @interface NotificationSettingXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end

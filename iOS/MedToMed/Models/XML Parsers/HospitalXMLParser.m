@@ -11,6 +11,8 @@
 
 @interface HospitalXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) HospitalModel *hospital;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end

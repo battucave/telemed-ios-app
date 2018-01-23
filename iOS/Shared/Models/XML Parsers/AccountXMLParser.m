@@ -11,7 +11,10 @@
 
 @interface AccountXMLParser()
 
+@property (nonatomic) AccountModel *account;
+@property (nonatomic) NSMutableString *currentElementValue;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
+@property (nonatomic) NSMutableDictionary *timeZone;
 
 @end
 

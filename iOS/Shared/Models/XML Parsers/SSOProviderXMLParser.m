@@ -8,6 +8,12 @@
 
 #import "SSOProviderXMLParser.h"
 
+@interface SSOProviderXMLParser()
+
+@property (nonatomic) NSMutableString *currentElementValue;
+
+@end
+
 @implementation SSOProviderXMLParser
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string

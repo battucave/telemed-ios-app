@@ -7,6 +7,7 @@
 //
 
 #import "ChatMessageModel.h"
+#import "ChatParticipantModel.h"
 #import "ChatMessageXMLParser.h"
 
 @interface ChatMessageModel()
