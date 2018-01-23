@@ -23,18 +23,18 @@
 @property (nonatomic) MessageEventModel *messageEventModel;
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonPhoneNumber;
+@property (weak, nonatomic) IBOutlet UIButton *buttonSend;
 @property (weak, nonatomic) IBOutlet UILabel *labelAccountName;
 @property (weak, nonatomic) IBOutlet UILabel *labelAccountPublicKey;
 @property (weak, nonatomic) IBOutlet UILabel *labelDate;
 @property (weak, nonatomic) IBOutlet UILabel *labelName;
-@property (weak, nonatomic) IBOutlet UIButton *buttonPhoneNumber;
 @property (weak, nonatomic) IBOutlet UILabel *labelTime;
-@property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
-
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
 @property (weak, nonatomic) IBOutlet UITableView *tableComments;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewComment;
-@property (weak, nonatomic) IBOutlet UIButton *buttonSend;
+@property (weak, nonatomic) IBOutlet UIView *viewAccountContainer;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelAccountNameHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelNameHeight;
@@ -101,20 +101,6 @@
 	{
 		[self setMessageDetails];
 	}
-	
-	// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
-	[self.labelAccountName layoutIfNeeded];
-	[self.labelName layoutIfNeeded];
-	[self.textViewMessage layoutIfNeeded];
-	
-	// Auto size Label Account Name, Label Name, and Text View Message height to their contents
-	CGSize newAccountNameSize = [self.labelAccountName sizeThatFits:CGSizeMake(self.labelAccountName.frame.size.width, MAXFLOAT)];
-	CGSize newNameSize = [self.labelName sizeThatFits:CGSizeMake(self.labelName.frame.size.width, MAXFLOAT)];
-	CGSize newMessageSize = [self.textViewMessage sizeThatFits:CGSizeMake(self.textViewMessage.frame.size.width, MAXFLOAT)];
-	
-	[self.constraintLabelAccountNameHeight setConstant:newAccountNameSize.height];
-	[self.constraintLabelNameHeight setConstant:newNameSize.height];
-	[self.constraintTextViewMessageHeight setConstant:newMessageSize.height];
 	
 	// Load Message Events
 	[self.messageEventModel getMessageEventsForMessageID:self.message.MessageID];
@@ -495,7 +481,7 @@
 
 - (void)setMessageDetails
 {
-	// Set Message Name, Phone Number, and Message
+	// Set Name, Phone Number, Message, Account Name, and Account Number
 	[self.labelName setText:self.message.SenderName];
 	[self.buttonPhoneNumber setTitle:self.message.SenderContact forState:UIControlStateNormal];
 	[self.textViewMessage setText:self.message.FormattedMessageText];
@@ -534,9 +520,7 @@
 
 - (void)setSentMessageDetails
 {
-	NSLog(@"Set Sent Message Details");
-	
-	// Set Message Name, Phone Number, and Message
+	// Set Name, Phone Number, and Message
 	[self.labelName setText:[self.message.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
 	[self.buttonPhoneNumber setTitle:@"" forState:UIControlStateNormal];
 	[self.textViewMessage setText:self.message.FormattedMessageText];
@@ -564,6 +548,10 @@
 	
 	[self.labelDate setText:date];
 	[self.labelTime setText:time];
+	
+	// Hide Account Name and Number
+	[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.viewAccountContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0]];
+	[self.viewAccountContainer setHidden:YES];
 }
 
 // Scroll to bottom of Scroll View
