@@ -34,7 +34,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
 @property (weak, nonatomic) IBOutlet UITableView *tableComments;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewComment;
-@property (weak, nonatomic) IBOutlet UIView *viewAccountContainer;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelAccountNameHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelNameHeight;
@@ -520,10 +519,12 @@
 
 - (void)setSentMessageDetails
 {
-	// Set Name, Phone Number, and Message
+	// Set Name, Phone Number, Message, Account Name, and Account Number
 	[self.labelName setText:[self.message.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
 	[self.buttonPhoneNumber setTitle:@"" forState:UIControlStateNormal];
 	[self.textViewMessage setText:self.message.FormattedMessageText];
+	[self.labelAccountName setText:self.message.Account.Name];
+	[self.labelAccountPublicKey setText:self.message.Account.PublicKey];
 	
 	// Disable Phone Number
 	[self.buttonPhoneNumber setEnabled:NO];
@@ -548,10 +549,6 @@
 	
 	[self.labelDate setText:date];
 	[self.labelTime setText:time];
-	
-	// Hide Account Name and Number
-	[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.viewAccountContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0]];
-	[self.viewAccountContainer setHidden:YES];
 }
 
 // Scroll to bottom of Scroll View

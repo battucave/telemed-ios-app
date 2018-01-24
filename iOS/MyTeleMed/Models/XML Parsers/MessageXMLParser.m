@@ -40,7 +40,7 @@
 		self.currentModel = @"AccountModel";
 	}
 	// ReceivedMessage is current on test server; Message is deprecated but still current on production server
-	if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
+	else if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
 	{
 		// Initialize the Message
 		self.message = [[MessageModel alloc] init];

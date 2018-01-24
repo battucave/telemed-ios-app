@@ -1705,7 +1705,6 @@
                         <outlet property="tableComments" destination="wee-fS-RCK" id="JkD-Pb-XPA"/>
                         <outlet property="textViewComment" destination="bUj-hm-VVC" id="9QM-Td-wHD"/>
                         <outlet property="textViewMessage" destination="Tij-lp-q26" id="hUi-oe-iA0"/>
-                        <outlet property="viewAccountContainer" destination="gLQ-UT-VeB" id="zJd-nq-oVB"/>
                         <outlet property="viewPriority" destination="eRo-nv-eAF" id="hwN-Hb-3pc"/>
                         <segue destination="Fgp-NY-2KQ" kind="unwind" identifier="archiveFromMessageDetailArchive" unwindAction="archiveFromMessageDetailArchive:" id="5jv-sF-fDb"/>
                     </connections>
