@@ -114,11 +114,11 @@
 {
 	id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
 	
-	if([rootViewController isKindOfClass:[UINavigationController class]])
+	if ([rootViewController isKindOfClass:[UINavigationController class]])
 	{
 		rootViewController = ((UINavigationController *) rootViewController).viewControllers.firstObject;
 	
-	} else if([rootViewController isKindOfClass:[UITabBarController class]])
+	} else if ([rootViewController isKindOfClass:[UITabBarController class]])
 	{
 		rootViewController = ((UITabBarController *) rootViewController).selectedViewController;
 	}

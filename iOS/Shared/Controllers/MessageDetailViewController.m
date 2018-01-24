@@ -36,18 +36,19 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonPhoneNumber;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSend;
-@property (weak, nonatomic) IBOutlet UILabel *labelName;
+@property (weak, nonatomic) IBOutlet UILabel *labelAccountName;
+@property (weak, nonatomic) IBOutlet UILabel *labelAccountPublicKey;
 @property (weak, nonatomic) IBOutlet UILabel *labelDate;
+@property (weak, nonatomic) IBOutlet UILabel *labelName;
 @property (weak, nonatomic) IBOutlet UILabel *labelTime;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITableView *tableComments;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewComment;
 @property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
+@property (weak, nonatomic) IBOutlet UIView *viewAccount;
 @property (weak, nonatomic) IBOutlet UIView *viewButtons;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelNameHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableCommentsHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewMessageHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewButtonsHeight;
 
 // TEMPORARY MEDTOMED (remove in phase 2)
@@ -134,16 +135,8 @@
 		}
 	#endif
 	
-	// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
-	[self.labelName layoutIfNeeded];
-	[self.textViewMessage layoutIfNeeded];
-	
-	// Auto size label name and text view message height to their contents
-	CGSize newNameSize = [self.labelName sizeThatFits:CGSizeMake(self.labelName.frame.size.width, MAXFLOAT)];
-	CGSize newMessageSize = [self.textViewMessage sizeThatFits:CGSizeMake(self.textViewMessage.frame.size.width, MAXFLOAT)];
-	
-	[self.constraintLabelNameHeight setConstant:newNameSize.height];
-	[self.constraintTextViewMessageHeight setConstant:newMessageSize.height];
+	// Set account details (if any)
+	[self setAccountDetails];
 	
 	#ifdef MYTELEMED
 		// Load message events
@@ -193,13 +186,32 @@
 	#endif
 }
 
+- (void)setAccountDetails
+{
+	// Set account name and number
+	if (self.message.Account)
+	{
+		[self.labelAccountName setText:self.message.Account.Name];
+		[self.labelAccountPublicKey setText:self.message.Account.PublicKey];
+	}
+	// Hide account information if not available
+	else
+	{
+		[self.viewAccount setHidden:YES];
+		
+		// Deactivate existing constraints on account view
+		[NSLayoutConstraint deactivateConstraints:self.viewAccount.constraints];
+		
+		// Add new 0 height constraint to account view
+		[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.viewAccount attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0]];
+	}
+}
+
 - (void)setSentMessageDetails
 {
-	NSLog(@"Set Sent Message Details");
-	
-	// Set message name, phone number, and message
-	[self.labelName setText:[self.message.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
+	// Set recipient names, phone number, and message
 	[self.buttonPhoneNumber setTitle:@"" forState:UIControlStateNormal];
+	[self.labelName setText:[self.message.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
 	[self.textViewMessage setText:self.message.FormattedMessageText];
 	
 	// Disable phone number
@@ -606,11 +618,9 @@
 
 - (void)setMessageDetails
 {
-	NSLog(@"Set Message Details");
-	
-	// Set message name, phone number, and message
-	[self.labelName setText:self.message.SenderName];
+	// Set recipient name, phone number, and message
 	[self.buttonPhoneNumber setTitle:self.message.SenderContact forState:UIControlStateNormal];
+	[self.labelName setText:self.message.SenderName];
 	[self.textViewMessage setText:self.message.FormattedMessageText];
 	
 	/*/ TESTING ONLY (used for generating screenshots)

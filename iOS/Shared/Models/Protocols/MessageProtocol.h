@@ -7,9 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AccountModel.h"
 
 @protocol MessageProtocol <NSObject>
 
+@property (nonatomic) AccountModel *Account;
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSNumber *MessageID;
 @property (nonatomic) NSString *PatientName;

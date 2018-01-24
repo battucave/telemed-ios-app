@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "AccountModel.h"
 #import "MessageProtocol.h"
 
 @protocol SentMessageDelegate <NSObject>
@@ -26,6 +27,7 @@
 
 // Any additional properties added here must also be added to MessageProtocol
 
+@property (nonatomic) AccountModel *Account;
 @property (nonatomic) NSString *FirstSent_LCL;
 @property (nonatomic) NSString *FirstSent_UTC;
 @property (nonatomic) NSString *FormattedMessageText;
