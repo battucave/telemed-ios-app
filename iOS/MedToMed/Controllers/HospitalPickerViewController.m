@@ -332,7 +332,7 @@
 	static NSString *cellIdentifier = @"HospitalCell";
 	static NSString *cellIdentifierRequested = @"HospitalRequestedCell";
 	
-	HospitalCell *cell = [self.tableHospitals dequeueReusableCellWithIdentifier:([hospital isHospitalRequested] ? cellIdentifierRequested : cellIdentifier)];
+	HospitalCell *cell = [self.tableHospitals dequeueReusableCellWithIdentifier:([hospital isRequested] ? cellIdentifierRequested : cellIdentifier)];
 	
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];

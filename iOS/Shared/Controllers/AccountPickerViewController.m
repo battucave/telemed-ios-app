@@ -373,7 +373,7 @@
 	static NSString *cellIdentifierPending = @"AccountPendingCell";
 	
 	#ifdef MEDTOMED
-		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:([account isAccountPending] ? cellIdentifierPending : cellIdentifier)];
+		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:([account isPending] ? cellIdentifierPending : cellIdentifier)];
 	
 	#else
 		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];

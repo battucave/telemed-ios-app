@@ -131,12 +131,12 @@
 	[self getAccountsWithCallback:callback parameters:parameters];
 }
 
-- (BOOL)isAccountAuthorized
+- (BOOL)isAuthorized
 {
 	return [self.MyAuthorizationStatus isEqualToString:@"Authorized"];
 }
 
-- (BOOL)isAccountPending
+- (BOOL)isPending
 {
 	return [self.MyAuthorizationStatus isEqualToString:@"Pending"];
 }

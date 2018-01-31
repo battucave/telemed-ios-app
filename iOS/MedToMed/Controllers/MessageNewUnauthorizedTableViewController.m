@@ -38,10 +38,10 @@
 			// Account is initially only pending if user has already requested a medical group (account)
 			BOOL isAccountPending = self.didRequestAccount;
 			
-			// Check if user is pending for at least one account
+			// Check whether user is pending for at least one medical group (account)
 			for (AccountModel *account in accounts)
 			{
-				if ([account isAccountPending])
+				if ([account isPending])
 				{
 					isAccountPending = YES;
 				}
@@ -78,25 +78,25 @@
 					if (success)
 					{
 						// Hospital is initially only requested if user has already requested a hospital
+						BOOL isHospitalAuthenticated = NO;
 						BOOL isHospitalRequested = self.didRequestHospital;
-						BOOL isHospitalAuthorized = NO;
 						NSString *textHeader = @"Please get started by requesting access to a Hospital using the button below.";
 						
-						// Check if user is authorized or pending for at least one hospital
+						// Check whether user is authorized or pending for at least one hospital
 						for (HospitalModel *hospital in hospitals)
 						{
-							if ([hospital isHospitalAuthorized])
+							if ([hospital isAuthenticated])
 							{
-								isHospitalAuthorized = YES;
+								isHospitalAuthenticated = YES;
 							}
-							else if ([hospital isHospitalRequested])
+							else if ([hospital isRequested])
 							{
 								isHospitalRequested = YES;
 							}
 						}
 						
 						// If user is authorized for at least one hospital, then their next step is to request a medical group (account)
-						if (isHospitalAuthorized)
+						if (isHospitalAuthenticated)
 						{
 							textHeader = @"Please request access to a Medical Group using the button below.";
 						}
@@ -157,7 +157,7 @@
 	[self setDidRequestAccount:YES];
 }
 
-// Unwind from account request screen and update header text to show pending hospital message
+// Unwind from hospital request screen and update header text to show pending hospital message
 - (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
 {
 	[self setDidRequestHospital:YES];

@@ -30,10 +30,10 @@
 
 - (void)getHospitals;
 - (void)getHospitalsWithCallback:(void (^)(BOOL success, NSMutableArray *hospitals, NSError *error))callback;
-- (BOOL)isHospitalAdmin;
-- (BOOL)isHospitalAuthorized;
-- (BOOL)isHospitalBlocked;
-- (BOOL)isHospitalDenied;
-- (BOOL)isHospitalRequested;
+- (BOOL)isAdmin;
+- (BOOL)isAuthenticated;
+- (BOOL)isBlocked;
+- (BOOL)isDenied;
+- (BOOL)isRequested;
 
 @end

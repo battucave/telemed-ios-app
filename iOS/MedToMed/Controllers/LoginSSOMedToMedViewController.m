@@ -58,7 +58,7 @@
 					// Check if user is authorized for at least one account
 					for (AccountModel *account in accounts)
 					{
-						if ([account isAccountAuthorized])
+						if ([account isAuthorized])
 						{
 							[profile setIsAuthorized:YES];
 						}

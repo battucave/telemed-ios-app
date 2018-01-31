@@ -27,7 +27,7 @@
 @property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *PublicKey;
 @property (nonatomic) NSDictionary *TimeZone;
-@property (nonatomic) NSString *MyAuthorizationStatus; // Possible values: Unauthorized, Pending, Authorized
+@property (nonatomic) NSString *MyAuthorizationStatus; // Possible values: Authorized, Pending, Unauthorized
 
 - (void)getAccounts;
 - (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
@@ -46,8 +46,8 @@
 #ifdef MEDTOMED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID;
 - (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
-- (BOOL)isAccountAuthorized;
-- (BOOL)isAccountPending;
+- (BOOL)isAuthorized;
+- (BOOL)isPending;
 #endif
 
 @end

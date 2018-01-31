@@ -92,27 +92,27 @@
 	}];
 }
 
-- (BOOL)isHospitalAdmin
+- (BOOL)isAdmin
 {
 	return [self.MyAuthenticationStatus isEqualToString:@"Admin"];
 }
 
-- (BOOL)isHospitalAuthorized
+- (BOOL)isAuthenticated
 {
-	return ([self isHospitalAdmin] || [self.MyAuthenticationStatus isEqualToString:@"OK"]);
+	return ([self isAdmin] || [self.MyAuthenticationStatus isEqualToString:@"OK"]);
 }
 
-- (BOOL)isHospitalBlocked
+- (BOOL)isBlocked
 {
 	return [self.MyAuthenticationStatus isEqualToString:@"Blocked"];
 }
 
-- (BOOL)isHospitalDenied
+- (BOOL)isDenied
 {
 	return [self.MyAuthenticationStatus isEqualToString:@"Denied"];
 }
 
-- (BOOL)isHospitalRequested
+- (BOOL)isRequested
 {
 	return [self.MyAuthenticationStatus isEqualToString:@"Requested"];
 }
