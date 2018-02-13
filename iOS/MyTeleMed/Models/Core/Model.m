@@ -7,10 +7,16 @@
 //
 
 #import "Model.h"
-//#import "AppDelegate.h"
 #import "TeleMedHTTPRequestOperationManager.h"
+#import "CustomAlertView.h"
 #import "ErrorAlertController.h"
 #import "GenericErrorXMLParser.h"
+
+@interface Model ()
+
+@property (nonatomic) CustomAlertView *activityIndicatorView;
+
+@end
 
 @implementation Model
 
@@ -34,6 +40,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
+		/*/ NEED ADDITIONAL TESTING - A delay is required between when indicator is hidden and screen animations can occur (i.e. go to another screen)
 		// Initialize activity indicator
 		UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 		UILabel *labelMessage = [[UILabel alloc] init];
@@ -61,7 +68,14 @@
 		[loadingAlertController.view addConstraints:[constraintsVertical arrayByAddingObjectsFromArray:constraintsHorizontal]];
 		
 		// Show activity indicator
-		[[self getRootViewController] presentViewController:loadingAlertController animated:YES completion:nil];
+		[[self getRootViewController] presentViewController:loadingAlertController animated:YES completion:nil];*/
+		
+		// Deprecated - Use custom alert view until additional testing completed for new activity indicator
+		if (self.activityIndicatorView == nil)
+		{
+			[self setActivityIndicatorView:[[CustomAlertView alloc] init]];
+			[self.activityIndicatorView showWithDialog:message];
+		}
 	});
 }
 
@@ -69,7 +83,16 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[[self getRootViewController] dismissViewControllerAnimated:YES completion:nil];
+		/*/ NEED ADDITIONAL TESTING - A delay is required between when indicator is hidden and screen animations can occur (i.e. go to another screen)
+		[[self getRootViewController] dismissViewControllerAnimated:YES completion:nil];*/
+		
+		// Deprecated - Use custom alert view until additional testing completed for new activity indicator
+		if (self.activityIndicatorView != nil)
+		{
+			[self.activityIndicatorView close];
+			
+			self.activityIndicatorView = nil;
+		}
 	});
 }
 

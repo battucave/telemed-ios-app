@@ -115,6 +115,7 @@
 		E21AE0AD1D24145800EA13E4 /* ChatMessagesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21AE0AC1D24145800EA13E4 /* ChatMessagesTableViewController.m */; };
 		E21C14691D33E2240025B6ED /* OnePixelLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C14681D33E2240025B6ED /* OnePixelLayoutConstraint.m */; };
 		E21EC5D11CE37C880027AA14 /* AccountPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */; };
+		E2251E7E20335AE500D17BA6 /* CustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2251E7C20335AE400D17BA6 /* CustomAlertView.m */; };
 		E232D7021E675E6200B797E1 /* button-Navigation-ChatMessages.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D6FF1E675E6200B797E1 /* button-Navigation-ChatMessages.png */; };
 		E232D7031E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7001E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png */; };
 		E232D7041E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */; };
@@ -503,6 +504,8 @@
 		E21EC5CF1CE37C880027AA14 /* AccountPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountPickerViewController.h; sourceTree = "<group>"; };
 		E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountPickerViewController.m; sourceTree = "<group>"; };
 		E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedβ.entitlements"; sourceTree = "<group>"; };
+		E2251E7C20335AE400D17BA6 /* CustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAlertView.m; sourceTree = "<group>"; };
+		E2251E7D20335AE400D17BA6 /* CustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAlertView.h; sourceTree = "<group>"; };
 		E232D6FF1E675E6200B797E1 /* button-Navigation-ChatMessages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages.png"; sourceTree = "<group>"; };
 		E232D7001E675E6200B797E1 /* button-Navigation-ChatMessages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@2x.png"; sourceTree = "<group>"; };
 		E232D7011E675E6200B797E1 /* button-Navigation-ChatMessages@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ChatMessages@3x.png"; sourceTree = "<group>"; };
@@ -1021,6 +1024,8 @@
 			children = (
 				E270ED371B1758C900DD43B8 /* AFNetworking */,
 				E2ECFB601B3471C00024D970 /* AFNetworking HTTP Managers */,
+				E2251E7D20335AE400D17BA6 /* CustomAlertView.h */,
+				E2251E7C20335AE400D17BA6 /* CustomAlertView.m */,
 				28EF16101811D5D600889D2A /* ELCUIApplication.h */,
 				28EF16111811D5D600889D2A /* ELCUIApplication.m */,
 				283710CF17F9FD1D00A25053 /* KeychainItemWrapper.h */,
@@ -1871,6 +1876,7 @@
 				E2CDEFAB1D25753400728F1A /* ChatMessageModel.m in Sources */,
 				E270ED6C1B1758C900DD43B8 /* AFURLResponseSerialization.m in Sources */,
 				E2E7F6F5200E4AAC00648D61 /* NSMutableString+XML.m in Sources */,
+				E2251E7E20335AE500D17BA6 /* CustomAlertView.m in Sources */,
 				28EAB9EA194B585100903772 /* HelpViewController.m in Sources */,
 				E27B85371B14D12900AD50C6 /* MyStatusXMLParser.m in Sources */,
 				E27B84E81B14B96A00AD50C6 /* AuthenticationModel.m in Sources */,
