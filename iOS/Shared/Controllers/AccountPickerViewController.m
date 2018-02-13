@@ -394,7 +394,7 @@
 		[cell.labelAccountNumber setText:@"Medical Group Number:"];
 	#endif
 	
-	// MedToMed - Hide authorization pending label if account is not pending status
+	// MedToMed - Hide authorization pending label if account is not pending
 	// MyTeleMed - Always hide authorization pending label
 	#ifdef MEDTOMED
 	if (! [account isPending])
