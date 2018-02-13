@@ -192,10 +192,10 @@
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Create Interval value (Comment setting does not include Interval)
+	// Create Interval value (Chat and Comment settings do not include Interval)
 	NSString *interval;
 	
-	if ([name isEqualToString:@"comment"] || settings.Interval == nil)
+	if ([name isEqualToString:@"chat"] || [name isEqualToString:@"comment"] || settings.Interval == nil)
 	{
 		interval = @"<Interval i:nil=\"true\" />";
 	}

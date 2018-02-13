@@ -19,9 +19,9 @@
 
 @interface AccountPickerViewController ()
 
-@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic) IBOutlet UITableView *tableAccounts;
+@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
 @property (nonatomic, strong) UISearchController *searchController;
 
@@ -190,6 +190,7 @@
 		{
 			predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@ OR MyAuthorizationStatus = %@", @"Authorized", @"Pending"];
 		}
+	
 		accounts = [[accounts filteredArrayUsingPredicate:predicate] mutableCopy];
 	#endif
 	
@@ -370,14 +371,7 @@
 	}
 	
 	static NSString *cellIdentifier = @"AccountCell";
-	static NSString *cellIdentifierPending = @"AccountPendingCell";
-	
-	#ifdef MEDTOMED
-		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:([account isPending] ? cellIdentifierPending : cellIdentifier)];
-	
-	#else
-		AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
-	#endif
+	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
@@ -392,11 +386,26 @@
 	// Set account name label
 	[cell.labelName setText:account.Name];
 	
-	// Set account number label (MedToMed's AccountPendingCell has no
-	if ([cell respondsToSelector:@selector(labelPublicKey)])
+	// Set account number label
+	[cell.labelPublicKey setText:account.PublicKey];
+	
+	// MedToMed - Update account number text to medical group number
+	#ifdef MEDTOMED
+		[cell.labelAccountNumber setText:@"Medical Group Number:"];
+	#endif
+	
+	// MedToMed - Hide authorization pending label if account is not pending status
+	// MyTeleMed - Always hide authorization pending label
+	#ifdef MEDTOMED
+	if (! [account isPending])
 	{
-		[cell.labelPublicKey setText:account.PublicKey];
+	#endif
+		[cell.labelAuthorizationPending setHidden:YES];
+		[cell.constraintAuthorizationPendingHeight setConstant:0.0f];
+		[cell.constraintAuthorizationPendingTopSpace setConstant:0.0f];
+	#ifdef MEDTOMED
 	}
+	#endif
 	
 	return cell;
 }
@@ -444,7 +453,7 @@
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
 	#ifdef MYTELEMED
-		// If using SettingsPreferredAccountPicker view from storyboard
+		// If selecting preferred account
 		if (self.shouldSetPreferredAccount)
 		{
 			// Save preferred account to server
@@ -453,7 +462,7 @@
 			[preferredAccountModel setDelegate:self];
 			[preferredAccountModel savePreferredAccount:self.selectedAccount];
 		}
-		// If using MessageNewAccountPicker view from storyboard
+		// If selecting an account for new message
 		else
 		{
 			// Go to MessageRecipientPickerTableViewController

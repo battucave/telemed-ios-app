@@ -910,10 +910,10 @@
             </objects>
             <point key="canvasLocation" x="2448.8000000000002" y="1676.311844077961"/>
         </scene>
-        <!--MessageNewAccountPicker-->
+        <!--AccountPicker-->
         <scene sceneID="k6B-SO-K4Q">
             <objects>
-                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="MessageNewAccountPicker" id="71D-tY-nCP" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="AccountPicker" id="71D-tY-nCP" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gY5-7U-Lgk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2449" y="2042"/>
@@ -1856,11 +1856,11 @@
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="UlW-eW-Gmn"/>
+        <segue reference="GBe-0v-zRW"/>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="v49-7h-3me"/>
         <segue reference="FEU-cP-WQX"/>
-        <segue reference="6bW-Sj-6zP"/>
+        <segue reference="I95-64-Mdk"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>
 </document>

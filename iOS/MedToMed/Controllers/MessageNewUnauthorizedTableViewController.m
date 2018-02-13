@@ -50,23 +50,8 @@
 			// If user is pending for at least one medical group (account), then their next step is to wait for approval
 			if (isAccountPending)
 			{
-				// Update header text and resize its frame in main thread
-				dispatch_async(dispatch_get_main_queue(), ^
-				{
-					UITableViewHeaderFooterView *viewHeader = [self.tableView headerViewForSection:0];
-					
-					[UIView setAnimationsEnabled:NO];
-					[self.tableView beginUpdates];
-					
-					[viewHeader.textLabel setText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval.", self.textDefaultHeader]];
-					[viewHeader sizeToFit];
-					
-					// Store view header's height to use in heightForHeaderInSection
-					[self setHeaderHeight:viewHeader.frame.size.height];
-			
-					[self.tableView endUpdates];
-					[UIView setAnimationsEnabled:YES];
-				});
+				// Update header text
+				[self setHeaderText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval.", self.textDefaultHeader]];
 			}
 			// Load user's hospitals
 			else
@@ -106,23 +91,8 @@
 							textHeader = @"Your requested Hospital is currently pending approval.";
 						}
 						
-						// Update header text and resize its frame in main thread
-						dispatch_async(dispatch_get_main_queue(), ^
-						{
-							UITableViewHeaderFooterView *viewHeader = [self.tableView headerViewForSection:0];
-						
-							[UIView setAnimationsEnabled:NO];
-							[self.tableView beginUpdates];
-							
-							[viewHeader.textLabel setText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, textHeader]];
-							[viewHeader sizeToFit];
-							
-							// Store view header's height to use in heightForHeaderInSection
-							[self setHeaderHeight:viewHeader.frame.size.height];
-							
-							[self.tableView endUpdates];
-							[UIView setAnimationsEnabled:YES];
-						});
+						// Update header text
+						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, textHeader]];
 					}
 				}];
 			}
@@ -161,6 +131,27 @@
 - (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
 {
 	[self setDidRequestHospital:YES];
+}
+
+- (void)setHeaderText:(NSString *)textHeader
+{
+	// Update header text and resize its frame in main thread
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		UITableViewHeaderFooterView *viewHeader = [self.tableView headerViewForSection:0];
+	
+		[UIView setAnimationsEnabled:NO];
+		[self.tableView beginUpdates];
+		
+		[viewHeader.textLabel setText:textHeader];
+		[viewHeader sizeToFit];
+		
+		// Store view header's height to use in heightForHeaderInSection
+		[self setHeaderHeight:viewHeader.frame.size.height];
+		
+		[self.tableView endUpdates];
+		[UIView setAnimationsEnabled:YES];
+	});
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

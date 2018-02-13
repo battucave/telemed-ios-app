@@ -16,6 +16,7 @@
 #endif
 
 #ifdef MEDTOMED
+	#import "HospitalPickerViewController.h"
 	#import "UserProfileModel.h"
 #endif
 
@@ -201,13 +202,21 @@
 	
 	#ifdef MYTELEMED
 		// Embedded table view controller inside container
-		if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
+		else if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
 		{
 			SettingsNotificationsTableViewController *settingsNotificationsTableViewController = segue.destinationViewController;
 			NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
 			
 			// Set notification settings type
 			[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
+		}
+	
+	#elif defined MEDTOMED
+		// Update title of HospitalsPickerViewController
+		else if ([segue.identifier isEqualToString:@"showHospitalPickerFromSettings"]) {
+			HospitalPickerViewController *hospitalPickerViewController = segue.destinationViewController;
+			
+			[hospitalPickerViewController setTitle:@"My Hospitals"];
 		}
 	#endif
 }
