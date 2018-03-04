@@ -24,10 +24,11 @@
 @property (weak) id delegate;
 
 @property (nonatomic) NSNumber *ID;
+@property (nonatomic) NSString *DID; // MedToMed only - Phone number to call TeleMed with
 @property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *PublicKey;
-@property (nonatomic) NSDictionary *TimeZone;
-@property (nonatomic) NSString *MyAuthorizationStatus; // Possible values: Authorized, Pending, Unauthorized
+@property (nonatomic) NSDictionary *TimeZone; // MyTeleMed only
+@property (nonatomic) NSString *MyAuthorizationStatus; // MedToMed only - Possible values: Authorized, Pending, Unauthorized
 
 - (void)getAccounts;
 - (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;

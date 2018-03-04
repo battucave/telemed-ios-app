@@ -204,7 +204,6 @@
 		E25036BC1FBB88F400099C7E /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED451B1758C900DD43B8 /* UIRefreshControl+AFNetworking.m */; };
 		E25036BD1FBB88F400099C7E /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */; };
 		E25036BE1FBB88F400099C7E /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3C1B1758C900DD43B8 /* AFSecurityPolicy.m */; };
-		E25036C01FBB88F400099C7E /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */; };
 		E25036C21FBB88F400099C7E /* CDMAVoiceDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */; };
 		E25036C71FBB88F400099C7E /* TeleMedHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */; };
 		E25036C81FBB88F400099C7E /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED461B1758C900DD43B8 /* UIWebView+AFNetworking.m */; };
@@ -493,6 +492,7 @@
 		E2D567E41CDB85B80054FD3F /* button-Cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677D1CDB85B80054FD3F /* button-Cancel@2x.png */; };
 		E2D567E51CDB85B80054FD3F /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677E1CDB85B80054FD3F /* logo.png */; };
 		E2D83FB51C761502008D26A8 /* CDMAVoiceDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */; };
+		E2DCFD95204C596D00D2C899 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DCFD94204C596D00D2C899 /* ContactViewController.m */; };
 		E2E323D61D2F1DC000646201 /* UIViewController+NotificationTonesFix.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */; };
 		E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */; };
 		E2E7F6FC200E648F00648D61 /* NSString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6FA200E648F00648D61 /* NSString+XML.m */; };
@@ -989,6 +989,8 @@
 		E2D5677E1CDB85B80054FD3F /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		E2D83FB31C761502008D26A8 /* CDMAVoiceDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDMAVoiceDataViewController.h; sourceTree = "<group>"; };
 		E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDMAVoiceDataViewController.m; sourceTree = "<group>"; };
+		E2DCFD93204C596C00D2C899 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		E2DCFD94204C596D00D2C899 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NotificationTonesFix.h"; sourceTree = "<group>"; };
 		E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NotificationTonesFix.m"; sourceTree = "<group>"; };
 		E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+XML.m"; sourceTree = "<group>"; };
@@ -1274,6 +1276,8 @@
 				E2D3E85B1D23063B00746265 /* ChatMessagesViewController.m */,
 				E2D5670F1CD95C500054FD3F /* ContactMessageViewController.h */,
 				E2D567101CD95C500054FD3F /* ContactMessageViewController.m */,
+				28CCCD8B17F535DD0093CEE2 /* ContactViewController.h */,
+				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
 				E211D59D1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.h */,
 				E211D59E1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m */,
 				28A8DA3F182BDEBC00C9DB08 /* MessageForwardViewController.h */,
@@ -1557,8 +1561,6 @@
 				E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */,
 				E2D83FB31C761502008D26A8 /* CDMAVoiceDataViewController.h */,
 				E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */,
-				28CCCD8B17F535DD0093CEE2 /* ContactViewController.h */,
-				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
 				E2964B451E675860002FF97B /* ErrorAlertController.h */,
 				E2964B461E675860002FF97B /* ErrorAlertController.m */,
 				28990CE9194F3A7E009BA9E0 /* HelpUserGuideViewController.h */,
@@ -1646,6 +1648,8 @@
 				E23A4F461FC3273A00DC899D /* AccountNewViewController.m */,
 				E2CAB4451FE9D41100202CCD /* AccountRequestTableViewController.h */,
 				E2CAB4461FE9D41100202CCD /* AccountRequestTableViewController.m */,
+				E2DCFD93204C596C00D2C899 /* ContactViewController.h */,
+				E2DCFD94204C596D00D2C899 /* ContactViewController.m */,
 				E24A44391FCE181A00A06EE8 /* HospitalPickerViewController.h */,
 				E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */,
 				E2CAB4421FE9B49A00202CCD /* HospitalRequestTableViewController.h */,
@@ -2537,10 +2541,10 @@
 				E25036BC1FBB88F400099C7E /* UIRefreshControl+AFNetworking.m in Sources */,
 				E25036BD1FBB88F400099C7E /* AFHTTPRequestOperationManager.m in Sources */,
 				E25036BE1FBB88F400099C7E /* AFSecurityPolicy.m in Sources */,
-				E25036C01FBB88F400099C7E /* ContactViewController.m in Sources */,
 				E25036C21FBB88F400099C7E /* CDMAVoiceDataViewController.m in Sources */,
 				E25036C71FBB88F400099C7E /* TeleMedHTTPRequestOperationManager.m in Sources */,
 				E25036C81FBB88F400099C7E /* UIWebView+AFNetworking.m in Sources */,
+				E2DCFD95204C596D00D2C899 /* ContactViewController.m in Sources */,
 				E25036CC1FBB88F400099C7E /* AuthenticationXMLParser.m in Sources */,
 				E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */,
 				E2CAB4441FE9B49A00202CCD /* HospitalRequestTableViewController.m in Sources */,

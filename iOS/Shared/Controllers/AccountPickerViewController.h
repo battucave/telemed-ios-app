@@ -20,6 +20,7 @@
 	@property (nonatomic) BOOL shouldSetPreferredAccount;
 
 #elif defined MEDTOMED
+	@property (nonatomic) BOOL shouldCallAccount;
 	@property (nonatomic) BOOL shouldSelectAccount;
 #endif
 

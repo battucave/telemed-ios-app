@@ -181,11 +181,11 @@
 		NSPredicate *predicate;
 	
 		// When selecting medical group (account) for new message, only show authorized medical groups
-		if (self.shouldSelectAccount)
+		if (self.shouldSelectAccount && ! self.shouldCallAccount)
 		{
 		 	predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@", @"Authorized"];
 		}
-		// When viewing "My Medical Groups", show authorized and pending medical groups
+		// Otherwise show both authorized and pending medical groups
 		else
 		{
 			predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@ OR MyAuthorizationStatus = %@", @"Authorized", @"Pending"];
@@ -334,6 +334,34 @@
 	return UITableViewAutomaticDimension;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+	// MedToMed - Only show a header when calling TeleMed
+	#ifdef MEDTOMED
+		if (self.shouldCallAccount)
+		{
+			return 36.0f;
+		}
+	#endif
+	
+	return 0.0f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	// MedToMed - Only show a header when calling TeleMed
+	#ifdef MEDTOMED
+		if (self.shouldCallAccount)
+		{
+			static NSString *cellIdentifier = @"AccountHeader";
+			
+			return [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		}
+	#endif
+	
+	return nil;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if ([self.accounts count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] == 0))
@@ -449,10 +477,10 @@
 		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
 	}
 	
-	// Add checkmark of selected account
-	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-	
 	#ifdef MYTELEMED
+		// Add checkmark of selected account
+		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+	
 		// If selecting preferred account
 		if (self.shouldSetPreferredAccount)
 		{
@@ -470,7 +498,52 @@
 		}
 	
 	#elif MEDTOMED
-		[self performSegueWithIdentifier:@"setAccount" sender:self];
+		if (self.shouldCallAccount) {
+			NSString *callUnavailableMessage = @"";
+			
+			// Verify that selected account has a phone number
+			if (self.selectedAccount.DID != nil && ! [self.selectedAccount.DID isEqualToString:@""])
+			{
+				// Use phone dialer to make call. Tel works same as telprompt in iOS 10.3+
+				NSURL *urlCallTeleMed = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@", self.selectedAccount.DID]];
+
+				// Verify that device can make phone calls
+				if ([[UIApplication sharedApplication] canOpenURL:urlCallTeleMed])
+				{
+					[[UIApplication sharedApplication] openURL:urlCallTeleMed];
+				}
+				else
+				{
+					callUnavailableMessage = @"Telephone service is unavailable.";
+				}
+			
+			} else {
+				callUnavailableMessage = [NSString stringWithFormat:@"This %@ has no phone number information. Please select another %@ to call about.", self.textAccount, self.textAccount];
+			}
+			
+			if (! [callUnavailableMessage isEqualToString:@""])
+			{
+				UIAlertController *callUnavailableAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:callUnavailableMessage preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+			
+				[callUnavailableAlertController addAction:actionOK];
+			
+				// PreferredAction only supported in 9.0+
+				if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
+				{
+					[callUnavailableAlertController setPreferredAction:actionOK];
+				}
+			
+				// Show Alert
+				[self presentViewController:callUnavailableAlertController animated:YES completion:nil];
+			}
+		
+		} else {
+			// Add checkmark of selected account
+			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+
+			[self performSegueWithIdentifier:@"setAccount" sender:self];
+		}
 	#endif
 }
 
