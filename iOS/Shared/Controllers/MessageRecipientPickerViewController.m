@@ -8,12 +8,21 @@
 
 #import "MessageRecipientPickerViewController.h"
 #import "ErrorAlertController.h"
-#import "ChatParticipantModel.h"
 #import "MessageRecipientModel.h"
+
+#ifdef MYTELEMED
+	#import "ChatParticipantModel.h"
+
+#elif defined MEDTOMED
+	#import "MessageNew2TableViewController.h"
+#endif
 
 @interface MessageRecipientPickerViewController ()
 
-@property (nonatomic) ChatParticipantModel *chatParticipantModel;
+#ifdef MYTELEMED
+	@property (nonatomic) ChatParticipantModel *chatParticipantModel;
+#endif
+
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
 @property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
@@ -22,9 +31,10 @@
 
 @property (nonatomic, strong) UISearchController *searchController;
 
-@property (nonatomic) NSMutableArray *messageRecipients;
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
+@property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) BOOL isLoaded;
+@property (nonatomic) NSMutableArray *messageRecipients;
 
 @end
 
@@ -35,8 +45,10 @@
 	[super viewDidLoad];
 	
 	// Initialize chat participant model (only used for chat)
-	[self setChatParticipantModel:[[ChatParticipantModel alloc] init]];
-	[self.chatParticipantModel setDelegate:self];
+	#ifdef MYTELEMED
+		[self setChatParticipantModel:[[ChatParticipantModel alloc] init]];
+		[self.chatParticipantModel setDelegate:self];
+	#endif
 	
 	// Initialize message recipient model (only used for new and forward message)
 	[self setMessageRecipientModel:[[MessageRecipientModel alloc] init]];
@@ -122,83 +134,103 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableMessageRecipients setTableFooterView:[[UIView alloc] init]];
 	
-	// Load list of message recipients
-	[self reloadMessageRecipients];
+	// Fix iOS 11+ issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). Only affects MedToMed at this time
+	if (self.hasSubmitted)
+	{
+		if (@available(iOS 11.0, *))
+		{
+			// Workaround the issue by completely replacing the next button with a brand new one
+			UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveMessageRecipients:)];
+			
+			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:saveButton, nil]];
+		}
+	}
+	
+	// Change save button title
+	#ifdef MEDTOMED
+		[self.navigationItem.rightBarButtonItem setTitle:@"Next"];
+	
+	// Load list of chat participants
+	#elif defined MYTELEMED
+		if ([self.messageRecipientType isEqualToString:@"Chat"])
+		{
+			[self.chatParticipantModel getChatParticipants];
+		}
+		else
+	#endif
+	
+	// Load list of message recipients for forward message
+	if ([self.messageRecipientType isEqualToString:@"Forward"])
+	{
+		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
+	}
+	// Load list of message recipients for new message
+	else
+	{
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
+	}
 }
 
-// Unwind to previous controller (chat message detail, forward message, or new message)
-- (IBAction)unwind:(id)sender
+// Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (message new 2)
+- (IBAction)saveMessageRecipients:(id)sender
 {
-	// Unwind to chat message detail
-	if ([self.messageRecipientType isEqualToString:@"Chat"])
-	{
-		if ([self.selectedMessageRecipients count] > 1)
+	[self setHasSubmitted:YES];
+	
+	#ifdef MEDTOMED
+		[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+	
+	#else
+		// Unwind to chat message detail
+		if ([self.messageRecipientType isEqualToString:@"Chat"])
 		{
-			UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+			if ([self.selectedMessageRecipients count] > 1)
+			{
+				UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+				{
+					// Disable group chat
+					self.isGroupChat = NO;
+					
+					// Execute unwind segue
+					[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+				}];
+				UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+				{
+					// Enable group chat
+					self.isGroupChat = YES;
+					
+					// Execute unwind segue
+					[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+				}];
+				
+				[groupChatAlertController addAction:actionNo];
+				[groupChatAlertController addAction:actionYes];
+				
+				// PreferredAction only supported in 9.0+
+				if ([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
+				{
+					[groupChatAlertController setPreferredAction:actionYes];
+				}
+				
+				// Show alert
+				[self presentViewController:groupChatAlertController animated:YES completion:nil];
+			}
+			else
 			{
 				// Disable group chat
 				self.isGroupChat = NO;
 				
 				// Execute unwind segue
 				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
-			}];
-			UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-			{
-				// Enable group chat
-				self.isGroupChat = YES;
-				
-				// Execute unwind segue
-				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
-			}];
-			
-			[groupChatAlertController addAction:actionNo];
-			[groupChatAlertController addAction:actionYes];
-			
-			// PreferredAction only supported in 9.0+
-			if ([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
-			{
-				[groupChatAlertController setPreferredAction:actionYes];
 			}
-			
-			// Show alert
-			[self presentViewController:groupChatAlertController animated:YES completion:nil];
 		}
+		// Unwind to forward message or new message
 		else
 		{
-			// Disable group chat
-			self.isGroupChat = NO;
-			
 			// Execute unwind segue
-			[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+			[self performSegueWithIdentifier:@"setMessageRecipients" sender:self];
 		}
-	}
-	// Unwind to forward message or new message
-	else
-	{
-		// Execute unwind segue
-		[self performSegueWithIdentifier:@"setMessageRecipients" sender:self];
-	}
-}
-
-// Get message recipients
-- (void)reloadMessageRecipients
-{
-	// Get participants for chat
-	if ([self.messageRecipientType isEqualToString:@"Chat"])
-	{
-		[self.chatParticipantModel getChatParticipants];
-	}
-	// Get recipients for forward message
-	else if ([self.messageRecipientType isEqualToString:@"Forward"])
-	{
-		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
-	}
-	// Get recipients for new message
-	else
-	{
-		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
-	}
+	#endif
 }
 
 // Return chat participants from chat participation model delegate
@@ -480,6 +512,20 @@
 	{
 		return;
 	}
+	
+	#ifdef MEDTOMED
+		// Message new 2
+		if ([segue.identifier isEqualToString:@"showMessageNew2"])
+		{
+			// Add message recipients to form values
+			[self.formValues setObject:self.selectedMessageRecipients forKey:@"MessageRecipients"];
+			
+			MessageNew2TableViewController *messageNew2TableViewController = segue.destinationViewController;
+			
+			[messageNew2TableViewController setDelegate:self];
+			[messageNew2TableViewController setFormValues:self.formValues];
+		}
+	#endif
 }
 
 - (void)didReceiveMemoryWarning
@@ -493,5 +539,18 @@
 	// Avoid superfluous warning that "Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior <UISearchController>"
 	[self.searchController.view removeFromSuperview];
 }
+
+#ifdef MEDTOMED
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Return updated form values back to new message screen (only useful if user returned to this screen from new message 2 screen)
+	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
+	{
+		[self.delegate setFormValues:self.formValues];
+	}
+}
+#endif
 
 @end

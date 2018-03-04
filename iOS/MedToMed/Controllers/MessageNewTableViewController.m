@@ -10,7 +10,7 @@
 #import "AccountPickerViewController.h"
 #import "ErrorAlertController.h"
 #import "HospitalPickerViewController.h"
-#import "MessageNew2TableViewController.h"
+#import "MessageRecipientPickerViewController.h"
 #import "AccountModel.h"
 #import "UserProfileModel.h"
 
@@ -64,13 +64,13 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from MessageNew2 screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
+	// Fix iOS 11+ issue with next button that occurs when returning back from message recipient picker screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
 	if (self.hasSubmitted)
 	{
 		if (@available(iOS 11.0, *))
 		{
 			// Workaround the issue by completely replacing the next button with a brand new one
-			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageNew2:)];
+			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageRecipientPicker:)];
 			
 			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
 		}
@@ -88,6 +88,7 @@
 			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
 			{
 				[textField setText:profile.FirstName];
+				[self textFieldDidEditingChange:textField];
 			}
 		}
 		// Callback last name
@@ -97,6 +98,7 @@
 			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
 			{
 				[textField setText:profile.LastName];
+				[self textFieldDidEditingChange:textField];
 			}
 		}
 		// Callback number
@@ -106,6 +108,7 @@
 			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
 			{
 				[textField setText:profile.PhoneNumber];
+				[self textFieldDidEditingChange:textField];
 			}
 		}
 		// Callback title
@@ -115,6 +118,7 @@
 			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
 			{
 				[textField setText:profile.JobTitlePrefix];
+				[self textFieldDidEditingChange:textField];
 			}
 		}
 	}
@@ -222,11 +226,11 @@
 	[self setHospital];
 }
 
-- (IBAction)showMessageNew2:(id)sender
+- (IBAction)showMessageRecipientPicker:(id)sender
 {
 	[self setHasSubmitted:YES];
 	
-	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+	[self performSegueWithIdentifier:@"showMessageRecipientPicker" sender:self];
 }
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
@@ -447,16 +451,20 @@
 		[hospitalPickerViewController setShouldSelectHospital:YES];
 		[hospitalPickerViewController setSelectedHospital:self.selectedHospital];
 	}
-	// Message new 2
-	else if ([segue.identifier isEqualToString:@"showMessageNew2"])
+	// Message recipient picker
+	else if ([segue.identifier isEqualToString:@"showMessageRecipientPicker"])
 	{
-		MessageNew2TableViewController *messageNew2TableViewController = segue.destinationViewController;
+		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
 		// Update form values with urgency value
 		[self.formValues setValue:(self.switchUrgencyLevel.isOn ? @"true" : @"false") forKey:@"STAT"];
 		
-		[messageNew2TableViewController setDelegate:self];
-		[messageNew2TableViewController setFormValues:self.formValues];
+		[messageRecipientPickerViewController setDelegate:self];
+		[messageRecipientPickerViewController setFormValues:self.formValues];
+		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
+		
+		// If user returned back to this screen, then he/she may have already set message recipients so pre-select them on message recipient picker screen
+		[messageRecipientPickerViewController setSelectedMessageRecipients:(NSMutableArray *)[self.formValues objectForKey:@"MessageRecipients"]];
 	}
 }
 

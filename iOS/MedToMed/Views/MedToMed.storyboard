@@ -469,7 +469,7 @@
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="zfS-jn-zhV"/>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Next" id="5YE-9V-Wlx">
                             <connections>
-                                <action selector="showMessageNew2:" destination="UuL-n9-GMi" id="ssU-D8-jmS"/>
+                                <action selector="showMessageRecipientPicker:" destination="UuL-n9-GMi" id="ia2-58-yW5"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -496,12 +496,12 @@
                         <outletCollection property="textFields" destination="tJ2-SW-pfe" id="BB0-0V-nSr"/>
                         <outletCollection property="textFields" destination="Hpg-oN-drg" id="Thx-Xe-1aW"/>
                         <outletCollection property="textFields" destination="00T-zd-9w9" id="bQK-LW-pzh"/>
-                        <segue destination="J3R-fF-WwB" kind="show" identifier="showMessageNew2" id="9cA-wY-RfV"/>
+                        <segue destination="Nso-hm-3eS" kind="show" identifier="showMessageRecipientPicker" id="TiR-jE-OLD"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GCq-Gv-1dY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1599.2" y="-0.44977511244377816"/>
+            <point key="canvasLocation" x="1599" y="-1"/>
         </scene>
         <!--SentMessagesViewController-->
         <scene sceneID="heu-l4-oc5">
@@ -511,21 +511,21 @@
             </objects>
             <point key="canvasLocation" x="1600" y="377"/>
         </scene>
-        <!--ContactMessageViewController-->
-        <scene sceneID="3Bx-ew-XK4">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="ContactMessageViewController" id="5G2-aM-cxw" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SHM-2c-A4S" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1600" y="465"/>
-        </scene>
         <!--HelpViewController-->
         <scene sceneID="AqT-RU-JDf">
             <objects>
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="HelpViewController" id="Xza-UQ-T0N" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZcK-q4-6FM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="1256"/>
+            <point key="canvasLocation" x="1600" y="1871"/>
+        </scene>
+        <!--MessageRecipientPickerViewController-->
+        <scene sceneID="tbU-qI-VYd">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="MessageRecipientPickerViewController" id="Nso-hm-3eS" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LXU-9l-lZM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2449" y="-2"/>
         </scene>
         <!--New Message-->
         <scene sceneID="LhX-mb-nh8">
@@ -753,7 +753,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0UZ-zN-8aD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="CEW-Eo-LzX" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2450" y="0.0"/>
+            <point key="canvasLocation" x="3316" y="0.0"/>
         </scene>
         <!--New Message-->
         <scene sceneID="azh-ZU-P0L">
@@ -909,7 +909,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="2448.8000000000002" y="1676.311844077961"/>
+            <point key="canvasLocation" x="2449" y="2290"/>
         </scene>
         <!--AccountPicker-->
         <scene sceneID="k6B-SO-K4Q">
@@ -917,7 +917,7 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="AccountPicker" id="71D-tY-nCP" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gY5-7U-Lgk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2449" y="2042"/>
+            <point key="canvasLocation" x="2448" y="2656"/>
         </scene>
         <!--Side Navigation View Controller-->
         <scene sceneID="aG1-BB-mfH">
@@ -1001,7 +1001,7 @@
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
-                                                    <segue destination="T4v-Vo-WiU" kind="custom" customClass="SWRevealViewControllerSegue" id="o97-1R-vO9"/>
+                                                    <segue destination="T4v-Vo-WiU" kind="custom" identifier="showSentMessages" customClass="SWRevealViewControllerSegue" id="o97-1R-vO9"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Contact TeleMed" textLabel="Iu8-nm-Lhr" style="IBUITableViewCellStyleDefault" id="GsF-gx-vYA">
@@ -1026,7 +1026,7 @@
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
-                                                    <segue destination="5G2-aM-cxw" kind="custom" identifier="showContactMessage" customClass="SWRevealViewControllerSegue" id="nRf-qN-CUa"/>
+                                                    <segue destination="YGe-ec-Wjc" kind="custom" identifier="showContact" customClass="SWRevealViewControllerSegue" id="IMG-60-odM"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Settings" textLabel="Pdn-Pq-fCe" style="IBUITableViewCellStyleDefault" id="2ek-J5-XUM">
@@ -1368,7 +1368,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zac-Hj-oBw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1600" y="878"/>
+            <point key="canvasLocation" x="1598" y="1493"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="t3P-YY-fgX">
@@ -1387,7 +1387,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fed-oi-NVL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="850" y="878"/>
+            <point key="canvasLocation" x="849" y="1493"/>
         </scene>
         <!--Profile Details-->
         <scene sceneID="ErL-g9-Uvk">
@@ -1639,7 +1639,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rfc-kn-8c9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2450" y="878"/>
+            <point key="canvasLocation" x="2449" y="1493"/>
         </scene>
         <!--SettingsPasswordTableViewController-->
         <scene sceneID="hFP-2i-1Fx">
@@ -1647,7 +1647,7 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="SettingsPasswordTableViewController" id="BCq-GT-bRH" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r8j-Td-78P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2450" y="1256"/>
+            <point key="canvasLocation" x="2450" y="1871"/>
         </scene>
         <!--New Message-->
         <scene sceneID="CEW-Xd-fEH">
@@ -1754,7 +1754,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ohc-rB-6kC" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="VxB-tn-cic" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3316" y="1675"/>
+            <point key="canvasLocation" x="3316" y="2289"/>
         </scene>
         <!--Request Medical Group-->
         <scene sceneID="8P3-aB-XZE">
@@ -1842,11 +1842,96 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yfb-Vx-13h" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="dqO-mi-JcR" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3316" y="2356"/>
+            <point key="canvasLocation" x="3316" y="2970"/>
+        </scene>
+        <!--Contact TeleMed-->
+        <scene sceneID="2AF-hJ-vSl">
+            <objects>
+                <viewController storyboardIdentifier="ContactViewController" id="YGe-ec-Wjc" customClass="ContactViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ohb-nO-1dR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-Black" translatesAutoresizingMaskIntoConstraints="NO" id="iag-3z-JUZ">
+                                <rect key="frame" x="38" y="85" width="300" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="iag-3z-JUZ" secondAttribute="height" multiplier="4:1" id="U4a-YY-Rhe"/>
+                                    <constraint firstAttribute="width" constant="300" id="mpx-bi-a9x"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gVI-us-Jdx">
+                                <rect key="frame" x="0.0" y="300" width="375" height="1"/>
+                                <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="aB3-kC-E0A"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="if9-CY-NkO">
+                                <rect key="frame" x="156" y="199" width="62" height="82"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="82" id="9A4-TC-ggI"/>
+                                    <constraint firstAttribute="width" constant="62" id="wq7-uH-Plu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
+                                <state key="normal" title="Call" backgroundImage="button-Contact-Call.png">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="callTeleMed:" destination="YGe-ec-Wjc" eventType="touchUpInside" id="Jpp-Wl-r4N"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="iag-3z-JUZ" firstAttribute="centerX" secondItem="ohb-nO-1dR" secondAttribute="centerX" id="30w-t0-7iR"/>
+                            <constraint firstItem="gVI-us-Jdx" firstAttribute="top" secondItem="if9-CY-NkO" secondAttribute="bottom" constant="19" id="7nD-SI-qzV"/>
+                            <constraint firstItem="Yst-KS-Tam" firstAttribute="trailing" secondItem="gVI-us-Jdx" secondAttribute="trailing" id="BsS-5L-wDu"/>
+                            <constraint firstItem="iag-3z-JUZ" firstAttribute="top" secondItem="Yst-KS-Tam" secondAttribute="top" constant="21" id="OBU-kD-3AU"/>
+                            <constraint firstItem="if9-CY-NkO" firstAttribute="top" secondItem="iag-3z-JUZ" secondAttribute="bottom" constant="39" id="VhN-hf-oZe"/>
+                            <constraint firstItem="if9-CY-NkO" firstAttribute="centerX" secondItem="gVI-us-Jdx" secondAttribute="centerX" id="a7c-pB-AWu"/>
+                            <constraint firstItem="gVI-us-Jdx" firstAttribute="leading" secondItem="Yst-KS-Tam" secondAttribute="leading" id="rfa-zR-TXf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Yst-KS-Tam"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Contact TeleMed" id="Jzc-d9-5z0">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="LZP-MH-Nn0"/>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="sideNavigationButton" destination="LZP-MH-Nn0" id="wQV-EC-iVr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AeN-IS-bau" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1598" y="788"/>
+        </scene>
+        <!--Contact TeleMed-->
+        <scene sceneID="ol1-cq-oQv">
+            <objects>
+                <navigationController storyboardIdentifier="ContactTeleMedNavigationController" title="Contact TeleMed" id="bEJ-we-70L" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="K46-pp-PIR">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="YGe-ec-Wjc" kind="relationship" relationship="rootViewController" id="GC3-bw-ZW2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AGc-lv-u2s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="849" y="788"/>
         </scene>
     </scenes>
     <resources>
         <image name="Logo" width="300" height="75"/>
+        <image name="Logo-Black" width="300" height="75"/>
+        <image name="button-Contact-Call.png" width="62" height="82"/>
         <image name="button-Navigation-ContactTeleMed.png" width="27" height="23"/>
         <image name="button-Navigation-Help.png" width="56" height="23"/>
         <image name="button-Navigation-LogOut.png" width="89" height="23"/>
@@ -1857,11 +1942,12 @@
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="IMG-60-odM"/>
         <segue reference="GBe-0v-zRW"/>
         <segue reference="rpH-Mr-Mcb"/>
-        <segue reference="v49-7h-3me"/>
+        <segue reference="ojM-FY-erA"/>
         <segue reference="FEU-cP-WQX"/>
-        <segue reference="6bW-Sj-6zP"/>
+        <segue reference="I95-64-Mdk"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>
 </document>

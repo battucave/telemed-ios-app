@@ -7,6 +7,7 @@
 //
 
 #import "NewMessageModel.h"
+#import "MessageRecipientModel.h"
 
 @interface NewMessageModel ()
 
@@ -18,7 +19,7 @@
 
 - (void)sendNewMessage:(NSDictionary *)messageData withOrder:(NSArray *)sortedKeys
 {
-	NSArray *parameters = @[@"AccountID", @"CallbackFirstName", @"CallbackLastName", @"CallbackPhoneNumber", @"CallbackTitle", @"HospitalID", @"MessageText", @"PatientFirstName", @"PatientLastName", @"STAT"];
+	NSArray *parameters = @[@"AccountID", @"CallbackFirstName", @"CallbackLastName", @"CallbackPhoneNumber", @"CallbackTitle", @"HospitalID", @"MessageRecipients", @"MessageText", @"PatientFirstName", @"PatientLastName", @"STAT"];
 	
 	// Show Activity Indicator
 	[self showActivityIndicator];
@@ -32,6 +33,14 @@
 	if ([messageData objectForKey:@"CallbackTitle"])
 	{
 		callbackTitle = [NSString stringWithFormat:@"<CallbackTitle>%@</CallbackTitle>", [messageData valueForKey:@"CallbackTitle"]];
+	}
+	
+	NSMutableArray *messageRecipients = (NSMutableArray *)[messageData objectForKey:@"MessageRecipients"];
+	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
+	
+	for(MessageRecipientModel *messageRecipient in messageRecipients)
+	{
+		[xmlRecipients appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", messageRecipient.ID]];
 	}
 	
 	// Sort dictionary keys alphabetically (if custom order is required, utilize the "sortedKeys" method parameter)
@@ -51,25 +60,22 @@
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<NewMsg xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<AccountID>%@</AccountID>"
-			"%@"
 			"<CallbackFirstName>%@</CallbackFirstName>"
 			"<CallbackLastName>%@</CallbackLastName>"
 			"<CallbackPhone>%@</CallbackPhone>"
+			"%@"
 			"<HospitalID>%@</HospitalID>"
+			"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
+				"%@"
+			"</MessageRecipients>"
 			"<MessageText>%@</MessageText>"
 			"<PatientFirstName>%@</PatientFirstName>"
 			"<PatientLastName>%@</PatientLastName>"
 			"<STAT>%@</STAT>"
 		"</NewMsg>",
-		[messageData valueForKey:@"AccountID"], callbackTitle, [messageData valueForKey:@"CallbackFirstName"], [messageData valueForKey:@"CallbackLastName"], [messageData valueForKey:@"CallbackPhoneNumber"], [messageData valueForKey:@"HospitalID"], [messageText componentsJoinedByString:@"\n"], [messageData valueForKey:@"PatientFirstName"], [messageData valueForKey:@"PatientLastName"], [messageData valueForKey:@"STAT"]];
+		[messageData valueForKey:@"AccountID"], [messageData valueForKey:@"CallbackFirstName"], [messageData valueForKey:@"CallbackLastName"], [messageData valueForKey:@"CallbackPhoneNumber"], callbackTitle, [messageData valueForKey:@"HospitalID"], xmlRecipients, [messageText componentsJoinedByString:@"\n"], [messageData valueForKey:@"PatientFirstName"], [messageData valueForKey:@"PatientLastName"], [messageData valueForKey:@"STAT"]];
 	
 	NSLog(@"XML Body: %@", xmlBody);
-	
-	// TEMPORARY (remove when NewMsg web service completed)
-	[self networkRequestDidStart:nil];
-	
-	return;
-	// END TEMPORARY
 	
 	[self.operationManager POST:@"NewMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{

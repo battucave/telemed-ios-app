@@ -19,4 +19,9 @@
 @property (nonatomic) NSString *messageRecipientType;
 @property (nonatomic) BOOL isGroupChat; // Only used for chat participants
 
+#ifdef MEDTOMED
+	@property (weak) id delegate;
+	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
+#endif
+
 @end

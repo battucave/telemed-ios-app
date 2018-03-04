@@ -183,7 +183,6 @@
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
 		E25036901FBB88F400099C7E /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED521B1758C900DD43B8 /* AFNetworkActivityIndicatorManager.m */; };
-		E25036921FBB88F400099C7E /* ContactMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D567101CD95C500054FD3F /* ContactMessageViewController.m */; };
 		E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85131B14D09400AD50C6 /* GenericErrorXMLParser.m */; };
 		E25036981FBB88F400099C7E /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED4A1B1758C900DD43B8 /* UIButton+AFNetworking.m */; };
 		E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
@@ -220,7 +219,6 @@
 		E25036D91FBB88F400099C7E /* AuthenticationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */; };
 		E25036DA1FBB88F400099C7E /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED491B1758C900DD43B8 /* UIProgressView+AFNetworking.m */; };
 		E25036DB1FBB88F400099C7E /* RevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661E1618353B630071FADF /* RevealViewController.m */; };
-		E25036DF1FBB88F400099C7E /* EmailTelemedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */; };
 		E25036E01FBB88F400099C7E /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */; };
 		E25036E41FBB88F400099C7E /* HelpUserGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28990CEA194F3A7E009BA9E0 /* HelpUserGuideViewController.m */; };
 		E25036E81FBB88F400099C7E /* ELCUIApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EF16111811D5D600889D2A /* ELCUIApplication.m */; };
@@ -322,6 +320,9 @@
 		E254E3781FE2FDD700B3014F /* NewMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E254E3761FE2FDD400B3014F /* NewMessageModel.m */; };
 		E2622D0C1FC5F8B0008BCFF3 /* MessageNewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */; };
 		E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */; };
+		E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */; };
+		E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */; };
+		E270481B204C33BB005AFFFF /* MessageRecipientXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B852D1B14D0F400AD50C6 /* MessageRecipientXMLParser.m */; };
 		E270ED5F1B1758C900DD43B8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED381B1758C900DD43B8 /* AFHTTPRequestOperationManager.m */; };
 		E270ED601B1758C900DD43B8 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3A1B1758C900DD43B8 /* AFNetworkActivityLogger.m */; };
 		E270ED611B1758C900DD43B8 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = E270ED3C1B1758C900DD43B8 /* AFSecurityPolicy.m */; };
@@ -1271,6 +1272,8 @@
 				E291269D1D2C29C900154AB2 /* ChatMessageDetailViewController.m */,
 				E2D3E85A1D23063B00746265 /* ChatMessagesViewController.h */,
 				E2D3E85B1D23063B00746265 /* ChatMessagesViewController.m */,
+				E2D5670F1CD95C500054FD3F /* ContactMessageViewController.h */,
+				E2D567101CD95C500054FD3F /* ContactMessageViewController.m */,
 				E211D59D1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.h */,
 				E211D59E1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m */,
 				28A8DA3F182BDEBC00C9DB08 /* MessageForwardViewController.h */,
@@ -1279,8 +1282,6 @@
 				28BA8E911A7009800042D769 /* MessageHistoryViewController.m */,
 				28A8DA5B182C56DB00C9DB08 /* MessageNewTableViewController.h */,
 				28A8DA5C182C56DB00C9DB08 /* MessageNewTableViewController.m */,
-				28A8DA46182C3E5C00C9DB08 /* MessageRecipientPickerViewController.h */,
-				28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */,
 				28CCCD8617F518800093CEE2 /* MessagesViewController.h */,
 				28CCCD8717F518800093CEE2 /* MessagesViewController.m */,
 				0865DBFA1C63AF060028E2B2 /* MessageTeleMedViewController.h */,
@@ -1556,8 +1557,6 @@
 				E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */,
 				E2D83FB31C761502008D26A8 /* CDMAVoiceDataViewController.h */,
 				E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */,
-				E2D5670F1CD95C500054FD3F /* ContactMessageViewController.h */,
-				E2D567101CD95C500054FD3F /* ContactMessageViewController.m */,
 				28CCCD8B17F535DD0093CEE2 /* ContactViewController.h */,
 				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
 				E2964B451E675860002FF97B /* ErrorAlertController.h */,
@@ -1570,6 +1569,8 @@
 				E272B8881B0D327100A7154B /* LoginSSOViewController.m */,
 				28176C121829AB0F00801EC7 /* MessageDetailViewController.h */,
 				28176C131829AB0F00801EC7 /* MessageDetailViewController.m */,
+				28A8DA46182C3E5C00C9DB08 /* MessageRecipientPickerViewController.h */,
+				28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */,
 				E2920C921E81AB04004BEF10 /* SentMessagesViewController.h */,
 				E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */,
 				E24D45031E8948E700B36DD6 /* SettingsPasswordTableViewController.h */,
@@ -1777,14 +1778,14 @@
 				E2CDEFAA1D25753400728F1A /* ChatParticipantModel.m */,
 				E27B84EF1B14CF8000AD50C6 /* CommentModel.h */,
 				E27B84F01B14CF8000AD50C6 /* CommentModel.m */,
+				E2C9FE041CD9251D00B64D88 /* EmailTelemedModel.h */,
+				E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */,
 				E27B84F21B14CF8F00AD50C6 /* ForwardMessageModel.h */,
 				E27B84F31B14CF8F00AD50C6 /* ForwardMessageModel.m */,
 				E27B84F81B14CFB700AD50C6 /* MessageModel.h */,
 				E27B84F91B14CFB700AD50C6 /* MessageModel.m */,
 				E27B84F51B14CFAA00AD50C6 /* MessageEventModel.h */,
 				E27B84F61B14CFAA00AD50C6 /* MessageEventModel.m */,
-				E27B85011B14CFE600AD50C6 /* MessageRecipientModel.h */,
-				E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */,
 				E27B84FB1B14CFC100AD50C6 /* MyProfileModel.h */,
 				E27B84FC1B14CFC100AD50C6 /* MyProfileModel.m */,
 				E27B84FE1B14CFCB00AD50C6 /* MyStatusModel.h */,
@@ -1821,8 +1822,6 @@
 				E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */,
 				E27B852F1B14D11200AD50C6 /* MessageEventXMLParser.h */,
 				E27B85301B14D11200AD50C6 /* MessageEventXMLParser.m */,
-				E27B852C1B14D0F400AD50C6 /* MessageRecipientXMLParser.h */,
-				E27B852D1B14D0F400AD50C6 /* MessageRecipientXMLParser.m */,
 				E27B85261B14D0C100AD50C6 /* MessageXMLParser.h */,
 				E27B85271B14D0C100AD50C6 /* MessageXMLParser.m */,
 				E27B85321B14D11D00AD50C6 /* MyProfileXMLParser.h */,
@@ -1875,8 +1874,8 @@
 				E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */,
 				E27B84D61B14B96A00AD50C6 /* AuthenticationModel.h */,
 				E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */,
-				E2C9FE041CD9251D00B64D88 /* EmailTelemedModel.h */,
-				E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */,
+				E27B85011B14CFE600AD50C6 /* MessageRecipientModel.h */,
+				E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */,
 				E24D45061E8953FD00B36DD6 /* PasswordChangeModel.h */,
 				E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */,
 				E27B850D1B14D03500AD50C6 /* ScreenshotAlertModel.h */,
@@ -1918,6 +1917,8 @@
 				E270ED8A1B18F24B00DD43B8 /* AuthenticationXMLParser.m */,
 				E27B85161B14D09400AD50C6 /* GenericErrorXMLParser.h */,
 				E27B85131B14D09400AD50C6 /* GenericErrorXMLParser.m */,
+				E27B852C1B14D0F400AD50C6 /* MessageRecipientXMLParser.h */,
+				E27B852D1B14D0F400AD50C6 /* MessageRecipientXMLParser.m */,
 				E2920C981E82BC96004BEF10 /* SentMessageXMLParser.h */,
 				E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */,
 				E2ECFB5A1B33223C0024D970 /* SSOProviderXMLParser.h */,
@@ -2502,12 +2503,12 @@
 			files = (
 				E23A4F4A1FC3325C00DC899D /* LoginSSOMedToMedViewController.m in Sources */,
 				E25036901FBB88F400099C7E /* AFNetworkActivityIndicatorManager.m in Sources */,
-				E25036921FBB88F400099C7E /* ContactMessageViewController.m in Sources */,
 				E22EF07C1FD99CBC00A2E6F6 /* MessageDetailViewController.m in Sources */,
 				E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */,
 				E25036981FBB88F400099C7E /* UIButton+AFNetworking.m in Sources */,
 				E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */,
 				E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */,
+				E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */,
 				E22EF0791FD89BC100A2E6F6 /* MessagesTableViewController.m in Sources */,
 				E250369D1FBB88F400099C7E /* CoreViewController.m in Sources */,
 				E250369F1FBB88F400099C7E /* AFURLRequestSerialization.m in Sources */,
@@ -2523,6 +2524,7 @@
 				E2CD93A31FCF1411006ED66F /* HospitalXMLParser.m in Sources */,
 				E25036B21FBB88F400099C7E /* UIAlertView+AFNetworking.m in Sources */,
 				E24A44401FCE1C7C00A06EE8 /* HospitalCell.m in Sources */,
+				E270481B204C33BB005AFFFF /* MessageRecipientXMLParser.m in Sources */,
 				E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */,
 				E25036B41FBB88F400099C7E /* ScreenshotAlertModel.m in Sources */,
 				E25036B51FBB88F400099C7E /* AppDelegate.m in Sources */,
@@ -2545,6 +2547,7 @@
 				E25036CD1FBB88F400099C7E /* SSOProviderModel.m in Sources */,
 				E25036CE1FBB88F400099C7E /* KeychainItemWrapper.m in Sources */,
 				E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */,
+				E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */,
 				E25036D01FBB88F400099C7E /* main.m in Sources */,
 				E25036D11FBB88F400099C7E /* AFHTTPRequestOperation.m in Sources */,
 				E25036D31FBB88F400099C7E /* CoreTableViewController.m in Sources */,
@@ -2556,7 +2559,6 @@
 				E2C7C1BD1FC4917100E50F07 /* UserProfileModel.m in Sources */,
 				E22EF07D1FD99DE700A2E6F6 /* AutoGrowingTextView.m in Sources */,
 				E25036DB1FBB88F400099C7E /* RevealViewController.m in Sources */,
-				E25036DF1FBB88F400099C7E /* EmailTelemedModel.m in Sources */,
 				E25036E01FBB88F400099C7E /* AFNetworkActivityLogger.m in Sources */,
 				E2CD93A01FCF0D88006ED66F /* HospitalModel.m in Sources */,
 				E25036E41FBB88F400099C7E /* HelpUserGuideViewController.m in Sources */,
