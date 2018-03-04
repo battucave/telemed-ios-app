@@ -68,15 +68,15 @@
 
 - (IBAction)updateTimeout:(id)sender
 {
-	NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	if (self.switchTimeout.isOn)
 	{
-		[preferences setBool:YES forKey:@"enableTimeout"];
+		[settings setBool:YES forKey:@"enableTimeout"];
 	}
 	else
 	{
-		if ( ! [preferences boolForKey:@"timeoutAlert"])
+		if ( ! [settings boolForKey:@"timeoutAlert"])
 		{
 			UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
@@ -85,11 +85,11 @@
 			}];
 			UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 			{
-				NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+				NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 				
-				[preferences setBool:YES forKey:@"timeoutAlert"];
-				[preferences setBool:NO forKey:@"enableTimeout"];
-				[preferences synchronize];
+				[settings setBool:YES forKey:@"timeoutAlert"];
+				[settings setBool:NO forKey:@"enableTimeout"];
+				[settings synchronize];
 			}];
 		
 			[updateTimeoutAlertController addAction:actionCancel];
@@ -106,11 +106,11 @@
 		}
 		else
 		{
-			[preferences setBool:NO forKey:@"enableTimeout"];
+			[settings setBool:NO forKey:@"enableTimeout"];
 		}
 	}
 	
-	[preferences synchronize];
+	[settings synchronize];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -157,9 +157,9 @@
 	// Set timeout value
 	if (indexPath.section == 0)
 	{
-		NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[self.switchTimeout setOn:[preferences boolForKey:@"enableTimeout"]];
+		[self.switchTimeout setOn:[settings boolForKey:@"enableTimeout"]];
 	}
 	// Add version and build numbers to version cell
 	else if (indexPath.section == self.aboutTeleMedSection)

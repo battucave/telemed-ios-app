@@ -25,6 +25,25 @@
 	return sharedUserProfileInstance;
 }
 
+// Override PhoneNumber getter
+- (NSString *)PhoneNumber
+{
+	// If phone number is not already set, check User Preferences
+	if ( ! _PhoneNumber)
+	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		_PhoneNumber = [settings valueForKey:@"UserProfilePhoneNumber"];
+	}
+	
+	return _PhoneNumber ?: @"";
+}
+
+/*- (void)saveUserProfile:(NSDictionary *)values
+{
+	// Save first name, last name, email address, and job title to server
+	// Save phone number to device's standardUserDefaults as "UserProfilePhoneNumber" (see PhoneNumber getter for this model)
+}*/
+
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
 	[self.operationManager GET:@"UserProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)

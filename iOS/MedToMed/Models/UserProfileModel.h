@@ -13,12 +13,13 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
-@property (nonatomic) BOOL IsAuthorized;
-@property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) NSString *FirstName;
+@property (nonatomic) BOOL IsAuthorized;
 @property (nonatomic) NSString *JobTitlePrefix;
 @property (nonatomic) NSString *LastName;
+@property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) NSDictionary *MyTimeZone;
+@property (nonatomic) NSString *PhoneNumber;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
 + (id <ProfileProtocol>)sharedInstance;

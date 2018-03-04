@@ -12,12 +12,14 @@
 #import "HospitalPickerViewController.h"
 #import "MessageNew2TableViewController.h"
 #import "AccountModel.h"
+#import "UserProfileModel.h"
 
 @interface MessageNewTableViewController ()
 
 @property (nonatomic) AccountModel *accountModel;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellIntro;
+@property (weak, nonatomic) IBOutlet UITableViewCell *cellHospital;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelHospital;
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
@@ -29,6 +31,7 @@
 
 @property (nonatomic) NSMutableArray *accounts;
 @property (nonatomic) BOOL hasSubmitted;
+@property (nonatomic) NSMutableArray *hospitals;
 @property (nonatomic) BOOL isLoading;
 
 @end
@@ -45,6 +48,13 @@
 	
 	// Initialize form values
 	[self setFormValues:[[NSMutableDictionary alloc] init]];
+	
+	// Get list of hospitals (no need to reload these if user revisits this screen so don't put this in viewWillAppear method)
+	// Initialize hospital model
+	HospitalModel *hospitalModel = [[HospitalModel alloc] init];
+	
+	[hospitalModel setDelegate:self];
+	[hospitalModel getHospitals];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -63,6 +73,49 @@
 			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageNew2:)];
 			
 			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
+		}
+	}
+	
+	// Pre-populate callback data with data from user profile
+	UserProfileModel *profile = [UserProfileModel sharedInstance];
+	
+	for (UITextField *textField in self.textFields)
+	{
+		// Callback first name
+		if ([textField.accessibilityIdentifier isEqualToString:@"CallbackFirstName"])
+		{
+			// Verify a value hasn't already been set
+			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			{
+				[textField setText:profile.FirstName];
+			}
+		}
+		// Callback last name
+		else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackLastName"])
+		{
+			// Verify a value hasn't already been set
+			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			{
+				[textField setText:profile.LastName];
+			}
+		}
+		// Callback number
+		else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
+		{
+			// Verify a value hasn't already been set
+			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			{
+				[textField setText:profile.PhoneNumber];
+			}
+		}
+		// Callback title
+		else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"])
+		{
+			// Verify a value hasn't already been set
+			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			{
+				[textField setText:profile.JobTitlePrefix];
+			}
 		}
 	}
 }
@@ -165,6 +218,36 @@
 	// Save selected hospital
 	[self setSelectedHospital:hospitalPickerViewController.selectedHospital];
 	
+	// Update screen with selected hospital information
+	[self setHospital];
+}
+
+- (IBAction)showMessageNew2:(id)sender
+{
+	[self setHasSubmitted:YES];
+	
+	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+}
+
+- (IBAction)textFieldDidEditingChange:(UITextField *)textField
+{
+	// Remove empty value for text field's key from form values
+	if ([textField.text isEqualToString:@""])
+	{
+		[self.formValues removeObjectForKey:textField.accessibilityIdentifier];
+	}
+	// Add/update value to form values for text field's key
+	else
+	{
+		[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+	}
+	
+	// Validate form
+	[self validateForm];
+}
+
+- (void)setHospital
+{
 	// Add/update hospital id to form values
 	[self.formValues setValue:self.selectedHospital.ID forKey:@"HospitalID"];
 	
@@ -231,28 +314,30 @@
 	[self validateForm];
 }
 
-- (IBAction)showMessageNew2:(id)sender
+// Return hospitals from hospital model delegate
+- (void)updateHospitals:(NSMutableArray *)hospitals
 {
-	[self setHasSubmitted:YES];
+	// Filter and store only authenticated hospitals
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
 	
-	[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+	[self setHospitals:[[hospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	
+	// If user has exactly one hospital, then set it as the selected hospital to save user time
+	if ([self.hospitals count] == 1) {
+		[self setSelectedHospital:[hospitals objectAtIndex:0]];
+		
+		[self setHospital];
+		
+		// Prevent user from being able to go to hospital picker screen and hide the cell's disclosure indicator
+		[self.cellHospital setAccessoryType:UITableViewCellAccessoryNone];
+		[self.cellHospital setUserInteractionEnabled:NO];
+	}
 }
 
-- (IBAction)textFieldDidEditingChange:(UITextField *)textField
+// Return error from hospital model delegate
+- (void)updateHospitalsError:(NSError *)error
 {
-	// Remove empty value for text field's key from form values
-	if ([textField.text isEqualToString:@""])
-	{
-		[self.formValues removeObjectForKey:textField.accessibilityIdentifier];
-	}
-	// Add/update value to form values for text field's key
-	else
-	{
-		[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
-	}
-	
-	// Validate form
-	[self validateForm];
+	// Don't show error here - there will be another chance to load hospitals on hospital picker screen
 }
 
 // Check required fields to determine if form can continue to next page
@@ -268,7 +353,7 @@
 			// Verify that callback phone number is a valid phone number
 			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
-				if ([textField.text length] < 7)
+				if ([textField.text length] < 10)
 				{
 					isValidated = NO;
 				}

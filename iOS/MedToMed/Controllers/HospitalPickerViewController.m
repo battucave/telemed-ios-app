@@ -14,11 +14,9 @@
 
 @interface HospitalPickerViewController ()
 
-@property (nonatomic) HospitalModel *hospitalModel;
-
-@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableHospitals;
+@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
 @property (nonatomic, strong) UISearchController *searchController;
 
@@ -32,14 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-	// If hospitals were not pre-loaded (slow connection in MessageNewTableViewController), then load them here
-	if ([self.hospitals count] == 0)
-	{
-		// Initialize hospital model
-		[self setHospitalModel:[[HospitalModel alloc] init]];
-		[self.hospitalModel setDelegate:self];
-	}
 	
 	// Initialize search controller
 	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -123,10 +113,14 @@
 		[self.tableHospitals setAllowsSelection:NO];
 	}
 	
-	// Get list of hospitals
+	// Get list of hospitals if none were passed from previous controller
 	if ([self.hospitals count] == 0)
 	{
-		[self.hospitalModel getHospitals];
+		// Initialize hospital model
+		HospitalModel *hospitalModel = [[HospitalModel alloc] init];
+		
+		[hospitalModel setDelegate:self];
+		[hospitalModel getHospitals];
 	}
 	// If hospital was previously selected, scroll to it
 	else

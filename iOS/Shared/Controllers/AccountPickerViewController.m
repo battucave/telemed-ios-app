@@ -129,7 +129,7 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableAccounts setTableFooterView:[[UIView alloc] init]];
 	
-	// Get list of accounts
+	// Get list of accounts if none were passed from previous controller
 	if ([self.accounts count] == 0)
 	{
 		// Initialize account model

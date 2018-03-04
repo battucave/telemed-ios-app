@@ -43,6 +43,10 @@
 - (IBAction)saveProfile:(id)sender
 {
 	NSLog(@"Save Profile");
+	
+	// UserProfileModel *profile = [UserProfileModel sharedInstance];
+	
+	// [profile saveUserProfile:data];
 }
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)sender

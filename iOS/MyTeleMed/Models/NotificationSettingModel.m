@@ -39,44 +39,44 @@
 
 - (NotificationSettingModel *)getNotificationSettingsByName:(NSString *)name
 {
-	NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	NSString *notificationKey = [NSString stringWithFormat:@"%@Settings", name];
-	NotificationSettingModel *settings;
+	NotificationSettingModel *notificationSettings;
 	
 	// Load Notification Settings from device
-	if ([preferences objectForKey:notificationKey] != nil)
+	if ([settings objectForKey:notificationKey] != nil)
 	{
 		// In MyTeleMed versions 3.0 - 3.2, the Notification Settings were archived using a different class. Use this class as a substitute when unarchiving the object
 		[NSKeyedUnarchiver setClass:self.class forClassName:@"NotificationSettingsModel"];
 		
 		// Unarchive the Notification Settings
-		settings = (NotificationSettingModel *)[NSKeyedUnarchiver unarchiveObjectWithData:[preferences objectForKey:notificationKey]];
+		notificationSettings = (NotificationSettingModel *)[NSKeyedUnarchiver unarchiveObjectWithData:[settings objectForKey:notificationKey]];
 	}
 	
 	// If Notification Settings for type not found on device, check server for previously saved Notification Settings
-	if (settings == nil || settings.Tone == nil)
+	if (notificationSettings == nil || notificationSettings.Tone == nil)
 	{
 		// Check server for previously saved Notification Settings
 		[self getServerNotificationSettingsByName:name];
 		
-		// Return default settings
+		// Return default notification settings
 		NSArray *intervals = [[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil];
 		
-		settings = [[NotificationSettingModel alloc] init];
+		notificationSettings = [[NotificationSettingModel alloc] init];
 		
-		[settings setEnabled:YES];
-		[settings setIsReminderOn:YES];
+		[notificationSettings setEnabled:YES];
+		[notificationSettings setIsReminderOn:YES];
 		
-		[settings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
+		[notificationSettings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
 		
 		// Intervals should always exist
 		if ([intervals count] > 0)
 		{
-			[settings setInterval:[NSNumber numberWithInt:(int)[[intervals objectAtIndex:0] integerValue]]];
+			[notificationSettings setInterval:[NSNumber numberWithInt:(int)[[intervals objectAtIndex:0] integerValue]]];
 		}
 	}
 	
-	return settings;
+	return notificationSettings;
 }
 
 // Not currently used (only here to provide a method for viewing all notification settings)
@@ -121,7 +121,7 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
 			// Set isReminderOn
 			[self setIsReminderOn:([self.Interval integerValue] > 0)];
@@ -149,8 +149,8 @@
 			}*/
 			
 			// Save Notification Settings for type to device
-			[preferences setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
-			[preferences synchronize];
+			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
+			[settings synchronize];
 			
 			if ([self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
 			{
@@ -184,7 +184,7 @@
 	}];
 }
 
-- (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)settings
+- (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings
 {
 	// Show Activity Indicator
 	[self showActivityIndicator];
@@ -195,13 +195,13 @@
 	// Create Interval value (Chat and Comment settings do not include Interval)
 	NSString *interval;
 	
-	if ([name isEqualToString:@"chat"] || [name isEqualToString:@"comment"] || settings.Interval == nil)
+	if ([name isEqualToString:@"chat"] || [name isEqualToString:@"comment"] || notificationSettings.Interval == nil)
 	{
 		interval = @"<Interval i:nil=\"true\" />";
 	}
 	else
 	{
-		interval = [NSString stringWithFormat:@"<Interval>%@</Interval>", (settings.isReminderOn ? settings.Interval : @"0")];
+		interval = [NSString stringWithFormat:@"<Interval>%@</Interval>", (notificationSettings.isReminderOn ? notificationSettings.Interval : @"0")];
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -211,7 +211,7 @@
 			"<Name>%@</Name>"
 			"<Tone>%@</Tone>"
 		"</NotificationSetting>",
-		(settings.Enabled ? @"true" : @"false"), interval, [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString], settings.Tone];
+		(notificationSettings.Enabled ? @"true" : @"false"), interval, [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString], notificationSettings.Tone];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 		
@@ -224,18 +224,18 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
 			// Save Notification Settings for type to device
-			[preferences setObject:[NSKeyedArchiver archivedDataWithRootObject:settings] forKey:notificationKey];
-			[preferences synchronize];
+			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:notificationSettings] forKey:notificationKey];
+			[settings synchronize];
 			
-			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], settings.Tone);
+			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], notificationSettings.Tone);
 			
 			// Priority Message Notification Settings removed in version 3.85. If saving Notification Settings for Normal Messages, then also save them for Priority Messages
 			if ([name isEqualToString:@"normal"])
 			{
-				[self saveNotificationSettingsByName:@"priority" settings:settings];
+				[self saveNotificationSettingsByName:@"priority" settings:notificationSettings];
 			}
 			// Not currently used
 			else if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
@@ -251,7 +251,7 @@
 			[self showError:error withCallback:^(void)
 			{
 				// Include callback to retry the request
-				[self saveNotificationSettingsByName:name settings:settings];
+				[self saveNotificationSettingsByName:name settings:notificationSettings];
 			}];
 			
 			// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
@@ -278,7 +278,7 @@
 		[self showError:error withCallback:^(void)
 		{
 			// Include callback to retry the request
-			[self saveNotificationSettingsByName:name settings:settings];
+			[self saveNotificationSettingsByName:name settings:notificationSettings];
 		}];
 		
 		// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
