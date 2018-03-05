@@ -1,6 +1,6 @@
 //
 //  AccountModel.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 5/26/15.
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
@@ -27,17 +27,19 @@
 			NSMutableArray *accounts = [parser accounts];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
-			for (int i = 0; i < 5; i++)
-			{
-				AccountModel *account = [[AccountModel alloc] init];
+			#ifdef MEDTOMED
+				for (int i = 0; i < 5; i++)
+				{
+					AccountModel *account = [[AccountModel alloc] init];
 			 
-				[account setID:[NSNumber numberWithInt:i]];
-				[account setMyAuthorizationStatus:@"Pending"]; // Unauthorized, Pending, Authorized
-				[account setName:[NSString stringWithFormat:@"Account %d", i]];
-				[account setPublicKey:[NSString stringWithFormat:@"%d", i]];
-				
-				[accounts addObject:account];
-			}
+					[account setID:[NSNumber numberWithInt:i]];
+					[account setMyAuthorizationStatus:@"Authorized"]; // Unauthorized, Pending, Authorized
+					[account setName:[NSString stringWithFormat:@"Account %d", i]];
+					[account setPublicKey:[NSString stringWithFormat:@"%d", i]];
+			 
+					[accounts addObject:account];
+				}
+			#endif
 			// END TESTING ONLY */
 			
 			// Handle success via callback block

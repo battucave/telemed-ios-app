@@ -54,6 +54,13 @@
 		[self.textViewAdditionalInformation setTextColor:[UIColor blackColor]];
 		[self.textViewAdditionalInformation setFont:[UIFont systemFontOfSize:14.0]];
 	}
+	
+	// Force user interface changes to take effect
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView beginUpdates];
+		[self.tableView endUpdates];
+	});
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -97,31 +104,7 @@
 	}
 }
 
-// Return pending from NewMessageModel delegate
-- (void)sendMessagePending
-{
-	// TEMPORARY (remove when NewMsg web service completed)
-	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Send Message Incomplete" message:@"Web services are incomplete for sending messages." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		// Unwind to first screen of message new form (assume success)
-		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
-	}];
-
-	[successAlertController addAction:actionOK];
-
-	// PreferredAction only supported in 9.0+
-	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[successAlertController setPreferredAction:actionOK];
-	}
-
-	// Show Alert
-	[self presentViewController:successAlertController animated:YES completion:nil];
-	// END TEMPORARY
-}
-
-// Return success from NewMessageModel delegate (this should be called when NewMsg web service completed)
+// Return success from NewMessageModel delegate (this logic should only be called after web service completes to avoid issues)
 - (void)sendMessageSuccess
 {
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
@@ -206,12 +189,6 @@
 	}
 	
 	[textView resignFirstResponder];
-}
-
-- (void)didReceiveMemoryWarning
-{
-	[super didReceiveMemoryWarning];
-	// Dispose of any resources that can be recreated.
 }
 
 @end

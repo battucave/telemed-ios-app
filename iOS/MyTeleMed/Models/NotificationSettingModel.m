@@ -8,6 +8,7 @@
 
 #import "NotificationSettingModel.h"
 #import "NotificationSettingXMLParser.h"
+#import "NSString+XML.h"
 
 @interface NotificationSettingModel ()
 
@@ -211,7 +212,7 @@
 			"<Name>%@</Name>"
 			"<Tone>%@</Tone>"
 		"</NotificationSetting>",
-		(notificationSettings.Enabled ? @"true" : @"false"), interval, [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString], notificationSettings.Tone];
+		(notificationSettings.Enabled ? @"true" : @"false"), interval, [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString], [notificationSettings.Tone escapeXML]];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 		

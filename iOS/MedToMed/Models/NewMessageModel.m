@@ -8,6 +8,7 @@
 
 #import "NewMessageModel.h"
 #import "MessageRecipientModel.h"
+#import "NSString+XML.h"
 
 @interface NewMessageModel ()
 
@@ -32,7 +33,7 @@
 	
 	if ([messageData objectForKey:@"CallbackTitle"])
 	{
-		callbackTitle = [NSString stringWithFormat:@"<CallbackTitle>%@</CallbackTitle>", [messageData valueForKey:@"CallbackTitle"]];
+		callbackTitle = [NSString stringWithFormat:@"<CallbackTitle>%@</CallbackTitle>", [[messageData valueForKey:@"CallbackTitle"] escapeXML]];
 	}
 	
 	NSMutableArray *messageRecipients = (NSMutableArray *)[messageData objectForKey:@"MessageRecipients"];
@@ -55,6 +56,12 @@
 		{
 			[messageText addObject:[NSString stringWithFormat:@"%@: %@", key, [messageData valueForKey:key]]];
 		}
+		
+		// If message text array is empty, then include a default message to prevent validation error
+		if ([messageText count] == 0)
+		{
+			[messageText addObject:@"No additional information provided."];
+		}
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -73,7 +80,19 @@
 			"<PatientLastName>%@</PatientLastName>"
 			"<STAT>%@</STAT>"
 		"</NewMsg>",
-		[messageData valueForKey:@"AccountID"], [messageData valueForKey:@"CallbackFirstName"], [messageData valueForKey:@"CallbackLastName"], [messageData valueForKey:@"CallbackPhoneNumber"], callbackTitle, [messageData valueForKey:@"HospitalID"], xmlRecipients, [messageText componentsJoinedByString:@"\n"], [messageData valueForKey:@"PatientFirstName"], [messageData valueForKey:@"PatientLastName"], [messageData valueForKey:@"STAT"]];
+		
+		[messageData valueForKey:@"AccountID"],
+		[[messageData valueForKey:@"CallbackFirstName"] escapeXML],
+		[[messageData valueForKey:@"CallbackLastName"] escapeXML],
+		[messageData valueForKey:@"CallbackPhoneNumber"],
+		callbackTitle,
+		[messageData valueForKey:@"HospitalID"],
+		xmlRecipients,
+		[[messageText componentsJoinedByString:@"\n"] escapeXML],
+		[[messageData valueForKey:@"PatientFirstName"] escapeXML],
+		[[messageData valueForKey:@"PatientLastName"] escapeXML],
+		[messageData valueForKey:@"STAT"]
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	

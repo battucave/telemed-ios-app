@@ -19,7 +19,7 @@
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
 		// Update account picker screen title
-		[accountPickerViewController setTitle:@"Call Medical Group"];
+		[accountPickerViewController setTitle:@"Call TeleMed"];
 		
 		// Enable account calling and account selection on account picker screen
 		[accountPickerViewController setShouldCallAccount:YES];

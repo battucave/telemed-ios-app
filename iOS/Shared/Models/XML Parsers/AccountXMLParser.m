@@ -1,6 +1,6 @@
 //
 //  AccountXMLParser.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by SolutionBuilt on 8/16/13.
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.

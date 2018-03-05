@@ -383,6 +383,8 @@
 		E2AE66371CE0DD7300953EFA /* NSObject+Swizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66361CE0DD7300953EFA /* NSObject+Swizzle.m */; };
 		E2AE66451CE1428300953EFA /* CoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66441CE1428300953EFA /* CoreViewController.m */; };
 		E2AE66481CE146DC00953EFA /* CoreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66471CE146DC00953EFA /* CoreTableViewController.m */; };
+		E2B0899B204DF640006697C7 /* NSString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6FA200E648F00648D61 /* NSString+XML.m */; };
+		E2B0899C204DF6B7006697C7 /* NSMutableString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */; };
 		E2C7C1B71FC3910A00E50F07 /* button-Help.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8B1FC38E7700CB8B9F /* button-Help.png */; };
 		E2C7C1B81FC3910D00E50F07 /* button-Help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8A1FC38E7300CB8B9F /* button-Help@2x.png */; };
 		E2C7C1B91FC3911000E50F07 /* button-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */; };
@@ -2515,6 +2517,7 @@
 				E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */,
 				E22EF0791FD89BC100A2E6F6 /* MessagesTableViewController.m in Sources */,
 				E250369D1FBB88F400099C7E /* CoreViewController.m in Sources */,
+				E2B0899B204DF640006697C7 /* NSString+XML.m in Sources */,
 				E250369F1FBB88F400099C7E /* AFURLRequestSerialization.m in Sources */,
 				E2622D0C1FC5F8B0008BCFF3 /* MessageNewTableViewController.m in Sources */,
 				E25036A31FBB88F400099C7E /* SentMessageModel.m in Sources */,
@@ -2570,6 +2573,7 @@
 				E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */,
 				E25036E81FBB88F400099C7E /* ELCUIApplication.m in Sources */,
 				E25036ED1FBB88F400099C7E /* AFHTTPSessionManager.m in Sources */,
+				E2B0899C204DF6B7006697C7 /* NSMutableString+XML.m in Sources */,
 				E2CAB4471FE9D41100202CCD /* AccountRequestTableViewController.m in Sources */,
 				E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */,
 				E22EF0961FD9DBFE00A2E6F6 /* SettingsPasswordTableViewController.m in Sources */,

@@ -33,6 +33,7 @@
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) NSMutableArray *hospitals;
 @property (nonatomic) BOOL isLoading;
+@property (nonatomic) BOOL shouldInitializeCallbackData;
 
 @end
 
@@ -40,7 +41,7 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	// Initialize Account Model
 	[self setAccountModel:[[AccountModel alloc] init]];
@@ -49,12 +50,16 @@
 	// Initialize form values
 	[self setFormValues:[[NSMutableDictionary alloc] init]];
 	
-	// Get list of hospitals (no need to reload these if user revisits this screen so don't put this in viewWillAppear method)
 	// Initialize hospital model
 	HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 	
 	[hospitalModel setDelegate:self];
+	
+	// Get list of hospitals (no need to reload these if user revisits this screen so don't put this in viewWillAppear method)
 	[hospitalModel getHospitals];
+	
+	// Update flag to initialize callback data
+	[self setShouldInitializeCallbackData:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -77,50 +82,40 @@
 	}
 	
 	// Pre-populate callback data with data from user profile
-	UserProfileModel *profile = [UserProfileModel sharedInstance];
-	
-	for (UITextField *textField in self.textFields)
+	if (self.shouldInitializeCallbackData)
 	{
-		// Callback first name
-		if ([textField.accessibilityIdentifier isEqualToString:@"CallbackFirstName"])
+		UserProfileModel *profile = [UserProfileModel sharedInstance];
+		
+		for (UITextField *textField in self.textFields)
 		{
-			// Verify a value hasn't already been set
-			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			// Callback first name
+			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackFirstName"])
 			{
 				[textField setText:profile.FirstName];
-				[self textFieldDidEditingChange:textField];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
-		}
-		// Callback last name
-		else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackLastName"])
-		{
-			// Verify a value hasn't already been set
-			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			// Callback last name
+			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackLastName"])
 			{
 				[textField setText:profile.LastName];
-				[self textFieldDidEditingChange:textField];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
-		}
-		// Callback number
-		else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
-		{
-			// Verify a value hasn't already been set
-			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			// Callback number
+			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
 				[textField setText:profile.PhoneNumber];
-				[self textFieldDidEditingChange:textField];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
-		}
-		// Callback title
-		else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"])
-		{
-			// Verify a value hasn't already been set
-			if (! [self.formValues objectForKey:textField.accessibilityIdentifier])
+			// Callback title
+			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"])
 			{
 				[textField setText:profile.JobTitlePrefix];
-				[self textFieldDidEditingChange:textField];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
 		}
+		
+		// Disable initializing callback data if user returns back to this screen from message recipient picker screen
+		[self setShouldInitializeCallbackData:NO];
 	}
 }
 
@@ -135,51 +130,58 @@
 // Unwind Segue from MessageNew2TableViewController
 - (IBAction)resetMessageNewForm:(UIStoryboardSegue *)segue
 {
-	// NOTE: Static cells do not reset when [self.tableView reloadData] is called so instead, manually reset all data
-	
-	// Reset selected medical group (account)
-	[self setSelectedAccount:nil];
-	
-	// Reset selected hospital
-	[self setSelectedHospital:nil];
+	// NOTE: Static cells do not reset when [self.tableView reloadData] is called. Instead, manually reset all data
 	
 	// Reset form values
 	[self.formValues removeAllObjects];
-	
-	dispatch_async(dispatch_get_main_queue(), ^
+
+	// Disable next button
+	[self.navigationItem.rightBarButtonItem setEnabled:NO];
+
+	// If user has exactly one hospital, then re-add it to form values
+	if ([self.hospitals count] == 1)
 	{
-		[self.tableView beginUpdates];
+		[self.formValues setValue:self.selectedHospital.ID forKey:@"HospitalID"];
+	}
+	// Otherwise reset selected hospital
+	else
+	{
+		[self setSelectedHospital:nil];
+		[self.labelHospital setText:@""];
 		
-		// Disable next button
-		[self.navigationItem.rightBarButtonItem setEnabled:NO];
-	
 		// Show intro cell
 		[self.cellIntro setHidden:NO];
 		
-		// Clear hospital label
-		[self.labelHospital setText:@""];
-		
-		// Clear medical group label
-		[self.labelMedicalGroup setText:@""];
-		
-		// Clear form fields
-		for (UITextField *textField in self.textFields)
-		{
-			[textField setText:@""];
-		}
-		
-		// Reset urgency level switch
-		[self.switchUrgencyLevel setOn:NO];
-		
 		// Hide medical group cell
 		[self.cellMedicalGroup setHidden:YES];
-		
-		// Hide form field cells
-		for (UITableViewCell *cellFormField in self.cellFormFields)
-		{
-			[cellFormField setHidden:YES];
-		}
-		
+	}
+	
+	// Reset selected medical group (account)
+	[self setSelectedAccount:nil];
+	[self.labelMedicalGroup setText:@""];
+
+	// Clear form fields
+	for (UITextField *textField in self.textFields)
+	{
+		[textField setText:@""];
+	}
+
+	// Reset urgency level switch
+	[self.switchUrgencyLevel setOn:NO];
+
+	// Hide form field cells
+	for (UITableViewCell *cellFormField in self.cellFormFields)
+	{
+		[cellFormField setHidden:YES];
+	}
+	
+	// NOTE: Callback data will be pre-populated in viewWillAppear which runs immediately after this method
+	[self setShouldInitializeCallbackData:YES];
+	
+	// Force user interface changes to take effect
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView beginUpdates];
 		[self.tableView endUpdates];
 	});
 }
@@ -370,6 +372,7 @@
 		}
 	}
 	
+	// Re-enable next button
 	[self.navigationItem.rightBarButtonItem setEnabled:isValidated];
 }
 

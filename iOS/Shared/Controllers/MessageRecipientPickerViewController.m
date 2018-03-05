@@ -146,29 +146,37 @@
 		}
 	}
 	
-	// Change save button title
 	#ifdef MEDTOMED
+		// Disable next button and change its title
+		[self.navigationItem.rightBarButtonItem setEnabled:NO];
 		[self.navigationItem.rightBarButtonItem setTitle:@"Next"];
 	
-	// Load list of chat participants
-	#elif defined MYTELEMED
+		// MedToMed - Re-enable next button if user returned to this screen with recipients still loaded
+		if ([self.messageRecipients count] > 0 && [self.selectedMessageRecipients count] > 0)
+		{
+			[self.navigationItem.rightBarButtonItem setEnabled:YES];
+		}
+	
+		// Load list of message recipients for new message
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
+	
+	#else
+		// Load list of chat participants
 		if ([self.messageRecipientType isEqualToString:@"Chat"])
 		{
 			[self.chatParticipantModel getChatParticipants];
 		}
+		// Load list of message recipients for forward message
+		else if ([self.messageRecipientType isEqualToString:@"Forward"])
+		{
+			[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
+		}
+		// Load list of message recipients for new message
 		else
+		{
+			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
+		}
 	#endif
-	
-	// Load list of message recipients for forward message
-	if ([self.messageRecipientType isEqualToString:@"Forward"])
-	{
-		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
-	}
-	// Load list of message recipients for new message
-	else
-	{
-		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
-	}
 }
 
 // Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (message new 2)
@@ -290,6 +298,14 @@
 	{
 		[self.tableMessageRecipients reloadData];
 	});
+	
+	// MedToMed - Re-enable next button if at least one message recipient is still selected
+	#ifdef MEDTOMED
+		if ([self.selectedMessageRecipients count] > 0)
+		{
+			[self.navigationItem.rightBarButtonItem setEnabled:YES];
+		}
+	#endif
 }
 
 // Return error from message recipient model delegate
@@ -460,6 +476,11 @@
 	
 	// Add checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+	
+	// MedToMed - Re-enable next button
+	#ifdef MEDTOMED
+		[self.navigationItem.rightBarButtonItem setEnabled:YES];
+	#endif
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -502,6 +523,14 @@
 	
 	// Remove checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	
+	// MedToMed - Disable next button if no recipients still selected
+	#ifdef MEDTOMED
+		if ([self.selectedMessageRecipients count] == 0)
+		{
+			[self.navigationItem.rightBarButtonItem setEnabled:NO];
+		}
+	#endif
 }
 
 // Only segue for this view is unwind segue
