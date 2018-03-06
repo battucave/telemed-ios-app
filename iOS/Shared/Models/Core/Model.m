@@ -11,6 +11,12 @@
 #import "ErrorAlertController.h"
 #import "GenericErrorXMLParser.h"
 
+@interface Model()
+
+@property (nonatomic) BOOL hasDismissed;
+
+@end
+
 @implementation Model
 
 - (id)init
@@ -62,17 +68,43 @@
 		[loadingAlertController.view addConstraints:[constraintsVertical arrayByAddingObjectsFromArray:constraintsHorizontal]];
 		
 		// Show activity indicator
-		[[self getRootViewController] presentViewController:loadingAlertController animated:YES completion:nil];
+		[[self getRootViewController] presentViewController:loadingAlertController animated:NO completion:nil];
+		
+		// Reset has dismissed flag
+		[self setHasDismissed:NO];
 	});
 }
 
 - (void)hideActivityIndicator
 {
+	[self hideActivityIndicator:nil];
+}
+
+- (void)hideActivityIndicator:(void (^)(void))callback
+{
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		// TODO: Need additional testing - A delay is required between when indicator is hidden and screen animations can occur (i.e. go to another screen)
 		
-		[[self getRootViewController] dismissViewControllerAnimated:YES completion:nil];
+		// If activity indicator has already been dismissed, then manually run any callbacks
+		if (self.hasDismissed)
+		{
+			if (callback != nil)
+			{
+				// Delay callback to ensure that activity indicator has finished dismissing
+				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+				{
+					callback();
+				});
+			}
+		}
+		else
+		{
+			[[self getRootViewController] dismissViewControllerAnimated:NO completion:callback];
+			
+			// Update has dismissed flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
+			[self setHasDismissed:YES];
+		}
 	});
 }
 

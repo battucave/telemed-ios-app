@@ -236,7 +236,7 @@
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
 {
 	// Determine which Messages were successfully Archived
-	NSMutableArray *successfulMessages = [self.selectedMessages copy];
+	NSMutableArray *successfulMessages = [self.selectedMessages mutableCopy];
 	
 	[successfulMessages removeObjectsInArray:failedMessages];
 	

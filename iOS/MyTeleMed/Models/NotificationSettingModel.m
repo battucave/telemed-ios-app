@@ -218,7 +218,7 @@
 		
 	[self.operationManager POST:@"NotificationSettings" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
 		
 		NSString *notificationKey = [NSString stringWithFormat:@"%@Settings", name];
 		
@@ -249,7 +249,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem saving your Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^(void)
+			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self saveNotificationSettingsByName:name settings:notificationSettings];
@@ -266,43 +266,55 @@
 	{
 		NSLog(@"NotificationSettingModel Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-		
-		// Build a generic error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your Notification Settings." andTitle:@"Notification Settings Error"];
-		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^(void)
-		{
-			// Include callback to retry the request
-			[self saveNotificationSettingsByName:name settings:notificationSettings];
-		}];
 		
 		// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
 		if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 		{
-			[self.delegate saveNotificationSettingsError:error];
+			// Close Activity Indicator with callback
+			[self hideActivityIndicator:^
+			{
+				[self.delegate saveNotificationSettingsError:error];
+			}];
 		}
+		else
+		{
+			// Close Activity Indicator
+			[self hideActivityIndicator];
+		}
+	
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your Notification Settings." andTitle:@"Notification Settings Error"];
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error withCallback:^
+		{
+			// Include callback to retry the request
+			[self saveNotificationSettingsByName:name settings:notificationSettings];
+		}];
 	}];
 }
 
 // Network Request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
 	// Remove Network Activity Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Notification Settings has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 	{
-		[self.delegate saveNotificationSettingsPending];
+		// Close Activity Indicator with callback
+		[self hideActivityIndicator:^
+		{
+			[self.delegate saveNotificationSettingsPending];
+		}];
+	}
+	else
+	{
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error

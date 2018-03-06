@@ -98,7 +98,7 @@
 	
 	[self.operationManager POST:@"NewMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
 		
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
@@ -114,13 +114,13 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^(void)
+			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self sendNewMessage:messageData withOrder:sortedKeys];
 			}];
 			
-			/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			}*/
@@ -130,42 +130,54 @@
 	{
 		NSLog(@"NewMessageModel Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		{
+			// Close Activity Indicator with callback
+			[self hideActivityIndicator:^
+			{
+				[self.delegate sendMessageError:error];
+			}];
+		}
+		else
+		{*/
+			// Close Activity Indicator
+			[self hideActivityIndicator];
+		//}
+	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"New Message Error"];
 		
 		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^(void)
+		[self showError:error withCallback:^
 		{
 			// Include callback to retry the request
 			[self sendNewMessage:messageData withOrder:sortedKeys];
 		}];
-		
-		/*if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
-		{
-			[self.delegate sendMessageError:error];
-		}*/
 	}];
 }
 
 // Network Request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
 	// Remove Network Activity Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
-		[self.delegate sendMessagePending];
+		// Close Activity Indicator with callback
+		[self hideActivityIndicator:^
+		{
+			[self.delegate sendMessagePending];
+		}];
+	}
+	else
+	{
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error

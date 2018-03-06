@@ -27,7 +27,7 @@
 		// Show error
 		[self showError:error];
 		
-		/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
+		/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
 		}*/
@@ -52,66 +52,93 @@
 	
 	[self.operationManager POST:@"PasswordChanges" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			if ([self.delegate respondsToSelector:@selector(changePasswordSuccess)])
 			{
-				[self.delegate changePasswordSuccess];
+				// Close Activity Indicator with callback
+				[self hideActivityIndicator:^
+				{
+					[self.delegate changePasswordSuccess];
+				}];
+			}
+			else
+			{
+				// Close Activity Indicator
+				[self hideActivityIndicator];
 			}
 		}
 		else
 		{
+			/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
+			{
+				// Close Activity Indicator with callback
+				[self hideActivityIndicator:^
+				{
+					[self.delegate changePasswordError:error];
+				}];
+			}
+			else
+			{*/
+				// Close Activity Indicator
+				[self hideActivityIndicator];
+			//}
+			
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error
 			[self showError:error];
-			
-			/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
-			{
-				[self.delegate changePasswordError:error];
-			}*/
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"PasswordChangeModel Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
 		// Remove Network Activity Observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 		//[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
+		{
+			// Close Activity Indicator with callback
+			[self hideActivityIndicator:^
+			{
+				[self.delegate changePasswordError:error];
+			}];
+		}
+		else
+		{*/
+			// Close Activity Indicator
+			[self hideActivityIndicator];
+		//}
+	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements." andTitle:@"Change Password Error"];
 		
 		// Show error
 		[self showError:error];
-		
-		/*if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
-		{
-			[self.delegate changePasswordError:error];
-		}*/
 	}];
 }
 
 // Network Request has been sent, but still awaiting response (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
-/*- (void)networkRequestDidStart:(NSNotification *)notification
+/* - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
 	// Remove Network Activity Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(changePasswordPending)])
 	{
-		[self.delegate changePasswordPending];
+		// Close Activity Indicator with callback
+		[self hideActivityIndicator:^
+		{
+			[self.delegate changePasswordPending];
+		}];
+	}
+	else
+	{
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error

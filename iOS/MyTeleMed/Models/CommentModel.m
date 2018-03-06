@@ -80,7 +80,7 @@
 	
 	[self.operationManager POST:@"Comments" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
 		
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
@@ -97,7 +97,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Add Comment Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^(void)
+			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
@@ -114,44 +114,56 @@
 	{
 		NSLog(@"CommentModel Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Still being used
+		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+		{
+			// Close Activity Indicator with callback
+			[self hideActivityIndicator:^
+			{
+				[self.delegate saveCommentError:error withPendingID:pendingID];
+			}];
+		}
+		else
+		{
+			// Close Activity Indicator
+			[self hideActivityIndicator];
+		}
+	
 		// Build a generic error message
 		NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:errorMessage andTitle:@"Add Comment Error"];
 		
 		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^(void)
+		[self showError:error withCallback:^
 		{
 			// Include callback to retry the request
 			[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
 		}];
-		
-		// Still being used
-		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
-		{
-			[self.delegate saveCommentError:error withPendingID:pendingID];
-		}
 	}];
 }
 
 // Network Request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
 	// Remove Network Activity Observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that Comment has been sent to server
 	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 	{
-		[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
+		// Close Activity Indicator with callback
+		[self hideActivityIndicator:^
+		{
+			[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
+		}];
+	}
+	else
+	{
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error
