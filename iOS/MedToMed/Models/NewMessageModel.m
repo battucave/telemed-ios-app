@@ -28,7 +28,10 @@
 	// Add Network Activity Observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Set callback title xml if it is present in message data
+	// Strip any non-numeric characters from phone number
+	NSString *callbackPhoneNumber = [[messageData valueForKey:@"CallbackPhoneNumber"] stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@""];
+	
+	// Set callback title xml if it is present in message data (NOTE: client requested that this be required, but I suspect that will change in the future so logic is still here to allow it to be optional)
 	NSString *callbackTitle = @"";
 	
 	if ([messageData objectForKey:@"CallbackTitle"])
@@ -84,7 +87,7 @@
 		[messageData valueForKey:@"AccountID"],
 		[[messageData valueForKey:@"CallbackFirstName"] escapeXML],
 		[[messageData valueForKey:@"CallbackLastName"] escapeXML],
-		[messageData valueForKey:@"CallbackPhoneNumber"],
+		callbackPhoneNumber,
 		callbackTitle,
 		[messageData valueForKey:@"HospitalID"],
 		xmlRecipients,

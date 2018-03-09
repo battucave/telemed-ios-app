@@ -252,6 +252,102 @@
 	[self validateForm];
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+	// Format phone number as 000-000-0000x000
+	if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"] && string.length > 0)
+	{
+		// Determine if a number was inserted
+		BOOL isNumericString = [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[string characterAtIndex:0]];
+		
+		// Determine where text was changed
+		UITextPosition *start = [textField positionFromPosition:textField.beginningOfDocument offset:range.location];
+		UITextPosition *end = [textField positionFromPosition:start offset:range.length];
+		UITextRange *textRange = [textField textRangeFromPosition:start toPosition:end];
+
+		// Get the new cursor location after insert/paste/typing
+		NSInteger cursorOffset = [textField offsetFromPosition:textField.beginningOfDocument toPosition:start] + string.length;
+		
+		// Prevent
+		if (isNumericString)
+		{
+			[textField replaceRange:textRange withText:string];
+		}
+		else
+		{
+			cursorOffset--;
+		}
+
+		NSMutableString *phoneNumber = [NSMutableString stringWithString:[[textField.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+		NSUInteger phoneNumberLength = phoneNumber.length;
+		
+		/*if (! [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[string characterAtIndex:0]])
+		{
+			if ( ! [string isEqualToString:@"#"]) {
+				return NO;
+			}
+		}*/
+		
+		if (phoneNumberLength >= 4)
+		{
+			[phoneNumber insertString:@"-" atIndex:3];
+		}
+
+		if (phoneNumberLength >= 7)
+		{
+			[phoneNumber insertString:@"-" atIndex:7];
+		}
+		
+		// If user attempted to enter hash character to start extension, then convert it
+		if (phoneNumberLength == 10 && [string isEqualToString:@"#"])
+		{
+			[phoneNumber insertString:@"x" atIndex:12];
+			cursorOffset++;
+		}
+
+		if (phoneNumberLength >= 11)
+		{
+			[phoneNumber insertString:@"x" atIndex:12];
+		}
+		
+		// If a separator characters was just added in front of the cursor, then modify the cursor offset to account for it
+		if (isNumericString && (cursorOffset == 4 || cursorOffset == 8 || cursorOffset == 13))
+		{
+			cursorOffset++;
+		}
+
+		// Update callback phone number field with formatted phone number
+		[textField setText:phoneNumber];
+
+		// Move the cursor and selected range to their new positions
+		UITextPosition *newCursorPosition = [textField positionFromPosition:textField.beginningOfDocument offset:cursorOffset];
+		UITextRange *newSelectedRange = [textField textRangeFromPosition:newCursorPosition toPosition:newCursorPosition];
+		[textField setSelectedTextRange:newSelectedRange];
+
+		// Text field's text was already changed so don't add the character(s)
+		return NO;
+	}
+	
+	return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	NSUInteger currentIndex = [self.textFields indexOfObject:textField];
+	NSUInteger nextIndex = currentIndex + 1;
+	
+	if (nextIndex < [self.textFields count])
+	{
+		[[self.textFields objectAtIndex:nextIndex] becomeFirstResponder];
+	}
+	else
+	{
+		[[self.textFields objectAtIndex:currentIndex] resignFirstResponder];
+	}
+	
+	return YES;
+}
+
 - (void)setHospital
 {
 	// Add/update hospital id to form values
@@ -359,13 +455,14 @@
 			// Verify that callback phone number is a valid phone number
 			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
-				if ([textField.text length] < 10)
+				// Strip any non-numeric characters from phone number
+				if ([[textField.text stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@""] length] < 10)
 				{
 					isValidated = NO;
 				}
 			}
-			// Verify that field is not empty
-			else if (! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] && [textField.text isEqualToString:@""])
+			// Verify that field is not empty (NOTE: client requested that callback title be required, but I suspect this will change in the future so the condition is simply commented out)
+			else if (/*! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] &&*/ [textField.text isEqualToString:@""])
 			{
 				isValidated = NO;
 			}
@@ -374,23 +471,6 @@
 	
 	// Re-enable next button
 	[self.navigationItem.rightBarButtonItem setEnabled:isValidated];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-	NSUInteger currentIndex = [self.textFields indexOfObject:textField];
-	NSUInteger nextIndex = currentIndex + 1;
-	
-	if (nextIndex < [self.textFields count])
-	{
-		[[self.textFields objectAtIndex:nextIndex] becomeFirstResponder];
-	}
-	else
-	{
-		[[self.textFields objectAtIndex:currentIndex] resignFirstResponder];
-	}
-	
-	return YES;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
