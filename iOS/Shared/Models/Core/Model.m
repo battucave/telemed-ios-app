@@ -39,8 +39,6 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// TODO: Need additional testing - A delay is required between when indicator is hidden and screen animations can occur (i.e. go to another screen)
-		
 		// Initialize activity indicator
 		UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 		UILabel *labelMessage = [[UILabel alloc] init];
@@ -84,8 +82,6 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// TODO: Need additional testing - A delay is required between when indicator is hidden and screen animations can occur (i.e. go to another screen)
-		
 		// If activity indicator has already been dismissed, then manually run any callbacks
 		if (self.hasDismissed)
 		{

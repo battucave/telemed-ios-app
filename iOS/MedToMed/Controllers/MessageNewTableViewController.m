@@ -92,25 +92,25 @@
 			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackFirstName"])
 			{
 				[textField setText:profile.FirstName];
-				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:profile.FirstName forKey:textField.accessibilityIdentifier];
 			}
 			// Callback last name
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackLastName"])
 			{
 				[textField setText:profile.LastName];
-				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:profile.LastName forKey:textField.accessibilityIdentifier];
 			}
 			// Callback number
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
 				[textField setText:profile.PhoneNumber];
-				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:profile.PhoneNumber forKey:textField.accessibilityIdentifier];
 			}
 			// Callback title
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"])
 			{
 				[textField setText:profile.JobTitlePrefix];
-				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:profile.JobTitlePrefix forKey:textField.accessibilityIdentifier];
 			}
 		}
 		
@@ -192,15 +192,15 @@
 	// Obtain reference to source view controller
 	AccountPickerViewController *accountPickerViewController = segue.sourceViewController;
 	
-	// Save selected account
+	// Save selected medical group (account)
 	[self setSelectedAccount:accountPickerViewController.selectedAccount];
 	
-	// Add/update account id to form values
+	// Add/update medical group (account) id to form values
 	[self.formValues setValue:self.selectedAccount.ID forKey:@"AccountID"];
 	
 	[self.tableView beginUpdates];
 	
-	// Update medical group label with medical group (account) name
+	// Update medical group (account) label with medical group name
 	[self.labelMedicalGroup setText:self.selectedAccount.Name];
 	
 	// Show form field cells
@@ -328,7 +328,7 @@
 	
 	[self setHospitals:[[hospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
 	
-	// If user has exactly one hospital, then set it as the selected hospital to save user time
+	// If user has exactly one hospital, then set it as the selected hospital
 	if ([self.hospitals count] == 1) {
 		[self setSelectedHospital:[hospitals objectAtIndex:0]];
 		
@@ -440,19 +440,20 @@
 		// Update account picker screen title
 		[accountPickerViewController setTitle:@"Choose Medical Group"];
 		
-		// Enable account selection, set accounts, and set selected account on account picker screen
-		[accountPickerViewController setShouldSelectAccount:YES];
+		// Set accounts, set selected account, and enable account selection on account picker screen
 		[accountPickerViewController setAccounts:self.accounts];
 		[accountPickerViewController setSelectedAccount:self.selectedAccount];
+		[accountPickerViewController setShouldSelectAccount:YES];
 	}
 	// Hospital picker
 	else if ([segue.identifier isEqualToString:@"showHospitalPickerFromMessageNew"])
 	{
 		HospitalPickerViewController *hospitalPickerViewController = segue.destinationViewController;
 		
-		// Enable hospital selection and set selected hospital on hospital picker screen
-		[hospitalPickerViewController setShouldSelectHospital:YES];
+		// Set hospitals, set selected hospital, and enable hospital selection on hospital picker screen
+		[hospitalPickerViewController setHospitals:self.hospitals];
 		[hospitalPickerViewController setSelectedHospital:self.selectedHospital];
+		[hospitalPickerViewController setShouldSelectHospital:YES];
 	}
 	// Message recipient picker
 	else if ([segue.identifier isEqualToString:@"showMessageRecipientPicker"])
@@ -465,6 +466,7 @@
 		[messageRecipientPickerViewController setDelegate:self];
 		[messageRecipientPickerViewController setFormValues:self.formValues];
 		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
+		[messageRecipientPickerViewController setTitle:@"Choose Recipients"];
 		
 		// If user returned back to this screen, then he/she may have already set message recipients so pre-select them on message recipient picker screen
 		[messageRecipientPickerViewController setSelectedMessageRecipients:(NSMutableArray *)[self.formValues objectForKey:@"MessageRecipients"]];

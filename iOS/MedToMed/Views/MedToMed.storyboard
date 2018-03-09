@@ -585,7 +585,7 @@
                                                         <outlet property="delegate" destination="J3R-fF-WwB" id="PRs-E0-jwM"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Patient's Location/Room:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q2P-98-8x0">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Patient's Location/Room" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q2P-98-8x0">
                                                     <rect key="frame" x="16" y="0.0" width="174" height="43.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="174" id="vhP-Yp-SGq"/>
@@ -630,7 +630,7 @@
                                                         <outlet property="delegate" destination="J3R-fF-WwB" id="azi-d8-HNu"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vitals:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQv-e3-vY8">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vitals" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQv-e3-vY8">
                                                     <rect key="frame" x="16" y="0.0" width="154" height="43.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="154" id="3Em-j8-uye"/>
@@ -675,7 +675,7 @@
                                                         <outlet property="delegate" destination="J3R-fF-WwB" id="yca-J1-0yJ"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post Operation Info:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ga-iD-TnB">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post Operation Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ga-iD-TnB">
                                                     <rect key="frame" x="16" y="0.0" width="154" height="43.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="154" id="3j0-q2-YbM"/>
@@ -702,7 +702,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="143.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Additional Information:" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0NP-Dd-c7E">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Additional Information" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0NP-Dd-c7E">
                                                     <rect key="frame" x="11" y="4" width="353" height="135"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="Additional Information"/>
@@ -1942,7 +1942,7 @@
         <segue reference="UlW-eW-Gmn"/>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="ojM-FY-erA"/>
-        <segue reference="15X-RI-oeg"/>
+        <segue reference="FEU-cP-WQX"/>
         <segue reference="6bW-Sj-6zP"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>

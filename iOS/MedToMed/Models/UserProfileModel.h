@@ -19,7 +19,7 @@
 @property (nonatomic) NSString *LastName;
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) NSDictionary *MyTimeZone;
-@property (nonatomic) NSString *PhoneNumber;
+@property (nonatomic) NSString *PhoneNumber; // Stored locally on device instead of web service
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
 + (id <ProfileProtocol>)sharedInstance;

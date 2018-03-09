@@ -56,12 +56,12 @@
 		{
 			[messageText addObject:[NSString stringWithFormat:@"%@: %@", key, [messageData valueForKey:key]]];
 		}
-		
-		// If message text array is empty, then include a default message to prevent validation error
-		if ([messageText count] == 0)
-		{
-			[messageText addObject:@"No additional information provided."];
-		}
+	}
+	
+	// If message text array is empty, then include a default message to prevent validation error
+	if ([messageText count] == 0)
+	{
+		[messageText addObject:@"No additional information provided."];
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:

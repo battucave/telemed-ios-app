@@ -36,7 +36,7 @@
 	
 	for (UITextField *textField in self.textFields)
 	{
-		// Set text field's value if it was previously set (user entered text on this screen, then went back to MessageNewTableViewController, then clicked "Next" to return here again)
+		// Set text field's value if it was previously set (user entered text on this screen, went back to previous screen, then returned here again)
 		[textField setText:[self.formValues objectForKey:textField.accessibilityIdentifier]];
 		
 		// Programmatically add textFieldDidEditingChange listener to each text field (will be required in future when fields change depending on medical group)
