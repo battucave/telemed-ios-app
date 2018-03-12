@@ -258,62 +258,67 @@
 	if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"] && string.length > 0)
 	{
 		// Determine if a number was inserted
-		BOOL isNumericString = [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[string characterAtIndex:0]];
+		BOOL isReplacementStringNumeric = [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[string characterAtIndex:0]];
 		
 		// Determine where text was changed
-		UITextPosition *start = [textField positionFromPosition:textField.beginningOfDocument offset:range.location];
-		UITextPosition *end = [textField positionFromPosition:start offset:range.length];
-		UITextRange *textRange = [textField textRangeFromPosition:start toPosition:end];
+		UITextPosition *replacementStart = [textField positionFromPosition:textField.beginningOfDocument offset:range.location];
+		UITextPosition *replacementEnd = [textField positionFromPosition:replacementStart offset:range.length];
+		UITextRange *replacementRange = [textField textRangeFromPosition:replacementStart toPosition:replacementEnd];
 
 		// Get the new cursor location after insert/paste/typing
-		NSInteger cursorOffset = [textField offsetFromPosition:textField.beginningOfDocument toPosition:start] + string.length;
+		NSInteger cursorOffset = [textField offsetFromPosition:textField.beginningOfDocument toPosition:replacementStart];
 		
-		// Prevent
-		if (isNumericString)
+		// Only add the new string to the text field if it is numeric
+		if (isReplacementStringNumeric)
 		{
-			[textField replaceRange:textRange withText:string];
-		}
-		else
-		{
-			cursorOffset--;
+			[textField replaceRange:replacementRange withText:string];
+			
+			// Adjust the cursor offset
+			cursorOffset += string.length;
 		}
 
 		NSMutableString *phoneNumber = [NSMutableString stringWithString:[[textField.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 		NSUInteger phoneNumberLength = phoneNumber.length;
 		
-		/*if (! [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[string characterAtIndex:0]])
-		{
-			if ( ! [string isEqualToString:@"#"]) {
-				return NO;
-			}
-		}*/
-		
 		if (phoneNumberLength >= 4)
 		{
 			[phoneNumber insertString:@"-" atIndex:3];
+			
+			// Adjust the cursor offset if a separator character was just added
+			if (cursorOffset == 4)
+			{
+				cursorOffset++;
+			}
 		}
 
 		if (phoneNumberLength >= 7)
 		{
 			[phoneNumber insertString:@"-" atIndex:7];
+			
+			// Adjust the cursor offset if a separator character was just added
+			if (cursorOffset == 8)
+			{
+				cursorOffset++;
+			}
 		}
 		
 		// If user attempted to enter hash character to start extension, then convert it
 		if (phoneNumberLength == 10 && [string isEqualToString:@"#"])
 		{
 			[phoneNumber insertString:@"x" atIndex:12];
+			
+			// Adjust the cursor offset
 			cursorOffset++;
 		}
-
-		if (phoneNumberLength >= 11)
+		else if (phoneNumberLength >= 11)
 		{
 			[phoneNumber insertString:@"x" atIndex:12];
-		}
-		
-		// If a separator characters was just added in front of the cursor, then modify the cursor offset to account for it
-		if (isNumericString && (cursorOffset == 4 || cursorOffset == 8 || cursorOffset == 13))
-		{
-			cursorOffset++;
+			
+			// Adjust the cursor offset if a separator character was just added
+			if (cursorOffset == 13)
+			{
+				cursorOffset++;
+			}
 		}
 
 		// Update callback phone number field with formatted phone number
@@ -324,7 +329,7 @@
 		UITextRange *newSelectedRange = [textField textRangeFromPosition:newCursorPosition toPosition:newCursorPosition];
 		[textField setSelectedTextRange:newSelectedRange];
 
-		// Text field's text was already changed so don't add the character(s)
+		// Text field's text was already changed so don't add the replacement string
 		return NO;
 	}
 	
