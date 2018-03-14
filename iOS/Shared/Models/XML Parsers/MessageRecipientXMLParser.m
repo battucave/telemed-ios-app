@@ -68,16 +68,16 @@
 		// Most names are of the following format: Lastname, Firstname
 		if ([self.currentElementValue rangeOfString:@", "].location != NSNotFound)
 		{
-			NSArray *nameParts = [self.currentElementValue componentsSeparatedByString:@", "];
+			NSArray *nameComponents = [self.currentElementValue componentsSeparatedByString:@", "];
 			
-			[self.messageRecipient setFirstName:[nameParts objectAtIndex:1]];
-			[self.messageRecipient setLastName:[nameParts objectAtIndex:0]];
+			[self.messageRecipient setFirstName:[nameComponents objectAtIndex:1]];
+			[self.messageRecipient setLastName:[nameComponents objectAtIndex:0]];
 		}
-		// Some names are not actual names (example: "Abundant HH On Call")
+		// Some names are not people names (example: "Abundant HH On Call")
 		else
 		{
-			[self.messageRecipient setFirstName:self.currentElementValue];
-			[self.messageRecipient setLastName:@""];
+			[self.messageRecipient setFirstName:@""];
+			[self.messageRecipient setLastName:self.currentElementValue];
 		}
 	}
 	else

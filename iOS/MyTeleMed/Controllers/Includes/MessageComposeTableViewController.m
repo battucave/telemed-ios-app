@@ -65,15 +65,22 @@
 	
 	if (messageRecipientsCount > 0)
 	{
-		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
-		
-		if (messageRecipientsCount > 1)
+		MessageRecipientModel *messageRecipient1 = [messageRecipients objectAtIndex:0];
+		MessageRecipientModel *messageRecipient2 = (messageRecipientsCount > 1 ? [messageRecipients objectAtIndex:1] : nil);
+	
+		switch (messageRecipientsCount)
 		{
-			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
-		}
-		else
-		{
-			messageRecipientNames = messageRecipient.Name;
+			case 1:
+				messageRecipientNames = messageRecipient1.Name;
+				break;
+			
+			case 2:
+				messageRecipientNames = [NSString stringWithFormat:@"%@ & %@", messageRecipient1.LastName, messageRecipient2.LastName];
+				break;
+			
+			default:
+				messageRecipientNames = [NSString stringWithFormat:@"%@, %@ & %ld more...", messageRecipient1.LastName, messageRecipient2.LastName, (long)messageRecipientsCount - 2];
+				break;
 		}
 	}
 	

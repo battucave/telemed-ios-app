@@ -461,7 +461,9 @@
 			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
 				// Strip any non-numeric characters from phone number
-				if ([[textField.text stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@""] length] < 10)
+				NSString *phoneNumber = [NSString stringWithString:[[textField.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+				
+				if (phoneNumber.length < 10)
 				{
 					isValidated = NO;
 				}

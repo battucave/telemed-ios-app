@@ -29,7 +29,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Strip any non-numeric characters from phone number
-	NSString *callbackPhoneNumber = [[messageData valueForKey:@"CallbackPhoneNumber"] stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@""];
+	NSString *callbackPhoneNumber = [NSString stringWithString:[[[messageData valueForKey:@"CallbackPhoneNumber"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 	
 	// Set callback title xml if it is present in message data (NOTE: client requested that this be required, but I suspect that will change in the future so logic is still here to allow it to be optional)
 	NSString *callbackTitle = @"";

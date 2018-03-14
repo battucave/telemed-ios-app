@@ -25,8 +25,8 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Name;
-@property (nonatomic) NSString *FirstName;
-@property (nonatomic) NSString *LastName;
+@property (nonatomic) NSString *FirstName; // Not passed from web service (generated during parsing)
+@property (nonatomic) NSString *LastName; // Not passed from web service (generated during parsing)
 
 - (void)getMessageRecipientsForAccountID:(NSNumber *)accountID;
 - (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID;

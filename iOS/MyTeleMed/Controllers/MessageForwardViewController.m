@@ -12,7 +12,6 @@
 #import "CommentModel.h"
 #import "MessageModel.h"
 #import "ForwardMessageModel.h"
-#import "MessageRecipientModel.h"
 
 @interface MessageForwardViewController ()
 

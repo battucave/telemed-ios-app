@@ -30,12 +30,6 @@
 
 
 /**
- * CONTACT TELEMED RECIPIENT
- */
-#define CONTACT_RECIPIENTS @"Billing", @"Calendar", @"Technical Support", @"Customer Service", @"App Feedback", @"Miscellanous"
-
-
-/**
  * NOTIFICATIONS
  */
 #define NOTIFICATION_TONES_SUBCATEGORIES @"Staff Favorites", @"MyTeleMed", @"iOS7", @"Classic"
