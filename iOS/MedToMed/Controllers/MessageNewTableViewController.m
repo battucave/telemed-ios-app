@@ -257,8 +257,18 @@
 	// Format phone number as 000-000-0000x000
 	if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"] && string.length > 0)
 	{
-		// Determine if a number was inserted
-		BOOL isReplacementStringNumeric = [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[string characterAtIndex:0]];
+		/*
+		 * When an autocomplete entry is tapped, this method will be called twice: first with just a space character, and then again with the autocomplete value.
+		 * The space character cannot be entered manually, so is therefore only used to indicate that autocomplete was used.
+		 * Use this indication character to reset the existing text field text (if any) so that the autocomplete value becomes the only text in the field.
+		 *   For example, if user begins typing a phone number, then taps an autocomplete entry corresponding to that initial value, then ensure that the autocomplete value does not get appended to the initial value, but instead replaces it.
+		 */
+		if ([string isEqualToString:@" "])
+		{
+			[textField setText:@""];
+			
+			return YES;
+		}
 		
 		// Determine where text was changed
 		UITextPosition *replacementStart = [textField positionFromPosition:textField.beginningOfDocument offset:range.location];
@@ -268,57 +278,49 @@
 		// Get the new cursor location after insert/paste/typing
 		NSInteger cursorOffset = [textField offsetFromPosition:textField.beginningOfDocument toPosition:replacementStart];
 		
-		// Only add the new string to the text field if it is numeric
-		if (isReplacementStringNumeric)
-		{
-			[textField replaceRange:replacementRange withText:string];
-			
-			// Adjust the cursor offset
-			cursorOffset += string.length;
-		}
-
+		// Remove country code from string (primarily only applies when user taps autocomplete entry)
+		NSString *newReplacementString = [string stringByReplacingOccurrencesOfString:@"+1" withString:@""];
+		
+		// Remove all non-numeric characters from replacement string
+		newReplacementString = [NSString stringWithString:[[newReplacementString componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+		
+		// Insert replacement string into replacement range and adjust the cursor offset
+		[textField replaceRange:replacementRange withText:newReplacementString];
+		cursorOffset += newReplacementString.length;
+		
+		// Remove all non-numeric characters from text field's text so it can be formatted with separator characters
 		NSMutableString *phoneNumber = [NSMutableString stringWithString:[[textField.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 		NSUInteger phoneNumberLength = phoneNumber.length;
 		
+		// Adjust the cursor offset to reflect the removed non-numeric characters
+		cursorOffset -= (textField.text.length - phoneNumberLength);
+		
 		if (phoneNumberLength >= 4)
 		{
+			// Add hyphen separator and adjust the cursor offset
 			[phoneNumber insertString:@"-" atIndex:3];
-			
-			// Adjust the cursor offset if a separator character was just added
-			if (cursorOffset == 4)
-			{
-				cursorOffset++;
-			}
+			cursorOffset++;
 		}
 
 		if (phoneNumberLength >= 7)
 		{
+			// Add hyphen separator and adjust the cursor offset
 			[phoneNumber insertString:@"-" atIndex:7];
-			
-			// Adjust the cursor offset if a separator character was just added
-			if (cursorOffset == 8)
-			{
-				cursorOffset++;
-			}
+			cursorOffset++;
 		}
 		
 		// If user attempted to enter hash character to start extension, then convert it
 		if (phoneNumberLength == 10 && [string isEqualToString:@"#"])
 		{
+			// Add extension separator and adjust the cursor offset
 			[phoneNumber insertString:@"x" atIndex:12];
-			
-			// Adjust the cursor offset
 			cursorOffset++;
 		}
 		else if (phoneNumberLength >= 11)
 		{
+			// Add extension separator and adjust the cursor offset
 			[phoneNumber insertString:@"x" atIndex:12];
-			
-			// Adjust the cursor offset if a separator character was just added
-			if (cursorOffset == 13)
-			{
-				cursorOffset++;
-			}
+			cursorOffset++;
 		}
 
 		// Update callback phone number field with formatted phone number
