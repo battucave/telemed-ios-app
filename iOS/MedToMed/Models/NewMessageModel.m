@@ -31,13 +31,13 @@
 	// Strip any non-numeric characters from phone number
 	NSString *callbackPhoneNumber = [NSString stringWithString:[[[messageData valueForKey:@"CallbackPhoneNumber"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 	
-	// Set callback title xml if it is present in message data (NOTE: client requested that this be required, but I suspect that will change in the future so logic is still here to allow it to be optional)
+	/*/ Set callback title xml if it is present in message data (NOTE: client requested that this be required, but I suspect that will change in the future so logic is still here to allow it to be optional)
 	NSString *callbackTitle = @"";
 	
 	if ([messageData objectForKey:@"CallbackTitle"])
 	{
 		callbackTitle = [NSString stringWithFormat:@"<CallbackTitle>%@</CallbackTitle>", [[messageData valueForKey:@"CallbackTitle"] escapeXML]];
-	}
+	}*/
 	
 	NSMutableArray *messageRecipients = (NSMutableArray *)[messageData objectForKey:@"MessageRecipients"];
 	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
@@ -73,7 +73,7 @@
 			"<CallbackFirstName>%@</CallbackFirstName>"
 			"<CallbackLastName>%@</CallbackLastName>"
 			"<CallbackPhone>%@</CallbackPhone>"
-			"%@"
+			"<CallbackTitle>%@</CallbackTitle>"
 			"<HospitalID>%@</HospitalID>"
 			"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
 				"%@"
@@ -88,7 +88,7 @@
 		[[messageData valueForKey:@"CallbackFirstName"] escapeXML],
 		[[messageData valueForKey:@"CallbackLastName"] escapeXML],
 		callbackPhoneNumber,
-		callbackTitle,
+		[[messageData valueForKey:@"CallbackTitle"] escapeXML],
 		[messageData valueForKey:@"HospitalID"],
 		xmlRecipients,
 		[[messageText componentsJoinedByString:@"\n"] escapeXML],
@@ -152,6 +152,24 @@
 	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"New Message Error"];
+		
+		// If error is related to the callback number, then handle it separately
+		if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
+		{
+			if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			{
+				// Close Activity Indicator with callback
+				[self hideActivityIndicator:^
+				{
+					[self.delegate sendMessageError:error];
+				}];
+				
+				return;
+			}
+		}
+		
+		// Close Activity Indicator
+		[self hideActivityIndicator];
 		
 		// Show error even if user has navigated to another screen
 		[self showError:error withCallback:^

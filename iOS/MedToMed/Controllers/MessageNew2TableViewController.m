@@ -92,15 +92,18 @@
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
 {
+	// Remove leading and trailing whitespace
+	NSString *formValue = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
 	// Remove empty value for text field's key from form values
-	if ([textField.text isEqualToString:@""])
+	if ([formValue isEqualToString:@""])
 	{
 		[self.formValues removeObjectForKey:textField.accessibilityIdentifier];
 	}
 	// Add/update value to form values for text field's key
 	else
 	{
-		[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+		[self.formValues setValue:formValue forKey:textField.accessibilityIdentifier];
 	}
 }
 
@@ -126,13 +129,15 @@
 	[self presentViewController:successAlertController animated:YES completion:nil];
 }
 
-/*/ Return error from NewMessageModel delegate (no longer used)
+// Return error from NewMessageModel delegate (currently only used for callback number error)
 - (void)sendMessageError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
-}*/
+	// Unwind to first screen of message new form to show error for callback number
+	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
+	{
+		[self performSegueWithIdentifier:@"handleErrorCallbackNumber" sender:self];
+	}
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -153,15 +158,18 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+	// Remove leading and trailing whitespace
+	NSString *formValue = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	
 	// Remove empty value for text view's key from form values
-	if ([textView.text isEqualToString:@""])
+	if ([formValue isEqualToString:@""])
 	{
 		[self.formValues removeObjectForKey:textView.accessibilityIdentifier];
 	}
 	// Add/update value to form values for text view's key
 	else
 	{
-		[self.formValues setValue:textView.text forKey:textView.accessibilityIdentifier];
+		[self.formValues setValue:formValue forKey:textView.accessibilityIdentifier];
 	}
 }
 

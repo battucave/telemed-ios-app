@@ -117,6 +117,9 @@
 		// Disable initializing callback data if user returns back to this screen from message recipient picker screen
 		[self setShouldInitializeCallbackData:NO];
 	}
+	
+	// Validate form in case user return here via error unwind segue
+	[self validateForm];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -127,7 +130,31 @@
 	[self.view endEditing:YES];
 }
 
-// Unwind Segue from MessageNew2TableViewController
+// Error Unwind Segue for Callback Number from MessageNew2TableViewController
+- (IBAction)handleErrorCallbackNumber:(UIStoryboardSegue *)segue
+{
+	NSString *callbackPhoneNumberValue = @"";
+	
+	for (UITextField *textField in self.textFields)
+	{
+		if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
+		{
+			// Retrieve existing value for callback number
+			callbackPhoneNumberValue = textField.text;
+			
+			// Reset existing value for callback number
+			[textField setText:@""];
+		}
+	}
+	
+	// Show error message for invalid callback number
+	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"Callback Number %@ is invalid. Please enter a valid phone number.", callbackPhoneNumberValue], NSLocalizedDescriptionKey, nil]];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
+}
+
+// Success Unwind Segue from MessageNew2TableViewController
 - (IBAction)resetMessageNewForm:(UIStoryboardSegue *)segue
 {
 	// NOTE: Static cells do not reset when [self.tableView reloadData] is called. Instead, manually reset all data
@@ -237,15 +264,18 @@
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
 {
+	// Remove leading and trailing whitespace
+	NSString *formValue = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
 	// Remove empty value for text field's key from form values
-	if ([textField.text isEqualToString:@""])
+	if ([formValue isEqualToString:@""])
 	{
 		[self.formValues removeObjectForKey:textField.accessibilityIdentifier];
 	}
 	// Add/update value to form values for text field's key
 	else
 	{
-		[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
+		[self.formValues setValue:formValue forKey:textField.accessibilityIdentifier];
 	}
 	
 	// Validate form
@@ -470,8 +500,8 @@
 					isValidated = NO;
 				}
 			}
-			// Verify that field is not empty (NOTE: client requested that callback title be required, but I suspect this will change in the future so the condition is simply commented out)
-			else if (/*! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] &&*/ [textField.text isEqualToString:@""])
+			// Verify that field is not empty and contains at least one alphanumeric character (NOTE: client requested that callback title be required, but I suspect this will change in the future so the condition is simply commented out)
+			else if (/*! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] &&*/ [[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] isEqualToString:@""])
 			{
 				isValidated = NO;
 			}
