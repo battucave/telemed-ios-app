@@ -128,6 +128,10 @@
 		[self.tableHospitals reloadData];
 		[self scrollToSelectedHospital];
 	}
+	
+	// TEMPORARY PHASE 1 (remove in phase 2)
+	[self.navigationItem setRightBarButtonItem:nil];
+	// END TEMPORARY PHASE 1
 }
 
 - (void)viewDidDisappear:(BOOL)animated

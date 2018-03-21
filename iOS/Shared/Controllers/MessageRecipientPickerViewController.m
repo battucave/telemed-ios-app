@@ -151,7 +151,7 @@
 		[self.navigationItem.rightBarButtonItem setEnabled:NO];
 		[self.navigationItem.rightBarButtonItem setTitle:@"Next"];
 	
-		// MedToMed - Re-enable next button if user returned to this screen with recipients still loaded
+		// Re-enable next button if user returned to this screen with recipients still loaded
 		if ([self.messageRecipients count] > 0 && [self.selectedMessageRecipients count] > 0)
 		{
 			[self.navigationItem.rightBarButtonItem setEnabled:YES];
@@ -491,9 +491,6 @@
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// Close search results
-		[self.searchController setActive:NO];
-		
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 		
 		// Get cell in message recipients table
@@ -502,6 +499,9 @@
 		
 		// Deselect cell
 		[self.tableMessageRecipients deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
+		
+		// Close search results
+		[self.searchController setActive:NO];
 	}
 	// Message recipients table
 	else
@@ -519,7 +519,10 @@
 	}];
 	
 	// Remove message recipient from selected message recipients
-	[self.selectedMessageRecipients removeObjectAtIndex:messageRecipientIndex];
+	if ([self.selectedMessageRecipients count] > messageRecipientIndex)
+	{
+		[self.selectedMessageRecipients removeObjectAtIndex:messageRecipientIndex];
+	}
 	
 	// Remove checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryNone];

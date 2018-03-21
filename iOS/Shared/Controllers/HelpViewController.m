@@ -7,14 +7,15 @@
 //
 
 #import "HelpViewController.h"
+#import "AccountPickerViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface HelpViewController ()
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonCallTeleMed;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDemoVideo;
 @property (weak, nonatomic) IBOutlet UILabel *labelIntro;
 @property (weak, nonatomic) IBOutlet UILabel *labelVersion;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonUserGuideCenterX;
 
 @end
 
@@ -56,10 +57,13 @@
 		// Update intro text with correct app name
 		[self.labelIntro setText:[self.labelIntro.text stringByReplacingOccurrencesOfString:@"MyTeleMed" withString:@"MedToMed"]];
 	
-		// Hide demo video button and adjust user guide to center
+		// Replace demo video button with call telemed button
+		[self.buttonCallTeleMed setHidden:NO];
 		[self.buttonDemoVideo setHidden:YES];
-		[self.constraintButtonUserGuideCenterX setConstant:0.0f];
 	
+	#else
+		// Hide call telemed button
+		[self.buttonCallTeleMed setHidden:YES];
 	#endif
 }
 
@@ -83,5 +87,23 @@
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
 }
+
+#ifdef MEDTOMED
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	// Account picker
+	if ([segue.identifier isEqualToString:@"showAccountPickerFromHelp"])
+	{
+		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
+		
+		// Update account picker screen title
+		[accountPickerViewController setTitle:@"Call TeleMed"];
+		
+		// Enable account calling and account selection on account picker screen
+		[accountPickerViewController setShouldCallAccount:YES];
+		[accountPickerViewController setShouldSelectAccount:YES];
+	}
+}
+#endif
 
 @end

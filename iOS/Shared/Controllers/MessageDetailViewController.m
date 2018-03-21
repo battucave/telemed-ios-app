@@ -51,11 +51,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableCommentsHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewButtonsHeight;
 
-// TEMPORARY MEDTOMED (remove in phase 2)
+// TEMPORARY MEDTOMED PHASE 1 (remove in phase 2)
 @property (weak, nonatomic) IBOutlet UILabel *labelCommentsEvents;
 @property (weak, nonatomic) IBOutlet UIView *viewAddCommentContainer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonAddCommentHeight;
-// END TEMPORARY
+// END TEMPORARY MEDTOMED PHASE 1
 
 @property (nonatomic) NSUInteger messageCount;
 @property (nonatomic) NSNumber *currentUserID;

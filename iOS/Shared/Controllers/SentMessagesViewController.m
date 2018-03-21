@@ -38,15 +38,15 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
+	// Modify text of future Back Button to this View Controller
+	[self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Sent" style:UIBarButtonItemStylePlain target:nil action:nil]];
+	
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		// Change top layout constraint to 0 (Keep Swipe Message there as it will simply be hidden under the Container View)
 		self.constraintTopSpace.constant = 0;
 	}
-	
-	// Modify text of future Back Button to this View Controller
-	[self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Sent" style:UIBarButtonItemStylePlain target:nil action:nil]];
 	
 	[super viewWillAppear:animated];
 }

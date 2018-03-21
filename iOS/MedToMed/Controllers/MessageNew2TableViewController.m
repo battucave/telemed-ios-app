@@ -110,7 +110,7 @@
 // Return success from NewMessageModel delegate (this logic should only be called after web service completes to avoid issues)
 - (void)sendMessageSuccess
 {
-	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Thank you. Your message has been sent." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Unwind to first screen of message new form

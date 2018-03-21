@@ -43,7 +43,7 @@
     [super viewDidLoad];
 	
 	#ifdef MEDTOMED
-		[self setMenuItems:@[@"New Message", @"Sent Messages", @"Contact TeleMed", @"Settings"]];
+		[self setMenuItems:@[@"New Message", @"Sent Messages", @"Settings", @"Log Out", @"Help"]];
 	
 	#else
 		[self setMenuItems:@[@"Messages", @"Sent Messages", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
@@ -70,13 +70,6 @@
 	#endif
 }
 
-- (IBAction)doLogout:(id)sender
-{
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	
-	[authenticationModel doLogout];
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;
@@ -90,6 +83,14 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	#ifdef MEDTOMED
+	// Log Out has padding above it
+	if (indexPath.row == 3)
+	{
+		return 64;
+	}
+	#endif
+	
     return 44;
 }
 
@@ -267,7 +268,7 @@
 #ifdef MEDTOMED
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Determine which screen to go to depending on whether user is authorized
+	// New Message: determine which screen to go to depending on whether user is authorized
 	if (indexPath.row == 0)
 	{
 		id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
@@ -282,6 +283,13 @@
 		{
 			[self performSegueWithIdentifier:@"showMessageNewUnauthorized" sender:[tableView cellForRowAtIndexPath:indexPath]];
 		}
+	}
+	// Log Out
+	else if (indexPath.row == 3)
+	{
+		AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+		
+		[authenticationModel doLogout];
 	}
 }
 #endif

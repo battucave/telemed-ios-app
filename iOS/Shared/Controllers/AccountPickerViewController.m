@@ -153,11 +153,12 @@
 			// Disallow selection of medical groups (accounts)
 			[self.tableAccounts setAllowsSelection:NO];
 			
-			// Add "+" button to allow user to request new medical group (account)
+			// MEDTOMED PHASE 2 LOGIC (uncomment in phase 2)
+			/*/ Add "+" button to allow user to request new medical group (account)
 			UIBarButtonItem *buttonSend = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAccountRequest)];
 			
 			// [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:buttonSend, nil]];
-			[self.navigationItem setRightBarButtonItem:buttonSend];
+			[self.navigationItem setRightBarButtonItem:buttonSend];*/
 		}
 	#endif
 }

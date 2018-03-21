@@ -47,7 +47,55 @@
 				}
 			}
 			
+			// TEMPORARY PHASE 1 LOGIC (remove in phase 2 and uncomment code below to replace it)
 			// If user is pending for at least one medical group (account), then their next step is to wait for approval
+			if (isAccountPending)
+			{
+				// Update header text
+				[self setHeaderText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval. Please contact TeleMed for assistance.", self.textDefaultHeader]];
+			}
+			// Load user's hospitals
+			else
+			{
+				HospitalModel *hospitalModel = [[HospitalModel alloc] init];
+	 
+				[hospitalModel getHospitalsWithCallback:^(BOOL success, NSMutableArray *hospitals, NSError *error)
+				{
+					if (success)
+					{
+						// Hospital is initially only requested if user has already requested a hospital
+						BOOL isHospitalAuthenticated = NO;
+						BOOL isHospitalRequested = self.didRequestHospital;
+						NSString *textHeader = @"Please contact TeleMed for assistance.";
+						
+						// Check whether user is authorized or pending for at least one hospital
+						for (HospitalModel *hospital in hospitals)
+						{
+							if ([hospital isAuthenticated])
+							{
+								isHospitalAuthenticated = YES;
+							}
+							else if ([hospital isRequested])
+							{
+								isHospitalRequested = YES;
+							}
+						}
+						
+						// If user is pending for at least one hospital, then their next step is to wait for approval
+						if (! isHospitalAuthenticated && isHospitalRequested)
+						{
+							textHeader = @"Your requested Hospital is currently pending approval. Please contact TeleMed for assistance.";
+						}
+						
+						// Update header text
+						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, textHeader]];
+					}
+				}];
+			}
+			// END TEMPORARY PHASE 1
+			
+			// MEDTOMED PHASE 2 LOGIC (uncomment in phase 2)
+			/*/ If user is pending for at least one medical group (account), then their next step is to wait for approval
 			if (isAccountPending)
 			{
 				// Update header text
@@ -95,7 +143,7 @@
 						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, textHeader]];
 					}
 				}];
-			}
+			}*/
 		}
 	}];
 }
@@ -106,19 +154,6 @@
 	
 	// Store default header text
 	[self setTextDefaultHeader:[self tableView:self.tableView titleForHeaderInSection:0]];
-	
-	/*/ TEMPORARY (remove in phase 2)
-	UITableViewHeaderFooterView *viewHeader = [self.tableView headerViewForSection:0];
-
-	[UIView setAnimationsEnabled:NO];
-	[self.tableView beginUpdates];
-
-	[viewHeader.textLabel setText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, @"Please contact TeleMed for assistance."]];
-	[viewHeader sizeToFit];
-
-	[self.tableView endUpdates];
-	[UIView setAnimationsEnabled:YES];
-	// END TEMPORARY*/
 }
 
 // Unwind from account request screen and update header text to show pending medical group (account) message
@@ -153,6 +188,13 @@
 		[UIView setAnimationsEnabled:YES];
 	});
 }
+
+// TEMPORARY PHASE 1 (remove in phase 2)
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+	return 0;
+}
+// END TEMPORARY PHASE 1
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

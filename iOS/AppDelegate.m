@@ -105,6 +105,11 @@
 			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
 			[application registerForRemoteNotifications];
 		}
+	
+	// MedToMed - Prevent swipe message from ever appearing
+	#elif defined MEDTOMED
+		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings synchronize];
 	#endif
 	
 	return YES;

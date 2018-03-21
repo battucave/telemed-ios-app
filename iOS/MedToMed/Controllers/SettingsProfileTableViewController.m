@@ -39,7 +39,7 @@
 	}];
 }
 
-// MedToMed phase 2
+// MEDTOMED PHASE 2 LOGIC
 - (IBAction)saveProfile:(id)sender
 {
 	NSLog(@"Save Profile");
@@ -55,7 +55,7 @@
 	[self validateForm];
 }
 
-// MedToMed phase 2 - figure out how to prevent updating value for field if user has already begun typing in it
+// MEDTOMED PHASE 2 LOGIC (figure out how to prevent updating value for field if user has already begun typing in it)
 - (void)setTextFieldValues:(id <ProfileProtocol>) profile
 {
 	for (UITextField *textField in self.textFields)

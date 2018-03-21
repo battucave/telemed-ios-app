@@ -585,7 +585,7 @@
 		[messageRecipientPickerViewController setDelegate:self];
 		[messageRecipientPickerViewController setFormValues:self.formValues];
 		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
-		[messageRecipientPickerViewController setTitle:@"Choose Recipients"];
+		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
 		
 		// If user returned back to this screen, then he/she may have already set message recipients so pre-select them on message recipient picker screen
 		[messageRecipientPickerViewController setSelectedMessageRecipients:(NSMutableArray *)[self.formValues objectForKey:@"MessageRecipients"]];
