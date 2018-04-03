@@ -15,6 +15,5 @@
 
 @property (nonatomic) NotificationSettingModel *notificationSetting;
 @property (nonatomic) NSMutableArray *notificationSettings;
-@property (nonatomic) NSMutableString *currentElementValue;
 
 @end

@@ -6,10 +6,13 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
+#import "AccountModel.h"
+
 @interface MessageStub : NSObject
 
 // Properties listed here exist in either MessageModel and/or SentMessageMode
 
+@property (nonatomic) AccountModel *Account;
 @property (nonatomic) NSString *FirstSent_LCL;
 @property (nonatomic) NSString *FirstSent_UTC;
 @property (nonatomic) NSString *FormattedMessageText;

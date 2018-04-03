@@ -127,6 +127,9 @@
 {
 	[super viewWillAppear:animated];
 	
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableAccounts setTableFooterView:[[UIView alloc] init]];
+	
 	// If account was previously selected, scroll to it
 	if(self.selectedAccount && [self.accounts count] > 0)
 	{

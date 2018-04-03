@@ -8,6 +8,7 @@
 
 #import "CommentModel.h"
 #import "MessageStub.h"
+#import "NSString+XML.h"
 
 @interface CommentModel ()
 
@@ -45,19 +46,19 @@
 	self.pendingID = pendingID;
 	
 	NSString *xmlBody = @"<Comment xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
-			"<CommentText>%3$@</CommentText>"
-			"<%1$@>%2$@</%1$@>"
+			"<CommentText>%1$@</CommentText>"
+			"<%2$@>%3$@</%2$@>"
 		"</Comment>";
 	
 	// Comment with Message Delivery ID
 	if(message.MessageDeliveryID)
 	{
-		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, comment];
+		xmlBody = [NSString stringWithFormat: xmlBody, [comment escapeXML], @"MessageDeliveryID", message.MessageDeliveryID];
 	}
 	// Comment with Message ID
 	else if(message.MessageID)
 	{
-		xmlBody = [NSString stringWithFormat: xmlBody, @"MessageID", message.MessageID, comment];
+		xmlBody = [NSString stringWithFormat: xmlBody, [comment escapeXML], @"MessageID", message.MessageID];
 	}
 	// Message must contain either MessageDeliveryID or MessageID
 	else

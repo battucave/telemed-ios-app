@@ -36,7 +36,17 @@
 	
 	[super viewWillAppear:animated];
 	
-	[self.labelVersion setText:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+	NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+	NSString *versionNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+
+	// Show only the version number for release version to eliminate confusion for TeleMed's support staff
+	#if RELEASE
+		[self.labelVersion setText:versionNumber];
+
+	// Also show build number for debug and beta versions
+	#else
+		[self.labelVersion setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
+	#endif
 }
 
 // Help Video Control Action button with direct link to video

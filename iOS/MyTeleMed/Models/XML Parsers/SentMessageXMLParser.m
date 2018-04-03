@@ -7,11 +7,15 @@
 //
 
 #import "SentMessageXMLParser.h"
+#import "AccountModel.h"
 #import "SentMessageModel.h"
 
 @interface SentMessageXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NSString *currentModel;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
+@property (nonatomic) SentMessageModel *sentMessage;
 
 @end
 
@@ -28,7 +32,14 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"SentMessage"])
+	if([elementName isEqualToString:@"Account"])
+	{
+		// Initialize Account
+		self.sentMessage.Account = [[AccountModel alloc] init];
+		
+		self.currentModel = @"AccountModel";
+	}
+	else if([elementName isEqualToString:@"SentMessage"])
 	{
 		// Initialize the SentMessage
 		self.sentMessage = [[SentMessageModel alloc] init];
@@ -49,11 +60,37 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"SentMessage"])
+	if([elementName isEqualToString:@"Account"])
+	{
+		self.currentModel = @"MessageModel";
+	}
+	else if([elementName isEqualToString:@"SentMessage"])
 	{
 		[self.sentMessages addObject:self.sentMessage];
 		
 		self.sentMessage = nil;
+	}
+	else if([self.currentModel isEqualToString:@"AccountModel"])
+	{
+		if([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+		{
+			[self.sentMessage.Account.TimeZone setValue:self.currentElementValue forKey:elementName];
+		}
+		else if([elementName isEqualToString:@"ID"])
+		{
+			[self.sentMessage.Account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+		else
+		{
+			@try
+			{
+				[self.sentMessage.Account setValue:self.currentElementValue forKey:elementName];
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found: %@", elementName);
+			}
+		}
 	}
 	else if([elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
 	{

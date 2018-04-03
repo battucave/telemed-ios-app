@@ -7,6 +7,7 @@
 //
 
 #import "EmailTelemedModel.h"
+#import "NSString+XML.h"
 
 @interface EmailTelemedModel ()
 
@@ -54,7 +55,7 @@
 			"<FromAddress>%@</FromAddress>"
 			"%@"
 		"</EmailToTelemed>",
-		message, fromEmailAddress, messageIdentifier];
+		[message escapeXML], [fromEmailAddress escapeXML], messageIdentifier];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	

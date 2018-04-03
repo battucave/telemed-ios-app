@@ -8,9 +8,14 @@
 
 #import "ChatMessageXMLParser.h"
 #import "ChatMessageModel.h"
+#import "ChatParticipantModel.h"
 
 @interface ChatMessageXMLParser()
 
+@property (nonatomic) ChatMessageModel *chatMessage;
+@property (nonatomic) ChatParticipantModel *chatParticipant;
+@property (nonatomic) NSMutableArray *chatParticipants;
+@property (nonatomic) NSMutableString *currentElementValue;
 @property (nonatomic) BOOL isChatParticipant;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 

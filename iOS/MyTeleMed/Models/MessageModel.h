@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "AccountModel.h"
 
 @protocol MessageDelegate <NSObject>
 
@@ -32,6 +33,7 @@
 // Any additional properties added here must also be added to MessageStub
 
 @property (nonatomic) NSNumber *ID; // Deprecated in favor of MessageDeliveryID (they are identical)
+@property (nonatomic) AccountModel *Account;
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSNumber *MessageDeliveryID;
 @property (nonatomic) NSNumber *MessageID;

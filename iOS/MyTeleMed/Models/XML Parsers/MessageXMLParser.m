@@ -7,10 +7,14 @@
 //
 
 #import "MessageXMLParser.h"
+#import "AccountModel.h"
 #import "MessageModel.h"
 
 @interface MessageXMLParser()
 
+@property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NSString *currentModel;
+@property (nonatomic) MessageModel *message;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end
@@ -28,8 +32,15 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
+	if([elementName isEqualToString:@"Account"])
+	{
+		// Initialize Account
+		self.message.Account = [[AccountModel alloc] init];
+		
+		self.currentModel = @"AccountModel";
+	}
 	// ReceivedMessage is current on test server; Message is deprecated but still current on production server
-	if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
+	else if([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
 	{
 		// Initialize the Message
 		self.message = [[MessageModel alloc] init];
@@ -50,11 +61,37 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Message"])
+	if([elementName isEqualToString:@"Account"])
+	{
+		self.currentModel = @"MessageModel";
+	}
+	else if([elementName isEqualToString:@"Message"])
 	{
 		[self.messages addObject:self.message];
 		
 		self.message = nil;
+	}
+	else if([self.currentModel isEqualToString:@"AccountModel"])
+	{
+		if([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+		{
+			[self.message.Account.TimeZone setValue:self.currentElementValue forKey:elementName];
+		}
+		else if([elementName isEqualToString:@"ID"])
+		{
+			[self.message.Account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+		else
+		{
+			@try
+			{
+				[self.message.Account setValue:self.currentElementValue forKey:elementName];
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found: %@", elementName);
+			}
+		}
 	}
 	else if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"MessageDeliveryID"] || [elementName isEqualToString:@"MessageID"] || [elementName isEqualToString:@"SenderID"])
 	{

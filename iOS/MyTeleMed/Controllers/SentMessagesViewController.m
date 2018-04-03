@@ -87,7 +87,7 @@
 			[self.messageModel setDelegate:self];
 		}
 		
-		[self.messageModel modifyMultipleMessagesState:self.selectedMessages state:@"archive"];
+		[self.messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
 	}
 }
 
