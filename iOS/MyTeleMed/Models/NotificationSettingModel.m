@@ -96,7 +96,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
@@ -153,6 +153,7 @@
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
 			[settings synchronize];
 			
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
 			{
 				[self.delegate updateNotificationSettings:self forName:name];
@@ -163,7 +164,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Notification Settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Notification Settings.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 			{
 				[self.delegate updateNotificationSettingsError:error];
@@ -177,7 +178,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Notification Settings." andTitle:@"Notification Settings Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
@@ -238,7 +239,7 @@
 			{
 				[self saveNotificationSettingsByName:@"priority" settings:notificationSettings];
 			}
-			// Not currently used
+			// Handle success via delegate (not currently used)
 			else if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
@@ -255,7 +256,7 @@
 				[self saveNotificationSettingsByName:name settings:notificationSettings];
 			}];
 			
-			// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
+			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
 			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
@@ -269,7 +270,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Temporarily handle additional logic in UIViewController+NotificationTonesFix.m
+		// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
 		if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 		{
 			// Close Activity Indicator with callback

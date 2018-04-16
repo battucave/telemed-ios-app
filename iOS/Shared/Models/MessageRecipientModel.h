@@ -12,7 +12,7 @@
 @protocol MessageRecipientDelegate <NSObject>
 
 @required
-- (void)updateMessageRecipients:(NSMutableArray *)newRecipients;
+- (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients;
 
 @optional
 - (void)updateMessageRecipientsError:(NSError *)error;

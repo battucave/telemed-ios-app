@@ -76,7 +76,7 @@
 				[commentModel addMessageComment:message comment:comment toForwardMessage:YES];
 			}
 			
-			// Not currently used
+			// Handle success via delegate (not currently used)
 			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
@@ -93,6 +93,7 @@
 				[self forwardMessage:message messageRecipientIDs:messageRecipientIDs withComment:comment];
 			}];
 			
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
@@ -106,6 +107,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			// Close Activity Indicator with callback

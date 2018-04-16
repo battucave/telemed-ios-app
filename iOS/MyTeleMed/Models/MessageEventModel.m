@@ -43,6 +43,7 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessageEvents:)])
 			{
 				[self.delegate updateMessageEvents:[parser messageEvents]];
@@ -53,7 +54,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Events Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Events.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessageEventsError:)])
 			{
 				[self.delegate updateMessageEventsError:error];
@@ -67,7 +68,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Events." andTitle:@"Message Events Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateMessageEventsError:)])
 		{
 			[self.delegate updateMessageEventsError:error];

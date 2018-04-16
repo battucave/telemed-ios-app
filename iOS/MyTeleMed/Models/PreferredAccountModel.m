@@ -46,7 +46,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Not currently used
+			// Handle success via delegate (not currently used)
 			if ([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
 			{
 				[self.delegate savePreferredAccountSuccess];
@@ -66,6 +66,7 @@
 				[self savePreferredAccount:account];
 			}];
 			
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
@@ -82,6 +83,7 @@
 		// Roll back My Profile Model's MyPreferredAccount to previous value
 		[self.myProfileModel restoreMyPreferredAccount];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 		{
 			// Close Activity Indicator with callback

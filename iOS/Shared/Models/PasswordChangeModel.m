@@ -27,6 +27,7 @@
 		// Show error
 		[self showError:error];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
@@ -55,6 +56,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(changePasswordSuccess)])
 			{
 				// Close Activity Indicator with callback
@@ -71,6 +73,7 @@
 		}
 		else
 		{
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
 				// Close Activity Indicator with callback
@@ -98,6 +101,7 @@
 		// Remove Network Activity Observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 		//[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			// Close Activity Indicator with callback

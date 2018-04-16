@@ -77,6 +77,7 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessages:)])
 			{
 				[self.delegate updateMessages:[parser messages]];
@@ -87,7 +88,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Messages.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessagesError:)])
 			{
 				[self.delegate updateMessagesError:error];
@@ -101,7 +102,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Messages." andTitle:@"Messages Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateMessagesError:)])
 		{
 			[self.delegate updateMessagesError:error];
@@ -125,21 +126,21 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			// Handle Success
+			// Handle success via delegate
 		}
 		// Error parsing XML file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 		}
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"MessageModel Error: %@", error);
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 	}];
 }*/
 
@@ -177,6 +178,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
 			{
 				// Close Activity Indicator with callback
@@ -193,6 +195,7 @@
 		}
 		else
 		{
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 			{
 				// Close Activity Indicator with callback
@@ -228,6 +231,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 		{
 			// Close Activity Indicator with callback
@@ -364,7 +368,7 @@
 	{
 		NSArray *failedMessages = [self.failedMessages copy];
 		
-		// Still being used
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
 		{
 			// Close Activity Indicator with callback
@@ -398,7 +402,7 @@
 			[self modifyMultipleMessagesState:failedMessages state:state];
 		}];
 	}
-	// If request was not cancelled, then it was successful (still being used)
+	// If request was not cancelled, then handle success via delegate (still being used)
 	else if ( ! self.queueCancelled && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
 	{
 		// Close Activity Indicator with callback

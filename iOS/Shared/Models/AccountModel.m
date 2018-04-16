@@ -11,6 +11,16 @@
 
 @implementation AccountModel
 
+- (void)getAccounts
+{
+	[self getAccountsWithCallback:nil parameters:nil];
+}
+
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
+{
+	[self getAccountsWithCallback:callback parameters:nil];
+}
+
 // Private method used for all accounts lookups
 - (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback parameters:(NSDictionary *)parameters
 {
@@ -90,15 +100,6 @@
 	}];
 }
 
-- (void)getAccounts
-{
-	[self getAccountsWithCallback:nil parameters:nil];
-}
-
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
-{
-	[self getAccountsWithCallback:callback parameters:nil];
-}
 
 
 #pragma mark - MyTeleMed

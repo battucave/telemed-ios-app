@@ -69,7 +69,7 @@
 		// Show error (user cannot have navigated to another screen at this point)
 		[self showError:error];
 		
-		// Still being used
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
 			[self.delegate saveCommentError:error withPendingID:pendingID];
@@ -85,7 +85,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Still being used
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
 			{
 				[self.delegate saveCommentSuccess:comment withPendingID:pendingID];
@@ -103,7 +103,7 @@
 				[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
 			}];
 			
-			// Still being used
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 			{
 				[self.delegate saveCommentError:error withPendingID:pendingID];
@@ -117,7 +117,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Still being used
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
 			// Close Activity Indicator with callback

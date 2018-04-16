@@ -79,7 +79,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Still being used
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
 			{
 				[self.delegate sendChatMessageSuccess:message withPendingID:pendingID];
@@ -96,7 +96,7 @@
 				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
 			}];
 			
-			// Still being used
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
@@ -110,7 +110,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Still being used
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			// Close Activity Indicator with callback

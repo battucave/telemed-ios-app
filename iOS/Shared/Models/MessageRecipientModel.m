@@ -57,6 +57,7 @@
 				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
 			}];
 			
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessageRecipients:)])
 			{
 				[self.delegate updateMessageRecipients:[messageRecipients mutableCopy]];
@@ -67,7 +68,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Recipients Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Recipients.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
 			{
 				[self.delegate updateMessageRecipientsError:error];
@@ -81,7 +82,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Recipients." andTitle:@"Message Recipients Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
 		{
 			[self.delegate updateMessageRecipientsError:error];

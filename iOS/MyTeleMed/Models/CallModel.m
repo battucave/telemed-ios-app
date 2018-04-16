@@ -44,7 +44,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Not currently used
+			// Handle success via delegate (not currently used)
 			if ([self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
 			{
 				[self.delegate callTeleMedSuccess];
@@ -61,6 +61,7 @@
 				[self callTeleMed];
 			}];
 			
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
@@ -74,6 +75,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
 			// Close Activity Indicator with callback
@@ -135,7 +137,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Not currently used
+			// Handle success via delegate (not currently used)
 			if ([self.delegate respondsToSelector:@selector(callSenderSuccess)])
 			{
 				[self.delegate callSenderSuccess];
@@ -152,6 +154,7 @@
 				[self callSenderForMessage:messageID recordCall:recordCall];
 			}];
 			
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
@@ -165,6 +168,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
 		{
 			// Close Activity Indicator with callback

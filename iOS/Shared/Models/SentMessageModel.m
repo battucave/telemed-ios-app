@@ -27,6 +27,7 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateSentMessages:)])
 			{
 				[self.delegate updateSentMessages:[parser sentMessages]];
@@ -37,7 +38,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Sent Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Sent Messages.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
 			{
 				[self.delegate updateSentMessagesError:error];
@@ -51,7 +52,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Sent Messages." andTitle:@"Sent Messages Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
 		{
 			[self.delegate updateSentMessagesError:error];
@@ -75,21 +76,21 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			// Handle Success
+			// Handle success via delegate
 		}
 		// Error parsing XML file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Sent Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Sent Message.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 		}
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"Sent MessageModel Error: %@", error);
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 	}];
 }*/
 

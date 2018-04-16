@@ -55,7 +55,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Not currently used
+			// Handle success via delegate (not currently used)
 			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
@@ -72,6 +72,7 @@
 				[self sendNewMessage:message accountID:accountID messageRecipientIDs:messageRecipientIDs];
 			}];
 			
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
@@ -85,6 +86,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			// Close Activity Indicator with callback

@@ -62,6 +62,7 @@
 				}
 			}
 			
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateChatMessages:)])
 			{
 				[self.delegate updateChatMessages:chatMessages];
@@ -72,7 +73,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 			{
 				[self.delegate updateChatMessagesError:error];
@@ -86,7 +87,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages." andTitle:@"Chat Messages Error"];
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 		{
 			[self.delegate updateChatMessagesError:error];
@@ -114,6 +115,7 @@
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
+			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(deleteChatMessageSuccess)])
 			{
 				[self.delegate deleteChatMessageSuccess];
@@ -130,6 +132,7 @@
 				[self deleteChatMessage:chatMessageID];
 			}];
 			
+			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 			{
 				[self.delegate deleteChatMessageError:error];
@@ -143,6 +146,7 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 		{
 			// Close Activity Indicator with callback
@@ -262,7 +266,7 @@
 	{
 		NSArray *failedChatMessages = [self.failedChatMessages copy];
 	
-		// Still being used to reset Chat Messages
+		// Handle success via delegate to reset chat messages
 		if ([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
 		{
 			// Close Activity Indicator with callback
@@ -296,7 +300,7 @@
 			[self deleteMultipleChatMessages:failedChatMessages];
 		}];
 	}
-	// If request was not cancelled, then it was successful (not currently used)
+	// If request was not cancelled, then handle success via delegate (not currently used)
 	else if ( ! self.queueCancelled && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
 	{
 		// Close Activity Indicator with callback
