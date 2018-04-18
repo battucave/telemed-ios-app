@@ -133,8 +133,8 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableMessageRecipients setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). Only affects MedToMed at this time
-	if (self.hasSubmitted)
+	// Fix iOS 11+ issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). (not currently used - only affects MedToMed if table allows multiple selection)
+	if (self.hasSubmitted && self.navigationItem.rightBarButtonItem != nil)
 	{
 		if (@available(iOS 11.0, *))
 		{
@@ -146,18 +146,29 @@
 	}
 	
 	#ifdef MEDTOMED
-		// Disable next button and change its title
-		[self.navigationItem.rightBarButtonItem setEnabled:NO];
-		[self.navigationItem.rightBarButtonItem setTitle:@"Next"];
+		// Force single selection of recipients
+		[self.tableMessageRecipients setAllowsMultipleSelection:NO];
 	
-		// Re-enable next button if user returned to this screen with recipients still loaded
-		if ([self.messageRecipients count] > 0 && [self.selectedMessageRecipients count] > 0)
+		// Disable next button and change its title if table allows multiple selection
+		if (self.tableMessageRecipients.allowsMultipleSelection)
 		{
-			[self.navigationItem.rightBarButtonItem setEnabled:YES];
+			[self.navigationItem.rightBarButtonItem setEnabled:NO];
+			[self.navigationItem.rightBarButtonItem setTitle:@"Next"];
+		
+			// Re-enable next button if user returned to this screen with recipients still loaded
+			if ([self.messageRecipients count] > 0 && [self.selectedMessageRecipients count] > 0)
+			{
+				[self.navigationItem.rightBarButtonItem setEnabled:YES];
+			}
+		}
+		// Remove right bar button if table is limited to single selection
+		else
+		{
+			[self.navigationItem setRightBarButtonItem:nil];
 		}
 	
 		// Load list of message recipients for new message
-		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID slotID:(NSNumber *)[self.formValues objectForKey:@"OnCallSlotID"]];
 	
 	#else
 		// Load list of chat participants
@@ -178,12 +189,12 @@
 	#endif
 }
 
-// Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (message new 2)
+// MyTeleMed only - Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (message new 2)
 - (IBAction)saveMessageRecipients:(id)sender
 {
 	[self setHasSubmitted:YES];
 	
-	#ifdef MEDTOMED
+	#ifdef MEDTOMED // (not currently used - only used if table allows multiple selection)
 		[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 	
 	#else
@@ -240,29 +251,33 @@
 	#endif
 }
 
-// Return chat participants from chat participation model delegate
-- (void)updateChatParticipants:(NSMutableArray *)newChatParticipants
+- (void)scrollToSelectedMessageRecipient
 {
-	[self setMessageRecipients:newChatParticipants];
-	
-	self.isLoaded = YES;
-	
-	// Reload table with updated data
-	dispatch_async(dispatch_get_main_queue(), ^
+	// Cancel if table allows multiple selection or no message recipient is selected
+	if (self.tableMessageRecipients.allowsMultipleSelection || [self.selectedMessageRecipients count] == 0)
 	{
-		[self.tableMessageRecipients reloadData];
-	});
-}
-
-// Return error from chat participation model delegate
-- (void)updateChatParticipantsError:(NSError *)error
-{
-	self.isLoaded = YES;
+		return;
+	}
 	
-	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	// Find selected on call slot in on call slot
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", [(MessageRecipientModel *)[self.selectedMessageRecipients objectAtIndex:0] ID]];
+	NSArray *results = [self.messageRecipients filteredArrayUsingPredicate:predicate];
 	
-	[errorAlertController show:error];
+	if ([results count] > 0)
+	{
+		// Find table cell that contains the message recipient
+		MessageRecipientModel *messageRecipient = [results objectAtIndex:0];
+		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.messageRecipients indexOfObject:messageRecipient] inSection:0];
+		
+		// Scroll to cell
+		if (indexPath)
+		{
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[self.tableMessageRecipients scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+			});
+		}
+	}
 }
 
 // Return message recipients from message recipient model delegate
@@ -292,15 +307,24 @@
 	
 	[self.selectedMessageRecipients removeObjectsAtIndexes:removeIndexes];
 	
-	// Reload table with updated data
-	dispatch_async(dispatch_get_main_queue(), ^
+	// MyTeleMed only - reload table with updated data
+	if (self.tableMessageRecipients.allowsMultipleSelection)
+	{
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self.tableMessageRecipients reloadData];
+		});
+	}
+	// MedToMed only - reload table with updated data and scroll to any previously selected message recipient (only if table is limited to single selection)
+	else
 	{
 		[self.tableMessageRecipients reloadData];
-	});
+		[self scrollToSelectedMessageRecipient];
+	}
 	
-	// MedToMed - Re-enable next button if at least one message recipient is still selected
+	// MedToMed - Re-enable next button if at least one message recipient is still selected (not currently used - only used if table allows multiple selection)
 	#ifdef MEDTOMED
-		if ([self.selectedMessageRecipients count] > 0)
+		if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] > 0)
 		{
 			[self.navigationItem.rightBarButtonItem setEnabled:YES];
 		}
@@ -344,6 +368,16 @@
 	[self setFilteredMessageRecipients:[NSMutableArray arrayWithArray:[self.messageRecipients filteredArrayUsingPredicate:predicate]]];
 	
 	[self.tableMessageRecipients reloadData];
+}
+
+// Delegate method for clicking cancel button on search results
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+	// Close search results
+	[self.searchController setActive:NO];
+	
+	// MedToMed only - scroll to selected message recipient (only if table is limited to single selection)
+	[self scrollToSelectedMessageRecipient];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -432,9 +466,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	MessageRecipientModel *messageRecipient;
-	UITableViewCell *cell;
-	
+	// MedToMed only - Reset selected message recipients
+	if ( ! self.tableMessageRecipients.allowsMultipleSelection)
+	{
+		[self.selectedMessageRecipients removeAllObjects];
+	}
+
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
@@ -444,95 +481,112 @@
 			// Close search results
 			[self.searchController setActive:NO];
 			
+			// Scroll to selected message recipient (only if table is limited to single selection)
+			[self scrollToSelectedMessageRecipient];
+			
 			return;
 		}
 		
-		// Set message recipient
-		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
-		
-		// Close search results
-		[self.searchController setActive:NO];
-		
-		// Get cell in message recipients table
-		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
-		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
-		
-		// Select cell
-		[self.tableMessageRecipients selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+		// Add message recipient to selected message recipients
+		[self.selectedMessageRecipients addObject:(MessageRecipientModel *)[self.filteredMessageRecipients objectAtIndex:indexPath.row]];
 	}
 	// Message recipients table
 	else
 	{
-		// Set message recipient
-		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
-		
-		// Get cell in message recipients table
-		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
+		// Add message recipient to selected message recipients
+		[self.selectedMessageRecipients addObject:(MessageRecipientModel *)[self.messageRecipients objectAtIndex:indexPath.row]];
 	}
 	
-	// Add message recipient to selected message recipients
-	[self.selectedMessageRecipients addObject:messageRecipient];
+	// Get cell in message recipients table
+	UITableViewCell *cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
 	
 	// Add checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// MedToMed - Re-enable next button
 	#ifdef MEDTOMED
-		[self.navigationItem.rightBarButtonItem setEnabled:YES];
+		// Re-enable next button (not currently used - only used if table allows multiple selection)
+		if (self.navigationItem.rightBarButtonItem != nil)
+		{
+			[self.navigationItem.rightBarButtonItem setEnabled:YES];
+		}
+		// Execute segue (only used if table is limited to single selection)
+		else
+		{
+			// Close the search results, then execute segue
+			if (self.searchController.active && self.definesPresentationContext)
+			{
+				[self dismissViewControllerAnimated:YES completion:^
+				{
+					[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+				}];
+			}
+			// Execute segue
+			else
+			{
+				[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
+			}
+			
+			return;
+		}
 	#endif
+	
+	// Close the search results
+	if (self.searchController.active)
+	{
+		[self.searchController setActive:NO];
+	}
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	MessageRecipientModel *messageRecipient;
-	UITableViewCell *cell;
-	
-	// Search results table
-	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
-	{
-		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
-		
-		// Get cell in message recipients table
-		int indexRow = (int)[self.messageRecipients indexOfObject:messageRecipient];
-		cell = [self.tableMessageRecipients cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
-		
-		// Deselect cell
-		[self.tableMessageRecipients deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
-		
-		// Close search results
-		[self.searchController setActive:NO];
-	}
-	// Message recipients table
-	else
-	{
-		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
-		
-		// Get cell in message recipients table
-		cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Find index of message recipient in selected message recipients
-	NSUInteger messageRecipientIndex = [self.selectedMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient2, NSUInteger foundIndex, BOOL *stop)
-	{
-		return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
-	}];
-	
-	// Remove message recipient from selected message recipients
-	if ([self.selectedMessageRecipients count] > messageRecipientIndex)
-	{
-		[self.selectedMessageRecipients removeObjectAtIndex:messageRecipientIndex];
-	}
+	// Get cell in message recipients table
+	UITableViewCell *cell = [self.tableMessageRecipients cellForRowAtIndexPath:indexPath];
 	
 	// Remove checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// MedToMed - Disable next button if no recipients still selected
-	#ifdef MEDTOMED
-		if ([self.selectedMessageRecipients count] == 0)
+	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath method)
+	if (self.tableMessageRecipients.allowsMultipleSelection)
+	{
+		MessageRecipientModel *messageRecipient;
+		
+		// Search results table
+		if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 		{
-			[self.navigationItem.rightBarButtonItem setEnabled:NO];
+			messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 		}
-	#endif
+		// Message recipients table
+		else
+		{
+			messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
+		}
+		
+		// Find index of message recipient in selected message recipients
+		NSUInteger messageRecipientIndex = [self.selectedMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient2, NSUInteger foundIndex, BOOL *stop)
+		{
+			return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
+		}];
+		
+		// Remove message recipient from selected message recipients
+		if ([self.selectedMessageRecipients count] > messageRecipientIndex)
+		{
+			[self.selectedMessageRecipients removeObjectAtIndex:messageRecipientIndex];
+		}
+		
+		// Close the search results
+		if (self.searchController.active)
+		{
+			[self.searchController setActive:NO];
+		}
+		
+		// MedToMed - Disable next button if no recipients still selected (not currently used - only used if table allows multiple selection)
+		#ifdef MEDTOMED
+			if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
+			{
+				[self.navigationItem.rightBarButtonItem setEnabled:NO];
+			}
+		#endif
+	}
 }
 
 // Only segue for this view is unwind segue
@@ -548,10 +602,18 @@
 		// Message new 2
 		if ([segue.identifier isEqualToString:@"showMessageNew2"])
 		{
-			// Add message recipients to form values
-			[self.formValues setObject:self.selectedMessageRecipients forKey:@"MessageRecipients"];
-			
 			MessageNew2TableViewController *messageNew2TableViewController = segue.destinationViewController;
+			
+			// Add message recipients to form values (not currently used - only used if table allows multiple selection)
+			if (self.tableMessageRecipients.allowsMultipleSelection)
+			{
+				[self.formValues setObject:self.selectedMessageRecipients forKey:@"MessageRecipients"];
+			}
+			// Add message recipient id to form values (only used if table is limited to single selection)
+			else
+			{
+				[self.formValues setValue:[(MessageRecipientModel *)[self.selectedMessageRecipients objectAtIndex:0] ID] forKey:@"MessageRecipientID"];
+			}
 			
 			[messageNew2TableViewController setDelegate:self];
 			[messageNew2TableViewController setFormValues:self.formValues];
@@ -571,16 +633,54 @@
 	[self.searchController.view removeFromSuperview];
 }
 
+
+#pragma mark - MedToMed
+
 #ifdef MEDTOMED
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	// Return updated form values back to new message screen (only useful if user returned to this screen from new message 2 screen)
+	// Return updated form values back to previous screen (only used if user returned to this screen from new message 2 screen)
 	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 	{
 		[self.delegate setFormValues:self.formValues];
 	}
+	
+	// Return selected message recipients back to previous screen
+	if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
+	{
+		[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
+	}
+}
+
+
+#pragma mark - MyTeleMed
+
+#else
+// Return chat participants from chat participation model delegate
+- (void)updateChatParticipants:(NSMutableArray *)newChatParticipants
+{
+	[self setMessageRecipients:newChatParticipants];
+	
+	self.isLoaded = YES;
+	
+	// Reload table with updated data
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableMessageRecipients reloadData];
+	});
+}
+
+// Return error from chat participation model delegate
+- (void)updateChatParticipantsError:(NSError *)error
+{
+	self.isLoaded = YES;
+	
+	// Show error message
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 #endif
 

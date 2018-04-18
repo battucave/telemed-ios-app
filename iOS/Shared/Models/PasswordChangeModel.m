@@ -59,7 +59,7 @@
 			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(changePasswordSuccess)])
 			{
-				// Close Activity Indicator with callback
+				// Close activity indicator with callback
 				[self hideActivityIndicator:^
 				{
 					[self.delegate changePasswordSuccess];
@@ -67,7 +67,7 @@
 			}
 			else
 			{
-				// Close Activity Indicator
+				// Close activity indicator
 				[self hideActivityIndicator];
 			}
 		}
@@ -76,7 +76,7 @@
 			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
-				// Close Activity Indicator with callback
+				// Close activity indicator with callback
 				[self hideActivityIndicator:^
 				{
 					[self.delegate changePasswordError:error];
@@ -84,7 +84,7 @@
 			}
 			else
 			{*/
-				// Close Activity Indicator
+				// Close activity indicator
 				[self hideActivityIndicator];
 			//}
 			
@@ -104,7 +104,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate changePasswordError:error];
@@ -112,7 +112,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -133,7 +133,7 @@
 	// Notify delegate that Message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(changePasswordPending)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate changePasswordPending];
@@ -141,7 +141,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

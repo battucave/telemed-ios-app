@@ -11,33 +11,6 @@
 
 @implementation MessageRecipientModel
 
-- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID
-{
-	NSDictionary *parameters = @{
-		@"acctID"	: accountID
-	};
-	
-	[self getMessageRecipients:parameters];
-}
-
-- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID
-{
-	NSDictionary *parameters = @{
-		@"mdid"	: messageDeliveryID
-	};
-	
-	[self getMessageRecipients:parameters];
-}
-
-- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID
-{
-	NSDictionary *parameters = @{
-		@"mid"	: messageID
-	};
-	
-	[self getMessageRecipients:parameters];
-}
-
 // Private method shared by getNewMessageRecipients and getForwardMessageRecipients
 - (void)getMessageRecipients:(NSDictionary *)parameters
 {
@@ -89,5 +62,52 @@
 		}
 	}];
 }
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID
+{
+	NSDictionary *parameters = @{
+		@"acctID"	: accountID
+	};
+	
+	[self getMessageRecipients:parameters];
+}
+
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID
+{
+	NSDictionary *parameters = @{
+		@"mdid"	: messageDeliveryID
+	};
+	
+	[self getMessageRecipients:parameters];
+}
+
+- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID
+{
+	NSDictionary *parameters = @{
+		@"mid"	: messageID
+	};
+	
+	[self getMessageRecipients:parameters];
+}
+#endif
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID
+{
+	NSDictionary *parameters = @{
+		@"acctID"	: accountID,
+		@"slotID"	: slotID
+	};
+	
+	[self getMessageRecipients:parameters];
+}
+#endif
 
 @end

@@ -20,13 +20,10 @@
 
 - (void)sendNewMessage:(NSDictionary *)messageData withOrder:(NSArray *)sortedKeys
 {
-	NSArray *parameters = @[@"AccountID", @"CallbackFirstName", @"CallbackLastName", @"CallbackPhoneNumber", @"CallbackTitle", @"HospitalID", @"MessageRecipients", @"MessageText", @"PatientFirstName", @"PatientLastName", @"STAT"];
+	NSArray *parameters = @[@"AccountID", @"CallbackFirstName", @"CallbackLastName", @"CallbackPhoneNumber", @"CallbackTitle", @"HospitalID", @"MessageRecipientID", @"MessageRecipients", @"MessageText", @"OnCallSlotID", @"PatientFirstName", @"PatientLastName", @"STAT"];
 	
 	// Show Activity Indicator
 	[self showActivityIndicator];
-	
-	// Add Network Activity Observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Strip any non-numeric characters from phone number
 	NSString *callbackPhoneNumber = [NSString stringWithString:[[[messageData valueForKey:@"CallbackPhoneNumber"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
@@ -39,6 +36,7 @@
 		callbackTitle = [NSString stringWithFormat:@"<CallbackTitle>%@</CallbackTitle>", [[messageData valueForKey:@"CallbackTitle"] escapeXML]];
 	}*/
 	
+	/*/ Set message recipients (NOTE: only used if web service changed back to allow multiple message recipients)
 	NSMutableArray *messageRecipients = (NSMutableArray *)[messageData objectForKey:@"MessageRecipients"];
 	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
 	
@@ -46,6 +44,13 @@
 	{
 		[xmlRecipients appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", messageRecipient.ID]];
 	}
+	
+	NSString *xmlMessageRecipients = [NSString stringWithFormat:
+		@"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
+			"%@"
+		"</MessageRecipients>",
+		xmlRecipients
+	];*/
 	
 	// Sort dictionary keys alphabetically (if custom order is required, utilize the "sortedKeys" method parameter)
 	// NSArray *sortedKeys = [[messageData allKeys] sortedArrayUsingSelector:@selector(compare:)];
@@ -75,10 +80,12 @@
 			"<CallbackPhone>%@</CallbackPhone>"
 			"<CallbackTitle>%@</CallbackTitle>"
 			"<HospitalID>%@</HospitalID>"
-			"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
+			"<MessageRecipientID>%@</MessageRecipientID>"
+			/*"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
 				"%@"
-			"</MessageRecipients>"
+			"</MessageRecipients>"*/
 			"<MessageText>%@</MessageText>"
+			"<OnCallSlotID>%@</OnCallSlotID>"
 			"<PatientFirstName>%@</PatientFirstName>"
 			"<PatientLastName>%@</PatientLastName>"
 			"<STAT>%@</STAT>"
@@ -90,8 +97,10 @@
 		callbackPhoneNumber,
 		[[messageData valueForKey:@"CallbackTitle"] escapeXML],
 		[messageData valueForKey:@"HospitalID"],
-		xmlRecipients,
+		[messageData valueForKey:@"MessageRecipientID"],
+		// xmlMessageRecipients,
 		[[messageText componentsJoinedByString:@"\n"] escapeXML],
+		[messageData valueForKey:@"OnCallSlotID"],
 		[[messageData valueForKey:@"PatientFirstName"] escapeXML],
 		[[messageData valueForKey:@"PatientLastName"] escapeXML],
 		[messageData valueForKey:@"STAT"]
@@ -101,15 +110,22 @@
 	
 	[self.operationManager POST:@"NewMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
-		
 		// Successful Post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
 			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
-				[self.delegate sendMessageSuccess];
+				// Close activity indicator with callback
+				[self hideActivityIndicator:^
+				{
+					[self.delegate sendMessageSuccess];
+				}];
+			}
+			// Close activity indicator
+			else
+			{
+				[self hideActivityIndicator];
 			}
 		}
 		else
@@ -137,21 +153,6 @@
 		// Remove Network Activity Observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
-		{
-			// Close Activity Indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate sendMessageError:error];
-			}];
-		}
-		else
-		{*/
-			// Close Activity Indicator
-			[self hideActivityIndicator];
-		//}
-	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"New Message Error"];
 		
@@ -161,7 +162,7 @@
 			// Handle error via delegate
 			if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
-				// Close Activity Indicator with callback
+				// Close activity indicator with callback
 				[self hideActivityIndicator:^
 				{
 					[self.delegate sendMessageError:error];
@@ -171,7 +172,7 @@
 			}
 		}
 		
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 		
 		// Show error even if user has navigated to another screen
@@ -181,31 +182,6 @@
 			[self sendNewMessage:messageData withOrder:sortedKeys];
 		}];
 	}];
-}
-
-// Network Request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove Network Activity Observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Notify delegate that Message has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
-	{
-		// Close Activity Indicator with callback
-		[self hideActivityIndicator:^
-		{
-			[self.delegate sendMessagePending];
-		}];
-	}
-	else
-	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
 }
 
 @end

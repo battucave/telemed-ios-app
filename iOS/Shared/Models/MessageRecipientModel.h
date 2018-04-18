@@ -28,8 +28,20 @@
 @property (nonatomic) NSString *FirstName; // Not passed from web service (generated during parsing)
 @property (nonatomic) NSString *LastName; // Not passed from web service (generated during parsing)
 
-- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID;
-- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID;
-- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID;
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID;
+	- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID;
+	- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID;
+#endif
+
+
+#pragma mark - MedToMed
+
+#ifdef MEDTOMED
+	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID;
+#endif
 
 @end

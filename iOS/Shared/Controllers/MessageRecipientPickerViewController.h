@@ -13,15 +13,21 @@
 
 @interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) id <MessageProtocol> message;
 @property (nonatomic) AccountModel *selectedAccount;
-@property (nonatomic) NSMutableArray *selectedMessageRecipients;
+
 @property (nonatomic) NSString *messageRecipientType;
-@property (nonatomic) BOOL isGroupChat; // Only used for chat participants
+@property (nonatomic) NSMutableArray *selectedMessageRecipients;
+
 
 #ifdef MEDTOMED
 	@property (weak) id delegate;
+
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
+
+#else
+	@property (nonatomic) id <MessageProtocol> message;
+
+	@property (nonatomic) BOOL isGroupChat; // Only used for chat participants
 #endif
 
 @end

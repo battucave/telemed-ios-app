@@ -368,6 +368,10 @@
 		E27B85341B14D11D00AD50C6 /* MyProfileXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85331B14D11D00AD50C6 /* MyProfileXMLParser.m */; };
 		E27B85371B14D12900AD50C6 /* MyStatusXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85361B14D12900AD50C6 /* MyStatusXMLParser.m */; };
 		E28307F11AD83170006FDD6D /* news_flash.caf in Resources */ = {isa = PBXBuildFile; fileRef = E28307F01AD83170006FDD6D /* news_flash.caf */; };
+		E2896347208540320055A18E /* OnCallSlotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896346208540320055A18E /* OnCallSlotModel.m */; };
+		E289634A208542BD0055A18E /* OnCallSlotXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */; };
+		E2896350208557870055A18E /* OnCallSlotPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E289634E208557850055A18E /* OnCallSlotPickerViewController.m */; };
+		E2896353208633AF0055A18E /* OnCallSlotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896351208633AF0055A18E /* OnCallSlotCell.m */; };
 		E291269E1D2C29C900154AB2 /* ChatMessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E291269D1D2C29C900154AB2 /* ChatMessageDetailViewController.m */; };
 		E2920C941E81AB04004BEF10 /* SentMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */; };
 		E2920C971E82BC73004BEF10 /* SentMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C961E82BC73004BEF10 /* SentMessageModel.m */; };
@@ -844,6 +848,14 @@
 		E27B85351B14D12900AD50C6 /* MyStatusXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyStatusXMLParser.h; sourceTree = "<group>"; };
 		E27B85361B14D12900AD50C6 /* MyStatusXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyStatusXMLParser.m; sourceTree = "<group>"; };
 		E28307F01AD83170006FDD6D /* news_flash.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = news_flash.caf; sourceTree = "<group>"; };
+		E2896345208540320055A18E /* OnCallSlotModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnCallSlotModel.h; sourceTree = "<group>"; };
+		E2896346208540320055A18E /* OnCallSlotModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnCallSlotModel.m; sourceTree = "<group>"; };
+		E2896348208542BD0055A18E /* OnCallSlotXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnCallSlotXMLParser.h; sourceTree = "<group>"; };
+		E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnCallSlotXMLParser.m; sourceTree = "<group>"; };
+		E289634E208557850055A18E /* OnCallSlotPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnCallSlotPickerViewController.m; sourceTree = "<group>"; };
+		E289634F208557860055A18E /* OnCallSlotPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnCallSlotPickerViewController.h; sourceTree = "<group>"; };
+		E2896351208633AF0055A18E /* OnCallSlotCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnCallSlotCell.m; sourceTree = "<group>"; };
+		E2896352208633AF0055A18E /* OnCallSlotCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnCallSlotCell.h; sourceTree = "<group>"; };
 		E291269C1D2C29C900154AB2 /* ChatMessageDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageDetailViewController.h; sourceTree = "<group>"; };
 		E291269D1D2C29C900154AB2 /* ChatMessageDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageDetailViewController.m; sourceTree = "<group>"; };
 		E2920C921E81AB04004BEF10 /* SentMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentMessagesViewController.h; sourceTree = "<group>"; };
@@ -1656,6 +1668,8 @@
 				E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */,
 				E2622D0D1FC5F9A4008BCFF3 /* MessageNew2TableViewController.h */,
 				E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */,
+				E289634F208557860055A18E /* OnCallSlotPickerViewController.h */,
+				E289634E208557850055A18E /* OnCallSlotPickerViewController.m */,
 				E22EF0981FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.h */,
 				E22EF0991FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.m */,
 			);
@@ -1676,6 +1690,8 @@
 			children = (
 				E24A443E1FCE1C7C00A06EE8 /* HospitalCell.h */,
 				E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */,
+				E2896352208633AF0055A18E /* OnCallSlotCell.h */,
+				E2896351208633AF0055A18E /* OnCallSlotCell.m */,
 			);
 			path = Includes;
 			sourceTree = "<group>";
@@ -1757,6 +1773,8 @@
 			children = (
 				E2CD93A11FCF1411006ED66F /* HospitalXMLParser.h */,
 				E2CD93A21FCF1411006ED66F /* HospitalXMLParser.m */,
+				E2896348208542BD0055A18E /* OnCallSlotXMLParser.h */,
+				E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */,
 				E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */,
 				E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */,
 			);
@@ -1849,6 +1867,8 @@
 				E2CD939F1FCF0D88006ED66F /* HospitalModel.m */,
 				E254E3771FE2FDD700B3014F /* NewMessageModel.h */,
 				E254E3761FE2FDD400B3014F /* NewMessageModel.m */,
+				E2896345208540320055A18E /* OnCallSlotModel.h */,
+				E2896346208540320055A18E /* OnCallSlotModel.m */,
 				E2C7C1BB1FC4917100E50F07 /* UserProfileModel.h */,
 				E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */,
 			);
@@ -2500,6 +2520,7 @@
 				E25036901FBB88F400099C7E /* AFNetworkActivityIndicatorManager.m in Sources */,
 				E22EF07C1FD99CBC00A2E6F6 /* MessageDetailViewController.m in Sources */,
 				E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */,
+				E289634A208542BD0055A18E /* OnCallSlotXMLParser.m in Sources */,
 				E25036981FBB88F400099C7E /* UIButton+AFNetworking.m in Sources */,
 				E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */,
 				E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */,
@@ -2515,6 +2536,7 @@
 				E25036A81FBB88F400099C7E /* UIImageView+AFNetworking.m in Sources */,
 				E25036AA1FBB88F400099C7E /* AFURLSessionManager.m in Sources */,
 				E25036AC1FBB88F400099C7E /* LoginSSOViewController.m in Sources */,
+				E2896350208557870055A18E /* OnCallSlotPickerViewController.m in Sources */,
 				E22EF09A1FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.m in Sources */,
 				E25036AD1FBB88F400099C7E /* SentMessageXMLParser.m in Sources */,
 				E2CD93A31FCF1411006ED66F /* HospitalXMLParser.m in Sources */,
@@ -2540,6 +2562,7 @@
 				E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */,
 				E2CAB4441FE9B49A00202CCD /* HospitalRequestTableViewController.m in Sources */,
 				E25036CD1FBB88F400099C7E /* SSOProviderModel.m in Sources */,
+				E2896347208540320055A18E /* OnCallSlotModel.m in Sources */,
 				E25036CE1FBB88F400099C7E /* KeychainItemWrapper.m in Sources */,
 				E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */,
 				E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */,
@@ -2567,6 +2590,7 @@
 				E22EF0961FD9DBFE00A2E6F6 /* SettingsPasswordTableViewController.m in Sources */,
 				E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */,
 				E25036F41FBB88F400099C7E /* SSOProviderXMLParser.m in Sources */,
+				E2896353208633AF0055A18E /* OnCallSlotCell.m in Sources */,
 				E22EF0761FD74BC700A2E6F6 /* MessageTeleMedComposeTableViewController.m in Sources */,
 				E22EF0971FD9DBFE00A2E6F6 /* SettingsTableViewController.m in Sources */,
 				E24A443C1FCE181A00A06EE8 /* HospitalPickerViewController.m in Sources */,

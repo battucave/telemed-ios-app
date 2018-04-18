@@ -65,13 +65,21 @@
 	{
 		[self.messageRecipient setValue:self.currentElementValue forKey:elementName];
 		
-		// Most names are of the following format: Lastname, Firstname
+		// Most MyTeleMed names are of the following format: Lastname, Firstname
 		if ([self.currentElementValue rangeOfString:@", "].location != NSNotFound)
 		{
 			NSArray *nameComponents = [self.currentElementValue componentsSeparatedByString:@", "];
 			
 			[self.messageRecipient setFirstName:[nameComponents objectAtIndex:1]];
 			[self.messageRecipient setLastName:[nameComponents objectAtIndex:0]];
+		}
+		// Most MedToMed names are of the following format: FirstName LastName
+		else if ([self.currentElementValue rangeOfString:@" "].location != NSNotFound)
+		{
+			NSArray *nameComponents = [self.currentElementValue componentsSeparatedByString:@" "];
+			
+			[self.messageRecipient setFirstName:[nameComponents objectAtIndex:0]];
+			[self.messageRecipient setLastName:[nameComponents objectAtIndex:1]];
 		}
 		// Some names are not people names (example: "Abundant HH On Call")
 		else
