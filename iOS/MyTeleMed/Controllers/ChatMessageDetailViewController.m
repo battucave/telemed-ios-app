@@ -521,7 +521,7 @@
 	
 	if ([results count] > 0)
 	{
-		// Find and delete table cell that contains Chat Message
+		// Find and delete table cell that contains the Chat Message
 		ChatMessageModel *chatMessage = [results objectAtIndex:0];
 		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
 		

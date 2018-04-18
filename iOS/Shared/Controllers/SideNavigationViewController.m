@@ -70,6 +70,13 @@
 	#endif
 }
 
+- (IBAction)doLogout:(id)sender
+{
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	
+	[authenticationModel doLogout];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;
@@ -268,6 +275,8 @@
 #ifdef MEDTOMED
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	
 	// New Message: determine which screen to go to depending on whether user is authorized
 	if (indexPath.row == 0)
 	{
@@ -276,20 +285,18 @@
 		// Show message new screen
 		if (profile.IsAuthorized)
 		{
-			[self performSegueWithIdentifier:@"showMessageNew" sender:[tableView cellForRowAtIndexPath:indexPath]];
+			[self performSegueWithIdentifier:@"showMessageNew" sender:cell];
 		}
 		// Show message new unauthorized screen
 		else
 		{
-			[self performSegueWithIdentifier:@"showMessageNewUnauthorized" sender:[tableView cellForRowAtIndexPath:indexPath]];
+			[self performSegueWithIdentifier:@"showMessageNewUnauthorized" sender:cell];
 		}
 	}
-	// Log Out
-	else if (indexPath.row == 3)
+	// Log Out (based on cell's identifier instead of row's indexPath for future compatibility in event that rows change in the future)
+	else if ([cell.reuseIdentifier isEqualToString:@"Log Out"])
 	{
-		AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-		
-		[authenticationModel doLogout];
+		[self doLogout:cell];
 	}
 }
 #endif

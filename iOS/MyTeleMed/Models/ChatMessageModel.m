@@ -149,7 +149,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate deleteChatMessageError:error];
@@ -157,7 +157,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -269,7 +269,7 @@
 		// Handle success via delegate to reset chat messages
 		if ([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate deleteMultipleChatMessagesError:failedChatMessages];
@@ -277,7 +277,7 @@
 		}
 		else
 		{
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		}
 	
@@ -303,7 +303,7 @@
 	// If request was not cancelled, then handle success via delegate (not currently used)
 	else if ( ! self.queueCancelled && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate deleteMultipleChatMessagesSuccess];
@@ -311,7 +311,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	
@@ -331,7 +331,7 @@
 	// Notify delegate that Delete Chat Message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate deleteChatMessagePending];
@@ -340,7 +340,7 @@
 	// Notify delegate that Multiple Chat Message Deletions have begun being sent to server (should always run multiple times if needed)
 	else if ([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate deleteMultipleChatMessagesPending];
@@ -348,7 +348,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

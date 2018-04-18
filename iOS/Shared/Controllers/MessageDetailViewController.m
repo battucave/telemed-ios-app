@@ -532,7 +532,7 @@
 	
 	if ([results count] > 0)
 	{
-		// Find and delete table cell that contains comment
+		// Find and delete table cell that contains the comment
 		MessageEventModel *messageEvent = [results objectAtIndex:0];
 		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.filteredMessageEvents indexOfObject:messageEvent] inSection:0]];
 		

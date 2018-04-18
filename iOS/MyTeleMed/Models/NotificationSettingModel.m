@@ -273,7 +273,7 @@
 		// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
 		if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate saveNotificationSettingsError:error];
@@ -281,7 +281,7 @@
 		}
 		else
 		{
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		}
 	
@@ -306,7 +306,7 @@
 	// Notify delegate that Notification Settings has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate saveNotificationSettingsPending];
@@ -314,7 +314,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

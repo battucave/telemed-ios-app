@@ -86,7 +86,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate savePreferredAccountError:error];
@@ -94,7 +94,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -122,7 +122,7 @@
 	// Notify delegate that Message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate savePreferredAccountPending];
@@ -130,7 +130,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

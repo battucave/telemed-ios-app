@@ -575,7 +575,6 @@
 
 #ifdef MEDTOMED
 
-
 /*
  * Show main screen: MessageNewTableViewController or MessageNewUnauthorizedTableViewController
  */

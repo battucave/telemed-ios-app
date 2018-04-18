@@ -120,7 +120,7 @@
 		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate saveCommentError:error withPendingID:pendingID];
@@ -128,7 +128,7 @@
 		}
 		else
 		{
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		}
 	
@@ -154,7 +154,7 @@
 	// Notify delegate that Comment has been sent to server
 	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
@@ -162,7 +162,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

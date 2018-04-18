@@ -16,5 +16,6 @@
 @property (nonatomic) NSMutableDictionary *formValues;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) HospitalModel *selectedHospital;
+@property (nonatomic) NSMutableArray *selectedMessageRecipients; // Only used if user returned back to this screen from message recipient picker screen
 
 @end

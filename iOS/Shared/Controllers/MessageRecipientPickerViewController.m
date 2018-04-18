@@ -29,12 +29,11 @@
 @property (nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
 
-@property (nonatomic, strong) UISearchController *searchController;
-
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) BOOL isLoaded;
 @property (nonatomic) NSMutableArray *messageRecipients;
+@property (nonatomic, strong) UISearchController *searchController;
 
 @end
 
@@ -63,16 +62,16 @@
 	// Initialize filtered message recipients
 	[self setFilteredMessageRecipients:[[NSMutableArray alloc] init]];
 	
+	// Present search controller from self
+	[self setDefinesPresentationContext:YES];
+	
 	// Initialize search controller
-	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+	[self setSearchController:[[UISearchController alloc] initWithSearchResultsController:nil]];
 	
 	[self.searchController setDelegate:self];
 	[self.searchController setDimsBackgroundDuringPresentation:NO];
 	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
-	
-	// Commented out because it causes issues when attempting to navigate to another screen on search result selection
-	// self.definesPresentationContext = YES;
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];

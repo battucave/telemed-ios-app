@@ -113,7 +113,7 @@
 		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
@@ -121,7 +121,7 @@
 		}
 		else
 		{
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		}
 	
@@ -146,7 +146,7 @@
 	// Notify delegate that Chat Message has been sent to server
 	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
@@ -154,7 +154,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

@@ -36,7 +36,7 @@
 				HospitalModel *hospital = [[HospitalModel alloc] init];
 				
 				[hospital setID:[NSNumber numberWithInt:i]];
-				[hospital setMyAuthenticationStatus:@"Requested"]; // NONE, Requested, OK, Admin, Denied, Blocked
+				[hospital setMyAuthenticationStatus:@"OK"]; // NONE, Requested, OK, Admin, Denied, Blocked
 				[hospital setName:[NSString stringWithFormat:@"Hospital %d", i]];
 				[hospital setAbbreviatedName:[NSString stringWithFormat:@"Hospital %d", i]];
 			 

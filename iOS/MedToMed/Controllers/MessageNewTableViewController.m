@@ -10,8 +10,9 @@
 #import "AccountPickerViewController.h"
 #import "ErrorAlertController.h"
 #import "HospitalPickerViewController.h"
-#import "MessageRecipientPickerViewController.h"
+#import "OnCallSlotPickerViewController.h"
 #import "AccountModel.h"
+#import "OnCallSlotModel.h"
 #import "UserProfileModel.h"
 
 @interface MessageNewTableViewController ()
@@ -75,7 +76,7 @@
 		if (@available(iOS 11.0, *))
 		{
 			// Workaround the issue by completely replacing the next button with a brand new one
-			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showMessageRecipientPicker:)];
+			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showOnCallSlotPicker:)];
 			
 			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
 		}
@@ -92,25 +93,25 @@
 			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackFirstName"])
 			{
 				[textField setText:profile.FirstName];
-				[self.formValues setValue:profile.FirstName forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
 			// Callback last name
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackLastName"])
 			{
 				[textField setText:profile.LastName];
-				[self.formValues setValue:profile.LastName forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
 			// Callback number
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
 				[textField setText:profile.PhoneNumber];
-				[self.formValues setValue:profile.PhoneNumber forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
 			// Callback title
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"])
 			{
 				[textField setText:profile.JobTitlePrefix];
-				[self.formValues setValue:profile.JobTitlePrefix forKey:textField.accessibilityIdentifier];
+				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
 		}
 		
@@ -186,6 +187,9 @@
 	// Reset selected medical group (account)
 	[self setSelectedAccount:nil];
 	[self.labelMedicalGroup setText:@""];
+	
+	// Reset selected messages recipients
+	[self.selectedMessageRecipients removeAllObjects];
 
 	// Clear form fields
 	for (UITextField *textField in self.textFields)
@@ -255,11 +259,11 @@
 	[self setHospital];
 }
 
-- (IBAction)showMessageRecipientPicker:(id)sender
+- (IBAction)showOnCallSlotPicker:(id)sender
 {
 	[self setHasSubmitted:YES];
 	
-	[self performSegueWithIdentifier:@"showMessageRecipientPicker" sender:self];
+	[self performSegueWithIdentifier:@"showOnCallSlotPicker" sender:self];
 }
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
@@ -454,16 +458,16 @@
 }
 
 // Return hospitals from hospital model delegate
-- (void)updateHospitals:(NSMutableArray *)hospitals
+- (void)updateHospitals:(NSMutableArray *)newHospitals
 {
 	// Filter and store only authenticated hospitals
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
 	
-	[self setHospitals:[[hospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	[self setHospitals:[[newHospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
 	
 	// If user has exactly one hospital, then set it as the selected hospital
 	if ([self.hospitals count] == 1) {
-		[self setSelectedHospital:[hospitals objectAtIndex:0]];
+		[self setSelectedHospital:[self.hospitals objectAtIndex:0]];
 		
 		[self setHospital];
 		
@@ -574,21 +578,20 @@
 		[hospitalPickerViewController setSelectedHospital:self.selectedHospital];
 		[hospitalPickerViewController setShouldSelectHospital:YES];
 	}
-	// Message recipient picker
-	else if ([segue.identifier isEqualToString:@"showMessageRecipientPicker"])
+	// On call slot picker
+	else if ([segue.identifier isEqualToString:@"showOnCallSlotPicker"])
 	{
-		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
+		OnCallSlotPickerViewController *onCallSlotPickerViewController = segue.destinationViewController;
 		
-		// Update form values with urgency value
+		// Add urgency value to form values
 		[self.formValues setValue:(self.switchUrgencyLevel.isOn ? @"true" : @"false") forKey:@"STAT"];
 		
-		[messageRecipientPickerViewController setDelegate:self];
-		[messageRecipientPickerViewController setFormValues:self.formValues];
-		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
-		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
+		[onCallSlotPickerViewController setDelegate:self];
+		[onCallSlotPickerViewController setFormValues:self.formValues];
+		[onCallSlotPickerViewController setSelectedAccount:self.selectedAccount];
 		
 		// If user returned back to this screen, then he/she may have already set message recipients so pre-select them on message recipient picker screen
-		[messageRecipientPickerViewController setSelectedMessageRecipients:(NSMutableArray *)[self.formValues objectForKey:@"MessageRecipients"]];
+		[onCallSlotPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
 }
 

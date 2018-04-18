@@ -110,7 +110,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate sendMessageError:error];
@@ -118,7 +118,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -143,7 +143,7 @@
 	// Notify delegate that Message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate sendMessagePending];
@@ -151,7 +151,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

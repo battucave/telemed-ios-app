@@ -23,10 +23,9 @@
 @property (nonatomic) IBOutlet UITableView *tableAccounts;
 @property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
-@property (nonatomic, strong) UISearchController *searchController;
-
 @property (nonatomic) NSMutableArray *filteredAccounts;
 @property (nonatomic) BOOL isLoaded;
+@property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic) NSString *textAccount;
 
 @end
@@ -45,16 +44,15 @@
 		[self setTextAccount:@"Account"];
 	#endif
 	
+	// Present search controller from self
+	[self setDefinesPresentationContext:YES];
+	
 	// Initialize search controller
-	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+	[self setSearchController:[[UISearchController alloc] initWithSearchResultsController:nil]];
 	
 	[self.searchController setDelegate:self];
 	[self.searchController setDimsBackgroundDuringPresentation:NO];
-	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
-	
-	// Commented out because it causes issues when attempting to navigate to another screen on search result selection
-	// self.definesPresentationContext = YES;
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
@@ -138,7 +136,7 @@
 		[accountModel setDelegate:self];
 		[accountModel getAccounts];
 	}
-	// If account was previously selected, scroll to it
+	// Reload table with updated data and scroll to any previously selected account
 	else
 	{
 		[self.tableAccounts reloadData];
@@ -161,17 +159,6 @@
 			[self.navigationItem setRightBarButtonItem:buttonSend];*/
 		}
 	#endif
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	
-	// Reset search results (put here because its animation must occur AFTER any segue)
-	if (self.searchController.active)
-	{
-		[self.searchController setActive:NO];
-	}
 }
 
 // Return accounts from account model delegate
@@ -199,7 +186,7 @@
 	
 	self.isLoaded = YES;
 	
-	// If account was previously selected, scroll to it
+	// Reload table with updated data and scroll to any previously selected account
 	[self.tableAccounts reloadData];
 	
 	[self scrollToSelectedAccount];
@@ -237,7 +224,7 @@
 	
 	if ([results count] > 0)
 	{
-		// Find table cell that contains selected account
+		// Find table cell that contains the selected account
 		AccountModel *account = [results objectAtIndex:0];
 		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.accounts indexOfObject:account] inSection:0];
 		
@@ -441,8 +428,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell;
-	
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
@@ -458,122 +443,110 @@
 			return;
 		}
 		
-		// Set selected account (in case user presses back button from next screen)
+		// Set selected account
 		[self setSelectedAccount:[self.filteredAccounts objectAtIndex:indexPath.row]];
-		
-		// Get cell in accounts table
-		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
-		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
-		
-		// Select cell (not needed - if user presses back button from next screen, viewWillAppear method handles selecting the selected account)
-		//[self.tableAccounts selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 	// Accounts table
 	else
 	{
-		// Set selected account (in case user presses back button from next screen)
+		// Set selected account
 		[self setSelectedAccount:[self.accounts objectAtIndex:indexPath.row]];
-		
-		// Get cell in accounts table
-		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
 	}
 	
-	#ifdef MYTELEMED
-		// Add checkmark of selected account
-		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+	// Get cell in accounts table
+	UITableViewCell *cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
 	
-		// If selecting preferred account
-		if (self.shouldSetPreferredAccount)
-		{
-			// Save preferred account to server
-			PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
-			
-			[preferredAccountModel setDelegate:self];
-			[preferredAccountModel savePreferredAccount:self.selectedAccount];
-		}
-		// If selecting an account for new message
-		else
-		{
-			// Go to MessageRecipientPickerTableViewController
-			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
-		}
-	
-	#elif MEDTOMED
-		if (self.shouldCallAccount) {
-			NSString *callUnavailableMessage = @"";
-			
-			// Verify that selected account has a phone number
-			if (self.selectedAccount.DID != nil && ! [self.selectedAccount.DID isEqualToString:@""])
+	// Completion block for handling selected row after closing the search results
+	void(^completion)(UITableViewCell *) = ^(UITableViewCell *cell)
+	{
+		#ifdef MYTELEMED
+			// Add checkmark of selected account
+			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+		
+			// If selecting preferred account
+			if (self.shouldSetPreferredAccount)
 			{
-				// Use phone dialer to make call. Tel works same as telprompt in iOS 10.3+
-				NSURL *urlCallTeleMed = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@", self.selectedAccount.DID]];
+				// Save preferred account to server
+				PreferredAccountModel *preferredAccountModel = [[PreferredAccountModel alloc] init];
+				
+				[preferredAccountModel setDelegate:self];
+				[preferredAccountModel savePreferredAccount:self.selectedAccount];
+			}
+			// If selecting an account for new message
+			else
+			{
+				// Go to MessageRecipientPickerTableViewController
+				[self performSegueWithIdentifier:@"showMessageRecipientPickerFromAccountPicker" sender:cell];
+			}
+		
+		#elif MEDTOMED
+			if (self.shouldCallAccount) {
+				NSString *callUnavailableMessage = @"";
+				
+				// Verify that selected account has a phone number
+				if (self.selectedAccount.DID != nil && ! [self.selectedAccount.DID isEqualToString:@""])
+				{
+					// Use phone dialer to make call. Tel works same as telprompt in iOS 10.3+
+					NSURL *urlCallTeleMed = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@", self.selectedAccount.DID]];
 
-				// Verify that device can make phone calls
-				if ([[UIApplication sharedApplication] canOpenURL:urlCallTeleMed])
-				{
-					[[UIApplication sharedApplication] openURL:urlCallTeleMed];
+					// Verify that device can make phone calls
+					if ([[UIApplication sharedApplication] canOpenURL:urlCallTeleMed])
+					{
+						[[UIApplication sharedApplication] openURL:urlCallTeleMed];
+					}
+					else
+					{
+						callUnavailableMessage = @"Telephone service is unavailable.";
+					}
+				
+				} else {
+					callUnavailableMessage = [NSString stringWithFormat:@"This %@ has no phone number information. Please select another %@ to call about.", self.textAccount, self.textAccount];
 				}
-				else
+				
+				if (! [callUnavailableMessage isEqualToString:@""])
 				{
-					callUnavailableMessage = @"Telephone service is unavailable.";
+					UIAlertController *callUnavailableAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:callUnavailableMessage preferredStyle:UIAlertControllerStyleAlert];
+					UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+				
+					[callUnavailableAlertController addAction:actionOK];
+				
+					// PreferredAction only supported in 9.0+
+					if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
+					{
+						[callUnavailableAlertController setPreferredAction:actionOK];
+					}
+				
+					// Show Alert
+					[self presentViewController:callUnavailableAlertController animated:YES completion:nil];
 				}
 			
 			} else {
-				callUnavailableMessage = [NSString stringWithFormat:@"This %@ has no phone number information. Please select another %@ to call about.", self.textAccount, self.textAccount];
-			}
-			
-			if (! [callUnavailableMessage isEqualToString:@""])
-			{
-				UIAlertController *callUnavailableAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:callUnavailableMessage preferredStyle:UIAlertControllerStyleAlert];
-				UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-			
-				[callUnavailableAlertController addAction:actionOK];
-			
-				// PreferredAction only supported in 9.0+
-				if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
-				{
-					[callUnavailableAlertController setPreferredAction:actionOK];
-				}
-			
-				// Show Alert
-				[self presentViewController:callUnavailableAlertController animated:YES completion:nil];
-			}
-		
-		} else {
-			// Add checkmark of selected account
-			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+				// Add checkmark of selected account
+				[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 
-			[self performSegueWithIdentifier:@"setAccount" sender:self];
-		}
-	#endif
+				[self performSegueWithIdentifier:@"setAccount" sender:self];
+			}
+		#endif
+	};
+	
+	// Close the search results and execute completion block
+	if (self.searchController.active && self.definesPresentationContext)
+	{
+		[self dismissViewControllerAnimated:YES completion:^{
+			completion(cell);
+		}];
+	}
+	// Execute completion block
+	else
+	{
+		completion(cell);
+	}
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell;
-	
-	// Search results table
-	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
-	{
-		// Close search results
-		[self.searchController setActive:NO];
-		
-		// Get cell in message accounts table
-		int indexRow = (int)[self.accounts indexOfObject:self.selectedAccount];
-		cell = [self.tableAccounts cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
-		
-		// Deselect cell
-		[self.tableAccounts deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
-	}
-	// Accounts table
-	else
-	{
-		// Get cell in accounts table
-		cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Remove selected account
-	[self setSelectedAccount:nil];
+	// Get cell in accounts table
+	UITableViewCell *cell = [self.tableAccounts cellForRowAtIndexPath:indexPath];
 	
 	// Remove checkmark of selected account
 	[cell setAccessoryType:UITableViewCellAccessoryNone];

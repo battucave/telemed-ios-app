@@ -78,7 +78,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate callTeleMedError:error];
@@ -86,7 +86,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -171,7 +171,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate callSenderError:error];
@@ -179,7 +179,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -209,7 +209,7 @@
 		// Notify delegate that TeleMed Call Request has been sent to server
 		if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate callTeleMedPending];
@@ -218,7 +218,7 @@
 		// Notify delegate that Sender Call Request has been sent to server
 		else if ([self.delegate respondsToSelector:@selector(callSenderPending)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate callSenderPending];
@@ -226,7 +226,7 @@
 		}
 		else
 		{
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		}
 	}

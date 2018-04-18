@@ -181,7 +181,7 @@
 			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
 			{
-				// Close Activity Indicator with callback
+				// Close activity indicator with callback
 				[self hideActivityIndicator:^
 				{
 					[self.delegate modifyMessageStateSuccess:state];
@@ -189,7 +189,7 @@
 			}
 			else
 			{
-				// Close Activity Indicator
+				// Close activity indicator
 				[self hideActivityIndicator];
 			}
 		}
@@ -198,7 +198,7 @@
 			// Handle error via delegate
 			/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 			{
-				// Close Activity Indicator with callback
+				// Close activity indicator with callback
 				[self hideActivityIndicator:^
 				{
 					[self.delegate modifyMessageStateError:error forState:state];
@@ -206,7 +206,7 @@
 			}
 			else
 			{*/
-				// Close Activity Indicator
+				// Close activity indicator
 				[self hideActivityIndicator];
 			//}
 		
@@ -234,7 +234,7 @@
 		// Handle error via delegate
 		/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate modifyMessageStateError:error forState:state];
@@ -242,7 +242,7 @@
 		}
 		else
 		{*/
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		//}
 	
@@ -371,7 +371,7 @@
 		// Handle error via delegate
 		if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
 		{
-			// Close Activity Indicator with callback
+			// Close activity indicator with callback
 			[self hideActivityIndicator:^
 			{
 				[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
@@ -379,7 +379,7 @@
 		}
 		else
 		{
-			// Close Activity Indicator
+			// Close activity indicator
 			[self hideActivityIndicator];
 		}
 	
@@ -405,7 +405,7 @@
 	// If request was not cancelled, then handle success via delegate (still being used)
 	else if ( ! self.queueCancelled && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate modifyMultipleMessagesStateSuccess:state];
@@ -413,7 +413,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	
@@ -433,7 +433,7 @@
 	// Notify delegate that Message State has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate modifyMessageStatePending:self.messageState];
@@ -442,7 +442,7 @@
 	// Notify delegate that Multiple Message States have begun being sent to server (should always run multiple times if needed)
 	else if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
 	{
-		// Close Activity Indicator with callback
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			[self.delegate modifyMultipleMessagesStatePending:self.messageState];
@@ -450,7 +450,7 @@
 	}
 	else
 	{
-		// Close Activity Indicator
+		// Close activity indicator
 		[self hideActivityIndicator];
 	}
 	

@@ -67,6 +67,7 @@
 {
 	[super viewWillDisappear:animated];
 	
+	// Return updated form values back to previous screen
 	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 	{
 		[self.delegate setFormValues:self.formValues];

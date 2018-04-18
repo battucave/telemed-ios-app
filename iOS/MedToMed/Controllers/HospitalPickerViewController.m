@@ -18,10 +18,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableHospitals;
 @property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
-@property (nonatomic, strong) UISearchController *searchController;
-
 @property (nonatomic) NSMutableArray *filteredHospitals;
 @property (nonatomic) BOOL isLoaded;
+@property (nonatomic, strong) UISearchController *searchController;
 
 @end
 
@@ -31,16 +30,16 @@
 {
     [super viewDidLoad];
 	
+	// Present search controller from self
+	[self setDefinesPresentationContext:YES];
+	
 	// Initialize search controller
-	self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+	[self setSearchController:[[UISearchController alloc] initWithSearchResultsController:nil]];
 	
 	[self.searchController setDelegate:self];
 	[self.searchController setDimsBackgroundDuringPresentation:NO];
 	//[self.searchController setHidesNavigationBarDuringPresentation:NO];
 	[self.searchController setSearchResultsUpdater:self];
-	
-	// Commented out because it causes issues when attempting to navigate to another screen on search result selection
-	// self.definesPresentationContext = YES;
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
@@ -111,6 +110,10 @@
 	else
 	{
 		[self.tableHospitals setAllowsSelection:NO];
+	
+		// TEMPORARY PHASE 1 (remove in phase 2)
+		[self.navigationItem setRightBarButtonItem:nil];
+		// END TEMPORARY PHASE 1
 	}
 	
 	// Get list of hospitals if none were passed from previous controller
@@ -122,26 +125,11 @@
 		[hospitalModel setDelegate:self];
 		[hospitalModel getHospitals];
 	}
-	// If hospital was previously selected, scroll to it
+	// Reload table with updated data and scroll to any previously selected hospital
 	else
 	{
 		[self.tableHospitals reloadData];
 		[self scrollToSelectedHospital];
-	}
-	
-	// TEMPORARY PHASE 1 (remove in phase 2)
-	[self.navigationItem setRightBarButtonItem:nil];
-	// END TEMPORARY PHASE 1
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	
-	// Reset search results (put here because it's animation must occur AFTER any segue)
-	if (self.searchController.active)
-	{
-		[self.searchController setActive:NO];
 	}
 }
 
@@ -149,43 +137,6 @@
 - (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
 {
 	NSLog(@"Unwind from Hospital Request");
-}
-
-// Return hospitals from hospital model delegate
-- (void)updateHospitals:(NSMutableArray *)hospitals
-{
-	// Filter and store only authenticated or requested hospitals
-	NSPredicate *predicate;
-	
-	// When selecting hospital for new message, only show authenticated hospitals
-	if (self.shouldSelectHospital)
-	{
-		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
-	}
-	// When viewing "My Hospitals", show authenticated and requested hospitals
-	else
-	{
-		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin", @"Requested"];
-	}
-	
-	[self setHospitals:[[hospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
-	
-	self.isLoaded = YES;
-	
-	// If hospital was previously selected, scroll to it
-	[self.tableHospitals reloadData];
-	[self scrollToSelectedHospital];
-}
-
-// Return error from hospital model delegate
-- (void)updateHospitalsError:(NSError *)error
-{
-	self.isLoaded = YES;
-	
-	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
 }
 
 - (void)scrollToSelectedHospital
@@ -202,7 +153,7 @@
 	
 	if ([results count] > 0)
 	{
-		// Find table cell that contains hospital
+		// Find table cell that contains the hospital
 		HospitalModel *hospital = [results objectAtIndex:0];
 		NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.hospitals indexOfObject:hospital] inSection:0];
 		
@@ -217,13 +168,48 @@
 	}
 }
 
+// Return hospitals from hospital model delegate
+- (void)updateHospitals:(NSMutableArray *)newHospitals
+{
+	// Filter and store only authenticated or requested hospitals
+	NSPredicate *predicate;
+	
+	// When selecting hospital for new message, only show authenticated hospitals
+	if (self.shouldSelectHospital)
+	{
+		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
+	}
+	// When viewing "My Hospitals", show authenticated and requested hospitals
+	else
+	{
+		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin", @"Requested"];
+	}
+	
+	[self setHospitals:[[newHospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	
+	self.isLoaded = YES;
+	
+	// Reload table with updated data and scroll to any previously selected hospital
+	[self.tableHospitals reloadData];
+	[self scrollToSelectedHospital];
+}
+
+// Return error from hospital model delegate
+- (void)updateHospitalsError:(NSError *)error
+{
+	self.isLoaded = YES;
+	
+	// Show error message
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
+}
+
 // Delegate method for updating search results
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
 	NSPredicate *predicate;
 	NSString *text = [searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	
-	NSLog(@"Text: %@", text);
 	
 	// Reset filtered hospitals
 	[self.filteredHospitals removeAllObjects];
@@ -282,7 +268,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Return default height if no Hospitals available
+	// Return default height if no hospitals available
 	if ([self.hospitals count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
@@ -314,6 +300,9 @@
 		return emptyCell;
 	}
 	
+	static NSString *cellIdentifier = @"HospitalCell";
+	static NSString *cellIdentifierRequested = @"HospitalRequestedCell";
+	
 	HospitalModel *hospital;
 	
 	// Search results table
@@ -326,9 +315,6 @@
 	{
 		hospital = [self.hospitals objectAtIndex:indexPath.row];
 	}
-	
-	static NSString *cellIdentifier = @"HospitalCell";
-	static NSString *cellIdentifierRequested = @"HospitalRequestedCell";
 	
 	HospitalCell *cell = [self.tableHospitals dequeueReusableCellWithIdentifier:([hospital isRequested] ? cellIdentifierRequested : cellIdentifier)];
 	
@@ -350,8 +336,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell;
-	
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
@@ -367,56 +351,41 @@
 			return;
 		}
 		
-		// Set selected hospital (in case user presses back button from next screen)
+		// Set selected hospital
 		[self setSelectedHospital:[self.filteredHospitals objectAtIndex:indexPath.row]];
-		
-		// Get cell in hospitals table
-		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
-		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
 	}
 	// Hospitals table
 	else
 	{
-		// Set selected hospital (in case user presses back button from next screen)
+		// Set selected hospital
 		[self setSelectedHospital:[self.hospitals objectAtIndex:indexPath.row]];
-		
-		// Get cell in hospitals table
-		cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	}
+	
+	// Get cell in hospitals table
+	UITableViewCell *cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	
 	// Add checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
+	// Close the search results, then execute unwind segue
+	if (self.searchController.active && self.definesPresentationContext)
+	{
+		[self dismissViewControllerAnimated:YES completion:^
+		{
+			[self performSegueWithIdentifier:@"setHospital" sender:self];
+		}];
+	}
 	// Execute unwind segue
-	[self performSegueWithIdentifier:@"setHospital" sender:self];
+	else
+	{
+		[self performSegueWithIdentifier:@"setHospital" sender:self];
+	}
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell;
-	
-	// Search results table
-	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
-	{
-		// Close search results
-		[self.searchController setActive:NO];
-		
-		// Get cell in hospitals table
-		int indexRow = (int)[self.hospitals indexOfObject:self.selectedHospital];
-		cell = [self.tableHospitals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0]];
-		
-		// Deselect cell
-		[self.tableHospitals deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:NO];
-	}
-	// Hospitals table
-	else
-	{
-		// Get cell in hospitals table
-		cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
-	}
-	
-	// Remove selected hospital
-	[self setSelectedHospital:nil];
+	// Get cell in hospitals table
+	UITableViewCell *cell = [self.tableHospitals cellForRowAtIndexPath:indexPath];
 	
 	// Remove checkmark of selected hospital
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
