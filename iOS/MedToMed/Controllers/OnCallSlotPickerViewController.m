@@ -22,7 +22,6 @@
 @property (nonatomic) BOOL isLoaded;
 @property (nonatomic) NSMutableArray *onCallSlots;
 @property (nonatomic, strong) UISearchController *searchController;
-@property (nonatomic) NSNumber *selectedOnCallSlotID;
 
 @end
 
@@ -103,9 +102,6 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableOnCallSlots setTableFooterView:[[UIView alloc] init]];
 	
-	// Get selected on call slot id
-	[self setSelectedOnCallSlotID:(NSNumber *)[self.formValues objectForKey:@"OnCallSlotID"]];
-	
 	// Initialize on call slot model
 	OnCallSlotModel *onCallSlotModel = [[OnCallSlotModel alloc] init];
 	
@@ -132,6 +128,12 @@
 	if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
 	{
 		[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
+	}
+	
+	// Return selected on call slot back to previous screen
+	if ([self.delegate respondsToSelector:@selector(setSelectedOnCallSlot:)])
+	{
+		[self.delegate setSelectedOnCallSlot:self.selectedOnCallSlot];
 	}
 	
 	// Remove Keyboard Observers
@@ -188,14 +190,14 @@
 
 - (void)scrollToSelectedOnCallSlot
 {
-	// Cancel if no on call slot id is selected
-	if (! self.selectedOnCallSlotID)
+	// Cancel if no on call slot is selected
+	if (! self.selectedOnCallSlot)
 	{
 		return;
 	}
 	
 	// Find selected on call slot in on call slot
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedOnCallSlotID];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", self.selectedOnCallSlot.ID];
 	NSArray *results = [self.onCallSlots filteredArrayUsingPredicate:predicate];
 	
 	if ([results count] > 0)
@@ -354,7 +356,7 @@
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Set previously selected on call slot (if any) as selected and add checkmark
-	if (self.selectedOnCallSlotID && [onCallSlot.ID isEqualToNumber:self.selectedOnCallSlotID])
+	if (self.selectedOnCallSlot && [onCallSlot.ID isEqualToNumber:self.selectedOnCallSlot.ID])
 	{
 		[tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -383,14 +385,14 @@
 			return;
 		}
 		
-		// Set selected on call slot id
-		[self setSelectedOnCallSlotID:[(OnCallSlotModel *)[self.filteredOnCallSlots objectAtIndex:indexPath.row] ID]];
+		// Set selected on call slot
+		[self setSelectedOnCallSlot:[self.filteredOnCallSlots objectAtIndex:indexPath.row]];
 	}
 	// Hospitals table
 	else
 	{
-		// Set selected on call slot id
-		[self setSelectedOnCallSlotID:[(OnCallSlotModel *)[self.onCallSlots objectAtIndex:indexPath.row] ID]];
+		// Set selected on call slot
+		[self setSelectedOnCallSlot:[self.onCallSlots objectAtIndex:indexPath.row]];
 	}
 	
 	// Get cell in on call slots table
@@ -439,14 +441,15 @@
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
 		// Add on call slot id to form values
-		[self.formValues setValue:self.selectedOnCallSlotID forKey:@"OnCallSlotID"];
+		[self.formValues setValue:self.selectedOnCallSlot.ID forKey:@"OnCallSlotID"];
 		
 		[messageRecipientPickerViewController setDelegate:self];
 		[messageRecipientPickerViewController setFormValues:self.formValues];
 		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
+		[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
 		
-		// If user returned back to this screen, then he/she may have already set message recipients so pre-select them on message recipient picker screen
+		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the message recipient picker screen
 		[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
 }

@@ -190,6 +190,9 @@
 	
 	// Reset selected messages recipients
 	[self.selectedMessageRecipients removeAllObjects];
+	
+	// Reset selected on call slot
+	[self setSelectedOnCallSlot:nil];
 
 	// Clear form fields
 	for (UITextField *textField in self.textFields)
@@ -590,8 +593,11 @@
 		[onCallSlotPickerViewController setFormValues:self.formValues];
 		[onCallSlotPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// If user returned back to this screen, then he/she may have already set message recipients so pre-select them on message recipient picker screen
+		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the message recipient picker screen
 		[onCallSlotPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
+		
+		// If user returned back to this screen, then he/she may have already selected the on call slot so pre-select them on the on call slot picker screen
+		[onCallSlotPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 	}
 }
 

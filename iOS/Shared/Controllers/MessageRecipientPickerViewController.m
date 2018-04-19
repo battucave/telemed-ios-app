@@ -172,7 +172,7 @@
 		}
 	
 		// Load list of message recipients for new message
-		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID slotID:(NSNumber *)[self.formValues objectForKey:@"OnCallSlotID"]];
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID slotID:self.selectedOnCallSlot.ID];
 	
 	#else
 		// Load list of chat participants

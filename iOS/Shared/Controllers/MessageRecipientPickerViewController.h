@@ -10,6 +10,7 @@
 #import "CoreViewController.h"
 #import "AccountModel.h"
 #import "MessageProtocol.h"
+#import "OnCallSlotModel.h"
 
 @interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
@@ -21,6 +22,8 @@
 
 #ifdef MEDTOMED
 	@property (weak) id delegate;
+
+	@property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
 
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
 
