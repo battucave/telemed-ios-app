@@ -145,6 +145,10 @@
 		}
 	}
 	
+	// Add Keyboard Observers
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
 	#ifdef MEDTOMED
 		// Force single selection of recipients
 		[self.tableMessageRecipients setAllowsMultipleSelection:NO];
@@ -185,6 +189,29 @@
 		else
 		{
 			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
+		}
+	#endif
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Remove Keyboard Observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	
+	#ifdef MEDTOMED
+		// Return updated form values back to previous screen (only used if user returned to this screen from new message 2 screen)
+		if ([self.delegate respondsToSelector:@selector(setFormValues:)])
+		{
+			[self.delegate setFormValues:self.formValues];
+		}
+	
+		// Return selected message recipients back to previous screen
+		if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
+		{
+			[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
 		}
 	#endif
 }
@@ -249,6 +276,47 @@
 			[self performSegueWithIdentifier:@"setMessageRecipients" sender:self];
 		}
 	#endif
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+	// Obtain keyboard size
+	CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	
+	// Convert it to the coordinates of message recipients table
+	keyboardFrame = [self.tableMessageRecipients convertRect:keyboardFrame fromView:nil];
+	
+	// Determine if the keyboard covers the table
+    CGRect intersect = CGRectIntersection(keyboardFrame, self.tableMessageRecipients.bounds);
+	
+	// If the keyboard covers the table
+    if ( ! CGRectIsNull(intersect))
+    {
+    	// Get details of keyboard animation
+    	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+		
+    	// Animate table above keyboard
+    	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
+    	{
+    		[self.tableMessageRecipients setContentInset:UIEdgeInsetsMake(0, 0, intersect.size.height, 0)];
+    		[self.tableMessageRecipients setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, intersect.size.height, 0)];
+		} completion:nil];
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+	// Get details of keyboard animation
+	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+	
+	// Animate table back down to bottom of screen
+	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
+	{
+		[self.tableMessageRecipients setContentInset:UIEdgeInsetsZero];
+		[self.tableMessageRecipients setScrollIndicatorInsets:UIEdgeInsetsZero];
+	} completion:nil];
 }
 
 - (void)scrollToSelectedMessageRecipient
@@ -634,30 +702,9 @@
 }
 
 
-#pragma mark - MedToMed
-
-#ifdef MEDTOMED
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	// Return updated form values back to previous screen (only used if user returned to this screen from new message 2 screen)
-	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
-	{
-		[self.delegate setFormValues:self.formValues];
-	}
-	
-	// Return selected message recipients back to previous screen
-	if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
-	{
-		[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
-	}
-}
-
-
 #pragma mark - MyTeleMed
 
-#else
+#ifdef MYTELEMED
 // Return chat participants from chat participation model delegate
 - (void)updateChatParticipants:(NSMutableArray *)newChatParticipants
 {

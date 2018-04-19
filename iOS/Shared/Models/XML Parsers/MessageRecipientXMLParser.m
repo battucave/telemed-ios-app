@@ -76,7 +76,14 @@
 		// Most MedToMed names are of the following format: FirstName LastName
 		else if ([self.currentElementValue rangeOfString:@" "].location != NSNotFound)
 		{
-			NSArray *nameComponents = [self.currentElementValue componentsSeparatedByString:@" "];
+			NSMutableArray *nameComponents = [[self.currentElementValue componentsSeparatedByString:@" "] mutableCopy];
+			NSString *firstName = [nameComponents objectAtIndex:0];
+			
+			// If first name is a prefix, then adjust name components
+			if ([nameComponents count] > 2 && ([firstName hasPrefix:@"Dr"] || [firstName hasPrefix:@"Mr"] || [firstName hasPrefix:@"MD"]))
+			{
+				[nameComponents removeObjectAtIndex:0];
+			}
 			
 			[self.messageRecipient setFirstName:[nameComponents objectAtIndex:0]];
 			[self.messageRecipient setLastName:[nameComponents objectAtIndex:1]];

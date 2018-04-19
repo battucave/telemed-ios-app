@@ -112,8 +112,7 @@
 	}
 	else
 	{
-		NSString *messagestring = [NSString stringWithFormat:@"Is %@ the correct Phone Number for this device? Your TeleMed profile will be updated.",
-								  phoneNumber];
+		NSString *messagestring = [NSString stringWithFormat:@"Is %@ the correct Phone Number for this device? Your TeleMed profile will be updated.", phoneNumber];
 		
 		UIAlertController *confirmPhoneNumberAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Phone Number" message:messagestring preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];

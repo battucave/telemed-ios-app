@@ -131,12 +131,66 @@
 		[self.tableHospitals reloadData];
 		[self scrollToSelectedHospital];
 	}
+	
+	// Add Keyboard Observers
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Remove Keyboard Observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 // Required for unwind compatibility with MessageNewUnauthorizedTableViewController (both unwind from HospitalRequestTableViewController)
 - (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
 {
 	NSLog(@"Unwind from Hospital Request");
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+	// Obtain keyboard size
+	CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	
+	// Convert it to the coordinates of hospitals table
+	keyboardFrame = [self.tableHospitals convertRect:keyboardFrame fromView:nil];
+	
+	// Determine if the keyboard covers the table
+    CGRect intersect = CGRectIntersection(keyboardFrame, self.tableHospitals.bounds);
+	
+	// If the keyboard covers the table
+    if ( ! CGRectIsNull(intersect))
+    {
+    	// Get details of keyboard animation
+    	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+		
+    	// Animate table above keyboard
+    	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
+    	{
+    		[self.tableHospitals setContentInset:UIEdgeInsetsMake(0, 0, intersect.size.height, 0)];
+    		[self.tableHospitals setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, intersect.size.height, 0)];
+		} completion:nil];
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+	// Get details of keyboard animation
+	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+	
+	// Animate table back down to bottom of screen
+	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
+	{
+		[self.tableHospitals setContentInset:UIEdgeInsetsZero];
+		[self.tableHospitals setScrollIndicatorInsets:UIEdgeInsetsZero];
+	} completion:nil];
 }
 
 - (void)scrollToSelectedHospital

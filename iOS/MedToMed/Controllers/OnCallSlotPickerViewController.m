@@ -112,6 +112,10 @@
 	// Get list of on call slots
 	[onCallSlotModel setDelegate:self];
 	[onCallSlotModel getOnCallSlots:self.selectedAccount.ID];
+	
+	// Add Keyboard Observers
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -129,12 +133,57 @@
 	{
 		[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
+	
+	// Remove Keyboard Observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 // Go to next controller (message recipient picker)
 - (IBAction)saveOnCallSlot:(id)sender
 {
 	NSLog(@"Save On Call Slot");
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+	// Obtain keyboard size
+	CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	
+	// Convert it to the coordinates of on call slots table
+	keyboardFrame = [self.tableOnCallSlots convertRect:keyboardFrame fromView:nil];
+	
+	// Determine if the keyboard covers the table
+    CGRect intersect = CGRectIntersection(keyboardFrame, self.tableOnCallSlots.bounds);
+	
+	// If the keyboard covers the table
+    if ( ! CGRectIsNull(intersect))
+    {
+    	// Get details of keyboard animation
+    	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+		
+    	// Animate table above keyboard
+    	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
+    	{
+    		[self.tableOnCallSlots setContentInset:UIEdgeInsetsMake(0, 0, intersect.size.height, 0)];
+    		[self.tableOnCallSlots setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, intersect.size.height, 0)];
+		} completion:nil];
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+	// Get details of keyboard animation
+	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+	
+	// Animate table back down to bottom of screen
+	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
+	{
+		[self.tableOnCallSlots setContentInset:UIEdgeInsetsZero];
+		[self.tableOnCallSlots setScrollIndicatorInsets:UIEdgeInsetsZero];
+	} completion:nil];
 }
 
 - (void)scrollToSelectedOnCallSlot
