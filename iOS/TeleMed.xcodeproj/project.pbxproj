@@ -1784,7 +1784,6 @@
 		E27B84AF1B14B96A00AD50C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E2C7C1C21FC4944F00E50F07 /* Protocols */,
 				E27B85101B14D09400AD50C6 /* XML Parsers */,
 				E27B84EC1B14CF7400AD50C6 /* CallModel.h */,
 				E27B84ED1B14CF7400AD50C6 /* CallModel.m */,
@@ -1873,13 +1872,6 @@
 				E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		E2C7C1C21FC4944F00E50F07 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		E2C7C1C41FC4B61300E50F07 /* Models */ = {

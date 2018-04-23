@@ -432,7 +432,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Urgency Level: Normal/Stat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vH2-Ng-Cm7">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Urgency Level: Normal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vH2-Ng-Cm7">
                                                     <rect key="frame" x="16" y="0.0" width="278" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.5568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -444,6 +444,9 @@
                                                         <constraint firstAttribute="width" constant="49" id="f0Z-nq-x5J"/>
                                                     </constraints>
                                                     <color key="onTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="urgencyLevelChanged:" destination="UuL-n9-GMi" eventType="valueChanged" id="qGa-Rs-3AV"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -479,6 +482,7 @@
                         <outlet property="cellMedicalGroup" destination="vIa-Bg-CRD" id="958-Cy-eXS"/>
                         <outlet property="labelHospital" destination="BQS-Nf-YY5" id="3Z0-4j-u0Q"/>
                         <outlet property="labelMedicalGroup" destination="Ev2-AI-7zp" id="1Yf-au-h33"/>
+                        <outlet property="labelUrgencyLevel" destination="vH2-Ng-Cm7" id="ica-Ey-LLk"/>
                         <outlet property="sideNavigationButton" destination="zfS-jn-zhV" id="NjC-Md-O4Z"/>
                         <outlet property="switchUrgencyLevel" destination="mJm-xO-9KK" id="Aj1-pt-H2U"/>
                         <outlet property="viewSectionFooter" destination="KfO-RV-ia8" id="eO4-gl-fjt"/>
@@ -1880,24 +1884,55 @@
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OnCallSlotCell" textLabel="NmE-TP-ufL" style="IBUITableViewCellStyleDefault" id="5KD-AH-YOW" customClass="OnCallSlotCell">
-                                        <rect key="frame" x="0.0" y="1" width="375" height="44"/>
+                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OnCallSlotCell" rowHeight="66" id="5KD-AH-YOW" customClass="OnCallSlotCell">
+                                        <rect key="frame" x="0.0" y="1" width="375" height="66"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="5KD-AH-YOW" id="s8E-IP-Hdh">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="On Call Slot Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NmE-TP-ufL">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="On Call Slot Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpZ-SA-IGs">
+                                                    <rect key="frame" x="15" y="11" width="345" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="251" text="Current On Call:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNt-J5-Y1a">
+                                                    <rect key="frame" x="15" y="37.5" width="98" height="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="98" id="5ri-LX-6oy"/>
+                                                        <constraint firstAttribute="height" constant="17" id="D84-d6-TXx"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{Name}" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNd-Cj-nDg">
+                                                    <rect key="frame" x="118" y="37.5" width="242" height="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="17" id="Uwl-dC-qc5"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="leading" secondItem="dNt-J5-Y1a" secondAttribute="leading" id="50P-5b-zzs"/>
+                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="trailing" secondItem="s8E-IP-Hdh" secondAttribute="trailingMargin" id="PNZ-Aa-1io"/>
+                                                <constraint firstItem="uNd-Cj-nDg" firstAttribute="leading" secondItem="dNt-J5-Y1a" secondAttribute="trailing" constant="5" id="Vhc-dj-h4I"/>
+                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="top" secondItem="s8E-IP-Hdh" secondAttribute="topMargin" id="YhC-Xw-iNi"/>
+                                                <constraint firstItem="uNd-Cj-nDg" firstAttribute="top" secondItem="cpZ-SA-IGs" secondAttribute="bottom" constant="6" id="dUf-lq-cYb"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="dNt-J5-Y1a" secondAttribute="bottom" constant="0.5" id="hXh-bg-36x"/>
+                                                <constraint firstItem="uNd-Cj-nDg" firstAttribute="trailing" secondItem="cpZ-SA-IGs" secondAttribute="trailing" id="oVs-he-z6J"/>
+                                                <constraint firstItem="dNt-J5-Y1a" firstAttribute="top" secondItem="cpZ-SA-IGs" secondAttribute="bottom" constant="6" id="p01-wG-HUa"/>
+                                                <constraint firstItem="dNt-J5-Y1a" firstAttribute="centerY" secondItem="uNd-Cj-nDg" secondAttribute="centerY" id="x9F-gq-Ta0"/>
+                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="leading" secondItem="s8E-IP-Hdh" secondAttribute="leadingMargin" id="zFz-A4-zjF"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="onCallSlotName" destination="NmE-TP-ufL" id="jH1-hh-p9D"/>
+                                            <outlet property="labelCurrentOnCall" destination="uNd-Cj-nDg" id="0x4-3L-ggB"/>
+                                            <outlet property="labelOnCallSlotName" destination="cpZ-SA-IGs" id="K66-8f-tuC"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

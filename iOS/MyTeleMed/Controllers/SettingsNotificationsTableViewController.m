@@ -72,7 +72,7 @@
 	[self setNotificationSettings:[self.notificationSettingModel getNotificationSettingsByName:self.notificationSettingsName]];
 }
 
-- (IBAction)updateReminder:(id)sender
+- (IBAction)reminderChanged:(id)sender
 {
 	[self.notificationSettings setIsReminderOn:self.switchReminders.isOn];
 	

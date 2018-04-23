@@ -408,8 +408,23 @@
 
 - (UITableViewCell *)cellForSentMessage:(MessageCell *)cell withMessage:(SentMessageModel *)sentMessage atIndexPath:(NSIndexPath *)indexPath
 {
+	NSString *messageRecipientNames = @"";
+	
+	// Format Message Recipient Names
+	NSArray *messageRecipients = [sentMessage.Recipients componentsSeparatedByString:@";"];
+	
+	if ([messageRecipients count] > 0)
+	{
+		messageRecipientNames = [messageRecipients objectAtIndex:0];
+		
+		if ([messageRecipients count] > 1)
+		{
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", [messageRecipients count] - 1];
+		}
+	}
+	
 	// Set Name, Phone Number, and Message
-	[cell.labelName setText:[sentMessage.Recipients stringByReplacingOccurrencesOfString:@";" withString:@"; "]];
+	[cell.labelName setText:messageRecipientNames];
 	[cell.labelPhoneNumber setText:@""];
 	[cell.labelMessage setText:sentMessage.FormattedMessageText];
 	

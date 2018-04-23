@@ -2355,7 +2355,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9VP-gf-edv">
                                                     <rect key="frame" x="309" y="6" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="updateTimeout:" destination="dAQ-yX-cuG" eventType="valueChanged" id="3E0-Pu-r2a"/>
+                                                        <action selector="timeoutChanged:" destination="dAQ-yX-cuG" eventType="valueChanged" id="ATz-h1-pBh"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -2775,7 +2775,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="snJ-Sc-sIx">
                                                     <rect key="frame" x="309" y="6" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="updateReminder:" destination="Fu1-Mj-dMW" eventType="valueChanged" id="ne6-cG-LBl"/>
+                                                        <action selector="reminderChanged:" destination="Fu1-Mj-dMW" eventType="valueChanged" id="6gy-Nq-qq3"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -4537,7 +4537,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="ejp-fl-nDj"/>
         <segue reference="j8k-kI-sFx"/>
         <segue reference="ZfR-s3-nyT"/>
-        <segue reference="xfy-la-02K"/>
+        <segue reference="bgc-j8-Gjl"/>
         <segue reference="xeH-nb-wrL"/>
         <segue reference="KfY-sd-ej7"/>
         <segue reference="V9Q-rq-EEe"/>

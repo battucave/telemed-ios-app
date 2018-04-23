@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelHospital;
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
+@property (weak, nonatomic) IBOutlet UILabel *labelUrgencyLevel;
 @property (weak, nonatomic) IBOutlet UISwitch *switchUrgencyLevel;
 @property (strong, nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
 
@@ -35,6 +36,7 @@
 @property (nonatomic) NSMutableArray *hospitals;
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL shouldInitializeCallbackData;
+@property (nonatomic) NSString *textUrgencyLevel;
 
 @end
 
@@ -70,17 +72,20 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from message recipient picker screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
+	// Fix iOS 11+ issue with next button that occurs when returning back from on call slot picker screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
 	if (self.hasSubmitted)
 	{
 		if (@available(iOS 11.0, *))
 		{
 			// Workaround the issue by completely replacing the next button with a brand new one
-			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(showOnCallSlotPicker:)];
+			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:self.navigationItem.rightBarButtonItem.title style:self.navigationItem.rightBarButtonItem.style target:self action:@selector(showOnCallSlotPicker:)];
 			
 			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
 		}
 	}
+	
+	// Get label urgency level text
+	[self setTextUrgencyLevel:[self.labelUrgencyLevel.text substringWithRange:NSMakeRange(0, [self.labelUrgencyLevel.text rangeOfString:@":"].location + 1)]];
 	
 	// Pre-populate callback data with data from user profile
 	if (self.shouldInitializeCallbackData)
@@ -202,6 +207,7 @@
 
 	// Reset urgency level switch
 	[self.switchUrgencyLevel setOn:NO];
+	[self urgencyLevelChanged:self.switchUrgencyLevel];
 
 	// Hide form field cells
 	for (UITableViewCell *cellFormField in self.cellFormFields)
@@ -260,13 +266,6 @@
 	
 	// Update screen with selected hospital information
 	[self setHospital];
-}
-
-- (IBAction)showOnCallSlotPicker:(id)sender
-{
-	[self setHasSubmitted:YES];
-	
-	[self performSegueWithIdentifier:@"showOnCallSlotPicker" sender:self];
 }
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)textField
@@ -392,6 +391,12 @@
 	return YES;
 }
 
+- (IBAction)urgencyLevelChanged:(id)sender
+{
+	// Update label urgency level text
+	[self.labelUrgencyLevel setText:[NSString stringWithFormat:@"%@ %@", self.textUrgencyLevel, (self.switchUrgencyLevel.isOn ? @"Stat" : @"Normal")]];
+}
+
 - (void)setHospital
 {
 	// Add/update hospital id to form values
@@ -458,6 +463,11 @@
 	
 	// Validate form
 	[self validateForm];
+}
+
+- (void)showOnCallSlotPicker:(id)sender
+{
+	[self performSegueWithIdentifier:@"showOnCallSlotPicker" sender:self];
 }
 
 // Return hospitals from hospital model delegate
@@ -598,6 +608,9 @@
 		
 		// If user returned back to this screen, then he/she may have already selected the on call slot so pre-select them on the on call slot picker screen
 		[onCallSlotPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
+		
+		// Update has submitted value to trigger appearance changes if user returns back to this screen
+		[self setHasSubmitted:YES];
 	}
 }
 

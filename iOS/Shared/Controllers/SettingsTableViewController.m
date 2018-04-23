@@ -66,7 +66,7 @@
 	}
 }
 
-- (IBAction)updateTimeout:(id)sender
+- (IBAction)timeoutChanged:(id)sender
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	

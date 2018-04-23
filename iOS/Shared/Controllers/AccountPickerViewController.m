@@ -362,7 +362,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 46.0f;
+	return 66.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -370,7 +370,7 @@
 	// Return default height if no accounts available
 	if ([self.accounts count] == 0)
 	{
-		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
+		return 46.0f;
 	}
 	
 	return UITableViewAutomaticDimension;

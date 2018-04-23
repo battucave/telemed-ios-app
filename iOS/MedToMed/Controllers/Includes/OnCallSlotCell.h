@@ -10,6 +10,7 @@
 
 @interface OnCallSlotCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *onCallSlotName;
+@property (weak, nonatomic) IBOutlet UILabel *labelCurrentOnCall;
+@property (weak, nonatomic) IBOutlet UILabel *labelOnCallSlotName;
 
 @end

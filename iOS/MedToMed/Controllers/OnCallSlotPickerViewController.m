@@ -298,7 +298,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 46.0f;
+	return 66.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -306,7 +306,7 @@
 	// Return default height if no on call slots available
 	if ([self.onCallSlots count] == 0)
 	{
-		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
+		return 46.0f;
 	}
 	
 	return UITableViewAutomaticDimension;
@@ -362,8 +362,9 @@
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	}
 	
-	// Set on call slot name label
-	[cell.onCallSlotName setText:onCallSlot.Name];
+	// Set on call slot current on call and name labels
+	[cell.labelCurrentOnCall setText:onCallSlot.CurrentOncall];
+	[cell.labelOnCallSlotName setText:onCallSlot.Name];
 	
 	return cell;
 }
