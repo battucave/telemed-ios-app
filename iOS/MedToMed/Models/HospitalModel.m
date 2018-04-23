@@ -28,7 +28,11 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			NSMutableArray *hospitals = [parser hospitals];
+			// Sort hospitals by name
+			NSMutableArray *hospitals = [[[parser hospitals] sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
+			{
+				return [hospitalModelA.Name compare:hospitalModelB.Name];
+			}] mutableCopy];
 			
 			/*/ TESTING ONLY (generate fictitious hospitals for testing)
 			for (int i = 0; i < 5; i++)

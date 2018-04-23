@@ -34,7 +34,11 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			NSMutableArray *accounts = [parser accounts];
+			// Sort accounts by name
+			NSMutableArray *accounts = [[[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
+			{
+				return [accountModelA.Name compare:accountModelB.Name];
+			}] mutableCopy];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
 			#ifdef MEDTOMED

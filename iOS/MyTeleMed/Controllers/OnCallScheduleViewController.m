@@ -64,20 +64,8 @@
 			// Populate On Call Now Entries with result
 			[self setCurrentOnCallEntries:status.CurrentOnCallEntries];
 			
-			// Sort On Call Now Entries by StartTime
-			self.currentOnCallEntries = [self.currentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
-			{
-				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
-			}];
-			
 			// Populate Next On Call Entries with result
 			[self setFutureOnCallEntries:status.FutureOnCallEntries];
-			
-			// Sort Next On Call Entries by StartTime
-			self.futureOnCallEntries = [self.futureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
-			{
-				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
-			}];
 			
 			[self filterOnCallEntries:[self.segmentedControl selectedSegmentIndex]];
 		}

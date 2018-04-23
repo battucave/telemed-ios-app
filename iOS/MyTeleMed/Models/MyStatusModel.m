@@ -37,6 +37,18 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
+			// Sort on call now entries by start time
+			self.CurrentOnCallEntries = [self.CurrentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
+			{
+				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
+			}];
+			
+			// Sort next on call entries by start time
+			self.FutureOnCallEntries = [self.FutureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
+			{
+				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
+			}];
+			
 			callback(YES, self, nil);
 		}
 		// Error parsing XML file

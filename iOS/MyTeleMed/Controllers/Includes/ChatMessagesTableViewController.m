@@ -162,14 +162,11 @@
 // Return Chat Messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
-	// Sort Chat Messages by Date Descending
-	if ([chatMessages count] > 0)
+	// Sort Chat Messages by time sent in descending order
+	chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
 	{
-		chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
-		{
-			return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
-		}] mutableCopy];
-	}
+		return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
+	}] mutableCopy];
 	
 	[self setIsLoaded:YES];
 	[self setChatMessages:chatMessages];

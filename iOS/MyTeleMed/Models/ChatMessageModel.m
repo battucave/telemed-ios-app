@@ -48,7 +48,11 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			NSMutableArray *chatMessages = [parser chatMessages];
+			// Sort Chat Messages by time sent
+			NSMutableArray *chatMessages = [[[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+			{
+				return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
+			}] mutableCopy];
 			
 			if ([chatMessages count] > 0)
 			{

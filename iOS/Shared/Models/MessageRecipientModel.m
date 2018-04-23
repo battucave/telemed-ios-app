@@ -24,7 +24,7 @@
 		// Parse the XML file
 		if ([xmlParser parse])
 		{
-			// Sort Message Recipients by Last Name, First Name
+			// Sort message recipients by name (MedToMed: FirstName LastName, MyTeleMed: LastName, FirstName)
 			NSArray *messageRecipients = [[parser messageRecipients] sortedArrayUsingComparator:^NSComparisonResult(MessageRecipientModel *messageRecipientModelA, MessageRecipientModel *messageRecipientModelB)
 			{
 				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
