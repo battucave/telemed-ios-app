@@ -2584,8 +2584,6 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="62" id="1is-RD-GQH"/>
                                             <constraint firstAttribute="height" constant="82" id="8rp-bj-Mjw"/>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="62" id="GJ9-Jz-sQt"/>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="82" id="oGE-JK-Y2c"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
@@ -2682,6 +2680,8 @@
                     <connections>
                         <outlet property="buttonCallTeleMed" destination="KwJ-NI-j2e" id="rQY-kD-15l"/>
                         <outlet property="buttonDemoVideo" destination="XVa-QK-14Q" id="uI4-A6-sD5"/>
+                        <outlet property="buttonUserGuide" destination="BSy-kB-Azi" id="Ndl-LL-5gY"/>
+                        <outlet property="constraintCallTeleMedCenterX" destination="QVR-qJ-fk4" id="bJF-TP-8bI"/>
                         <outlet property="labelIntro" destination="Ac9-nK-wjB" id="BvT-qY-kfN"/>
                         <outlet property="labelVersion" destination="2ew-Kc-FAo" id="Q2Z-Gk-zNc"/>
                         <outlet property="sideNavigationButton" destination="hSv-35-fRh" id="4xg-tB-OAj"/>
@@ -4537,7 +4537,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="ejp-fl-nDj"/>
         <segue reference="j8k-kI-sFx"/>
         <segue reference="ZfR-s3-nyT"/>
-        <segue reference="bgc-j8-Gjl"/>
+        <segue reference="xfy-la-02K"/>
         <segue reference="xeH-nb-wrL"/>
         <segue reference="KfY-sd-ej7"/>
         <segue reference="V9Q-rq-EEe"/>

@@ -14,8 +14,11 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonCallTeleMed;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDemoVideo;
+@property (weak, nonatomic) IBOutlet UIButton *buttonUserGuide;
 @property (weak, nonatomic) IBOutlet UILabel *labelIntro;
 @property (weak, nonatomic) IBOutlet UILabel *labelVersion;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintCallTeleMedCenterX;
 
 @end
 
@@ -60,6 +63,11 @@
 		// Replace demo video button with call telemed button
 		[self.buttonCallTeleMed setHidden:NO];
 		[self.buttonDemoVideo setHidden:YES];
+	
+		// TEMPORARY (remove when user guide is created for MedToMed)
+		[self.buttonUserGuide setHidden:YES];
+		[self.constraintCallTeleMedCenterX setConstant:0.0f];
+		[self.labelIntro setText:@"If you have questions or need further instruction on how to use the MedToMed app, please contact TeleMed using the button below. for "];
 	
 	#else
 		// Hide call telemed button
