@@ -1,5 +1,5 @@
 //
-//  ELCUIApplication.h
+//  TeleMedApplication.h
 //
 //  Created by Brandon Trebitowski on 9/19/11.
 //  Copyright 2011 ELC Technologies. All rights reserved.
@@ -15,7 +15,7 @@
  * overridden in order to catch all touch events.
  */
 
-@interface ELCUIApplication : UIApplication {
+@interface TeleMedApplication : UIApplication {
 	NSTimer *_idleTimer;
 }
 

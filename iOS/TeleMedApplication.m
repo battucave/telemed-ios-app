@@ -1,14 +1,13 @@
 //
-//  ELCUIApplication.m
+//  TeleMedApplication.m
 //
 //  Created by Brandon Trebitowski on 9/19/11.
 //  Copyright 2011 ELC Technologies. All rights reserved.
 //
 
-#import "ELCUIApplication.h"
+#import "TeleMedApplication.h"
 
-@implementation ELCUIApplication
-
+@implementation TeleMedApplication
 
 - (void)sendEvent:(UIEvent *)event
 {

@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ELCUIApplication.h"
+#import "TeleMedApplication.h"
 #import "ErrorAlertController.h"
 #import "SWRevealViewController.h"
 #import "TeleMedHTTPRequestOperationManager.h"
@@ -92,7 +92,7 @@
 			// Reset idle timer
 			dispatch_async(dispatch_get_main_queue(), ^
 			{
-				[(ELCUIApplication *)[UIApplication sharedApplication] resetIdleTimer];
+				[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
 			});
 		}
 	}];
@@ -282,7 +282,7 @@
 			if (success)
 			{
 				// Update Timeout Period to the value sent from server
-				[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
+				[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
 				
 				// MyTeleMed - Validate device registration with server
 				#ifdef MYTELEMED

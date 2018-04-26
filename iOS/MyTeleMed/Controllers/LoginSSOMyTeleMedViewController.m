@@ -9,7 +9,7 @@
 #import "LoginSSOMyTeleMedViewController.h"
 #import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
-#import "ELCUIApplication.h"
+#import "TeleMedApplication.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -35,7 +35,7 @@
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
 			// Update Timeout Period to the value sent from server
-			[(ELCUIApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
+			[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
 			
 			NSLog(@"User ID: %@", myProfileModel.ID);
 			NSLog(@"Preferred Account ID: %@", myProfileModel.MyPreferredAccount.ID);
