@@ -67,7 +67,7 @@
 		// TEMPORARY (remove when user guide is created for MedToMed)
 		[self.buttonUserGuide setHidden:YES];
 		[self.constraintCallTeleMedCenterX setConstant:0.0f];
-		[self.labelIntro setText:@"If you have questions or need further instruction on how to use the MedToMed app, please contact TeleMed using the button below. for "];
+		[self.labelIntro setText:@"If you have questions or need further instruction on how to use the MedToMed app, please contact TeleMed using the button below."];
 	
 	#else
 		// Hide call telemed button
