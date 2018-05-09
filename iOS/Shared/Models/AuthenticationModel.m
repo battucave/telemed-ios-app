@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import "AuthenticationModel.h"
 #import "AppDelegate.h"
+#import "AuthenticationModel.h"
 #import "AuthenticationHTTPSessionManager.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "KeyChainItemWrapper.h"
@@ -43,7 +43,7 @@
 {
 	if (self = [super init])
 	{
-		// TEMPORARY: (Version 3.3) - Remove old Login Keychain items - This logic can be removed in a future update.
+		// TEMPORARY: (Version 3.3) - Remove old login keychain items - This logic can be removed in a future update
 		KeychainItemWrapper *keyChainLogin = [[KeychainItemWrapper alloc] initWithIdentifier:@"Login" accessGroup:nil];
 		
 		[keyChainLogin resetKeychainItem];
@@ -55,7 +55,7 @@
 // Override RefreshToken getter
 - (NSString *)RefreshToken
 {
-	// If RefreshToken is not already set, check Keychain
+	// If refresh token is not already set, check keychain
 	if ( ! _RefreshToken)
 	{
 		KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
@@ -71,7 +71,7 @@
 	return _RefreshToken;
 }
 
-// Override AccessToken setter to also store Access Token's Expiration
+// Override AccessToken setter to also store access token's expiration
 - (void)setAccessToken:(NSString *)newAccessToken
 {
 	if (_AccessToken != newAccessToken)
@@ -83,13 +83,11 @@
 			_AccessTokenExpiration = [[NSDate date] dateByAddingTimeInterval:ACCESS_TOKEN_EXPIRATION_TIME];
 		}
 		
-		//NSLog(@"Access Token Expiration: %@", self.AccessTokenExpiration);
-		
 		_AccessToken = newAccessToken;
 	}
 }
 
-// Override RefreshToken setter to store value in Keychain
+// Override RefreshToken setter to store value in keychain
 - (void)setRefreshToken:(NSString *)newRefreshToken
 {
 	if (_RefreshToken != newRefreshToken)
@@ -103,16 +101,16 @@
 	}
 }
 
-// Public Method
+// Public method
 - (void)getNewTokensWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure
 {
 	[self getNewTokensWithSuccess:success failure:failure isRetry:NO];
 }
 
-// Private Method with Internal Retry Mechanism
+// Private method with internal retry mechanism
 - (void)getNewTokensWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure isRetry:(BOOL)isRetry
 {
-	// If no Refresh Token found, then tokens cannot be refreshed
+	// If no refresh token found, then tokens cannot be refreshed
 	if ( ! self.RefreshToken)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
@@ -146,10 +144,10 @@
 		[parser setAuthentication:self];
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Set Tokens if found in response
+			// Set tokens if found in response
 			if ( ! [self.AccessToken isEqualToString:@""] && ! [self.RefreshToken isEqualToString:@""])
 			{
 				NSLog(@"New Access Token: %@", self.AccessToken);
@@ -160,7 +158,7 @@
 			}
 		}
 		
-		// Tokens not found in response or error parsing the XML file
+		// Tokens not found in response or error parsing the xml file
 		NSLog(@"Error Refreshing Tokens");
 		
 		dispatch_async(dispatch_get_main_queue(), ^
@@ -191,7 +189,7 @@
 				[self getNewTokensWithSuccess:success failure:failure isRetry:YES];
 			});
 		}
-		// Handle timeout issues differently if not in LoginSSO Storyboard
+		// Handle timeout issues differently if not in LoginSSO storyboard
 		else if ( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
 		{
 			NSLog(@"Refreshing Tokens Timed Out: %@", error);
@@ -207,7 +205,7 @@
 			
 			failure(error);
 		}
-		// If error is not related to device being offline, then RefreshToken is no longer valid so force the user to login again
+		// If error is not related to device being offline, then refresh token is no longer valid so force the user to login again
 		else
 		{
 			NSLog(@"Error Refreshing Tokens: %@", error);
@@ -240,10 +238,10 @@
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	
-	// Reset Refresh Token in Keychain
+	// Reset refresh token in keychain
 	[keyChainRefreshToken resetKeychainItem];
 	
-	// Reset Operation Manager
+	// Reset operation manager
 	[operationManager doReset];
 	
 	// Reset tokens in app

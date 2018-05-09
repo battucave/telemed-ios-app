@@ -19,10 +19,10 @@
 
 - (void)callTeleMed
 {
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
@@ -32,16 +32,16 @@
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	// This Rest Service Method only returns after the phone call has been answered so increase timeout interval
+	// This web service method only returns after the phone call has been answered so increase timeout interval
 	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSLog(@"CallModel Success: %@", operation.response);
 		
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
@@ -72,7 +72,7 @@
 	{
 		NSLog(@"CallModel Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -107,10 +107,10 @@
 
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
@@ -124,17 +124,17 @@
 	NSLog(@"CallSenderForMessage");
 	NSLog(@"%@", parameters);
 	
-	// The web service only returns a result after the phone call has been answered so increase timeout interval
+	// The web service method only returns a result after the phone call has been answered so increase timeout interval
 	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
-	// This Rest Service Method only returns after the phone call has been answered
+	// This web service method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSLog(@"CallModel Success: %@", operation.response);
 		
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
@@ -165,7 +165,7 @@
 	{
 		NSLog(@"CallModel Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -198,15 +198,15 @@
 	[self.operationManager.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	if ( ! self.pendingComplete)
 	{
-		// Notify delegate that TeleMed Call Request has been sent to server
+		// Notify delegate that TeleMed call request has been sent to server
 		if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
 		{
 			// Close activity indicator with callback
@@ -215,7 +215,7 @@
 				[self.delegate callTeleMedPending];
 			}];
 		}
-		// Notify delegate that Sender Call Request has been sent to server
+		// Notify delegate that sender call request has been sent to server
 		else if ([self.delegate respondsToSelector:@selector(callSenderPending)])
 		{
 			// Close activity indicator with callback

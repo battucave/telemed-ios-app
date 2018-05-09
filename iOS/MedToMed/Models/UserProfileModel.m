@@ -6,6 +6,7 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
+#import "TeleMedApplication.h"
 #import "UserProfileModel.h"
 #import "ProfileProtocol.h"
 #import "UserProfileXMLParser.h"
@@ -28,7 +29,7 @@
 // Override PhoneNumber getter
 - (NSString *)PhoneNumber
 {
-	// If phone number is not already set, check User Preferences
+	// If phone number is not already set, check user preferences
 	if ( ! _PhoneNumber)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -36,6 +37,17 @@
 	}
 	
 	return _PhoneNumber ?: @"";
+}
+
+// Override TimeoutPeriodMins setter to also update application's timeout period
+- (void)setTimeoutPeriodMins:(NSNumber *)TimeoutPeriodMins
+{
+	if (_TimeoutPeriodMins != TimeoutPeriodMins)
+	{
+		_TimeoutPeriodMins = TimeoutPeriodMins;
+	}
+	
+	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
 }
 
 /*- (void)saveUserProfile:(NSDictionary *)values
@@ -54,12 +66,12 @@
 		[parser setUserProfile:self];
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			callback(YES, (id <ProfileProtocol>)self, nil);
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Profile Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Profile.", NSLocalizedDescriptionKey, nil]];

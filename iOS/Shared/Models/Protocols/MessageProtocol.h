@@ -20,7 +20,7 @@
 @property (nonatomic) NSNumber *SenderID;
 @property (nonatomic) NSString *SenderName;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived, 2 = Sent (This property not set by web service)
+@property (nonatomic) int messageType; // 0 = Active, 1 = Archived, 2 = Sent (this property not set by web service)
 
 // MessageModel only
 @optional

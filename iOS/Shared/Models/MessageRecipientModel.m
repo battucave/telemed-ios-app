@@ -21,7 +21,7 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			// Sort message recipients by name (MedToMed: FirstName LastName, MyTeleMed: LastName, FirstName)
@@ -36,7 +36,7 @@
 				[self.delegate updateMessageRecipients:[messageRecipients mutableCopy]];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Recipients Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Recipients.", NSLocalizedDescriptionKey, nil]];

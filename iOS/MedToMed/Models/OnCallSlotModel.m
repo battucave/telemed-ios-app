@@ -24,7 +24,7 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			// Sort on call slots by name (commented out because not sure if there should be a specific order)
@@ -40,7 +40,7 @@
 				[self.delegate updateOnCallSlots:onCallSlots];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"On Call Slots Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the On Call Slots.", NSLocalizedDescriptionKey, nil]];

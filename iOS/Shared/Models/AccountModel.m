@@ -31,7 +31,7 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			// Sort accounts by name
@@ -67,7 +67,7 @@
 				[self.delegate updateAccounts:accounts];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Accounts Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Accounts.", NSLocalizedDescriptionKey, nil]];

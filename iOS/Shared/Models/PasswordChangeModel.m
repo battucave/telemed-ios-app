@@ -36,10 +36,10 @@
 		return;
 	}
 	
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
+	// Add network activity observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -53,7 +53,7 @@
 	
 	[self.operationManager POST:@"PasswordChanges" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
@@ -98,7 +98,7 @@
 	{
 		NSLog(@"PasswordChangeModel Error: %@", error);
 		
-		// Remove Network Activity Observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
+		// Remove network activity observer (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 		//[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -124,13 +124,13 @@
 	}];
 }
 
-// Network Request has been sent, but still awaiting response (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
+// Network request has been sent, but still awaiting response (not used because can't assume success - old password may be incorrect, new password may not meet requirements, etc)
 /* - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that Message has been sent to server
+	// Notify delegate that message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(changePasswordPending)])
 	{
 		// Close activity indicator with callback

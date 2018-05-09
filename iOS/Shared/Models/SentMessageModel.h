@@ -41,7 +41,7 @@
 @property (nonatomic) NSNumber *SenderID;
 @property (nonatomic) NSString *SenderName;
 
-@property (nonatomic) int messageType; // Always 2 (This property not set by web services)
+@property (nonatomic) int messageType; // Always 2 (this property not set by web services)
 
 - (void)getSentMessages;
 

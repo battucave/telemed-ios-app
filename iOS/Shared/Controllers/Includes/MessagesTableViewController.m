@@ -456,6 +456,13 @@
 	[cell.imageStatus setHidden:YES];
 	[cell.constraintNameLeadingSpace setConstant:7.0f];
 	
+	/*/ TESTING ONLY (used for generating Screenshots)
+	#ifdef DEBUG
+		[cell.labelName setText:@"TeleMed"];
+		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
+	#endif
+	// END TESTING ONLY */
+	
 	// Set Message Priority color
 	if ([sentMessage.Priority isEqualToString:@"Priority"])
 	{

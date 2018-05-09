@@ -23,7 +23,7 @@
 {
 	if (self = [super init])
 	{
-		// Initialize Operation Manager
+		// Initialize operation manager
 		self.operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	}
 	
@@ -112,12 +112,12 @@
 	
 	[xmlParser setDelegate:parser];
 	
-	// Parse the XML file to obtain Error Message
+	// Parse the xml file to obtain error message
 	if ([xmlParser parse] && ! [parser.error isEqualToString:@"An error has occurred."])
 	{
 		errorString = parser.error;
 	}
-	// Error parsing XML file or generic response returned
+	// Error parsing xml file or generic response returned
 	else
 	{
 		errorString = message;
@@ -160,7 +160,7 @@
 
 - (void)dealloc
 {
-	// Remove all Observers if applicable (models with POST or DELETE requests have Network Activity Observers)
+	// Remove all observers if applicable (models with POST or DELETE requests have network activity observers)
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

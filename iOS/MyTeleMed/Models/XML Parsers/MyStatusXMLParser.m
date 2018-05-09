@@ -23,7 +23,7 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize My Status and OnCall Entries
+	// Initialize my status and on call entries
 	self.currentOnCallEntries = [[NSMutableArray alloc] init];
 	self.futureOnCallEntries = [[NSMutableArray alloc] init];
 	
@@ -35,7 +35,7 @@
 {
 	if ([elementName isEqualToString:@"NextOncallEntry"] || [elementName isEqualToString:@"OnCallNowEntry"])
 	{
-		// Initialize an OnCall Entry
+		// Initialize an on call entry
 		self.onCallEntry = [[OnCallEntryModel alloc] init];
 	}
 }
@@ -94,7 +94,7 @@
 			
 			if (self.currentElementValue != nil && ! [self.currentElementValue isEqualToString:@"Never"])
 			{
-				// Get date in UTC timezone (not needed at this time, but keep here for future changes)
+				// Get date in utc timezone (not needed at this time, but keep here for future changes)
 				/*[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
 				UTCDate = [dateFormatter dateFromString:self.currentElementValue];
 				

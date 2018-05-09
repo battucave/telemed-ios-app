@@ -34,7 +34,7 @@
 {
 	if ([elementName isEqualToString:@"Account"])
 	{
-		// Initialize Account
+		// Initialize account
 		self.message.Account = [[AccountModel alloc] init];
 		
 		self.currentModel = @"AccountModel";
@@ -42,7 +42,7 @@
 	// ReceivedMessage is current on test server; Message is deprecated but still current on production server
 	else if ([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
 	{
-		// Initialize the Message
+		// Initialize the message
 		self.message = [[MessageModel alloc] init];
 	}
 }

@@ -32,16 +32,16 @@
 
 - (void)addMessageComment:(id <MessageProtocol>)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
 {
-	// Show Activity Indicator only if not being added with Forward Message
+	// Show activity indicator only if not being added with forward message
 	if ( ! toForwardMessage)
 	{
 		[self showActivityIndicator];
 	}
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Store comment and ID for saveCommentPending method
+	// Store comment and id for saveCommentPending:
 	self.comment = comment;
 	self.pendingID = pendingID;
 	
@@ -50,17 +50,17 @@
 			"<%2$@>%3$@</%2$@>"
 		"</Comment>";
 	
-	// Comment with Message Delivery ID
+	// Comment with message delivery id
 	if ([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
 		xmlBody = [NSString stringWithFormat: xmlBody, [comment escapeXML], @"MessageDeliveryID", message.MessageDeliveryID];
 	}
-	// Comment with Message ID
+	// Comment with message id
 	else if (message.MessageID)
 	{
 		xmlBody = [NSString stringWithFormat: xmlBody, [comment escapeXML], @"MessageID", message.MessageID];
 	}
-	// Message must contain either MessageDeliveryID or MessageID
+	// Message must contain either message delivery id or message id
 	else
 	{
 		NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment from the Message Detail screen." : @"There was a problem adding your Comment.");
@@ -80,9 +80,9 @@
 	
 	[self.operationManager POST:@"Comments" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
@@ -114,7 +114,7 @@
 	{
 		NSLog(@"CommentModel Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -148,10 +148,10 @@
 // Network Request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that Comment has been sent to server
+	// Notify delegate that comment has been sent to server
 	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 	{
 		// Close activity indicator with callback

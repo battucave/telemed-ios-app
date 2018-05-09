@@ -31,7 +31,7 @@
 {
 	if ([elementName isEqualToString:@"NotificationSettings"])
 	{
-		// Initialize the Notification Setting (Only when retrieving ALL Notification Settings. When retrieving a single Notification Setting, this will already be initialized)
+		// Initialize the notification setting (Only when retrieving all notification settings. When retrieving a single notification setting, this will already be initialized)
 		if ( ! self.notificationSetting)
 		{
 			self.notificationSetting = [[NotificationSettingModel alloc] init];

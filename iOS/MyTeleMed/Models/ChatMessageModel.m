@@ -45,10 +45,10 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Sort Chat Messages by time sent
+			// Sort chat messages by time sent
 			NSMutableArray *chatMessages = [[[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
 			{
 				return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
@@ -58,7 +58,7 @@
 			{
 				for(ChatMessageModel *chatMessage in chatMessages)
 				{
-					// Sort Chat Participants by Last Name, First Name
+					// Sort chat participants by last name, first name
 					chatMessage.ChatParticipants = [chatMessage.ChatParticipants sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
 					{
 						return [chatParticipantModelA.FormattedNameLNF compare:chatParticipantModelB.FormattedNameLNF];
@@ -72,7 +72,7 @@
 				[self.delegate updateChatMessages:chatMessages];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
@@ -101,10 +101,10 @@
 
 - (void)deleteChatMessage:(NSNumber *)chatMessageID
 {
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator:@"Deleting..."];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
@@ -114,9 +114,9 @@
 	
 	[self.operationManager DELETE:@"ChatMessages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
@@ -147,7 +147,7 @@
 	{
 		NSLog(@"ChatMessageModel Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -188,10 +188,10 @@
 	
 	NSLog(@"Delete Multiple Chat Messages");
 	
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator:@"Deleting..."];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	for(ChatMessageModel *chatMessage in chatMessages)
@@ -206,7 +206,7 @@
 		
 		[self.operationManager DELETE:@"ChatMessages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 		{
-			// Successful Post returns a 204 code with no response
+			// Successful post returns a 204 code with no response
 			
 			if (operation.response.statusCode != 204)
 			{
@@ -214,14 +214,14 @@
 				
 				NSLog(@"ChatMessageModel Error: %@", error);
 				
-				// Add Chat Message to failed Chat Messages
+				// Add chat message to failed chat messages
 				[self.failedChatMessages addObject:chatMessage];
 			}
 			
 			// Increment number of finished operations
 			self.numberOfFinishedOperations++;
 			
-			// Execute Queue finished method if all operations have completed
+			// Execute queue finished method if all operations have completed
 			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
 				[self chatMessageDeleteQueueFinished];
@@ -243,13 +243,13 @@
 				return;
 			}
 			
-			// Add Chat Message to failed Chat Messages
+			// Add chat message to failed chat messages
 			[self.failedChatMessages addObject:chatMessage];
 			
 			// Increment number of finished operations
 			self.numberOfFinishedOperations++;
 			
-			// Execute Queue finished method if all operations have completed
+			// Execute queue finished method if all operations have completed
 			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
 				[self chatMessageDeleteQueueFinished];
@@ -262,10 +262,10 @@
 {
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedChatMessages count], self.totalNumberOfOperations);
 	
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// If a failure occurred while deleting Chat Message
+	// If a failure occurred while deleting chat message
 	if ([self.failedChatMessages count] > 0)
 	{
 		NSArray *failedChatMessages = [self.failedChatMessages copy];
@@ -285,10 +285,10 @@
 			[self hideActivityIndicator];
 		}
 	
-		// Default to all Chat Messages failed to delete
+		// Default to all chat messages failed to delete
 		NSString *errorMessage = @"There was a problem deleting your Chat Messages.";
 		
-		// Only some Chat Messages failed to delete
+		// Only some chat messages failed to delete
 		if ([failedChatMessages count] != self.totalNumberOfOperations)
 		{
 			errorMessage = @"There was a problem deleting some of your Chat Messages.";
@@ -319,20 +319,20 @@
 		[self hideActivityIndicator];
 	}
 	
-	// Reset Queue Variables
+	// Reset queue variables
 	self.totalNumberOfOperations = 0;
 	self.numberOfFinishedOperations = 0;
 	
 	[self.failedChatMessages removeAllObjects];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that Delete Chat Message has been sent to server
+	// Notify delegate that delete chat message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
 	{
 		// Close activity indicator with callback
@@ -341,7 +341,7 @@
 			[self.delegate deleteChatMessagePending];
 		}];
 	}
-	// Notify delegate that Multiple Chat Message Deletions have begun being sent to server (should always run multiple times if needed)
+	// Notify delegate that multiple chat message deletions have begun being sent to server (should always run multiple times if needed)
 	else if ([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
 	{
 		// Close activity indicator with callback

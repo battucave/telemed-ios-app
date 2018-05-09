@@ -25,7 +25,7 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			// Sort hospitals by name
@@ -59,7 +59,7 @@
 				[self.delegate updateHospitals:hospitals];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Hospitals Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Hospitals.", NSLocalizedDescriptionKey, nil]];

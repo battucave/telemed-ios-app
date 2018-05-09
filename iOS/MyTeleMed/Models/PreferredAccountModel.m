@@ -23,16 +23,16 @@
 
 - (void)savePreferredAccount:(AccountModel *)account
 {
-	// Initialize My Profile Model
+	// Initialize my profile model
 	[self setMyProfileModel:[MyProfileModel sharedInstance]];
 	
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Store Preferred Account to be used when network request is sent
+	// Store preferred account to be used when network request is sent
 	[self setPreferredAccount:account];
 	
 	NSDictionary *parameters = @{
@@ -41,9 +41,9 @@
 	
 	[self.operationManager POST:@"PreferredAcct" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
@@ -54,7 +54,7 @@
 		}
 		else
 		{
-			// Roll back My Profile Model's MyPreferredAccount to previous value
+			// Roll back my profile model's my preferred account to previous value
 			[self.myProfileModel restoreMyPreferredAccount];
 			
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Preferred Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Preferred Account.", NSLocalizedDescriptionKey, nil]];
@@ -77,7 +77,7 @@
 	{
 		NSLog(@"PasswordChangeModel Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Roll back My Profile Model's MyPreferredAccount to previous value
@@ -110,16 +110,16 @@
 	}];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Save Preferred Account to My Profile Model (assume success so save it immediately and then roll back if error occurs)
+	// Save preferred account to my profile model (assume success so save it immediately and then roll back if error occurs)
 	[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
 	
-	// Notify delegate that Message has been sent to server
+	// Notify delegate that message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 	{
 		// Close activity indicator with callback

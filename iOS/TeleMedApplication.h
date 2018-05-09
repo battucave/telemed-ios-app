@@ -11,8 +11,7 @@
 #define kApplicationDidTimeoutNotification @"ApplicationDidTimeout"
 
 /**
- * This is a subclass of UIApplication with the sendEvent: method 
- * overridden in order to catch all touch events.
+ * This is a subclass of UIApplication with sendEvent: overridden in order to catch all touch events.
  */
 
 @interface TeleMedApplication : UIApplication {

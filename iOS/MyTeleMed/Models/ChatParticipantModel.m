@@ -27,10 +27,10 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Sort Chat Participants by Last Name, First Name
+			// Sort chat participants by last name, first name
 			NSArray *chatParticipants = [[parser chatParticipants] sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
 			{
 				return [chatParticipantModelA.FormattedNameLNF compare:chatParticipantModelB.FormattedNameLNF];
@@ -42,7 +42,7 @@
 				[self.delegate updateChatParticipants:[chatParticipants mutableCopy]];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Participants Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Participants.", NSLocalizedDescriptionKey, nil]];

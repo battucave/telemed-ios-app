@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"Person"])
 	{
-		// Initialize the Message Event.
+		// Initialize the chat participant
 		self.chatParticipant = [[ChatParticipantModel alloc] init];
 	}
 }
@@ -65,7 +65,7 @@
 	{
 		[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
 		
-		// Manually set Name property from FormattedNameLNF
+		// Manually set name property from formatted name lnf
 		[self.chatParticipant setValue:self.currentElementValue forKey:@"Name"];
 	}
 	else

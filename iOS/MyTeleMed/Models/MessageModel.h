@@ -31,9 +31,9 @@
 
 @property (weak) id delegate;
 
-// Any additional properties added here must also be added to MessageProtocol
+// Any additional properties added here must also be added to message protocol
 
-@property (nonatomic) NSNumber *ID; // Deprecated in favor of MessageDeliveryID (they are identical)
+@property (nonatomic) NSNumber *ID; // Deprecated in favor of message delivery id (they are identical)
 @property (nonatomic) AccountModel *Account;
 @property (nonatomic) NSString *FormattedMessageText;
 @property (nonatomic) NSNumber *MessageDeliveryID;
@@ -47,7 +47,7 @@
 @property (nonatomic) NSString *TimeReceived_LCL;
 @property (nonatomic) NSString *TimeReceived_UTC;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (This property not set by web service)
+@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (this property not set by web service)
 
 - (void)getActiveMessages;
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;

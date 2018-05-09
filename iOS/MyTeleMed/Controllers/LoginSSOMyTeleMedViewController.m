@@ -6,10 +6,9 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "LoginSSOMyTeleMedViewController.h"
 #import "PhoneNumberViewController.h"
-#import "AppDelegate.h"
-#import "TeleMedApplication.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -33,9 +32,6 @@
 		if (success)
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-			
-			// Update Timeout Period to the value sent from server
-			[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
 			
 			NSLog(@"User ID: %@", myProfileModel.ID);
 			NSLog(@"Preferred Account ID: %@", myProfileModel.MyPreferredAccount.ID);

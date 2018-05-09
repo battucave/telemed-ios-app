@@ -35,14 +35,14 @@
 	// MYTELEMED Only
 	if ([elementName isEqualToString:@"Account"])
 	{
-		// Initialize Account
+		// Initialize account
 		self.sentMessage.Account = [[AccountModel alloc] init];
 		
 		self.currentModel = @"AccountModel";
 	}
 	else if ([elementName isEqualToString:@"SentMessage"])
 	{
-		// Initialize the SentMessage
+		// Initialize the sent message
 		self.sentMessage = [[SentMessageModel alloc] init];
 	}
 }

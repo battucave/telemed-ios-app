@@ -26,7 +26,7 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize My Profile and My Registered Devices
+	// Initialize my profile and my registered devices
 	self.myRegisteredDevices = [[NSMutableArray alloc] init];
 	
 	// Initialize the number formatter
@@ -37,14 +37,14 @@
 {
 	if ([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-		// Initialize My Preferred Account
+		// Initialize my preferred account
 		self.myProfile.MyPreferredAccount = [[AccountModel alloc] init];
 		
 		self.currentModel = @"MyPreferredAccountModel";
 	}
 	else if ([elementName isEqualToString:@"RegisteredDevice"])
 	{
-		// Initialize a Registered Device
+		// Initialize a registered device
 		self.registeredDevice = [[RegisteredDeviceModel alloc] init];
 		
 		self.currentModel = @"RegisteredDeviceModel";
@@ -75,7 +75,7 @@
 	}
 	else if ([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-			self.currentModel = @"MyProfileModel";
+		self.currentModel = @"MyProfileModel";
 	}
 	else if ([elementName isEqualToString:@"MyRegisteredDevices"])
 	{

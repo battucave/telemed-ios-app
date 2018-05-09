@@ -48,13 +48,13 @@
 		[_idleTimer invalidate];
 	}
 	
-	// Default Timeout period to 10 minutes
+	// Default timeout period to 10 minutes
 	if (self.timeoutPeriodMins < 1)
 	{
 		_timeoutPeriodMins = DEFAULT_APP_TIMEOUT_PERIOD_MINS;
 	}
 	
-	// On app launch and/or login, the Timeout Period will be overwritten with the Timeout Period set in User Info Model
+	// On app launch and/or login, the timeout period will be overwritten with the timeout period set in profile model
 	
 	_idleTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeoutPeriodMins * 60 target:self selector:@selector(idleTimerExceeded) userInfo:nil repeats:NO];
 }

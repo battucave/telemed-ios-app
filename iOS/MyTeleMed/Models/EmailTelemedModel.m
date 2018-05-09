@@ -41,13 +41,13 @@
 		return;
 	}
 	
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Add Message Identifier if a Message Delivery ID exists (exists for MessageTeleMedViewController, doesn't exist for ContactEmailViewController)
+	// Add message identifier if a message delivery id exists (exists for message telemed view controller, doesn't exist for contact email view controller)
 	NSString *messageIdentifier = (messageDeliveryID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageDeliveryID] : @"");
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -62,9 +62,9 @@
 	
 	[self.operationManager POST:@"EmailToTelemed" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
@@ -95,7 +95,7 @@
 	{
 		NSLog(@"EmailTelemed Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -125,13 +125,13 @@
 	}];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that Message has been sent to server
+	// Notify delegate that message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		// Close activity indicator with callback
@@ -161,7 +161,7 @@
 	NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
 	NSArray *matches = [detector matchesInString:emailAddress options:0 range:entireRange];
  
-	// should only a single match
+	// Should be only a single match
 	if ([matches count] != 1)
 	{
 		return NO;
@@ -169,31 +169,30 @@
  
 	NSTextCheckingResult *result = [matches firstObject];
  
-	// result should be a link
+	// Result should be a link type
 	if (result.resultType != NSTextCheckingTypeLink)
 	{
 		return NO;
 	}
  
-	// result should be a recognized mail address
+	// Result should be a recognized email address
 	if ( ! [result.URL.scheme isEqualToString:@"mailto"])
 	{
 		return NO;
 	}
  
-	// match must be entire string
+	// Match must include the entire string
 	if ( ! NSEqualRanges(result.range, entireRange))
 	{
 		return NO;
 	}
  
-	// but schould not have the mail URL scheme
+	// Should not have the mailto url scheme
 	if ([emailAddress hasPrefix:@"mailto:"])
 	{
 		return NO;
 	}
  
-	// no complaints, string is valid email address
 	return YES;
 }
 

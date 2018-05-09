@@ -18,7 +18,7 @@
 // Override Name getter
 - (NSString *)Name
 {
-	// If SSOProvider is not already set, check User Preferences
+	// If sso provider is not already set, check user preferences
 	if ( ! _Name)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -28,7 +28,7 @@
 	return _Name ?: @"";
 }
 
-// Override Name setter to store value in User Preferences
+// Override Name setter to store value in user preferences
 - (void)setName:(NSString *)newName
 {
 	if (_Name != newName)
@@ -44,7 +44,7 @@
 
 - (void)validate:(NSString *)newName withCallback:(void(^)(BOOL success, NSError *error))callback
 {
-	// Allow user to clear out SSO Provider in order to use the default provider
+	// Allow user to clear out sso provider in order to use the default provider
 	if (newName.length == 0)
 	{
 		return callback(YES, nil);
@@ -62,7 +62,7 @@
 		[parser setSsoProvider:self];
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			if ( ! [self.Name isEqualToString:@""])
@@ -87,12 +87,12 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file to obtain Error Message
+		// Parse the xml file to obtain error message
 		if ([xmlParser parse] && ! [parser.error isEqualToString:@"An error has occurred."])
 		{
 			errorString = parser.error;
 		}
-		// Error parsing XML file or generic response returned
+		// Error parsing xml file or generic response returned
 		else
 		{
 			errorString = @"The ID Provider entered is invalid.";

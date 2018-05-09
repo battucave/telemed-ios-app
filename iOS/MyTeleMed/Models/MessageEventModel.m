@@ -40,7 +40,7 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
 			// Handle success via delegate
@@ -49,7 +49,7 @@
 				[self.delegate updateMessageEvents:[parser messageEvents]];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Events Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Events.", NSLocalizedDescriptionKey, nil]];

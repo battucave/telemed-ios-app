@@ -6,10 +6,9 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "LoginSSOMedToMedViewController.h"
 #import "AccountNewViewController.h"
-#import "AppDelegate.h"
-#import "TeleMedApplication.h"
 #import "AccountModel.h"
 #import "UserProfileModel.h"
 
@@ -47,9 +46,6 @@
 	{
 		if (success)
 		{
-			// Update Timeout Period to the value sent from sserver
-			[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[profile.TimeoutPeriodMins intValue]];
-			
 			// Fetch Accounts and check the authorization status for each
 			[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
 			{

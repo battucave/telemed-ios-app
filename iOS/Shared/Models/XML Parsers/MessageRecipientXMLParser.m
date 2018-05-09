@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"MsgRecip"])
 	{
-		// Initialize the Message Event.
+		// Initialize the message event
 		self.messageRecipient = [[MessageRecipientModel alloc] init];
 	}
 }

@@ -20,10 +20,10 @@
 
 - (void)forwardMessage:(id <MessageProtocol>)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment
 {
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
@@ -40,17 +40,17 @@
 			"</MessageRecipients>"
 		"</FwdMsg>";
 	
-	// Forward with Message Delivery ID
+	// Forward with message delivery id
 	if ([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
 		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, xmlRecipients];
 	}
-	// Forward with Message ID
+	// Forward with message id
 	else if (message.MessageID)
 	{
 		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageID", message.MessageID, xmlRecipients];
 	}
-	// Message must contain either MessageDeliveryID or MessageID
+	// Message must contain either message delivery id or message id
 	else
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Forward Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem forwarding your Message.", NSLocalizedDescriptionKey, nil]];
@@ -63,9 +63,9 @@
 	
 	[self.operationManager POST:@"FwdMsgs" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed in AFNetworkingOperationDidStartNotification callback
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
+		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Add comment if present
@@ -104,7 +104,7 @@
 	{
 		NSLog(@"ForwardMessageModel Error: %@", error);
 		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Handle error via delegate
@@ -134,13 +134,13 @@
 	}];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that Message has been sent to server
+	// Notify delegate that message has been sent to server
 	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		// Close activity indicator with callback

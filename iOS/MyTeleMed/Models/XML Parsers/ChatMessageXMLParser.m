@@ -36,17 +36,17 @@
 {
 	if ([elementName isEqualToString:@"ChatMessage"])
 	{
-		// Initialize the Chat Message
+		// Initialize the chat message
 		self.chatMessage = [[ChatMessageModel alloc] init];
 	}
 	else if ([elementName isEqualToString:@"Participants"])
 	{
-		// Initialize the Chat Participants
+		// Initialize the chat participants
 		self.chatParticipants = [[NSMutableArray alloc] init];
 	}
 	else if ([elementName isEqualToString:@"Person"])
 	{
-		// Initialize the Chat Participant
+		// Initialize the chat participant
 		self.chatParticipant = [[ChatParticipantModel alloc] init];
 		
 		self.isChatParticipant = YES;

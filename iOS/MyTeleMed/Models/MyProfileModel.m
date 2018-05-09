@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
+#import "TeleMedApplication.h"
 #import "MyProfileModel.h"
 #import "ProfileProtocol.h"
 #import "AccountModel.h"
@@ -33,7 +34,7 @@
 	return sharedMyProfileInstance;
 }
 
-// Override MyPreferredAccount setter to also store existing MyPreferredAccount
+// Override MyPreferredAccount setter to also store existing my preferred account
 - (void)setMyPreferredAccount:(AccountModel *)account
 {
 	if (_MyPreferredAccount != account)
@@ -48,6 +49,17 @@
 	}
 }
 
+// Override TimeoutPeriodMins setter to also update application's timeout period
+- (void)setTimeoutPeriodMins:(NSNumber *)TimeoutPeriodMins
+{
+	if (_TimeoutPeriodMins != TimeoutPeriodMins)
+	{
+		_TimeoutPeriodMins = TimeoutPeriodMins;
+	}
+	
+	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
+}
+
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
 	[self.operationManager GET:@"MyProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
@@ -58,15 +70,15 @@
 		[parser setMyProfile:self];
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
+		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Search user's Registered Devices to determine whether any match the current device. If so, update the current device with the new Phone Number
+			// Search user's registered devices to determine whether any match the current device. If so, update the current device with the new phone number
 			[self setCurrentDevice];
 			
 			callback(YES, (id <ProfileProtocol>)self, nil);
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Profile Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Profile.", NSLocalizedDescriptionKey, nil]];
@@ -85,7 +97,7 @@
 	}];
 }
 
-// Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving MyPreferredAccount to server)
+// Restore MyPreferredAccount to previous value (only used by preferred account model in case of error saving my preferred account to server)
 - (void)restoreMyPreferredAccount
 {
 	if (_oldMyPreferredAccount != nil)
@@ -103,10 +115,10 @@
 	
 	RegisteredDeviceModel *myRegisteredDevice = [RegisteredDeviceModel sharedInstance];
 	
-	// Search user's Registered Devices for the current device
+	// Search user's registered devices for the current device
 	for(RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
 	{
-		// If found, set the current device's Phone Number
+		// If found, set the current device's phone number
 		if ([registeredDevice.ID caseInsensitiveCompare:myRegisteredDevice.ID] == NSOrderedSame)
 		{
 			myRegisteredDevice.PhoneNumber = registeredDevice.PhoneNumber;

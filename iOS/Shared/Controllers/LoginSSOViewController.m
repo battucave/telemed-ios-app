@@ -7,8 +7,8 @@
 //
 
 #import <objc/runtime.h>
-#import "LoginSSOViewController.h"
 #import "AppDelegate.h"
+#import "LoginSSOViewController.h"
 #import "AFNetworkReachabilityManager.h"
 #import "AuthenticationModel.h"
 #import "SSOProviderModel.h"
@@ -272,7 +272,7 @@
 	// Speed up toggling the loading screen by forcing it to execute in main thread
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// Toggle Activity Indicator
+		// Toggle activity indicator
 		if (isLoading)
 		{
 			[self.activityIndicator startAnimating];

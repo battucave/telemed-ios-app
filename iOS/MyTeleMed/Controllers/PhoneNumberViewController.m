@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import "PhoneNumberViewController.h"
 #import "AppDelegate.h"
+#import "PhoneNumberViewController.h"
 #import "ErrorAlertController.h"
 #import "HelpViewController.h"
 #import "MyProfileModel.h"
@@ -126,7 +126,7 @@
 			// Save Phone Number to Device
 			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
 			
-			// Run registerDevice web service
+			// Run register device web service
 			[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 			{
 				if (success)
