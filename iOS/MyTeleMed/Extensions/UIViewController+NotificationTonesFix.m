@@ -13,7 +13,7 @@
 
 - (void)verifyNotificationTones
 {
-	NSLog(@"verifyNotificationTones");
+	NSLog(@"Verify Notification Tones");
 	
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	

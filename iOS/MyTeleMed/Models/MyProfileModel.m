@@ -113,17 +113,18 @@
 		return;
 	}
 	
-	RegisteredDeviceModel *myRegisteredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
 	// Search user's registered devices for the current device
 	for(RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
 	{
 		// If found, set the current device's phone number
-		if ([registeredDevice.ID caseInsensitiveCompare:myRegisteredDevice.ID] == NSOrderedSame)
+		if ([registeredDevice.ID caseInsensitiveCompare:registeredDeviceModel.ID] == NSOrderedSame)
 		{
-			myRegisteredDevice.PhoneNumber = registeredDevice.PhoneNumber;
+			[registeredDeviceModel setHasRegistered:YES];
+			[registeredDeviceModel setPhoneNumber:registeredDevice.PhoneNumber];
 			
-			NSLog(@"Current Device already Registered with ID: %@ and Phone Number: %@", myRegisteredDevice.ID, myRegisteredDevice.PhoneNumber);
+			NSLog(@"Current Device already Registered with ID: %@ and Phone Number: %@", registeredDeviceModel.ID, registeredDeviceModel.PhoneNumber);
 		}
 	}
 }

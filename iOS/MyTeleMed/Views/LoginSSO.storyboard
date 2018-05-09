@@ -37,7 +37,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="doN-Te-whe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="290" y="258"/>
+            <point key="canvasLocation" x="310" y="258"/>
         </scene>
         <!--LoginSSO My Tele Med View Controller-->
         <scene sceneID="qUb-3F-ygI">
@@ -158,12 +158,11 @@
                         <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="Rgv-gr-GBL"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>
                         <outlet property="webView" destination="HAU-mb-TqS" id="QO0-LX-oBu"/>
-                        <segue destination="2av-Uk-df6" kind="show" identifier="showPhoneNumber" id="ajQ-dD-4Bo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zbR-an-VdQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1023" y="258"/>
+            <point key="canvasLocation" x="1790" y="258"/>
         </scene>
         <!--Enter SSO ID Provider-->
         <scene sceneID="Az2-Pj-ksJ">
@@ -311,7 +310,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YGw-OH-T0q" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Frn-L8-EDA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1022" y="996"/>
+            <point key="canvasLocation" x="1791" y="995"/>
         </scene>
         <!--Phone Number View Controller-->
         <scene sceneID="Ywa-UN-9m2">
@@ -444,13 +443,11 @@
                         <outlet property="constraintFormTop" destination="iBQ-Qa-fwJ" id="lvc-uA-e44"/>
                         <outlet property="textPhoneNumber" destination="CrA-Ex-elv" id="uAc-KN-WQg"/>
                         <outlet property="viewToolbar" destination="vlM-42-BSe" id="jJ2-aQ-T13"/>
-                        <segue destination="bXr-xs-BMc" kind="unwind" identifier="unwindFromPhoneNumber" unwindAction="unwindFromPhoneNumber:" id="5IF-db-Wcg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BUi-ro-vlv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="bXr-xs-BMc" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1738" y="258"/>
+            <point key="canvasLocation" x="3295" y="258"/>
         </scene>
         <!--HelpViewController-->
         <scene sceneID="7MW-Oo-Dby">
@@ -458,7 +455,43 @@
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="HelpViewController" id="aua-Qa-l8H" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EDn-Si-4b6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1736" y="995"/>
+            <point key="canvasLocation" x="2544" y="994"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ypu-4k-uZd">
+            <objects>
+                <navigationController storyboardIdentifier="LoginSSONavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="B5v-uN-iAU" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zny-LJ-Afr">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="FjD-qd-sAh" kind="relationship" relationship="rootViewController" id="8BL-Oo-3uh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Syx-7W-jry" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1042" y="258"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="XPL-16-xg9">
+            <objects>
+                <navigationController storyboardIdentifier="PhoneNumberNavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="ZfR-4f-ehv" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9iW-BZ-rPJ">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="2av-Uk-df6" kind="relationship" relationship="rootViewController" id="vao-ot-DRI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y5f-7W-mBS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2546" y="258"/>
         </scene>
     </scenes>
     <resources>
@@ -470,6 +503,6 @@
         <image name="button-WebViewForward.png" width="12" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="7Cm-Eo-Uci"/>
+        <segue reference="EId-x6-V12"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -2855,6 +2855,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					BETA,
+					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -2884,7 +2885,6 @@
 					MYTELEMED,
 					"API_PREFIX=\\@\\\"MyTmdWebApi\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"mytmd\\\"",
-					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"XMLNS=\\@\\\"MyTmd\\\"",
 				);
 				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
@@ -2936,6 +2936,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					DEBUG,
+					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2981,7 +2982,11 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					RELEASE,
+					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -3011,7 +3016,6 @@
 					MYTELEMED,
 					"API_PREFIX=\\@\\\"MyTmdWebApi\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"mytmd\\\"",
-					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"XMLNS=\\@\\\"MyTmd\\\"",
 				);
 				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
@@ -3043,7 +3047,6 @@
 					MYTELEMED,
 					"API_PREFIX=\\@\\\"MyTmdWebApi\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"mytmd\\\"",
-					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
 					"XMLNS=\\@\\\"MyTmd\\\"",
 				);
 				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
@@ -3075,7 +3078,6 @@
 					MEDTOMED,
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
-					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 					"XMLNS=\\@\\\"MedToMed\\\"",
 				);
 				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
@@ -3107,7 +3109,6 @@
 					MEDTOMED,
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
-					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
 					"XMLNS=\\@\\\"MedToMed\\\"",
 				);
 				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
@@ -3140,7 +3141,6 @@
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 					"XMLNS=\\@\\\"MedToMed\\\"",
-					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 				);
 				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

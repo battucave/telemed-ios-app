@@ -189,7 +189,7 @@
 				[self getNewTokensWithSuccess:success failure:failure isRetry:YES];
 			});
 		}
-		// Handle timeout issues differently if not in LoginSSO storyboard
+		// Handle timeout issues differently if not in login sso storyboard
 		else if ( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
 		{
 			NSLog(@"Refreshing Tokens Timed Out: %@", error);
@@ -249,7 +249,7 @@
 	self.AccessTokenExpiration = nil;
 	self.RefreshToken = nil;
 	
-	// Go to LoginSSO screen
+	// Go to login sso screen
 	UIStoryboard *loginSSOStoryboard;
 	UIStoryboard *currentStoryboard = appDelegate.window.rootViewController.storyboard;
 	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
@@ -265,8 +265,9 @@
 		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
 	}
 	
-	UIViewController *loginSSOViewController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
-	[appDelegate.window setRootViewController:loginSSOViewController];
+	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
+	
+	[appDelegate.window setRootViewController:loginSSONavigationController];
 	[appDelegate.window makeKeyAndVisible];
 }
 

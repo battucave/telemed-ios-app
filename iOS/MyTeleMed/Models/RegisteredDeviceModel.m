@@ -115,6 +115,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		if (operation.response.statusCode == 204)
 		{
 			// Disable future registration until next login
+			self.hasRegistered = YES;
 			self.shouldRegister = NO;
 			
 			callback(YES, nil);

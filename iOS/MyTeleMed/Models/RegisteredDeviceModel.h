@@ -17,7 +17,8 @@
 @property (nonatomic) NSString *PlatformID;
 @property (nonatomic) NSString *Token;
 
-@property (nonatomic) BOOL shouldRegister;
+@property (nonatomic) BOOL hasRegistered; // This property not set by web service
+@property (nonatomic) BOOL shouldRegister; // This property not set by web service
 
 + (instancetype)sharedInstance;
 

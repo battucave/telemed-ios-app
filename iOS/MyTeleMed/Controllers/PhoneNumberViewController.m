@@ -84,7 +84,7 @@
 		[phoneNumberHelpAlertController setPreferredAction:actionOK];
 	}
 
-	// Show Alert
+	// Show alert
 	[self presentViewController:phoneNumberHelpAlertController animated:YES completion:nil];
 }
 
@@ -107,7 +107,7 @@
 			[errorAlertController setPreferredAction:actionOK];
 		}
 	
-		// Show Alert
+		// Show alert
 		[self presentViewController:errorAlertController animated:YES completion:nil];
 	}
 	else
@@ -120,10 +120,10 @@
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
-			// Register Phone Number along with new Device Token
+			// Register phone number along with new device token
 			[registeredDeviceModel setShouldRegister:YES];
 			
-			// Save Phone Number to Device
+			// Save phone number to device
 			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
 			
 			// Run register device web service
@@ -131,7 +131,7 @@
 			{
 				if (success)
 				{
-					// Go to Main Storyboard
+					// Go to the next screen in the login process
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
 				}
 				else
@@ -149,18 +149,19 @@
 					}
 					
 					UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
-					UIAlertAction *actionGoBack = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+					UIAlertAction *actionGoBack = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 					{
-						// Go back to Login
-						if (self.delegate)
+						// Go back to login sso (user navigated here from login sso)
+						if ([self.navigationController.viewControllers count] > 1)
 						{
-							[self performSegueWithIdentifier:@"unwindFromPhoneNumber" sender:self];
+							[self.navigationController popToRootViewControllerAnimated:YES];
 						}
-						// User was automatically redirected to PhoneNumberViewController from AppDelegate
+						// Go back to login sso (user bypassed login, but was sent here due to invalid phone number)
 						else
 						{
 							UIViewController *loginSSOViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
-							[self.navigationController setViewControllers:@[loginSSOViewController] animated:YES];
+						
+							[self.navigationController setViewControllers:@[loginSSOViewController] animated:NO];
 						}
 					}];
 					UIAlertAction *actionRetry = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
@@ -168,7 +169,7 @@
 					[errorAlertController addAction:actionGoBack];
 					[errorAlertController addAction:actionRetry];
 				
-					// Show Alert
+					// Show alert
 					[self presentViewController:errorAlertController animated:YES completion:nil];
 				}
 			}];
@@ -183,7 +184,7 @@
 			[confirmPhoneNumberAlertController setPreferredAction:actionYes];
 		}
 
-		// Show Alert
+		// Show alert
 		[self presentViewController:confirmPhoneNumberAlertController animated:YES completion:nil];
 	}
 }

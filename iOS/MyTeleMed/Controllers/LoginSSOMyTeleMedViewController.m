@@ -14,13 +14,7 @@
 
 @implementation LoginSSOMyTeleMedViewController
 
-// Unwind Segue from PhoneNumberViewController
-- (IBAction)unwindFromPhoneNumber:(UIStoryboardSegue *)segue
-{
-	NSLog(@"unwindFromPhoneNumber");
-}
-
-// Obtain User Data from server and initialize app
+// Obtain user data from server and initialize app
 - (void)finalizeLogin
 {
 	NSLog(@"Finalize MyTeleMed Login");
@@ -38,10 +32,10 @@
 			NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 			NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 			
-			// Check if device is already registered with TeleMed service
-			if (registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
+			// Check if user has previously registered this device with TeleMed
+			if (registeredDeviceModel.hasRegistered)
 			{
-				// Phone Number is already registered with Web Service, so we just need to update Device Token (Device Token can change randomly so this keeps it up to date)
+				// Phone Number was previously registered with TeleMed, but we should update the device token in case it changed
 				[registeredDeviceModel setShouldRegister:YES];
 				
 				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
@@ -52,22 +46,17 @@
 						[self showWebViewError:[NSString stringWithFormat:@"There was a problem registering your device on our network:<br>%@", registeredDeviceError.localizedDescription]];
 					}
 					
-					if (success)
-					{
-						// Go to Main Storyboard
-						[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
-					}
-					// Error updating Device Token so show Phone Number screen so user can register correct phone number
-					else
-					{
-						[self performSegueWithIdentifier:@"showPhoneNumber" sender:self];
-					}
+					// NOTE: If the request was not successful, then just continue to next step in the login process to avoid a potential infinite loop. Don't force user to re-enter their phone number until the next time they launch the app
+					
+					// Go to the next screen in the login process
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
 				}];
 			}
-			// Device ID is not yet registered with TeleMed, so show Phone Number screen to register
+			// Device id is not yet registered with TeleMed, so show phone number screen
 			else
 			{
-				[self performSegueWithIdentifier:@"showPhoneNumber" sender:self];
+				// Go to the next screen in the login process
+				[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
 			}
 		}
 		else
@@ -80,17 +69,6 @@
 	}];
 	
 	[super finalizeLogin];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-	if ([segue.identifier isEqualToString:@"showPhoneNumber"])
-	{
-		PhoneNumberViewController *phoneNumberViewController = segue.destinationViewController;
-		
-		// Set delegate
-		[phoneNumberViewController setDelegate:self];
-	}
 }
 
 @end

@@ -326,21 +326,20 @@
 	
 	NSLog(@"Current Storyboard: %@", currentStoryboardName);
 	
-	// Already on LoginSSO storyboard
+	// Already on login sso storyboard
 	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
 	{
 		loginSSOStoryboard = currentStoryboard;
 	}
-	// Go to LoginSSO storyboard
+	// Go to login sso storyboard
 	else
 	{
 		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
 	}
 	
-	UIViewController *loginSSOViewController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
-	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:loginSSOViewController];
+	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
 	
-	[self.window setRootViewController:navigationController];
+	[self.window setRootViewController:loginSSONavigationController];
 	[self.window makeKeyAndVisible];
 }
 
@@ -506,10 +505,50 @@
 }
 
 /*
- * Show main screen: messages view controller
+ * Show main screen: change password view controller, phone number view controller, or messages view controller
  */
 - (void)showMainScreen
 {
+	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
+	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
+	
+	// If user is currently on login sso storyboard, then perform additional checks before sending user to main storyboard
+	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
+	{
+		BOOL hasNavigationController = self.window.rootViewController.class == UINavigationController.class;
+		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+		// If device has not previously registered with TeleMed web service, then show phone number screen
+		if ( ! registeredDeviceModel.hasRegistered)
+		{
+			// If using Simulator, skip phone number step because it is always invalid
+			// #ifdef DEBUG
+			#if TARGET_IPHONE_SIMULATOR
+				NSLog(@"Skip Phone Number step when on Simulator or Debugging");
+			
+			#else
+				if (hasNavigationController)
+				{
+					UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
+					UIViewController *phoneNumberViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
+				
+					[navigationController pushViewController:phoneNumberViewController animated:YES];
+				}
+				else
+				{
+					UINavigationController *phoneNumberNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberNavigationController"];
+					
+					[self.window setRootViewController:phoneNumberNavigationController];
+					[self.window makeKeyAndVisible];
+				}
+			
+				return;
+			#endif
+		}
+	}
+	
+	// Show messages view controller
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
 	
@@ -526,10 +565,10 @@
 	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 	
-	// (Re-)Register device with TeleMed's web service
-	if (registeredDeviceModel.PhoneNumber.length > 0 && ! [registeredDeviceModel.PhoneNumber isEqualToString:@"000-000-0000"])
+	// Check if user has previously registered this device with TeleMed
+	if (registeredDeviceModel.hasRegistered)
 	{
-		// Phone number is already registered with web service, so we just need to update device token (device token can change randomly so this keeps it up to date)
+		// Phone number was previously registered with TeleMed, but we should update the device token in case it changed
 		[registeredDeviceModel setShouldRegister:YES];
 		
 		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
@@ -542,26 +581,21 @@
 				[errorAlertController show:registeredDeviceError];
 			}
 			
-			// Go to main screen regardless of whether there was an error (no need to force re-login here since any error here only affects registering device for push notifications)
+			// If the request was not successful, direct the user to re-enter their phone number again (handled by showMainScreen:)
+			if ( ! success)
+			{
+				[registeredDeviceModel setHasRegistered:NO];
+			}
+			
+			// Go to the next screen in the login process
 			[self showMainScreen];
 		}];
 	}
-	// Account is valid, but phone number is not yet registered with TeleMed, so go directly to phone number screen
+	// Account is valid, but phone number is not yet registered with TeleMed so go directly to phone number screen (handled by showMainScreen:)
 	else
 	{
-		NSLog(@"Phone Number Invalid");
-		
-		// If using Simulator, skip phone number step because it is always invalid
-		// #ifdef DEBUG
-		#if TARGET_IPHONE_SIMULATOR
-			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
-		
-			[self showMainScreen];
-		
-		#else
-			// Force user to re-login to eliminate issue of user trying to login as another user and getting permanently stuck on phone number screen (even after re-install of app)
-			[self showLoginSSOScreen];
-		#endif
+		// Go the next screen in the login process
+		[self showMainScreen];
 	}
 }
 #endif
