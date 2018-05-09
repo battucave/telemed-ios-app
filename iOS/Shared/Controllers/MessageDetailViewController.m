@@ -14,15 +14,15 @@
 
 #ifdef MYTELEMED
 	#import "MessageHistoryViewController.h"
-	#import "CommentCell.h" // MedToMed Phase 2
-	#import "MessageEventCell.h" // MedToMed Phase 2
-	#import "CommentModel.h" // MedToMed Phase 2
-	#import "MessageEventModel.h" // MedToMed Phase 2
+	#import "CommentCell.h" // Med2Med Phase 2
+	#import "MessageEventCell.h" // Med2Med Phase 2
+	#import "CommentModel.h" // Med2Med Phase 2
+	#import "MessageEventModel.h" // Med2Med Phase 2
 	#import "MessageRecipientModel.h"
 	#import "MyProfileModel.h"
 #endif
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	#import "UserProfileModel.h"
 #endif
 
@@ -51,11 +51,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableCommentsHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewButtonsHeight;
 
-// TEMPORARY MEDTOMED PHASE 1 (remove in phase 2)
+// TEMPORARY MED2MED PHASE 1 (remove in phase 2)
 @property (weak, nonatomic) IBOutlet UILabel *labelCommentsEvents;
 @property (weak, nonatomic) IBOutlet UIView *viewAddCommentContainer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonAddCommentHeight;
-// END TEMPORARY MEDTOMED PHASE 1
+// END TEMPORARY MED2MED PHASE 1
 
 @property (nonatomic) NSUInteger messageCount;
 @property (nonatomic) NSNumber *currentUserID;
@@ -79,7 +79,7 @@
 	#ifdef MYTELEMED
 	 	profile = [MyProfileModel sharedInstance];
 	
-	#elif defined MEDTOMED
+	#elif defined MED2MED
 			profile = [UserProfileModel sharedInstance];
 	#endif
 	
@@ -178,8 +178,8 @@
 		}
 	#endif
 	
-	// MedToMed - modify appearance
-	#ifdef MEDTOMED
+	// Med2Med - modify appearance
+	#ifdef MED2MED
 		// Hide buttons
 		[self.viewButtons setHidden:YES];
 		[self.constraintViewButtonsHeight setConstant:0.0f];
@@ -827,9 +827,9 @@
 #endif
 
 
-#pragma mark - MedToMed
+#pragma mark - Med2Med
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 // TEMPORARY (remove in phase 2)
 - (void)viewDidLayoutSubviews
 {

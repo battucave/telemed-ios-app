@@ -15,7 +15,7 @@
 	#import "MyProfileModel.h"
 #endif
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	#import "HospitalPickerViewController.h"
 	#import "UserProfileModel.h"
 #endif
@@ -38,7 +38,7 @@
 	// Initialize May Disable Timeout value
 	self.mayDisableTimeout = NO;
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		[self setAboutTeleMedSection:2];
 	
 	#else
@@ -56,7 +56,7 @@
 	#ifdef MYTELEMED
 		profile = [MyProfileModel sharedInstance];
 
-	#elif defined MEDTOMED
+	#elif defined MED2MED
 		profile = [UserProfileModel sharedInstance];
 	#endif
 	
@@ -194,7 +194,7 @@
 			[accountPickerViewController setTitle:@"Preferred Account"];
 			[accountPickerViewController setShouldSetPreferredAccount:YES];
 		
-		#elif defined MEDTOMED
+		#elif defined MED2MED
 			[accountPickerViewController setTitle:@"My Medical Groups"];
 			[accountPickerViewController setShouldSelectAccount:NO];
 		#endif
@@ -211,7 +211,7 @@
 			[settingsNotificationsTableViewController setNotificationSettingsType:indexPath.row];
 		}
 	
-	#elif defined MEDTOMED
+	#elif defined MED2MED
 		// Update title of HospitalsPickerViewController
 		else if ([segue.identifier isEqualToString:@"showHospitalPickerFromSettings"]) {
 			HospitalPickerViewController *hospitalPickerViewController = segue.destinationViewController;

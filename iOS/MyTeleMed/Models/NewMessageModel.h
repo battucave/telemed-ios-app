@@ -26,13 +26,13 @@
 @property (nonatomic) BOOL Success;
 @property (nonatomic) NSString *Message;
 
-// Header files are shared by all targets so have to include the method signatures used by both MyTeleMed and MedToMed.
+// Header files are shared by all targets so have to include the method signatures used by both MyTeleMed and Med2Med.
 
 #ifdef MYTELEMED
 	- (void)sendNewMessage:(NSString *)message accountID:(NSNumber *)accountID messageRecipientIDs:(NSArray *)messageRecipientIDs;
 #endif
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	- (void)sendNewMessage:(NSDictionary *)data;
 #endif
 

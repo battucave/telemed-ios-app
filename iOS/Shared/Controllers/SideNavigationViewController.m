@@ -16,7 +16,7 @@
 	#import "MyStatusModel.h"
 #endif
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	#import "ProfileProtocol.h"
 	#import "UserProfileModel.h"
 #endif
@@ -42,7 +42,7 @@
 {
     [super viewDidLoad];
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		[self setMenuItems:@[@"New Message", @"Sent Messages", @"Settings", @"Log Out", @"Help"]];
 	
 	#else
@@ -90,7 +90,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 	// Log Out has padding above it
 	if (indexPath.row == 3)
 	{
@@ -270,9 +270,9 @@
 }
 
 
-#pragma mark - MedToMed
+#pragma mark - Med2Med
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];

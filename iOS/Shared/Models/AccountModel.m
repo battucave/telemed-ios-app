@@ -41,7 +41,7 @@
 			}] mutableCopy];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
-			#ifdef MEDTOMED
+			#ifdef MED2MED
 				for (int i = 0; i < 5; i++)
 				{
 					AccountModel *account = [[AccountModel alloc] init];
@@ -120,9 +120,9 @@
 #endif
 
 
-#pragma mark - MedToMed
+#pragma mark - Med2Med
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID
 {
 	[self getAccountsByHospital:hospitalID withCallback:nil];

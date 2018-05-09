@@ -101,7 +101,7 @@
 		28DAB3541A9687E600400553 /* MessageDetailParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28DAB3531A9687E500400553 /* MessageDetailParentViewController.m */; };
 		28E0CD741822AF8100729B4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E0CD721822AF8100729B4A /* Main.storyboard */; };
 		28EAB9EA194B585100903772 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EAB9E9194B585100903772 /* HelpViewController.m */; };
-		E20295011FBB934F00811DA6 /* MedToMed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295001FBB934F00811DA6 /* MedToMed.storyboard */; };
+		E20295011FBB934F00811DA6 /* Med2Med.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295001FBB934F00811DA6 /* Med2Med.storyboard */; };
 		E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */; };
 		E20295051FBBA47000811DA6 /* Main.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295041FBBA46C00811DA6 /* Main.xcassets */; };
 		E20295061FBBA47600811DA6 /* Main.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295041FBBA46C00811DA6 /* Main.xcassets */; };
@@ -168,7 +168,7 @@
 		E232D7071E675E7800B797E1 /* indicator-CommentRightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */; };
 		E232D7081E675E7800B797E1 /* indicator-CommentRightBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */; };
 		E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F461FC3273A00DC899D /* AccountNewViewController.m */; };
-		E23A4F4A1FC3325C00DC899D /* LoginSSOMedToMedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */; };
+		E23A4F4A1FC3325C00DC899D /* LoginSSOMed2MedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F491FC3325C00DC899D /* LoginSSOMed2MedViewController.m */; };
 		E240EE6D1F54A462009D8ED1 /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
 		E24A44321FCC6DF900A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
 		E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
@@ -674,8 +674,8 @@
 		28E0CD721822AF8100729B4A /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		28EAB9E8194B585100903772 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
 		28EAB9E9194B585100903772 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
-		E20294F81FBB920C00811DA6 /* MedToMed-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MedToMed-Info.plist"; sourceTree = "<group>"; };
-		E20295001FBB934F00811DA6 /* MedToMed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MedToMed.storyboard; sourceTree = "<group>"; };
+		E20294F81FBB920C00811DA6 /* Med2Med-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Med2Med-Info.plist"; sourceTree = "<group>"; };
+		E20295001FBB934F00811DA6 /* Med2Med.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Med2Med.storyboard; sourceTree = "<group>"; };
 		E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginSSO.storyboard; sourceTree = "<group>"; };
 		E20295041FBBA46C00811DA6 /* Main.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Main.xcassets; sourceTree = "<group>"; };
 		E20295071FBBA4AD00811DA6 /* MedToMed.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MedToMed.xcassets; sourceTree = "<group>"; };
@@ -724,8 +724,8 @@
 		E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue@2x.png"; sourceTree = "<group>"; };
 		E23A4F431FC3269F00DC899D /* AccountNewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountNewViewController.h; sourceTree = "<group>"; };
 		E23A4F461FC3273A00DC899D /* AccountNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountNewViewController.m; sourceTree = "<group>"; };
-		E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginSSOMedToMedViewController.h; sourceTree = "<group>"; };
-		E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginSSOMedToMedViewController.m; sourceTree = "<group>"; };
+		E23A4F481FC3325C00DC899D /* LoginSSOMed2MedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginSSOMed2MedViewController.h; sourceTree = "<group>"; };
+		E23A4F491FC3325C00DC899D /* LoginSSOMed2MedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginSSOMed2MedViewController.m; sourceTree = "<group>"; };
 		E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IBDesignable.h"; sourceTree = "<group>"; };
 		E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+IBDesignable.m"; sourceTree = "<group>"; };
 		E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CDMAVoiceData.xib; sourceTree = "<group>"; };
@@ -742,7 +742,7 @@
 		E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordChangeModel.m; sourceTree = "<group>"; };
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
-		E25037B71FBB88F400099C7E /* MedToMed Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MedToMed Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E25037B71FBB88F400099C7E /* M2M Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "M2M Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E254E3761FE2FDD400B3014F /* NewMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageModel.m; sourceTree = "<group>"; };
 		E254E3771FE2FDD700B3014F /* NewMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageModel.h; sourceTree = "<group>"; };
 		E2622D0A1FC5F8B0008BCFF3 /* MessageNewTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNewTableViewController.h; sourceTree = "<group>"; };
@@ -999,10 +999,10 @@
 		E2D5677E1CDB85B80054FD3F /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		E2D83FB31C761502008D26A8 /* CDMAVoiceDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDMAVoiceDataViewController.h; sourceTree = "<group>"; };
 		E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDMAVoiceDataViewController.m; sourceTree = "<group>"; };
-		E2DFACE020938DE100B798F8 /* MedToMed Debug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "MedToMed Debug.entitlements"; sourceTree = "<group>"; };
+		E2DFACE020938DE100B798F8 /* Med2Med Debug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Med2Med Debug.entitlements"; sourceTree = "<group>"; };
 		E2DFACE120938DF400B798F8 /* MyTmd Debug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "MyTmd Debug.entitlements"; sourceTree = "<group>"; };
-		E2DFACE22093908A00B798F8 /* MedToMed.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MedToMed.entitlements; sourceTree = "<group>"; };
-		E2DFACE32093908A00B798F8 /* MedToMedβ.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "MedToMedβ.entitlements"; sourceTree = "<group>"; };
+		E2DFACE22093908A00B798F8 /* Med2Med.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Med2Med.entitlements; sourceTree = "<group>"; };
+		E2DFACE32093908A00B798F8 /* Med2Medβ.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Med2Medβ.entitlements"; sourceTree = "<group>"; };
 		E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NotificationTonesFix.h"; sourceTree = "<group>"; };
 		E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NotificationTonesFix.m"; sourceTree = "<group>"; };
 		E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+XML.m"; sourceTree = "<group>"; };
@@ -1199,7 +1199,7 @@
 				E2AD96F8208FB3450012B1DB /* TeleMedApplication.h */,
 				E2AD96F7208FB3440012B1DB /* TeleMedApplication.m */,
 				E211D5701FBF4A4F00263497 /* Shared */,
-				E20294F71FBB920C00811DA6 /* MedToMed */,
+				E20294F71FBB920C00811DA6 /* Med2Med */,
 				28CCCD4517F517A50093CEE2 /* MyTeleMed */,
 				081710681C495603000DD7C9 /* MyTeleMedWatch */,
 				081710771C495603000DD7C9 /* MyTeleMedWatch Extension */,
@@ -1214,7 +1214,7 @@
 				28CCCD3C17F517A50093CEE2 /* MyTmd Debug.app */,
 				081710671C495602000DD7C9 /* MyTeleMedWatch.app */,
 				081710731C495603000DD7C9 /* MyTeleMedWatch Extension.appex */,
-				E25037B71FBB88F400099C7E /* MedToMed Debug.app */,
+				E25037B71FBB88F400099C7E /* M2M Debug.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1322,7 +1322,7 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		E20294F71FBB920C00811DA6 /* MedToMed */ = {
+		E20294F71FBB920C00811DA6 /* Med2Med */ = {
 			isa = PBXGroup;
 			children = (
 				E211D5A01FBF5F1900263497 /* Controllers */,
@@ -1331,7 +1331,7 @@
 				E211D5681FBF393600263497 /* Supporting Files */,
 				E20294FE1FBB933F00811DA6 /* Views */,
 			);
-			path = MedToMed;
+			path = Med2Med;
 			sourceTree = "<group>";
 		};
 		E20294FD1FBB933F00811DA6 /* Resources */ = {
@@ -1346,7 +1346,7 @@
 			isa = PBXGroup;
 			children = (
 				E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */,
-				E20295001FBB934F00811DA6 /* MedToMed.storyboard */,
+				E20295001FBB934F00811DA6 /* Med2Med.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1354,10 +1354,10 @@
 		E211D5681FBF393600263497 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E20294F81FBB920C00811DA6 /* MedToMed-Info.plist */,
-				E2DFACE020938DE100B798F8 /* MedToMed Debug.entitlements */,
-				E2DFACE32093908A00B798F8 /* MedToMedβ.entitlements */,
-				E2DFACE22093908A00B798F8 /* MedToMed.entitlements */,
+				E20294F81FBB920C00811DA6 /* Med2Med-Info.plist */,
+				E2DFACE020938DE100B798F8 /* Med2Med Debug.entitlements */,
+				E2DFACE32093908A00B798F8 /* Med2Medβ.entitlements */,
+				E2DFACE22093908A00B798F8 /* Med2Med.entitlements */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -1668,8 +1668,8 @@
 				E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */,
 				E2CAB4421FE9B49A00202CCD /* HospitalRequestTableViewController.h */,
 				E2CAB4431FE9B49A00202CCD /* HospitalRequestTableViewController.m */,
-				E23A4F481FC3325C00DC899D /* LoginSSOMedToMedViewController.h */,
-				E23A4F491FC3325C00DC899D /* LoginSSOMedToMedViewController.m */,
+				E23A4F481FC3325C00DC899D /* LoginSSOMed2MedViewController.h */,
+				E23A4F491FC3325C00DC899D /* LoginSSOMed2MedViewController.m */,
 				E2A4BBF31FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.h */,
 				E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */,
 				E2622D0A1FC5F8B0008BCFF3 /* MessageNewTableViewController.h */,
@@ -2001,9 +2001,9 @@
 			productReference = 28CCCD3C17F517A50093CEE2 /* MyTmd Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E250368C1FBB88F400099C7E /* MedToMed */ = {
+		E250368C1FBB88F400099C7E /* Med2Med */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E25037B31FBB88F400099C7E /* Build configuration list for PBXNativeTarget "MedToMed" */;
+			buildConfigurationList = E25037B31FBB88F400099C7E /* Build configuration list for PBXNativeTarget "Med2Med" */;
 			buildPhases = (
 				E250368F1FBB88F400099C7E /* Sources */,
 				E25037001FBB88F400099C7E /* Frameworks */,
@@ -2013,9 +2013,9 @@
 			);
 			dependencies = (
 			);
-			name = MedToMed;
+			name = Med2Med;
 			productName = MyTeleMed;
-			productReference = E25037B71FBB88F400099C7E /* MedToMed Debug.app */;
+			productReference = E25037B71FBB88F400099C7E /* M2M Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2084,7 +2084,7 @@
 				28CCCD3B17F517A50093CEE2 /* MyTeleMed */,
 				081710661C495602000DD7C9 /* MyTeleMedWatch */,
 				081710721C495603000DD7C9 /* MyTeleMedWatch Extension */,
-				E250368C1FBB88F400099C7E /* MedToMed */,
+				E250368C1FBB88F400099C7E /* Med2Med */,
 			);
 		};
 /* End PBXProject section */
@@ -2326,7 +2326,7 @@
 				E2C7C1B71FC3910A00E50F07 /* button-Help.png in Resources */,
 				E25037581FBB88F400099C7E /* indicator-CommentRight.png in Resources */,
 				E22EF0861FD9A39200A2E6F6 /* button-MessageDetail-Forward@3x.png in Resources */,
-				E20295011FBB934F00811DA6 /* MedToMed.storyboard in Resources */,
+				E20295011FBB934F00811DA6 /* Med2Med.storyboard in Resources */,
 				E250375E1FBB88F400099C7E /* button-Navigation-Archives.png in Resources */,
 				E25037641FBB88F400099C7E /* button-Cancel.png in Resources */,
 				E25037651FBB88F400099C7E /* button-Help-Video.png in Resources */,
@@ -2525,7 +2525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E22C7B222093801B005CFA4A /* TeleMedApplication.m in Sources */,
-				E23A4F4A1FC3325C00DC899D /* LoginSSOMedToMedViewController.m in Sources */,
+				E23A4F4A1FC3325C00DC899D /* LoginSSOMed2MedViewController.m in Sources */,
 				E25036901FBB88F400099C7E /* AFNetworkActivityIndicatorManager.m in Sources */,
 				E22EF07C1FD99CBC00A2E6F6 /* MessageDetailViewController.m in Sources */,
 				E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */,
@@ -2646,7 +2646,6 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
@@ -2675,7 +2674,6 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2704,7 +2702,6 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2735,7 +2732,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
@@ -2766,7 +2762,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2797,7 +2792,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2875,7 +2869,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMedβ.entitlements";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3006,7 +2999,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTmd Debug.entitlements";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3037,7 +3029,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMed.entitlements";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3066,25 +3057,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
-				CODE_SIGN_ENTITLEMENTS = "MedToMed/Supporting Files/MedToMed Debug.entitlements";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Med Debug.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					MEDTOMED,
+					MED2MED,
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 					"XMLNS=\\@\\\"MedToMed\\\"",
 				);
-				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
+				INFOPLIST_FILE = "Med2Med/Supporting Files/Med2Med-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telemed.medtomed.debug;
-				PRODUCT_NAME = "$(TARGET_NAME) Debug";
+				PRODUCT_NAME = "M2M Debug";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -3097,21 +3087,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "MedToMed/Supporting Files/MedToMed.entitlements";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Med.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					MEDTOMED,
+					MED2MED,
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 					"XMLNS=\\@\\\"MedToMed\\\"",
 				);
-				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
+				INFOPLIST_FILE = "Med2Med/Supporting Files/Med2Med-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telemed.medtomed;
@@ -3128,21 +3117,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
-				CODE_SIGN_ENTITLEMENTS = "MedToMed/Supporting Files/MedToMedβ.entitlements";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Medβ.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					MEDTOMED,
+					MED2MED,
 					"API_PREFIX=\\@\\\"MedToMed\\\"",
 					"AUTHENTICATION_AUDIENCE=\\@\\\"m2m\\\"",
 					"XMLNS=\\@\\\"MedToMed\\\"",
 				);
-				INFOPLIST_FILE = "MedToMed/Supporting Files/MedToMed-Info.plist";
+				INFOPLIST_FILE = "Med2Med/Supporting Files/Med2Med-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telemed.medtomed.adhoc;
@@ -3198,7 +3186,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E25037B31FBB88F400099C7E /* Build configuration list for PBXNativeTarget "MedToMed" */ = {
+		E25037B31FBB88F400099C7E /* Build configuration list for PBXNativeTarget "Med2Med" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E25037B41FBB88F400099C7E /* Debug */,

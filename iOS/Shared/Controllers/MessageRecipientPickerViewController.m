@@ -13,7 +13,7 @@
 #ifdef MYTELEMED
 	#import "ChatParticipantModel.h"
 
-#elif defined MEDTOMED
+#elif defined MED2MED
 	#import "MessageNew2TableViewController.h"
 #endif
 
@@ -133,7 +133,7 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableMessageRecipients setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). (not currently used - only affects MedToMed if table allows multiple selection)
+	// Fix iOS 11+ issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). (not currently used - only affects Med2Med if table allows multiple selection)
 	if (self.hasSubmitted && self.navigationItem.rightBarButtonItem != nil)
 	{
 		if (@available(iOS 11.0, *))
@@ -149,7 +149,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		// Force single selection of recipients
 		[self.tableMessageRecipients setAllowsMultipleSelection:NO];
 	
@@ -201,7 +201,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		// Return updated form values back to previous screen (only used if user returned to this screen from new message 2 screen)
 		if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 		{
@@ -221,7 +221,7 @@
 {
 	[self setHasSubmitted:YES];
 	
-	#ifdef MEDTOMED // (not currently used - only used if table allows multiple selection)
+	#ifdef MED2MED // (not currently used - only used if table allows multiple selection)
 		[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 	
 	#else
@@ -383,15 +383,15 @@
 			[self.tableMessageRecipients reloadData];
 		});
 	}
-	// MedToMed only - reload table with updated data and scroll to any previously selected message recipient (only if table is limited to single selection)
+	// Med2Med only - reload table with updated data and scroll to any previously selected message recipient (only if table is limited to single selection)
 	else
 	{
 		[self.tableMessageRecipients reloadData];
 		[self scrollToSelectedMessageRecipient];
 	}
 	
-	// MedToMed - Re-enable next button if at least one message recipient is still selected (not currently used - only used if table allows multiple selection)
-	#ifdef MEDTOMED
+	// Med2Med - Re-enable next button if at least one message recipient is still selected (not currently used - only used if table allows multiple selection)
+	#ifdef MED2MED
 		if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] > 0)
 		{
 			[self.navigationItem.rightBarButtonItem setEnabled:YES];
@@ -444,7 +444,7 @@
 	// Close search results
 	[self.searchController setActive:NO];
 	
-	// MedToMed only - scroll to selected message recipient (only if table is limited to single selection)
+	// Med2Med only - scroll to selected message recipient (only if table is limited to single selection)
 	[self scrollToSelectedMessageRecipient];
 }
 
@@ -534,7 +534,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// MedToMed only - Reset selected message recipients
+	// Med2Med only - Reset selected message recipients
 	if ( ! self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		[self.selectedMessageRecipients removeAllObjects];
@@ -571,7 +571,7 @@
 	// Add checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		// Re-enable next button (not currently used - only used if table allows multiple selection)
 		if (self.navigationItem.rightBarButtonItem != nil)
 		{
@@ -647,8 +647,8 @@
 			[self.searchController setActive:NO];
 		}
 		
-		// MedToMed - Disable next button if no recipients still selected (not currently used - only used if table allows multiple selection)
-		#ifdef MEDTOMED
+		// Med2Med - Disable next button if no recipients still selected (not currently used - only used if table allows multiple selection)
+		#ifdef MED2MED
 			if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
 			{
 				[self.navigationItem.rightBarButtonItem setEnabled:NO];
@@ -666,7 +666,7 @@
 		return;
 	}
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		// Message new 2
 		if ([segue.identifier isEqualToString:@"showMessageNew2"])
 		{

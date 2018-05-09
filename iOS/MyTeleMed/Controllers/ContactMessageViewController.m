@@ -24,7 +24,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		[self.navigationItem setTitle:@"Contact TeleMed"];
 	
 	// Remove menu button if showing Back button. This MUST happen before [super viewWillAppear] so that Back Button will be added in its place (Back button only shown when navigating from Login.storyboard View Controllers)
@@ -53,7 +53,7 @@
 // Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	#ifdef MEDTOMED
+	#ifdef MED2MED
 		// Reset message text
 		[self.messageTeleMedComposeTableViewController.textViewMessage setText:@""];
 		[self.messageTeleMedComposeTableViewController.textViewMessage resignFirstResponder];

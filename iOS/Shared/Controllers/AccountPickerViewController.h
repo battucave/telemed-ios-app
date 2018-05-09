@@ -19,7 +19,7 @@
 	@property (nonatomic) NSMutableArray *selectedMessageRecipients;
 	@property (nonatomic) BOOL shouldSetPreferredAccount;
 
-#elif defined MEDTOMED
+#elif defined MED2MED
 	@property (nonatomic) BOOL shouldCallAccount;
 	@property (nonatomic) BOOL shouldSelectAccount;
 #endif

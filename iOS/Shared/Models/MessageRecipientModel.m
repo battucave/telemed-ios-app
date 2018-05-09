@@ -24,7 +24,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Sort message recipients by name (MedToMed: FirstName LastName, MyTeleMed: LastName, FirstName)
+			// Sort message recipients by name (Med2Med: FirstName LastName, MyTeleMed: LastName, FirstName)
 			NSArray *messageRecipients = [[parser messageRecipients] sortedArrayUsingComparator:^NSComparisonResult(MessageRecipientModel *messageRecipientModelA, MessageRecipientModel *messageRecipientModelB)
 			{
 				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
@@ -96,9 +96,9 @@
 #endif
 
 
-#pragma mark - MedToMed
+#pragma mark - Med2Med
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 - (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID
 {
 	NSDictionary *parameters = @{

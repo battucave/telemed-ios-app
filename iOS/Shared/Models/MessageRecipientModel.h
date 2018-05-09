@@ -38,9 +38,9 @@
 #endif
 
 
-#pragma mark - MedToMed
+#pragma mark - Med2Med
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID;
 #endif
 

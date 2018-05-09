@@ -13,7 +13,7 @@
 	#import "MyProfileModel.h"
 #endif
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	#import "UserProfileModel.h"
 #endif
 
@@ -54,7 +54,7 @@
 	#ifdef MYTELEMED
 		profile = [MyProfileModel sharedInstance];
 
-	#elif defined MEDTOMED
+	#elif defined MED2MED
 		profile = [UserProfileModel sharedInstance];
 	#endif
 	

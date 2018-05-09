@@ -24,7 +24,7 @@
 	#import "RegisteredDeviceModel.h"
 #endif
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	#import "AccountModel.h"
 	#import "UserProfileModel.h"
 #endif
@@ -106,8 +106,8 @@
 			[application registerForRemoteNotifications];
 		}
 	
-	// MedToMed - Prevent swipe message from ever appearing
-	#elif defined MEDTOMED
+	// Med2Med - Prevent swipe message from ever appearing
+	#elif defined MED2MED
 		[settings setBool:YES forKey:@"swipeMessageDisabled"];
 		[settings synchronize];
 	#endif
@@ -264,11 +264,11 @@
 		#ifdef MYTELEMED
 			id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 		
-		#elif defined MEDTOMED
+		#elif defined MED2MED
 			id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
 		
 		#else
-			NSLog(@"Error - Target is neither MyTeleMed nor MedToMed");
+			NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
 		
 			[self showLoginSSOScreen];
 		
@@ -284,9 +284,9 @@
 				#ifdef MYTELEMED
 					[self validateRegistration:profile];
 				
-				// MedToMed - Validate at least one account is authorized
-				#elif defined MEDTOMED
-					[self validateMedToMedAuthorization:profile];
+				// Med2Med - Validate at least one account is authorized
+				#elif defined MED2MED
+					[self validateMed2MedAuthorization:profile];
 				#endif
 				
 				// Else condition will never be reached since it would have been handled while defining profile
@@ -601,9 +601,9 @@
 #endif
 
 
-#pragma mark - MedToMed
+#pragma mark - Med2Med
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 
 /*
  * Show main screen: message new table view controller or message new unauthorized table view controller
@@ -611,7 +611,7 @@
 - (void)showMainScreen
 {
 	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MedToMed" bundle:nil];
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Med2Med" bundle:nil];
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
 	UINavigationController *navigationController;
 	
@@ -632,7 +632,7 @@
 	[self.window makeKeyAndVisible];
 }
 
-- (void)validateMedToMedAuthorization:(id <ProfileProtocol>)profile
+- (void)validateMed2MedAuthorization:(id <ProfileProtocol>)profile
 {
 	// Fetch accounts and check the authorization status for each
 	AccountModel *accountModel = [[AccountModel alloc] init];

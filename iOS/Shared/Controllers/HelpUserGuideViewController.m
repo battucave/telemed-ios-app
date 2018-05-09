@@ -27,8 +27,8 @@
 	NSURL *userGuideUrl = [NSURL URLWithString:@"https://www.mytelemed.com/mytmd2009/mobilehelp/PDF/iPhone.pdf"];
 	
 	// TODO: Update user guide url
-	#ifdef MEDTOMED
-		NSLog(@"UPDATE USER GUIDE URL FOR MEDTOMED");
+	#ifdef MED2MED
+		NSLog(@"UPDATE USER GUIDE URL FOR MED2MED");
 	#endif
 	
 	NSURLRequest *requestObject = [NSURLRequest requestWithURL:userGuideUrl];

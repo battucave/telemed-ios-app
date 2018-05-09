@@ -55,19 +55,19 @@
 		[self.labelVersion setText:[NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber]];
 	#endif
 	
-	// MedToMed
-	#ifdef MEDTOMED
+	// Med2Med
+	#ifdef MED2MED
 		// Update intro text with correct app name
-		[self.labelIntro setText:[self.labelIntro.text stringByReplacingOccurrencesOfString:@"MyTeleMed" withString:@"MedToMed"]];
+		[self.labelIntro setText:[self.labelIntro.text stringByReplacingOccurrencesOfString:@"MyTeleMed" withString:@"Med2Med"]];
 	
 		// Replace demo video button with call telemed button
 		[self.buttonCallTeleMed setHidden:NO];
 		[self.buttonDemoVideo setHidden:YES];
 	
-		// TEMPORARY (remove when user guide is created for MedToMed)
+		// TEMPORARY (remove when user guide is created for Med2Med)
 		[self.buttonUserGuide setHidden:YES];
 		[self.constraintCallTeleMedCenterX setConstant:0.0f];
-		[self.labelIntro setText:@"If you have questions or need further instruction on how to use the MedToMed app, please contact TeleMed using the button below."];
+		[self.labelIntro setText:@"If you have questions or need further instruction on how to use the Med2Med app, please contact TeleMed using the button below."];
 	
 	#else
 		// Hide call telemed button
@@ -96,7 +96,7 @@
 	// Dispose of any resources that can be recreated.
 }
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Account picker

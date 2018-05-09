@@ -20,7 +20,7 @@
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
 
-#ifdef MEDTOMED
+#ifdef MED2MED
 	@property (weak) id delegate;
 
 	@property (nonatomic) OnCallSlotModel *selectedOnCallSlot;

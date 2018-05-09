@@ -680,7 +680,7 @@
         <!--AccountRequestTableViewController-->
         <scene sceneID="nDs-tK-Q6S">
             <objects>
-                <viewControllerPlaceholder storyboardName="MedToMed" bundleIdentifier="com.telemed.medtomed" referencedIdentifier="AccountRequestTableViewController" id="xJG-LZ-YxZ" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Med2Med" bundleIdentifier="com.telemed.medtomed" referencedIdentifier="AccountRequestTableViewController" id="xJG-LZ-YxZ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lO8-9R-w1n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6614" y="-1345"/>
@@ -778,7 +778,7 @@
         <!--MessageNew2TableViewController-->
         <scene sceneID="5hQ-Vn-iBV">
             <objects>
-                <viewControllerPlaceholder storyboardName="MedToMed" bundleIdentifier="com.telemed.medtomed" referencedIdentifier="MessageNew2TableViewController" id="Dim-mn-IBH" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Med2Med" bundleIdentifier="com.telemed.medtomed" referencedIdentifier="MessageNew2TableViewController" id="Dim-mn-IBH" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kke-Wy-rWU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="7282" y="-893"/>
@@ -2554,7 +2554,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="v8E-N0-EBQ"/>
                                 </constraints>
-                                <string key="text">If you have questions or need further instruction on how to use the MyTeleMed app, please review the MyTeleMed iPhone User Guide materials below.</string>
+                                <string key="text">If you have questions or need further instruction on how to use the MyTeleMed app, please review the User Guide materials below.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>

@@ -73,7 +73,7 @@
 			[self.messageRecipient setFirstName:[nameComponents objectAtIndex:1]];
 			[self.messageRecipient setLastName:[nameComponents objectAtIndex:0]];
 		}
-		// Most MedToMed names are of the following format: FirstName LastName
+		// Most Med2Med names are of the following format: FirstName LastName
 		else if ([self.currentElementValue rangeOfString:@" "].location != NSNotFound)
 		{
 			NSMutableArray *nameComponents = [[self.currentElementValue componentsSeparatedByString:@" "] mutableCopy];
