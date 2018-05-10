@@ -32,7 +32,7 @@
 	if ([elementName isEqualToString:@"NotificationSettings"])
 	{
 		// Initialize the notification setting (Only when retrieving all notification settings. When retrieving a single notification setting, this will already be initialized)
-		if ( ! self.notificationSetting)
+		if (! self.notificationSetting)
 		{
 			self.notificationSetting = [[NotificationSettingModel alloc] init];
 		}
@@ -41,7 +41,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if ( ! self.currentElementValue)
+	if (! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}

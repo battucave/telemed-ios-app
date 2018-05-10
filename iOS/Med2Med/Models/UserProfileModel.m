@@ -30,7 +30,7 @@
 - (NSString *)PhoneNumber
 {
 	// If phone number is not already set, check user preferences
-	if ( ! _PhoneNumber)
+	if (! _PhoneNumber)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		_PhoneNumber = [settings valueForKey:@"UserProfilePhoneNumber"];

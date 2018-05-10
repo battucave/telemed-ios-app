@@ -305,7 +305,7 @@
 		}];
 	}
 	// If request was not cancelled, then handle success via delegate (not currently used)
-	else if ( ! self.queueCancelled && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
+	else if (! self.queueCancelled && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^
@@ -333,7 +333,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that delete chat message has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^

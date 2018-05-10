@@ -19,7 +19,7 @@
 - (NSString *)Name
 {
 	// If sso provider is not already set, check user preferences
-	if ( ! _Name)
+	if (! _Name)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		_Name = [settings valueForKey:@"SSOProvider"];
@@ -65,7 +65,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			if ( ! [self.Name isEqualToString:@""])
+			if (! [self.Name isEqualToString:@""])
 			{
 				return callback(YES, nil);
 			}

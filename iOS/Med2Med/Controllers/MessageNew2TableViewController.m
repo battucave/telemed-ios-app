@@ -29,7 +29,7 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// Only set placeholder if it has not already been set
-	if ( ! self.textViewAdditionalInformationPlaceholder)
+	if (! self.textViewAdditionalInformationPlaceholder)
 	{
 		self.textViewAdditionalInformationPlaceholder = self.textViewAdditionalInformation.text;
 	}

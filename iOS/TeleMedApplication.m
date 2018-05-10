@@ -14,7 +14,7 @@
 	[super sendEvent:event];
 	
 	// Fire up the timer upon first event
-	if ( ! _idleTimer)
+	if (! _idleTimer)
 	{
 		[self resetIdleTimer];
 	}

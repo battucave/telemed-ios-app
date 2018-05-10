@@ -420,7 +420,7 @@
 	[self updateWebViewLoading:NO];
 	
 	// If url is any page other than about:blank, then reset isRetry
-	if ( ! [currentURL isEqualToString:@"about:blank"])
+	if (! [currentURL isEqualToString:@"about:blank"])
 	{
 		self.isRetry = NO;
 	}

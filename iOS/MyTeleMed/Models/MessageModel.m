@@ -147,7 +147,7 @@
 - (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state
 {
 	// Validate message state
-	if ( ! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
+	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
 		state = @"Read";
 	}
@@ -272,7 +272,7 @@
 	}
 	
 	// Validate message state
-	if ( ! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
+	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
 		state = @"Read";
 	}
@@ -403,7 +403,7 @@
 		}];
 	}
 	// If request was not cancelled, then handle success via delegate (still being used)
-	else if ( ! self.queueCancelled && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
+	else if (! self.queueCancelled && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^
@@ -431,7 +431,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that message state has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^

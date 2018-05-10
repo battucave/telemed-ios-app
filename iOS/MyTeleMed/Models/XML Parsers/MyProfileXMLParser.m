@@ -57,7 +57,7 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if ( ! self.currentElementValue)
+	if (! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -98,7 +98,7 @@
 		self.myProfile.MyPreferredAccount.TimeZone = self.timeZone;
 		self.timeZone = nil;
 	} 
-	else if ( ! [elementName isEqualToString:@"MyProfile"])
+	else if (! [elementName isEqualToString:@"MyProfile"])
 	{
 		if ([self.currentModel isEqualToString:@"MyPreferredAccountModel"])
 		{

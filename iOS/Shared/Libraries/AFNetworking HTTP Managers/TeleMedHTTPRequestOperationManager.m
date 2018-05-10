@@ -271,7 +271,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if ( ! self.reachabilityManager.isReachable)
+	if (! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -297,7 +297,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if ( ! self.reachabilityManager.isReachable)
+	if (! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -322,7 +322,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if ( ! self.reachabilityManager.isReachable)
+	if (! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -346,7 +346,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if ( ! self.reachabilityManager.isReachable)
+	if (! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -371,7 +371,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if ( ! self.reachabilityManager.isReachable)
+	if (! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -396,7 +396,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Prevent request if device is offline
-	if ( ! self.reachabilityManager.isReachable)
+	if (! self.reachabilityManager.isReachable)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:NSURLErrorNotConnectedToInternet userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"The device is currently offline.", NSLocalizedDescriptionKey, nil]];
 		
@@ -677,7 +677,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 			pendingFailure([pendingOperation objectForKey:@"operation"], error);
 			
 			// If operation is a POST, PUT, PATCH, or DELETE request, then remove it from pending operations
-			if ( ! [operation.request.HTTPMethod isEqualToString:@"GET"] && ! [operation.request.HTTPMethod isEqualToString:@"HEAD"])
+			if (! [operation.request.HTTPMethod isEqualToString:@"GET"] && ! [operation.request.HTTPMethod isEqualToString:@"HEAD"])
 			{
 				[deletePendingOperations addObject:pendingOperation];
 			}

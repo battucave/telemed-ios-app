@@ -76,7 +76,7 @@
 	}
 	else
 	{
-		if ( ! [settings boolForKey:@"timeoutAlert"])
+		if (! [settings boolForKey:@"timeoutAlert"])
 		{
 			UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)

@@ -69,7 +69,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Add comment if present
-			if ( ! [comment isEqualToString:@""])
+			if (! [comment isEqualToString:@""])
 			{
 				CommentModel *commentModel = [[CommentModel alloc] init];
 				
@@ -141,7 +141,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that message has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^

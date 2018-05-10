@@ -112,7 +112,7 @@
 	[cell setBackgroundColor:[UIColor clearColor]];
 	
 	// Fix bugs on iOS < 10
-	if ( ! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
+	if (! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 	{
 		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
 		[cell setPreservesSuperviewLayoutMargins:NO];

@@ -204,7 +204,7 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	if ( ! self.pendingComplete)
+	if (! self.pendingComplete)
 	{
 		// Notify delegate that TeleMed call request has been sent to server
 		if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])

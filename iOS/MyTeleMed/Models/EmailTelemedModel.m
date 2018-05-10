@@ -25,7 +25,7 @@
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
 	// Validate email address
-	if ( ! [self isValidEmailAddress:fromEmailAddress])
+	if (! [self isValidEmailAddress:fromEmailAddress])
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"From field must be a valid email address.", NSLocalizedDescriptionKey, nil]];
 		
@@ -132,7 +132,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that message has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^
@@ -152,7 +152,7 @@
 
 - (BOOL)isValidEmailAddress:(NSString *)emailAddress
 {
-	if ( ! [emailAddress length])
+	if (! [emailAddress length])
 	{
 		return NO;
 	}
@@ -176,13 +176,13 @@
 	}
  
 	// Result should be a recognized email address
-	if ( ! [result.URL.scheme isEqualToString:@"mailto"])
+	if (! [result.URL.scheme isEqualToString:@"mailto"])
 	{
 		return NO;
 	}
  
 	// Match must include the entire string
-	if ( ! NSEqualRanges(result.range, entireRange))
+	if (! NSEqualRanges(result.range, entireRange))
 	{
 		return NO;
 	}

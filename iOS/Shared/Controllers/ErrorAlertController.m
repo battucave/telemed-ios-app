@@ -137,9 +137,9 @@
 	NSLog(@"Offline Error Message: %@", alertMessage);
 	
 	// Only show error message if it has never been shown or has been 2+ seconds since last shown
-	if ( ! self.dateLastOfflineError || [[NSDate date] compare:[self.dateLastOfflineError dateByAddingTimeInterval:2.0]] == NSOrderedDescending)
+	if (! self.dateLastOfflineError || [[NSDate date] compare:[self.dateLastOfflineError dateByAddingTimeInterval:2.0]] == NSOrderedDescending)
 	{
-		if ( ! self.isErrorAlertShowing)
+		if (! self.isErrorAlertShowing)
 		{
 			// Configure Alert Controller
 			self.offlineAlertController = [ErrorAlertController alertControllerWithTitle:@"Data Connection Unavailable" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];

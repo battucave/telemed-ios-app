@@ -304,7 +304,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that notification settings has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^

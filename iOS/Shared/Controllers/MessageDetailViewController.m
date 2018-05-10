@@ -743,7 +743,7 @@
 	// Scroll scroll view content to bottom
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.0];
 	
-	[self.buttonSend setEnabled:( ! [textView.text isEqualToString:@""] && ! [textView.text isEqualToString:self.textViewCommentPlaceholder])];
+	[self.buttonSend setEnabled:(! [textView.text isEqualToString:@""] && ! [textView.text isEqualToString:self.textViewCommentPlaceholder])];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

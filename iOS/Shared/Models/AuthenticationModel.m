@@ -56,7 +56,7 @@
 - (NSString *)RefreshToken
 {
 	// If refresh token is not already set, check keychain
-	if ( ! _RefreshToken)
+	if (! _RefreshToken)
 	{
 		KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
 		
@@ -111,7 +111,7 @@
 - (void)getNewTokensWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure isRetry:(BOOL)isRetry
 {
 	// If no refresh token found, then tokens cannot be refreshed
-	if ( ! self.RefreshToken)
+	if (! self.RefreshToken)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -148,7 +148,7 @@
 		if ([xmlParser parse])
 		{
 			// Set tokens if found in response
-			if ( ! [self.AccessToken isEqualToString:@""] && ! [self.RefreshToken isEqualToString:@""])
+			if (! [self.AccessToken isEqualToString:@""] && ! [self.RefreshToken isEqualToString:@""])
 			{
 				NSLog(@"New Access Token: %@", self.AccessToken);
 				NSLog(@"New Refresh Token: %@", self.RefreshToken);
@@ -180,7 +180,7 @@
 		NSLog(@"Refresh Tokens Error %ld: %@", (long)error.code, [[NSString alloc] initWithData:[NSData dataWithData:data] encoding:NSUTF8StringEncoding]);
 		
 		// First retry the operation again after a delay
-		if ( ! isRetry)
+		if (! isRetry)
 		{
 			NSLog(@"Retry Refreshing Tokens");
 			
@@ -190,7 +190,7 @@
 			});
 		}
 		// Handle timeout issues differently if not in login sso storyboard
-		else if ( ! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
+		else if (! [currentStoryboardName isEqualToString:@"LoginSSO"] && (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorTimedOut))
 		{
 			NSLog(@"Refreshing Tokens Timed Out: %@", error);
 			

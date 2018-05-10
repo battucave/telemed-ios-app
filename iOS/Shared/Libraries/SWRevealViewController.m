@@ -587,7 +587,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated
 {
-    if ( ![self isViewLoaded])
+    if (![self isViewLoaded])
     {
         [self _setFrontViewController:frontViewController];
         return;
@@ -599,7 +599,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 
 - (void)setRearViewController:(UIViewController *)rightViewController
 {
-    if ( ![self isViewLoaded])
+    if (![self isViewLoaded])
     {
         [self _setRearViewController:rightViewController];
         return;
@@ -611,7 +611,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 
 - (void)setRightViewController:(UIViewController *)rightViewController
 {
-    if ( ![self isViewLoaded])
+    if (![self isViewLoaded])
     {
         [self _setRightViewController:rightViewController];
         return;
@@ -648,7 +648,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 
 - (void)setFrontViewPosition:(FrontViewPosition)frontViewPosition animated:(BOOL)animated
 {
-    if ( ![self isViewLoaded] )
+    if (![self isViewLoaded] )
     {
         _frontViewPosition = frontViewPosition;
         _rearViewPosition = frontViewPosition;
@@ -1219,7 +1219,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 // animation completion, or right after return in case of non-animated deployment.
 - (void (^)(void))_deployForViewController:(UIViewController*)controller inView:(UIView*)view
 {
-    if ( !controller || !view )
+    if (!controller || !view )
         return ^(void){};
     
     CGRect frame = view.bounds;

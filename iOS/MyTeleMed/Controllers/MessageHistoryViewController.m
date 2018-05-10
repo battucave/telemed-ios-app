@@ -38,7 +38,7 @@
 	// Initialize Filtered Message Events
 	for(MessageEventModel *messageEvent in self.messageEvents)
 	{
-		if ( ! [messageEvent.Type isEqualToString:@"Comment"])
+		if (! [messageEvent.Type isEqualToString:@"Comment"])
 		{
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
@@ -53,7 +53,7 @@
 	[super viewWillAppear:animated];
 	
 	// Disable Forward Button if no Message Recipients available
-	if ( ! self.canForward)
+	if (! self.canForward)
 	{
 		[self.buttonForward setEnabled:NO];
 	}

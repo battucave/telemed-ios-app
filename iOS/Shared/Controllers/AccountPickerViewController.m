@@ -108,7 +108,7 @@
 	
 	#ifdef MYTELEMED
 		// If selected account not already set, then set it to my profile model's MyPreferredAccount
-		if ( ! self.selectedAccount)
+		if (! self.selectedAccount)
 		{
 			MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 			
@@ -186,7 +186,7 @@
     CGRect intersect = CGRectIntersection(keyboardFrame, self.tableAccounts.bounds);
 	
 	// If the keyboard covers the table
-    if ( ! CGRectIsNull(intersect))
+    if (! CGRectIsNull(intersect))
     {
     	// Get details of keyboard animation
     	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];

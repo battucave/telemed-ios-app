@@ -120,7 +120,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Notify delegate that mssage has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^

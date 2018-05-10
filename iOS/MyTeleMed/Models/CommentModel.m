@@ -33,7 +33,7 @@
 - (void)addMessageComment:(id <MessageProtocol>)message comment:(NSString *)comment withPendingID:(NSNumber *)pendingID toForwardMessage:(BOOL)toForwardMessage
 {
 	// Show activity indicator only if not being added with forward message
-	if ( ! toForwardMessage)
+	if (! toForwardMessage)
 	{
 		[self showActivityIndicator];
 	}

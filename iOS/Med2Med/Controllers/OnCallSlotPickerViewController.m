@@ -159,7 +159,7 @@
     CGRect intersect = CGRectIntersection(keyboardFrame, self.tableOnCallSlots.bounds);
 	
 	// If the keyboard covers the table
-    if ( ! CGRectIsNull(intersect))
+    if (! CGRectIsNull(intersect))
     {
     	// Get details of keyboard animation
     	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];

@@ -92,7 +92,7 @@
 	NSString *tone = [aps objectForKey:@"sound"];
 	
 	// If no NotificationType was sent, assume it's a message.
-	if ( ! notificationType)
+	if (! notificationType)
 	{
 		notificationType = @"Message";
 		

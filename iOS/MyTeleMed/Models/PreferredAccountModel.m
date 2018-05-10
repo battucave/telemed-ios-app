@@ -120,7 +120,7 @@
 	[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
 	
 	// Notify delegate that message has been sent to server
-	if ( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 	{
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^

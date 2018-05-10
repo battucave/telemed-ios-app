@@ -33,13 +33,13 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If ID is not already set, check user preferences
-	if ( ! _ID)
+	if (! _ID)
 	{
 		_ID = [settings valueForKey:@"UDDIDevice"];
 	}
 	
 	// ID not already stored so generate it
-	if ( ! _ID)
+	if (! _ID)
 	{
 		// Generate device id
 		CFUUIDRef theUUID = CFUUIDCreate(kCFAllocatorDefault);
@@ -63,7 +63,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 - (NSString *)AppVersionInfo
 {
 	// If app version info is not already set, check bundle version
-	if ( ! _AppVersionInfo)
+	if (! _AppVersionInfo)
 	{
 		_AppVersionInfo = [NSString stringWithFormat:@"Version: %@; Build: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
 	}

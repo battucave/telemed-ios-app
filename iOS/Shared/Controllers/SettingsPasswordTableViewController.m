@@ -24,6 +24,7 @@
 {
 	[super viewWillAppear:animated];
 	
+	// Auto-focus current password field
 	[self.textFieldCurrentPassword becomeFirstResponder];
 }
 
@@ -45,7 +46,7 @@
 		return;
 	}
 	// Verify that New Password matches Confirm Password
-	else if ( ! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
+	else if (! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
 		// Show error message
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password do not match.", NSLocalizedDescriptionKey, nil]];
@@ -85,7 +86,7 @@
 // Check required fields to determine if form can be submitted
 - (void)validateForm
 {
-	[self.navigationItem.rightBarButtonItem setEnabled:( ! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
+	[self.navigationItem.rightBarButtonItem setEnabled:(! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

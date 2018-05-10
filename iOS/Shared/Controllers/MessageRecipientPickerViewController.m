@@ -290,7 +290,7 @@
     CGRect intersect = CGRectIntersection(keyboardFrame, self.tableMessageRecipients.bounds);
 	
 	// If the keyboard covers the table
-    if ( ! CGRectIsNull(intersect))
+    if (! CGRectIsNull(intersect))
     {
     	// Get details of keyboard animation
     	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -535,7 +535,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Med2Med only - Reset selected message recipients
-	if ( ! self.tableMessageRecipients.allowsMultipleSelection)
+	if (! self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		[self.selectedMessageRecipients removeAllObjects];
 	}

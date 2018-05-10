@@ -246,7 +246,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
-	if ( ! timeoutEnabled)
+	if (! timeoutEnabled)
 	{
 		// If Enable timeout string is null, then it has never been set. Set it to true
 		if ([settings objectForKey:@"enableTimeout"] == nil)
@@ -259,7 +259,7 @@
 	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
 	
 	// If user has timeout disabled and a refresh token already exists, attempt to bypass login screen
-	if ( ! timeoutEnabled && authenticationModel.RefreshToken != nil)
+	if (! timeoutEnabled && authenticationModel.RefreshToken != nil)
 	{
 		#ifdef MYTELEMED
 			id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
@@ -520,7 +520,7 @@
 		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
 		// If device has not previously registered with TeleMed web service, then show phone number screen
-		if ( ! registeredDeviceModel.hasRegistered)
+		if (! registeredDeviceModel.hasRegistered)
 		{
 			// If using Simulator, skip phone number step because it is always invalid
 			// #ifdef DEBUG
@@ -582,7 +582,7 @@
 			}
 			
 			// If the request was not successful, direct the user to re-enter their phone number again (handled by showMainScreen:)
-			if ( ! success)
+			if (! success)
 			{
 				[registeredDeviceModel setHasRegistered:NO];
 			}

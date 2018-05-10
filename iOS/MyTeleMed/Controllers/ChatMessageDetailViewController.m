@@ -327,7 +327,7 @@
 {
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:( ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.textViewChatMessagePlaceholder] && self.selectedChatParticipants != nil && [self.selectedChatParticipants count] > 0)];
+	[self.buttonSend setEnabled:(! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.textViewChatMessagePlaceholder] && self.selectedChatParticipants != nil && [self.selectedChatParticipants count] > 0)];
 }
 
 // Override default Remote Notification action from CoreViewController
@@ -384,7 +384,7 @@
 				NSArray *chatParticipantIDs = [[chatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
 				
 				// If Conversation's Chat Participants do not match Selected Chat Participants, then don't update the Chat Messages
-				if ( ! [chatParticipantIDs isEqualToArray:selectedChatParticipantIDs])
+				if (! [chatParticipantIDs isEqualToArray:selectedChatParticipantIDs])
 				{
 					NSLog(@"Chat Participants do not match Selected Chat Participants");
 					
@@ -725,7 +725,7 @@
 	[cell.labelDetail setText:chatMessage.Text];
 	
 	// Set Message Event Sender
-	if ( ! currentUserIsSender)
+	if (! currentUserIsSender)
 	{
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", chatMessage.SenderID];
 		NSArray *results = [chatMessage.ChatParticipants filteredArrayUsingPredicate:predicate];
