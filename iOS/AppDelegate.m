@@ -546,6 +546,29 @@
 				return;
 			#endif
 		}
+		
+		// If TeleMed requires a password change for the user, then show password change screen
+		if (profile.PasswordChangeRequired)
+		{
+			NSLog(@"PASSWORD CHANGE REQUIRED");
+			
+			if (hasNavigationController)
+			{
+				UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
+				UITableViewController *passwordViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PasswordViewController"];
+			
+				[navigationController pushViewController:passwordViewController animated:YES];
+			}
+			else
+			{
+				UINavigationController *passwordNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PasswordNavigationController"];
+				
+				[self.window setRootViewController:passwordNavigationController];
+				[self.window makeKeyAndVisible];
+			}
+			
+			return;
+		}
 	}
 	
 	// Show messages view controller

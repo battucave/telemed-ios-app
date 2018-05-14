@@ -1228,7 +1228,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mio-hw-4sA">
                                                     <rect key="frame" x="309" y="6" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="updateTimeout:" destination="cPe-rz-HUb" eventType="valueChanged" id="Mou-Q4-WbV"/>
+                                                        <action selector="timeoutChanged:" destination="cPe-rz-HUb" eventType="valueChanged" id="1qv-rd-CLJ"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -1982,8 +1982,8 @@
         <segue reference="GBe-0v-zRW"/>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="ojM-FY-erA"/>
-        <segue reference="FEU-cP-WQX"/>
-        <segue reference="6bW-Sj-6zP"/>
+        <segue reference="HgO-po-FXF"/>
+        <segue reference="I95-64-Mdk"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>
 </document>

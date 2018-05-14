@@ -24,6 +24,7 @@
 @property (nonatomic) AccountModel *MyPreferredAccount;
 @property (nonatomic) NSArray *MyRegisteredDevices;
 @property (nonatomic) NSDictionary *MyTimeZone;
+@property (nonatomic) BOOL PasswordChangeRequired;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
 + (id <ProfileProtocol>)sharedInstance;

@@ -149,6 +149,10 @@
 				{
 					self.myProfile.MayDisableTimeout = [self.currentElementValue boolValue];
 				}
+				else if ([elementName isEqualToString:@"PasswordChangeRequired"])
+				{
+					self.myProfile.PasswordChangeRequired = [self.currentElementValue boolValue];
+				}
 				else
 				{
 					[self.myProfile setValue:self.currentElementValue forKey:elementName];

@@ -26,6 +26,7 @@
 @property (nonatomic) NSString *CallTelemedNumber;
 @property (nonatomic) AccountModel *MyPreferredAccount;
 @property (nonatomic) NSArray *MyRegisteredDevices;
+@property (nonatomic) BOOL PasswordChangeRequired;
 
 // UserProfileModel only
 @optional

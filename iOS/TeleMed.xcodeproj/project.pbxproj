@@ -246,7 +246,6 @@
 		E25037131FBB88F400099C7E /* button-Navigation-Messages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567761CDB85B80054FD3F /* button-Navigation-Messages@2x.png */; };
 		E25037161FBB88F400099C7E /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567781CDB85B80054FD3F /* menu@2x.png */; };
 		E250371B1FBB88F400099C7E /* image-ContactLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567381CDB85B80054FD3F /* image-ContactLogo@2x.png */; };
-		E25037201FBB88F400099C7E /* background-PhoneNumber@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */; };
 		E25037221FBB88F400099C7E /* button-Save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */; };
 		E250372B1FBB88F400099C7E /* button-WebViewBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567291CDB85B80054FD3F /* button-WebViewBack@2x.png */; };
 		E250372E1FBB88F400099C7E /* button-TextField-Help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567661CDB85B80054FD3F /* button-TextField-Help@2x.png */; };
@@ -261,7 +260,6 @@
 		E250373B1FBB88F400099C7E /* indicator-CommentRightBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E232D7061E675E7800B797E1 /* indicator-CommentRightBlue@2x.png */; };
 		E250373D1FBB88F400099C7E /* button-WebViewBack.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567731CDB85B80054FD3F /* button-WebViewBack.png */; };
 		E250373E1FBB88F400099C7E /* button-Navigation-LogOut.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567551CDB85B80054FD3F /* button-Navigation-LogOut.png */; };
-		E250373F1FBB88F400099C7E /* background-PhoneNumber@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */; };
 		E25037411FBB88F400099C7E /* button-WebViewForward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567371CDB85B80054FD3F /* button-WebViewForward@2x.png */; };
 		E25037451FBB88F400099C7E /* button-Navigation-Help.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567631CDB85B80054FD3F /* button-Navigation-Help.png */; };
 		E25037491FBB88F400099C7E /* button-Navigation-ContactTeleMed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567411CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png */; };
@@ -279,7 +277,6 @@
 		E250376A1FBB88F400099C7E /* image-ContactLogo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672D1CDB85B80054FD3F /* image-ContactLogo@3x.png */; };
 		E250376D1FBB88F400099C7E /* button-Save.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567391CDB85B80054FD3F /* button-Save.png */; };
 		E250376E1FBB88F400099C7E /* button-Navigation-OnCallSchedule@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5676E1CDB85B80054FD3F /* button-Navigation-OnCallSchedule@3x.png */; };
-		E250376F1FBB88F400099C7E /* background-PhoneNumber.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567791CDB85B80054FD3F /* background-PhoneNumber.png */; };
 		E25037701FBB88F400099C7E /* button-Continue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5671E1CDB85B80054FD3F /* button-Continue@2x.png */; };
 		E25037731FBB88F400099C7E /* button-Continue.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567301CDB85B80054FD3F /* button-Continue.png */; };
 		E25037751FBB88F400099C7E /* button-Navigation-LogOut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */; };
@@ -343,6 +340,10 @@
 		E275C2121D3836E1004C0744 /* image-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20F1D3836E1004C0744 /* image-logo.png */; };
 		E275C2131D3836E1004C0744 /* image-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C2101D3836E1004C0744 /* image-logo@2x.png */; };
 		E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */; };
+		E27B20B720A4A3F300FA3405 /* PasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B20B620A4A3F300FA3405 /* PasswordViewController.m */; };
+		E27B20C720A4D1B300FA3405 /* background-LoginSSO-Field.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C420A4D1A000FA3405 /* background-LoginSSO-Field.png */; };
+		E27B20C820A4D1B300FA3405 /* background-LoginSSO-Field@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C520A4D1A800FA3405 /* background-LoginSSO-Field@3x.png */; };
+		E27B20C920A4D1B300FA3405 /* background-LoginSSO-Field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C620A4D1AD00FA3405 /* background-LoginSSO-Field@2x.png */; };
 		E27B84D71B14B96A00AD50C6 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84B11B14B96A00AD50C6 /* Model.m */; };
 		E27B84E81B14B96A00AD50C6 /* AuthenticationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */; };
 		E27B84EB1B14CF6A00AD50C6 /* AccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */; };
@@ -424,7 +425,6 @@
 		E2D567931CDB85B80054FD3F /* menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672C1CDB85B80054FD3F /* menu@3x.png */; };
 		E2D567941CDB85B80054FD3F /* image-ContactLogo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672D1CDB85B80054FD3F /* image-ContactLogo@3x.png */; };
 		E2D567951CDB85B80054FD3F /* button-Navigation-LogOut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */; };
-		E2D567961CDB85B80054FD3F /* background-PhoneNumber@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */; };
 		E2D567971CDB85B80054FD3F /* button-Continue.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567301CDB85B80054FD3F /* button-Continue.png */; };
 		E2D5679A1CDB85B80054FD3F /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567331CDB85B80054FD3F /* menu.png */; };
 		E2D5679B1CDB85B80054FD3F /* icon-Mail-Read@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */; };
@@ -436,7 +436,6 @@
 		E2D567A11CDB85B80054FD3F /* indicator-CommentLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */; };
 		E2D567A21CDB85B80054FD3F /* button-Help-PDF@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */; };
 		E2D567A31CDB85B80054FD3F /* button-Save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */; };
-		E2D567A51CDB85B80054FD3F /* background-PhoneNumber@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */; };
 		E2D567A61CDB85B80054FD3F /* button-AddComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */; };
 		E2D567A81CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567411CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png */; };
 		E2D567A91CDB85B80054FD3F /* icon-Mail-Unread@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567421CDB85B80054FD3F /* icon-Mail-Unread@2x.png */; };
@@ -488,7 +487,6 @@
 		E2D567DD1CDB85B80054FD3F /* button-Navigation-Messages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567761CDB85B80054FD3F /* button-Navigation-Messages@2x.png */; };
 		E2D567DE1CDB85B80054FD3F /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567771CDB85B80054FD3F /* logo@2x.png */; };
 		E2D567DF1CDB85B80054FD3F /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567781CDB85B80054FD3F /* menu@2x.png */; };
-		E2D567E01CDB85B80054FD3F /* background-PhoneNumber.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567791CDB85B80054FD3F /* background-PhoneNumber.png */; };
 		E2D567E11CDB85B80054FD3F /* button-Contact-Mail.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677A1CDB85B80054FD3F /* button-Contact-Mail.png */; };
 		E2D567E21CDB85B80054FD3F /* button-Contact-Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677B1CDB85B80054FD3F /* button-Contact-Mail@2x.png */; };
 		E2D567E31CDB85B80054FD3F /* button-Navigation-Help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677C1CDB85B80054FD3F /* button-Navigation-Help@2x.png */; };
@@ -799,6 +797,11 @@
 		E275C2101D3836E1004C0744 /* image-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo@2x.png"; sourceTree = "<group>"; };
 		E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserProfileXMLParser.h; sourceTree = "<group>"; };
 		E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserProfileXMLParser.m; sourceTree = "<group>"; };
+		E27B20B520A4A3F300FA3405 /* PasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PasswordViewController.h; sourceTree = "<group>"; };
+		E27B20B620A4A3F300FA3405 /* PasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PasswordViewController.m; sourceTree = "<group>"; };
+		E27B20C420A4D1A000FA3405 /* background-LoginSSO-Field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-LoginSSO-Field.png"; sourceTree = "<group>"; };
+		E27B20C520A4D1A800FA3405 /* background-LoginSSO-Field@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-LoginSSO-Field@3x.png"; sourceTree = "<group>"; };
+		E27B20C620A4D1AD00FA3405 /* background-LoginSSO-Field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-LoginSSO-Field@2x.png"; sourceTree = "<group>"; };
 		E27B84B11B14B96A00AD50C6 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 		E27B84B21B14B96A00AD50C6 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationModel.m; sourceTree = "<group>"; };
@@ -927,7 +930,6 @@
 		E2D5672C1CDB85B80054FD3F /* menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@3x.png"; sourceTree = "<group>"; };
 		E2D5672D1CDB85B80054FD3F /* image-ContactLogo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-ContactLogo@3x.png"; sourceTree = "<group>"; };
 		E2D5672E1CDB85B80054FD3F /* button-Navigation-LogOut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-LogOut@2x.png"; sourceTree = "<group>"; };
-		E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-PhoneNumber@3x.png"; sourceTree = "<group>"; };
 		E2D567301CDB85B80054FD3F /* button-Continue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Continue.png"; sourceTree = "<group>"; };
 		E2D567331CDB85B80054FD3F /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-Mail-Read@2x.png"; sourceTree = "<group>"; };
@@ -939,7 +941,6 @@
 		E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentLeft.png"; sourceTree = "<group>"; };
 		E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help-PDF@2x.png"; sourceTree = "<group>"; };
 		E2D5673C1CDB85B80054FD3F /* button-Save@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Save@3x.png"; sourceTree = "<group>"; };
-		E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-PhoneNumber@2x.png"; sourceTree = "<group>"; };
 		E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-AddComment@2x.png"; sourceTree = "<group>"; };
 		E2D567411CDB85B80054FD3F /* button-Navigation-ContactTeleMed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-ContactTeleMed@3x.png"; sourceTree = "<group>"; };
 		E2D567421CDB85B80054FD3F /* icon-Mail-Unread@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-Mail-Unread@2x.png"; sourceTree = "<group>"; };
@@ -991,7 +992,6 @@
 		E2D567761CDB85B80054FD3F /* button-Navigation-Messages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-Messages@2x.png"; sourceTree = "<group>"; };
 		E2D567771CDB85B80054FD3F /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
 		E2D567781CDB85B80054FD3F /* menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@2x.png"; sourceTree = "<group>"; };
-		E2D567791CDB85B80054FD3F /* background-PhoneNumber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-PhoneNumber.png"; sourceTree = "<group>"; };
 		E2D5677A1CDB85B80054FD3F /* button-Contact-Mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Contact-Mail.png"; sourceTree = "<group>"; };
 		E2D5677B1CDB85B80054FD3F /* button-Contact-Mail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Contact-Mail@2x.png"; sourceTree = "<group>"; };
 		E2D5677C1CDB85B80054FD3F /* button-Navigation-Help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Navigation-Help@2x.png"; sourceTree = "<group>"; };
@@ -1450,9 +1450,9 @@
 				E211D5A61FBF642300263497 /* background-Login.png */,
 				E211D5A41FBF642200263497 /* background-Login@2x.png */,
 				E211D5A51FBF642300263497 /* background-Login@3x.png */,
-				E2D567791CDB85B80054FD3F /* background-PhoneNumber.png */,
-				E2D5673E1CDB85B80054FD3F /* background-PhoneNumber@2x.png */,
-				E2D5672F1CDB85B80054FD3F /* background-PhoneNumber@3x.png */,
+				E27B20C420A4D1A000FA3405 /* background-LoginSSO-Field.png */,
+				E27B20C620A4D1AD00FA3405 /* background-LoginSSO-Field@2x.png */,
+				E27B20C520A4D1A800FA3405 /* background-LoginSSO-Field@3x.png */,
 				E2D567681CDB85B80054FD3F /* button-AddComment.png */,
 				E2D5673F1CDB85B80054FD3F /* button-AddComment@2x.png */,
 				E2D5675B1CDB85B80054FD3F /* button-AddComment@3x.png */,
@@ -1589,6 +1589,8 @@
 				28176C131829AB0F00801EC7 /* MessageDetailViewController.m */,
 				28A8DA46182C3E5C00C9DB08 /* MessageRecipientPickerViewController.h */,
 				28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */,
+				E27B20B520A4A3F300FA3405 /* PasswordViewController.h */,
+				E27B20B620A4A3F300FA3405 /* PasswordViewController.m */,
 				E2920C921E81AB04004BEF10 /* SentMessagesViewController.h */,
 				E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */,
 				E24D45031E8948E700B36DD6 /* SettingsPasswordTableViewController.h */,
@@ -2130,7 +2132,6 @@
 				E2D5679F1CDB85B80054FD3F /* image-ContactLogo@2x.png in Resources */,
 				E2D567811CDB85B80054FD3F /* button-MessageDetail-ReturnCall@2x.png in Resources */,
 				E2D567DE1CDB85B80054FD3F /* logo@2x.png in Resources */,
-				E2D567A51CDB85B80054FD3F /* background-PhoneNumber@2x.png in Resources */,
 				E2D567A31CDB85B80054FD3F /* button-Save@3x.png in Resources */,
 				E2D567D31CDB85B80054FD3F /* button-MessageDetail-Archive@2x.png in Resources */,
 				283DF2CF18CA09EE00A344D2 /* input.caf in Resources */,
@@ -2157,7 +2158,6 @@
 				E2D567C71CDB85B80054FD3F /* button-MessageDetail-TeleMed@2x.png in Resources */,
 				E2D567DA1CDB85B80054FD3F /* button-WebViewBack.png in Resources */,
 				E2D567BC1CDB85B80054FD3F /* button-Navigation-LogOut.png in Resources */,
-				E2D567961CDB85B80054FD3F /* background-PhoneNumber@3x.png in Resources */,
 				283DF2CD18CA09EE00A344D2 /* note.caf in Resources */,
 				E2D5679E1CDB85B80054FD3F /* button-WebViewForward@2x.png in Resources */,
 				283DF2EE18CA09EE00A344D2 /* glass.caf in Resources */,
@@ -2173,6 +2173,7 @@
 				283DF2D718CA09EE00A344D2 /* bamboo.caf in Resources */,
 				E2D5678E1CDB85B80054FD3F /* button-Navigation-SentMessages@3x.png in Resources */,
 				E2D567D91CDB85B80054FD3F /* button-MessageDetail-Archive.png in Resources */,
+				E27B20C920A4D1B300FA3405 /* background-LoginSSO-Field@2x.png in Resources */,
 				283DF2F418CA09EE00A344D2 /* minuet.caf in Resources */,
 				283DF30118CA09EE00A344D2 /* fanfare.caf in Resources */,
 				E28307F11AD83170006FDD6D /* news_flash.caf in Resources */,
@@ -2199,13 +2200,13 @@
 				E2D567891CDB85B80054FD3F /* icon-Mail-Read@3x.png in Resources */,
 				E2148C302062E01200B8DB95 /* button-Navigation-SecureChat@2x.png in Resources */,
 				E2D567AA1CDB85B80054FD3F /* button-MessageDetail-TeleMed@3x.png in Resources */,
+				E27B20C820A4D1B300FA3405 /* background-LoginSSO-Field@3x.png in Resources */,
 				E2D567CF1CDB85B80054FD3F /* button-AddComment.png in Resources */,
 				E2D567941CDB85B80054FD3F /* image-ContactLogo@3x.png in Resources */,
 				283DF2EC18CA09EE00A344D2 /* sci-fi.caf in Resources */,
 				283DF2D418CA09EE00A344D2 /* hello.caf in Resources */,
 				E2D567A01CDB85B80054FD3F /* button-Save.png in Resources */,
 				E2D567D51CDB85B80054FD3F /* button-Navigation-OnCallSchedule@3x.png in Resources */,
-				E2D567E01CDB85B80054FD3F /* background-PhoneNumber.png in Resources */,
 				E21A0A8D1FC38E7E00CB8B9F /* button-Help@2x.png in Resources */,
 				E2D567851CDB85B80054FD3F /* button-Continue@2x.png in Resources */,
 				E2D567C41CDB85B80054FD3F /* icon-Mail-Unread.png in Resources */,
@@ -2237,6 +2238,7 @@
 				283DF2F318CA09EE00A344D2 /* electronic.caf in Resources */,
 				E211D5A71FBF642400263497 /* background-Login@2x.png in Resources */,
 				087C00C21B04FD73004E35DE /* LoginSSO.storyboard in Resources */,
+				E27B20C720A4D1B300FA3405 /* background-LoginSSO-Field.png in Resources */,
 				E2D567861CDB85B80054FD3F /* button-Navigation-Messages@3x.png in Resources */,
 				E2D567C61CDB85B80054FD3F /* button-WebViewForward.png in Resources */,
 				E2D567841CDB85B80054FD3F /* button-MessageDetail-History.png in Resources */,
@@ -2290,7 +2292,6 @@
 				E20295081FBBA4B200811DA6 /* MedToMed.xcassets in Resources */,
 				E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */,
 				E250371B1FBB88F400099C7E /* image-ContactLogo@2x.png in Resources */,
-				E25037201FBB88F400099C7E /* background-PhoneNumber@2x.png in Resources */,
 				E25037221FBB88F400099C7E /* button-Save@3x.png in Resources */,
 				E250372B1FBB88F400099C7E /* button-WebViewBack@2x.png in Resources */,
 				E250372E1FBB88F400099C7E /* button-TextField-Help@2x.png in Resources */,
@@ -2311,7 +2312,6 @@
 				E2C7C1B81FC3910D00E50F07 /* button-Help@2x.png in Resources */,
 				E250373D1FBB88F400099C7E /* button-WebViewBack.png in Resources */,
 				E250373E1FBB88F400099C7E /* button-Navigation-LogOut.png in Resources */,
-				E250373F1FBB88F400099C7E /* background-PhoneNumber@3x.png in Resources */,
 				E25037411FBB88F400099C7E /* button-WebViewForward@2x.png in Resources */,
 				E25037451FBB88F400099C7E /* button-Navigation-Help.png in Resources */,
 				E25037491FBB88F400099C7E /* button-Navigation-ContactTeleMed@3x.png in Resources */,
@@ -2337,7 +2337,6 @@
 				E250376A1FBB88F400099C7E /* image-ContactLogo@3x.png in Resources */,
 				E250376D1FBB88F400099C7E /* button-Save.png in Resources */,
 				E250376E1FBB88F400099C7E /* button-Navigation-OnCallSchedule@3x.png in Resources */,
-				E250376F1FBB88F400099C7E /* background-PhoneNumber.png in Resources */,
 				E25037701FBB88F400099C7E /* button-Continue@2x.png in Resources */,
 				E25037731FBB88F400099C7E /* button-Continue.png in Resources */,
 				E25037751FBB88F400099C7E /* button-Navigation-LogOut@2x.png in Resources */,
@@ -2465,6 +2464,7 @@
 				28CCCD9417F535DD0093CEE2 /* SettingsTableViewController.m in Sources */,
 				E2CDEFA51D25752100728F1A /* ChatParticipantXMLParser.m in Sources */,
 				E270ED8B1B18F24B00DD43B8 /* AuthenticationXMLParser.m in Sources */,
+				E27B20B720A4A3F300FA3405 /* PasswordViewController.m in Sources */,
 				E211D59F1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m in Sources */,
 				E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */,
 				E211D59C1FBF571B00263497 /* MessageCell.m in Sources */,
@@ -2868,7 +2868,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMedβ.entitlements";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2998,7 +2998,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTmd Debug.entitlements";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3028,7 +3028,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMed.entitlements";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
