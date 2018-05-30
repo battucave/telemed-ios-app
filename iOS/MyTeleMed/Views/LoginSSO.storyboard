@@ -525,22 +525,22 @@
                                 </constraints>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRK-B7-eMK">
-                                <rect key="frame" x="0.0" y="106" width="320" height="286"/>
+                                <rect key="frame" x="0.0" y="106" width="320" height="261"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EAD-Qg-S5Z">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="261"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your password has expired and must be changed per the requirements below." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2SB-kc-vtH">
-                                                <rect key="frame" x="10" y="0.0" width="300" height="50"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your password has expired and must be changed." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2SB-kc-vtH">
+                                                <rect key="frame" x="9" y="0.0" width="302" height="21"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="40Y-PG-Ryh"/>
+                                                    <constraint firstAttribute="height" constant="21" id="40Y-PG-Ryh"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I3z-LR-L7q">
-                                                <rect key="frame" x="10" y="50" width="300" height="35"/>
+                                                <rect key="frame" x="10" y="25" width="300" height="35"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background-LoginSSO-Field.png" translatesAutoresizingMaskIntoConstraints="NO" id="v79-wF-Eeq">
                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="35"/>
@@ -571,7 +571,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cEj-fx-i4O">
-                                                <rect key="frame" x="10" y="90" width="300" height="35"/>
+                                                <rect key="frame" x="10" y="65" width="300" height="35"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background-LoginSSO-Field.png" translatesAutoresizingMaskIntoConstraints="NO" id="9JG-Ct-Ymh">
                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="35"/>
@@ -602,7 +602,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nTQ-MY-Hmh">
-                                                <rect key="frame" x="10" y="130" width="300" height="35"/>
+                                                <rect key="frame" x="10" y="105" width="300" height="35"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background-LoginSSO-Field.png" translatesAutoresizingMaskIntoConstraints="NO" id="NbT-6B-dGg">
                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="35"/>
@@ -633,13 +633,20 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="opv-mi-RBI">
-                                                <rect key="frame" x="10" y="165" width="300" height="116"/>
+                                                <rect key="frame" x="10" y="140" width="300" height="116"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="116" id="gwJ-ty-nie"/>
                                                 </constraints>
                                                 <attributedString key="attributedText">
+                                                    <fragment content="Password Requirements:">
+                                                        <attributes>
+                                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
                                                     <fragment>
-                                                        <string key="content">Password Requirements:
+                                                        <string key="content">
 Must be 8 characters minimum &amp; contain at least 3 of the following 4 types of characters:
     ◦ Upper Case A-Z
     ◦ Lower Case a-z
@@ -658,7 +665,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="2SB-kc-vtH" firstAttribute="top" secondItem="EAD-Qg-S5Z" secondAttribute="top" id="4fc-Bn-hU1"/>
-                                            <constraint firstItem="2SB-kc-vtH" firstAttribute="leading" secondItem="EAD-Qg-S5Z" secondAttribute="leading" constant="10" id="9eK-UM-g3e"/>
+                                            <constraint firstItem="2SB-kc-vtH" firstAttribute="leading" secondItem="EAD-Qg-S5Z" secondAttribute="leading" constant="9" id="9eK-UM-g3e"/>
                                             <constraint firstAttribute="bottom" secondItem="opv-mi-RBI" secondAttribute="bottom" constant="5" id="BUl-DS-MrI"/>
                                             <constraint firstItem="nTQ-MY-Hmh" firstAttribute="leading" secondItem="EAD-Qg-S5Z" secondAttribute="leading" constant="10" id="Br4-ki-zfh"/>
                                             <constraint firstItem="cEj-fx-i4O" firstAttribute="top" secondItem="I3z-LR-L7q" secondAttribute="bottom" constant="5" id="D9T-5d-jos"/>
@@ -666,12 +673,12 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             <constraint firstItem="opv-mi-RBI" firstAttribute="leading" secondItem="EAD-Qg-S5Z" secondAttribute="leading" constant="10" id="Jqt-qI-7Ln"/>
                                             <constraint firstAttribute="trailing" secondItem="I3z-LR-L7q" secondAttribute="trailing" constant="10" id="NNo-xb-EKa"/>
                                             <constraint firstItem="opv-mi-RBI" firstAttribute="top" secondItem="nTQ-MY-Hmh" secondAttribute="bottom" id="XZp-FE-g95"/>
-                                            <constraint firstAttribute="trailing" secondItem="2SB-kc-vtH" secondAttribute="trailing" constant="10" id="YXC-Sm-rsm"/>
+                                            <constraint firstAttribute="trailing" secondItem="2SB-kc-vtH" secondAttribute="trailing" constant="9" id="YXC-Sm-rsm"/>
                                             <constraint firstItem="nTQ-MY-Hmh" firstAttribute="top" secondItem="cEj-fx-i4O" secondAttribute="bottom" constant="5" id="bhP-Dt-6RY"/>
-                                            <constraint firstItem="I3z-LR-L7q" firstAttribute="top" secondItem="2SB-kc-vtH" secondAttribute="bottom" id="dOc-Le-2xH"/>
+                                            <constraint firstItem="I3z-LR-L7q" firstAttribute="top" secondItem="2SB-kc-vtH" secondAttribute="bottom" constant="4" id="dOc-Le-2xH"/>
                                             <constraint firstAttribute="trailing" secondItem="cEj-fx-i4O" secondAttribute="trailing" constant="10" id="f7K-U2-RaK"/>
                                             <constraint firstAttribute="trailing" secondItem="nTQ-MY-Hmh" secondAttribute="trailing" constant="10" id="fFx-ZH-9NH"/>
-                                            <constraint firstAttribute="height" constant="286" id="jdZ-Iw-Omd"/>
+                                            <constraint firstAttribute="height" constant="261" id="jdZ-Iw-Omd"/>
                                             <constraint firstAttribute="width" constant="320" id="mIM-bR-iAO"/>
                                             <constraint firstItem="cEj-fx-i4O" firstAttribute="leading" secondItem="EAD-Qg-S5Z" secondAttribute="leading" constant="10" id="pKM-g4-6yN"/>
                                             <constraint firstItem="I3z-LR-L7q" firstAttribute="leading" secondItem="EAD-Qg-S5Z" secondAttribute="leading" constant="10" id="vKv-rb-gJi"/>
@@ -680,7 +687,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="EAD-Qg-S5Z" firstAttribute="top" secondItem="tRK-B7-eMK" secondAttribute="top" id="9hv-JH-4xj"/>
-                                    <constraint firstAttribute="height" constant="286" id="CPn-P2-tUM"/>
+                                    <constraint firstAttribute="height" constant="261" id="CPn-P2-tUM"/>
                                     <constraint firstAttribute="trailing" secondItem="EAD-Qg-S5Z" secondAttribute="trailing" priority="750" id="d9k-bl-Bwp"/>
                                     <constraint firstAttribute="bottom" secondItem="EAD-Qg-S5Z" secondAttribute="bottom" id="jkt-qc-5ZC"/>
                                     <constraint firstItem="EAD-Qg-S5Z" firstAttribute="centerX" secondItem="tRK-B7-eMK" secondAttribute="centerX" id="nD2-Lh-ncV"/>
@@ -757,6 +764,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="button-WebViewForward.png" width="12" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="EId-x6-V12"/>
+        <segue reference="7Cm-Eo-Uci"/>
     </inferredMetricsTieBreakers>
 </document>
