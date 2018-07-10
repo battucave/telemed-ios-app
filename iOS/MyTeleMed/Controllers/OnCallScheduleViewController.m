@@ -7,6 +7,7 @@
 //
 
 #import "OnCallScheduleViewController.h"
+#import "ErrorAlertController.h"
 #import "OnCallSummaryCell.h"
 #import "MyStatusModel.h"
 
@@ -58,23 +59,13 @@
 	{
 		self.isLoaded = YES;
 		
-		if(success)
+		if (success)
 		{
 			// Populate On Call Now Entries with result
 			[self setCurrentOnCallEntries:status.CurrentOnCallEntries];
 			
-			// Sort On Call Now Entries by StartTime
-			self.currentOnCallEntries = [self.currentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
-				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
-			}];
-			
 			// Populate Next On Call Entries with result
 			[self setFutureOnCallEntries:status.FutureOnCallEntries];
-			
-			// Sort Next On Call Entries by StartTime
-			self.futureOnCallEntries = [self.futureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
-				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
-			}];
 			
 			[self filterOnCallEntries:[self.segmentedControl selectedSegmentIndex]];
 		}
@@ -83,7 +74,9 @@
 			NSLog(@"OnCallScheduleViewController Error: %@", error);
 			
 			// Show error message
-			[self.myStatusModel showError:error];
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
 		}
 	}];
 }
@@ -106,11 +99,11 @@
 	NSDate *dateTime;
 	
 	// Filter to Current On Call Entries
-	if(onCallPeriod == 0)
+	if (onCallPeriod == 0)
 	{
 		[self setFilteredOnCallEntries:self.currentOnCallEntries];
 		
-		if([self.filteredOnCallEntries count] > 0)
+		if ([self.filteredOnCallEntries count] > 0)
 		{
 			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] Started];
 		}
@@ -120,14 +113,14 @@
 	{
 		[self setFilteredOnCallEntries:self.futureOnCallEntries];
 		
-		if([self.filteredOnCallEntries count] > 0)
+		if ([self.filteredOnCallEntries count] > 0)
 		{
 			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] WillStart];
 		}
 	}
 	
 	// Cancel filtering if no Filtered On Call Entries
-	if([self.filteredOnCallEntries count] == 0)
+	if ([self.filteredOnCallEntries count] == 0)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -138,7 +131,7 @@
 	}
 	
 	// Display Date Grouping only if showing Future On Call entries
-	if(onCallPeriod == 1)
+	if (onCallPeriod == 1)
 	{
 		for(OnCallEntryModel *onCallEntry in self.filteredOnCallEntries)
 		{
@@ -195,7 +188,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if([self.filteredOnCallEntries count] == 0)
+	if ([self.filteredOnCallEntries count] == 0)
 	{
 		return 1;
 	}
@@ -211,7 +204,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Return default height if no Filtered On Call Entries available
-	if([self.filteredOnCallEntries count] == 0)
+	if ([self.filteredOnCallEntries count] == 0)
 	{
 		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 	}
@@ -236,7 +229,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set default message if no Filtered On Call Entries available
-	if([self.filteredOnCallEntries count] == 0)
+	if ([self.filteredOnCallEntries count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -255,7 +248,7 @@
 	OnCallEntryModel *onCallEntry = [self.filteredOnCallEntries objectAtIndex:indexPath.row];
 	BOOL hideSeparator = NO;
 	
-	if(indexPath.row < [self.filteredOnCallEntries count] - 1)
+	if (indexPath.row < [self.filteredOnCallEntries count] - 1)
 	{
 		hideSeparator =  [[self.filteredOnCallEntries objectAtIndex:indexPath.row + 1] shouldDisplayDate];
 	}
@@ -279,14 +272,14 @@
 	[cell.labelStopTime setText:[NSString stringWithFormat:@"%@, %@", stopDate, stopTime]];
 	
 	// If StartTime is nil, hide start dates (this should never happen)
-	if(startDateRaw == nil)
+	if (startDateRaw == nil)
 	{
 		[cell.labelStart setHidden:YES];
 		[cell.labelStartTime setText:@""];
 	}
 	
 	// If StopTime is nil, hide stop dates
-	if(onCallEntry.WillEnd == nil)
+	if (onCallEntry.WillEnd == nil)
 	{
 		[cell.labelEnd setHidden:YES];
 		[cell.labelStopTime setText:@""];
@@ -295,7 +288,7 @@
 	// Show/Hide Dates
 	[cell.viewDateContainer setHidden: ! onCallEntry.shouldDisplayDate];
 	
-	if(onCallEntry.shouldDisplayDate)
+	if (onCallEntry.shouldDisplayDate)
 	{
 		// Set On Call Summary Day
 		[dateFormatter setDateFormat:@"EEEE"];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CoreViewController.h"
 
-@interface ChatMessageDetailViewController : CoreViewController <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface ChatMessageDetailViewController : CoreViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @property (nonatomic) BOOL isNewChat;
 @property (nonatomic) NSArray *conversations;

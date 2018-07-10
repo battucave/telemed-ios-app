@@ -8,6 +8,7 @@
 
 #import "ChatMessagesTableViewController.h"
 #import "ChatMessageDetailViewController.h"
+#import "ErrorAlertController.h"
 #import "ChatMessageCell.h"
 #import "ChatMessageModel.h"
 #import "ChatParticipantModel.h"
@@ -82,7 +83,7 @@
 	self.hiddenChatMessages = [NSMutableArray new];
 	
 	// If no Chat Messages to hide, cancel
-	if(chatMessages == nil || [chatMessages count] == 0)
+	if (chatMessages == nil || [chatMessages count] == 0)
 	{
 		return;
 	}
@@ -102,7 +103,7 @@
 - (void)unHideSelectedChatMessages:(NSArray *)chatMessages
 {
 	// If no Chat Messages to hide, cancel
-	if(chatMessages == nil || [chatMessages count] == 0)
+	if (chatMessages == nil || [chatMessages count] == 0)
 	{
 		return;
 	}
@@ -122,10 +123,10 @@
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
 {
 	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSArray *chatMessagesCopy = [NSArray arrayWithArray:[self.chatMessages copy]];
+	NSArray *chatMessagesCopy = [self.chatMessages copy];
 	
 	// If no Chat Messages to remove, cancel
-	if(chatMessages == nil || [chatMessages count] == 0)
+	if (chatMessages == nil || [chatMessages count] == 0)
 	{
 		return;
 	}
@@ -141,7 +142,7 @@
 	}
 	
 	// Remove rows
-	if([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
+	if ([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
@@ -161,14 +162,11 @@
 // Return Chat Messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSMutableArray *)chatMessages
 {
-	// Sort Chat Messages by Date Descending
-	if([chatMessages count] > 0)
+	// Sort Chat Messages by time sent in descending order
+	chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
 	{
-		chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
-		{
-			return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
-		}] mutableCopy];
-	}
+		return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
+	}] mutableCopy];
 	
 	[self setIsLoaded:YES];
 	[self setChatMessages:chatMessages];
@@ -191,7 +189,9 @@
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
-	[self.chatMessageModel showError:error];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -201,7 +201,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if([self.chatMessages count] == 0)
+	if ([self.chatMessages count] == 0)
 	{
 		return 1;
 	}
@@ -212,12 +212,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are Chat Messages and Hidden Chat Messages and row is not the only row in the table
-	if([self.chatMessages count] > 0 && [self.hiddenChatMessages count] > 0 && (indexPath.row > 0 || [self.chatMessages count] != [self.hiddenChatMessages count]))
+	if ([self.chatMessages count] > 0 && [self.hiddenChatMessages count] > 0 && (indexPath.row > 0 || [self.chatMessages count] != [self.hiddenChatMessages count]))
 	{
 		ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 		
 		// Hide Hidden Chat Messages by setting its height to 0
-		if([self.hiddenChatMessages containsObject:chatMessage])
+		if ([self.hiddenChatMessages containsObject:chatMessage])
 		{
 			return 0.0f;
 		}
@@ -228,7 +228,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.chatMessages count] == 0 || (indexPath.row == 0 && [self.chatMessages count] == [self.hiddenChatMessages count]))
+	if ([self.chatMessages count] == 0 || (indexPath.row == 0 && [self.chatMessages count] == [self.hiddenChatMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -246,13 +246,13 @@
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
 	// Hide Hidden Chat Messages
-	if([self.hiddenChatMessages count] > 0 && [self.hiddenChatMessages containsObject:chatMessage])
+	if ([self.hiddenChatMessages count] > 0 && [self.hiddenChatMessages containsObject:chatMessage])
 	{
 		[cell setHidden:YES];
 	}
 	
 	// Set Participants
-	if(chatMessage.ChatParticipants)
+	if (chatMessage.ChatParticipants)
 	{
 		// Remove self from Chat Participants
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID != %@", self.currentUserID];
@@ -262,12 +262,12 @@
 		NSInteger chatParticipantsCount = [chatParticipants count];
 		
 		// Format Chat Participant Names
-		if(chatParticipantsCount > 0)
+		if (chatParticipantsCount > 0)
 		{
 			ChatParticipantModel *chatParticipant1 = [chatParticipants objectAtIndex:0];
 			ChatParticipantModel *chatParticipant2 = (chatParticipantsCount > 1 ? [chatParticipants objectAtIndex:1] : nil);
 			
-			switch(chatParticipantsCount)
+			switch (chatParticipantsCount)
 			{
 				case 1:
 					chatParticipantNames = chatParticipant1.FormattedNameLNF;
@@ -279,7 +279,7 @@
 				
 				default:
 					// iPhone 6+ can handle more names
-					if([UIScreen mainScreen].bounds.size.width > 320.0f)
+					if ([UIScreen mainScreen].bounds.size.width > 320.0f)
 					{
 						chatParticipantNames = [NSString stringWithFormat:@"%@, %@ & %ld more...", chatParticipant1.LastName, chatParticipant2.LastName, (long)chatParticipantsCount - 2];
 					}
@@ -295,7 +295,7 @@
 	}
 	
 	// Set Date and Time
-	if(chatMessage.TimeSent_LCL)
+	if (chatMessage.TimeSent_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
@@ -315,8 +315,8 @@
 	[cell.labelMessage setText:chatMessage.Text];
 	
 	// Set Unopened/Unread
-	if(chatMessage.Unopened)
-	//if(indexPath.row % 2) // Only used for testing both styles
+	if (chatMessage.Unopened)
+	//if (indexPath.row % 2) // Only used for testing both styles
 	{
 		// Show blue bar
 		[cell.viewUnopened setHidden:NO];
@@ -342,14 +342,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are no Chat Messages, then user clicked the No Chat Messages found cell so do nothing
-	if([self.chatMessages count] == 0)
+	if ([self.chatMessages count] == 0)
 	{
 		return;
 	}
 	// If in editing mode, toggle the Delete button in ChatMessagesViewController
-	else if(self.editing)
+	else if (self.editing)
 	{
-		if([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
+		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
 		{
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedChatMessages = [NSMutableArray new];
@@ -367,9 +367,9 @@
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If in editing mode, toggle the Delete button in ChatMessagesViewController
-	if(self.editing)
+	if (self.editing)
 	{
-		if([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
+		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
 		{
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedChatMessages = [NSMutableArray new];
@@ -387,7 +387,7 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
 	// If navigating to Message Detail, but there are no Chat Messages, then user clicked the No Chat Messages found cell
-	if([identifier isEqualToString:@"showChatMessageDetail"])
+	if ([identifier isEqualToString:@"showChatMessageDetail"])
 	{
 		return ! self.editing && [self.chatMessages count] > 0;
 	}
@@ -397,11 +397,11 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([[segue identifier] isEqualToString:@"showChatMessageDetail"])
+	if ([segue.identifier isEqualToString:@"showChatMessageDetail"])
 	{
 		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;
 		
-		if([self.chatMessages count] > [self.tableView indexPathForSelectedRow].row)
+		if ([self.chatMessages count] > [self.tableView indexPathForSelectedRow].row)
 		{
 			ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			

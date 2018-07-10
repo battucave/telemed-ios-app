@@ -16,16 +16,9 @@
 
 @property (nonatomic) EmailTelemedModel *emailTelemedModel;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-
 @end
 
 @implementation MessageTeleMedViewController
-
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
 
 - (IBAction)sendTeleMedMessage:(id)sender
 {
@@ -33,7 +26,7 @@
 	[self.emailTelemedModel setDelegate:self];
 	
 	// If Active or Archived Message, include its Message Delivery ID
-	if(self.message.MessageDeliveryID)
+	if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID)
 	{
 		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
 	}
@@ -54,23 +47,15 @@
 /*/ Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];
+ 
 }
 
 // Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.emailTelemedModel showOfflineError];
-	}
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	[errorAlertController show:error];
 }*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
@@ -79,12 +64,12 @@
 	senderEmailAddress = [senderEmailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:( ! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
+	[self.navigationItem.rightBarButtonItem setEnabled:(! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedMessageTeleMedTable"])
+	if ([segue.identifier isEqualToString:@"embedMessageTeleMedTable"])
 	{
 		[self setMessageTeleMedComposeTableViewController:segue.destinationViewController];
 		

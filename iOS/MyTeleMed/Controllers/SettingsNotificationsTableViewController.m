@@ -7,6 +7,7 @@
 //
 
 #import "SettingsNotificationsTableViewController.h"
+#import "ErrorAlertController.h"
 #import "SettingsNotificationsPickerTableViewController.h"
 #import "NotificationSettingModel.h"
 
@@ -26,23 +27,18 @@
 
 @implementation SettingsNotificationsTableViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
 	// If Notification Settings are not nil, then we are returning from SettingsNotificationsPickerViewController and don't want to reset the settings
-	if(self.notificationSettings != nil)
+	if (self.notificationSettings != nil)
 	{
 		return;
 	}
 	
 	// Set Notification Settings Type as string
-	switch(self.notificationSettingsType)
+	switch (self.notificationSettingsType)
 	{
 		// Stat Message Settings
 		case 0:
@@ -76,7 +72,7 @@
 	[self setNotificationSettings:[self.notificationSettingModel getNotificationSettingsByName:self.notificationSettingsName]];
 }
 
-- (IBAction)updateReminder:(id)sender
+- (IBAction)reminderChanged:(id)sender
 {
 	[self.notificationSettings setIsReminderOn:self.switchReminders.isOn];
 	
@@ -94,7 +90,7 @@
 	NSString *selectedOption = settingsNotificationsPickerTableViewController.selectedOption;
 	
 	// Set selected Notification Interval
-	if(settingsNotificationsPickerTableViewController.pickerType == 1)
+	if (settingsNotificationsPickerTableViewController.pickerType == 1)
 	{
 		[self.notificationSettings setInterval:[NSNumber numberWithInteger:[selectedOption integerValue]]];
 	}
@@ -124,9 +120,11 @@
 	NSLog(@"Error loading notification settings");
 	
 	// Show error message only if device offline
-	if(error.code == NSURLErrorNotConnectedToInternet)
+	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
-		[self.notificationSettingModel showError:error];
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		
+		[errorAlertController show:error];
 	}
 }
 
@@ -139,15 +137,9 @@
 // Return Save error from NotificationSettingModel delegate (no longer used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorTimedOut)
-	{
-		return [self.notificationSettingModel showOfflineError];
-	}
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Notification Settings Error" message:@"There was a problem saving your Notification Settings. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	[errorAlertController show:error];
 }*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -165,16 +157,13 @@
 {
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 	
-	switch(indexPath.row)
+	switch (indexPath.row)
 	{
 		// Reminders Row
 		case 0:
 		{
 			// Set Reminders value
 			[self.switchReminders setOn:self.notificationSettings.isReminderOn];
-			
-			// Prevent cell selection
-			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 			break;
 		}
 		
@@ -204,7 +193,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Segue to Notification Settings Picker
-	if(indexPath.row > 0)
+	if (indexPath.row > 0)
 	{
 		[self performSegueWithIdentifier:@"showSettingsNotificationsPicker" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
@@ -212,7 +201,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"showSettingsNotificationsPicker"])
+	if ([segue.identifier isEqualToString:@"showSettingsNotificationsPicker"])
 	{
 		SettingsNotificationsPickerTableViewController *settingsNotificationsPickerTableViewController = segue.destinationViewController;
 		UITableViewCell *cell = (UITableViewCell *)sender;
@@ -221,7 +210,7 @@
 		[settingsNotificationsPickerTableViewController setPickerType:cell.tag];
 		
 		// Set selected Notification Tone
-		if(cell.tag == 0)
+		if (cell.tag == 0)
 		{
 			[settingsNotificationsPickerTableViewController setSelectedOption:self.notificationSettings.ToneTitle];
 		}

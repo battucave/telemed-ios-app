@@ -16,16 +16,11 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *cellMessage;
 @property (weak, nonatomic) IBOutlet UILabel *labelMessageRecipient;
 
+@property (nonatomic) CGFloat cellMessageHeight;
+
 @end
 
 @implementation MessageComposeTableViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
-	[self.textViewMessage setDelegate:self];
-}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -40,10 +35,8 @@
 	
 	self.cellMessageHeight = self.cellMessage.frame.size.height;
 	
-	[self.textViewMessage setAutocorrectionType:UITextAutocorrectionTypeNo];
-	
 	// Only set placeholder if it has not already been set (otherwise the placeholder will update to anything the user previously typed when returning from MessageRecipientPickerTableViewController)
-	if( ! self.textViewMessagePlaceholder)
+	if (! self.textViewMessagePlaceholder)
 	{
 		self.textViewMessagePlaceholder = self.textViewMessage.text;
 	}
@@ -58,29 +51,36 @@
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewViewController delegate to simplify the passing of data to Message Recipient Picker
+// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewTableViewController delegate to simplify the passing of data to Message Recipient Picker
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self.delegate performSegueToMessageRecipientPicker:(id)sender];
 }
 
-// Method fired from MessageNewViewController/MessageForwardViewController
+// Method fired from MessageNewTableViewController/MessageForwardViewController
 - (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients
 {
 	NSString *messageRecipientNames = @"";
 	NSInteger messageRecipientsCount = [messageRecipients count];
 	
-	if(messageRecipientsCount > 0)
+	if (messageRecipientsCount > 0)
 	{
-		MessageRecipientModel *messageRecipient = [messageRecipients objectAtIndex:0];
-		
-		if(messageRecipientsCount > 1)
+		MessageRecipientModel *messageRecipient1 = [messageRecipients objectAtIndex:0];
+		MessageRecipientModel *messageRecipient2 = (messageRecipientsCount > 1 ? [messageRecipients objectAtIndex:1] : nil);
+	
+		switch (messageRecipientsCount)
 		{
-			messageRecipientNames = [messageRecipient.LastName stringByAppendingFormat:@" & %ld more...", (long)messageRecipientsCount - 1];
-		}
-		else
-		{
-			messageRecipientNames = messageRecipient.Name;
+			case 1:
+				messageRecipientNames = messageRecipient1.Name;
+				break;
+			
+			case 2:
+				messageRecipientNames = [NSString stringWithFormat:@"%@ & %@", messageRecipient1.LastName, messageRecipient2.LastName];
+				break;
+			
+			default:
+				messageRecipientNames = [NSString stringWithFormat:@"%@, %@ & %ld more...", messageRecipient1.LastName, messageRecipient2.LastName, (long)messageRecipientsCount - 2];
+				break;
 		}
 	}
 	
@@ -94,8 +94,9 @@
 	// Obtain Keyboard Size
 	CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 	
-	// Calculate New Height for Message Cell -> Use Parent View Controller to account for Navigation Controller
-	[self setCellMessageHeight:self.parentViewController.view.frame.size.height - keyboardSize.height - self.cellMessageRecipient.bounds.size.height];
+	// Calculate New Height for Message Cell
+	int cellMessagePadding = 20;
+	[self setCellMessageHeight:self.parentViewController.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - keyboardSize.height - self.cellMessageRecipient.frame.size.height - cellMessagePadding];
 	
 	// Force a refresh on the table
 	[self.tableView beginUpdates];
@@ -108,7 +109,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	// Hide placeholder
-	if([textView.text isEqualToString:self.textViewMessagePlaceholder])
+	if ([textView.text isEqualToString:self.textViewMessagePlaceholder])
 	{
 		[textView setText:@""];
 		[textView setTextColor:[UIColor blackColor]];
@@ -121,7 +122,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
 	// Validate form in delegate
-	if([self.delegate respondsToSelector:@selector(validateForm:)])
+	if ([self.delegate respondsToSelector:@selector(validateForm:)])
 	{
 		[self.delegate validateForm:self.textViewMessage.text];
 	}
@@ -130,7 +131,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 	// Show placeholder
-	if([textView.text isEqualToString:@""])
+	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewMessagePlaceholder];
 		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];

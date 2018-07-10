@@ -64,7 +64,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
-	if([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		self.constraintTopSpace.constant = 0;
 	}
@@ -82,33 +82,51 @@
 	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will archive %@. Archived messages can be accessed from the Main Menu.", (selectedMessageCount == 1 ? @"this message" : @"these messages")];
 	
 	// Ensure at least one selected Message (should never happen as Archive button should be disabled when no Messages selected)
-	if(selectedMessageCount < 1)
+	if (selectedMessageCount < 1)
 	{
 		return;
 	}
 	
 	for(MessageModel *message in self.selectedMessages)
 	{
-		if([message.State isEqualToString:@"Unread"])
+		if ([message.State isEqualToString:@"Unread"])
 		{
 			unreadMessageCount++;
 		}
 	}
 	
 	// Update notification message if all of these messages are Unread
-	if(unreadMessageCount == selectedMessageCount)
+	if (unreadMessageCount == selectedMessageCount)
 	{
 		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (unreadMessageCount == 1 ? @"This message has" : @"These messages have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
-	else if(unreadMessageCount > 0)
+	else if (unreadMessageCount > 0)
 	{
 		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these messages %@ not been read yet. Selecting Continue will archive and close out %@ from our system.", (long)unreadMessageCount, (unreadMessageCount == 1 ? @"has" : @"have"), (unreadMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Archive Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
-	
-    [alertView show];
+	UIAlertController *archiveMessagesAlertController = [UIAlertController alertControllerWithTitle:@"Archive Messages" message:notificationMessage preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		MessageModel *messageModel = [[MessageModel alloc] init];
+		[messageModel setDelegate:self];
+		
+		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
+	}];
+
+	[archiveMessagesAlertController addAction:actionCancel];
+	[archiveMessagesAlertController addAction:actionContinue];
+
+	// PreferredAction only supported in 9.0+
+	if ([archiveMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[archiveMessagesAlertController setPreferredAction:actionContinue];
+	}
+
+	// Show Alert
+	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
 }
 
 // Unwind segue from MessageDetailViewController (only after archive action)
@@ -120,24 +138,13 @@
 	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if(buttonIndex > 0)
-	{
-		MessageModel *messageModel = [[MessageModel alloc] init];
-		[messageModel setDelegate:self];
-		
-		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
-	}
-}
-
 // Override default Remote Notification action from CoreViewController
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
 	NSLog(@"Received Remote Notification MessagesViewController");
 	
 	// Reload Messages list to get the new Message only if the notification was for a Message
-	if([notificationType isEqualToString:@"Message"])
+	if ([notificationType isEqualToString:@"Message"])
 	{
 		NSLog(@"Refresh Messages");
 		
@@ -167,7 +174,7 @@
 	[super setEditing:editing animated:animated];
 	
 	// Update Edit button title to Cancel (default is Done)
-	if(editing)
+	if (editing)
 	{
 		[self.editButtonItem setTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 	}
@@ -178,7 +185,7 @@
 	}
 	
 	// Notify MessagesTableViewController of change in editing mode
-	if([self.messagesTableViewController respondsToSelector:@selector(setEditing:animated:)])
+	if ([self.messagesTableViewController respondsToSelector:@selector(setEditing:animated:)])
 	{
 		[self.messagesTableViewController setEditing:editing animated:animated];
 	}
@@ -193,7 +200,7 @@
 	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
 	
 	// If in editing mode, add the Archive and right flexible space buttons
-	if(editing)
+	if (editing)
 	{
 		[self.barButtonArchive setEnabled:NO];
 		
@@ -229,12 +236,12 @@
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
 {
 	// Determine which Messages were successfully Archived
-	NSMutableArray *successfulMessages = [NSMutableArray arrayWithArray:[self.selectedMessages copy]];
+	NSMutableArray *successfulMessages = [self.selectedMessages mutableCopy];
 	
 	[successfulMessages removeObjectsInArray:failedMessages];
 	
 	// Remove selected all rows from Messages Table that were successfully Archived
-	if([self.selectedMessages count] > 0)
+	if ([self.selectedMessages count] > 0)
 	{
 		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
 	}
@@ -256,7 +263,7 @@
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open
-	if(revealController.frontViewPosition == FrontViewPositionRight)
+	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
@@ -268,7 +275,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Embedded Table View Controller inside Container
-	if([segue.identifier isEqualToString:@"embedActiveMessagesTable"])
+	if ([segue.identifier isEqualToString:@"embedActiveMessagesTable"])
 	{
 		[self setMessagesTableViewController:segue.destinationViewController];
 		

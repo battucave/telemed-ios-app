@@ -1,0 +1,74 @@
+//
+//  LoginSSOMyTeleMedViewController.m
+//  MyTeleMed
+//
+//  Created by Shane Goodwin on 11/17/17.
+//  Copyright © 2017 SolutionBuilt. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "LoginSSOMyTeleMedViewController.h"
+#import "PhoneNumberViewController.h"
+#import "MyProfileModel.h"
+#import "RegisteredDeviceModel.h"
+
+@implementation LoginSSOMyTeleMedViewController
+
+// Obtain user data from server and initialize app
+- (void)finalizeLogin
+{
+	NSLog(@"Finalize MyTeleMed Login");
+	
+	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	
+	[myProfileModel getWithCallback:^(BOOL success, MyProfileModel *profile, NSError *error)
+	{
+		if (success)
+		{
+			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+			
+			NSLog(@"User ID: %@", myProfileModel.ID);
+			NSLog(@"Preferred Account ID: %@", myProfileModel.MyPreferredAccount.ID);
+			NSLog(@"Device ID: %@", registeredDeviceModel.ID);
+			NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
+			
+			// Check if user has previously registered this device with TeleMed
+			if (registeredDeviceModel.hasRegistered)
+			{
+				// Phone Number was previously registered with TeleMed, but we should update the device token in case it changed
+				[registeredDeviceModel setShouldRegister:YES];
+				
+				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
+				{
+					// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
+					if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
+					{
+						[self showWebViewError:[NSString stringWithFormat:@"There was a problem registering your device on our network:<br>%@", registeredDeviceError.localizedDescription]];
+					}
+					
+					// NOTE: If the request was not successful, then just continue to next step in the login process to avoid a potential infinite loop. Don't force user to re-enter their phone number until the next time they launch the app
+					
+					// Go to the next screen in the login process
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+				}];
+			}
+			// Device id is not yet registered with TeleMed, so show phone number screen
+			else
+			{
+				// Go to the next screen in the login process
+				[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+			}
+		}
+		else
+		{
+			NSLog(@"LoginSSOMyTeleMedViewController Error: %@", error);
+			
+			// Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
+			[self showWebViewError:[NSString stringWithFormat:@"There was a problem completing the login process:<br>%@", error.localizedDescription]];
+		}
+	}];
+	
+	[super finalizeLogin];
+}
+
+@end

@@ -23,16 +23,16 @@
 
 - (void)savePreferredAccount:(AccountModel *)account
 {
-	// Initialize My Profile Model
+	// Initialize my profile model
 	[self setMyProfileModel:[MyProfileModel sharedInstance]];
 	
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Store Preferred Account to be used when network request is sent
+	// Store preferred account to be used when network request is sent
 	[self setPreferredAccount:account];
 	
 	NSDictionary *parameters = @{
@@ -41,35 +41,35 @@
 	
 	[self.operationManager POST:@"PreferredAcct" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Close Activity Indicator
-		[self hideActivityIndicator];
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		// Successful post returns a 204 code with no response
+		if (operation.response.statusCode == 204)
 		{
-			// Not currently used
-			if([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
+			// Handle success via delegate (not currently used)
+			if ([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
 			{
 				[self.delegate savePreferredAccountSuccess];
 			}
 		}
 		else
 		{
-			// Roll back My Profile Model's MyPreferredAccount to previous value
+			// Roll back my profile model's my preferred account to previous value
 			[self.myProfileModel restoreMyPreferredAccount];
 			
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Preferred Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Preferred Account.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^(void)
+			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self savePreferredAccount:account];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
-				[self.delegate changePasswordError:error];
+				[self.delegate savePreferredAccountError:error];
 			}*/
 		}
 	}
@@ -77,48 +77,61 @@
 	{
 		NSLog(@"PasswordChangeModel Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Roll back My Profile Model's MyPreferredAccount to previous value
 		[self.myProfileModel restoreMyPreferredAccount];
 		
+		// Handle error via delegate
+		/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+		{
+			// Close activity indicator with callback
+			[self hideActivityIndicator:^
+			{
+				[self.delegate savePreferredAccountError:error];
+			}];
+		}
+		else
+		{*/
+			// Close activity indicator
+			[self hideActivityIndicator];
+		//}
+	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem changing your Preferred Account." andTitle:@"Preferred Account Error"];
 		
 		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^(void)
+		[self showError:error withCallback:^
 		{
 			// Include callback to retry the request
 			[self savePreferredAccount:account];
 		}];
-		
-		/*if([self.delegate respondsToSelector:@selector(changePasswordError:)])
-		{
-			[self.delegate changePasswordError:error];
-		}*/
 	}];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Save Preferred Account to My Profile Model (assume success so save it immediately and then roll back if error occurs)
+	// Save preferred account to my profile model (assume success so save it immediately and then roll back if error occurs)
 	[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
 	
-	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
+	// Notify delegate that message has been sent to server
+	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 	{
-		[self.delegate savePreferredAccountPending];
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
+		{
+			[self.delegate savePreferredAccountPending];
+		}];
+	}
+	else
+	{
+		// Close activity indicator
+		[self hideActivityIndicator];
 	}
 	
 	// Ensure that pending callback doesn't fire again after possible error

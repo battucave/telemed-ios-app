@@ -13,12 +13,12 @@
 
 - (void)verifyNotificationTones
 {
-	NSLog(@"verifyNotificationTones");
+	NSLog(@"Verify Notification Tones");
 	
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If Notification Tones have already been fixed, then skip doing it again
-	if([settings boolForKey:@"notificationTonesFixed"])
+	if ([settings boolForKey:@"notificationTonesFixed"])
 	{
 		return;
 	}
@@ -47,13 +47,13 @@
 	// Load Notification Settings for type
 	notificationSettings = [notificationSettings getNotificationSettingsByName:name];
 	
-	if(notificationSettings != nil && notificationSettings.Tone != nil)
+	if (notificationSettings != nil && notificationSettings.Tone != nil)
 	{
 		NSLog(@"%@ Tone: %@", [name capitalizedString], notificationSettings.Tone);
 	}
 	
 	// Save Notification Settings with .caf format only if Tone does not contain file extension
-	if(notificationSettings != nil && notificationSettings.Tone != nil && ! [notificationSettings.Tone hasSuffix:@".caf"])
+	if (notificationSettings != nil && notificationSettings.Tone != nil && ! [notificationSettings.Tone hasSuffix:@".caf"])
 	{
 		[notificationSettings setTone:[notificationSettings getToneFromToneTitle:notificationSettings.Tone]];
 		
@@ -73,7 +73,7 @@
 	NSLog(@"%@ Tone: %@", [name capitalizedString], serverNotificationSettings.Tone);
 	
 	// Save server notification settings with .caf format only if old MyTeleMed Tone
-	if(serverNotificationSettings != nil && serverNotificationSettings.Tone != nil && ! [serverNotificationSettings.Tone hasSuffix:@".caf"])
+	if (serverNotificationSettings != nil && serverNotificationSettings.Tone != nil && ! [serverNotificationSettings.Tone hasSuffix:@".caf"])
 	{
 		[serverNotificationSettings setTone:[NSString stringWithFormat:@"%@.caf", serverNotificationSettings.Tone]];
 		

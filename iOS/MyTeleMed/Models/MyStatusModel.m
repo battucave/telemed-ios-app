@@ -11,15 +11,14 @@
 
 @implementation MyStatusModel
 
-static MyStatusModel *sharedMyStatusInstance = nil;
-
-+ (MyStatusModel *)sharedInstance
++ (instancetype)sharedInstance
 {
 	static dispatch_once_t token;
+	static MyStatusModel *sharedMyStatusInstance = nil;
 	
 	dispatch_once(&token, ^
 	{
-		sharedMyStatusInstance = [[super alloc] init];
+		sharedMyStatusInstance = [[self alloc] init];
 	});
 	
 	return sharedMyStatusInstance;
@@ -35,12 +34,24 @@ static MyStatusModel *sharedMyStatusInstance = nil;
 		[parser setMyStatus:self];
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
-		if([xmlParser parse])
+		// Parse the xml file
+		if ([xmlParser parse])
 		{
+			// Sort on call now entries by start time
+			self.CurrentOnCallEntries = [self.CurrentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
+			{
+				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
+			}];
+			
+			// Sort next on call entries by start time
+			self.FutureOnCallEntries = [self.FutureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
+			{
+				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
+			}];
+			
 			callback(YES, self, nil);
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Status Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving your Status.", NSLocalizedDescriptionKey, nil]];

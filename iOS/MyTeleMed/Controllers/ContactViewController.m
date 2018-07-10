@@ -9,35 +9,31 @@
 #import "ContactViewController.h"
 #import "CallModel.h"
 
-@interface ContactViewController ()
-
-@property (nonatomic) CallModel *callModel;
-
-@end
-
 @implementation ContactViewController
-
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
 
 - (IBAction)callTeleMed:(id)sender
 {
-	UIAlertView *confirmAlertView = [[UIAlertView alloc] initWithTitle:@"Call TeleMed" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Call", nil];
-	
-	[confirmAlertView setTag:1];
-	[confirmAlertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if(alertView.tag == 1 && buttonIndex > 0)
+	UIAlertController *callTeleMedAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionCall = [UIAlertAction actionWithTitle:@"Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		[self setCallModel:[[CallModel alloc] init]];
-		[self.callModel setDelegate:self];
-		[self.callModel callTeleMed];
+		CallModel *callModel = [[CallModel alloc] init];
+		
+		[callModel setDelegate:self];
+		[callModel callTeleMed];
+	}];
+
+	[callTeleMedAlertController addAction:actionClose];
+	[callTeleMedAlertController addAction:actionCall];
+
+	// PreferredAction only supported in 9.0+
+	if ([callTeleMedAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[callTeleMedAlertController setPreferredAction:actionCall];
 	}
+
+	// Show alert dialog
+	[self presentViewController:callTeleMedAlertController animated:YES completion:nil];
 }
 
 // Return success from CallTeleMedModel delegate (no longer used)
@@ -49,15 +45,9 @@
 // Return error from CallTeleMedModel delegate (no longer used)
 - (void)callTeleMedError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.callModel showOfflineError];
-	}
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Call TeleMed Error" message:@"There was a problem requesting a Return Call. Please try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	[errorAlertController show:error];
 }*/
 
 - (void)didReceiveMemoryWarning

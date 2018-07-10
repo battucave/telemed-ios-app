@@ -38,7 +38,7 @@
 	// Initialize Filtered Message Events
 	for(MessageEventModel *messageEvent in self.messageEvents)
 	{
-		if( ! [messageEvent.Type isEqualToString:@"Comment"])
+		if (! [messageEvent.Type isEqualToString:@"Comment"])
 		{
 			[self.filteredMessageEvents addObject:messageEvent];
 		}
@@ -53,7 +53,7 @@
 	[super viewWillAppear:animated];
 	
 	// Disable Forward Button if no Message Recipients available
-	if( ! self.canForward)
+	if (! self.canForward)
 	{
 		[self.buttonForward setEnabled:NO];
 	}
@@ -83,7 +83,7 @@
 	
 	[self.filteredMessageEvents removeAllObjects];
 	
-	switch([self.segmentedControl selectedSegmentIndex])
+	switch ([self.segmentedControl selectedSegmentIndex])
 	{
 	   // Office Events
 		case 1:
@@ -99,11 +99,11 @@
 	}
 	
 	// If Basic Event set
-	if(messageEventString != nil)
+	if (messageEventString != nil)
 	{
 		for(MessageEventModel *messageEvent in self.messageEvents)
 		{
-			if([messageEvent.Type isEqualToString:messageEventString])
+			if ([messageEvent.Type isEqualToString:messageEventString])
 			{
 				[self.filteredMessageEvents addObject:messageEvent];
 			}
@@ -177,7 +177,7 @@
 	CGFloat cellHeight = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + 1.0f;
 	
 	// If height is less than 40, constraints will break
-	if(cellHeight < 40.0f)
+	if (cellHeight < 40.0f)
 	{
 		cellHeight = 40.0f;
 	}
@@ -194,14 +194,14 @@
 	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
 	
 	// Set Message Event Date and Time
-	if(messageEvent.Time_LCL)
+	if (messageEvent.Time_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
 		NSDate *dateTime = [dateFormatter dateFromString:messageEvent.Time_LCL];
 		
 		// If date is nil, it may have been formatted incorrectly
-		if(dateTime == nil)
+		if (dateTime == nil)
 		{
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 			dateTime = [dateFormatter dateFromString:messageEvent.Time_LCL];
@@ -217,7 +217,7 @@
 	[cell.labelDetail setText:messageEvent.Detail];
 	
 	// Set Message Event Type
-	if([messageEvent.Type isEqualToString:@"User"])
+	if ([messageEvent.Type isEqualToString:@"User"])
 	{
 		[cell.labelType setText:@"Office Event"];
 	}

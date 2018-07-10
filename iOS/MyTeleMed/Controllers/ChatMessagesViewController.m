@@ -46,7 +46,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
-	if([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
 		// Change top layout constraint to 0 (Keep Swipe Message there as it will simply be hidden under the Container View)
 		self.constraintTopSpace.constant = 0;
@@ -65,48 +65,55 @@
 	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this secure chat message" : @"these secure chat messages")];
 	
 	// Ensure at least one selected Chat Message (should never happen as Delete button should be disabled when no Messages selected)
-	if(selectedChatMessageCount < 1)
+	if (selectedChatMessageCount < 1)
 	{
 		return;
 	}
 	
 	for(ChatMessageModel *chatMessage in self.selectedChatMessages)
 	{
-		if(chatMessage.Unopened)
+		if (chatMessage.Unopened)
 		{
 			unreadChatMessageCount++;
 		}
 	}
 	
 	// Update notification message if all of these Messages are Unread
-	if(unreadChatMessageCount == selectedChatMessageCount)
+	if (unreadChatMessageCount == selectedChatMessageCount)
 	{
 		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will delete %@ from our system.", (unreadChatMessageCount == 1 ? @"This secure chat message has" : @"These secure chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	// Update notification message if some of these messages are Unread
-	else if(unreadChatMessageCount > 0)
+	else if (unreadChatMessageCount > 0)
 	{
 		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not been read yet. Selecting Continue will delete %@ from our system.", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Chat Messages" message:notificationMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
-	
-    [alertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if(buttonIndex > 0)
+	UIAlertController *deleteChatMessagesAlertController = [UIAlertController alertControllerWithTitle:@"Delete Chat Messages" message:notificationMessage preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Added this because a minority of users were complaining that Chat sometimes causes crash
-		if(self.chatMessageModel == nil)
+		if (self.chatMessageModel == nil)
 		{
 			[self setChatMessageModel:[[ChatMessageModel alloc] init]];
 			[self.chatMessageModel setDelegate:self];
 		}
 		
 		[self.chatMessageModel deleteMultipleChatMessages:self.selectedChatMessages];
+	}];
+
+	[deleteChatMessagesAlertController addAction:actionCancel];
+	[deleteChatMessagesAlertController addAction:actionContinue];
+
+	// PreferredAction only supported in 9.0+
+	if ([deleteChatMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[deleteChatMessagesAlertController setPreferredAction:actionContinue];
 	}
+
+	// Show Alert
+	[self presentViewController:deleteChatMessagesAlertController animated:YES completion:nil];
 }
 
 // Override default Remote Notification action from CoreViewController
@@ -115,7 +122,7 @@
 	NSLog(@"Received Remote Notification ChatMessagesViewController");
 	
 	// Reload Chat Messages list to get the new Chat Message only if the notification was for a Chat Message
-	if([notificationType isEqualToString:@"Chat"])
+	if ([notificationType isEqualToString:@"Chat"])
 	{
 		NSLog(@"Refresh Chat Messages");
 		
@@ -145,7 +152,7 @@
 	[super setEditing:editing animated:animated];
 	
 	// Update Edit button title to Cancel (default is Done)
-	if(editing)
+	if (editing)
 	{
 		[self.editButtonItem setTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 	}
@@ -156,7 +163,7 @@
 	}
 	
 	// Notify ChatMessagesTableViewController of change in editing mode
-	if([self.chatMessagesTableViewController respondsToSelector:@selector(setEditing:animated:)])
+	if ([self.chatMessagesTableViewController respondsToSelector:@selector(setEditing:animated:)])
 	{
 		[self.chatMessagesTableViewController setEditing:editing animated:animated];
 	}
@@ -171,7 +178,7 @@
 	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
 	
 	// If in editing mode, add the Delete and right flexible space buttons
-	if(editing)
+	if (editing)
 	{
 		[self.barButtonDelete setEnabled:NO];
 		
@@ -207,12 +214,12 @@
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
 {
 	// Determine which Chat Messages were successfully Archived
-	NSMutableArray *successfulChatMessages = [NSMutableArray arrayWithArray:[self.selectedChatMessages copy]];
+	NSMutableArray *successfulChatMessages = [self.selectedChatMessages mutableCopy];
 	
 	[successfulChatMessages removeObjectsInArray:failedChatMessages];
 	
 	// Remove selected all rows from Chat Messages Table that were successfully Archived
-	if([self.selectedChatMessages count] > 0)
+	if ([self.selectedChatMessages count] > 0)
 	{
 		[self.chatMessagesTableViewController removeSelectedChatMessages:successfulChatMessages];
 	}
@@ -234,7 +241,7 @@
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open
-	if(revealController.frontViewPosition == FrontViewPositionRight)
+	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
@@ -246,7 +253,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Embedded Table View Controller inside Container
-	if([segue.identifier isEqualToString:@"embedChatMessagesTable"])
+	if ([segue.identifier isEqualToString:@"embedChatMessagesTable"])
 	{
 		[self setChatMessagesTableViewController:segue.destinationViewController];
 		
@@ -264,7 +271,7 @@
 		[self.chatMessagesTableViewController.tableView setContentInset:tableInset];
 	}
 	// Set Conversations for Chat Message Detail to use for determining whether a message with selected Chat Participants already exists
-	else if([segue.identifier isEqualToString:@"showNewChatMessageDetail"])
+	else if ([segue.identifier isEqualToString:@"showChatMessageNew"])
 	{
 		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;
 		

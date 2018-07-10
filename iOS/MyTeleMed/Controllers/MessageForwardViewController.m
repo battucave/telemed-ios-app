@@ -12,15 +12,12 @@
 #import "CommentModel.h"
 #import "MessageModel.h"
 #import "ForwardMessageModel.h"
-#import "MessageRecipientModel.h"
 
 @interface MessageForwardViewController ()
 
 @property (nonatomic) MessageComposeTableViewController *messageComposeTableViewController;
 
 @property (nonatomic) CommentModel *commentModel;
-
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
 
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
@@ -49,7 +46,7 @@
 	[self setSelectedMessageRecipients:messageRecipientPickerViewController.selectedMessageRecipients];
 	
 	// Update MessageComposeTableViewController with selected Message Recipient Names
-	if([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
+	if ([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
 	{
 		[self.messageComposeTableViewController updateSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
@@ -63,7 +60,7 @@
 	NSString *comment = self.messageComposeTableViewController.textViewMessage.text;
 	
 	// Remove placeholder comment
-	if([self.messageComposeTableViewController.textViewMessage.text isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
+	if ([comment isEqualToString:self.messageComposeTableViewController.textViewMessagePlaceholder])
 	{
 		comment = @"";
 	}
@@ -84,10 +81,6 @@
 /*/ Return success from ForwardMessageModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message" message:@"Message forwarded successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];
-	
 	// Go back to Message Detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -95,15 +88,9 @@
 // Return error from ForwardMessageModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.forwardMessageModel showOfflineError];
-	}
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Forward Message Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	[errorAlertController show:error];
 }*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
@@ -111,7 +98,7 @@
 {
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
+	[self.navigationItem.rightBarButtonItem setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
 }
 
 // Fired from MessageComposeTable to perform segue to MessageRecipientPickerTableViewController - simplifies passing of data to the picker
@@ -122,13 +109,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedMessageForwardTable"])
+	if ([segue.identifier isEqualToString:@"embedMessageForwardTable"])
 	{
 		[self setMessageComposeTableViewController:segue.destinationViewController];
 		
 		[self.messageComposeTableViewController setDelegate:self];
 	}
-	else if([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageForward"])
+	else if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageForward"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		

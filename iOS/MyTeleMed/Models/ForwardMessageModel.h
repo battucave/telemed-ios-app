@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
-#import "MessageStub.h"
+#import "MessageProtocol.h"
 
 @protocol ForwardMessageDelegate <NSObject>
 
@@ -25,6 +25,6 @@
 @property (nonatomic) BOOL Success;
 @property (nonatomic) NSString *Message;
 
-- (void)forwardMessage:(MessageStub *)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment;
+- (void)forwardMessage:(id <MessageProtocol>)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment;
 
 @end
