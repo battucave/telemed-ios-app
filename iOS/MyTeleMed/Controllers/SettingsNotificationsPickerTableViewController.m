@@ -12,9 +12,9 @@
 
 @interface SettingsNotificationsPickerTableViewController ()
 
-@property (nonatomic) NSArray *subCategories;
 @property (nonatomic) NSArray *pickerOptions;
 @property (nonatomic) NSString *selectedTempOption;
+@property (nonatomic) NSArray *subCategories;
 
 @property (nonatomic) SystemSoundID systemSoundID;
 
@@ -35,11 +35,11 @@
 	// Set Picker Options
 	switch (self.pickerType)
 	{
-		// Subcategory Tones
+		// Subcategory and Silent Tones
 		case 0:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, @"Silent", nil]];
 			
-			// Hide Done Button
+			// Hide Save Button
 			[self.navigationItem setRightBarButtonItem:nil];
 			break;
 		
@@ -47,7 +47,7 @@
 		case 1:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil]];
 			
-			// Hide Done Button
+			// Hide Save Button
 			[self.navigationItem setRightBarButtonItem:nil];
 			break;
 		
@@ -238,6 +238,11 @@
 	
 	// If showing Notification Intervals, make selection final
 	if (self.pickerType == 1)
+	{
+		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
+	}
+	// If showing Subcategory and Silent Tones and user selects Silent, make selection final
+	else if (self.pickerType == 0 && [self.pickerOptions count] >= indexPath.row && [[self.pickerOptions objectAtIndex:indexPath.row] isEqualToString:@"Silent"])
 	{
 		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
 	}

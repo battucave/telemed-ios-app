@@ -282,7 +282,7 @@
 			{
 				// MyTeleMed - Validate device registration with server
 				#ifdef MYTELEMED
-					[self validateRegistration:profile];
+					[self validateMyTeleMedRegistration:profile];
 				
 				// Med2Med - Validate at least one account is authorized
 				#elif defined MED2MED
@@ -579,7 +579,7 @@
 	[self.window makeKeyAndVisible];
 }
 
-- (void)validateRegistration:(id <ProfileProtocol>)profile
+- (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
 {
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 
