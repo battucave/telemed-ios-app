@@ -47,8 +47,8 @@
 	[self.textFieldConfirmNewPassword setInputAccessoryView:self.viewToolbar];
 	[self.viewToolbar removeFromSuperview];
 	
-	// iPhone < 5 - Hide logo image so that the entire form is visible
-	if ([UIScreen mainScreen].bounds.size.height < 568.0f)
+	// iPhone < 6 - Hide logo image so that the entire form is visible
+	if ([UIScreen mainScreen].bounds.size.height < 667.0f)
 	{
 		[self.imageLogo setHidden:YES];
 		[self.constraintScrollViewTop setConstant:5.0f];

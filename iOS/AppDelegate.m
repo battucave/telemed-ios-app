@@ -550,8 +550,6 @@
 		// If TeleMed requires a password change for the user, then show password change screen
 		if (profile.PasswordChangeRequired)
 		{
-			NSLog(@"PASSWORD CHANGE REQUIRED");
-			
 			if (hasNavigationController)
 			{
 				UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;

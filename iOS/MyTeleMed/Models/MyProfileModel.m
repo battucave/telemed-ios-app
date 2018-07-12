@@ -17,6 +17,8 @@
 
 @property (nonatomic) AccountModel *oldMyPreferredAccount;
 
+// @property (nonatomic) BOOL hasChangedPassword; // TESTING ONLY
+
 @end
 
 @implementation MyProfileModel
@@ -75,6 +77,16 @@
 		{
 			// Search user's registered devices to determine whether any match the current device. If so, update the current device with the new phone number
 			[self setCurrentDevice];
+			
+			/*/ TESTING ONLY (used to show the change password screen after "cold" start)
+			#ifdef DEBUG
+				if (! self.hasChangedPassword)
+				{
+					[self setPasswordChangeRequired:YES];
+					[self setHasChangedPassword:YES];
+				}
+			#endif
+			// END TESTING ONLY */
 			
 			callback(YES, (id <ProfileProtocol>)self, nil);
 		}
