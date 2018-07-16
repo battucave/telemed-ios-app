@@ -10,6 +10,7 @@
 #import "Model.h"
 #import "ProfileProtocol.h"
 #import "AccountModel.h"
+#import "TimeZoneModel.h"
 
 @interface MyProfileModel : Model <ProfileProtocol>
 
@@ -23,7 +24,7 @@
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) AccountModel *MyPreferredAccount;
 @property (nonatomic) NSArray *MyRegisteredDevices;
-@property (nonatomic) NSDictionary *MyTimeZone;
+@property (nonatomic) TimeZoneModel *MyTimeZone;
 @property (nonatomic) BOOL PasswordChangeRequired;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 

@@ -8,6 +8,7 @@
 
 #import "Model.h"
 #import "ProfileProtocol.h"
+#import "TimeZoneModel.h"
 
 @interface UserProfileModel : Model <ProfileProtocol>
 
@@ -18,7 +19,7 @@
 @property (nonatomic) NSString *JobTitlePrefix;
 @property (nonatomic) NSString *LastName;
 @property (nonatomic) BOOL MayDisableTimeout;
-@property (nonatomic) NSDictionary *MyTimeZone;
+@property (nonatomic) TimeZoneModel *MyTimeZone;
 @property (nonatomic) NSString *PhoneNumber; // Stored locally on device instead of web service
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 

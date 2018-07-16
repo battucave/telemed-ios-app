@@ -9,6 +9,7 @@
 #import "SentMessageXMLParser.h"
 #import "AccountModel.h"
 #import "SentMessageModel.h"
+#import "TimeZoneModel.h"
 
 @interface SentMessageXMLParser()
 
@@ -45,6 +46,13 @@
 		// Initialize the sent message
 		self.sentMessage = [[SentMessageModel alloc] init];
 	}
+	else if ([elementName isEqualToString:@"TimeZone"])
+	{
+		// Initialize the account time zone
+		self.sentMessage.Account.TimeZone = [[TimeZoneModel alloc] init];
+		
+		self.currentModel = @"TimeZoneModel";
+	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
@@ -64,7 +72,7 @@
 	// MYTELEMED Only
 	if ([elementName isEqualToString:@"Account"])
 	{
-		self.currentModel = @"MessageModel";
+		self.currentModel = nil;
 	}
 	else if ([elementName isEqualToString:@"SentMessage"])
 	{
@@ -73,13 +81,14 @@
 		self.sentMessage = nil;
 	}
 	// MYTELEMED Only
+	else if ([elementName isEqualToString:@"TimeZone"])
+	{
+		self.currentModel = @"AccountModel";
+	}
+	// MYTELEMED Only
 	else if ([self.currentModel isEqualToString:@"AccountModel"])
 	{
-		if ([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
-		{
-			[self.sentMessage.Account.TimeZone setValue:self.currentElementValue forKey:elementName];
-		}
-		else if ([elementName isEqualToString:@"ID"])
+		if ([elementName isEqualToString:@"ID"])
 		{
 			[self.sentMessage.Account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 		}
@@ -91,7 +100,26 @@
 			}
 			@catch(NSException *exception)
 			{
-				NSLog(@"Key not found: %@", elementName);
+				NSLog(@"Key not found on Account: %@", elementName);
+			}
+		}
+	}
+	// MYTELEMED Only
+	else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
+	{
+		if ([elementName isEqualToString:@"ID"])
+		{
+			[self.sentMessage.Account.TimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+		else
+		{
+			@try
+			{
+				[self.sentMessage.Account.TimeZone setValue:self.currentElementValue forKey:elementName];
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found on Time Zone: %@", elementName);
 			}
 		}
 	}

@@ -8,13 +8,14 @@
 
 #import "AccountXMLParser.h"
 #import "AccountModel.h"
+#import "TimeZoneModel.h"
 
 @interface AccountXMLParser()
 
 @property (nonatomic) AccountModel *account;
 @property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NSString *currentModel;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
-@property (nonatomic) NSMutableDictionary *timeZone;
 
 @end
 
@@ -38,7 +39,10 @@
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
-		self.timeZone = [[NSMutableDictionary alloc] init];
+		// Initialize the time zone
+		self.account.TimeZone = [[TimeZoneModel alloc] init];
+		
+		self.currentModel = @"TimeZoneModel";
 	}
 }
 
@@ -62,18 +66,31 @@
 		
 		self.account = nil;
 	}
-	else if ([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
-	{
-		[self.timeZone setValue:self.currentElementValue forKey:elementName];
-	}
 	else if ([elementName isEqualToString:@"ID"])
 	{
 		[self.account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
-		self.account.TimeZone = self.timeZone;
-		self.timeZone = nil;
+		self.currentModel = nil;
+	}
+	else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
+	{
+		@try
+		{
+			if ([elementName isEqualToString:@"ID"])
+			{
+				[self.account.TimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+			}
+			else
+			{
+				[self.account.TimeZone setValue:self.currentElementValue forKey:elementName];
+			}
+		}
+		@catch(NSException *exception)
+		{
+			NSLog(@"Key not found on Time Zone: %@", elementName);
+		}
 	}
 	else
 	{

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AccountModel.h"
+#import "TimeZoneModel.h"
 
 @protocol ProfileProtocol <NSObject>
 
@@ -15,7 +16,7 @@
 @property (nonatomic) NSString *Email;
 @property (nonatomic) BOOL IsAuthorized; // Med2Med manually sets this separately from web service
 @property (nonatomic) BOOL MayDisableTimeout;
-@property (nonatomic) NSDictionary *MyTimeZone;
+@property (nonatomic) TimeZoneModel *MyTimeZone;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
 + (id <ProfileProtocol>)sharedInstance;

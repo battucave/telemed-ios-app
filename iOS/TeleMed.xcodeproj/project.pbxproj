@@ -340,6 +340,8 @@
 		E275C2121D3836E1004C0744 /* image-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20F1D3836E1004C0744 /* image-logo.png */; };
 		E275C2131D3836E1004C0744 /* image-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C2101D3836E1004C0744 /* image-logo@2x.png */; };
 		E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */; };
+		E279944A20F914CB004EA215 /* TimeZoneModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E279944920F914CB004EA215 /* TimeZoneModel.m */; };
+		E279944D20F91648004EA215 /* TimeZoneXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E279944C20F91648004EA215 /* TimeZoneXMLParser.m */; };
 		E27B20B720A4A3F300FA3405 /* PasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B20B620A4A3F300FA3405 /* PasswordViewController.m */; };
 		E27B20C720A4D1B300FA3405 /* background-LoginSSO-Field.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C420A4D1A000FA3405 /* background-LoginSSO-Field.png */; };
 		E27B20C820A4D1B300FA3405 /* background-LoginSSO-Field@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C520A4D1A800FA3405 /* background-LoginSSO-Field@3x.png */; };
@@ -400,6 +402,8 @@
 		E2CDEFA61D25752100728F1A /* ChatMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFA41D25752100728F1A /* ChatMessageXMLParser.m */; };
 		E2CDEFAB1D25753400728F1A /* ChatMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFA81D25753400728F1A /* ChatMessageModel.m */; };
 		E2CDEFAC1D25753400728F1A /* ChatParticipantModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CDEFAA1D25753400728F1A /* ChatParticipantModel.m */; };
+		E2CE248C20FD045E00785801 /* TimeZoneModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E279944920F914CB004EA215 /* TimeZoneModel.m */; };
+		E2CE248D20FD0FB200785801 /* TimeZoneXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E279944C20F91648004EA215 /* TimeZoneXMLParser.m */; };
 		E2D3E85C1D23063B00746265 /* ChatMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D3E85B1D23063B00746265 /* ChatMessagesViewController.m */; };
 		E2D567111CD95C500054FD3F /* ContactMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D567101CD95C500054FD3F /* ContactMessageViewController.m */; };
 		E2D567131CDA73430054FD3F /* default.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2D567121CDA73430054FD3F /* default.caf */; };
@@ -797,6 +801,10 @@
 		E275C2101D3836E1004C0744 /* image-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo@2x.png"; sourceTree = "<group>"; };
 		E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserProfileXMLParser.h; sourceTree = "<group>"; };
 		E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserProfileXMLParser.m; sourceTree = "<group>"; };
+		E279944820F914CB004EA215 /* TimeZoneModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeZoneModel.h; sourceTree = "<group>"; };
+		E279944920F914CB004EA215 /* TimeZoneModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeZoneModel.m; sourceTree = "<group>"; };
+		E279944B20F91648004EA215 /* TimeZoneXMLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeZoneXMLParser.h; sourceTree = "<group>"; };
+		E279944C20F91648004EA215 /* TimeZoneXMLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeZoneXMLParser.m; sourceTree = "<group>"; };
 		E27B20B520A4A3F300FA3405 /* PasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PasswordViewController.h; sourceTree = "<group>"; };
 		E27B20B620A4A3F300FA3405 /* PasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PasswordViewController.m; sourceTree = "<group>"; };
 		E27B20C420A4D1A000FA3405 /* background-LoginSSO-Field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-LoginSSO-Field.png"; sourceTree = "<group>"; };
@@ -1904,6 +1912,8 @@
 				E2920C961E82BC73004BEF10 /* SentMessageModel.m */,
 				E2ECFB571B331F910024D970 /* SSOProviderModel.h */,
 				E2ECFB581B331F910024D970 /* SSOProviderModel.m */,
+				E279944820F914CB004EA215 /* TimeZoneModel.h */,
+				E279944920F914CB004EA215 /* TimeZoneModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1943,6 +1953,8 @@
 				E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */,
 				E2ECFB5A1B33223C0024D970 /* SSOProviderXMLParser.h */,
 				E2ECFB5B1B33223C0024D970 /* SSOProviderXMLParser.m */,
+				E279944B20F91648004EA215 /* TimeZoneXMLParser.h */,
+				E279944C20F91648004EA215 /* TimeZoneXMLParser.m */,
 			);
 			path = "XML Parsers";
 			sourceTree = "<group>";
@@ -2416,6 +2428,7 @@
 				E2ED891F1D9DB2EE0094214C /* NewChatMessageModel.m in Sources */,
 				E27B84F41B14CF8F00AD50C6 /* ForwardMessageModel.m in Sources */,
 				E2AE66451CE1428300953EFA /* CoreViewController.m in Sources */,
+				E2CE248C20FD045E00785801 /* TimeZoneModel.m in Sources */,
 				E211D59A1FBF571B00263497 /* ChatMessagesTableViewController.m in Sources */,
 				E270ED6B1B1758C900DD43B8 /* AFURLRequestSerialization.m in Sources */,
 				28BA8E921A7009800042D769 /* MessageHistoryViewController.m in Sources */,
@@ -2496,6 +2509,7 @@
 				E21EC5D11CE37C880027AA14 /* AccountPickerViewController.m in Sources */,
 				28A8DA5E182C56DB00C9DB08 /* MessageNewTableViewController.m in Sources */,
 				0865DBFC1C63AF060028E2B2 /* MessageTeleMedViewController.m in Sources */,
+				E2CE248D20FD0FB200785801 /* TimeZoneXMLParser.m in Sources */,
 				E270ED6E1B1758C900DD43B8 /* AFHTTPSessionManager.m in Sources */,
 				E2964B471E675860002FF97B /* ErrorAlertController.m in Sources */,
 				28ADA6ED17FA1585003A81A1 /* PhoneNumberViewController.m in Sources */,
@@ -2554,12 +2568,14 @@
 				E270481B204C33BB005AFFFF /* MessageRecipientXMLParser.m in Sources */,
 				E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */,
 				E25036B41FBB88F400099C7E /* ScreenshotAlertModel.m in Sources */,
+				E279944A20F914CB004EA215 /* TimeZoneModel.m in Sources */,
 				E25036B51FBB88F400099C7E /* AppDelegate.m in Sources */,
 				E25036B71FBB88F400099C7E /* SSOProviderViewController.m in Sources */,
 				E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */,
 				E25036B91FBB88F400099C7E /* OnePixelLayoutConstraint.m in Sources */,
 				E25036BA1FBB88F400099C7E /* AFURLConnectionOperation.m in Sources */,
 				E22EF0781FD89BC100A2E6F6 /* MessageCell.m in Sources */,
+				E279944D20F91648004EA215 /* TimeZoneXMLParser.m in Sources */,
 				E2A607D41FDB27930014F1E2 /* AccountXMLParser.m in Sources */,
 				E25036BC1FBB88F400099C7E /* UIRefreshControl+AFNetworking.m in Sources */,
 				E25036BD1FBB88F400099C7E /* AFHTTPRequestOperationManager.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
+#import "TimeZoneModel.h"
 
 @protocol AccountDelegate <NSObject>
 
@@ -27,7 +28,7 @@
 @property (nonatomic) NSString *DID; // Med2Med only - Phone number to call TeleMed with
 @property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *PublicKey;
-@property (nonatomic) NSDictionary *TimeZone; // MyTeleMed only
+@property (nonatomic) TimeZoneModel *TimeZone; // MyTeleMed only
 @property (nonatomic) NSString *MyAuthorizationStatus; // Med2Med only - Possible values: Authorized, Pending, Unauthorized
 
 - (void)getAccounts;

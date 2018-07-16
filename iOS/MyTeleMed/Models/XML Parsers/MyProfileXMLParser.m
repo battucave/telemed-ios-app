@@ -10,6 +10,7 @@
 #import "MyProfileModel.h"
 #import "AccountModel.h"
 #import "RegisteredDeviceModel.h"
+#import "TimeZoneModel.h"
 
 @interface MyProfileXMLParser()
 
@@ -18,7 +19,7 @@
 @property (nonatomic) NSMutableArray *myRegisteredDevices;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 @property (nonatomic) RegisteredDeviceModel *registeredDevice;
-@property (nonatomic) NSMutableDictionary *timeZone;
+@property (nonatomic) TimeZoneModel *timeZone;
 
 @end
 
@@ -51,7 +52,9 @@
 	}
 	else if ([elementName isEqualToString:@"TimeZone"] || [elementName isEqualToString:@"MyTimeZone"])
 	{
-		self.timeZone = [[NSMutableDictionary alloc] init];
+		self.timeZone = [[TimeZoneModel alloc] init];
+		
+		self.currentModel = @"TimeZoneModel";
 	}
 }
 
@@ -69,13 +72,9 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if ([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+	if ([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-		[self.timeZone setValue:self.currentElementValue forKey:elementName];
-	}
-	else if ([elementName isEqualToString:@"MyPreferredAccount"])
-	{
-		self.currentModel = @"MyProfileModel";
+		self.currentModel = nil;
 	}
 	else if ([elementName isEqualToString:@"MyRegisteredDevices"])
 	{
@@ -85,18 +84,20 @@
 	{
 		self.myProfile.MyTimeZone = self.timeZone;
 		self.timeZone = nil;
+		self.currentModel = nil;
 	}
 	else if ([elementName isEqualToString:@"RegisteredDevice"])
 	{
 		[self.myRegisteredDevices addObject:self.registeredDevice];
 		
 		self.registeredDevice = nil;
-		self.currentModel = @"MyProfileModel";
+		self.currentModel = nil;
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
 		self.myProfile.MyPreferredAccount.TimeZone = self.timeZone;
 		self.timeZone = nil;
+		self.currentModel = nil;
 	} 
 	else if (! [elementName isEqualToString:@"MyProfile"])
 	{
@@ -127,6 +128,24 @@
 			@catch(NSException *exception)
 			{
 				NSLog(@"Key not found on Registered Device: %@", elementName);
+			}
+		}
+		else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
+		{
+			@try
+			{
+				if ([elementName isEqualToString:@"ID"])
+				{
+					[self.timeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+				}
+				else
+				{
+					[self.timeZone setValue:self.currentElementValue forKey:elementName];
+				}
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found on Time Zone: %@", elementName);
 			}
 		}
 		else

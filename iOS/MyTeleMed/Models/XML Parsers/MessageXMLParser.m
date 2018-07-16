@@ -45,6 +45,13 @@
 		// Initialize the message
 		self.message = [[MessageModel alloc] init];
 	}
+	else if ([elementName isEqualToString:@"TimeZone"])
+	{
+		// Initialize the account time zone
+		self.message.Account.TimeZone = [[TimeZoneModel alloc] init];
+		
+		self.currentModel = @"TimeZoneModel";
+	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
@@ -71,13 +78,13 @@
 		
 		self.message = nil;
 	}
+	else if ([elementName isEqualToString:@"TimeZone"])
+	{
+		self.currentModel = @"AccountModel";
+	}
 	else if ([self.currentModel isEqualToString:@"AccountModel"])
 	{
-		if ([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
-		{
-			[self.message.Account.TimeZone setValue:self.currentElementValue forKey:elementName];
-		}
-		else if ([elementName isEqualToString:@"ID"])
+		if ([elementName isEqualToString:@"ID"])
 		{
 			[self.message.Account setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 		}
@@ -90,6 +97,24 @@
 			@catch(NSException *exception)
 			{
 				NSLog(@"Key not found: %@", elementName);
+			}
+		}
+	}
+	else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
+	{
+		if ([elementName isEqualToString:@"ID"])
+		{
+			[self.message.Account.TimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+		else
+		{
+			@try
+			{
+				[self.message.Account.TimeZone setValue:self.currentElementValue forKey:elementName];
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found on Time Zone: %@", elementName);
 			}
 		}
 	}
