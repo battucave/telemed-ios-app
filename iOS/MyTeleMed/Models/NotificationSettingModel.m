@@ -270,29 +270,24 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
-		if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate saveNotificationSettingsError:error];
-			}];
-		}
-		else
-		{
-			// Close activity indicator
-			[self hideActivityIndicator];
-		}
-	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your notification settings." andTitle:@"notification settings Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self saveNotificationSettingsByName:name settings:notificationSettings];
+			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
+			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+			{
+				[self.delegate saveNotificationSettingsError:error];
+			}
+		
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self saveNotificationSettingsByName:name settings:notificationSettings];
+			}];
 		}];
 	}];
 }
@@ -303,23 +298,18 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that notification settings has been sent to server
-	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		// Close activity indicator with callback
-		[self hideActivityIndicator:^
+		// Notify delegate that notification settings has been sent to server
+		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 		{
 			[self.delegate saveNotificationSettingsPending];
-		}];
-	}
-	else
-	{
-		// Close activity indicator
-		[self hideActivityIndicator];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
+		}
+		
+		// Ensure that pending callback doesn't fire again after possible error
+		self.pendingComplete = YES;
+	}];
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder

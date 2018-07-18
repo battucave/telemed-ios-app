@@ -110,29 +110,24 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate sendChatMessageError:error withPendingID:pendingID];
-			}];
-		}
-		else
-		{
-			// Close activity indicator
-			[self hideActivityIndicator];
-		}
-	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Chat Message." andTitle:@"Chat Message Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
+			// Handle error via delegate
+			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			{
+				[self.delegate sendChatMessageError:error withPendingID:pendingID];
+			}
+		
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
+			}];
 		}];
 	}];
 }
@@ -143,23 +138,18 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that chat message has been sent to server
-	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		// Close activity indicator with callback
-		[self hideActivityIndicator:^
+		// Notify delegate that chat message has been sent to server
+		if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 		{
 			[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
-		}];
-	}
-	else
-	{
-		// Close activity indicator
-		[self hideActivityIndicator];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	//self.pendingComplete = YES;
+		}
+		
+		// Ensure that pending callback doesn't fire again after possible error
+		//self.pendingComplete = YES;
+	}];
 }
 
 @end

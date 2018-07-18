@@ -75,29 +75,24 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate callTeleMedError:error];
-			}];
-		}
-		else
-		{*/
-			// Close activity indicator
-			[self hideActivityIndicator];
-		//}
-	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem requesting a Return Call." andTitle:@"Call TeleMed Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self callTeleMed];
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			{
+				[self.delegate callTeleMedError:error];
+			} */
+		
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self callTeleMed];
+			}];
 		}];
 	}];
 	
@@ -158,7 +153,7 @@
 			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
-			}*/
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -168,29 +163,24 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate callSenderError:error];
-			}];
-		}
-		else
-		{*/
-			// Close activity indicator
-			[self hideActivityIndicator];
-		//}
-	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem requesting a Return Call." andTitle:@"Return Call Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self callSenderForMessage:messageID recordCall:recordCall];
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
+			{
+				[self.delegate callSenderError:error];
+			} */
+		
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self callSenderForMessage:messageID recordCall:recordCall];
+			}];
 		}];
 	}];
 	
@@ -204,35 +194,26 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	if (! self.pendingComplete)
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		// Notify delegate that TeleMed call request has been sent to server
-		if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
+		if (! self.pendingComplete)
 		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
+			// Notify delegate that TeleMed call request has been sent to server
+			if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
 			{
 				[self.delegate callTeleMedPending];
-			}];
-		}
-		// Notify delegate that sender call request has been sent to server
-		else if ([self.delegate respondsToSelector:@selector(callSenderPending)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
+			}
+			// Notify delegate that sender call request has been sent to server
+			else if ([self.delegate respondsToSelector:@selector(callSenderPending)])
 			{
 				[self.delegate callSenderPending];
-			}];
+			}
 		}
-		else
-		{
-			// Close activity indicator
-			[self hideActivityIndicator];
-		}
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
+		
+		// Ensure that pending callback doesn't fire again after possible error
+		self.pendingComplete = YES;
+	}];
 }
 
 @end

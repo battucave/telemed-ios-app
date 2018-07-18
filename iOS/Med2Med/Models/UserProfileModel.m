@@ -50,12 +50,6 @@
 	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
 }
 
-/*- (void)saveUserProfile:(NSDictionary *)values
-{
-	// Save first name, last name, email address, and job title to server
-	// Save phone number to device's standardUserDefaults as "UserProfilePhoneNumber" (see PhoneNumber getter for this model)
-}*/
-
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
 	[self.operationManager GET:@"UserProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)

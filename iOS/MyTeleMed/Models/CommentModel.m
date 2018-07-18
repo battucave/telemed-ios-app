@@ -117,30 +117,25 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate saveCommentError:error withPendingID:pendingID];
-			}];
-		}
-		else
-		{
-			// Close activity indicator
-			[self hideActivityIndicator];
-		}
-	
 		// Build a generic error message
 		NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment on the Message Detail screen." : @"There was a problem adding your Comment.");
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:errorMessage andTitle:@"Add Comment Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
+			// Handle error via delegate
+			if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+			{
+				[self.delegate saveCommentError:error withPendingID:pendingID];
+			}
+		
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
+			}];
 		}];
 	}];
 }
@@ -151,23 +146,18 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that comment has been sent to server
-	if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		// Close activity indicator with callback
-		[self hideActivityIndicator:^
+		// Notify delegate that comment has been sent to server
+		if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 		{
 			[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
-		}];
-	}
-	else
-	{
-		// Close activity indicator
-		[self hideActivityIndicator];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	//self.pendingComplete = YES;
+		}
+		
+		// Ensure that pending callback doesn't fire again after possible error
+		// self.pendingComplete = YES;
+	}];
 }
 
 @end

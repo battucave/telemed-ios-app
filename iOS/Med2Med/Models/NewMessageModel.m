@@ -110,41 +110,36 @@
 	
 	[self.operationManager POST:@"NewMsg" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Successful post returns a 204 code with no response
-		if (operation.response.statusCode == 204)
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
 		{
-			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			// Successful post returns a 204 code with no response
+			if (operation.response.statusCode == 204)
 			{
-				// Close activity indicator with callback
-				[self hideActivityIndicator:^
+				// Handle success via delegate (not currently used)
+				if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 				{
 					[self.delegate sendMessageSuccess];
-				}];
+				}
 			}
-			// Close activity indicator
 			else
 			{
-				[self hideActivityIndicator];
+				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
+				
+				// Show error even if user has navigated to another screen
+				[self showError:error withCallback:^
+				{
+					// Include callback to retry the request
+					[self sendNewMessage:messageData withOrder:sortedKeys];
+				}];
+				
+				// Handle error via delegate
+				/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+				{
+					[self.delegate sendMessageError:error];
+				} */
 			}
-		}
-		else
-		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
-			
-			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
-			{
-				// Include callback to retry the request
-				[self sendNewMessage:messageData withOrder:sortedKeys];
-			}];
-			
-			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
-			{
-				[self.delegate sendMessageError:error];
-			}*/
-		}
+		}];
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{

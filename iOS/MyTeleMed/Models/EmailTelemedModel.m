@@ -98,29 +98,24 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
-		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
-		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				[self.delegate sendMessageError:error];
-			}];
-		}
-		else
-		{*/
-			// Close activity indicator
-			[self hideActivityIndicator];
-		//}
-	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"Message TeleMed Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			{
+				[self.delegate sendMessageError:error];
+			} */
+		
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
+			}];
 		}];
 	}];
 }
@@ -131,23 +126,18 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that message has been sent to server
-	if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		// Close activity indicator with callback
-		[self hideActivityIndicator:^
+		// Notify delegate that message has been sent to server
+		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 		{
 			[self.delegate sendMessagePending];
-		}];
-	}
-	else
-	{
-		// Close activity indicator
-		[self hideActivityIndicator];
-	}
+		}
 	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
+		// Ensure that pending callback doesn't fire again after possible error
+		self.pendingComplete = YES;
+	}];
 }
 
 - (BOOL)isValidEmailAddress:(NSString *)emailAddress
