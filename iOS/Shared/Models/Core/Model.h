@@ -16,7 +16,6 @@
 
 - (void)showActivityIndicator;
 - (void)showActivityIndicator:(NSString *)message;
-- (void)hideActivityIndicator;
 - (void)hideActivityIndicator:(void (^)(void))callback;
 - (NSError *)buildError:(NSError *)error usingData:(NSData *)data withGenericMessage:(NSString *)message andTitle:(NSString *)title;
 - (void)showError:(NSError *)error;
