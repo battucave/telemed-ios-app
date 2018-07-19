@@ -55,6 +55,9 @@
 					NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
 					MyProfileModel *profile = [MyProfileModel sharedInstance];
 					
+					NSArray *randomAccountNames = @[profile.MyPreferredAccount.Name, @"Long Name That Doesn't Fit Onto One Line", @"Short Name", @"Really Long Name That Spans Multiple Lines With A Demo Account Attached", @"Jason's Demo Account", @"Hutchison Family Practice", @"Hutchison Family Practice Demo", @"Hello World"];
+					NSArray *randomSlotDescriptions = @[@"Slot Description", @"Long Slot Description That Doesn't Fit Onto One Line", @"Short", @"Really Long Slot Description That Spans Multiple Lines With A Demo Account Attached", @"Slot This All The Way In There If It Fits", @"Who This?", @"Short Again", @"Another Really Long Slot Description That Should Hopefully Span Multiple Lines Unless User Is On A Tablet"];
+					
 					// Generate current on call entries (and future on call entries if none set)
 					for (int i = 0; i < numberOfOnCallEntries; i++)
 					{
@@ -63,8 +66,8 @@
 						
 						[currentOnCallEntry setAccountID:profile.MyPreferredAccount.ID];
 						[currentOnCallEntry setAccountKey:[numberFormatter numberFromString:profile.MyPreferredAccount.PublicKey]];
-						[currentOnCallEntry setAccountName:profile.MyPreferredAccount.Name];
-						[currentOnCallEntry setSlotDesc:@"Slot Description"];
+						[currentOnCallEntry setAccountName:[randomAccountNames objectAtIndex:i % 8]];
+						[currentOnCallEntry setSlotDesc:[randomSlotDescriptions objectAtIndex:i % 8]];
 						[currentOnCallEntry setSlotID:[NSNumber numberWithInt:i]];
 						[currentOnCallEntry setStarted:onCallDate];
 						[currentOnCallEntry setWillEnd:[NSDate dateWithTimeInterval:86400 sinceDate:onCallDate]];
@@ -77,8 +80,8 @@
 							
 							[futureOnCallEntry setAccountID:profile.MyPreferredAccount.ID];
 							[futureOnCallEntry setAccountKey:[numberFormatter numberFromString:profile.MyPreferredAccount.PublicKey]];
-							[futureOnCallEntry setAccountName:profile.MyPreferredAccount.Name];
-							[futureOnCallEntry setSlotDesc:@"Slot Description"];
+							[futureOnCallEntry setAccountName:[randomAccountNames objectAtIndex:i % 8]];
+							[futureOnCallEntry setSlotDesc:[randomSlotDescriptions objectAtIndex:i % 8]];
 							[futureOnCallEntry setSlotID:[NSNumber numberWithInt:(i + numberOfOnCallEntries)]];
 							[futureOnCallEntry setWillStart:[NSDate dateWithTimeInterval:(86400 * ((i / numberOfFutureOnCallEntriesPerDay) + 1)) sinceDate:onCallDate]];
 							

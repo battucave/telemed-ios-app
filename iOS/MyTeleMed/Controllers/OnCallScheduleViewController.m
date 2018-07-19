@@ -192,6 +192,8 @@
 	
 	OnCallSummaryCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier];
 	
+	[cell setSeparatorInset:UIEdgeInsetsZero];
+	
 	// Hide cell's separator if the next row will display a date
 	if (indexPath.row < [self.filteredOnCallEntries count] - 1 && [[self.filteredOnCallEntries objectAtIndex:indexPath.row + 1] shouldDisplayDate])
 	{

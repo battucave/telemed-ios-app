@@ -98,7 +98,7 @@
 	}
 	#endif
 	
-    return 44;
+    return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
