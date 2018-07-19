@@ -9,6 +9,10 @@
 #import "MyStatusModel.h"
 #import "MyStatusXMLParser.h"
 
+#ifdef DEBUG
+	#import "MyProfileModel.h"
+#endif
+
 @implementation MyStatusModel
 
 + (instancetype)sharedInstance
@@ -37,6 +41,67 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
+			/*/ TESTING ONLY (used to generate fictitious on call entries if none were found)
+			#ifdef DEBUG
+				if ([self.CurrentOnCallEntries count] == 0)
+				{
+					// Config settings
+					static int numberOfOnCallEntries = 8;
+					static int numberOfFutureOnCallEntriesPerDay = 3;
+					
+					NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+					NSMutableArray *debugCurrentOnCallEntries = [[NSMutableArray alloc] init];
+					NSMutableArray *debugFutureOnCallEntries = [[NSMutableArray alloc] init];
+					NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+					MyProfileModel *profile = [MyProfileModel sharedInstance];
+					
+					// Generate current on call entries (and future on call entries if none set)
+					for (int i = 0; i < numberOfOnCallEntries; i++)
+					{
+						OnCallEntryModel *currentOnCallEntry = [[OnCallEntryModel alloc] init];
+						NSDate *onCallDate = [calendar dateBySettingHour:i minute:0 second:0 ofDate:[NSDate date] options:0];
+						
+						[currentOnCallEntry setAccountID:profile.MyPreferredAccount.ID];
+						[currentOnCallEntry setAccountKey:[numberFormatter numberFromString:profile.MyPreferredAccount.PublicKey]];
+						[currentOnCallEntry setAccountName:profile.MyPreferredAccount.Name];
+						[currentOnCallEntry setSlotDesc:@"Slot Description"];
+						[currentOnCallEntry setSlotID:[NSNumber numberWithInt:i]];
+						[currentOnCallEntry setStarted:onCallDate];
+						[currentOnCallEntry setWillEnd:[NSDate dateWithTimeInterval:86400 sinceDate:onCallDate]];
+						
+						[debugCurrentOnCallEntries addObject:currentOnCallEntry];
+						
+						if ([self.FutureOnCallEntries count] == 0)
+						{
+							OnCallEntryModel *futureOnCallEntry = [[OnCallEntryModel alloc] init];
+							
+							[futureOnCallEntry setAccountID:profile.MyPreferredAccount.ID];
+							[futureOnCallEntry setAccountKey:[numberFormatter numberFromString:profile.MyPreferredAccount.PublicKey]];
+							[futureOnCallEntry setAccountName:profile.MyPreferredAccount.Name];
+							[futureOnCallEntry setSlotDesc:@"Slot Description"];
+							[futureOnCallEntry setSlotID:[NSNumber numberWithInt:(i + numberOfOnCallEntries)]];
+							[futureOnCallEntry setWillStart:[NSDate dateWithTimeInterval:(86400 * ((i / numberOfFutureOnCallEntriesPerDay) + 1)) sinceDate:onCallDate]];
+							
+							[debugFutureOnCallEntries addObject:futureOnCallEntry];
+							
+							if (i == 0)
+							{
+								[self setNextOnCall:futureOnCallEntry.WillStart];
+							}
+						}
+					}
+					
+					[self setCurrentOnCallEntries:debugCurrentOnCallEntries];
+					[self setOnCallNow:YES];
+					
+					if ([debugFutureOnCallEntries count] > 0)
+					{
+						[self setFutureOnCallEntries:debugFutureOnCallEntries];
+					}
+				}
+			#endif
+			//*/
+			
 			// Sort on call now entries by start time
 			self.CurrentOnCallEntries = [self.CurrentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB)
 			{

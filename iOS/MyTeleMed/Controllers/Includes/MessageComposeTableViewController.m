@@ -144,7 +144,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set each row's height independently
-	return (indexPath.row == 1 ? self.cellMessageHeight : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	return (indexPath.row == 1 ? self.cellMessageHeight : UITableViewAutomaticDimension);
 }
 
 - (void)didReceiveMemoryWarning

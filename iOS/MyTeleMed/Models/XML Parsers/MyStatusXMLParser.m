@@ -126,7 +126,6 @@
 		{
 			if ([@[@"ActiveChatConvoCount", @"ActiveMessageCount", @"UnopenedChatConvoCount", @"UnreadMessageCount"] containsObject:elementName])
 			{
-				NSLog(@"NumberFromString: %@", elementName);
 				[self.myStatus setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 			}
 			else

@@ -19,9 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelEnd;
 @property (weak, nonatomic) IBOutlet UILabel *labelStartTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelStopTime;
-@property (weak, nonatomic) IBOutlet UIView *viewSeparator;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelTitleHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLabelSlotNamesHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewDateContainerHeight;
 
 @end

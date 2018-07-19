@@ -315,22 +315,6 @@
 	}
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 46.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// Return default height if no hospitals available
-	if ([self.hospitals count] == 0)
-	{
-		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
-	}
-	
-	return UITableViewAutomaticDimension;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if ([self.hospitals count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredHospitals count] == 0))

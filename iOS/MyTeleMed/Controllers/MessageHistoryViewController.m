@@ -151,40 +151,6 @@
 	return [self.filteredMessageEvents count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 52.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// iOS8+ Auto Height
-	return UITableViewAutomaticDimension;
-	
-	// Deprecated: Manually determine height for < iOS8
-	/*static NSString *cellIdentifier = @"MessageEventCell";
-	MessageEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	
-	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
-	
-	// Calculate Auto Height of Table Cell
-	[cell.labelDetail setText:messageEvent.Detail];
-	
-	[cell setNeedsLayout];
-	[cell layoutIfNeeded];
-	
-	// Determine the new height - add 1.0 to the height to account for the cell separator
-	CGFloat cellHeight = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + 1.0f;
-	
-	// If height is less than 40, constraints will break
-	if (cellHeight < 40.0f)
-	{
-		cellHeight = 40.0f;
-	}
-	
-	return cellHeight;*/
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellIdentifier = @"MessageEventCell";

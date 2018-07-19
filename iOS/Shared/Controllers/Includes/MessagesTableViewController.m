@@ -293,7 +293,7 @@
 		}
 	}
 	
-	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+	return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -296,22 +296,6 @@
 	}
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 66.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// Return default height if no on call slots available
-	if ([self.onCallSlots count] == 0)
-	{
-		return 46.0f;
-	}
-	
-	return UITableViewAutomaticDimension;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if ([self.onCallSlots count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredOnCallSlots count] == 0))

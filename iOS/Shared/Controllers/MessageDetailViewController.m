@@ -254,22 +254,6 @@
 	return [self.filteredMessageEvents count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 62.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// Return default height if no comments available
-	if ([self.filteredMessageEvents count] == 0)
-	{
-		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
-	}
-	
-	return UITableViewAutomaticDimension;
-}
-
 - (void)dealloc
 {
 	// Remove notification observers

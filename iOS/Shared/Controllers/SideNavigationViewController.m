@@ -88,9 +88,9 @@
 	return [self.menuItems count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	#ifdef MED2MED
+    #ifdef MED2MED
 	// Log Out has padding above it
 	if (indexPath.row == 3)
 	{
@@ -99,11 +99,6 @@
 	#endif
 	
     return 44;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

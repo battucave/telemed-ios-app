@@ -360,22 +360,6 @@
 	}
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 66.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// Return default height if no accounts available
-	if ([self.accounts count] == 0)
-	{
-		return 46.0f;
-	}
-	
-	return UITableViewAutomaticDimension;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	// Med2Med - Only show a header when calling TeleMed

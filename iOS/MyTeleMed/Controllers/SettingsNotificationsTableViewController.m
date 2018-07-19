@@ -150,7 +150,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Hide everything except Alert Sound for Chat and Comments
-	return (self.notificationSettingsType >= 2 && indexPath.row != 1 ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	return (self.notificationSettingsType >= 2 && indexPath.row != 1 ? 0 : UITableViewAutomaticDimension);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

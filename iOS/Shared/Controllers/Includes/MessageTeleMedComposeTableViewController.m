@@ -142,8 +142,7 @@
 		return self.cellMessageHeight;
 	}
 	
-	// Can't use super here because it would call MessageComposeTableViewController which has different heights
-	return [[[UITableViewController alloc] init] tableView:tableView heightForRowAtIndexPath:indexPath];
+	return UITableViewAutomaticDimension;
 }
 
 - (void)didReceiveMemoryWarning

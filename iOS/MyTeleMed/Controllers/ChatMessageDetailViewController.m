@@ -653,22 +653,6 @@
 	return [self.chatMessages count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 74.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// Return default height if no Chat Messages available
-	if ([self.chatMessages count] == 0)
-	{
-		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
-	}
-	
-	return UITableViewAutomaticDimension;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set default message if no Chat Messages available
