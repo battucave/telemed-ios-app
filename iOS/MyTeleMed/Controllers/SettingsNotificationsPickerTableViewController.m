@@ -118,7 +118,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0 : 46.0;
+	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0f : 46.0f;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

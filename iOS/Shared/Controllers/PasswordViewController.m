@@ -88,30 +88,28 @@
 	// Verify that form is valid
 	if (! [self validateForm])
 	{
-		// Show error message
-		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
+		// Show error message without title
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
 		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 		
 		[errorAlertController show:error];
-		
-		return;
 	}
 	// Verify that New Password matches Confirm Password
 	else if (! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
-		// Show error message
-		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password do not match.", NSLocalizedDescriptionKey, nil]];
+		// Show error message without title
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password fields do not match.", NSLocalizedDescriptionKey, nil]];
 		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 		
 		[errorAlertController show:error];
 		
 		[self.textFieldConfirmNewPassword setText:@""];
 		[self.textFieldConfirmNewPassword becomeFirstResponder];
-		
-		return;
 	}
-	
-	[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
+	else
+	{
+		[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
+	}
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -155,6 +153,27 @@
 	} completion:nil];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	if (textField == self.textFieldCurrentPassword)
+	{
+		[self.textFieldNewPassword becomeFirstResponder];
+	}
+	else if (textField == self.textFieldNewPassword)
+	{
+		[self.textFieldConfirmNewPassword becomeFirstResponder];
+	}
+	else if (textField == self.textFieldConfirmNewPassword)
+	{
+		// Submit change password
+		[self changePassword:textField];
+		
+		[self.textFieldConfirmNewPassword resignFirstResponder];
+	}
+	
+	return YES;
+}
+
 // Return pending from PasswordChangeModel delegate (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc)
 /*- (void)changePasswordPending
 {
@@ -185,27 +204,6 @@
 - (BOOL)validateForm
 {
 	return (! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""]);
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-	if (textField == self.textFieldCurrentPassword)
-	{
-		[self.textFieldNewPassword becomeFirstResponder];
-	}
-	else if (textField == self.textFieldNewPassword)
-	{
-		[self.textFieldConfirmNewPassword becomeFirstResponder];
-	}
-	else if (textField == self.textFieldConfirmNewPassword)
-	{
-		// Submit change password
-		[self changePassword:textField];
-		
-		[self.textFieldConfirmNewPassword resignFirstResponder];
-	}
-	
-	return YES;
 }
 
 - (void)didReceiveMemoryWarning

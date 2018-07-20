@@ -370,7 +370,7 @@
 		}
 	#endif
 	
-	return 0.0f;
+	return 0.1f;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

@@ -157,6 +157,19 @@
 	return YES;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+	// Hide placeholder
+	if ([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
+	{
+		[textView setText:@""];
+		[textView setTextColor:[UIColor blackColor]];
+		[textView setFont:[UIFont systemFontOfSize:14.0]];
+	}
+	
+	[textView becomeFirstResponder];
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
 	// Remove leading and trailing whitespace
@@ -172,19 +185,6 @@
 	{
 		[self.formValues setValue:formValue forKey:textView.accessibilityIdentifier];
 	}
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-	// Hide placeholder
-	if ([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
-	{
-		[textView setText:@""];
-		[textView setTextColor:[UIColor blackColor]];
-		[textView setFont:[UIFont systemFontOfSize:14.0]];
-	}
-	
-	[textView becomeFirstResponder];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView

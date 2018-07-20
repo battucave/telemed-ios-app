@@ -18,8 +18,7 @@
 
 - (void)changePassword:(NSString *)newPassword withOldPassword:(NSString *)oldPassword
 {
-	// Simple validation to ensure that both passwords are set
-	// Don't do any further password validations. The server should be the only source of truth for passwords
+	// Simple validation to ensure that both passwords are set. Don't do any further password validations as the server should be the sole source of truth for passwords
 	if ([newPassword length] < 1 || [oldPassword length] < 1)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"Current password and new password values are required.", NSLocalizedDescriptionKey, nil]];

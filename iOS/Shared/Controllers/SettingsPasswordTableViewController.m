@@ -34,59 +34,28 @@
 	
 	[passwordChangeModel setDelegate:self];
 	
-	// Verify that form is valid (save button only enabled after form validated)
-	if (! self.navigationItem.rightBarButtonItem.isEnabled)
+	// Verify that new password matches confirm password
+	if (! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
-		// Show error message
-		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController show:error];
-		
-		return;
-	}
-	// Verify that New Password matches Confirm Password
-	else if (! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
-	{
-		// Show error message
-		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password do not match.", NSLocalizedDescriptionKey, nil]];
+		// Show error message without title
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password fields do not match.", NSLocalizedDescriptionKey, nil]];
 		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 		
 		[errorAlertController show:error];
 		
 		[self.textFieldConfirmNewPassword setText:@""];
 		[self.textFieldConfirmNewPassword becomeFirstResponder];
-		
-		return;
 	}
-	
-	[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
+	else
+	{
+		[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
+	}
 }
 
 - (IBAction)textFieldDidEditingChange:(UITextField *)sender
 {
 	// Validate form
 	[self validateForm];
-}
-
-// Return pending from PasswordChangeModel delegate (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc)
-/*- (void)changePasswordPending
-{
-	// Go back to Settings (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
-}*/
-
-// Return success from PasswordChangeModel delegate
-- (void)changePasswordSuccess
-{
-	// Go back to Settings
-	[self.navigationController popViewControllerAnimated:YES];
-}
-
-// Check required fields to determine if form can be submitted
-- (void)validateForm
-{
-	[self.navigationItem.rightBarButtonItem setEnabled:(! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -110,9 +79,29 @@
 	return YES;
 }
 
+// Return pending from PasswordChangeModel delegate (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc)
+/*- (void)changePasswordPending
+{
+	// Go back to Settings (assume success)
+	[self.navigationController popViewControllerAnimated:YES];
+}*/
+
+// Return success from PasswordChangeModel delegate
+- (void)changePasswordSuccess
+{
+	// Go back to Settings
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+// Check required fields to determine if form can be submitted
+- (void)validateForm
+{
+	[self.navigationItem.rightBarButtonItem setEnabled:(! [self.textFieldCurrentPassword.text isEqualToString:@""] && ! [self.textFieldNewPassword.text isEqualToString:@""] && ! [self.textFieldConfirmNewPassword.text isEqualToString:@""])];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0 : 46.0;
+	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0f : 46.0f;
 }
 
 - (void)didReceiveMemoryWarning

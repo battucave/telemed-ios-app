@@ -28,8 +28,8 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchUrgencyLevel;
 @property (strong, nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
 
-@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 @property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;
+@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
 @property (nonatomic) NSMutableArray *accounts;
 @property (nonatomic) BOOL hasSubmitted;
@@ -46,12 +46,12 @@
 {
 	[super viewDidLoad];
 	
-	// Initialize Account Model
-	[self setAccountModel:[[AccountModel alloc] init]];
-	[self.accountModel setDelegate:self];
-	
 	// Initialize form values
 	[self setFormValues:[[NSMutableDictionary alloc] init]];
+	
+	// Initialize account model
+	[self setAccountModel:[[AccountModel alloc] init]];
+	[self.accountModel setDelegate:self];
 	
 	// Initialize hospital model
 	HospitalModel *hospitalModel = [[HospitalModel alloc] init];
@@ -153,8 +153,8 @@
 		}
 	}
 	
-	// Show error message for invalid callback number
-	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"Callback Number %@ is invalid. Please enter a valid phone number.", callbackPhoneNumberValue], NSLocalizedDescriptionKey, nil]];
+	// Show error message without title for invalid callback number
+	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"Callback Number %@ is invalid. Please enter a valid phone number.", callbackPhoneNumberValue], NSLocalizedDescriptionKey, nil]];
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
 	[errorAlertController show:error];
@@ -288,6 +288,29 @@
 	[self validateForm];
 }
 
+- (IBAction)urgencyLevelChanged:(id)sender
+{
+	// Update label urgency level text
+	[self.labelUrgencyLevel setText:[NSString stringWithFormat:@"%@ %@", self.textUrgencyLevel, (self.switchUrgencyLevel.isOn ? @"Stat" : @"Normal")]];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	NSUInteger currentIndex = [self.textFields indexOfObject:textField];
+	NSUInteger nextIndex = currentIndex + 1;
+	
+	if (nextIndex < [self.textFields count])
+	{
+		[[self.textFields objectAtIndex:nextIndex] becomeFirstResponder];
+	}
+	else
+	{
+		[[self.textFields objectAtIndex:currentIndex] resignFirstResponder];
+	}
+	
+	return YES;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
 	// Format phone number as 000-000-0000x000
@@ -372,29 +395,6 @@
 	}
 	
 	return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-	NSUInteger currentIndex = [self.textFields indexOfObject:textField];
-	NSUInteger nextIndex = currentIndex + 1;
-	
-	if (nextIndex < [self.textFields count])
-	{
-		[[self.textFields objectAtIndex:nextIndex] becomeFirstResponder];
-	}
-	else
-	{
-		[[self.textFields objectAtIndex:currentIndex] resignFirstResponder];
-	}
-	
-	return YES;
-}
-
-- (IBAction)urgencyLevelChanged:(id)sender
-{
-	// Update label urgency level text
-	[self.labelUrgencyLevel setText:[NSString stringWithFormat:@"%@ %@", self.textUrgencyLevel, (self.switchUrgencyLevel.isOn ? @"Stat" : @"Normal")]];
 }
 
 - (void)setHospital
@@ -531,37 +531,23 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-	return (self.isLoading ? self.viewSectionFooter.frame.size.height : 0.1);
+	return (self.isLoading ? self.viewSectionFooter.frame.size.height : 0.1f);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return 0.1;
+	return 0.1f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 	
-	return (cell.hidden ? 0 : [super tableView:tableView heightForRowAtIndexPath:indexPath]);
+	return (cell.hidden ? 0.0f : UITableViewAutomaticDimension);
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-	/* if (self.isLoading)
-	{
-		UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 10.0f, self.tableView.bounds.size.width, 54.0f)];
-		
-		[activityIndicatorView startAnimating];
-		[activityIndicatorView setFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 44.0f)];
-		[activityIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin];
-		
-		[containerView addSubview:activityIndicatorView];
-
-		return containerView;
-	}*/
-	
 	// Only show table footer if loading is enabled
 	return (self.isLoading ? self.viewSectionFooter : nil);
 }

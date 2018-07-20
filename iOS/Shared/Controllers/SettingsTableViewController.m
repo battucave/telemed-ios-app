@@ -126,14 +126,14 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its header height to 0.1 (0.0 doesn't work)
-	return (section == 0 && ! self.mayDisableTimeout ? 0.1 : ([self tableView:tableView titleForHeaderInSection:section] == nil ? 22.0 : 46.0));
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its header height to 0
+	return (section == 0 && ! self.mayDisableTimeout ? 0.1f : ([self tableView:tableView titleForHeaderInSection:section] == nil ? 22.0f : 46.0f));
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its footer height to 0.1 (0.0 doesn't work)
-	return (section == 0 && ! self.mayDisableTimeout ? 0.1 : [super tableView:tableView heightForFooterInSection:section]);
+	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its footer height to 0
+	return (section == 0 && ! self.mayDisableTimeout ? 0.1f : [super tableView:tableView heightForFooterInSection:section]);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

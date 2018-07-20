@@ -4355,7 +4355,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCG-8B-ZoU">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="13" width="110" height="18"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="160" id="Kdi-DM-DWU"/>
                                                     </constraints>
@@ -4364,8 +4364,8 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Iyn-Mu-NnV" firstAttribute="leading" secondItem="SCG-8B-ZoU" secondAttribute="trailing" constant="-160" id="5kS-iW-w3Z"/>
                                                 <constraint firstAttribute="centerY" secondItem="Iyn-Mu-NnV" secondAttribute="centerY" constant="-0.5" id="DbT-4P-Ek6"/>
+                                                <constraint firstItem="Iyn-Mu-NnV" firstAttribute="leading" secondItem="NbS-Ru-vEQ" secondAttribute="leading" constant="16" id="anu-tT-H29"/>
                                                 <constraint firstAttribute="trailing" secondItem="Iyn-Mu-NnV" secondAttribute="trailing" constant="16" id="atc-hA-hPA"/>
                                                 <constraint firstAttribute="centerY" secondItem="SCG-8B-ZoU" secondAttribute="centerY" id="ioe-0x-W7S"/>
                                                 <constraint firstItem="SCG-8B-ZoU" firstAttribute="leading" secondItem="NbS-Ru-vEQ" secondAttribute="leadingMargin" id="sv3-60-a7V"/>
@@ -4409,9 +4409,9 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="Te3-TJ-q9X" secondAttribute="trailing" constant="16" id="60i-Oi-4vN"/>
                                                 <constraint firstItem="cgw-vt-vLu" firstAttribute="leading" secondItem="uhn-eF-uE4" secondAttribute="leadingMargin" id="QYs-Sm-u9H"/>
-                                                <constraint firstItem="Te3-TJ-q9X" firstAttribute="leading" secondItem="cgw-vt-vLu" secondAttribute="trailing" constant="-160" id="RSk-WD-LSu"/>
                                                 <constraint firstAttribute="centerY" secondItem="Te3-TJ-q9X" secondAttribute="centerY" constant="-0.5" id="oDO-r7-0Sg"/>
                                                 <constraint firstAttribute="centerY" secondItem="cgw-vt-vLu" secondAttribute="centerY" id="oWF-6d-9WA"/>
+                                                <constraint firstItem="Te3-TJ-q9X" firstAttribute="leading" secondItem="uhn-eF-uE4" secondAttribute="leading" constant="16" id="zIX-6p-cWP"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -4451,8 +4451,8 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="7gF-pf-45E" secondAttribute="trailing" constant="16" id="8L0-qi-eVa"/>
+                                                <constraint firstItem="7gF-pf-45E" firstAttribute="leading" secondItem="Jrk-6b-Gmu" secondAttribute="leading" constant="16" id="GWl-ic-Yhf"/>
                                                 <constraint firstAttribute="centerY" secondItem="o4b-gi-602" secondAttribute="centerY" id="N7l-UN-cc4"/>
-                                                <constraint firstItem="7gF-pf-45E" firstAttribute="leading" secondItem="o4b-gi-602" secondAttribute="trailing" constant="-160" id="TIB-79-Jgv"/>
                                                 <constraint firstAttribute="centerY" secondItem="7gF-pf-45E" secondAttribute="centerY" constant="-0.5" id="ikv-HV-sJb"/>
                                                 <constraint firstItem="o4b-gi-602" firstAttribute="leading" secondItem="Jrk-6b-Gmu" secondAttribute="leadingMargin" id="mOd-Q8-lfG"/>
                                             </constraints>

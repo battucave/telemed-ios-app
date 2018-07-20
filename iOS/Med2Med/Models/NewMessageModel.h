@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-// This file is exact duplicate of Med2Med's NewMessageModel.h
+// NOTE: This file is exact duplicate of Med2Med's NewMessageModel.h
 
 #import <Foundation/Foundation.h>
 #import "Model.h"
