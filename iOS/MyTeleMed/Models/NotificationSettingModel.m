@@ -137,12 +137,12 @@
 			// DEPRECATED: If the tone received from server is default, change it to the iOS default: "Note"
 			/* if ([self.Tone isEqualToString:@"Default"])
 			{
-				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
+				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
 				
 				// Tones should always exist
 				if ([tones count] > 8)
 				{
-					[self setTone:[tones objectAtIndex:8]]; // iOS7 Defaults to Note tone
+					[self setTone:[tones objectAtIndex:8]]; // iOS 7+ Defaults to Note tone
 				}
 				
 				// Save new default to server

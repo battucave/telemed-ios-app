@@ -32,10 +32,10 @@
 /**
  * NOTIFICATIONS
  */
-#define NOTIFICATION_TONES_SUBCATEGORIES @"Staff Favorites", @"MyTeleMed", @"iOS7", @"Classic"
-#define NOTIFICATION_TONES_IOS7 @"Aurora", @"Bamboo", @"Chord", @"Circles", @"Complete", @"Hello", @"Input", @"Keys", @"Note", @"Popcorn", @"Pulse", @"Synth"
+#define NOTIFICATION_TONES_SUBCATEGORIES @"Staff Favorites", @"MyTeleMed", @"Standard", @"Classic"
 #define NOTIFICATION_TONES_CLASSIC_IOS @"Alarm", @"Anticipate", @"Bell", @"Bloom", @"Calypso", @"Chime", @"Choo Choo", @"Descent", @"Electronic", @"Fanfare", @"Glass", @"Horn", @"Ladder", @"Minuet", @"News Flash", @"Noir", @"Sherwood Forest", @"Spell", @"Suspense", @"Telegraph", @"Tiptoes", @"Tri-tone", @"Typewriters", @"Update"
 #define NOTIFICATION_TONES_MYTELEMED @"Alert", @"Chirp", @"Low", @"Notice", @"Quantum", @"Sonar"
 #define NOTIFICATION_TONES_STAFF_FAVORITES @"Ascending", @"Digital Alarm 1", @"Digital Alarm 2", @"Irritating", @"Nuclear", @"Sci-Fi", @"Sonic Reverb", @"Warning"
+#define NOTIFICATION_TONES_STANDARD @"Aurora", @"Bamboo", @"Chord", @"Circles", @"Complete", @"Hello", @"Input", @"Keys", @"Note", @"Popcorn", @"Pulse", @"Synth"
 
 #define NOTIFICATION_INTERVALS @"1 minute", @"5 minutes", @"10 minutes", @"15 minutes", @"20 minutes"

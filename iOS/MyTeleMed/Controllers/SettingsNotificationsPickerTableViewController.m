@@ -61,9 +61,9 @@
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil]];
 			break;
 		
-		// iOS7 Tones
+		// Standard Tones
 		case 4:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil]];
+			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil]];
 			break;
 		
 		// Classic iOS Tones
@@ -140,9 +140,9 @@
 				NSString *subCategory = [self.subCategories objectAtIndex:self.pickerType - 2];
 				
 				// Singularize Subcategory
-				if ([[subCategory substringFromIndex:[subCategory length] - 1] isEqualToString:@"s"])
+				if ([[subCategory substringFromIndex:subCategory.length - 1] isEqualToString:@"s"])
 				{
-					subCategory = [subCategory substringToIndex:[subCategory length] - 1];
+					subCategory = [subCategory substringToIndex:subCategory.length - 1];
 				}
 				
 				return [NSString stringWithFormat:@"%@ ALERT SOUNDS", subCategory];
@@ -180,18 +180,22 @@
 		
 		switch (cell.tag)
 		{
+			// Staff Favorite Tones
 			case 2:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil];
 				break;
 			
+			// MyTeleMed Tones
 			case 3:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil];
 				break;
 			
+			// Standard Tones
 			case 4:
-				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
+				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
 				break;
 			
+			// Classic iOS Tones
 			case 5:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil];
 				break;

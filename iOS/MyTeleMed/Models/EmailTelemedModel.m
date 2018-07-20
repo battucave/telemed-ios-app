@@ -142,12 +142,12 @@
 
 - (BOOL)isValidEmailAddress:(NSString *)emailAddress
 {
-	if (! [emailAddress length])
+	if (! emailAddress.length)
 	{
 		return NO;
 	}
- 
-	NSRange entireRange = NSMakeRange(0, [emailAddress length]);
+
+	NSRange entireRange = NSMakeRange(0, emailAddress.length);
 	NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
 	NSArray *matches = [detector matchesInString:emailAddress options:0 range:entireRange];
  

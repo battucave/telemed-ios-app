@@ -59,9 +59,9 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu"
 			dispatch_async(self.completionQueue ?: dispatch_get_main_queue(), ^
-						   {
-							   failure(nil, serializationError);
-						   });
+			{
+				failure(nil, serializationError);
+			});
 #pragma clang diagnostic pop
 		}
 		

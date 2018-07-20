@@ -147,11 +147,11 @@
 	// Play notification sound
 	if (tone != nil)
 	{
-		// If tone is "default", then use iOS7's default tone (there is no way to retrieve system's default alert sound)
+		// If tone is "default", then use Standard's default tone (there is no way to retrieve system's default alert sound)
 		if ([tone isEqualToString:@"default"])
 		{
 			NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
-			NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
+			NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
 			
 			if ([tones count] > 8)
 			{

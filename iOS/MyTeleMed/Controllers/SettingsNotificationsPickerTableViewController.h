@@ -11,7 +11,7 @@
 
 @interface SettingsNotificationsPickerTableViewController : CoreTableViewController
 
-@property (nonatomic) NSInteger pickerType; // 0 = Subcategory Tone, 1 = Interval, 2 = Staff Favorite Tone, 3 = MyTeleMed Tone, 4 = iOS7 Tone, 5 = Classic Tone
+@property (nonatomic) NSInteger pickerType; // 0 = Subcategory Tone, 1 = Interval, 2 = Staff Favorite Tone, 3 = MyTeleMed Tone, 4 = Standard Tone, 5 = Classic Tone
 @property (nonatomic) NSString *selectedOption;
 
 @end
