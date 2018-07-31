@@ -277,22 +277,12 @@
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if ([self.filteredOnCallSlots count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.filteredOnCallSlots count];
+		return MAX([self.filteredOnCallSlots count], 1);
 	}
 	// On call slots table
 	else
 	{
-		if ([self.onCallSlots count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.onCallSlots count];
+		return MAX([self.onCallSlots count], 1);
 	}
 }
 
@@ -442,6 +432,7 @@
 - (void)didReceiveMemoryWarning
 {
 	[super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

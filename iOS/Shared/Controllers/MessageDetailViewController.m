@@ -246,12 +246,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ([self.filteredMessageEvents count] == 0)
-	{
-		return 1;
-	}
-	
-	return [self.filteredMessageEvents count];
+	return MAX([self.filteredMessageEvents count], 1);
+}
+
+- (void)didReceiveMemoryWarning
+{
+	[super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc

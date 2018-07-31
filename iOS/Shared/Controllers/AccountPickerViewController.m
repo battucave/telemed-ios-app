@@ -341,22 +341,12 @@
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if ([self.filteredAccounts count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.filteredAccounts count];
+		return MAX([self.filteredAccounts count], 1);
 	}
 	// Accounts table
 	else
 	{
-		if ([self.accounts count] == 0)
-		{
-			return 1;
-		}
-			
-		return [self.accounts count];
+		return MAX([self.accounts count], 1);
 	}
 }
 

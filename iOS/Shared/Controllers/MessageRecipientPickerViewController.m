@@ -458,22 +458,12 @@
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if ([self.filteredMessageRecipients count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.filteredMessageRecipients count];
+		return MAX([self.filteredMessageRecipients count], 1);
 	}
 	// Message recipients table
 	else
 	{
-		if ([self.messageRecipients count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.messageRecipients count];
+		return MAX([self.messageRecipients count], 1);
 	}
 }
 

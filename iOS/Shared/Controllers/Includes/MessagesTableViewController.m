@@ -271,12 +271,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ([self.filteredMessages count] == 0)
-	{
-		return 1;
-	}
-	
-	return [self.filteredMessages count];
+	return MAX([self.filteredMessages count], 1);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

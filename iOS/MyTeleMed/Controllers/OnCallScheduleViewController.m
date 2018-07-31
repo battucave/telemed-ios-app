@@ -169,12 +169,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ([self.filteredOnCallEntries count] == 0)
-	{
-		return 1;
-	}
-	
-	return [self.filteredOnCallEntries count];
+	return MAX([self.filteredOnCallEntries count], 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -296,22 +296,12 @@
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		if ([self.filteredHospitals count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.filteredHospitals count];
+		return MAX([self.filteredHospitals count], 1);
 	}
 	// Hospitals table
 	else
 	{
-		if ([self.hospitals count] == 0)
-		{
-			return 1;
-		}
-		
-		return [self.hospitals count];
+		return MAX([self.hospitals count], 1);
 	}
 }
 

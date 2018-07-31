@@ -201,12 +201,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ([self.chatMessages count] == 0)
-	{
-		return 1;
-	}
-	
-	return [self.chatMessages count];
+	return MAX([self.chatMessages count], 1);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
