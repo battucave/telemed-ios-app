@@ -106,16 +106,16 @@
 	// Fix issue in iPad where background defaulted to White (unfixable in IB because of bug)
 	[cell setBackgroundColor:[UIColor clearColor]];
 	
-	// Fix bugs on iOS < 10
+	/*/ Fix bugs on iOS < 10 (only required if not using Automatic Separator Insets)
 	if (! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 	{
 		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
 		[cell setPreservesSuperviewLayoutMargins:NO];
 		[cell.contentView setPreservesSuperviewLayoutMargins:NO];
 		
-		// Fix issue in iOS 8-9 where label has too much left margin
+		// Eliminate any left margin from label (Fix issue in iOS 8-9)
 		[cell setLayoutMargins:UIEdgeInsetsZero];
-	}
+	} */
 }
 
 // Customize the appearance of table view cells.
@@ -134,6 +134,11 @@
 	}
 	
 	#ifdef MYTELEMED
+		// Reset text label's font size
+		UIFont *fontTextLabel = cell.textLabel.font;
+
+		[cell.textLabel setFont:[fontTextLabel fontWithSize:18.0f]];
+	
 		// If cell is for Secure Chat or Messages
 		if ([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
 		{
@@ -196,10 +201,10 @@
 				// Direct users to "Next" on call items on On Call Schedule screen
 				self.onCallScheduleDefaultSegmentControlIndex = 1;
 				
-				[cell.textLabel setText:@"Next On Call:"];
-				
 				NSString *nextOnCallDate = @"None";
 				NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+				
+				[cell.textLabel setText:@"Next On Call:"];
 			
 				if (self.myStatusModel.NextOnCall != nil)
 				{
@@ -207,16 +212,8 @@
 					[dateFormatter setDateFormat:@"M/dd h:mma"];
 					nextOnCallDate = [[dateFormatter stringFromDate:self.myStatusModel.NextOnCall] lowercaseString];
 					
-					NSLog(@"Next On Call Date: %@", nextOnCallDate);
-					
-					// Remove right padding of On Call Schedule cell
-					[cell setLayoutMargins:UIEdgeInsetsZero];
-				}
-				// If there is no Next On Call date, then line up Next On Call Date label with Message Counts
-				else
-				{
-					// Add right padding to On Call Schedule cell
-					[cell setLayoutMargins:UIEdgeInsetsZero];
+					// Decrease text label's font size slightly to make more room for the date
+					[cell.textLabel setFont:[fontTextLabel fontWithSize:17.0f]];
 				}
 				
 				[cell.detailTextLabel setText:nextOnCallDate];

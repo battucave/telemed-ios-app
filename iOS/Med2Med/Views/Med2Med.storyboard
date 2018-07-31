@@ -11,6 +11,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="fa-light-300.ttf">
+            <string>FontAwesome5ProLight</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Reveal View Controller-->
         <scene sceneID="y85-2A-XYq">
@@ -940,27 +945,54 @@
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="MOw-fM-fQ3">
-                                        <rect key="frame" x="0.0" y="70" width="320" height="244"/>
+                                        <rect key="frame" x="0.0" y="70" width="320" height="289"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="244" id="ZRE-9x-RcG"/>
+                                            <constraint firstAttribute="height" constant="289" id="ZRE-9x-RcG"/>
                                         </constraints>
                                         <color key="separatorColor" red="0.49019607840000001" green="0.49019607840000001" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="New Message" textLabel="RbP-5s-xk1" style="IBUITableViewCellStyleDefault" id="zUO-RL-y7T" customClass="SideNavigationCountCell">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="37" shouldIndentWhileEditing="NO" reuseIdentifier="Staff Approvals" textLabel="tjn-es-uWO" style="IBUITableViewCellStyleDefault" id="uaY-JW-25D" userLabel="Staff Approvals">
                                                 <rect key="frame" x="0.0" y="1" width="320" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="uaY-JW-25D" id="tFf-zV-zkg">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SAz-LE-bJY">
+                                                            <rect key="frame" x="19.5" y="11" width="15" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Staff Approvals" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tjn-es-uWO">
+                                                            <rect key="frame" x="52" y="0.0" width="253" height="43.5"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </tableViewCell>
+                                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="37" shouldIndentWhileEditing="NO" reuseIdentifier="New Message" textLabel="RbP-5s-xk1" style="IBUITableViewCellStyleDefault" id="zUO-RL-y7T" customClass="SideNavigationCountCell">
+                                                <rect key="frame" x="0.0" y="45" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="zUO-RL-y7T" id="mmt-FT-nWj">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-Messages.png" translatesAutoresizingMaskIntoConstraints="NO" id="3Lt-pX-lrz">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oz8-mQ-pUU">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="New Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RbP-5s-xk1">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="52" y="0.0" width="253" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -970,19 +1002,22 @@
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Sent Messages" textLabel="ZLy-zs-7CQ" style="IBUITableViewCellStyleDefault" id="IHj-QV-Icr">
-                                                <rect key="frame" x="0.0" y="45" width="320" height="44"/>
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="37" shouldIndentWhileEditing="NO" reuseIdentifier="Sent Messages" textLabel="ZLy-zs-7CQ" style="IBUITableViewCellStyleDefault" id="IHj-QV-Icr">
+                                                <rect key="frame" x="0.0" y="89" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="IHj-QV-Icr" id="FEa-lm-zw3">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-SentMessages.png" translatesAutoresizingMaskIntoConstraints="NO" id="YzD-b8-UfW">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h63-cI-1Fc">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sent Messages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZLy-zs-7CQ">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="52" y="0.0" width="253" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -995,19 +1030,22 @@
                                                     <segue destination="T4v-Vo-WiU" kind="custom" identifier="showSentMessages" customClass="SWRevealViewControllerSegue" id="o97-1R-vO9"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Settings" textLabel="Pdn-Pq-fCe" style="IBUITableViewCellStyleDefault" id="2ek-J5-XUM">
-                                                <rect key="frame" x="0.0" y="89" width="320" height="44"/>
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="37" shouldIndentWhileEditing="NO" reuseIdentifier="Settings" textLabel="Pdn-Pq-fCe" style="IBUITableViewCellStyleDefault" id="2ek-J5-XUM">
+                                                <rect key="frame" x="0.0" y="133" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="2ek-J5-XUM" id="ruX-Fw-i0d">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-Settings.png" translatesAutoresizingMaskIntoConstraints="NO" id="xG3-6g-apr">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T6Y-R5-gcp">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Settings" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Pdn-Pq-fCe">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="52" y="0.0" width="253" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1020,21 +1058,24 @@
                                                     <segue destination="cPe-rz-HUb" kind="show" identifier="showSettings" customClass="SWRevealViewControllerSegue" id="rpH-Mr-Mcb"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Log Out" rowHeight="64" id="iHq-Zw-zSa">
-                                                <rect key="frame" x="0.0" y="133" width="320" height="64"/>
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="37" shouldIndentWhileEditing="NO" reuseIdentifier="Log Out" rowHeight="64" id="iHq-Zw-zSa">
+                                                <rect key="frame" x="0.0" y="177" width="320" height="64"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="iHq-Zw-zSa" id="QZe-Ke-fi0">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="63.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="button-Navigation-LogOut.png" translatesAutoresizingMaskIntoConstraints="NO" id="i9q-uo-EOV">
-                                                            <rect key="frame" x="10" y="30" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQa-eR-2Nz">
+                                                            <rect key="frame" x="18" y="30" width="18" height="20"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="22" id="map-Ea-uO5"/>
+                                                                <constraint firstAttribute="width" constant="18" id="7Re-iD-M8S"/>
                                                             </constraints>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log Out" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bHy-or-PcD">
-                                                            <rect key="frame" x="42" y="20" width="263" height="43.5"/>
+                                                            <rect key="frame" x="57" y="20" width="248" height="43.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="43.5" id="3fq-Y0-EpH"/>
                                                             </constraints>
@@ -1044,28 +1085,31 @@
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="bHy-or-PcD" firstAttribute="leading" secondItem="i9q-uo-EOV" secondAttribute="trailing" constant="10" id="RIv-a2-H6a"/>
+                                                        <constraint firstItem="BQa-eR-2Nz" firstAttribute="leading" secondItem="QZe-Ke-fi0" secondAttribute="leading" constant="18" id="OOL-zK-flp"/>
                                                         <constraint firstAttribute="bottom" secondItem="bHy-or-PcD" secondAttribute="bottom" id="aM4-Jv-svV"/>
-                                                        <constraint firstAttribute="bottom" secondItem="i9q-uo-EOV" secondAttribute="bottom" constant="10.5" id="adL-Ly-VZF"/>
+                                                        <constraint firstItem="bHy-or-PcD" firstAttribute="leading" secondItem="BQa-eR-2Nz" secondAttribute="trailing" constant="21" id="dd8-Uu-frS"/>
+                                                        <constraint firstAttribute="bottom" secondItem="BQa-eR-2Nz" secondAttribute="bottom" constant="13.5" id="dgF-oo-voO"/>
                                                         <constraint firstAttribute="trailing" secondItem="bHy-or-PcD" secondAttribute="trailing" constant="15" id="h0K-qx-wbk"/>
-                                                        <constraint firstItem="i9q-uo-EOV" firstAttribute="leading" secondItem="QZe-Ke-fi0" secondAttribute="leading" constant="10" id="kv4-q3-3Fk"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Help" textLabel="rcT-k1-fU3" style="IBUITableViewCellStyleDefault" id="ALu-Hn-nMG">
-                                                <rect key="frame" x="0.0" y="197" width="320" height="44"/>
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="37" shouldIndentWhileEditing="NO" reuseIdentifier="Help" textLabel="rcT-k1-fU3" style="IBUITableViewCellStyleDefault" id="ALu-Hn-nMG">
+                                                <rect key="frame" x="0.0" y="241" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="ALu-Hn-nMG" id="yXh-z2-XHF">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-Help.png" translatesAutoresizingMaskIntoConstraints="NO" id="AEr-oV-EhE">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNJ-sn-uDu">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Help" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rcT-k1-fU3">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="52" y="0.0" width="253" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1959,11 +2003,6 @@
     </scenes>
     <resources>
         <image name="Logo" width="300" height="75"/>
-        <image name="button-Navigation-Help.png" width="22" height="23"/>
-        <image name="button-Navigation-LogOut.png" width="22" height="23"/>
-        <image name="button-Navigation-Messages.png" width="22" height="23"/>
-        <image name="button-Navigation-SentMessages.png" width="22" height="23"/>
-        <image name="button-Navigation-Settings.png" width="22" height="23"/>
         <image name="button-TextField-Help.png" width="20" height="20"/>
         <image name="menu.png" width="19" height="17"/>
     </resources>

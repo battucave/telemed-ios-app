@@ -11,6 +11,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="fa-light-300.ttf">
+            <string>FontAwesome5ProLight</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Reveal View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -67,20 +72,22 @@
                                             <constraint firstAttribute="height" constant="311" id="nrh-b3-z69"/>
                                         </constraints>
                                         <color key="separatorColor" red="0.49019607843137253" green="0.49019607843137253" blue="0.49019607843137253" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Messages" id="aHF-1X-L0X" customClass="SideNavigationCountCell">
+                                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="Messages" id="aHF-1X-L0X" customClass="SideNavigationCountCell">
                                                 <rect key="frame" x="0.0" y="1" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="aHF-1X-L0X" id="6CN-cz-HWf">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="button-Navigation-Messages.png" translatesAutoresizingMaskIntoConstraints="NO" id="f5g-mm-uL6">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
-                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oyb-iw-vYL">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Messages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFg-Ic-1iw">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -113,10 +120,10 @@
                                                         <constraint firstAttribute="trailing" secondItem="cgH-qI-M3Q" secondAttribute="trailing" constant="12" id="KVX-5S-AW5"/>
                                                         <constraint firstItem="HFg-Ic-1iw" firstAttribute="centerY" secondItem="cgH-qI-M3Q" secondAttribute="centerY" id="Kvo-Ub-Il6"/>
                                                         <constraint firstAttribute="bottom" secondItem="HFg-Ic-1iw" secondAttribute="bottom" constant="0.5" id="Qk5-4d-hRc"/>
-                                                        <constraint firstItem="f5g-mm-uL6" firstAttribute="leading" secondItem="6CN-cz-HWf" secondAttribute="leading" constant="10" id="aVq-m1-UGP"/>
                                                         <constraint firstItem="HFg-Ic-1iw" firstAttribute="top" secondItem="6CN-cz-HWf" secondAttribute="top" id="gcX-sb-ne1"/>
-                                                        <constraint firstItem="HFg-Ic-1iw" firstAttribute="leading" secondItem="f5g-mm-uL6" secondAttribute="trailing" constant="10" id="jRS-lZ-TxS"/>
-                                                        <constraint firstItem="HFg-Ic-1iw" firstAttribute="centerY" secondItem="f5g-mm-uL6" secondAttribute="centerY" id="s0k-tD-0FG"/>
+                                                        <constraint firstItem="HFg-Ic-1iw" firstAttribute="leading" secondItem="Oyb-iw-vYL" secondAttribute="trailing" constant="10" id="h0p-yw-1rv"/>
+                                                        <constraint firstItem="Oyb-iw-vYL" firstAttribute="leading" secondItem="6CN-cz-HWf" secondAttribute="leadingMargin" constant="2" id="qBI-Md-lYf"/>
+                                                        <constraint firstItem="Oyb-iw-vYL" firstAttribute="centerY" secondItem="HFg-Ic-1iw" secondAttribute="centerY" id="qGn-uB-vqR"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -129,19 +136,22 @@
                                                     <segue destination="2Ma-B1-RxK" kind="custom" identifier="showMessages" customClass="SWRevealViewControllerSegue" id="FA7-fW-yLW"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Sent Messages" textLabel="YSS-sg-iQ8" style="IBUITableViewCellStyleDefault" id="zq8-hX-NNR">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="Sent Messages" textLabel="YSS-sg-iQ8" style="IBUITableViewCellStyleDefault" id="zq8-hX-NNR">
                                                 <rect key="frame" x="0.0" y="45" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="zq8-hX-NNR" id="YfP-bh-Nft">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-SentMessages.png" translatesAutoresizingMaskIntoConstraints="NO" id="NH0-24-Z8D">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z07-Pu-vkz">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sent Messages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YSS-sg-iQ8">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -154,19 +164,22 @@
                                                     <segue destination="TCR-3e-Sgf" kind="custom" identifier="showSentMessages" customClass="SWRevealViewControllerSegue" id="ejp-fl-nDj"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Archives" textLabel="Eny-AN-hXV" style="IBUITableViewCellStyleDefault" id="qEd-6E-5rX">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="Archives" textLabel="Eny-AN-hXV" style="IBUITableViewCellStyleDefault" id="qEd-6E-5rX">
                                                 <rect key="frame" x="0.0" y="89" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="qEd-6E-5rX" id="X2d-2g-4QG">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-Archives.png" translatesAutoresizingMaskIntoConstraints="NO" id="L7k-Je-J7H">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9OK-I0-g7I">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Archives" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Eny-AN-hXV">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -179,18 +192,21 @@
                                                     <segue destination="lCh-Yc-kzD" kind="custom" identifier="showArchives" customClass="SWRevealViewControllerSegue" id="duc-Go-Hul"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Secure Chat" id="BjS-O6-WPf" customClass="SideNavigationCountCell">
+                                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="Secure Chat" id="BjS-O6-WPf" customClass="SideNavigationCountCell">
                                                 <rect key="frame" x="0.0" y="133" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="BjS-O6-WPf" id="LFi-JL-QKv">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="button-Navigation-SecureChat.png" translatesAutoresizingMaskIntoConstraints="NO" id="yrQ-96-piO">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
-                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6r-Ld-dvh">
+                                                            <rect key="frame" x="16" y="11" width="23" height="20"/>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Secure Chat" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xsr-eW-5WW">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -224,14 +240,13 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="Xsr-eW-5WW" firstAttribute="top" secondItem="LFi-JL-QKv" secondAttribute="top" id="2zF-ft-JQ9"/>
+                                                        <constraint firstItem="l6r-Ld-dvh" firstAttribute="leading" secondItem="LFi-JL-QKv" secondAttribute="leadingMargin" constant="1" id="6dg-3o-HYh"/>
                                                         <constraint firstAttribute="trailing" secondItem="Xsr-eW-5WW" secondAttribute="trailing" constant="15" id="72n-DE-Qxl"/>
-                                                        <constraint firstItem="Xsr-eW-5WW" firstAttribute="centerY" secondItem="yrQ-96-piO" secondAttribute="centerY" id="MsW-yV-LzG"/>
-                                                        <constraint firstItem="yrQ-96-piO" firstAttribute="centerY" secondItem="LFi-JL-QKv" secondAttribute="centerY" id="TlZ-yi-ePk"/>
+                                                        <constraint firstItem="l6r-Ld-dvh" firstAttribute="centerY" secondItem="Xsr-eW-5WW" secondAttribute="centerY" id="ZNJ-xi-VkX"/>
                                                         <constraint firstAttribute="trailing" secondItem="iYx-x1-Rrv" secondAttribute="trailing" constant="12" id="fq0-ra-aXp"/>
                                                         <constraint firstItem="iYx-x1-Rrv" firstAttribute="centerY" secondItem="Xsr-eW-5WW" secondAttribute="centerY" id="g2l-yR-mic"/>
                                                         <constraint firstAttribute="bottom" secondItem="Xsr-eW-5WW" secondAttribute="bottom" id="iTJ-aD-IWE"/>
-                                                        <constraint firstItem="Xsr-eW-5WW" firstAttribute="leading" secondItem="yrQ-96-piO" secondAttribute="trailing" constant="10" id="u5s-od-JUN"/>
-                                                        <constraint firstItem="yrQ-96-piO" firstAttribute="leading" secondItem="LFi-JL-QKv" secondAttribute="leading" constant="10" id="zVg-LU-xl4"/>
+                                                        <constraint firstItem="Xsr-eW-5WW" firstAttribute="leading" secondItem="l6r-Ld-dvh" secondAttribute="trailing" constant="8" id="men-Uy-kzN"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -241,19 +256,22 @@
                                                     <segue destination="o2h-qA-hBP" kind="custom" identifier="showSecureChat" customClass="SWRevealViewControllerSegue" id="ZfR-s3-nyT"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="On Call Schedule" textLabel="FRd-UZ-5Au" detailTextLabel="7an-Qs-mvP" style="IBUITableViewCellStyleValue1" id="PoK-2E-c0S">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="On Call Schedule" textLabel="FRd-UZ-5Au" detailTextLabel="7an-Qs-mvP" style="IBUITableViewCellStyleValue1" id="PoK-2E-c0S">
                                                 <rect key="frame" x="0.0" y="177" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="PoK-2E-c0S" id="d1T-W4-w0l">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-OnCallSchedule.png" translatesAutoresizingMaskIntoConstraints="NO" id="aai-ce-ZzS">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aAt-Uz-94h">
+                                                            <rect key="frame" x="18" y="11" width="18" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="On Call Schedule" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FRd-UZ-5Au">
-                                                            <rect key="frame" x="42" y="11" width="138.5" height="21.5"/>
+                                                            <rect key="frame" x="47" y="11" width="138.5" height="21.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -273,19 +291,22 @@
                                                     <segue destination="6Oi-DG-KWc" kind="custom" identifier="showOnCallSchedule" customClass="SWRevealViewControllerSegue" id="nDL-G3-d11"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Contact TeleMed" textLabel="HTo-B1-shQ" style="IBUITableViewCellStyleDefault" id="cFw-fR-u38">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="Contact TeleMed" textLabel="HTo-B1-shQ" style="IBUITableViewCellStyleDefault" id="cFw-fR-u38">
                                                 <rect key="frame" x="0.0" y="221" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="cFw-fR-u38" id="SYl-2u-ftA">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-ContactTeleMed.png" translatesAutoresizingMaskIntoConstraints="NO" id="iUO-le-Mar">
-                                                            <rect key="frame" x="7" y="10" width="27" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYg-9f-vzr">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Contact TeleMed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HTo-B1-shQ">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -298,19 +319,22 @@
                                                     <segue destination="EUw-72-fK4" kind="custom" identifier="showContact" customClass="SWRevealViewControllerSegue" id="SWX-Rd-no8"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="42" shouldIndentWhileEditing="NO" reuseIdentifier="Settings" textLabel="bX8-tZ-0yi" style="IBUITableViewCellStyleDefault" id="6iH-fp-anm">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="32" shouldIndentWhileEditing="NO" reuseIdentifier="Settings" textLabel="bX8-tZ-0yi" style="IBUITableViewCellStyleDefault" id="6iH-fp-anm">
                                                 <rect key="frame" x="0.0" y="265" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="6iH-fp-anm" id="wyO-Ir-0nv">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="button-Navigation-Settings.png" translatesAutoresizingMaskIntoConstraints="NO" id="tpD-m2-tNS">
-                                                            <rect key="frame" x="10" y="10" width="22" height="23"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="loZ-N0-Y6V">
+                                                            <rect key="frame" x="17" y="11" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
+                                                            <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Settings" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bX8-tZ-0yi">
-                                                            <rect key="frame" x="42" y="0.0" width="263" height="43.5"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -330,31 +354,215 @@
                                             <outlet property="delegate" destination="W1Q-1B-CLM" id="6N6-0S-Wkr"/>
                                         </connections>
                                     </tableView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zun-Y4-db4">
-                                        <rect key="frame" x="10" y="619" width="98" height="23"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zun-Y4-db4">
+                                        <rect key="frame" x="12" y="619" width="98" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="98" id="TPE-pk-A77"/>
                                             <constraint firstAttribute="height" constant="23" id="WcQ-Yp-Ha1"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <inset key="titleEdgeInsets" minX="9" minY="3" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Log Out" image="button-Navigation-LogOut.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+                                        <inset key="titleEdgeInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="  ">
+                                                    <attributes>
+                                                        <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="20" name="FontAwesome5ProLight"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                            <tabStops>
+                                                                <textTab alignment="left" location="28">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="56">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="84">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="112">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="140">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="168">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="196">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="224">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="252">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="280">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="308">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="336">
+                                                                    <options/>
+                                                                </textTab>
+                                                            </tabStops>
+                                                        </paragraphStyle>
+                                                    </attributes>
+                                                </fragment>
+                                                <fragment content="Log Out">
+                                                    <attributes>
+                                                        <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="18" name="HelveticaNeue"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                            <tabStops>
+                                                                <textTab alignment="left" location="28">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="56">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="84">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="112">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="140">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="168">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="196">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="224">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="252">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="280">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="308">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="336">
+                                                                    <options/>
+                                                                </textTab>
+                                                            </tabStops>
+                                                        </paragraphStyle>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
                                         </state>
                                         <connections>
                                             <action selector="doLogout:" destination="W1Q-1B-CLM" eventType="touchUpInside" id="Odp-ng-NgO"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8OM-iF-lmf">
-                                        <rect key="frame" x="245" y="619" width="65" height="23"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8OM-iF-lmf">
+                                        <rect key="frame" x="235" y="619" width="70" height="23"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="65" id="POv-46-Fgg"/>
+                                            <constraint firstAttribute="width" constant="70" id="POv-46-Fgg"/>
                                             <constraint firstAttribute="height" constant="23" id="m41-Hi-ERC"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <inset key="titleEdgeInsets" minX="4" minY="3" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Help" image="button-Navigation-Help.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+                                        <inset key="titleEdgeInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="  ">
+                                                    <attributes>
+                                                        <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="20" name="FontAwesome5ProLight"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                            <tabStops>
+                                                                <textTab alignment="left" location="28">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="56">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="84">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="112">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="140">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="168">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="196">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="224">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="252">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="280">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="308">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="336">
+                                                                    <options/>
+                                                                </textTab>
+                                                            </tabStops>
+                                                        </paragraphStyle>
+                                                    </attributes>
+                                                </fragment>
+                                                <fragment content="Help">
+                                                    <attributes>
+                                                        <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="18" name="HelveticaNeue"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                            <tabStops>
+                                                                <textTab alignment="left" location="28">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="56">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="84">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="112">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="140">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="168">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="196">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="224">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="252">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="280">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="308">
+                                                                    <options/>
+                                                                </textTab>
+                                                                <textTab alignment="left" location="336">
+                                                                    <options/>
+                                                                </textTab>
+                                                            </tabStops>
+                                                        </paragraphStyle>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
                                         </state>
                                         <connections>
                                             <segue destination="fKJ-5X-BvT" kind="custom" identifier="showHelp" customClass="SWRevealViewControllerSegue" id="KfY-sd-ej7"/>
@@ -369,8 +577,8 @@
                                     <constraint firstAttribute="trailing" secondItem="gqY-PD-HNX" secondAttribute="trailing" id="OvO-yN-Rp4"/>
                                     <constraint firstItem="0an-ou-B5y" firstAttribute="trailing" secondItem="gqY-PD-HNX" secondAttribute="trailing" constant="-55" id="WmT-An-pbH"/>
                                     <constraint firstItem="0an-ou-B5y" firstAttribute="top" secondItem="gqY-PD-HNX" secondAttribute="bottom" id="qpB-j0-9gv"/>
-                                    <constraint firstItem="zun-Y4-db4" firstAttribute="leading" secondItem="nEx-7Y-Nvy" secondAttribute="leading" constant="10" id="r62-ZQ-t3V"/>
-                                    <constraint firstAttribute="trailing" secondItem="8OM-iF-lmf" secondAttribute="trailing" constant="65" id="u2F-59-1Z1"/>
+                                    <constraint firstItem="zun-Y4-db4" firstAttribute="leading" secondItem="nEx-7Y-Nvy" secondAttribute="leading" constant="12" id="r62-ZQ-t3V"/>
+                                    <constraint firstAttribute="trailing" secondItem="8OM-iF-lmf" secondAttribute="trailing" constant="70" id="u2F-59-1Z1"/>
                                     <constraint firstItem="gqY-PD-HNX" firstAttribute="leading" secondItem="nEx-7Y-Nvy" secondAttribute="leading" id="vBu-kE-Uaj"/>
                                     <constraint firstItem="gqY-PD-HNX" firstAttribute="top" secondItem="nEx-7Y-Nvy" secondAttribute="top" id="yJ2-q5-aqh"/>
                                 </constraints>
@@ -4498,15 +4706,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="button-MessageDetail-History.png" width="38" height="45"/>
         <image name="button-MessageDetail-ReturnCall.png" width="59" height="45"/>
         <image name="button-MessageDetail-TeleMed.png" width="47" height="45"/>
-        <image name="button-Navigation-Archives.png" width="22" height="23"/>
-        <image name="button-Navigation-ContactTeleMed.png" width="27" height="23"/>
-        <image name="button-Navigation-Help.png" width="22" height="23"/>
-        <image name="button-Navigation-LogOut.png" width="22" height="23"/>
-        <image name="button-Navigation-Messages.png" width="22" height="23"/>
-        <image name="button-Navigation-OnCallSchedule.png" width="22" height="23"/>
-        <image name="button-Navigation-SecureChat.png" width="22" height="23"/>
-        <image name="button-Navigation-SentMessages.png" width="22" height="23"/>
-        <image name="button-Navigation-Settings.png" width="22" height="23"/>
         <image name="icon-Mail-Read.png" width="18" height="21"/>
         <image name="indicator-CommentLeft.png" width="7" height="15"/>
         <image name="indicator-CommentRight.png" width="7" height="15"/>
