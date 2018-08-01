@@ -17,9 +17,9 @@
 
 @implementation HospitalRequestTableViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+	[super viewDidAppear:animated];
 	
 	// Auto-focus hospital code field
 	[self.textFieldHospitalCode becomeFirstResponder];

@@ -17,9 +17,9 @@
 
 @implementation AccountRequestTableViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+	[super viewDidAppear:animated];
 	
 	// Auto-focus account code field
 	[self.textFieldAccountCode becomeFirstResponder];

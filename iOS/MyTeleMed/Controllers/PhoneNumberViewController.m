@@ -36,9 +36,6 @@
 		[self.constraintFormTop setConstant:12.0f];
 	}
 	
-	// Auto-focus phone number field
-	[self.textPhoneNumber becomeFirstResponder];
-	
 	// Attach toolbar to top of keyboard
 	[self.textPhoneNumber setInputAccessoryView:self.viewToolbar];
 	[self.viewToolbar removeFromSuperview];
@@ -69,6 +66,14 @@
 				break;
 		}
 	#endif
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	
+	// Auto-focus phone number field
+	[self.textPhoneNumber becomeFirstResponder];
 }
 
 - (IBAction)getPhoneNumberHelp:(id)sender

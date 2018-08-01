@@ -29,15 +29,22 @@
 	
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
-	// Auto-populate and auto-focus sso provider field
+	// Auto-populate sso provider field
 	self.ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	[self.textFieldSSOProvider setText:self.ssoProviderModel.Name];
-	[self.textFieldSSOProvider becomeFirstResponder];
 	
 	// Attach toolbar to top of keyboard
 	[self.textFieldSSOProvider setInputAccessoryView:self.viewToolbar];
 	[self.viewToolbar removeFromSuperview];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	
+	// Auto-focus sso provider field
+	[self.textFieldSSOProvider becomeFirstResponder];
 }
 
 - (IBAction)submitSSOProvider:(id)sender

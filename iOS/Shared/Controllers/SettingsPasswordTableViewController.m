@@ -20,9 +20,9 @@
 
 @implementation SettingsPasswordTableViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+	[super viewDidAppear:animated];
 	
 	// Auto-focus current password field
 	[self.textFieldCurrentPassword becomeFirstResponder];
