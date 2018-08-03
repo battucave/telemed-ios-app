@@ -32,10 +32,10 @@
 {
     [super viewDidLoad];
 	
-	// Initialize Selected Message Recipients Array
+	// Initialize selected message recipients array
 	self.selectedMessageRecipients = [[NSMutableArray alloc] init];
 	
-	// Initialize Account Model
+	// Initialize AccountModel
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 }
@@ -44,23 +44,23 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Get list of Accounts
+	// Get list of accounts
 	[self.accountModel getAccounts];
 }
 
 // Unwind Segue from MessageRecipientPickerViewController
 - (IBAction)setMessageRecipients:(UIStoryboardSegue *)segue
 {
-	// Obtain reference to Source View Controller
+	// Obtain reference to source view controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;
 	
-	// Save selected Account
+	// Save selected account
 	[self setSelectedAccount:messageRecipientPickerViewController.selectedAccount];
 	
-	// Save selected Message Recipients
+	// Save selected message recipients
 	[self setSelectedMessageRecipients:messageRecipientPickerViewController.selectedMessageRecipients];
 	
-	// Update MessageComposeTableViewController with selected Message Recipient Names
+	// Update MessageComposeTableViewController with selected message recipient names
 	if ([self.messageComposeTableViewController respondsToSelector:@selector(updateSelectedMessageRecipients:)])
 	{
 		[self.messageComposeTableViewController updateSelectedMessageRecipients:self.selectedMessageRecipients];
@@ -78,12 +78,12 @@
 	[newMessageModel sendNewMessage:self.messageComposeTableViewController.textViewMessage.text accountID:self.selectedAccount.ID messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"]];
 }
 
-// Return Accounts from AccountModel delegate
+// Return accounts from AccountModel delegate
 - (void)updateAccounts:(NSMutableArray *)accounts
 {
 	[self setAccounts:accounts];
 	
-	// If user has only one Account, automatically set it as the selected Account
+	// If user has only one account, automatically set it as the selected account
 	if ([accounts count] == 1)
 	{
 		self.selectedAccount = (AccountModel *)[accounts objectAtIndex:0];
@@ -102,7 +102,7 @@
 // Return pending from NewMessageModel delegate
 - (void)sendMessagePending
 {
-	// Go back to Messages (assume success)
+	// Go back to MessagesViewController (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -120,22 +120,22 @@
 	[errorAlertController show:error];
 }*/
 
-// Fired from MessageComposeTable to perform segue to either AccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker
+// Fired from MessageComposeTableViewController to perform segue to either AccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender
 {
-	// User only has one Account so skip the Account selection screen and go straight to MessageRecipientPickerTableViewController
+	// User only has one account so skip the AccountPickerViewController and go straight to MessageRecipientPickerViewController
 	if ([self.accounts count] == 1)
 	{
 		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageNew" sender:sender];
 	}
-	// If user has more than one Account (or Accounts haven't loaded yet due to slow connection), then they must first select an Account from AccountPickerTableViewController
+	// If user has more than one account (or accounts haven't loaded yet due to slow connection), then they must first select an account from AccountPickerTableViewController
 	else
 	{
 		[self performSegueWithIdentifier:@"showAccountPickerFromMessageNew" sender:sender];
 	}
 }
 
-// Check required fields to determine if Form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate
+// Check required fields to determine if form can be submitted - Fired from setMessageRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText
 {
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -155,26 +155,26 @@
 	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
-		// Set Accounts
+		// Set accounts
 		[accountPickerViewController setAccounts:self.accounts];
 		
-		// Set Selected Account if previously set
+		// Set selected account if previously set
 		[accountPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// Set selected Message Recipients if previously set (to pass through to MessageRecipientPickerTableViewController)
+		// Set selected message recipients if previously set (to pass through to MessageRecipientPickerTableViewController)
 		[accountPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 	else if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageNew"])
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set Account
+		// Set account
 		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// Set Message Recipient Type
+		// Set message recipient type
 		[messageRecipientPickerViewController setMessageRecipientType:@"New"];
 		
-		// Set selected Message Recipients if previously set
+		// Set selected message recipients if previously set
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 }

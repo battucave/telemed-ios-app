@@ -26,47 +26,47 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Store Notification Tone Subcategories as array
+	// Store notification tone subcategories as array
 	[self setSubCategories:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, nil]];
 	
-	// Set Selected Temp Option to Selected Option
+	// Set selected temp option to selected option
 	[self setSelectedTempOption:self.selectedOption];
 	
-	// Set Picker Options
+	// Set picker options
 	switch (self.pickerType)
 	{
-		// Subcategory and Silent Tones
+		// Subcategories and silent tone
 		case 0:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, @"Silent", nil]];
 			
-			// Hide Save Button
+			// Hide save button
 			[self.navigationItem setRightBarButtonItem:nil];
 			break;
 		
-		// Notification Intervals
+		// Notification intervals
 		case 1:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil]];
 			
-			// Hide Save Button
+			// Hide save button
 			[self.navigationItem setRightBarButtonItem:nil];
 			break;
 		
-		// Staff Favorite Tones
+		// Staff favorite tones
 		case 2:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil]];
 			break;
 		
-		// MyTeleMed Tones
+		// MyTeleMed tones
 		case 3:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil]];
 			break;
 		
-		// Standard Tones
+		// Standard tones
 		case 4:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil]];
 			break;
 		
-		// Classic iOS Tones
+		// Classic iOS tones
 		case 5:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil]];
 			break;
@@ -134,12 +134,12 @@
 		case 4:
 		case 5:
 		{
-			// Get Subcategory from array
+			// Get subcategory from array
 			if ([self.subCategories count] > self.pickerType - 2)
 			{
 				NSString *subCategory = [self.subCategories objectAtIndex:self.pickerType - 2];
 				
-				// Singularize Subcategory
+				// Singularize subcategory
 				if ([[subCategory substringFromIndex:subCategory.length - 1] isEqualToString:@"s"])
 				{
 					subCategory = [subCategory substringToIndex:subCategory.length - 1];
@@ -168,40 +168,40 @@
 	
 	UITableViewCell *cell;
 	
-	// Notification Tone Subcategory
+	// Notification tone subcategory
 	if (self.pickerType == 0 && [self.subCategories containsObject:optionText])
 	{
 		NSArray *notificationTonesArray;
 		
 		cell = [tableView dequeueReusableCellWithIdentifier:SubcategoryCellIdentifier forIndexPath:indexPath];
 		
-		// Set custom tag value to be used in prepareForSegue for determining which Notification Tones to display
+		// Set custom tag value to be used in prepareForSegue for determining which notification tones to display
 		[cell setTag:[self.subCategories indexOfObject:optionText] + 2];
 		
 		switch (cell.tag)
 		{
-			// Staff Favorite Tones
+			// Staff favorite tones
 			case 2:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil];
 				break;
 			
-			// MyTeleMed Tones
+			// MyTeleMed tones
 			case 3:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil];
 				break;
 			
-			// Standard Tones
+			// Standard tones
 			case 4:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
 				break;
 			
-			// Classic iOS Tones
+			// Classic iOS tones
 			case 5:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil];
 				break;
 		}
 		
-		// Add checkmark and set Detail Text on selected subcategory option
+		// Add checkmark and set detail text on selected subcategory option
 		if ([notificationTonesArray containsObject:self.selectedOption])
 		{
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -210,7 +210,7 @@
 			[self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		}
 	}
-	// Notification Interval or standard Notification Tone
+	// Notification interval or standard notification tone
 	else
 	{
 	    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
@@ -279,15 +279,15 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Notification Tone Subcategory selected
+	// Notification tone subcategory selected
 	if ([segue.identifier isEqualToString:@"showSettingsNotificationsSubcategoryPicker"])
 	{
 		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self.tableView indexPathForSelectedRow]];
 		
-		// Set new Picker Type
+		// Set new picker type
 		[segue.destinationViewController setPickerType:cell.tag];
 		
-		// Set Selected Option on new View Controller
+		// Set selected option on new view controller
 		[segue.destinationViewController setSelectedOption:self.selectedOption];
 	}
 	// Unwind Segue
@@ -295,7 +295,7 @@
 	{
 		NSInteger selectedRow = [[self.tableView indexPathForSelectedRow] row];
 		
-		// Set Selected Option
+		// Set selected option
 		if ([self.pickerOptions count] > selectedRow)
 		{
 			[self setSelectedOption:[self.pickerOptions objectAtIndex:selectedRow]];

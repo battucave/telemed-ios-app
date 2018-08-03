@@ -35,7 +35,7 @@
 {
     [super viewDidLoad];
 	
-	// Initialize May Disable Timeout value
+	// Initialize may disable timeout value
 	self.mayDisableTimeout = NO;
 	
 	#ifdef MED2MED

@@ -55,13 +55,13 @@
 		[self.refreshControl endRefreshing];
 	});
 	
-	// Initialize Message Model
+	// Initialize MessageModel
 	#ifdef MYTELEMED
 		[self setMessageModel:[[MessageModel alloc] init]];
 		[self.messageModel setDelegate:self];
 	#endif
 	
-	// Initialize Sent Message Model
+	// Initialize SentMessageModel
 	[self setSentMessageModel:[[SentMessageModel alloc] init]];
 	[self.sentMessageModel setDelegate:self];
 }
@@ -76,7 +76,7 @@
 	[self reloadMessages];
 }
 
-// Action to perform when Refresh Control triggered
+// Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
 {
 	[self reloadMessages];
@@ -94,7 +94,7 @@
 	[self setFilteredMessages:nil];
 	self.messagesType = newMessagesType;
 	
-	// If Messages Type is Active, re-enable Refresh Control
+	// If messages type is active, re-enable refresh control
 	if (newMessagesType == 0)
 	{
 		if (self.refreshControl == nil)
@@ -102,7 +102,7 @@
 			self.refreshControl = self.savedRefreshControl;
 		}
 	}
-	// If Messages Type is Archives or Sent, disable Refresh Control
+	// If messages type is archives or sent, disable refresh control
 	else
 	{
 		self.savedRefreshControl = self.refreshControl;
@@ -117,26 +117,26 @@
 	[self setArchiveStartDate:startDate];
 	[self setArchiveEndDate:endDate];
 	
-	// Don't need to Reload Messages here because viewWillAppear fires when ArchivesPickerViewController is popped from Navigation Controller
+	// Don't need to reload messages here because viewWillAppear fires when ArchivesPickerViewController is popped from navigation controller
 }
 
 - (void)hideSelectedMessages:(NSArray *)messages
 {
 	self.hiddenMessages = [NSMutableArray new];
 	
-	// If no Messages to hide, cancel
+	// If no messages to hide, cancel
 	if (messages == nil || [messages count] == 0)
 	{
 		return;
 	}
 	
-	// Add each Message to Hidden Messages
+	// Add each message to hidden messages
 	for(id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages addObject:message];
 	}
 	
-	// Toggle the Edit button
+	// Toggle the edit button
 	[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	
 	[self.tableView reloadData];
@@ -144,19 +144,19 @@
 
 - (void)unHideSelectedMessages:(NSArray *)messages
 {
-	// If no Messages to hide, cancel
+	// If no messages to hide, cancel
 	if (messages == nil || [messages count] == 0)
 	{
 		return;
 	}
 	
-	// Remove each Message from Hidden Messages
+	// Remove each message from hidden messages
 	for(id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages removeObject:message];
 	}
 	
-	// Show the Edit button (there will always be at least one Message when unhiding)
+	// Show the edit button (there will always be at least one message when unhiding)
 	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
 	
 	[self.tableView reloadData];
@@ -167,13 +167,13 @@
 	NSMutableArray *indexPaths = [NSMutableArray new];
 	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
 	
-	// If no Messages to remove, cancel
+	// If no messages to remove, cancel
 	if (messages == nil || [messages count] == 0)
 	{
 		return;
 	}
 	
-	// Remove each Message from the source data, filtered data, hidden data, selected data, and the table itself
+	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
 	for(id <MessageProtocol> message in messages)
 	{
 		[self.messages removeObject:message];
@@ -189,20 +189,20 @@
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no Messages left in the source data, simply reload the row to show the No Messages cell
+	// If there are no messages left in the source data, simply reload the row to show the no messages cell
 	else
 	{
 		[self.tableView reloadData];
 		
-		// Toggle the Edit button
+		// Toggle the edit button
 		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
-	// Update delegate's list of Selected Messages
+	// Update delegate's list of selected messages
 	[self.delegate setSelectedMessages:self.selectedMessages];
 }
 
-// Reset Messages back to Loading state
+// Reset messages back to loading state
 - (void)resetMessages
 {
 	[self setIsLoaded:NO];
@@ -211,14 +211,14 @@
 	[self.tableView reloadData];
 }
 
-// Return Messages from MessageModel delegate
+// Return messages from MessageModel delegate
 - (void)updateMessages:(NSMutableArray *)messages
 {
 	[self setIsLoaded:YES];
 	[self setMessages:messages];
 	[self setFilteredMessages:messages];
 
-	// If Messages Type is Active, toggle the parent ViewController's Edit button based on whether there are any Filtered Messages
+	// If messages type is active, toggle the parent view controller's edit button based on whether there are any filtered messages
 	if (self.messagesType == 0)
 	{
 		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
@@ -247,7 +247,7 @@
 }
 #endif
 
-// Return Sent Messages from SentMessageModel delegate
+// Return sent messages from SentMessageModel delegate
 - (void)updateSentMessages:(NSMutableArray *)sentMessages
 {
 	[self updateMessages:sentMessages];
@@ -276,12 +276,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are Filtered Messages and Hidden Messages and row is not the only row in the table
+	// If there are filtered messages and hidden messages and row is not the only row in the table
 	if (self.messagesType != 2 && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
 	{
 		id <MessageProtocol> message = [self.filteredMessages objectAtIndex:indexPath.row];
 		
-		// Hide Hidden Messages by setting its height to 0
+		// Hide hidden messages by setting the cell's height to 0
 		if ([self.hiddenMessages containsObject:message])
 		{
 			return 0.0f;
@@ -308,12 +308,12 @@
 	MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	id message = [self.filteredMessages objectAtIndex:indexPath.row];
 	
-	// Sent Messages
+	// Sent messages
 	if (self.messagesType == 2)
 	{
 		return [self cellForSentMessage:cell withMessage:message atIndexPath:indexPath];
 	}
-	// Active and Archived Messages
+	// Active and archived messages
 	else
 	{
 		return [self cellForReceivedMessage:cell withMessage:message atIndexPath:indexPath];
@@ -322,18 +322,18 @@
 
 - (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(id <MessageProtocol>)message atIndexPath:(NSIndexPath *)indexPath
 {
-	// Hide Hidden Messages
+	// Hide hidden messages
 	if ([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
 	{
 		[cell setHidden:YES];
 	}
 	
-	// Set Name, Phone Number, and Message
+	// Set name, phone number, and message
 	[cell.labelName setText:message.SenderName];
 	[cell.labelPhoneNumber setText:message.SenderContact];
 	[cell.labelMessage setText:message.FormattedMessageText];
 	
-	// Set Date and Time
+	// Set date and time
 	if (message.TimeReceived_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -357,7 +357,7 @@
 		[cell.labelTime setText:time];
 	}
 	
-	// If Message has been read, change Status image to Unread icon
+	// If message has been read, change status image to unread icon
 	if ([message.State isEqualToString:@"Unread"])
 	{
 		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
@@ -367,7 +367,7 @@
 		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
 	}
 	
-	/*/ TESTING ONLY (used for generating Screenshots)
+	/*/ TESTING ONLY (used for generating screenshots)
 	#ifdef DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelPhoneNumber setText:@"800-420-4695"];
@@ -384,7 +384,7 @@
 	#endif
 	// END TESTING ONLY */
 	
-	// Set Message Priority color
+	// Set message priority color
 	if ([message.Priority isEqualToString:@"Priority"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
@@ -405,7 +405,7 @@
 {
 	NSString *messageRecipientNames = @"";
 	
-	// Format Message Recipient Names
+	// Format message recipient names
 	NSArray *messageRecipients = [sentMessage.Recipients componentsSeparatedByString:@";"];
 	
 	if ([messageRecipients count] > 0)
@@ -414,16 +414,16 @@
 		
 		if ([messageRecipients count] > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %ld more...", [messageRecipients count] - 1];
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %lu more...", [messageRecipients count] - 1];
 		}
 	}
 	
-	// Set Name, Phone Number, and Message
+	// Set name, phone number, and message
 	[cell.labelName setText:messageRecipientNames];
 	[cell.labelPhoneNumber setText:@""];
 	[cell.labelMessage setText:sentMessage.FormattedMessageText];
 	
-	// Set Date and Time
+	// Set date and time
 	if (sentMessage.FirstSent_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -447,18 +447,18 @@
 		[cell.labelTime setText:time];
 	}
 	
-	// Hide Status image
+	// Hide status image
 	[cell.imageStatus setHidden:YES];
 	[cell.constraintNameLeadingSpace setConstant:7.0f];
 	
-	/*/ TESTING ONLY (used for generating Screenshots)
+	/*/ TESTING ONLY (used for generating screenshots)
 	#ifdef DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 	#endif
 	// END TESTING ONLY */
 	
-	// Set Message Priority color
+	// Set message priority color
 	if ([sentMessage.Priority isEqualToString:@"Priority"])
 	{
 		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
@@ -477,12 +477,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no Filtered Messages, then user clicked the No Messages found cell so do nothing
+	// If there are no filtered messages, then user clicked the no messages found cell so do nothing
 	if ([self.filteredMessages count] == 0)
 	{
 		return;
 	}
-	// If in editing mode, toggle the Archive button in MessagesViewController
+	// If in editing mode, toggle the archive button in MessagesViewController
 	else if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
@@ -502,7 +502,7 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If in editing mode, toggle the Archive button in MessagesViewController
+	// If in editing mode, toggle the archive button in MessagesViewController
 	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
@@ -522,7 +522,7 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-	// If navigating to Message Detail, but there are no Filtered Messages, then user clicked the No Messages found cell
+	// If navigating to MessageDetailViewContoller, but there are no filtered messages, then user clicked the no messages found cell
 	if ([identifier isEqualToString:@"showMessageDetail"])
 	{
 		return ! self.editing && [self.filteredMessages count] > 0;
@@ -555,7 +555,7 @@
 
 - (void)dealloc
 {
-	// Remove Notification Observers
+	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -563,22 +563,22 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-// Reload Messages
+// Reload messages
 - (void)reloadMessages
 {
 	switch (self.messagesType)
 	{
-		// Get Archived Messages
+		// Get archived messages
 		case 1:
 			[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
 			break;
 		
-		// Get Sent Messages
+		// Get sent messages
 		case 2:
 			[self.sentMessageModel getSentMessages];
 			break;
 			
-		// Get Active Messages
+		// Get active messages
 		case 0:
 		default:
 			[self.messageModel getActiveMessages];
@@ -591,7 +591,7 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-// Reload Messages
+// Reload messages
 - (void)reloadMessages
 {
 	[self.sentMessageModel getSentMessages];

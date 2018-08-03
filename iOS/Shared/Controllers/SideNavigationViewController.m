@@ -59,7 +59,7 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// MyTeleMed - Update Message Counts on Messages row and On Call Date on On Call Schedule row
+	// MyTeleMed - Update message counts on messages row and on call date on on call schedule row
 	#ifdef MYTELEMED
 		[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 		{
@@ -91,11 +91,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     #ifdef MED2MED
-	// Log Out has padding above it
-	if (indexPath.row == 3)
-	{
-		return 64;
-	}
+		// Log out has padding above it
+		if ([[self.menuItems objectAtIndex:indexPath.row] isEqualToString:@"Log Out"])
+		{
+			return 64;
+		}
 	#endif
 	
     return UITableViewAutomaticDimension;
@@ -139,22 +139,22 @@
 
 		[cell.textLabel setFont:[fontTextLabel fontWithSize:18.0f]];
 	
-		// If cell is for Secure Chat or Messages
-		if ([CellIdentifier isEqualToString:@"Secure Chat"] || [CellIdentifier isEqualToString:@"Messages"])
+		// If cell is for secure chat or messages
+		if ([cell.reuseIdentifier isEqualToString:@"Secure Chat"] || [cell.reuseIdentifier isEqualToString:@"Messages"])
 		{
-			// Hide Message Counts by default
+			// Hide message counts by default
 			[cell.labelCounts setHidden:YES];
 			
 			// If StatusModel has finished loading
 			if (self.isStatusLoaded)
 			{
-				// If cell is for Secure Chat, set Chat Counts
-				if ([CellIdentifier isEqualToString:@"Secure Chat"])
+				// If cell is for secure chat, set chat counts
+				if ([cell.reuseIdentifier isEqualToString:@"Secure Chat"])
 				{
 					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
 				}
-				// If cell is for Messages, set Message Counts
-				else if ([CellIdentifier isEqualToString:@"Messages"])
+				// If cell is for messages, set message counts
+				else if ([cell.reuseIdentifier isEqualToString:@"Messages"])
 				{
 					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnreadMessageCount, self.myStatusModel.ActiveMessageCount]];
 					
@@ -165,7 +165,7 @@
 				// Store old frame size
 				CGRect oldFrame = cell.labelCounts.frame;
 				
-				// Resize Message Count label to fit updated text
+				// Resize message count label to fit updated text
 				[cell.labelCounts sizeToFit];
 				
 				CGRect newFrame = cell.labelCounts.frame;
@@ -177,17 +177,17 @@
 				[cell.labelCounts setFrame:newFrame];
 				[cell.constraintCountsWidth setConstant:newFrame.size.width];
 				
-				// Show Message Counts
+				// Show message counts
 				[cell.labelCounts setHidden:NO];
 			}
 		}
-		// If cell is for On Call Schedule and StatusModel has finished loading
-		else if ([CellIdentifier isEqualToString:@"On Call Schedule"] && self.isStatusLoaded)
+		// If cell is for on call schedule and StatusModel has finished loading
+		else if ([cell.reuseIdentifier isEqualToString:@"On Call Schedule"] && self.isStatusLoaded)
 		{
-			// If user is Currently On Call
+			// If user is currently on call
 			if (self.myStatusModel.OnCallNow)
 			{
-				// Direct users to "Current" on call items on On Call Schedule screen
+				// Direct users to "Current" on call items on OnCallScheduleViewController
 				self.onCallScheduleDefaultSegmentControlIndex = 0;
 				
 				[cell.textLabel setText:@"Currently On Call"];
@@ -195,10 +195,10 @@
 				[cell.detailTextLabel setHidden:YES];
 			}
 			
-			// Set Next On Call
+			// Set next on call
 			else
 			{
-				// Direct users to "Next" on call items on On Call Schedule screen
+				// Direct users to "Next" on call items on OnCallScheduleViewController
 				self.onCallScheduleDefaultSegmentControlIndex = 1;
 				
 				NSString *nextOnCallDate = @"None";
@@ -233,7 +233,7 @@
 		
 		swSegue.performBlock = ^(SWRevealViewControllerSegue *revealViewControllerSegue, UIViewController *sourceViewController, UIViewController *destinationViewController)
 		{
-			// MyTeleMed - Set Default Segment Control Index for On Call Schedule
+			// MyTeleMed - Set default segment control Index for OnCallScheduleViewController
 			#ifdef MYTELEMED
 				if ([segue.identifier isEqualToString:@"showOnCallSchedule"])
 				{
@@ -269,23 +269,21 @@
 {
 	UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	
-	// New Message: determine which screen to go to depending on whether user is authorized
-	if (indexPath.row == 0)
+	// New message: determine which screen to go to depending on whether user is authorized
+	if ([cell.reuseIdentifier isEqualToString:@"New Message"])
 	{
-		id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
-		
-		// Show message new screen
-		if (profile.IsAuthorized)
+		// Show MessageNewTableViewController
+		if ([[UserProfileModel sharedInstance] IsAuthorized])
 		{
 			[self performSegueWithIdentifier:@"showMessageNew" sender:cell];
 		}
-		// Show message new unauthorized screen
+		// Show MessageNewUnauthorizedTableViewController
 		else
 		{
 			[self performSegueWithIdentifier:@"showMessageNewUnauthorized" sender:cell];
 		}
 	}
-	// Log Out (based on cell's identifier instead of row's indexPath for future compatibility in event that rows change in the future)
+	// Log out (based on cell's identifier instead of row's indexPath for future compatibility in event that rows change in the future)
 	else if ([cell.reuseIdentifier isEqualToString:@"Log Out"])
 	{
 		[self doLogout:cell];

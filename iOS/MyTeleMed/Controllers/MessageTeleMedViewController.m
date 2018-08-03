@@ -25,12 +25,12 @@
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];
 	[self.emailTelemedModel setDelegate:self];
 	
-	// If Active or Archived Message, include its Message Delivery ID
+	// If active or archived message, include its message delivery id
 	if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID)
 	{
 		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
 	}
-	// If Sent Message
+	// If sent message
 	else
 	{
 		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
@@ -40,7 +40,7 @@
 // Return pending from EmailTelemedModel delegate
 - (void)sendMessagePending
 {
-	// Go back to Message Detail
+	// Go back to message detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -58,7 +58,7 @@
 	[errorAlertController show:error];
 }*/
 
-// Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
+// Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress
 {
 	senderEmailAddress = [senderEmailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

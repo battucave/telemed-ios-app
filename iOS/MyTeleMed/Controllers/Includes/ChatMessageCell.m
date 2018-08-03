@@ -35,12 +35,12 @@
 	
 	if (self.editing)
 	{
-		// Indentation width in storyboard attributes has no effect on custom Table Cells. Therefore, assume the default indentation of 38.0f and add additional indentation separately
-		//CGFloat indentation = self.indentationLevel * self.indentationWidth;
+		// Indentation width in storyboard attributes has no effect on custom table cells. Therefore, assume the default indentation of 38.0f and add additional indentation separately
+		// CGFloat indentation = self.indentationLevel * self.indentationWidth;
 		CGFloat defaultEditIndentation = 38.0f;
 		CGFloat additionalEditIndentation = 8.0f;
 		
-		// Use leading constraint on viewPriority to add additional indentation
+		// Use leading constraint on view priority to add additional indentation
 		[self.constraintViewLeftSpace setConstant:additionalEditIndentation];
 		
 		// Adjust separator inset to account for editing indentation (the default left edge inset seems to be off so subtracting 3 fixes it)
@@ -66,7 +66,7 @@
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
 	// Cancel default functionality
-	//[super setHighlighted:highlighted animated:animated];
+	// [super setHighlighted:highlighted animated:animated];
 }
 
 // Configure the view for the selected state. By default, setSelected sets all of the cell's subviews to a clear background color. Override this functionality

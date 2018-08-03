@@ -48,7 +48,7 @@
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Request Hospital Incomplete" message:@"Web services are incomplete for requesting a hospital." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Go back to My Hospitals or Message New Unauthorized
+		// Go back to HospitalPickerViewController or MessageNewUnauthorizedTableViewController
 		[self performSegueWithIdentifier:@"unwindFromHospitalRequest" sender:self];
 	}];
 
@@ -60,7 +60,7 @@
 		[successAlertController setPreferredAction:actionOK];
 	}
 
-	// Show Alert
+	// Show alert
 	[self presentViewController:successAlertController animated:YES completion:nil];
 	// END TEMPORARY
 }

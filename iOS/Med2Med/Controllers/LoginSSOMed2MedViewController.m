@@ -78,7 +78,7 @@
 		{
 			NSLog(@"LoginSSOMed2MedViewController Error: %@", error);
 			
-			// Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
+			// Even if device offline, show this error message so that user can re-attempt to login (LoginSSOViewController will show offline message)
 			[self showWebViewError:[NSString stringWithFormat:@"There was a problem completing the login process:<br>%@", error.localizedDescription]];
 		}
 	}];

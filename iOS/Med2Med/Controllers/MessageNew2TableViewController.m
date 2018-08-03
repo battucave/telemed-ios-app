@@ -114,7 +114,7 @@
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Thank you. Your message has been sent." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Unwind to first screen of message new form
+		// Unwind to first screen of MessageNewTableViewController form
 		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
 	}];
 
@@ -133,7 +133,7 @@
 // Return error from NewMessageModel delegate (currently only used for callback number error)
 - (void)sendMessageError:(NSError *)error
 {
-	// Unwind to first screen of message new form to show error for callback number
+	// Unwind to first screen of MessageNewTableViewController form to show error for callback number
 	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
 	{
 		[self performSegueWithIdentifier:@"handleErrorCallbackNumber" sender:self];

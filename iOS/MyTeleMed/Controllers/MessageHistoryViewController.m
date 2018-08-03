@@ -35,7 +35,7 @@
 	// Perform shared logic in MessageDetailParentViewController
 	[super viewDidLoad];
 	
-	// Initialize Filtered Message Events
+	// Initialize filtered message events
 	for(MessageEventModel *messageEvent in self.messageEvents)
 	{
 		if (! [messageEvent.Type isEqualToString:@"Comment"])
@@ -44,7 +44,7 @@
 		}
 	}
 	
-	// Reset Message Events to not include comments (required for Segment Control selections)
+	// Reset message events to not include comments (required for segment control selections)
 	[self setMessageEvents:[self.filteredMessageEvents copy]];
 }
 
@@ -52,13 +52,13 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Disable Forward Button if no Message Recipients available
+	// Disable forward button if no message recipients available
 	if (! self.canForward)
 	{
 		[self.buttonForward setEnabled:NO];
 	}
 	
-	// Ensure Segment Control is set to all initially
+	// Ensure segment control is set to all initially
 	[self.segmentedControl setSelectedSegmentIndex:0];
 }
 
@@ -71,11 +71,11 @@
 	self.originalTableMessageEventsBottom = self.constraintTableMessageEventsBottom.constant;
 	self.originalTableMessageEventsHeight = self.tableMessageEvents.frame.size.height;
 	
-	// Auto size Table Message Events to show all rows (in XCode 8+ this needs to be run again after table cells have rendered)
+	// Auto size table message events to show all rows (in XCode 8+ this needs to be run again after table cells have rendered)
 	[self autoSizeTableEvents];
 }
 
-// User Clicked one of the UISegmented Control options: (All, Office Events, Comment, Telemed Events)
+// User clicked one of the segment control options
 - (IBAction)filterMessageEvents:(id)sender
 {
 	NSString *messageEventString = nil;
@@ -85,20 +85,20 @@
 	
 	switch ([self.segmentedControl selectedSegmentIndex])
 	{
-	   // Office Events
+	   // Office events
 		case 1:
 			messageEventString = @"User";
 			eventLabel = @"Office Events";
 			break;
 		
-		// TeleMed Events
+		// TeleMed events
 		case 2:
 			messageEventString = @"TeleMed";
 			eventLabel = @"TeleMed Events";
 			break;
 	}
 	
-	// If Basic Event set
+	// If basic event set
 	if (messageEventString != nil)
 	{
 		for(MessageEventModel *messageEvent in self.messageEvents)
@@ -111,7 +111,7 @@
 		
 		[self.labelEventsType setText:eventLabel];
 	}
-	// If Priority All or not set
+	// If priority is all or not set
 	else
 	{
 		[self setFilteredMessageEvents:[self.messageEvents mutableCopy]];
@@ -123,12 +123,12 @@
 	{
 		[self.tableMessageEvents reloadData];
 		
-		// Auto size Table Message Events to show all rows (in XCode 8+ this needs to be run again after table cells have rendered)
+		// Auto size table message events to show all rows (in XCode 8+ this needs to be run again after table cells have rendered)
 		[self autoSizeTableEvents];
 	});
 }
 
-// Auto size Table Events height to show all rows
+// Auto size table events height to show all rows
 - (void)autoSizeTableEvents
 {
 	dispatch_async(dispatch_get_main_queue(), ^
@@ -159,7 +159,7 @@
 	// Set up the cell
 	MessageEventModel *messageEvent = [self.filteredMessageEvents objectAtIndex:indexPath.row];
 	
-	// Set Message Event Date and Time
+	// Set message event date and time
 	if (messageEvent.Time_LCL)
 	{
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -179,10 +179,10 @@
 		[cell.labelDate setText:date];
 	}
 	
-	// Set Message Event Detail
+	// Set message event detail
 	[cell.labelDetail setText:messageEvent.Detail];
 	
-	// Set Message Event Type
+	// Set message event type
 	if ([messageEvent.Type isEqualToString:@"User"])
 	{
 		[cell.labelType setText:@"Office Event"];
@@ -192,7 +192,7 @@
 		[cell.labelType setText:@"Telemed Event"];
 	}
 	
-	// Auto size Table Message Events to show all rows
+	// Auto size table message events to show all rows
 	[self autoSizeTableEvents];
 	
 	return cell;

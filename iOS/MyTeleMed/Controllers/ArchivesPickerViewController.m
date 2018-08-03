@@ -36,7 +36,7 @@
 	// Initialize accounts
 	self.accounts = [[NSMutableArray alloc] init];
 	
-	// Initialize account model
+	// Initialize AccountModel
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	

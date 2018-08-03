@@ -499,13 +499,13 @@
 	// Handle push notification when app is active
 	if ([application applicationState] == UIApplicationStateActive)
 	{
-		// Push notification to any observers within the app (core view controller, core table view controller, message detail view controller, and messages table view controller)
+		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
 	}
 }
 
 /*
- * Show main screen: change password view controller, phone number view controller, or messages view controller
+ * Show main screen: ChangePasswordViewController, PhoneNumberViewController, or MessagesViewController
  */
 - (void)showMainScreen
 {
@@ -519,7 +519,7 @@
 		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
-		// If device has not previously registered with TeleMed web service, then show phone number screen
+		// If device has not previously registered with TeleMed web service, then show PhoneNumberViewController
 		if (! registeredDeviceModel.hasRegistered)
 		{
 			// If using Simulator, skip phone number step because it is always invalid
@@ -547,7 +547,7 @@
 			#endif
 		}
 		
-		// If TeleMed requires a password change for the user, then show password change screen
+		// If TeleMed requires a password change for the user, then show PasswordChangeViewController
 		if (profile.PasswordChangeRequired)
 		{
 			if (hasNavigationController)
@@ -569,7 +569,7 @@
 		}
 	}
 	
-	// Show messages view controller
+	// Show MessagesViewController
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
 	
@@ -612,7 +612,7 @@
 			[self showMainScreen];
 		}];
 	}
-	// Account is valid, but phone number is not yet registered with TeleMed so go directly to phone number screen (handled by showMainScreen:)
+	// Account is valid, but phone number is not yet registered with TeleMed so go directly to PhoneNumberViewController (handled by showMainScreen:)
 	else
 	{
 		// Go the next screen in the login process
@@ -627,7 +627,7 @@
 #ifdef MED2MED
 
 /*
- * Show main screen: message new table view controller or message new unauthorized table view controller
+ * Show main screen: MessageNewTableViewController or MessageNewUnauthorizedTableViewController
  */
 - (void)showMainScreen
 {
@@ -636,12 +636,12 @@
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
 	UINavigationController *navigationController;
 	
-	// If user has at least one authorized account, then show message new screen
+	// If user has at least one authorized account, then show MessageNewViewController
 	if (profile.IsAuthorized)
 	{
 		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewNavigationController"];
 	}
-	// Else show message new unauthorized screen
+	// Else show MessageNewUnauthorizedTableViewController
 	else
 	{
 		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewUnauthorizedNavigationController"];

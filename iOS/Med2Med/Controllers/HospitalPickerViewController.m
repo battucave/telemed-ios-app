@@ -106,7 +106,7 @@
 	{
 		[self.navigationItem setRightBarButtonItem:nil];
 	}
-	// If user navigated from settings screen, disallow selection of hospitals
+	// If user navigated from SettingsTableViewController, disallow selection of hospitals
 	else
 	{
 		[self.tableHospitals setAllowsSelection:NO];
@@ -132,7 +132,7 @@
 		[self scrollToSelectedHospital];
 	}
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -141,7 +141,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }

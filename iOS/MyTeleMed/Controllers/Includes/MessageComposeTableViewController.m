@@ -26,7 +26,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
@@ -46,12 +46,12 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Perform Segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewTableViewController delegate to simplify the passing of data to Message Recipient Picker
+// Perform segue to AccountPickerTableViewController or MessageRecipientPickerTableViewController from MessageForwardViewController/MessageNewTableViewController delegate to simplify the passing of data to MessageRecipientPickerViewController
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self.delegate performSegueToMessageRecipientPicker:(id)sender];
@@ -84,17 +84,17 @@
 		}
 	}
 	
-	// Update Message Recipient Label with Message Recipient Name
+	// Update message recipient label with message recipient name
 	[self.labelMessageRecipient setText:messageRecipientNames];
 }
 
-// Resize Message Text View to match available space between top of Table Cell and Keyboard
+// Resize message text view to match available space between top of table cell and keyboard
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-	// Obtain Keyboard Size
+	// Obtain keyboard size
 	CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 	
-	// Calculate New Height for Message Cell
+	// Calculate new height for message cell
 	int cellMessagePadding = 20;
 	[self setCellMessageHeight:self.parentViewController.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - keyboardSize.height - self.cellMessageRecipient.frame.size.height - cellMessagePadding];
 	
@@ -102,7 +102,7 @@
 	[self.tableView beginUpdates];
 	[self.tableView endUpdates];
 	
-	// Scroll back to Top of Table
+	// Scroll back to top of table
 	[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
@@ -155,7 +155,7 @@
 
 - (void)dealloc
 {
-	// Remove Notification Observers
+	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

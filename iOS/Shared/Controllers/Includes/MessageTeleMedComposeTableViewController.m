@@ -33,11 +33,11 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
-	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	// Remove empty separator lines (by default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	self.cellMessageHeight = self.cellMessage.frame.size.height;
@@ -48,7 +48,7 @@
 		self.textViewMessagePlaceholder = self.textViewMessage.text;
 	}
 	
-	// Set User Email Address
+	// Set user's email address
 	id <ProfileProtocol> profile;
 	
 	#ifdef MYTELEMED
@@ -68,18 +68,18 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Resize Message Text View to match available space between top of Table Cell and Keyboard
+// Resize message text view to match available space between top of table cell and keyboard
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-	// Obtain Keyboard Size
+	// Obtain keyboard size
 	CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 	
-	// Calculate New Height for Message Cell
+	// Calculate new height for message cell
 	int cellMessagePadding = 20;
 	[self setCellMessageHeight:self.parentViewController.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - keyboardSize.height - self.cellMessageRecipient.frame.size.height - cellMessagePadding];
 	
@@ -87,7 +87,7 @@
 	[self.tableView beginUpdates];
 	[self.tableView endUpdates];
 	
-	// Scroll back to Top of Table
+	// Scroll back to top of table
 	[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
@@ -153,7 +153,7 @@
 
 - (void)dealloc
 {
-	// Remove Notification Observers
+	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

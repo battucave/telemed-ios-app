@@ -19,20 +19,20 @@
     _sideNavigationButton.target = self.revealViewController;
 	_sideNavigationButton.action = @selector(revealToggle:);
 	
-	// Set revealViewController delegate
+	// Set review view controller delegate
 	[self.revealViewController setDelegate:self];
 	
-	// Register a Gesture Recognizer for Navigation Controller
+	// Register a gesture recognizer for navigation controller
 	[self.navigationController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }
 
-// Prevent user interaction on Front View while navigation is open
+// Prevent user interaction on front view while navigation is open
 - (void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position
 {
 	// If position is open
 	if (position == FrontViewPositionRight)
 	{
-		// Prevent user interaction on everything except the Navigation Bar (so that menu button is still clickable)
+		// Prevent user interaction on everything except the navigation bar (so that menu button is still clickable)
 		for(id subview in [revealController.frontViewController.view subviews])
 		{
 			if (! [subview isKindOfClass:[UINavigationBar class]])

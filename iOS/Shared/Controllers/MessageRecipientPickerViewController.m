@@ -145,7 +145,7 @@
 		}
 	}
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
@@ -197,12 +197,12 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
 	#ifdef MED2MED
-		// Return updated form values back to previous screen (only used if user returned to this screen from new message 2 screen)
+		// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
 		if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 		{
 			[self.delegate setFormValues:self.formValues];
@@ -216,7 +216,7 @@
 	#endif
 }
 
-// MyTeleMed only - Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (message new 2)
+// MyTeleMed only - Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (MessageNew2TableViewController)
 - (IBAction)saveMessageRecipients:(id)sender
 {
 	[self setHasSubmitted:YES];
@@ -225,7 +225,7 @@
 		[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 	
 	#else
-		// Unwind to chat message detail
+		// Unwind to ChatMessageDetailViewController
 		if ([self.messageRecipientType isEqualToString:@"Chat"])
 		{
 			if ([self.selectedMessageRecipients count] > 1)

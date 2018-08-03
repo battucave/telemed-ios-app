@@ -72,7 +72,7 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from on call slot picker screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
+	// Fix iOS 11+ issue with next button that occurs when returning back from OnCallSlotPickerViewController. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
 	if (self.hasSubmitted)
 	{
 		if (@available(iOS 11.0, *))
@@ -120,7 +120,7 @@
 			}
 		}
 		
-		// Disable initializing callback data if user returns back to this screen from message recipient picker screen
+		// Disable initializing callback data if user returns back to this screen from MessageRecipientPickerViewController
 		[self setShouldInitializeCallbackData:NO];
 	}
 	
@@ -484,7 +484,7 @@
 		
 		[self setHospital];
 		
-		// Prevent user from being able to go to hospital picker screen and hide the cell's disclosure indicator
+		// Prevent user from being able to go to HospitalPickerViewController and hide the cell's disclosure indicator
 		[self.cellHospital setAccessoryType:UITableViewCellAccessoryNone];
 		[self.cellHospital setUserInteractionEnabled:NO];
 	}
@@ -493,7 +493,7 @@
 // Return error from hospital model delegate
 - (void)updateHospitalsError:(NSError *)error
 {
-	// Don't show error here - there will be another chance to load hospitals on hospital picker screen
+	// Don't show error here - there will be another chance to load hospitals on HospitalPickerViewController
 }
 
 // Check required fields to determine if form can continue to next page
@@ -559,7 +559,7 @@
 	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
-		// Update account picker screen title
+		// Update AccountPickerViewController title
 		[accountPickerViewController setTitle:@"Choose Medical Group"];
 		
 		// Set accounts, set selected account, and enable account selection on account picker screen
@@ -589,10 +589,10 @@
 		[onCallSlotPickerViewController setFormValues:self.formValues];
 		[onCallSlotPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the message recipient picker screen
+		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the MessageRecipientPickerViewController
 		[onCallSlotPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 		
-		// If user returned back to this screen, then he/she may have already selected the on call slot so pre-select them on the on call slot picker screen
+		// If user returned back to this screen, then he/she may have already selected the on call slot so pre-select them on the OnCallSlotPickerViewController
 		[onCallSlotPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		
 		// Update has submitted value to trigger appearance changes if user returns back to this screen

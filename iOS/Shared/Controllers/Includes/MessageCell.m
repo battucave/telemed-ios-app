@@ -35,7 +35,7 @@
 	
 	if (self.editing)
 	{
-		// Indentation width in storyboard attributes has no effect on custom Table Cells. Therefore, assume the default indentation of 38.0f and add additional indentation separately
+		// Indentation width in storyboard attributes has no effect on custom table Cells. Therefore, assume the default indentation of 38.0f and add additional indentation separately
 		//CGFloat indentation = self.indentationLevel * self.indentationWidth;
 		CGFloat defaultEditIndentation = 38.0f;
 		CGFloat additionalEditIndentation = 8.0f;

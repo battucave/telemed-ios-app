@@ -24,11 +24,11 @@
 {
 	[super viewDidLoad];
 	
-	// Initialize Message Model
+	// Initialize MessageModel
 	[self setMessageModel:[[MessageModel alloc] init]];
 	[self.messageModel setDelegate:self];
 	
-	// Initialize Filtered Basic Events
+	// Initialize filtered basic events
 	[self setFilteredMessageEvents:[NSMutableArray array]];
 }
 
@@ -36,18 +36,18 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Set Buttons for Archived Message Details
+	// Set buttons for archived message details
 	if (self.message.messageType == 1)
 	{
 		[self.buttonArchive setEnabled:NO];
 	}
-	// Set buttons for Sent Message Details
+	// Set buttons for sent message details
 	else if (self.message.messageType == 2)
 	{
 		CGFloat buttonWidth = self.buttonReturnCall.frame.size.width;
 		CGFloat spaceAdjustment = (buttonWidth / 2);
 		
-		// Disable Archive and Return Call buttons
+		// Disable archive and return call buttons
 		[self.buttonArchive setEnabled:NO];
 		[self.buttonArchive.superview setHidden:YES];
 		[self.buttonReturnCall setEnabled:NO];
@@ -59,7 +59,7 @@
 		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
 	}
 	
-	// Set Message Priority color (defaults to "Normal" green color)
+	// Set message priority color (defaults to "Normal" green color)
 	if ([self.message.Priority isEqualToString:@"Priority"])
 	{
 		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
@@ -97,7 +97,7 @@
 		[returnCallAlertController setPreferredAction:actionReturnCall];
 	}
 
-	// Show Alert
+	// Show alert
 	[self presentViewController:returnCallAlertController animated:YES completion:nil];
 }
 
@@ -119,14 +119,14 @@
 		[archiveMessageAlertController setPreferredAction:actionContinue];
 	}
 
-	// Show Alert
+	// Show alert
 	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
 }
 
-/*/ Return Message State pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
+/*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
 {
-	// If finished Archiving message, send user back
+	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 	{
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -145,10 +145,10 @@
 	}
 }*/
 
-// Return Message State success from MessageModel delegate
+// Return message state success from MessageModel delegate
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
-	// If finished Archiving message, send user back
+	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 	{
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
@@ -167,7 +167,7 @@
 	}
 }
 
-/*/ Return Message State error from MessageModel delegate
+/*/ Return message state error from MessageModel delegate
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
 	// Show error message

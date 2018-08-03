@@ -51,17 +51,17 @@
 {
 	NSString *name = [self.textFieldSSOProvider.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 	
-	// Validate SSO Provider using API
+	// Validate SSO provider using api
 	[self.ssoProviderModel validate:name withCallback:^(BOOL success, NSError *error)
 	{
-		// SSO Provider is valid so save it and return to Login
+		// SSO provider is valid so save it and return to login
 		if (success)
 		{
 			[self.ssoProviderModel setName:name];
 			
 			[self performSegueWithIdentifier:@"unwindFromSSOProvider" sender:sender];
 		}
-		// SSO Provider is invalid so show error
+		// SSO provider is invalid so show error
 		else
 		{
 			// Re-show keyboard

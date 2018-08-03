@@ -156,13 +156,13 @@
 	[self setTextDefaultHeader:[self tableView:self.tableView titleForHeaderInSection:0]];
 }
 
-// Unwind from account request screen and update header text to show pending medical group (account) message
+// Unwind from AccountRequestTableViewController and update header text to show pending medical group (account) message
 - (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
 {
 	[self setDidRequestAccount:YES];
 }
 
-// Unwind from hospital request screen and update header text to show pending hospital message
+// Unwind from HospitalRequestTableViewController and update header text to show pending hospital message
 - (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
 {
 	[self setDidRequestHospital:YES];
@@ -174,18 +174,21 @@
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		UITableViewHeaderFooterView *viewHeader = [self.tableView headerViewForSection:0];
-	
-		[UIView setAnimationsEnabled:NO];
-		[self.tableView beginUpdates];
 		
-		[viewHeader.textLabel setText:textHeader];
-		[viewHeader sizeToFit];
-		
-		// Store view header's height to use in heightForHeaderInSection
-		[self setHeaderHeight:viewHeader.frame.size.height];
-		
-		[self.tableView endUpdates];
-		[UIView setAnimationsEnabled:YES];
+		if (viewHeader)
+		{
+			[UIView setAnimationsEnabled:NO];
+			[self.tableView beginUpdates];
+		 
+			[viewHeader.textLabel setText:textHeader];
+			[viewHeader sizeToFit];
+		 
+			// Store view header's height to use in heightForHeaderInSection
+			[self setHeaderHeight:viewHeader.frame.size.height];
+		 
+			[self.tableView endUpdates];
+			[UIView setAnimationsEnabled:YES];
+		}
 	});
 }
 

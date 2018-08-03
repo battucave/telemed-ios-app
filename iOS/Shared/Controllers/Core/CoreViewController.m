@@ -97,7 +97,7 @@
 	NSString *message = nil;
 	NSString *tone = [aps objectForKey:@"sound"];
 	
-	// If no NotificationType was sent, assume it's a message.
+	// If no notification type was sent, assume it's a message.
 	if (! notificationType)
 	{
 		notificationType = @"Message";
@@ -109,10 +109,10 @@
 		}
 	}
 	
-	// Extract Delivery ID, Message ID, or Chat Message ID
+	// Extract delivery id, message id, or chat message id
 	if ([notificationType isEqualToString:@"Comment"])
 	{
-		// MessageID is used for sent messages; DeliveryID is used for received messages
+		// Message id is used for sent messages; delivery id is used for received messages
 		deliveryID = ([userInfo objectForKey:@"MessageID"] ?: [userInfo objectForKey:@"DeliveryID"]);
 	}
 	else if ([notificationType isEqualToString:@"Chat"])
@@ -120,7 +120,7 @@
 		deliveryID = [userInfo objectForKey:@"ChatMsgID"];
 	}
 	
-	// Convert deliveryID to a number if it is not already
+	// Convert delivery id to a number if it is not already
 	if (! [deliveryID isKindOfClass:[NSNumber class]])
 	{
 		deliveryID = [NSNumber numberWithInteger:[deliveryID integerValue]];

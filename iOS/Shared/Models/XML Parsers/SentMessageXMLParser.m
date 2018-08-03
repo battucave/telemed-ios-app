@@ -33,7 +33,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	// MYTELEMED Only
+	// MyTeleMed only
 	if ([elementName isEqualToString:@"Account"])
 	{
 		// Initialize account
@@ -69,7 +69,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	// MYTELEMED Only
+	// MyTeleMed only
 	if ([elementName isEqualToString:@"Account"])
 	{
 		self.currentModel = nil;
@@ -80,12 +80,12 @@
 		
 		self.sentMessage = nil;
 	}
-	// MYTELEMED Only
+	// MyTeleMed only
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
 		self.currentModel = @"AccountModel";
 	}
-	// MYTELEMED Only
+	// MyTeleMed only
 	else if ([self.currentModel isEqualToString:@"AccountModel"])
 	{
 		if ([elementName isEqualToString:@"ID"])
@@ -104,7 +104,7 @@
 			}
 		}
 	}
-	// MYTELEMED Only
+	// MyTeleMed only
 	else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
 	{
 		if ([elementName isEqualToString:@"ID"])

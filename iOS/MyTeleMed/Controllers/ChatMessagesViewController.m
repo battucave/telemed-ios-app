@@ -35,20 +35,20 @@
 {
     [super viewDidLoad];
 	
-	// Store Navigation Bar Title
+	// Store navigation bar title
 	[self setNavigationBarTitle:self.navigationItem.title];
 	
-	// Note: programmatically set Right Bar Button Item to Apple's built-in Edit button is toggled from within ChatMessagesTableViewController.m based on number of Chat Messages
+	// Note: programmatically set right bar button item to Apple's built-in edit button is toggled from within ChatMessagesTableViewController.m based on number of chat messages
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
+	// If swipe message has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 0 (Keep Swipe Message there as it will simply be hidden under the Container View)
+		// Change top layout constraint to 0 (keep swipe message there as it will simply be hidden under the container view)
 		self.constraintTopSpace.constant = 0;
 	}
 	
@@ -57,14 +57,14 @@
 	[super viewWillAppear:animated];
 }
 
-// User clicked Delete Bar Button in Toolbar
+// User clicked delete bar button in toolbar
 - (IBAction)deleteMessages:(id)sender
 {
 	NSInteger selectedChatMessageCount = [self.selectedChatMessages count];
 	NSInteger unreadChatMessageCount = 0;
 	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this secure chat message" : @"these secure chat messages")];
 	
-	// Ensure at least one selected Chat Message (should never happen as Delete button should be disabled when no Messages selected)
+	// Ensure at least one selected chat message (should never happen as delete button should be disabled when no chat messages selected)
 	if (selectedChatMessageCount < 1)
 	{
 		return;
@@ -78,12 +78,12 @@
 		}
 	}
 	
-	// Update notification message if all of these Messages are Unread
+	// Update notification message if all of these messages are unread
 	if (unreadChatMessageCount == selectedChatMessageCount)
 	{
 		notificationMessage = [NSString stringWithFormat:@"Warning: %@ not been read yet. Selecting Continue will delete %@ from our system.", (unreadChatMessageCount == 1 ? @"This secure chat message has" : @"These secure chat messages have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
 	}
-	// Update notification message if some of these messages are Unread
+	// Update notification message if some of these messages are unread
 	else if (unreadChatMessageCount > 0)
 	{
 		notificationMessage = [NSString stringWithFormat:@"Warning: %ld of these secure chat messages %@ not been read yet. Selecting Continue will delete %@ from our system.", (long)unreadChatMessageCount, (unreadChatMessageCount == 1 ? @"has" : @"have"), (unreadChatMessageCount == 1 ? @"it" : @"them")];
@@ -93,7 +93,7 @@
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Added this because a minority of users were complaining that Chat sometimes causes crash
+		// Added this because a minority of users were complaining that chat sometimes causes crash
 		if (self.chatMessageModel == nil)
 		{
 			[self setChatMessageModel:[[ChatMessageModel alloc] init]];
@@ -112,16 +112,16 @@
 		[deleteChatMessagesAlertController setPreferredAction:actionContinue];
 	}
 
-	// Show Alert
+	// Show alert
 	[self presentViewController:deleteChatMessagesAlertController animated:YES completion:nil];
 }
 
-// Override default Remote Notification action from CoreViewController
+// Override default remote notification action from CoreViewController
 - (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
 {
 	NSLog(@"Received Remote Notification ChatMessagesViewController");
 	
-	// Reload Chat Messages list to get the new Chat Message only if the notification was for a Chat Message
+	// Reload chat messages list to get the new chat message only if the notification was for a chat message
 	if ([notificationType isEqualToString:@"Chat"])
 	{
 		NSLog(@"Refresh Chat Messages");
@@ -129,7 +129,7 @@
 		[self.chatMessagesTableViewController reloadChatMessages];
 	}
     
-    // Execute the default Notification Message action
+    // Execute the default notification message action
     [super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
 }
 
@@ -139,10 +139,10 @@
 	_selectedChatMessages = [NSArray arrayWithArray:selectedChatMessages];
 	NSInteger selectedChatMessageCount = [selectedChatMessages count];
 	
-	// Toggle Delete bar button on/off based on number of selected Chat Messages
+	// Toggle delete bar button on/off based on number of selected chat messages
 	[self.barButtonDelete setEnabled:(selectedChatMessageCount > 0)];
 	
-	// Update navigation bar title based on number of Chat Messages selected
+	// Update navigation bar title based on number of chat messages selected
 	[self.navigationItem setTitle:(selectedChatMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedChatMessageCount] : self.navigationBarTitle)];
 }
 
@@ -151,12 +151,12 @@
 {
 	[super setEditing:editing animated:animated];
 	
-	// Update Edit button title to Cancel (default is Done)
+	// Update Edit button title to cancel (default is done)
 	if (editing)
 	{
 		[self.editButtonItem setTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 	}
-	// Reset navigation Bar Title
+	// Reset navigation bar title
 	else
 	{
 		[self.navigationItem setTitle:self.navigationBarTitle];
@@ -168,7 +168,7 @@
 		[self.chatMessagesTableViewController setEditing:editing animated:animated];
 	}
 	
-	// Toggle Toolbar buttons
+	// Toggle toolbar buttons
 	[self toggleToolbarButtons:editing];
 }
 
@@ -177,7 +177,7 @@
 	// Initialize toolbar items with only the left flexible space button
 	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
 	
-	// If in editing mode, add the Delete and right flexible space buttons
+	// If in editing mode, add the delete and right flexible space buttons
 	if (editing)
 	{
 		[self.barButtonDelete setEnabled:NO];
@@ -185,7 +185,7 @@
 		[toolbarItems addObject:self.barButtonDelete];
 		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
 	}
-	// If not in editing mode, add the Compose button
+	// If not in editing mode, add the compose button
 	else
 	{
 		[toolbarItems addObject:self.barButtonCompose];
@@ -194,44 +194,44 @@
 	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
-// Return Delete Multiple Chat Message pending from ChatMessageModel delegate
+// Return delete multiple chat message pending from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesPending
 {
-	// Hide selected rows from Chat Messages Table
+	// Hide selected rows from chat messages table
 	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
 	
 	[self setEditing:NO animated:YES];
 }
 
-// Return Delete Multiple Chat Message success from ChatMessageModel delegate
+// Return delete multiple chat message success from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesSuccess
 {
-	// Remove selected rows from Chat Messages Table
+	// Remove selected rows from chat messages table
 	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
 }
 
-// Return Delete Multiple Chat Message error from ChatMessageModel delegate
+// Return delete multiple chat message error from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
 {
-	// Determine which Chat Messages were successfully Archived
+	// Determine which chat messages were successfully delete4d
 	NSMutableArray *successfulChatMessages = [self.selectedChatMessages mutableCopy];
 	
 	[successfulChatMessages removeObjectsInArray:failedChatMessages];
 	
-	// Remove selected all rows from Chat Messages Table that were successfully Archived
+	// Remove selected all rows from chat messages table that were successfully archived
 	if ([self.selectedChatMessages count] > 0)
 	{
 		[self.chatMessagesTableViewController removeSelectedChatMessages:successfulChatMessages];
 	}
 	
-	// Reload Chat Messages Table to re-show Chat Messages that were not Archived
+	// Reload chat messages table to re-show chat messages that were not deleted
 	[self.chatMessagesTableViewController unHideSelectedChatMessages:failedChatMessages];
 	
-	// Update Selected Messages to only the Failed Chat Messages
+	// Update selected chat messages to only the failed chat messages
 	self.selectedChatMessages = failedChatMessages;
 }
 
-// Delegate method from SWRevealController that fires when a Recognized Gesture has ended
+// Delegate method from SWRevealController that fires when a recognized gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
 {
 	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
@@ -252,25 +252,25 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Embedded Table View Controller inside Container
+	// Embedded table view controller inside container
 	if ([segue.identifier isEqualToString:@"embedChatMessagesTable"])
 	{
 		[self setChatMessagesTableViewController:segue.destinationViewController];
 		
-		// Set Chat Messages
+		// Set chat messages
 		[self.chatMessagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
 		[self.toolbarBottom layoutIfNeeded];
 		
-		// Increase bottom inset of Messages Table so that its bottom scroll position rests above bottom Toolbar
+		// Increase bottom inset of chat messages table so that its bottom scroll position rests above bottom toolbar
 		UIEdgeInsets tableInset = self.chatMessagesTableViewController.tableView.contentInset;
 		CGSize toolbarSize = self.toolbarBottom.frame.size;
 		
 		tableInset.bottom = toolbarSize.height;
 		[self.chatMessagesTableViewController.tableView setContentInset:tableInset];
 	}
-	// Set Conversations for Chat Message Detail to use for determining whether a message with selected Chat Participants already exists
+	// Set conversations for chat message detail to use for determining whether a message with selected chat participants already exists
 	else if ([segue.identifier isEqualToString:@"showChatMessageNew"])
 	{
 		ChatMessageDetailViewController *chatMessageDetailViewController = segue.destinationViewController;

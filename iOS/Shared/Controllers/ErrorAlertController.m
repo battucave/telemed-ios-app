@@ -44,7 +44,7 @@
 	// Remove this window from stack
 	[[ErrorAlertController sharedInstance].windows removeObject:self.window];
 	
-	// Set Alpha to 1.0 for last alert to make it appear
+	// Set alpha to 1.0 for last alert to make it appear
 	[UIView animateWithDuration:0.3 animations:^
 	{
 		[[ErrorAlertController sharedInstance].windows.lastObject setAlpha:1.0];
@@ -70,13 +70,13 @@
 		return [self showOffline];
 	}
 	
-	// Configure Alert Controller
+	// Configure alert controller
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
 	[alertController addAction:actionOK];
 	
-	// Show Alert
+	// Show alert
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[alertController presentAlertController:YES completion:nil];
@@ -97,12 +97,9 @@
 		errorMessage = [NSString stringWithFormat:@"%@ %@", errorMessage, [self getOfflineMessage]];
 	}
 	
-	// Configure Alert Controller
-	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Would you like to try again?", errorMessage] preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
-	{
-		// No action necessary
-	}];
+	// Configure alert controller
+	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@\nWould you like to try again?", errorMessage] preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *actionRetry = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Execute callback
@@ -121,7 +118,7 @@
 		[alertController setPreferredAction:actionRetry];
 	}
 	
-	// Show Alert
+	// Show alert
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[alertController presentAlertController:YES completion:nil];
@@ -141,23 +138,23 @@
 	{
 		if (! self.isErrorAlertShowing)
 		{
-			// Configure Alert Controller
+			// Configure alert controller
 			self.offlineAlertController = [ErrorAlertController alertControllerWithTitle:@"Data Connection Unavailable" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 			{
-				// Toggle Error Alert to show again
+				// Toggle error alert to show again
 				self.isErrorAlertShowing = NO;
 			}];
 			
 			[self.offlineAlertController addAction:actionOK];
 			
-			// Show Alert
+			// Show alert
 			dispatch_async(dispatch_get_main_queue(), ^
 			{
 				[self.offlineAlertController presentAlertController:YES completion:nil];
 			});
 			
-			// Toggle Error Alert to not re-show
+			// Toggle error alert to not re-show
 			self.isErrorAlertShowing = YES;
 		}
 		
@@ -173,24 +170,24 @@
 	// Only dismiss offline error messages without callbacks
 	[self.offlineAlertController dismissViewControllerAnimated:YES completion:nil];
 	
-	// Toggle Error Alert to show again
+	// Toggle error alert to show again
 	self.isErrorAlertShowing = NO;
 }
 
 - (void)presentAlertController:(BOOL)animated completion:(void (^ _Nullable)(void))completion
 {
-	// Configure new window from which to present Alert
+	// Configure new window from which to present alert
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	UIWindow *topWindow = [UIApplication sharedApplication].windows.lastObject;
 	
 	[self.window setRootViewController:[[UIViewController alloc] init]];
 	[self.window setWindowLevel:topWindow.windowLevel + 1];
 	
-	// Show Alert
+	// Show alert
 	[self.window makeKeyAndVisible];
 	[self.window.rootViewController presentViewController:self animated:animated completion:completion];
 	
-	// Set Alpha to 0.0 for last alert to make it appear as though there is only a single alert at one time
+	// Set alpha to 0.0 for last alert to make it appear as though there is only a single alert at one time
 	[[ErrorAlertController sharedInstance].windows.lastObject setAlpha:0.0];
 	[[ErrorAlertController sharedInstance].windows addObject:self.window];
 }

@@ -109,7 +109,7 @@
 	[onCallSlotModel setDelegate:self];
 	[onCallSlotModel getOnCallSlots:self.selectedAccount.ID];
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -118,13 +118,13 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Return updated form values back to previous screen (only used if user returned to this screen from new message 2 screen)
+	// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
 	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 	{
 		[self.delegate setFormValues:self.formValues];
 	}
 	
-	// Return selected message recipients back to previous screen (only used if user returned to this screen from message recipient picker screen)
+	// Return selected message recipients back to previous screen (only used if user returned to this screen from MessageRecipientPickerViewController)
 	if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
 	{
 		[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
@@ -136,12 +136,12 @@
 		[self.delegate setSelectedOnCallSlot:self.selectedOnCallSlot];
 	}
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-// Go to next controller (message recipient picker)
+// Go to next controller (MessageRecipientPickerViewController)
 - (IBAction)saveOnCallSlot:(id)sender
 {
 	NSLog(@"Save On Call Slot");
@@ -424,7 +424,7 @@
 		[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
 		
-		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the message recipient picker screen
+		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the MessageRecipientPickerViewController
 		[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 	}
 }

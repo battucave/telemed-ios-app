@@ -290,7 +290,7 @@
 	[self setCommentModel:[[CommentModel alloc] init]];
 	[self.commentModel setDelegate:self];
 	
-	// Send Comment with a pending id so that it can be identified in callbacks
+	// Send comment with a pending id so that it can be identified in callbacks
 	[self.commentModel addMessageComment:self.message comment:self.textViewComment.text withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 

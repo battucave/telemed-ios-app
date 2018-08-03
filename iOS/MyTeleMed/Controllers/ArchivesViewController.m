@@ -36,10 +36,10 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
+	// If swipe message has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 11 (Keep Swipe Message there as it will simply be hidden under the Container View and we can still use the top border of it)
+		// Change top layout constraint to 11 (keep swipe message there as it will simply be hidden under the container view and we can still use the top border of it)
 		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
 	}
 	
@@ -52,10 +52,10 @@
 	// Reset MessagesTableViewController back to loading state
 	[self.messagesTableViewController resetMessages];
 	
-	// Obtain reference to Source View Controller
+	// Obtain reference to source view controller
 	[self setArchivesPickerViewController:segue.sourceViewController];
 	
-	// Save selected Account and Date values
+	// Save selected account and date values
 	[self setSelectedAccountIndex:self.archivesPickerViewController.selectedAccountIndex];
 	[self setSelectedDateIndex:self.archivesPickerViewController.selectedDateIndex];
 	
@@ -71,7 +71,7 @@
 		[self.archivesPickerViewController.selectedAccount setPublicKey:@"0"];
 	}
 	
-	// Update Results Label with selected Account and Date values
+	// Update results label with selected account and date values
 	[self.labelResults setText:[NSString stringWithFormat:@"Results from %@ for %@", self.archivesPickerViewController.selectedDate, self.archivesPickerViewController.selectedAccount.Name]];
 	
 	// Update MessagesTableViewController with updated messages
@@ -81,13 +81,13 @@
 	}
 }
 
-// Delegate method from SWRevealController that fires when a Recognized Gesture has ended
+// Delegate method from SWRevealController that fires when a recognized gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
 {
 	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
 }
 
-// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if Gesture resulted in opening the SWRevealController
+// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if gesture resulted in opening the SWRevealController
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open
@@ -107,14 +107,14 @@
 	{
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
-		// Set Messages Type to Archived
+		// Set messages type to archived
 		[self.messagesTableViewController initMessagesWithType:1];
 	}
 	else if ([segue.identifier isEqualToString:@"showArchivesPicker"])
 	{
 		[self setArchivesPickerViewController:segue.destinationViewController];
 		
-		// Set selected Account and Date if previously set
+		// Set selected account and date if previously set
 		[self.archivesPickerViewController setSelectedAccountIndex:self.selectedAccountIndex];
 		[self.archivesPickerViewController setSelectedDateIndex:self.selectedDateIndex];
 	}

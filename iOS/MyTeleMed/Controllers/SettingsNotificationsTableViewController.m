@@ -31,41 +31,41 @@
 {
 	[super viewWillAppear:animated];
 	
-	// If Notification Settings are not nil, then we are returning from SettingsNotificationsPickerViewController and don't want to reset the settings
+	// If notification settings are not nil, then we are returning from SettingsNotificationsPickerViewController and don't want to reset the settings
 	if (self.notificationSettings != nil)
 	{
 		return;
 	}
 	
-	// Set Notification Settings Type as string
+	// Set notification settings type as string
 	switch (self.notificationSettingsType)
 	{
-		// Stat Message Settings
+		// Stat message settings
 		case 0:
 			[self setNotificationSettingsName:@"stat"];
 			[self.navigationItem setTitle:@"Stat Messages"];
 			break;
 		
-		// Normal Message Settings
+		// Normal message settings
 		case 1:
 			[self setNotificationSettingsName:@"normal"];
 			[self.navigationItem setTitle:@"Normal Messages"];
 			break;
 		
-		// Chat Message Settings
+		// Chat message settings
 		case 2:
 			[self setNotificationSettingsName:@"chat"];
 			[self.navigationItem setTitle:@"Secure Chat Messages"];
 			break;
 		
-		// Comment Settings
+		// Comment settings
 		case 3:
 			[self setNotificationSettingsName:@"comment"];
 			[self.navigationItem setTitle:@"Comments"];
 			break;
 	}
 	
-	// Load Notification Settings for name
+	// Load notification settings for name
 	[self setNotificationSettingModel:[[NotificationSettingModel alloc] init]];
 	
 	[self.notificationSettingModel setDelegate:self];
@@ -89,12 +89,12 @@
 	
 	NSString *selectedOption = settingsNotificationsPickerTableViewController.selectedOption;
 	
-	// Set selected Notification Interval
+	// Set selected notification interval
 	if (settingsNotificationsPickerTableViewController.pickerType == 1)
 	{
 		[self.notificationSettings setInterval:[NSNumber numberWithInteger:[selectedOption integerValue]]];
 	}
-	// Set selected Notification Tone
+	// Set selected notification tone
 	else
 	{
 		[self.notificationSettings setToneTitle:selectedOption];
@@ -106,7 +106,7 @@
 	[self.notificationSettingModel saveNotificationSettingsByName:self.notificationSettingsName settings:self.notificationSettings];
 }
 
-// Return Server Notification Settings from NotificationSettingModel delegate
+// Return server notification settings from NotificationSettingModel delegate
 - (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name
 {
 	[self setNotificationSettings:serverNotificationSettings];
@@ -128,13 +128,13 @@
 	}
 }
 
-/*/ Return Save success from NotificationSettingModel delegate (no longer used)
+/*/ Return save success from NotificationSettingModel delegate (no longer used)
 - (void)saveNotificationSettingsSuccess
 {
 	NSLog(@"Notification Settings saved to server successfully");
 }
 
-// Return Save error from NotificationSettingModel delegate (no longer used)
+// Return save error from NotificationSettingModel delegate (no longer used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
@@ -149,7 +149,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Hide everything except Alert Sound for Chat and Comments
+	// Hide everything except alert sound for chat and comments
 	return (self.notificationSettingsType >= 2 && indexPath.row != 1 ? 0 : UITableViewAutomaticDimension);
 }
 
@@ -159,32 +159,32 @@
 	
 	switch (indexPath.row)
 	{
-		// Reminders Row
+		// Reminders row
 		case 0:
 		{
-			// Set Reminders value
+			// Set reminders value
 			[self.switchReminders setOn:self.notificationSettings.isReminderOn];
 			break;
 		}
 		
-		// Tone Row
+		// Tone row
 		case 1:
 		{
-			// Set Tone text
+			// Set tone text
 			[cell.detailTextLabel setText:self.notificationSettings.ToneTitle];
 			break;
 		}
 		
-		// Interval Row
+		// Interval row
 		case 2:
 		{
-			// Set Interval text
+			// Set interval text
 			[cell.detailTextLabel setText:[[self.notificationSettings.Interval stringValue] stringByAppendingString:@" min"]];
 			break;
 		}
 	}
 	
-	// Fix iOS8 Issue that prevents detailText from appearing
+	// Fix iOS8 Issue that prevents detail text from appearing
 	[cell layoutSubviews];
 	
     return cell;
@@ -192,7 +192,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Segue to Notification Settings Picker
+	// Segue to notification settings picker
 	if (indexPath.row > 0)
 	{
 		[self performSegueWithIdentifier:@"showSettingsNotificationsPicker" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
@@ -206,15 +206,15 @@
 		SettingsNotificationsPickerTableViewController *settingsNotificationsPickerTableViewController = segue.destinationViewController;
 		UITableViewCell *cell = (UITableViewCell *)sender;
 		
-		// Set Picker Type
+		// Set picker type
 		[settingsNotificationsPickerTableViewController setPickerType:cell.tag];
 		
-		// Set selected Notification Tone
+		// Set selected notification tone
 		if (cell.tag == 0)
 		{
 			[settingsNotificationsPickerTableViewController setSelectedOption:self.notificationSettings.ToneTitle];
 		}
-		// Set selected Notification Interval
+		// Set selected notification interval
 		else
 		{
 			[settingsNotificationsPickerTableViewController setSelectedOption:[[self.notificationSettings.Interval stringValue] stringByAppendingFormat:@" minute%@", ([self.notificationSettings.Interval isEqualToNumber:[NSNumber numberWithInt:1]] ? @"" : @"s")]];

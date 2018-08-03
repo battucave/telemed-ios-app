@@ -30,7 +30,7 @@
 {
     [super viewDidLoad];
 	
-	// Store Navigation Bar Title
+	// Store navigation bar title
 	[self setNavigationBarTitle:self.navigationItem.title];
 }
 
@@ -38,26 +38,26 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// Modify text of future Back Button to this View Controller
+	// Modify text of future back button to this view controller
 	[self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Sent" style:UIBarButtonItemStylePlain target:nil action:nil]];
 	
-	// If Swipe Message has been disabled (Triggering a swipe to open the menu or refresh the table will disable it)
+	// If swipe message has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 0 (Keep Swipe Message there as it will simply be hidden under the Container View)
+		// Change top layout constraint to 0 (keep swipe message there as it will simply be hidden under the container view)
 		self.constraintTopSpace.constant = 0;
 	}
 	
 	[super viewWillAppear:animated];
 }
 
-// Delegate method from SWRevealController that fires when a Recognized Gesture has ended
+// Delegate method from SWRevealController that fires when a recognized gesture has ended
 - (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
 {
 	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
 }
 
-// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if Gesture resulted in opening the SWRevealController
+// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded delegate method so we can determine if gesture resulted in opening the SWRevealController
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open
@@ -72,19 +72,19 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Embedded Table View Controller inside Container
+	// Embedded table view controller inside container
 	if ([segue.identifier isEqualToString:@"embedSentMessagesTable"])
 	{
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
-		// Set Messages Type to Sent
+		// Set messages type to sent
 		[self.messagesTableViewController initMessagesWithType:2];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.
 		[self.toolbarBottom layoutIfNeeded];
 		
-		// Increase bottom inset of Messages Table so that its bottom scroll position rests above bottom Toolbar
+		// Increase bottom inset of messages table so that its bottom scroll position rests above bottom toolbar
 		UIEdgeInsets tableInset = self.messagesTableViewController.tableView.contentInset;
 		CGSize toolbarSize = self.toolbarBottom.frame.size;
 		

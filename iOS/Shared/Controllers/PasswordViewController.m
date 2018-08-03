@@ -54,7 +54,7 @@
 		[self.constraintScrollViewTop setConstant:5.0f];
 	}
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -74,7 +74,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -94,7 +94,7 @@
 		
 		[errorAlertController show:error];
 	}
-	// Verify that New Password matches Confirm Password
+	// Verify that new password matches confirm password
 	else if (! [self.textFieldNewPassword.text isEqualToString:self.textFieldConfirmNewPassword.text])
 	{
 		// Show error message without title

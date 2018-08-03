@@ -19,24 +19,24 @@
     _sideNavigationButton.target = self.revealViewController;
 	_sideNavigationButton.action = @selector(revealToggle:);
 	
-	// HelpViewController may not have revealViewController when navigated to from LoginViewController or PhoneNumberViewController
+	// HelpViewController may not have reveal view controller when navigated to from LoginViewController or PhoneNumberViewController
 	if (self.revealViewController)
 	{
-		// Set revealViewController delegate
+		// Set reveal view controller delegate
 		[self.revealViewController setDelegate:self];
 		
-		// Register a Gesture Recognizer for Navigation Controller
+		// Register a gesture recognizer for navigation controller
 		[self.navigationController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 	}
 }
 
-// Prevent user interaction on Front View while navigation is open
+// Prevent user interaction on front view while navigation is open
 - (void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position
 {
 	// If position is open
 	if (position == FrontViewPositionRight)
 	{
-		// Prevent user interaction on everything except the Navigation Bar (so that menu button is still clickable)
+		// Prevent user interaction on everything except the navigation bar (so that menu button is still clickable)
 		for(id subview in [revealController.frontViewController.view subviews])
 		{
 			if (! [subview isKindOfClass:[UINavigationBar class]])
@@ -65,7 +65,7 @@
 {
 	// IMPORTANT: These ViewControllers are not dealloc'd as expected when using side navigation. Workaround has been added to SideNavigationViewController.m to manually remove observers
 	
-	// Remove Notification Observers
+	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

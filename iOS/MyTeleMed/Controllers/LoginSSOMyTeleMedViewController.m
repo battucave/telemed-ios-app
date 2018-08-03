@@ -52,7 +52,7 @@
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
 				}];
 			}
-			// Device id is not yet registered with TeleMed, so show phone number screen
+			// Device id is not yet registered with TeleMed, so show PhoneNumberViewController
 			else
 			{
 				// Go to the next screen in the login process

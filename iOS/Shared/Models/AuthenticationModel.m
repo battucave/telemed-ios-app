@@ -249,7 +249,7 @@
 	self.AccessTokenExpiration = nil;
 	self.RefreshToken = nil;
 	
-	// Go to login sso screen
+	// Go to LoginSSOViewController
 	UIStoryboard *loginSSOStoryboard;
 	UIStoryboard *currentStoryboard = appDelegate.window.rootViewController.storyboard;
 	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];

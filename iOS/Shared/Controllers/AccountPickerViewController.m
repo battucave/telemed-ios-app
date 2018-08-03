@@ -144,12 +144,12 @@
 		[self scrollToSelectedAccount];
 	}
 	
-	// Add Keyboard Observers
+	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
 	#ifdef MED2MED
-		// If user navigated from settings screen
+		// If user navigated from SettingsTableViewController
 		if (! self.shouldSelectAccount)
 		{
 			// Disallow selection of medical groups (accounts)
@@ -169,7 +169,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Remove Keyboard Observers
+	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -583,7 +583,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	#ifdef MYTELEMED
-		// Set Account for MessageRecipientPickerTableViewController
+		// Set account for MessageRecipientPickerTableViewController
 		if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
 		{
 			MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;

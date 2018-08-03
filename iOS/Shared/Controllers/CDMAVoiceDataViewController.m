@@ -42,7 +42,7 @@
 
 - (IBAction)toggleCDMAVoiceDataDisabled:(UISwitch *)sender
 {
-	// Toggle CDMA Voice Data window on change of UISwitch
+	// Toggle whether this view should show again on next run
 	[self.settings setBool: ! sender.isOn forKey:@"CDMAVoiceDataDisabled"];
 }
 

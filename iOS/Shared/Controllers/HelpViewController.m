@@ -28,7 +28,7 @@
 {
 	[super viewDidLoad];
 	
-	// If showing Back button, remove existing menu button so that Back Button will be added in its place (Back button only shown when navigating from LoginSSO.storyboard view controllers)
+	// If showing back button, remove existing menu button so that back button will be added in its place (back button only shown when navigating from LoginSSO.storyboard view controllers)
 	if (self.showBackButton)
 	{
 		self.navigationItem.leftBarButtonItem = nil;
@@ -84,10 +84,10 @@
 	[self presentMoviePlayerViewControllerAnimated:player];
 }
 
-// Override CoreViewController's logic to prevent showing CDMA Voice Data screen
+// Override CoreViewController's logic to prevent showing CDMAVoiceDataViewController
 - (void)showCDMAVoiceDataViewController:(NSNotification *)notification
 {
-	// Don't show CDMA Voice Data screen
+	// Don't show CDMAVoiceDataViewController
 }
 
 - (void)didReceiveMemoryWarning
@@ -104,10 +104,10 @@
 	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
-		// Update account picker screen title
+		// Update AccountPickerViewController title
 		[accountPickerViewController setTitle:@"Call TeleMed"];
 		
-		// Enable account calling and account selection on account picker screen
+		// Enable account calling and account selection on AccountPickerViewController
 		[accountPickerViewController setShouldCallAccount:YES];
 		[accountPickerViewController setShouldSelectAccount:YES];
 	}

@@ -71,10 +71,10 @@
 	}
 }
 
-// Override CoreViewController's logic to prevent showing CDMA Voice Data screen
+// Override CoreViewController's logic to prevent showing CDMAVoiceDataViewController
 - (void)showCDMAVoiceDataViewController:(NSNotification *)notification
 {
-	// Don't show CDMA Voice Data screen
+	// Don't show CDMAVoiceDataViewController
 }
 
 - (void)didReceiveMemoryWarning
