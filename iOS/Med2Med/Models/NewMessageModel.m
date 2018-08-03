@@ -145,36 +145,30 @@
 	{
 		NSLog(@"NewMessageModel Error: %@", error);
 		
-		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"New Message Error"];
 		
-		// If error is related to the callback number, then handle it separately
-		if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
 		{
-			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			// If error is related to the callback number, then handle it separately
+			if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
 			{
-				// Close activity indicator with callback
-				[self hideActivityIndicator:^
+				// Handle error via delegate
+				if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 				{
 					[self.delegate sendMessageError:error];
-				}];
-				
-				return;
+					
+					return;
+				}
 			}
-		}
-		
-		// Close activity indicator
-		[self hideActivityIndicator];
-		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^
-		{
-			// Include callback to retry the request
-			[self sendNewMessage:messageData withOrder:sortedKeys];
+			
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self sendNewMessage:messageData withOrder:sortedKeys];
+			}];
 		}];
 	}];
 }
