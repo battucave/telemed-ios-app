@@ -6,6 +6,8 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "Model.h"
 #import "ProfileProtocol.h"
 #import "TimeZoneModel.h"

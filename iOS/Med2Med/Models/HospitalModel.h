@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "Model.h"
 
 @protocol HospitalDelegate <NSObject>

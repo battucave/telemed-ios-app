@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "CoreViewController.h"
-#import "MessageModel.h"
 #import "MessageProtocol.h"
+#import "MessageModel.h"
 
 @interface MessageDetailParentViewController : CoreViewController
 

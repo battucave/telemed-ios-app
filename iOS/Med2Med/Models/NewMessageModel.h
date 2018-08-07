@@ -9,6 +9,7 @@
 // NOTE: This file is exact duplicate of Med2Med's NewMessageModel.h
 
 #import <Foundation/Foundation.h>
+
 #import "Model.h"
 
 @protocol NewMessageDelegate <NSObject>

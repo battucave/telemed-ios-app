@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "RevealTableViewController.h"
 
 @interface MessageNewUnauthorizedTableViewController : RevealTableViewController

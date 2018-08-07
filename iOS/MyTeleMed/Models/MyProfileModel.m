@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import "TeleMedApplication.h"
 #import "MyProfileModel.h"
+#import "TeleMedApplication.h"
 #import "ProfileProtocol.h"
 #import "AccountModel.h"
 #import "RegisteredDeviceModel.h"

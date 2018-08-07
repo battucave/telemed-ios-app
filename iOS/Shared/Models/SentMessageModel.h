@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "Model.h"
-#import "AccountModel.h"
 #import "MessageProtocol.h"
+#import "AccountModel.h"
 
 @protocol SentMessageDelegate <NSObject>
 

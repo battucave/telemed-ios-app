@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
+#import <AudioToolbox/AudioServices.h>
+
 #import "SettingsNotificationsPickerTableViewController.h"
 #import "NotificationSettingModel.h"
-#import <AudioToolbox/AudioServices.h>
 
 @interface SettingsNotificationsPickerTableViewController ()
 

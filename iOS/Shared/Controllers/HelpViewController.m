@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 SolutionBuilt. All rights reserved.
 //
 
+#import <MediaPlayer/MediaPlayer.h>
+
 #import "HelpViewController.h"
 #import "AccountPickerViewController.h"
-#import <MediaPlayer/MediaPlayer.h>
 
 @interface HelpViewController ()
 

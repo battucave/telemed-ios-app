@@ -7,8 +7,8 @@
 //
 
 #import "MyProfileXMLParser.h"
-#import "MyProfileModel.h"
 #import "AccountModel.h"
+#import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 #import "TimeZoneModel.h"
 

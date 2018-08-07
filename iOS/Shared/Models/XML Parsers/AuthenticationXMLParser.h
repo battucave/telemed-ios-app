@@ -6,7 +6,8 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
 #import "AuthenticationModel.h"
 
 @interface AuthenticationXMLParser : NSObject <NSXMLParserDelegate>

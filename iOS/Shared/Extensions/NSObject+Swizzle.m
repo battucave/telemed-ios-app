@@ -6,8 +6,9 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
-#import "NSObject+Swizzle.h"
 #import <objc/runtime.h>
+
+#import "NSObject+Swizzle.h"
 
 @implementation NSObject (Swizzle)
 

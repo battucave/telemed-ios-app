@@ -7,8 +7,8 @@
 //
 
 #import "ArchivesViewController.h"
-#import "MessagesTableViewController.h"
 #import "ArchivesPickerViewController.h"
+#import "MessagesTableViewController.h"
 #import "SWRevealViewController.h"
 
 @interface ArchivesViewController ()

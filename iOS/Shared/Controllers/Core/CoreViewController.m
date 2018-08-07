@@ -6,9 +6,10 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
+#import <AudioToolbox/AudioServices.h>
+
 #import "CoreViewController.h"
 #import "CDMAVoiceDataViewController.h"
-#import <AudioToolbox/AudioServices.h>
 
 #ifdef MYTELEMED
 	#import "NotificationSettingModel.h"

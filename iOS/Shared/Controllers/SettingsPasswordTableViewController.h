@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "CoreTableViewController.h"
 
 @interface SettingsPasswordTableViewController : CoreTableViewController <UITextFieldDelegate>

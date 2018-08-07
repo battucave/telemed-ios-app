@@ -6,8 +6,8 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "LoginSSOMyTeleMedViewController.h"
+#import "AppDelegate.h"
 #import "PhoneNumberViewController.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"

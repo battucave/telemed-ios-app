@@ -7,9 +7,9 @@
 //
 
 #import "MessageNewTableViewController.h"
+#import "AccountPickerViewController.h"
 #import "ErrorAlertController.h"
 #import "MessageComposeTableViewController.h"
-#import "AccountPickerViewController.h"
 #import "MessageRecipientPickerViewController.h"
 #import "AccountModel.h"
 #import "NewMessageModel.h"

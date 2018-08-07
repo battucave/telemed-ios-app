@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "MessageDetailViewController.h"
 #import "ErrorAlertController.h"
 #import "AutoGrowingTextView.h"
 #import "ProfileProtocol.h"
-#import <QuartzCore/QuartzCore.h>
 
 #ifdef MYTELEMED
 	#import "MessageHistoryViewController.h"

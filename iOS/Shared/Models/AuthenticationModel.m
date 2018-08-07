@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "AuthenticationModel.h"
+#import "AppDelegate.h"
 #import "AuthenticationHTTPSessionManager.h"
-#import "TeleMedHTTPRequestOperationManager.h"
 #import "KeyChainItemWrapper.h"
+#import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 
 @interface AuthenticationModel()

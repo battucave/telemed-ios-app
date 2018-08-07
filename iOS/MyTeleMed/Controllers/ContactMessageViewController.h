@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "RevealViewController.h"
 
 @interface ContactMessageViewController : RevealViewController

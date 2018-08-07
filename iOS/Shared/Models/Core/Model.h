@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "TeleMedHTTPRequestOperationManager.h"
 
 @interface Model : NSObject

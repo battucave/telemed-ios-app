@@ -6,17 +6,19 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import "AppDelegate.h"
-#import "TeleMedApplication.h"
-#import "ErrorAlertController.h"
-#import "SWRevealViewController.h"
-#import "TeleMedHTTPRequestOperationManager.h"
-#import "ProfileProtocol.h"
-#import "AuthenticationModel.h"
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#import <UserNotifications/UserNotifications.h>
+
+#import "AppDelegate.h"
+#import "TeleMedApplication.h"
+#import "ErrorAlertController.h"
+#import "SWRevealViewController.h"
+#import "ProfileProtocol.h"
+#import "AuthenticationModel.h"
+#import "TeleMedHTTPRequestOperationManager.h"
 
 #ifdef MYTELEMED
 	#import "MyProfileModel.h"

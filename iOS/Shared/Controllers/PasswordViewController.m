@@ -6,8 +6,8 @@
 //  Copyright © 2018 SolutionBuilt. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "PasswordViewController.h"
+#import "AppDelegate.h"
 #import "ErrorAlertController.h"
 #import "ProfileProtocol.h"
 #import "PasswordChangeModel.h"
