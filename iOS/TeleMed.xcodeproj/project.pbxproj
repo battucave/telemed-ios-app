@@ -420,7 +420,6 @@
 		E2D567E11CDB85B80054FD3F /* button-Contact-Mail.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677A1CDB85B80054FD3F /* button-Contact-Mail.png */; };
 		E2D567E21CDB85B80054FD3F /* button-Contact-Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677B1CDB85B80054FD3F /* button-Contact-Mail@2x.png */; };
 		E2D83FB51C761502008D26A8 /* CDMAVoiceDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */; };
-		E2E323D61D2F1DC000646201 /* UIViewController+NotificationTonesFix.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */; };
 		E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */; };
 		E2E7F6FC200E648F00648D61 /* NSString+XML.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E7F6FA200E648F00648D61 /* NSString+XML.m */; };
 		E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB581B331F910024D970 /* SSOProviderModel.m */; };
@@ -893,8 +892,6 @@
 		E2DFACE120938DF400B798F8 /* MyTmd Debug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "MyTmd Debug.entitlements"; sourceTree = "<group>"; };
 		E2DFACE22093908A00B798F8 /* Med2Med.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Med2Med.entitlements; sourceTree = "<group>"; };
 		E2DFACE32093908A00B798F8 /* Med2Medβ.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Med2Medβ.entitlements"; sourceTree = "<group>"; };
-		E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NotificationTonesFix.h"; sourceTree = "<group>"; };
-		E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NotificationTonesFix.m"; sourceTree = "<group>"; };
 		E2E7F6F7200E648E00648D61 /* NSMutableString+XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+XML.m"; sourceTree = "<group>"; };
 		E2E7F6F8200E648F00648D61 /* NSMutableString+XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+XML.h"; sourceTree = "<group>"; };
 		E2E7F6F9200E648F00648D61 /* NSString+XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XML.h"; sourceTree = "<group>"; };
@@ -1132,7 +1129,6 @@
 			isa = PBXGroup;
 			children = (
 				28CCCD8217F518420093CEE2 /* Controllers */,
-				E2AE66311CE0DBF900953EFA /* Extensions */,
 				E27B84AF1B14B96A00AD50C6 /* Models */,
 				28CCCD7717F517FC0093CEE2 /* Resources */,
 				E211D5691FBF394400263497 /* Supporting Files */,
@@ -1724,15 +1720,6 @@
 			path = "XML Parsers";
 			sourceTree = "<group>";
 		};
-		E2AE66311CE0DBF900953EFA /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				E2E323D41D2F1DC000646201 /* UIViewController+NotificationTonesFix.h */,
-				E2E323D51D2F1DC000646201 /* UIViewController+NotificationTonesFix.m */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		E2C7C1BA1FC4914700E50F07 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1912,7 +1899,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -1934,6 +1921,9 @@
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
 							};
 						};
 					};
@@ -2219,7 +2209,6 @@
 				28CCCD9117F535DD0093CEE2 /* ArchivesViewController.m in Sources */,
 				E27B84D71B14B96A00AD50C6 /* Model.m in Sources */,
 				E270ED671B1758C900DD43B8 /* UIImageView+AFNetworking.m in Sources */,
-				E2E323D61D2F1DC000646201 /* UIViewController+NotificationTonesFix.m in Sources */,
 				E270ED6F1B1758C900DD43B8 /* AFURLSessionManager.m in Sources */,
 				E272B8891B0D327200A7154B /* LoginSSOViewController.m in Sources */,
 				E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */,
@@ -2441,6 +2430,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2470,6 +2460,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2499,6 +2490,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;

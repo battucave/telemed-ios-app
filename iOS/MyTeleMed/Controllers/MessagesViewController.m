@@ -12,15 +12,6 @@
 #import "SWRevealViewController.h"
 #import "MessageModel.h"
 
-/*
- * Temporary (Version 3.51) - Notification Tones had to be fixed in Version 3.51 to add the file extension to any tones that had been saved in Version 3.50.
- * This file and import can be removed in a future version (the file is not used anywhere else).
- */
-#import "UIViewController+NotificationTonesFix.h"
-/*
- * End Temporary (Version 3.51)
- */
-
 @interface MessagesViewController ()
 
 @property (weak, nonatomic) MessagesTableViewController *messagesTableViewController;
@@ -48,15 +39,6 @@
 	[self setNavigationBarTitle:self.navigationItem.title];
 	
 	// Note: programmatically set right bar button item to Apple's built-in edit button is toggled from within MessagesTableViewController.m based on number of filtered messages
-
-	/*
-	 * Temporary (Version 3.51) - Notification Tones had to be fixed in Version 3.51 to add the file extension to any tones that had been saved in Version 3.50.
-	 * This logic can be removed in a future version.
-	 */
-	[self verifyNotificationTones];
-	/*
-	 * End Temporary (Version 3.51)
-	 */
 }
 
 - (void)viewWillAppear:(BOOL)animated
