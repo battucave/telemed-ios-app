@@ -296,7 +296,7 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone
 {
 	NSLog(@"Received Remote Notification MessageDetailViewController");
 	
@@ -309,12 +309,12 @@
 	//*/
 	
 	// Reload message events if remote notification is a comment specifically for the current message
-	if ([notificationType isEqualToString:@"Comment"] && deliveryID)
+	if ([notificationType isEqualToString:@"Comment"] && notificationID)
 	{
 		// Received messages
-		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
+		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && [notificationID isEqualToNumber:self.message.MessageDeliveryID])
 		{
-			NSLog(@"Refresh Comments with Message Delivery ID: %@", deliveryID);
+			NSLog(@"Refresh Comments with Message Delivery ID: %@", notificationID);
 			
 			// Cancel queued comments refresh
 			[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
@@ -322,9 +322,9 @@
 			[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
 		}
 		// Sent messages
-		else if (self.message.MessageID && [deliveryID isEqualToNumber:self.message.MessageID])
+		else if (self.message.MessageID && [notificationID isEqualToNumber:self.message.MessageID])
 		{
-			NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
+			NSLog(@"Refresh Comments with Message ID: %@", notificationID);
 			
 			// Cancel queued comments refresh
 			[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
@@ -334,7 +334,7 @@
 	}
 	
 	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
+	[super handleRemoteNotificationMessage:message ofType:notificationType withID:notificationID withTone:tone];
 }
 
 // Return events from MessageEventModel delegate

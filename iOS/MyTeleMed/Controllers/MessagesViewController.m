@@ -121,7 +121,7 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone
 {
 	NSLog(@"Received Remote Notification MessagesViewController");
 	
@@ -134,7 +134,7 @@
 	}
     
     // Execute the default notification message action
-    [super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
+    [super handleRemoteNotificationMessage:message ofType:notificationType withID:notificationID withTone:tone];
 }
 
 // Override selectedMessages setter

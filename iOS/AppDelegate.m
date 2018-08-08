@@ -514,12 +514,73 @@
 	#endif
 	// END TESTING ONLY */
 	
+	NSDictionary *notificationData = [self parseRemoteNotification:notification];
+	
 	// Handle push notification when app is active
 	if (application.applicationState == UIApplicationStateActive)
 	{
 		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:notification];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:notificationData];
 	}
+}
+
+/*
+ * Parse and clean up push notification data from didReceiveRemoteNotification method or didFinishLaunchingWithOptions method
+ */
+- (NSDictionary *)parseRemoteNotification:(NSDictionary *)notification
+{
+	NSDictionary *aps = [notification objectForKey:@"aps"];
+	id alert = [aps objectForKey:@"alert"];
+	NSString *message = nil;
+	NSNumber *notificationID;
+	NSString *notificationType = [notification objectForKey:@"NotificationType"];
+	
+	// Determine whether notification's alert was sent as an object or a string.
+	if ([alert isKindOfClass:[NSString class]])
+	{
+		message = alert;
+	}
+	else if ([alert isKindOfClass:[NSDictionary class]])
+	{
+		message = [alert objectForKey:@"body"];
+	}
+	
+	// If no notification type was sent, assume it's a message.
+	if (! notificationType)
+	{
+		notificationType = @"Message";
+		
+		// If message contains specific substring, then it's a notification for comment.
+		if ([message rangeOfString:@" added a comment to a message"].location != NSNotFound)
+		{
+			notificationType = @"Comment";
+		}
+	}
+	
+	// Extract delivery id or message id
+	if ([notificationType isEqualToString:@"Comment"])
+	{
+		// Message id is used for sent messages; delivery id is used for received messages
+		notificationID = ([notification objectForKey:@"MessageID"] ?: [notification objectForKey:@"DeliveryID"]);
+	}
+	// Extract chat message id
+	else if ([notificationType isEqualToString:@"Chat"])
+	{
+		notificationID = [notification objectForKey:@"ChatMsgID"];
+	}
+	
+	// Convert notification id to a number if it is not already
+	if (! [notificationID isKindOfClass:[NSNumber class]])
+	{
+		notificationID = [NSNumber numberWithInteger:[notificationID integerValue]];
+	}
+	
+	return @{
+		@"notificationType"	: notificationType,
+		@"notificationID"	: notificationID,
+		@"message"			: message,
+		@"tone"				: [aps objectForKey:@"sound"]
+	};
 }
 
 /*

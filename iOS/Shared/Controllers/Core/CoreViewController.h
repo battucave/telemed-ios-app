@@ -11,7 +11,7 @@
 @interface CoreViewController : UIViewController
 
 #ifdef MYTELEMED
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone;
+- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone;
 #endif
 
 @end
