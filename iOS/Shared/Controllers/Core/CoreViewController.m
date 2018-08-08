@@ -23,7 +23,7 @@
 
 @implementation CoreViewController
 
-// NOTE: All functionality from this file is duplicated in CoreTableViewController.m
+// NOTE: All functionality in this file is duplicated in CoreTableViewController.m
 
 - (void)viewWillAppear:(BOOL)animated
 {

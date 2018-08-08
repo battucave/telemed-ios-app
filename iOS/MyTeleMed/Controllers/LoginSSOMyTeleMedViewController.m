@@ -40,13 +40,15 @@
 				
 				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
 				{
-					// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
+					// If there is an error other than the device offline error, show an error and require user to enter their phone number again
 					if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 					{
+						// If the request was not successful, direct the user to re-enter their phone number again (handled by AppDelegate's showMainScreen:)
+						[registeredDeviceModel setHasRegistered:NO];
+						
+						// Show the error even if success returned true so that TeleMed can track issue down
 						[self showWebViewError:[NSString stringWithFormat:@"There was a problem registering your device on our network:<br>%@", registeredDeviceError.localizedDescription]];
 					}
-					
-					// NOTE: If the request was not successful, then just continue to next step in the login process to avoid a potential infinite loop. Don't force user to re-enter their phone number until the next time they launch the app
 					
 					// Go to the next screen in the login process
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];

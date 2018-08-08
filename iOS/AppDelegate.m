@@ -57,6 +57,11 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
+	// Med2Med - Prevent swipe message from ever appearing
+	#ifdef MED2MED
+		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+	#endif
+	
 	// Initialize cdma voice data settings
 	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
 	
@@ -101,17 +106,32 @@
 	
 	// MyTeleMed - push notification registration
 	#ifdef MYTELEMED
-		if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+		// Register for push notification in iOS 10+
+		if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 		{
-			// iOS 8+ push notifications
-			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-			[application registerForRemoteNotifications];
+			UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+			
+			[userNotificationCenter setDelegate:self];
+			[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+				if (granted)
+				{
+					dispatch_async(dispatch_get_main_queue(), ^
+					{
+						[application registerForRemoteNotifications];
+					});
+				}
+			}];
 		}
-	
-	// Med2Med - Prevent swipe message from ever appearing
-	#elif defined MED2MED
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
-		[settings synchronize];
+		// Register for push notifications in iOS < 10
+		else
+		{
+			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+			
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[application registerForRemoteNotifications];
+			});
+		}
 	#endif
 	
 	return YES;
@@ -246,17 +266,15 @@
 	
 	// Load timeout preference
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
-	if (! timeoutEnabled)
+	// If enable timeout has never been set, the default it to true
+	if (! [settings objectForKey:@"enableTimeout"])
 	{
-		// If Enable timeout string is null, then it has never been set. Set it to true
-		if ([settings objectForKey:@"enableTimeout"] == nil)
-		{
-			[settings setBool:YES forKey:@"enableTimeout"];
-			[settings synchronize];
-		}
+		[settings setBool:YES forKey:@"enableTimeout"];
+		[settings synchronize];
 	}
+	
+	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
 	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
 	
@@ -391,7 +409,7 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
 	NSLog(@"My Device Token: %@", deviceToken);
 	
@@ -419,7 +437,7 @@
 	}];
 }
 
-- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
 }
@@ -429,7 +447,7 @@
 	//NSLog(@"Local Notification received: %@", notification.userInfo);
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
 {
 	// IMPORTANT: TeleMed's test and production servers both send push notifications through apple's production server. Only apps signed with ad hoc or distribution provisioning profiles can receive these notifications - not debug
 	// See project's ReadMe.md for instructions on how to test push notifications using apn tester free
@@ -482,27 +500,25 @@
 	}*/
 	
 	/*/ TESTING ONLY (push notifications can generally only be tested in ad hoc mode where nothing can be logged, so show result in an alert instead)
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	#if !defined RELEASE
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Push Notification", (application.applicationState == 0 ? @"Foreground" : @"Background")] message:[NSString stringWithFormat:@"%@", notification] preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
-	[alertController addAction:actionOK];
+		[alertController addAction:actionOK];
 	
-	// PreferredAction only supported in 9.0+
-	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[alertController setPreferredAction:actionOK];
-	}
-	
-	// Show alert
-	[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
-	
+		// Show alert
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+		});
+	#endif
 	// END TESTING ONLY */
 	
 	// Handle push notification when app is active
-	if ([application applicationState] == UIApplicationStateActive)
+	if (application.applicationState == UIApplicationStateActive)
 	{
 		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:notification];
 	}
 }
 
@@ -588,10 +604,9 @@
 	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 	
-	// Check if user has previously registered this device with TeleMed
+	// If this device was previously registered with TeleMed, we should update the device token in case it changed
 	if (registeredDeviceModel.hasRegistered)
 	{
-		// Phone number was previously registered with TeleMed, but we should update the device token in case it changed
 		[registeredDeviceModel setShouldRegister:YES];
 		
 		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
