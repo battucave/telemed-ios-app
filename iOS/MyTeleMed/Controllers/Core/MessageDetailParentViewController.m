@@ -37,12 +37,12 @@
 	[super viewWillAppear:animated];
 	
 	// Set buttons for archived message details
-	if (self.message.messageType == 1)
+	if ([self.message.MessageType isEqualToString:@"Archived"])
 	{
 		[self.buttonArchive setEnabled:NO];
 	}
 	// Set buttons for sent message details
-	else if (self.message.messageType == 2)
+	else if ([self.message.MessageType isEqualToString:@"Sent"])
 	{
 		CGFloat buttonWidth = self.buttonReturnCall.frame.size.width;
 		CGFloat spaceAdjustment = (buttonWidth / 2);

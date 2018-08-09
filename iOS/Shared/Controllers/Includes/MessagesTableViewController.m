@@ -541,7 +541,6 @@
 		{
 			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
 			
-			[message setMessageType:self.messagesType];
 			[messageDetailViewController setMessage:message];
 		}
 	}

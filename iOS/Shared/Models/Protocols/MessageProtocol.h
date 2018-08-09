@@ -21,12 +21,12 @@
 @property (nonatomic) NSNumber *SenderID;
 @property (nonatomic) NSString *SenderName;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived, 2 = Sent (this property not set by web service)
+@property (nonatomic) NSString *MessageType; // Active, Archived, Sent (this property not set by web service)
 
 // MessageModel only
 @optional
 @property (nonatomic) NSNumber *MessageDeliveryID;
-@property (nonatomic) NSString *State;
+@property (nonatomic) NSString *State; // Archived, Read, ReadAndArchived, Unread
 @property (nonatomic) NSString *TimeReceived_LCL;
 @property (nonatomic) NSString *TimeReceived_UTC;
 

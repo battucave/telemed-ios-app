@@ -44,11 +44,11 @@
 @property (nonatomic) NSString *SenderContact;
 @property (nonatomic) NSNumber *SenderID;
 @property (nonatomic) NSString *SenderName;
-@property (nonatomic) NSString *State;
+@property (nonatomic) NSString *State; // Archived, Read, ReadAndArchived, Unread
 @property (nonatomic) NSString *TimeReceived_LCL;
 @property (nonatomic) NSString *TimeReceived_UTC;
 
-@property (nonatomic) int messageType; // 0 = Active, 1 = Archived (this property not set by web service)
+@property (nonatomic) NSString *MessageType; // Active, Archived (this property not set by web service)
 
 - (void)getActiveMessages;
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;

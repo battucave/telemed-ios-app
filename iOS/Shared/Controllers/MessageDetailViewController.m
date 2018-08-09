@@ -120,7 +120,7 @@
 	}
 	
 	// Set sent message details
-	if (self.message.messageType == 2)
+	if ([self.message.MessageType isEqualToString:@"Sent"])
 	{
 		[self setSentMessageDetails];
 		
@@ -158,7 +158,7 @@
 		// Mark message as read if active and unread
 		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID && [self.message respondsToSelector:@selector(State)] && self.message.State)
 		{
-			if (self.message.messageType == 0 && [self.message.State isEqualToString:@"Unread"])
+			if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Unread"])
 			{
 				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
 				
@@ -169,7 +169,7 @@
 				// END TESTING ONLY */
 			}
 			/*/ TESTING ONLY (unarchive archived messages)
-			else if (self.message.messageType == 1)
+			else if ([self.message.MessageType isEqualToString:@"Archived"])
 			{
 				#ifdef DEBUG
 					[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
