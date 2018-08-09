@@ -87,18 +87,17 @@
 #ifdef MYTELEMED
 - (void)didReceiveRemoteNotification:(NSNotification *)notification
 {
-	NSDictionary *notificationInfo = notification.object;
+	NSLog(@"CoreViewController Remote Notification: %@", notification.object);
 	
-	NSLog(@"CoreViewController Remote Notification: %@", notificationInfo);
-	
-	if (notificationInfo)
-	{
-		[self handleRemoteNotificationMessage:[notificationInfo objectForKey:@"message"] ofType:[notificationInfo objectForKey:@"notificationType"] withID:[notificationInfo objectForKey:@"notificationID"] withTone:[notificationInfo objectForKey:@"tone"]];
-	}
+	[self handleRemoteNotification:notification.object ofType:[notification.object objectForKey:@"notificationType"]];
 }
 
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone
+- (void)handleRemoteNotification:(NSDictionary *)notificationInfo ofType:(NSString *)notificationType
 {
+	NSString *message = [notificationInfo objectForKey:@"message"];
+	// NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
+	NSString *tone = [notificationInfo objectForKey:@"tone"];
+	
 	// Play notification sound
 	if (tone != nil)
 	{

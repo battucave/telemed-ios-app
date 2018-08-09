@@ -6,12 +6,14 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
+// IMPORTANT: Only view controllers that are NOT part of the login process (use LoginSSO storyboard) should extend from CoreTableViewController
+
 #import <UIKit/UIKit.h>
 
 @interface CoreTableViewController : UITableViewController
 
 #ifdef MYTELEMED
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone;
+- (void)handleRemoteNotification:(NSDictionary *)notification ofType:(NSString *)notificationType;
 #endif
 
 @end

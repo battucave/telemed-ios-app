@@ -116,8 +116,8 @@
 	[self presentViewController:deleteChatMessagesAlertController animated:YES completion:nil];
 }
 
-// Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone
+/*/ Override default remote notification action from CoreViewController
+- (void)handleRemoteNotification:(NSDictionary *)notificationInfo ofType:(NSString *)notificationType
 {
 	NSLog(@"Received Remote Notification ChatMessagesViewController");
 	
@@ -130,8 +130,9 @@
 	}
     
     // Execute the default notification message action
-    [super handleRemoteNotificationMessage:message ofType:notificationType withID:notificationID withTone:tone];
+    [super handleRemoteNotification:notificationInfo ofType:notificationType];
 }
+//*/
 
 // Override selectedChatMessages setter
 - (void)setSelectedChatMessages:(NSArray *)selectedChatMessages

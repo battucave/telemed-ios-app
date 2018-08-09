@@ -296,21 +296,23 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone
+- (void)handleRemoteNotification:(NSDictionary *)notificationInfo ofType:(NSString *)notificationType
 {
 	NSLog(@"Received Remote Notification MessageDetailViewController");
 	
 	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message)
 	#ifdef DEBUG
-		message = @"Shane Goodwin added a comment to a message.";
-		type = @"comment";
-		deliveryId = 5133538688695397;
+		[notificationInfo setValue:@"Shane Goodwin added a comment to a message." forKey:@"message"];
+		[notificationInfo setValue:5133538688695397 forKey:@"notificationID"];
+		notificationType = @"Comment";
 	#endif
 	//*/
 	
 	// Reload message events if remote notification is a comment specifically for the current message
-	if ([notificationType isEqualToString:@"Comment"] && notificationID)
+	if ([notificationType isEqualToString:@"Comment"])
 	{
+		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
+		
 		// Received messages
 		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && [notificationID isEqualToNumber:self.message.MessageDeliveryID])
 		{
@@ -322,7 +324,7 @@
 			[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
 		}
 		// Sent messages
-		else if (self.message.MessageID && [notificationID isEqualToNumber:self.message.MessageID])
+		else if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && [notificationID isEqualToNumber:self.message.MessageID])
 		{
 			NSLog(@"Refresh Comments with Message ID: %@", notificationID);
 			
@@ -334,7 +336,7 @@
 	}
 	
 	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withID:notificationID withTone:tone];
+	[super handleRemoteNotification:notificationInfo ofType:notificationType];
 }
 
 // Return events from MessageEventModel delegate

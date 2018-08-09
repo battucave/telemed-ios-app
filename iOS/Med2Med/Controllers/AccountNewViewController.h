@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "CoreViewController.h"
-
-@interface AccountNewViewController : CoreViewController <UITextFieldDelegate>
+@interface AccountNewViewController : UIViewController <UITextFieldDelegate>
 
 @end

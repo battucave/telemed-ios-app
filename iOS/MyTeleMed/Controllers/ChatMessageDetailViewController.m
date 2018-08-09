@@ -331,12 +331,12 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withID:(NSNumber *)notificationID withTone:(NSString *)tone
+- (void)handleRemoteNotification:(NSDictionary *)notificationInfo ofType:(NSString *)notificationType
 {
 	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
     
-    // Reload chat messages if remote notification is a chat message (there is no way to verify that the message is specifically for the current conversation because the deliveryID will be a newly generated value that won't match conversationID)
-	if ([notificationType isEqualToString:@"Chat"]/* && deliveryID && self.conversationID && [deliveryID isEqualToNumber:self.conversationID]*/)
+    // Reload chat messages if remote notification is a chat message (there is no way to verify that the message is specifically for the current conversation because the notificationID will be a newly generated value that won't match conversationID)
+	if ([notificationType isEqualToString:@"Chat"]/* && notificationID && self.conversationID && [notificationID isEqualToNumber:self.conversationID]*/)
 	{
 		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
 		
@@ -347,7 +347,7 @@
 	}
 	
 	// If remote notification is NOT a chat message specifically for the current conversation, execute the default notification message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withID:notificationID withTone:tone];
+	[super handleRemoteNotification:notificationInfo ofType:notificationType];
 }
 
 // Reset chat messages back to loading state

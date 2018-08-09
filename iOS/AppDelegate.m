@@ -529,13 +529,15 @@
  */
 - (NSDictionary *)parseRemoteNotification:(NSDictionary *)notification
 {
+	NSLog(@"Remote Notification Info: %@", notification);
+	
 	NSDictionary *aps = [notification objectForKey:@"aps"];
 	id alert = [aps objectForKey:@"alert"];
-	NSString *message = nil;
+	NSString *message;
 	NSNumber *notificationID;
-	NSString *notificationType = [notification objectForKey:@"NotificationType"];
+	NSString *notificationType = [notification objectForKey:@"NotificationType"] ?: @"Message";
 	
-	// Determine whether notification's alert was sent as an object or a string.
+	// Determine whether notification's alert was sent as an object or a string
 	if ([alert isKindOfClass:[NSString class]])
 	{
 		message = alert;
@@ -545,25 +547,13 @@
 		message = [alert objectForKey:@"body"];
 	}
 	
-	// If no notification type was sent, assume it's a message.
-	if (! notificationType)
-	{
-		notificationType = @"Message";
-		
-		// If message contains specific substring, then it's a notification for comment.
-		if ([message rangeOfString:@" added a comment to a message"].location != NSNotFound)
-		{
-			notificationType = @"Comment";
-		}
-	}
-	
-	// Extract delivery id or message id
+	// Extract delivery id or message id from comment notification
 	if ([notificationType isEqualToString:@"Comment"])
 	{
 		// Message id is used for sent messages; delivery id is used for received messages
 		notificationID = ([notification objectForKey:@"MessageID"] ?: [notification objectForKey:@"DeliveryID"]);
 	}
-	// Extract chat message id
+	// Extract chat message id from chat notification
 	else if ([notificationType isEqualToString:@"Chat"])
 	{
 		notificationID = [notification objectForKey:@"ChatMsgID"];
