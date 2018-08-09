@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginSSOViewController : UIViewController <UIScrollViewDelegate, UIWebViewDelegate>
+#import "CoreViewController.h"
+
+@interface LoginSSOViewController : CoreViewController <UIScrollViewDelegate, UIWebViewDelegate>
 
 - (void)finalizeLogin;
 - (void)showWebViewError:(NSString *)errorMessage;

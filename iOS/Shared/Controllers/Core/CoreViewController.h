@@ -6,8 +6,6 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
-// IMPORTANT: Only view controllers that are NOT part of the login process (use LoginSSO storyboard) should extend from CoreViewController
-
 #import <UIKit/UIKit.h>
 
 @interface CoreViewController : UIViewController

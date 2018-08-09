@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSOProviderViewController : UIViewController <UITextFieldDelegate>
+#import "CoreViewController.h"
+
+@interface SSOProviderViewController : CoreViewController <UITextFieldDelegate>
 
 @end
