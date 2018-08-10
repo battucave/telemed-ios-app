@@ -108,7 +108,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to archived
-		[self.messagesTableViewController initMessagesWithType:1];
+		[self.messagesTableViewController initMessagesWithType:@"Archived"];
 	}
 	else if ([segue.identifier isEqualToString:@"showArchivesPicker"])
 	{

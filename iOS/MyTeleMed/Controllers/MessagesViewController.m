@@ -263,7 +263,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to active
-		[self.messagesTableViewController initMessagesWithType:0];
+		[self.messagesTableViewController initMessagesWithType:@"Active"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

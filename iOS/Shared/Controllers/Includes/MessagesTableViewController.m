@@ -31,7 +31,7 @@
 @property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
 
-@property (nonatomic) int messagesType; // 0 = Active, 1 = Archived, 2 = Sent
+@property (nonatomic) NSString *messagesType; // Active, Archived, Sent
 @property (nonatomic) NSNumber *archiveAccountID;
 @property (nonatomic) NSDate *archiveStartDate;
 @property (nonatomic) NSDate *archiveEndDate;
@@ -88,14 +88,14 @@
 	[settings synchronize];
 }
 
-- (void)initMessagesWithType:(int)newMessagesType
+- (void)initMessagesWithType:(NSString *)newMessagesType
 {
 	[self setMessages:nil];
 	[self setFilteredMessages:nil];
 	self.messagesType = newMessagesType;
 	
 	// If messages type is active, re-enable refresh control
-	if (newMessagesType == 0)
+	if ([newMessagesType isEqualToString:@"Active"])
 	{
 		if (self.refreshControl == nil)
 		{
@@ -219,7 +219,7 @@
 	[self setFilteredMessages:messages];
 
 	// If messages type is active, toggle the parent view controller's edit button based on whether there are any filtered messages
-	if (self.messagesType == 0)
+	if ([self.messagesType isEqualToString:@"Active"])
 	{
 		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
@@ -277,7 +277,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are filtered messages and hidden messages and row is not the only row in the table
-	if (self.messagesType != 2 && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
+	if (! [self.messagesType isEqualToString:@"Sent"] && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
 	{
 		id <MessageProtocol> message = [self.filteredMessages objectAtIndex:indexPath.row];
 		
@@ -309,7 +309,7 @@
 	id message = [self.filteredMessages objectAtIndex:indexPath.row];
 	
 	// Sent messages
-	if (self.messagesType == 2)
+	if ([self.messagesType isEqualToString:@"Sent"])
 	{
 		return [self cellForSentMessage:cell withMessage:message atIndexPath:indexPath];
 	}
@@ -565,23 +565,20 @@
 // Reload messages
 - (void)reloadMessages
 {
-	switch (self.messagesType)
+	// Get archived messages
+	if ([self.messagesType isEqualToString:@"Archived"])
 	{
-		// Get archived messages
-		case 1:
-			[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
-			break;
-		
-		// Get sent messages
-		case 2:
-			[self.sentMessageModel getSentMessages];
-			break;
-			
-		// Get active messages
-		case 0:
-		default:
-			[self.messageModel getActiveMessages];
-			break;
+		[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
+	}
+	// Get sent messages
+	else if ([self.messagesType isEqualToString:@"Sent"])
+	{
+		[self.sentMessageModel getSentMessages];
+	}
+	// Get active messages
+	else
+	{
+		[self.messageModel getActiveMessages];
 	}
 }
 #endif
