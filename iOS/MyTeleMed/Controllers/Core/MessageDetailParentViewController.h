@@ -15,7 +15,10 @@
 @interface MessageDetailParentViewController : CoreViewController
 
 @property (nonatomic) id <MessageProtocol> message;
+@property (nonatomic) NSNumber *messageDeliveryID; // Active or archived message received from push notification
+@property (nonatomic) NSNumber *messageID; // Sent message received from push notification
 @property (nonatomic) MessageModel *messageModel;
+@property (nonatomic) NSString *messageType; // Active, Archived, Sent
 
 @property (nonatomic) NSArray *messageEvents;
 @property (nonatomic) NSMutableArray *filteredMessageEvents;

@@ -20,6 +20,9 @@
 	@interface MessageDetailViewController : CoreViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 	@property (nonatomic) id <MessageProtocol> message;
+	@property (nonatomic) NSNumber *messageID; // Sent message received from push notification
+	@property (nonatomic) NSNumber *messageDeliveryID; // Not used; compatibility with MyTeleMed
+	@property (nonatomic) NSString *messageType; // Active, Archived, Sent
 
 	// Duplicate properties contained in MessageDetailParentViewController
 	@property (nonatomic) NSArray *messageEvents;
