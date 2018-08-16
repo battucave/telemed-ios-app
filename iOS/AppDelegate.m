@@ -538,11 +538,11 @@
 	NSString *notificationType = [notification objectForKey:@"NotificationType"] ?: @"Message";
 	
 	// Determine whether notification's alert was sent as an object or a string
-	if ([alert isKindOfClass:[NSString class]])
+	if ([alert isKindOfClass:NSString.class])
 	{
 		message = alert;
 	}
-	else if ([alert isKindOfClass:[NSDictionary class]])
+	else if ([alert isKindOfClass:NSDictionary.class])
 	{
 		message = [alert objectForKey:@"body"];
 	}
