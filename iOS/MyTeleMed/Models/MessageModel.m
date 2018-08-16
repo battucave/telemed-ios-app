@@ -110,13 +110,13 @@
 	}];
 }
 
-/*- (void)getMessageByID:(NSNumber *)messageID
+- (void)getMessageByDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, MessageModel *message, NSError *error))callback
 {
 	NSDictionary *parameters = @{
-		@"mdid"	: messageID
+		@"mdid"	: messageDeliveryID
 	};
 	
-	[self GET:@"Messages" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
+	[self.operationManager GET:@"Messages" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
 		MessageXMLParser *parser = [[MessageXMLParser alloc] init];
@@ -126,23 +126,28 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Handle success via delegate
+			MessageModel *message = [[parser messages] objectAtIndex:0];
+			
+			callback(YES, message, nil);
 		}
 		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via delegate
+			callback(NO, nil, error);
 		}
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"MessageModel Error: %@", error);
 		
-		// Handle error via delegate
+		// Build a generic error message
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message." andTitle:@"Message Error"];
+		
+		callback(NO, nil, error);
 	}];
-}*/
+}
 
 - (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state
 {

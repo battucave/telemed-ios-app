@@ -19,8 +19,10 @@
 	#import "MessageEventCell.h" // Med2Med Phase 2
 	#import "CommentModel.h" // Med2Med Phase 2
 	#import "MessageEventModel.h" // Med2Med Phase 2
+	#import "MessageModel.h"
 	#import "MessageRecipientModel.h"
 	#import "MyProfileModel.h"
+	#import "SentMessageModel.h"
 #endif
 
 #ifdef MED2MED
@@ -59,10 +61,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonAddCommentHeight;
 // END TEMPORARY MED2MED PHASE 1
 
-@property (nonatomic) NSUInteger messageCount;
 @property (nonatomic) NSNumber *currentUserID;
+@property (nonatomic) NSUInteger messageCount;
 @property (nonatomic) NSString *textViewCommentPlaceholder;
 
+@property (nonatomic) BOOL isFromPushNotification;// MyTeleMed only
 @property (nonatomic) BOOL isLoaded;
 
 @end
@@ -172,17 +175,71 @@
 			}
 		#endif
 	}
-	// Load sent message details from server (opened via push notification)
-	else if (self.messageID)
-	{
-		NSLog(@"Push Notification Sent Message ID: %@", self.messageID);
-	}
 	
 	#ifdef MYTELEMED
 		// Load message details from server (opened via push notification)
 		else if (self.messageDeliveryID)
 		{
-			NSLog(@"Push Notification Message ID: %@", self.messageDeliveryID);
+			NSLog(@"Push Notification Message Delivery ID: %@", self.messageDeliveryID);
+			
+			MessageModel *messageModel = [[MessageModel alloc] init];
+			
+			// Flag message as being loaded from push notification
+			[self setIsFromPushNotification:YES];
+			
+			[messageModel getMessageByDeliveryID:self.messageDeliveryID withCallback:^(BOOL success, MessageModel *message, NSError *error) {
+				if (success)
+				{
+					self.message = message;
+					self.messageID = message.MessageID;
+					self.messageType = message.MessageType;
+					
+					[self setMessageDetails];
+					
+					// Mark message as read if it is active and unread
+					[self modifyMessageAsRead];
+					
+					// Enable archive button for active messages
+					if ([self.messageType isEqualToString:@"Active"])
+					{
+						[self.buttonArchive setEnabled:YES];
+					}
+				}
+				// Show error
+				else
+				{
+					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					
+					[errorAlertController show:error];
+				}
+			}];
+		}
+		// Load sent message details from server (opened via push notification)
+		else if (self.messageID)
+		{
+			NSLog(@"Push Notification Sent Message ID: %@", self.messageID);
+			
+			SentMessageModel *sentMessageModel = [[SentMessageModel alloc] init];
+			
+			// Flag message as being loaded from push notification
+			[self setIsFromPushNotification:YES];
+			
+			[sentMessageModel getSentMessageByID:self.messageID withCallback:^(BOOL success, SentMessageModel *message, NSError *error) {
+				if (success)
+				{
+					self.message = message;
+					self.messageID = message.MessageID;
+					
+					[self setSentMessageDetails];
+				}
+				// Show error
+				else
+				{
+					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					
+					[errorAlertController show:error];
+				}
+			}];
 		}
 	
 		// Load message events
@@ -360,7 +417,7 @@
 	//*/
 	
 	// Reload message events if push notification is a comment specifically for the current message
-	if ([notificationType isEqualToString:@"Comment"])
+	if ([notificationInfo objectForKey:@"notificationID"] && ([notificationType isEqualToString:@"Comment"] || [notificationType isEqualToString:@"SentComment"]))
 	{
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
@@ -489,10 +546,13 @@
 	{
 		[self.tableComments reloadData];
 		
-		// Scroll to bottom of comments after table reloads data only if a new comment has been added since last check
-		if (self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount)
+		// Scroll to bottom of comments after table reloads data only if message loaded directly from push notification or a new comment has been added since last check
+		if (self.isFromPushNotification || (self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount))
 		{
-			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
+			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.5];
+			
+			// Reset from push notification flag
+			[self setIsFromPushNotification:NO];
 		}
 		
 		// Update message count with new number of filtered message events
