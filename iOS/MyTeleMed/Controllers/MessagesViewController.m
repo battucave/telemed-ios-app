@@ -120,24 +120,6 @@
 	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
 }
 
-/*/ Override default remote notification action from CoreViewController
-- (void)handleRemoteNotification:(NSDictionary *)notificationInfo ofType:(NSString *)notificationType
-{
-	NSLog(@"Received Remote Notification MessagesViewController");
-	
-	// Reload messages list to get the new message only if the notification was for a message
-	if ([notificationType isEqualToString:@"Message"])
-	{
-		NSLog(@"Refresh Messages");
-		
-		[self.messagesTableViewController reloadMessages];
-	}
-    
-    // Execute the default notification message action
-    [super handleRemoteNotification:notificationInfo ofType:notificationType];
-}
-//*/
-
 // Override selectedMessages setter
 - (void)setSelectedMessages:(NSArray *)theSelectedMessages
 {

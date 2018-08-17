@@ -331,24 +331,33 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotification:(NSDictionary *)notificationInfo ofType:(NSString *)notificationType
+/*/ TEMPORARY - Commented out because there is currently no way to verify that the message is specifically for the current conversation because the notificationID will be a newly generated value that wouldn't match conversationID. Uncomment if this changes
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
 {
-	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
+	NSLog(@"Received Push Notification ChatMessageDetailViewController");
     
-    // Reload chat messages if remote notification is a chat message (there is no way to verify that the message is specifically for the current conversation because the notificationID will be a newly generated value that won't match conversationID)
-	if ([notificationType isEqualToString:@"Chat"]/* && notificationID && self.conversationID && [notificationID isEqualToNumber:self.conversationID]*/)
+    // Reload chat messages if push notification is a chat message
+	if ([notificationID objectForKey:@"notificationID"] && [notificationType isEqualToString:@"Chat"])
 	{
-		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
+		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
-		// Cancel queued chat messages refresh
-		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
-		
-		[self.chatMessageModel getChatMessagesByID:self.conversationID];
+		if (notificationID && self.conversationID && [notificationID isEqualToNumber:self.conversationID])
+		{
+			NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
+			
+			// Cancel queued chat messages refresh
+			[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+			
+			[self.chatMessageModel getChatMessagesByID:self.conversationID];
+			
+			// Remove action view (only remove action view if/when notification includes a way to verify that the message is specifically for the current conversation)
+			// actionView = nil;
+		}
 	}
 	
 	// If remote notification is NOT a chat message specifically for the current conversation, execute the default notification message action
-	[super handleRemoteNotification:notificationInfo ofType:notificationType];
-}
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionView];
+} */
 
 // Reset chat messages back to loading state
 - (void)resetChatMessages
@@ -405,17 +414,20 @@
 		}
 	}
 	
-	[self setIsLoaded:YES];
+	// Keep current value of is loaded to determine whether to scroll to bottom of chat messages
+	BOOL hadLoaded = self.isLoaded;
+	
 	[self setChatMessages:chatMessages];
+	[self setIsLoaded:YES];
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableChatMessages reloadData];
 		
-		// Scroll to bottom of chat messages after table reloads data only if a new chat message has been added since last check
-		if (self.chatMessageCount > 0 && chatMessageCount > self.chatMessageCount)
+		// Scroll to bottom of chat messages after table reloads data only if this is the first load or a new chat message has been added since last check
+		if (! hadLoaded || (self.chatMessageCount > 0 && chatMessageCount > self.chatMessageCount))
 		{
-			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
+			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.5];
 		}
 		
 		// Update chat message count with new number of chat messages
