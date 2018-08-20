@@ -331,33 +331,62 @@
 }
 
 // Override default remote notification action from CoreViewController
-/*/ TEMPORARY - Commented out because there is currently no way to verify that the message is specifically for the current conversation because the notificationID will be a newly generated value that wouldn't match conversationID. Uncomment if this changes
 - (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
 {
 	NSLog(@"Received Push Notification ChatMessageDetailViewController");
     
-    // Reload chat messages if push notification is a chat message
-	if ([notificationID objectForKey:@"notificationID"] && [notificationType isEqualToString:@"Chat"])
+    // Reload chat messages if push notification is a chat message for *any* conversation (notification id is a newly generated value that won't exist yet in any current chat messages)
+	if ([notificationInfo objectForKey:@"notificationID"] && [notificationType isEqualToString:@"Chat"])
 	{
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
-		if (notificationID && self.conversationID && [notificationID isEqualToNumber:self.conversationID])
+		// Received chat message with a valid notification id
+		if (notificationID && self.conversationID)
 		{
 			NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
+			
+			__block UIAlertAction *actionViewBlock = actionView;
 			
 			// Cancel queued chat messages refresh
 			[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
 			
-			[self.chatMessageModel getChatMessagesByID:self.conversationID];
+			// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
+			[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
+			{
+				if (success)
+				{
+					// Execute the existing success delegate method
+					[self updateChatMessages:chatMessages];
+					
+					// Determine if notification id exists in the updated chat messages
+					NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", notificationID];
+					NSArray *results = [chatMessages filteredArrayUsingPredicate:predicate];
+					
+					// Push notification is specifically for this conversation so remove the action view to prevent the user from opening a duplicate screen of the same chat messages
+					if ([results count] > 0)
+					{
+						// Remove action view
+						actionViewBlock = nil;
+					}
+				}
+				else
+				{
+					// Execute the existing error delegate method
+					[self updateChatMessagesError:error];
+				}
+	
+				// Execute the default notification message action
+				[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionViewBlock];
+			}];
 			
-			// Remove action view (only remove action view if/when notification includes a way to verify that the message is specifically for the current conversation)
-			// actionView = nil;
+			// Delay executing the default notification message action until chat messages have finished loading
+			return;
 		}
 	}
 	
-	// If remote notification is NOT a chat message specifically for the current conversation, execute the default notification message action
+	// Execute the default notification message action
 	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionView];
-} */
+}
 
 // Reset chat messages back to loading state
 - (void)resetChatMessages

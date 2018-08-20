@@ -464,6 +464,7 @@
 	// Sample notifications that can be used with apn tester free (these are real notifications that come from TeleMed)
 	/* Message push notification
 	{
+		"DeliveryID":5133538688695397, // This property has been requested, but not yet implemented
 		"NotificationType":"Message",
 		"aps":
 		{
@@ -476,6 +477,7 @@
 	/* Message comment push notification
 	{
 		"DeliveryID":5133538688695397,
+		"MessageID":"",
 		"NotificationType":"Comment",
 		"aps":
 		{
@@ -545,8 +547,8 @@
 	#if !defined RELEASE
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			NSString *applicationState = (application.applicationState == UIApplicationStateActive ? @"Foreground" : (application.applicationState == UIApplicationStateBackground ? @"Background" : @"Inactive"));
-			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Push Notification", applicationState] message:[NSString stringWithFormat:@"%@", notification] preferredStyle:UIAlertControllerStyleAlert];
+			NSString *applicationStateString = (applicationState == UIApplicationStateActive ? @"Foreground" : (applicationState == UIApplicationStateBackground ? @"Background" : @"Inactive"));
+			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Push Notification", applicationStateString] message:[NSString stringWithFormat:@"%@", notification] preferredStyle:UIAlertControllerStyleAlert];
 			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	 
 			[alertController addAction:actionOK];
