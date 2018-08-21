@@ -417,7 +417,7 @@
 	//*/
 	
 	// Reload message events if push notification is a comment specifically for the current message
-	if ([notificationInfo objectForKey:@"notificationID"] && ([notificationType isEqualToString:@"Comment"] || [notificationType isEqualToString:@"SentComment"]))
+	if (([notificationType isEqualToString:@"Comment"] || [notificationType isEqualToString:@"SentComment"]) && [notificationInfo objectForKey:@"notificationID"])
 	{
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		

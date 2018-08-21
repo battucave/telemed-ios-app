@@ -674,32 +674,22 @@
 	}
 	
 	// Extract chat message id from chat notification
-	if ([notificationType isEqualToString:@"Chat"])
+	if ([notification objectForKey:@"ChatMsgID"])
 	{
 		notificationID = [notification objectForKey:@"ChatMsgID"];
+		notificationType = @"Chat"; // Ensure that notification type is set properly
 	}
-	// Extract delivery id or message id from comment notification
-	else if ([notificationType isEqualToString:@"Comment"])
-	{
-		id deliveryID = [notification objectForKey:@"DeliveryID"];
-		id messageID = [notification objectForKey:@"MessageID"];
-		
-		//  Delivery id is used for comments on received messages (using integer value is not accurate, but is useful for determining if value is a valid number)
-		if (deliveryID && [deliveryID respondsToSelector:@selector(integerValue)] && [deliveryID integerValue] > 0)
-		{
-			notificationID = deliveryID;
-		}
-		// Message id is used for comments on sent messages (using integer value is not accurate, but is useful for determining if value is a valid number)
-		else if (messageID && [messageID respondsToSelector:@selector(integerValue)] && [messageID integerValue] > 0)
-		{
-			notificationID = messageID;
-			notificationType = @"SentComment";
-		}
-	}
-	// Extract delivery id from message notification
-	else if ([notificationType isEqualToString:@"Message"])
+	// Extract delivery id from comment or message notification (ensure that delivery id actually has a value because sent comment notification also contains a delivery id, but with no value)
+	else if ([notification objectForKey:@"DeliveryID"] && [[notification objectForKey:@"DeliveryID"] respondsToSelector:@selector(integerValue)] && [[notification objectForKey:@"DeliveryID"] integerValue] > 0)
 	{
 		notificationID = [notification objectForKey:@"DeliveryID"];
+		notificationType = ([notificationType isEqualToString:@"Comment"] ? @"Comment" : @"Message"); // Ensure that notification type is set properly
+	}
+	// Extract message id from sent comment notification
+	else if ([notification objectForKey:@"MessageID"])
+	{
+		notificationID = [notification objectForKey:@"MessageID"];
+		notificationType = @"SentComment"; // Change notification type from Comment to SentComment to simplify further handling of the remote notification
 	}
 	
 	NSLog(@"Notification Type: %@", notificationType);

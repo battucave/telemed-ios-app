@@ -335,53 +335,48 @@
 {
 	NSLog(@"Received Push Notification ChatMessageDetailViewController");
     
-    // Reload chat messages if push notification is a chat message for *any* conversation (notification id is a newly generated value that won't exist yet in any current chat messages)
-	if ([notificationInfo objectForKey:@"notificationID"] && [notificationType isEqualToString:@"Chat"])
+    // Reload chat messages if conversation id is set (not a new chat) and push notification is a chat message for *any* conversation (notification id is a newly generated value that won't exist yet in any current chat messages)
+	if (self.conversationID && [notificationType isEqualToString:@"Chat"] && [notificationInfo objectForKey:@"notificationID"])
 	{
+		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
+		
+		__block UIAlertAction *actionViewBlock = actionView;
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
-		// Received chat message with a valid notification id
-		if (notificationID && self.conversationID)
+		// Cancel queued chat messages refresh
+		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+		
+		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
+		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
 		{
-			NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
-			
-			__block UIAlertAction *actionViewBlock = actionView;
-			
-			// Cancel queued chat messages refresh
-			[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
-			
-			// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
-			[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
+			if (success)
 			{
-				if (success)
+				// Execute the existing success delegate method
+				[self updateChatMessages:chatMessages];
+				
+				// Determine if notification id exists in the updated chat messages
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", notificationID];
+				NSArray *results = [chatMessages filteredArrayUsingPredicate:predicate];
+				
+				// Push notification is specifically for this conversation so remove the action view to prevent the user from opening a duplicate screen of the same chat messages
+				if ([results count] > 0)
 				{
-					// Execute the existing success delegate method
-					[self updateChatMessages:chatMessages];
-					
-					// Determine if notification id exists in the updated chat messages
-					NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", notificationID];
-					NSArray *results = [chatMessages filteredArrayUsingPredicate:predicate];
-					
-					// Push notification is specifically for this conversation so remove the action view to prevent the user from opening a duplicate screen of the same chat messages
-					if ([results count] > 0)
-					{
-						// Remove action view
-						actionViewBlock = nil;
-					}
+					// Remove action view
+					actionViewBlock = nil;
 				}
-				else
-				{
-					// Execute the existing error delegate method
-					[self updateChatMessagesError:error];
-				}
-	
-				// Execute the default notification message action
-				[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionViewBlock];
-			}];
-			
-			// Delay executing the default notification message action until chat messages have finished loading
-			return;
-		}
+			}
+			else
+			{
+				// Execute the existing error delegate method
+				[self updateChatMessagesError:error];
+			}
+
+			// Execute the default notification message action
+			[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionViewBlock];
+		}];
+		
+		// Delay executing the default notification message action until chat messages have finished loading
+		return;
 	}
 	
 	// Execute the default notification message action
