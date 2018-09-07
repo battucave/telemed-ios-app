@@ -103,9 +103,7 @@
 		28EAB9EA194B585100903772 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EAB9E9194B585100903772 /* HelpViewController.m */; };
 		E20295011FBB934F00811DA6 /* Med2Med.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295001FBB934F00811DA6 /* Med2Med.storyboard */; };
 		E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */; };
-		E20295051FBBA47000811DA6 /* Main.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295041FBBA46C00811DA6 /* Main.xcassets */; };
-		E20295061FBBA47600811DA6 /* Main.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295041FBBA46C00811DA6 /* Main.xcassets */; };
-		E20295081FBBA4B200811DA6 /* MedToMed.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295071FBBA4AD00811DA6 /* MedToMed.xcassets */; };
+		E20295081FBBA4B200811DA6 /* Med2Med.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295071FBBA4AD00811DA6 /* Med2Med.xcassets */; };
 		E202950A1FBBA53600811DA6 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20295091FBBA53500811DA6 /* Launch Screen.xib */; };
 		E211D5921FBF571B00263497 /* MessageTeleMedComposeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D57F1FBF571B00263497 /* MessageTeleMedComposeTableViewController.m */; };
 		E211D5931FBF571B00263497 /* AccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D5841FBF571B00263497 /* AccountCell.m */; };
@@ -601,8 +599,7 @@
 		E20294F81FBB920C00811DA6 /* Med2Med-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Med2Med-Info.plist"; sourceTree = "<group>"; };
 		E20295001FBB934F00811DA6 /* Med2Med.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Med2Med.storyboard; sourceTree = "<group>"; };
 		E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginSSO.storyboard; sourceTree = "<group>"; };
-		E20295041FBBA46C00811DA6 /* Main.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Main.xcassets; sourceTree = "<group>"; };
-		E20295071FBBA4AD00811DA6 /* MedToMed.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MedToMed.xcassets; sourceTree = "<group>"; };
+		E20295071FBBA4AD00811DA6 /* Med2Med.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Med2Med.xcassets; sourceTree = "<group>"; };
 		E20295091FBBA53500811DA6 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		E211D57C1FBF571B00263497 /* ChatMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageCell.h; sourceTree = "<group>"; };
 		E211D57D1FBF571B00263497 /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
@@ -1223,7 +1220,7 @@
 		E20294FD1FBB933F00811DA6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E20295071FBBA4AD00811DA6 /* MedToMed.xcassets */,
+				E20295071FBBA4AD00811DA6 /* Med2Med.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1312,7 +1309,6 @@
 			children = (
 				E271C1B92110AF4200256D8B /* Fonts */,
 				E211D5731FBF4BFE00263497 /* Images */,
-				E20295041FBBA46C00811DA6 /* Main.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2091,7 +2087,6 @@
 				E2D567871CDB85B80054FD3F /* icon-Mail-Read.png in Resources */,
 				283DF2E418CA09EE00A344D2 /* notice.caf in Resources */,
 				E2D567831CDB85B80054FD3F /* button-Help-PDF@3x.png in Resources */,
-				E20295051FBBA47000811DA6 /* Main.xcassets in Resources */,
 				E2D567B11CDB85B80054FD3F /* button-Help-PDF.png in Resources */,
 				E2D567931CDB85B80054FD3F /* menu@3x.png in Resources */,
 				E2D567C11CDB85B80054FD3F /* icon-Mail-Unread@3x.png in Resources */,
@@ -2109,7 +2104,7 @@
 				E22EF0931FD9A3CA00A2E6F6 /* icon-Mail-Unread.png in Resources */,
 				E25037161FBB88F400099C7E /* menu@2x.png in Resources */,
 				E271C1C52110AF7D00256D8B /* fa-light-300.ttf in Resources */,
-				E20295081FBBA4B200811DA6 /* MedToMed.xcassets in Resources */,
+				E20295081FBBA4B200811DA6 /* Med2Med.xcassets in Resources */,
 				E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */,
 				E250372B1FBB88F400099C7E /* button-WebViewBack@2x.png in Resources */,
 				E250372E1FBB88F400099C7E /* button-TextField-Help@2x.png in Resources */,
@@ -2129,7 +2124,6 @@
 				E25037411FBB88F400099C7E /* button-WebViewForward@2x.png in Resources */,
 				E25037531FBB88F400099C7E /* indicator-CommentLeft.png in Resources */,
 				E2C7C1B91FC3911000E50F07 /* button-Help@3x.png in Resources */,
-				E20295061FBBA47600811DA6 /* Main.xcassets in Resources */,
 				E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */,
 				E271C1C42110AF7A00256D8B /* fa-regular-400.ttf in Resources */,
 				E2C7C1B71FC3910A00E50F07 /* button-Help.png in Resources */,
