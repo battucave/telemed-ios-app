@@ -6,15 +6,16 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
+#import <AudioToolbox/AudioServices.h>
+
 #import "SettingsNotificationsPickerTableViewController.h"
 #import "NotificationSettingModel.h"
-#import <AudioToolbox/AudioServices.h>
 
 @interface SettingsNotificationsPickerTableViewController ()
 
-@property (nonatomic) NSArray *subCategories;
 @property (nonatomic) NSArray *pickerOptions;
 @property (nonatomic) NSString *selectedTempOption;
+@property (nonatomic) NSArray *subCategories;
 
 @property (nonatomic) SystemSoundID systemSoundID;
 
@@ -22,56 +23,51 @@
 
 @implementation SettingsNotificationsPickerTableViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
-	// Store Notification Tone Subcategories as array
+	// Store notification tone subcategories as array
 	[self setSubCategories:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, nil]];
 	
-	// Set Selected Temp Option to Selected Option
+	// Set selected temp option to selected option
 	[self setSelectedTempOption:self.selectedOption];
 	
-	// Set Picker Options
-	switch(self.pickerType)
+	// Set picker options
+	switch (self.pickerType)
 	{
-		// Subcategory Tones
+		// Subcategories and silent tone
 		case 0:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, @"Silent", nil]];
 			
-			// Hide Done Button
+			// Hide save button
 			[self.navigationItem setRightBarButtonItem:nil];
 			break;
 		
-		// Notification Intervals
+		// Notification intervals
 		case 1:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil]];
 			
-			// Hide Done Button
+			// Hide save button
 			[self.navigationItem setRightBarButtonItem:nil];
 			break;
 		
-		// Staff Favorite Tones
+		// Staff favorite tones
 		case 2:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil]];
 			break;
 		
-		// MyTeleMed Tones
+		// MyTeleMed tones
 		case 3:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil]];
 			break;
 		
-		// iOS7 Tones
+		// Standard tones
 		case 4:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil]];
+			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil]];
 			break;
 		
-		// Classic iOS Tones
+		// Classic iOS tones
 		case 5:
 			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil]];
 			break;
@@ -90,7 +86,7 @@
 
 - (void)playNotificationTone:(NSInteger)selectedRow
 {
-	if([self.pickerOptions count] <= selectedRow)
+	if ([self.pickerOptions count] <= selectedRow)
 	{
 		return;
 	}
@@ -101,7 +97,7 @@
 	
 	NSLog(@"Tone Path: %@", tonePath);
 	
-	if(tonePath != nil)
+	if (tonePath != nil)
 	{
 		AudioServicesDisposeSystemSoundID(self.systemSoundID);
 		
@@ -123,12 +119,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0 : 46.0;
+	return ([self tableView:tableView titleForHeaderInSection:section] == nil) ? 22.0f : 46.0f;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	switch(self.pickerType)
+	switch (self.pickerType)
 	{
 		case 1:
 			return @"REPEAT ALERT INCREMENTS";
@@ -139,15 +135,15 @@
 		case 4:
 		case 5:
 		{
-			// Get Subcategory from array
-			if([self.subCategories count] > self.pickerType - 2)
+			// Get subcategory from array
+			if ([self.subCategories count] > self.pickerType - 2)
 			{
 				NSString *subCategory = [self.subCategories objectAtIndex:self.pickerType - 2];
 				
-				// Singularize Subcategory
-				if([[subCategory substringFromIndex:[subCategory length] - 1] isEqualToString:@"s"])
+				// Singularize subcategory
+				if ([[subCategory substringFromIndex:subCategory.length - 1] isEqualToString:@"s"])
 				{
-					subCategory = [subCategory substringToIndex:[subCategory length] - 1];
+					subCategory = [subCategory substringToIndex:subCategory.length - 1];
 				}
 				
 				return [NSString stringWithFormat:@"%@ ALERT SOUNDS", subCategory];
@@ -173,37 +169,41 @@
 	
 	UITableViewCell *cell;
 	
-	// Notification Tone Subcategory
-	if(self.pickerType == 0 && [self.subCategories containsObject:optionText])
+	// Notification tone subcategory
+	if (self.pickerType == 0 && [self.subCategories containsObject:optionText])
 	{
 		NSArray *notificationTonesArray;
 		
 		cell = [tableView dequeueReusableCellWithIdentifier:SubcategoryCellIdentifier forIndexPath:indexPath];
 		
-		// Set custom tag value to be used in prepareForSegue for determining which Notification Tones to display
+		// Set custom tag value to be used in prepareForSegue for determining which notification tones to display
 		[cell setTag:[self.subCategories indexOfObject:optionText] + 2];
 		
-		switch(cell.tag)
+		switch (cell.tag)
 		{
+			// Staff favorite tones
 			case 2:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil];
 				break;
 			
+			// MyTeleMed tones
 			case 3:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil];
 				break;
 			
+			// Standard tones
 			case 4:
-				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_IOS7, nil];
+				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
 				break;
 			
+			// Classic iOS tones
 			case 5:
 				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil];
 				break;
 		}
 		
-		// Add checkmark and set Detail Text on selected subcategory option
-		if([notificationTonesArray containsObject:self.selectedOption])
+		// Add checkmark and set detail text on selected subcategory option
+		if ([notificationTonesArray containsObject:self.selectedOption])
 		{
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 			[cell.detailTextLabel setText:self.selectedOption];
@@ -211,7 +211,7 @@
 			[self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 		}
 	}
-	// Notification Interval or standard Notification Tone
+	// Notification interval or standard notification tone
 	else
 	{
 	    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
@@ -220,7 +220,7 @@
 		[cell setAccessoryType:UITableViewCellAccessoryNone];
 		
 		// Add checkmark to selected option
-		if([optionText isEqualToString:self.selectedTempOption])
+		if ([optionText isEqualToString:self.selectedTempOption])
 		{
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 			
@@ -230,9 +230,6 @@
 	
 	// Set option text
 	[cell.textLabel setText:optionText];
-	
-	// Remove selection style
-	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	
 	// Fix iOS8 Issue that prevents detailText from appearing
 	[cell layoutSubviews];
@@ -245,12 +242,17 @@
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	
 	// If showing Notification Intervals, make selection final
-	if(self.pickerType == 1)
+	if (self.pickerType == 1)
+	{
+		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
+	}
+	// If showing Subcategory and Silent Tones and user selects Silent, make selection final
+	else if (self.pickerType == 0 && [self.pickerOptions count] >= indexPath.row && [[self.pickerOptions objectAtIndex:indexPath.row] isEqualToString:@"Silent"])
 	{
 		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
 	}
 	// If showing standard Notification Tones, add checkmark to selected option and play sound
-	else if(cell.tag == 0)
+	else if (cell.tag == 0)
 	{
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 		[self setSelectedTempOption: [self.pickerOptions objectAtIndex:indexPath.row]];
@@ -264,7 +266,7 @@
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	
 	// Replace checkmark with disclosure indicator and remove detail text
-	if(cell.tag > 0)
+	if (cell.tag > 0)
 	{
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 		[cell.detailTextLabel setText:@""];
@@ -278,15 +280,15 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	// Notification Tone Subcategory selected
-	if([segue.identifier isEqualToString:@"showSettingsNotificationsSubcategoryPicker"])
+	// Notification tone subcategory selected
+	if ([segue.identifier isEqualToString:@"showSettingsNotificationsSubcategoryPicker"])
 	{
 		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self.tableView indexPathForSelectedRow]];
 		
-		// Set new Picker Type
+		// Set new picker type
 		[segue.destinationViewController setPickerType:cell.tag];
 		
-		// Set Selected Option on new View Controller
+		// Set selected option on new view controller
 		[segue.destinationViewController setSelectedOption:self.selectedOption];
 	}
 	// Unwind Segue
@@ -294,8 +296,8 @@
 	{
 		NSInteger selectedRow = [[self.tableView indexPathForSelectedRow] row];
 		
-		// Set Selected Option
-		if([self.pickerOptions count] > selectedRow)
+		// Set selected option
+		if ([self.pickerOptions count] > selectedRow)
 		{
 			[self setSelectedOption:[self.pickerOptions objectAtIndex:selectedRow]];
 		}

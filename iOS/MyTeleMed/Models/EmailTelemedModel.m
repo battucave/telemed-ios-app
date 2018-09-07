@@ -1,6 +1,6 @@
 //
 //  MessageTelemedModel.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 5/3/16.
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
@@ -25,14 +25,15 @@
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
 	// Validate email address
-	if( ! [self isValidEmailAddress:fromEmailAddress])
+	if (! [self isValidEmailAddress:fromEmailAddress])
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"From field must be a valid email address.", NSLocalizedDescriptionKey, nil]];
 		
 		// Show error even if user has navigated to another screen
 		[self showError:error];
 		
-		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		// Handle error via delegate
+		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 		{
 			[self.delegate sendMessageError:error];
 		}*/
@@ -40,17 +41,17 @@
 		return;
 	}
 	
-	// Show Activity Indicator
+	// Show activity indicator
 	[self showActivityIndicator];
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Add Message Identifier if a Message Delivery ID exists (exists for MessageTeleMedViewController, doesn't exist for ContactEmailViewController)
+	// Add message identifier if a message delivery id exists (exists for message telemed view controller, doesn't exist for contact email view controller)
 	NSString *messageIdentifier = (messageDeliveryID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageDeliveryID] : @"");
 	
 	NSString *xmlBody = [NSString stringWithFormat:
-		@"<EmailToTelemed xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+		@"<EmailToTelemed xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<BodyText>%@</BodyText>"
 			"<FromAddress>%@</FromAddress>"
 			"%@"
@@ -61,13 +62,13 @@
 	
 	[self.operationManager POST:@"EmailToTelemed" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity Indicator already closed on AFNetworkingOperationDidStartNotification
+		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
-		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		// Successful post returns a 204 code with no response
+		if (operation.response.statusCode == 204)
 		{
-			// Not currently used
-			if([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			// Handle success via delegate (not currently used)
+			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
 			}
@@ -77,13 +78,14 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^(void)
+			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
 			}];
 			
-			/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			}*/
@@ -93,92 +95,94 @@
 	{
 		NSLog(@"EmailTelemed Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"Message TeleMed Error"];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^(void)
+		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		[self hideActivityIndicator:^
 		{
-			// Include callback to retry the request
-			[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
-		}];
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			{
+				[self.delegate sendMessageError:error];
+			} */
 		
-		/*if([self.delegate respondsToSelector:@selector(sendMessageError:)])
-		{
-			[self.delegate sendMessageError:error];
-		}*/
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
+			}];
+		}];
 	}];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Notify delegate that Message has been sent to server
-	if( ! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		[self.delegate sendMessagePending];
-	}
+		// Notify delegate that message has been sent to server
+		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+		{
+			[self.delegate sendMessagePending];
+		}
 	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
+		// Ensure that pending callback doesn't fire again after possible error
+		self.pendingComplete = YES;
+	}];
 }
 
 - (BOOL)isValidEmailAddress:(NSString *)emailAddress
 {
-	if( ! [emailAddress length])
+	if (! emailAddress.length)
 	{
 		return NO;
 	}
- 
-	NSRange entireRange = NSMakeRange(0, [emailAddress length]);
+
+	NSRange entireRange = NSMakeRange(0, emailAddress.length);
 	NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
 	NSArray *matches = [detector matchesInString:emailAddress options:0 range:entireRange];
  
-	// should only a single match
-	if([matches count] != 1)
+	// Should be only a single match
+	if ([matches count] != 1)
 	{
 		return NO;
 	}
  
 	NSTextCheckingResult *result = [matches firstObject];
  
-	// result should be a link
-	if(result.resultType != NSTextCheckingTypeLink)
+	// Result should be a link type
+	if (result.resultType != NSTextCheckingTypeLink)
 	{
 		return NO;
 	}
  
-	// result should be a recognized mail address
-	if( ! [result.URL.scheme isEqualToString:@"mailto"])
+	// Result should be a recognized email address
+	if (! [result.URL.scheme isEqualToString:@"mailto"])
 	{
 		return NO;
 	}
  
-	// match must be entire string
-	if( ! NSEqualRanges(result.range, entireRange))
+	// Match must include the entire string
+	if (! NSEqualRanges(result.range, entireRange))
 	{
 		return NO;
 	}
  
-	// but schould not have the mail URL scheme
-	if([emailAddress hasPrefix:@"mailto:"])
+	// Should not have the mailto url scheme
+	if ([emailAddress hasPrefix:@"mailto:"])
 	{
 		return NO;
 	}
  
-	// no complaints, string is valid email address
 	return YES;
 }
 

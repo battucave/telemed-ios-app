@@ -1,0 +1,691 @@
+//
+//  AppDelegate.m
+//  TeleMed
+//
+//  Created by SolutionBuilt on 9/26/13.
+//  Copyright (c) 2013 SolutionBuilt. All rights reserved.
+//
+
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+#import <UserNotifications/UserNotifications.h>
+
+#import "AppDelegate.h"
+#import "TeleMedApplication.h"
+#import "ErrorAlertController.h"
+#import "SWRevealViewController.h"
+#import "ProfileProtocol.h"
+#import "AuthenticationModel.h"
+#import "TeleMedHTTPRequestOperationManager.h"
+
+#ifdef MYTELEMED
+	#import "MyProfileModel.h"
+	#import "MyStatusModel.h"
+	#import "RegisteredDeviceModel.h"
+#endif
+
+#ifdef MED2MED
+	#import "AccountModel.h"
+	#import "UserProfileModel.h"
+#endif
+
+@interface AppDelegate()
+
+@property (nonatomic) CTCallCenter *callCenter;
+
+@end
+
+@implementation AppDelegate
+
+
+#pragma mark - App Lifecycle
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
+	// Setup app timeout feature
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:kApplicationDidTimeoutNotification object:nil];
+	
+	// Setup screenshot notification feature
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+	
+	// Add reachability observer to defer web services until reachability has been determined
+	__unused TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	
+	// Initialize cdma voice data settings
+	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
+	
+	#if !TARGET_IPHONE_SIMULATOR && !defined(DEBUG)
+		// Initialize carrier
+		CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+		CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+	
+		// AT&T and T-Mobile are guaranteed to support voice and data simultaneously, so turn off cdma voice data message by default for them
+		if ([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
+		{
+			[settings setBool:YES forKey:@"CDMAVoiceDataDisabled"];
+		}
+	#endif
+	
+	[settings synchronize];
+	
+	// Initialize call center
+	self.callCenter = [[CTCallCenter alloc] init];
+	
+	[self.callCenter setCallEventHandler:^(CTCall *call)
+	{
+		if ([[call callState] isEqual:CTCallStateDisconnected])
+		{
+			NSLog(@"Call disconnected");
+			
+			// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController dismiss];
+			
+			// Post a notification to other files in the project
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
+			
+			// Reset idle timer
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
+			});
+		}
+	}];
+	
+	// MyTeleMed - push notification registration
+	#ifdef MYTELEMED
+		if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+		{
+			// iOS 8+ push notifications
+			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+			[application registerForRemoteNotifications];
+		}
+	
+	// Med2Med - Prevent swipe message from ever appearing
+	#elif defined MED2MED
+		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings synchronize];
+	#endif
+	
+	return YES;
+}
+							
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state
+	
+	// Add view over app to obsure screenshot
+	[self toggleScreenshotView:NO];
+	
+	// Save current time app was closed (used for showing cdma screen)
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
+	[settings setObject:[NSDate date] forKey:@"dateApplicationDidEnterBackground"];
+	[settings synchronize];
+	
+	// MyTeleMed - Update app's badge count with number of unread messages
+	#ifdef MYTELEMED
+		MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
+	
+		// Set badge number for app icon. These values are updated every time user resumes app and opens side navigation. Idea is that if user is actively using app, then they will use side navigation which will update the unread message count. If they just briefly open the app to check messages, then the app resume will update the unread message count
+		[application setApplicationIconBadgeNumber:[myStatusModel.UnreadMessageCount integerValue]];
+	#endif
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later
+	// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+	// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background
+	
+	// Remove view over app that was used to obsure screenshot (calling it here speeds up dismissal of screenshot when returning from background)
+	[self toggleScreenshotView:YES];
+	
+	// If more than 15 minutes have passed since app was closed, then reset cdma voice data hidden value
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
+	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 900)
+	{
+		[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
+		[settings synchronize];
+	}
+	
+	// MyTeleMed - Verify account is still valid
+	#ifdef MYTELEMED
+		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	
+		[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+		{
+			if (success)
+			{
+				MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
+				
+				// Update my status model with updated number of unread messages
+				[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
+				{
+					// No callback needed - values stored in shared instance automatically
+				}];
+			}
+			else
+			{
+				NSLog(@"Error %ld: %@", (long)error.code, error.localizedDescription);
+				
+				// If error is not because device is offline, then account not valid so go to login screen
+				if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
+				{
+					AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+					
+					[authenticationModel doLogout];
+				}
+			}
+		}];
+	#endif
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface
+	
+	// Remove view over app that was used to obsure screenshot (calling it here is required when user double clicks home button and then clicks the already active TeleMed app - applicationWillEnterForeground is not called in this case)
+	[self toggleScreenshotView:YES];
+	
+	// Dismiss error alert if showing
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController dismiss];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:
+}
+
+- (void)dealloc
+{
+	// Remove all observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+#pragma mark - Custom Methods
+
+- (void)applicationDidTimeout:(NSNotification *)notification
+{
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
+	
+	// Only log user out if timeout is enabled and user is not currently on phone call
+	if (timeoutEnabled && ! [self isCallConnected])
+	{
+		// Delay logout to ensure application is fully loaded
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		{
+			[authenticationModel doLogout];
+		});
+	}
+}
+
+- (void)didFinishInitialization:(NSNotification *)notification
+{
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	
+	// Remove reachability observer
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	
+	// Load timeout preference
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
+	
+	if (! timeoutEnabled)
+	{
+		// If Enable timeout string is null, then it has never been set. Set it to true
+		if ([settings objectForKey:@"enableTimeout"] == nil)
+		{
+			[settings setBool:YES forKey:@"enableTimeout"];
+			[settings synchronize];
+		}
+	}
+	
+	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
+	
+	// If user has timeout disabled and a refresh token already exists, attempt to bypass login screen
+	if (! timeoutEnabled && authenticationModel.RefreshToken != nil)
+	{
+		#ifdef MYTELEMED
+			id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+		
+		#elif defined MED2MED
+			id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+		
+		#else
+			NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
+		
+			[self showLoginSSOScreen];
+		
+			return;
+		#endif
+
+		// Verify account is valid
+		[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+		{
+			if (success)
+			{
+				// MyTeleMed - Validate device registration with server
+				#ifdef MYTELEMED
+					[self validateMyTeleMedRegistration:profile];
+				
+				// Med2Med - Validate at least one account is authorized
+				#elif defined MED2MED
+					[self validateMed2MedAuthorization:profile];
+				#endif
+				
+				// Else condition will never be reached since it would have been handled while defining profile
+			}
+			// Account is no longer valid so go to login screen
+			else
+			{
+				[self showLoginSSOScreen];
+			}
+		}];
+	}
+	// Go to login screen by default
+	else
+	{
+		[self showLoginSSOScreen];
+	}
+}
+
+- (BOOL)isCallConnected
+{
+	for(CTCall *call in self.callCenter.currentCalls)
+	{
+		if (call.callState == CTCallStateConnected)
+		{
+			return YES;
+		}
+	}
+	
+	return NO;
+}
+
+- (void)showLoginSSOScreen
+{
+	UIStoryboard *loginSSOStoryboard;
+	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
+	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
+	
+	NSLog(@"Current Storyboard: %@", currentStoryboardName);
+	
+	// Already on login sso storyboard
+	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
+	{
+		loginSSOStoryboard = currentStoryboard;
+	}
+	// Go to login sso storyboard
+	else
+	{
+		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
+	}
+	
+	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
+	
+	[self.window setRootViewController:loginSSONavigationController];
+	[self.window makeKeyAndVisible];
+}
+
+- (void)toggleScreenshotView:(BOOL)shouldHide
+{
+	UIView *screenshotView = [self.window viewWithTag:8353633];
+	
+	// Remove view over app that was used to obsure screenshot
+	if (shouldHide)
+	{
+		if (screenshotView != nil)
+		{
+			[UIView animateWithDuration:0.25f animations:^
+			{
+				[screenshotView setAlpha:0.0];
+			}
+			completion:^(BOOL finished)
+			{
+				[screenshotView removeFromSuperview];
+			}];
+		}
+	}
+	// Add view over app to obsure screenshot
+	else
+	{
+		// Only show screenshot view if it is not already visible
+		if (screenshotView == nil)
+		{
+			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"Launch Screen" owner:self options:nil] objectAtIndex:0];
+			UIScreen *screen = [UIScreen mainScreen];
+			
+			[screenshotView setContentMode:UIViewContentModeScaleAspectFill];
+			[screenshotView setFrame:CGRectMake(0.0f, 0.0f, screen.bounds.size.width, screen.bounds.size.height)];
+			[screenshotView setTag:8353633];
+			[self.window addSubview:screenshotView];
+			[self.window bringSubviewToFront:screenshotView];
+		}
+	}
+}
+
+- (void)userDidTakeScreenshot:(NSNotification *)notification
+{
+	NSLog(@"Screenshot Taken");
+}
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	NSLog(@"My Device Token: %@", deviceToken);
+	
+	// Convert the token to a hex string and make sure it's all caps
+	NSMutableString *tokenString = [NSMutableString stringWithString:[[deviceToken description] uppercaseString]];
+	[tokenString replaceOccurrencesOfString:@"<" withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
+	[tokenString replaceOccurrencesOfString:@">" withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
+	[tokenString replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
+	
+	// Set device token
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	[registeredDeviceModel setToken:tokenString];
+	
+	// Run update device token web service. This will only fire if either my profile model's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
+	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
+	{
+		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
+		if (error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
+		{
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
+		}
+	}];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	NSLog(@"Failed to get token, error: %@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+	//NSLog(@"Local Notification received: %@", notification.userInfo);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+	// IMPORTANT: TeleMed's test and production servers both send push notifications through apple's production server. Only apps signed with ad hoc or distribution provisioning profiles can receive these notifications - not debug
+	// See project's ReadMe.md for instructions on how to test push notifications using apn tester free
+	
+	// Sample notifications that can be used with apn tester free (these are real notifications that come from TeleMed)
+	/* Message push notification
+	{
+		"NotificationType":"Message",
+		"aps":
+		{
+			"alert":"3 new messages.",
+			"badge":3,
+			"sound":"note.caf"
+		}
+	}*/
+
+	/* Message comment push notification
+	{
+		"DeliveryID":5133538688695397,
+		"NotificationType":"Comment",
+		"aps":
+		{
+			"alert":"Dr. Matt Rogers added a comment to a message.",
+			"sound":"circles.caf"
+		}
+	}*/
+
+    /* Sent message comment push notification
+    {
+    	"DeliveryID":"",
+    	"MessageID":5646855541685471,
+    	"NotificationType":"Comment",
+    	"aps":
+    	{
+    		"alert":"Dr. Matt Rogers added a comment to a message.",
+    		"sound":"circles.caf"
+		}
+	}*/
+
+
+	/* Chat push notification
+	{
+		"ChatMsgID":5594182060867965,
+		"NotificationType":"Chat",
+		"aps":
+		{
+			"alert":"Matt Rogers:What's happening?",
+			"sound":"nuclear.caf"
+		}
+	}*/
+	
+	/*/ TESTING ONLY (push notifications can generally only be tested in ad hoc mode where nothing can be logged, so show result in an alert instead)
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	
+	[alertController addAction:actionOK];
+	
+	// PreferredAction only supported in 9.0+
+	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[alertController setPreferredAction:actionOK];
+	}
+	
+	// Show alert
+	[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	
+	// END TESTING ONLY */
+	
+	// Handle push notification when app is active
+	if ([application applicationState] == UIApplicationStateActive)
+	{
+		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
+	}
+}
+
+/*
+ * Show main screen: ChangePasswordViewController, PhoneNumberViewController, or MessagesViewController
+ */
+- (void)showMainScreen
+{
+	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
+	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
+	
+	// If user is currently on login sso storyboard, then perform additional checks before sending user to main storyboard
+	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
+	{
+		BOOL hasNavigationController = self.window.rootViewController.class == UINavigationController.class;
+		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+		// If device has not previously registered with TeleMed web service, then show PhoneNumberViewController
+		if (! registeredDeviceModel.hasRegistered)
+		{
+			// If using Simulator, skip phone number step because it is always invalid
+			// #ifdef DEBUG
+			#if TARGET_IPHONE_SIMULATOR
+				NSLog(@"Skip Phone Number step when on Simulator or Debugging");
+			
+			#else
+				if (hasNavigationController)
+				{
+					UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
+					UIViewController *phoneNumberViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
+				
+					[navigationController pushViewController:phoneNumberViewController animated:YES];
+				}
+				else
+				{
+					UINavigationController *phoneNumberNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberNavigationController"];
+					
+					[self.window setRootViewController:phoneNumberNavigationController];
+					[self.window makeKeyAndVisible];
+				}
+			
+				return;
+			#endif
+		}
+		
+		// If TeleMed requires a password change for the user, then show PasswordChangeViewController
+		if (profile.PasswordChangeRequired)
+		{
+			if (hasNavigationController)
+			{
+				UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
+				UITableViewController *passwordViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PasswordViewController"];
+			
+				[navigationController pushViewController:passwordViewController animated:YES];
+			}
+			else
+			{
+				UINavigationController *passwordNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PasswordNavigationController"];
+				
+				[self.window setRootViewController:passwordNavigationController];
+				[self.window makeKeyAndVisible];
+			}
+			
+			return;
+		}
+	}
+	
+	// Show MessagesViewController
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
+	
+	[self.window setRootViewController:initialViewController];
+	[self.window makeKeyAndVisible];
+}
+
+- (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
+{
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+
+	NSLog(@"User ID: %@", profile.ID);
+	NSLog(@"Preferred Account ID: %@", profile.MyPreferredAccount.ID);
+	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
+	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
+	
+	// Check if user has previously registered this device with TeleMed
+	if (registeredDeviceModel.hasRegistered)
+	{
+		// Phone number was previously registered with TeleMed, but we should update the device token in case it changed
+		[registeredDeviceModel setShouldRegister:YES];
+		
+		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
+		{
+			// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
+			if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
+			{
+				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				
+				[errorAlertController show:registeredDeviceError];
+			}
+			
+			// If the request was not successful, direct the user to re-enter their phone number again (handled by showMainScreen:)
+			if (! success)
+			{
+				[registeredDeviceModel setHasRegistered:NO];
+			}
+			
+			// Go to the next screen in the login process
+			[self showMainScreen];
+		}];
+	}
+	// Account is valid, but phone number is not yet registered with TeleMed so go directly to PhoneNumberViewController (handled by showMainScreen:)
+	else
+	{
+		// Go the next screen in the login process
+		[self showMainScreen];
+	}
+}
+#endif
+
+
+#pragma mark - Med2Med
+
+#ifdef MED2MED
+
+/*
+ * Show main screen: MessageNewTableViewController or MessageNewUnauthorizedTableViewController
+ */
+- (void)showMainScreen
+{
+	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Med2Med" bundle:nil];
+	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
+	UINavigationController *navigationController;
+	
+	// If user has at least one authorized account, then show MessageNewViewController
+	if (profile.IsAuthorized)
+	{
+		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewNavigationController"];
+	}
+	// Else show MessageNewUnauthorizedTableViewController
+	else
+	{
+		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewUnauthorizedNavigationController"];
+	}
+	
+	[initialViewController setFrontViewController:navigationController];
+	
+	[self.window setRootViewController:initialViewController];
+	[self.window makeKeyAndVisible];
+}
+
+- (void)validateMed2MedAuthorization:(id <ProfileProtocol>)profile
+{
+	// Fetch accounts and check the authorization status for each
+	AccountModel *accountModel = [[AccountModel alloc] init];
+	
+	[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	{
+		if (success)
+		{
+			// Verify that user is authorized for at least one account
+			for (AccountModel *account in accounts)
+			{
+				if ([account isAuthorized])
+				{
+					[profile setIsAuthorized:YES];
+				}
+				
+				NSLog(@"Account Name: %@; Status: %@", account.Name, account.MyAuthorizationStatus);
+			}
+			
+			// Go to main storyboard
+			[self showMainScreen];
+		}
+		else
+		{
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
+		}
+	}];
+}
+#endif
+
+@end

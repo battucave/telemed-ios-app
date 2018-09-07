@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "MyProfileModel.h"
 
 @interface MyProfileXMLParser : NSObject <NSXMLParserDelegate>

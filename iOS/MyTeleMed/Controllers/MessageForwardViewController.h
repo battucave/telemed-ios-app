@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "CoreViewController.h"
-#import "MessageStub.h"
+#import "MessageProtocol.h"
 
 @interface MessageForwardViewController : CoreViewController
 
-@property (nonatomic) MessageStub *message;
+@property (nonatomic) id <MessageProtocol> message;
 
 @end

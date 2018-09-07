@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "CoreTableViewController.h"
+
 @protocol MessageComposeTableDelegate <NSObject>
 
 @required
@@ -18,13 +20,16 @@
 
 @end
 
-@interface MessageComposeTableViewController : UITableViewController <UITextViewDelegate>
+@interface MessageComposeTableViewController : CoreTableViewController <UITextViewDelegate>
 
 @property (weak) id delegate;
-@property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
-@property (nonatomic) NSString *textViewMessagePlaceholder;
-@property (nonatomic) CGFloat cellMessageHeight;
 
-- (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients;
+@property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
+
+@property (nonatomic) NSString *textViewMessagePlaceholder;
+
+#ifdef MYTELEMED
+	- (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients;
+#endif
 
 @end

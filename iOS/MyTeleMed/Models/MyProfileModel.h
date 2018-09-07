@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Model.h"
-#import "AccountModel.h"
 
-// Primary Model
-@interface MyProfileModel : Model
+#import "Model.h"
+#import "ProfileProtocol.h"
+#import "AccountModel.h"
+#import "TimeZoneModel.h"
+
+@interface MyProfileModel : Model <ProfileProtocol>
 
 @property (weak) id delegate;
 
@@ -19,15 +21,17 @@
 @property (nonatomic) BOOL BlockCallerID;
 @property (nonatomic) NSString *CallTelemedNumber;
 @property (nonatomic) NSString *Email;
+@property (nonatomic) BOOL IsAuthorized;
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) AccountModel *MyPreferredAccount;
 @property (nonatomic) NSArray *MyRegisteredDevices;
-@property (nonatomic) NSDictionary *MyTimeZone;
+@property (nonatomic) TimeZoneModel *MyTimeZone;
+@property (nonatomic) BOOL PasswordChangeRequired;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
 
-+ (MyProfileModel *)sharedInstance;
++ (id <ProfileProtocol>)sharedInstance;
 
-- (void)getWithCallback:(void (^)(BOOL success, MyProfileModel *profile, NSError *error))callback;
+- (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback;
 - (void)restoreMyPreferredAccount;
 
 @end

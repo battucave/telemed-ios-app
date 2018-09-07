@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "Model.h"
 
 @protocol NotificationSettingDelegate <NSObject>
@@ -27,11 +28,11 @@
 @property (weak) id delegate;
 
 @property (nonatomic) BOOL Enabled;
-@property (nonatomic) BOOL isReminderOn; // Not passed from Web Service
+@property (nonatomic) BOOL isReminderOn; // Not passed from web service
 @property (nonatomic) NSNumber *Interval;
 @property (nonatomic) NSString *Name;
 @property (nonatomic) NSString *Tone;
-@property (nonatomic) NSString *ToneTitle; // Not passed from Web Service
+@property (nonatomic) NSString *ToneTitle; // Not passed from web service
 
 - (NSString *)getToneFromToneTitle:(NSString *)toneTitle;
 - (NotificationSettingModel *)getNotificationSettingsByName:(NSString *)name;

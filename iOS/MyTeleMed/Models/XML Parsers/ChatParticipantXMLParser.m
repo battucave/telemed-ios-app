@@ -30,16 +30,16 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"Person"])
+	if ([elementName isEqualToString:@"Person"])
 	{
-		// Initialize the Message Event.
+		// Initialize the chat participant
 		self.chatParticipant = [[ChatParticipantModel alloc] init];
 	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if (! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -51,21 +51,21 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Person"])
+	if ([elementName isEqualToString:@"Person"])
 	{
 		[self.chatParticipants addObject:self.chatParticipant];
 		
 		self.chatParticipant = nil;
 	}
-	else if([elementName isEqualToString:@"ID"])
+	else if ([elementName isEqualToString:@"ID"])
 	{
 		[self.chatParticipant setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	else if([elementName isEqualToString:@"FormattedNameLNF"])
+	else if ([elementName isEqualToString:@"FormattedNameLNF"])
 	{
 		[self.chatParticipant setValue:self.currentElementValue forKey:elementName];
 		
-		// Manually set Name property from FormattedNameLNF
+		// Manually set name property from formatted name lnf
 		[self.chatParticipant setValue:self.currentElementValue forKey:@"Name"];
 	}
 	else

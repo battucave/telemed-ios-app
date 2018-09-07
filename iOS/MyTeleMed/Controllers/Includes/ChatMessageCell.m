@@ -23,7 +23,7 @@
 	[super awakeFromNib];
 	
 	// Set default separator inset
-	if([self respondsToSelector:@selector(setSeparatorInset:)])
+	if ([self respondsToSelector:@selector(setSeparatorInset:)])
 	{
 		[self setDefaultEdgeInsets:self.separatorInset];
 	}
@@ -33,18 +33,18 @@
 {
 	[super layoutSubviews];
 	
-	if(self.editing)
+	if (self.editing)
 	{
-		// Indentation width in storyboard attributes has no effect on custom Table Cells. Therefore, assume the default indentation of 38.0f and add additional indentation separately
-		//CGFloat indentation = self.indentationLevel * self.indentationWidth;
+		// Indentation width in storyboard attributes has no effect on custom table cells. Therefore, assume the default indentation of 38.0f and add additional indentation separately
+		// CGFloat indentation = self.indentationLevel * self.indentationWidth;
 		CGFloat defaultEditIndentation = 38.0f;
 		CGFloat additionalEditIndentation = 8.0f;
 		
-		// Use leading constraint on viewPriority to add additional indentation
+		// Use leading constraint on view priority to add additional indentation
 		[self.constraintViewLeftSpace setConstant:additionalEditIndentation];
 		
 		// Adjust separator inset to account for editing indentation (the default left edge inset seems to be off so subtracting 3 fixes it)
-		if([self respondsToSelector:@selector(setSeparatorInset:)])
+		if ([self respondsToSelector:@selector(setSeparatorInset:)])
 		{
 			[self setSeparatorInset:UIEdgeInsetsMake(self.defaultEdgeInsets.top, self.defaultEdgeInsets.left - 3.0f + defaultEditIndentation + additionalEditIndentation, self.defaultEdgeInsets.bottom, self.defaultEdgeInsets.right)];
 		}
@@ -55,7 +55,7 @@
 		[self.constraintViewLeftSpace setConstant:0.0f];
 		
 		// Remove extra indentation from separator inset
-		if([self respondsToSelector:@selector(setSeparatorInset:)])
+		if ([self respondsToSelector:@selector(setSeparatorInset:)])
 		{
 			[self setSeparatorInset:self.defaultEdgeInsets];
 		}
@@ -66,7 +66,7 @@
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
 	// Cancel default functionality
-	//[super setHighlighted:highlighted animated:animated];
+	// [super setHighlighted:highlighted animated:animated];
 }
 
 // Configure the view for the selected state. By default, setSelected sets all of the cell's subviews to a clear background color. Override this functionality
@@ -87,7 +87,7 @@
 	
 	[self.contentView.subviews enumerateObjectsUsingBlock:^(id view, NSUInteger idx, BOOL *stop)
 	{
-		if([view respondsToSelector:@selector(setHighlighted:)])
+		if ([view respondsToSelector:@selector(setHighlighted:)])
 		{
 			[view setValue:@NO forKey:@"highlighted"];
 		}

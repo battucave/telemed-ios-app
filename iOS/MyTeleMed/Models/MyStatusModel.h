@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "Model.h"
 
-// Primary Model
+// Primary model
 @interface MyStatusModel : Model
 
 @property (weak) id delegate;
@@ -24,7 +25,7 @@
 @property (nonatomic) NSArray *CurrentOnCallEntries;
 @property (nonatomic) NSArray *FutureOnCallEntries;
 
-+ (MyStatusModel *)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (void)getWithCallback:(void (^)(BOOL success, MyStatusModel *status, NSError *error))callback;
 
@@ -41,7 +42,7 @@
 @property (nonatomic) NSDate *WillEnd;
 @property (nonatomic) NSDate *WillStart;
 
-// Temporary Property only used in OnCallScheduleViewController to control output of date
+// Temporary property only used in on call schedule view controller to control output of date
 @property (nonatomic) BOOL shouldDisplayDate;
 
 @end

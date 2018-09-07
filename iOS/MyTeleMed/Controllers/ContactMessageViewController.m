@@ -1,6 +1,6 @@
 //
 //  ContactEmailViewController.m
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 5/3/16.
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
@@ -16,15 +16,21 @@
 
 @property (nonatomic) EmailTelemedModel *emailTelemedModel;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-
 @end
 
 @implementation ContactMessageViewController
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-	[super viewDidLoad];
+	[super viewWillAppear:animated];
+	
+	#ifdef MED2MED
+		[self.navigationItem setTitle:@"Contact TeleMed"];
+	
+	// Remove menu button if showing back button. This MUST happen before [super viewWillAppear] so that back button will be added in its place (back button only shown when navigating from Login.storyboard View Controllers)
+	#else
+		self.navigationItem.leftBarButtonItem = nil;
+	#endif
 }
 
 - (IBAction)sendTeleMedMessage:(id)sender
@@ -38,27 +44,46 @@
 // Return pending from EmailTeleMedModel delegate
 - (void)sendMessagePending
 {
-	// Go back to Messages (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
+	// Go back to messages (assume success)
+	#ifdef MYTELEMED
+		[self.navigationController popViewControllerAnimated:YES];
+	#endif
 }
 
-/*/ Return success from EmailTelemedModel delegate (no longer used)
+// Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	#ifdef MED2MED
+		// Reset message text
+		[self.messageTeleMedComposeTableViewController.textViewMessage setText:@""];
+		[self.messageTeleMedComposeTableViewController.textViewMessage resignFirstResponder];
+
+		// Invalidate form
+		[self.navigationItem.rightBarButtonItem setEnabled:NO];
 	
-	[successAlertView show];
-	
-	// Go back to Message Detail
-	[self.navigationController popViewControllerAnimated:YES];
+		// Show succcess message (assume success)
+		UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Contact TeleMed" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+
+		[successAlertController addAction:actionOK];
+
+		// PreferredAction only supported in 9.0+
+		if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[successAlertController setPreferredAction:actionOK];
+		}
+
+		// Show Alert
+		[self presentViewController:successAlertController animated:YES completion:nil];
+	#endif
 }
 
-// Return error from EmailTelemedModel delegate (no longer used)
+/*/ Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:error.localizedFailureReason message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	[errorAlertView show];
+	[errorAlertController show:error];
 }*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
@@ -67,12 +92,12 @@
 	senderEmailAddress = [senderEmailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:( ! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
+	[self.navigationItem.rightBarButtonItem setEnabled:(! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedContactEmailTable"])
+	if ([segue.identifier isEqualToString:@"embedContactEmailTable"])
 	{
 		[self setMessageTeleMedComposeTableViewController:segue.destinationViewController];
 		

@@ -21,11 +21,11 @@
 {
 	[super layoutSubviews];
 	
-	// Add corner radius to View Comment Container
+	// Add corner radius to view comment container
 	self.viewCommentContainer.layer.masksToBounds = YES;
 	self.viewCommentContainer.layer.cornerRadius = 5;
 	
-	// Add corner radius to View Comment Shadow
+	// Add corner radius to view comment shadow
 	self.viewCommentShadow.layer.cornerRadius = 5;
 	
 }

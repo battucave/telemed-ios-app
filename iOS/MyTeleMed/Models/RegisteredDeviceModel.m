@@ -15,13 +15,13 @@
 
 static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 
-+ (RegisteredDeviceModel *)sharedInstance
++ (instancetype)sharedInstance
 {
 	static dispatch_once_t token;
 	
 	dispatch_once(&token, ^
 	{
-		sharedRegisteredDeviceInstance = [[super alloc] init];
+		sharedRegisteredDeviceInstance = [[self alloc] init];
 	});
 	
 	return sharedRegisteredDeviceInstance;
@@ -32,26 +32,26 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If ID is not already set, check User Preferences
-	if( ! _ID)
+	// If ID is not already set, check user preferences
+	if (! _ID)
 	{
 		_ID = [settings valueForKey:@"UDDIDevice"];
 	}
 	
 	// ID not already stored so generate it
-	if( ! _ID)
+	if (! _ID)
 	{
-		// Generate Device ID
+		// Generate device id
 		CFUUIDRef theUUID = CFUUIDCreate(kCFAllocatorDefault);
 		
-		if(theUUID)
+		if (theUUID)
 		{
 			_ID = (__bridge NSString *)(CFUUIDCreateString(kCFAllocatorDefault, theUUID));
 			
 			CFRelease(theUUID);
 		}
 		
-		// Store Device ID in User Preferences
+		// Store device id in user preferences
 		[settings setValue:_ID forKey:@"UDDIDevice"];
 		[settings synchronize];
 	}
@@ -62,8 +62,8 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 // Override AppVersionInfo getter
 - (NSString *)AppVersionInfo
 {
-	// If AppVersionInfo is not already set, check bundle version
-	if( ! _AppVersionInfo)
+	// If app version info is not already set, check bundle version
+	if (! _AppVersionInfo)
 	{
 		_AppVersionInfo = [NSString stringWithFormat:@"Version: %@; Build: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
 	}
@@ -73,8 +73,8 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback
 {
-	// Device Simulator has no Phone Number and no Device Token. Continuing will cause Web Service Error
-	// #if DEBUG
+	// Device simulator has no phone number and no device token. Continuing will cause web service error
+	// #ifdef DEBUG
 	#if TARGET_IPHONE_SIMULATOR
 		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
 		
@@ -83,11 +83,11 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		return;
 	#endif
 	
-	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from [AppDelegate didRegisterForRemoteNotificationsWithDeviceToken]
+	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from app delegate's didRegisterForRemoteNotificationsWithDeviceToken:
 	// Also ensure that device actually needs to register
-	if(self.Token == NULL || self.PhoneNumber == NULL || ! self.shouldRegister)
+	if (self.Token == NULL || self.PhoneNumber == NULL || ! self.shouldRegister)
 	{
-		if(self.Token == NULL)
+		if (self.Token == NULL)
 		{
 			NSLog(@"IMPORTANT: Device does not have a token so it is not being registered with TeleMed. If this persists, make sure that an explicit provisioning profile is being used for MyTeleMed and that its certificate has Push Notifications enabled.");
 		}
@@ -98,7 +98,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	}
 	
 	NSString *xmlBody = [NSString stringWithFormat:
-		@"<RegisteredDevice xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">"
+		@"<RegisteredDevice xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<AppVersionInfo>%@</AppVersionInfo>"
 			"<ID>%@</ID>"
 			"<PhoneNumber>%@</PhoneNumber>"
@@ -111,10 +111,11 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		
 	[self.operationManager POST:@"RegisteredDevices" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		// Successful post returns a 204 code with no response
+		if (operation.response.statusCode == 204)
 		{
-			// Disable Future Registration until next login
+			// Disable future registration until next login
+			self.hasRegistered = YES;
 			self.shouldRegister = NO;
 			
 			callback(YES, nil);

@@ -6,6 +6,8 @@
 //  Copyright (c) 2016 SolutionBuilt. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 #import "RevealViewController.h"
 
 @interface ChatMessagesViewController : RevealViewController

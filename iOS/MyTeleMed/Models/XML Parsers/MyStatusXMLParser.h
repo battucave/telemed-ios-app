@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "MyStatusModel.h"
 
 @interface MyStatusXMLParser : NSObject <NSXMLParserDelegate>

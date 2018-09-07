@@ -1,12 +1,13 @@
 //
 //  EmailTelemedModel.h
-//  MyTeleMed
+//  TeleMed
 //
 //  Created by Shane Goodwin on 5/3/16.
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+
 #import "Model.h"
 
 @protocol EmailTelemedDelegate <NSObject>

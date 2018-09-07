@@ -16,28 +16,21 @@
 
 @property (nonatomic) EmailTelemedModel *emailTelemedModel;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSend;
-
 @end
 
 @implementation MessageTeleMedViewController
-
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-}
 
 - (IBAction)sendTeleMedMessage:(id)sender
 {
 	[self setEmailTelemedModel:[[EmailTelemedModel alloc] init]];
 	[self.emailTelemedModel setDelegate:self];
 	
-	// If Active or Archived Message, include its Message Delivery ID
-	if(self.message.MessageDeliveryID)
+	// If active or archived message, include its message delivery id
+	if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID)
 	{
 		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text withMessageDeliveryID:self.message.MessageDeliveryID];
 	}
-	// If Sent Message
+	// If sent message
 	else
 	{
 		[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
@@ -47,44 +40,36 @@
 // Return pending from EmailTelemedModel delegate
 - (void)sendMessagePending
 {
-	// Go back to Message Detail
+	// Go back to message detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageSuccess
 {
-	UIAlertView *successAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed" message:@"Message sent successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[successAlertView show];
+ 
 }
 
 // Return error from EmailTelemedModel delegate (no longer used)
 - (void)sendMessageError:(NSError *)error
 {
-	// If device offline, show offline message
-	if(error.code == NSURLErrorNotConnectedToInternet)
-	{
-		return [self.emailTelemedModel showOfflineError];
-	}
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Message TeleMed Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[errorAlertView show];
+	[errorAlertController show:error];
 }*/
 
-// Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
+// Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress
 {
 	senderEmailAddress = [senderEmailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	[self.buttonSend setEnabled:( ! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
+	[self.navigationItem.rightBarButtonItem setEnabled:(! [senderEmailAddress isEqualToString:@""] && ! [messageText isEqualToString:@""] && ! [messageText isEqualToString:self.messageTeleMedComposeTableViewController.textViewMessagePlaceholder])];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if([segue.identifier isEqualToString:@"embedMessageTeleMedTable"])
+	if ([segue.identifier isEqualToString:@"embedMessageTeleMedTable"])
 	{
 		[self setMessageTeleMedComposeTableViewController:segue.destinationViewController];
 		

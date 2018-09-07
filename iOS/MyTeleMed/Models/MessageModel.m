@@ -34,13 +34,13 @@
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
 	// Set Default End Date
-	if(endDate == nil)
+	if (endDate == nil)
 	{
 		endDate = [NSDate date];
 	}
 	
 	// Set Default Start Date
-	if(startDate == nil)
+	if (startDate == nil)
 	{
 		startDate = [endDate dateByAddingTimeInterval:60 * 60 * 24 * -7];
 	}
@@ -56,7 +56,7 @@
 	} mutableCopy];
 	
 	// If using specific Account, alter the URL to include the Account Public Key
-	if(accountID > 0)
+	if (accountID > 0)
 	{
 		[parameters setValue:accountID forKey:@"acctID"];
 	}
@@ -74,21 +74,22 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
-		if([xmlParser parse])
+		// Parse the xml file
+		if ([xmlParser parse])
 		{
-			if([self.delegate respondsToSelector:@selector(updateMessages:)])
+			// Handle success via delegate
+			if ([self.delegate respondsToSelector:@selector(updateMessages:)])
 			{
 				[self.delegate updateMessages:[parser messages]];
 			}
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Messages.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
-			if([self.delegate respondsToSelector:@selector(updateMessagesError:)])
+			// Handle error via delegate
+			if ([self.delegate respondsToSelector:@selector(updateMessagesError:)])
 			{
 				[self.delegate updateMessagesError:error];
 			}
@@ -101,8 +102,8 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Messages." andTitle:@"Messages Error"];
 		
-		// Only handle error if user still on same screen
-		if([self.delegate respondsToSelector:@selector(updateMessagesError:)])
+		// Handle error via delegate
+		if ([self.delegate respondsToSelector:@selector(updateMessagesError:)])
 		{
 			[self.delegate updateMessagesError:error];
 		}
@@ -122,49 +123,49 @@
 		
 		[xmlParser setDelegate:parser];
 		
-		// Parse the XML file
-		if([xmlParser parse])
+		// Parse the xml file
+		if ([xmlParser parse])
 		{
-			// Handle Success
+			// Handle success via delegate
 		}
-		// Error parsing XML file
+		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message.", NSLocalizedDescriptionKey, nil]];
 			
-			// Only handle error if user still on same screen
+			// Handle error via delegate
 		}
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"MessageModel Error: %@", error);
 		
-		// Only handle error if user still on same screen
+		// Handle error via delegate
 	}];
 }*/
 
 - (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state
 {
-	// Validate state
-	if( ! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
+	// Validate message state
+	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
 		state = @"Read";
 	}
 	
-	// Show Activity Indicator
-	if([state isEqualToString:@"Archive"])
+	// Show activity indicator
+	if ([state isEqualToString:@"Archive"])
 	{
 		[self showActivityIndicator:@"Archiving..."];
 	}
-	else if([state isEqualToString:@"Unarchive"])
+	if ([state isEqualToString:@"Unarchive"])
 	{
 		[self showActivityIndicator:@"Unarchiving..."];
 	}
 	
-	// Add Network Activity Observer (not currently used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
+	// Add network activity observer (not currently used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
 	// [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Store state for modifyMessageStatePending method
+	// Store state for modifyMessageStatePending:
 	self.messageState = state;
 	
 	NSDictionary *parameters = @{
@@ -174,66 +175,71 @@
 	
 	[self.operationManager POST:@"Messages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Hide activity indicator
-		[self hideActivityIndicator];
-		
-		// Successful Post returns a 204 code with no response
-		if(operation.response.statusCode == 204)
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
 		{
-			if([self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
+			// Successful post returns a 204 code with no response
+			if (operation.response.statusCode == 204)
 			{
-				[self.delegate modifyMessageStateSuccess:state];
-			}
-		}
-		else
-		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")], NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")], NSLocalizedDescriptionKey, nil]];
-			
-			// Only show error if Archiving or Unarchiving
-			if([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
-			{
-				// Show error even if user has navigated to another screen
-				[self showError:error withCallback:^(void)
+				// Handle success via delegate
+				if ([self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
 				{
-					// Include callback to retry the request
-					[self modifyMessageState:messageID state:state];
-				}];
+					[self.delegate modifyMessageStateSuccess:state];
+				}
 			}
-			
-			/*if([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
+			else
 			{
-				[self.delegate modifyMessageStateError:error forState:state];
-			}*/
-		}
+				// Handle error via delegate
+				/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
+				{
+					[self.delegate modifyMessageStateError:error forState:state];
+				} */
+			
+				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")], NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")], NSLocalizedDescriptionKey, nil]];
+				
+				// Only show error if archiving or unarchiving
+				if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
+				{
+					// Show error even if user has navigated to another screen
+					[self showError:error withCallback:^
+					{
+						// Include callback to retry the request
+						[self modifyMessageState:messageID state:state];
+					}];
+				}
+			}
+		}];
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"MessageModel Error: %@", error);
 		
-		// Close Activity Indicator
-		[self hideActivityIndicator];
-		
-		// Remove Network Activity Observer
+		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:[NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")] andTitle:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")]];
 		
-		// Only show error if Archiving or Unarchiving
-		if([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
 		{
-			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^(void)
+			// Handle error via delegate
+			/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 			{
-				// Include callback to retry the request
-				[self modifyMessageState:messageID state:state];
-			}];
-		}
+				[self.delegate modifyMessageStateError:error forState:state];
+			} */
 		
-		/*if([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
-		{
-			[self.delegate modifyMessageStateError:error forState:state];
-		}*/
+			// Only show error if archiving or unarchiving
+			if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
+			{
+				// Show error even if user has navigated to another screen
+				[self showError:error withCallback:^
+				{
+					// Include callback to retry the request
+					[self modifyMessageState:messageID state:state];
+				}];
+			}
+		}];
 	}];
 }
 
@@ -241,31 +247,31 @@
 {
 	self.failedMessages = [[NSMutableArray alloc] init];
 	
-	if([messages count] < 1)
+	if ([messages count] < 1)
 	{
 		return;
 	}
 	
-	// Validate State
-	if( ! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
+	// Validate message state
+	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
 		state = @"Read";
 	}
 	
-	// Show Activity Indicator
-	if([state isEqualToString:@"Archive"])
+	// Show activity indicator
+	if ([state isEqualToString:@"Archive"])
 	{
 		[self showActivityIndicator:@"Archiving..."];
 	}
-	else if([state isEqualToString:@"Unarchive"])
+	if ([state isEqualToString:@"Unarchive"])
 	{
 		[self showActivityIndicator:@"Unarchiving..."];
 	}
 	
-	// Add Network Activity Observer
+	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Store state for modifyMessageStatePending method
+	// Store state for modifyMessageStatePending:
 	self.messageState = state;
 	
 	for(MessageModel *message in messages)
@@ -280,22 +286,22 @@
 		
 		[self.operationManager POST:@"Messages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 		{
-			// Successful Post returns a 204 code with no response
-			if(operation.response.statusCode != 204)
+			// Successful post returns a 204 code with no response
+			if (operation.response.statusCode != 204)
 			{
 				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Archive Error", NSLocalizedFailureReasonErrorKey, @"There was a problem modifying the Message Status.", NSLocalizedDescriptionKey, nil]];
 				
 				NSLog(@"MessageModel Error: %@", error);
 				
-				// Add Message to failed Messages
+				// Add message to failed messages
 				[self.failedMessages addObject:message];
 			}
 			
 			// Increment number of finished operations
 			self.numberOfFinishedOperations++;
 			
-			// Execute Queue finished method if all operations have completed
-			if(self.numberOfFinishedOperations == self.totalNumberOfOperations)
+			// Execute queue finished method if all operations have completed
+			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
 				[self messageStateQueueFinished:state];
 			}
@@ -305,7 +311,7 @@
 			NSLog(@"MessageModel Error: %@", error);
 			
 			// Handle device offline error
-			if(error.code == NSURLErrorNotConnectedToInternet)
+			if (error.code == NSURLErrorNotConnectedToInternet)
 			{
 				// Cancel further operations to prevent multiple error messages
 				[self.operationManager.operationQueue cancelAllOperations];
@@ -316,14 +322,14 @@
 				return;
 			}
 			
-			// Add Message to failed Messages
+			// Add message to failed messages
 			[self.failedMessages addObject:message];
 			
 			// Increment number of finished operations
 			self.numberOfFinishedOperations++;
 			
-			// Execute Queue finished method if all operations have completed
-			if(self.numberOfFinishedOperations == self.totalNumberOfOperations)
+			// Execute queue finished method if all operations have completed
+			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
 				[self messageStateQueueFinished:state];
 			}
@@ -335,84 +341,79 @@
 {
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedMessages count], self.totalNumberOfOperations);
 	
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// If a failure occurred while modifying Message state
-	if([self.failedMessages count] > 0)
+	// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+	[self hideActivityIndicator:^
 	{
-		// Default to all Messages failed to archive
-		NSString *errorMessage = @"There was a problem archiving your Messages.";
-		
-		// Only some Messages failed to archive
-		if([self.failedMessages count] != self.totalNumberOfOperations)
+		// If a failure occurred while modifying message state
+		if ([self.failedMessages count] > 0)
 		{
-			errorMessage = @"There was a problem archiving some of your Messages.";
+			NSArray *failedMessages = [self.failedMessages copy];
+			
+			// Handle error via delegate
+			if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
+			{
+				[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
+			}
+		
+			// Default to all messages failed to archive
+			NSString *errorMessage = @"There was a problem archiving your Messages.";
+			
+			// Only some messages failed to archive
+			if ([failedMessages count] != self.totalNumberOfOperations)
+			{
+				errorMessage = @"There was a problem archiving some of your Messages.";
+			}
+			
+			// Show error message
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Archive Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
+			
+			// Show error even if user has navigated to another screen
+			[self showError:error withCallback:^
+			{
+				// Include callback to retry the request
+				[self modifyMultipleMessagesState:failedMessages state:state];
+			}];
 		}
-		
-		// Show error message
-		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Archive Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
-		NSArray *failedMessages = [NSArray arrayWithArray:[self.failedMessages copy]];
-		
-		// Show error even if user has navigated to another screen
-		[self showError:error withCallback:^(void)
-		{
-			// Include callback to retry the request
-			[self modifyMultipleMessagesState:failedMessages state:state];
-		}];
-		
-		// Still being used
-		if([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
-		{
-			[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
-		}
-	}
-	// If request was not cancelled, then it was successful
-	else if( ! self.queueCancelled)
-	{
-		// Still being used
-		if([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
+		// If request was not cancelled, then handle success via delegate (still being used)
+		else if (! self.queueCancelled && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
 		{
 			[self.delegate modifyMultipleMessagesStateSuccess:state];
 		}
-	}
-	
-	// Reset Queue Variables
-	self.totalNumberOfOperations = 0;
-	self.numberOfFinishedOperations = 0;
-	
-	[self.failedMessages removeAllObjects];
+		
+		// Reset queue variables
+		self.totalNumberOfOperations = 0;
+		self.numberOfFinishedOperations = 0;
+		
+		[self.failedMessages removeAllObjects];
+	}];
 }
 
-// Network Request has been sent, but still awaiting response
+// Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
-	// Close Activity Indicator
-	[self hideActivityIndicator];
-	
-	// Remove Network Activity Observer
+	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	if( ! self.pendingComplete)
+	// Close activity indicator with callback
+	[self hideActivityIndicator:^
 	{
-		// Notify delegate that Message State has been sent to server
-		if([self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
+		// Notify delegate that message state has been sent to server
+		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
 		{
 			[self.delegate modifyMessageStatePending:self.messageState];
 		}
-	}
+		// Notify delegate that multiple message states have begun being sent to server (should always run multiple times if needed)
+		else if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
+		{
+			[self.delegate modifyMultipleMessagesStatePending:self.messageState];
+		}
 		
-	// Notify delegate that Multiple Message States have begun being sent to server (should always run multiple times if needed)
-	if([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
-	{
-		[self.delegate modifyMultipleMessagesStatePending:self.messageState];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
+		// Ensure that pending callback doesn't fire again after possible error
+		self.pendingComplete = YES;
+	}];
 }
 
 @end

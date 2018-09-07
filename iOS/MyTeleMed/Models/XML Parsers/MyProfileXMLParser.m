@@ -7,9 +7,10 @@
 //
 
 #import "MyProfileXMLParser.h"
-#import "MyProfileModel.h"
 #import "AccountModel.h"
+#import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
+#import "TimeZoneModel.h"
 
 @interface MyProfileXMLParser()
 
@@ -18,7 +19,7 @@
 @property (nonatomic) NSMutableArray *myRegisteredDevices;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 @property (nonatomic) RegisteredDeviceModel *registeredDevice;
-@property (nonatomic) NSMutableDictionary *timeZone;
+@property (nonatomic) TimeZoneModel *timeZone;
 
 @end
 
@@ -26,7 +27,7 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize My Profile and My Registered Devices
+	// Initialize my profile and my registered devices
 	self.myRegisteredDevices = [[NSMutableArray alloc] init];
 	
 	// Initialize the number formatter
@@ -35,29 +36,31 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if([elementName isEqualToString:@"MyPreferredAccount"])
+	if ([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-		// Initialize My Preferred Account
+		// Initialize my preferred account
 		self.myProfile.MyPreferredAccount = [[AccountModel alloc] init];
 		
 		self.currentModel = @"MyPreferredAccountModel";
 	}
-	else if([elementName isEqualToString:@"RegisteredDevice"])
+	else if ([elementName isEqualToString:@"RegisteredDevice"])
 	{
-		// Initialize a Registered Device
+		// Initialize a registered device
 		self.registeredDevice = [[RegisteredDeviceModel alloc] init];
 		
 		self.currentModel = @"RegisteredDeviceModel";
 	}
-	else if([elementName isEqualToString:@"TimeZone"] || [elementName isEqualToString:@"MyTimeZone"])
+	else if ([elementName isEqualToString:@"TimeZone"] || [elementName isEqualToString:@"MyTimeZone"])
 	{
-		self.timeZone = [[NSMutableDictionary alloc] init];
+		self.timeZone = [[TimeZoneModel alloc] init];
+		
+		self.currentModel = @"TimeZoneModel";
 	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-	if( ! self.currentElementValue)
+	if (! self.currentElementValue)
 	{
 		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	}
@@ -69,42 +72,40 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if([elementName isEqualToString:@"Description"] || [elementName isEqualToString:@"Offset"])
+	if ([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-		[self.timeZone setValue:self.currentElementValue forKey:elementName];
+		self.currentModel = nil;
 	}
-	else if([elementName isEqualToString:@"MyPreferredAccount"])
-	{
-			self.currentModel = @"MyProfileModel";
-	}
-	else if([elementName isEqualToString:@"MyRegisteredDevices"])
+	else if ([elementName isEqualToString:@"MyRegisteredDevices"])
 	{
 		self.myProfile.MyRegisteredDevices = self.myRegisteredDevices;
 	}
-	else if([elementName isEqualToString:@"MyTimeZone"])
+	else if ([elementName isEqualToString:@"MyTimeZone"])
 	{
 		self.myProfile.MyTimeZone = self.timeZone;
 		self.timeZone = nil;
+		self.currentModel = nil;
 	}
-	else if([elementName isEqualToString:@"RegisteredDevice"])
+	else if ([elementName isEqualToString:@"RegisteredDevice"])
 	{
 		[self.myRegisteredDevices addObject:self.registeredDevice];
 		
 		self.registeredDevice = nil;
-		self.currentModel = @"MyProfileModel";
+		self.currentModel = nil;
 	}
-	else if([elementName isEqualToString:@"TimeZone"])
+	else if ([elementName isEqualToString:@"TimeZone"])
 	{
 		self.myProfile.MyPreferredAccount.TimeZone = self.timeZone;
 		self.timeZone = nil;
+		self.currentModel = nil;
 	} 
-	else if( ! [elementName isEqualToString:@"MyProfile"])
+	else if (! [elementName isEqualToString:@"MyProfile"])
 	{
-		if([self.currentModel isEqualToString:@"MyPreferredAccountModel"])
+		if ([self.currentModel isEqualToString:@"MyPreferredAccountModel"])
 		{
 			@try
 			{
-				if([elementName isEqualToString:@"ID"])
+				if ([elementName isEqualToString:@"ID"])
 				{
 					[self.myProfile.MyPreferredAccount setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 				}
@@ -118,7 +119,7 @@
 				NSLog(@"Key not found on My Preferred Account: %@", elementName);
 			}
 		}
-		else if([self.currentModel isEqualToString:@"RegisteredDeviceModel"])
+		else if ([self.currentModel isEqualToString:@"RegisteredDeviceModel"])
 		{
 			@try
 			{
@@ -129,21 +130,47 @@
 				NSLog(@"Key not found on Registered Device: %@", elementName);
 			}
 		}
+		else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
+		{
+			@try
+			{
+				if ([elementName isEqualToString:@"ID"])
+				{
+					[self.timeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+				}
+				else
+				{
+					[self.timeZone setValue:self.currentElementValue forKey:elementName];
+				}
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found on Time Zone: %@", elementName);
+			}
+		}
 		else
 		{
 			@try
 			{
-				if([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"TimeoutPeriodMins"])
+				if ([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"TimeoutPeriodMins"])
 				{
 					[self.myProfile setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 				}
-				else if([elementName isEqualToString:@"BlockCallerID"])
+				else if ([elementName isEqualToString:@"BlockCallerID"])
 				{
 					self.myProfile.BlockCallerID = [self.currentElementValue boolValue];
 				}
-				else if([elementName isEqualToString:@"MayDisableTimeout"])
+				else if ([elementName isEqualToString:@"IsAuthorized"])
+				{
+					self.myProfile.IsAuthorized = [self.currentElementValue boolValue];
+				}
+				else if ([elementName isEqualToString:@"MayDisableTimeout"])
 				{
 					self.myProfile.MayDisableTimeout = [self.currentElementValue boolValue];
+				}
+				else if ([elementName isEqualToString:@"PasswordChangeRequired"])
+				{
+					self.myProfile.PasswordChangeRequired = [self.currentElementValue boolValue];
 				}
 				else
 				{

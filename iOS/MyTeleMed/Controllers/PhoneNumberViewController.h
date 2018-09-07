@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CoreViewController.h"
 
-@interface PhoneNumberViewController : CoreViewController <UITextFieldDelegate>
-
-@property (weak) id delegate;
+// No need to extend CoreViewController here because the app will never receive push notifications until after this step has completed
+@interface PhoneNumberViewController : UIViewController <UITextFieldDelegate>
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "OnCallScheduleViewController.h"
+#import "ErrorAlertController.h"
 #import "OnCallSummaryCell.h"
 #import "MyStatusModel.h"
 
@@ -34,7 +35,7 @@
 {
     [super viewDidLoad];
 	
-	// Initialize My Status Model
+	// Initialize my status model
 	[self setMyStatusModel:[MyStatusModel sharedInstance]];
 	[self.myStatusModel setDelegate:self];
 }
@@ -43,38 +44,31 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Set Segmented Control Index to any default set in SideNavigationViewController
+	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
+	[self.tableOnCallSchedule setTableFooterView:[[UIView alloc] init]];
+	
+	// Set segmented control index to any default set in side navigation view controller
 	[self.segmentedControl setSelectedSegmentIndex:self.defaultSegmentControlIndex];
 	
-	// Set Initialize CellIdentifier
+	// Set initial cell identifier
 	self.cellIdentifier = ([self.segmentedControl selectedSegmentIndex] == 0 ? @"CurrentOnCallScheduleCell" : @"FutureOnCallScheduleCell");
 	
-	// Initialize On Call Entries
+	// Initialize on call entries
 	[self setCurrentOnCallEntries:nil];
 	[self setFutureOnCallEntries:nil];
 	
-	// Get On Call Entries
+	// Get on call entries
 	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 	{
 		self.isLoaded = YES;
 		
-		if(success)
+		if (success)
 		{
-			// Populate On Call Now Entries with result
+			// Populate on call now entries with result
 			[self setCurrentOnCallEntries:status.CurrentOnCallEntries];
 			
-			// Sort On Call Now Entries by StartTime
-			self.currentOnCallEntries = [self.currentOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
-				return [onCallEntryModelA.Started compare:onCallEntryModelB.Started];
-			}];
-			
-			// Populate Next On Call Entries with result
+			// Populate next on call entries with result
 			[self setFutureOnCallEntries:status.FutureOnCallEntries];
-			
-			// Sort Next On Call Entries by StartTime
-			self.futureOnCallEntries = [self.futureOnCallEntries sortedArrayUsingComparator:^NSComparisonResult(OnCallEntryModel *onCallEntryModelA, OnCallEntryModel *onCallEntryModelB) {
-				return [onCallEntryModelA.WillStart compare:onCallEntryModelB.WillStart];
-			}];
 			
 			[self filterOnCallEntries:[self.segmentedControl selectedSegmentIndex]];
 		}
@@ -83,18 +77,20 @@
 			NSLog(@"OnCallScheduleViewController Error: %@", error);
 			
 			// Show error message
-			[self.myStatusModel showError:error];
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
 		}
 	}];
 }
 
-// User clicked one of the UISegmented Control options: (Current, Next)
+// User clicked one of the segmented control options: (Current, Next)
 - (IBAction)setOnCallPeriod:(id)sender
 {
-	// Filter On Call Entries
+	// Filter on call entries
 	[self filterOnCallEntries:[self.segmentedControl selectedSegmentIndex]];
 	
-	// Update Cell Identifier
+	// Update cell identifier
 	self.cellIdentifier = ([self.segmentedControl selectedSegmentIndex] == 0 ? @"CurrentOnCallScheduleCell" : @"FutureOnCallScheduleCell");
 }
 
@@ -105,29 +101,29 @@
 	
 	NSDate *dateTime;
 	
-	// Filter to Current On Call Entries
-	if(onCallPeriod == 0)
+	// Filter to current on call entries
+	if (onCallPeriod == 0)
 	{
 		[self setFilteredOnCallEntries:self.currentOnCallEntries];
 		
-		if([self.filteredOnCallEntries count] > 0)
+		if ([self.filteredOnCallEntries count] > 0)
 		{
 			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] Started];
 		}
 	}
-	// Filter to Future On Call Entries
+	// Filter to future on call entries
 	else
 	{
 		[self setFilteredOnCallEntries:self.futureOnCallEntries];
 		
-		if([self.filteredOnCallEntries count] > 0)
+		if ([self.filteredOnCallEntries count] > 0)
 		{
 			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] WillStart];
 		}
 	}
 	
-	// Cancel filtering if no Filtered On Call Entries
-	if([self.filteredOnCallEntries count] == 0)
+	// Cancel filtering if no filtered on call entries
+	if ([self.filteredOnCallEntries count] == 0)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -137,22 +133,22 @@
 		return;
 	}
 	
-	// Display Date Grouping only if showing Future On Call entries
-	if(onCallPeriod == 1)
+	// Display date grouping only if showing future on call entries
+	if (onCallPeriod == 1)
 	{
 		for(OnCallEntryModel *onCallEntry in self.filteredOnCallEntries)
 		{
-			// Parse and format On Call Entry Start Date to remove time
+			// Parse and format on call entry start date to remove time
 			NSDate *dateOnCall = [calendar dateFromComponents:[calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:onCallEntry.WillStart]];
 			
-			// Set Should Display Date property depending on whether On Call date is greater than Previous On Call date
+			// Set should display date property depending on whether on call date is greater than previous on call date
 			onCallEntry.shouldDisplayDate = ([datePreviousOnCall compare:dateOnCall] == NSOrderedAscending);
 			
-			// Update Previous On Call date to current On Call date
+			// Update previous on call date to current on call date
 			datePreviousOnCall = dateOnCall;
 		}
 	}
-	// Only Show Date for first cell
+	// Only show date for first cell
 	else
 	{
 		OnCallEntryModel *onCallEntry = [self.filteredOnCallEntries objectAtIndex:0];
@@ -166,28 +162,6 @@
 	});
 }
 
-// Calculate Height Difference of Label between original storyboard height and dynamic size that fits height
-- (CGFloat)calculateHeightDifference:(UILabel *)label text:(NSString *)textLabel
-{
-	// Get original width
-	CGFloat originalWidth = label.frame.size.width;
-	
-	// Get original height
-	[label setText:@" "];
-	
-	CGSize originalSizeLabel = [label sizeThatFits:CGSizeMake(originalWidth, MAXFLOAT)];
-	
-	// Get auto height
-	[label setText:textLabel];
-	
-	CGSize newSizeLabel = [label sizeThatFits:CGSizeMake(originalWidth, MAXFLOAT)];
-	
-	float heightDifference = newSizeLabel.height - originalSizeLabel.height;
-	
-	// Fix weird issue where a positive heightDifference is not quite accurate
-	return (heightDifference > 0 ? heightDifference - 0.5f : 0);
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;
@@ -195,48 +169,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if([self.filteredOnCallEntries count] == 0)
-	{
-		return 1;
-	}
-	
-	return [self.filteredOnCallEntries count];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return 50.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// Return default height if no Filtered On Call Entries available
-	if([self.filteredOnCallEntries count] == 0)
-	{
-		return [self tableView:tableView estimatedHeightForRowAtIndexPath:indexPath];
-	}
-	
-	// Manually determine height for < iOS8
-	OnCallSummaryCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier];
-	
-	OnCallEntryModel *onCallEntry = [self.filteredOnCallEntries objectAtIndex:indexPath.row];
-	
-	[cell setNeedsLayout];
-	[cell layoutIfNeeded];
-	
-	// Calculate On Call Summary Title height difference between original storyboard height and dynamic size that fits height
-	CGFloat heightLabelTitleDifference = [self calculateHeightDifference:cell.labelTitle text:[NSString stringWithFormat:@"%@ %@", onCallEntry.AccountKey, onCallEntry.AccountName]];
-	
-	// Calculate On Call Summary SlotNames height difference between original storyboard height and dynamic size that fits height
-	CGFloat heightLabelSlotNamesDifference = [self calculateHeightDifference:cell.labelSlotNames text:onCallEntry.SlotDesc];
-	
-	return 83.0f + (onCallEntry.shouldDisplayDate ? 24.0f : 0.0f) + heightLabelTitleDifference + heightLabelSlotNamesDifference;
+	return MAX([self.filteredOnCallEntries count], 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Set default message if no Filtered On Call Entries available
-	if([self.filteredOnCallEntries count] == 0)
+	// Set default message if no filtered on call entries available
+	if ([self.filteredOnCallEntries count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -248,79 +187,76 @@
 	
 	OnCallSummaryCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier];
 	
+	[cell setSeparatorInset:UIEdgeInsetsZero];
+	
+	// Hide cell's separator if the next row will display a date
+	if (indexPath.row < [self.filteredOnCallEntries count] - 1 && [[self.filteredOnCallEntries objectAtIndex:indexPath.row + 1] shouldDisplayDate])
+	{
+		[cell setSeparatorInset:UIEdgeInsetsMake(0.0f, cell.bounds.size.width, 0.0f, 0.0f)];
+	}
+	
 	// Set up the cell
 	[cell.labelStart setHidden:NO];
 	[cell.labelEnd setHidden:NO];
 	
+	// Initialize on call entry
 	OnCallEntryModel *onCallEntry = [self.filteredOnCallEntries objectAtIndex:indexPath.row];
-	BOOL hideSeparator = NO;
 	
-	if(indexPath.row < [self.filteredOnCallEntries count] - 1)
-	{
-		hideSeparator =  [[self.filteredOnCallEntries objectAtIndex:indexPath.row + 1] shouldDisplayDate];
-	}
+	// Set on call summary title and slot name(s)
+	[cell.labelTitle setText:[NSString stringWithFormat:@"%@ %@", onCallEntry.AccountKey, onCallEntry.AccountName]];
+	[cell.labelSlotNames setText:onCallEntry.SlotDesc];
 	
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	NSDate *startDateRaw = (onCallEntry.Started ?: onCallEntry.WillStart);
 	
 	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 	
-	// Set On Call Summary Start and Stop Dates
+	// Set on call summary start and stop dates
 	[dateFormatter setDateFormat:@"MMM d, yyyy"];
 	NSString *startDate = [dateFormatter stringFromDate:startDateRaw];
 	NSString *stopDate = [dateFormatter stringFromDate:onCallEntry.WillEnd];
 	
-	// Set On Call Summary Start and Stop Times
+	// Set on call summary start and stop times
 	[dateFormatter setDateFormat:@"h:mma"];
 	NSString *startTime = [[dateFormatter stringFromDate:startDateRaw] lowercaseString];
 	NSString *stopTime = [[dateFormatter stringFromDate:onCallEntry.WillEnd] lowercaseString];
 	
+	if (onCallEntry.shouldDisplayDate)
+	{
+		// Set on call summary day
+		[dateFormatter setDateFormat:@"EEEE"];
+		[cell.labelDay setText:[dateFormatter stringFromDate:startDateRaw]];
+		[cell.labelDate setText:startDate];
+		
+		// Show date container
+		[cell.viewDateContainer setHidden:NO];
+		[cell.constraintViewDateContainerHeight setConstant:24.0f];
+	}
+	else
+	{
+		// Hide date container
+		[cell.viewDateContainer setHidden:YES];
+		[cell.constraintViewDateContainerHeight setConstant:0.0f];
+	}
+	
 	[cell.labelStartTime setText:[NSString stringWithFormat:@"%@, %@", startDate, startTime]];
 	[cell.labelStopTime setText:[NSString stringWithFormat:@"%@, %@", stopDate, stopTime]];
 	
-	// If StartTime is nil, hide start dates (this should never happen)
-	if(startDateRaw == nil)
+	// If start time is nil, hide start dates (this should never happen)
+	if (startDateRaw == nil)
 	{
 		[cell.labelStart setHidden:YES];
 		[cell.labelStartTime setText:@""];
 	}
 	
-	// If StopTime is nil, hide stop dates
-	if(onCallEntry.WillEnd == nil)
+	// If stop time is nil, hide stop dates
+	if (onCallEntry.WillEnd == nil)
 	{
 		[cell.labelEnd setHidden:YES];
 		[cell.labelStopTime setText:@""];
 	}
 	
-	// Show/Hide Dates
-	[cell.viewDateContainer setHidden: ! onCallEntry.shouldDisplayDate];
-	
-	if(onCallEntry.shouldDisplayDate)
-	{
-		// Set On Call Summary Day
-		[dateFormatter setDateFormat:@"EEEE"];
-		[cell.labelDay setText:[dateFormatter stringFromDate:startDateRaw]];
-		[cell.labelDate setText:startDate];
-	}
-	
-	// Set On Call Summary Title and SlotName(s)
-	[cell.labelTitle setText:[NSString stringWithFormat:@"%@ %@", onCallEntry.AccountKey, onCallEntry.AccountName]];
-	[cell.labelSlotNames setText:onCallEntry.SlotDesc];
-	
 	[cell layoutIfNeeded];
-	
-	// Set Auto Height for On Call Summary Title
-	CGFloat widthLabelTitle = cell.labelTitle.frame.size.width;
-	CGSize newSizeLabelTitle = [cell.labelTitle sizeThatFits:CGSizeMake(widthLabelTitle, MAXFLOAT)];
-	cell.constraintLabelTitleHeight.constant = newSizeLabelTitle.height;
-	
-	// Set Auto Height for On Call Summary Slot Name(s)
-	CGFloat widthLabelSlotNames = cell.labelSlotNames.frame.size.width;
-	CGSize newSizeLabelSlotNames = [cell.labelSlotNames sizeThatFits:CGSizeMake(widthLabelSlotNames, MAXFLOAT)];
-	cell.constraintLabelSlotNamesHeight.constant = newSizeLabelSlotNames.height;
-	
-	// Show/Hide Separator
-	[cell.viewSeparator setHidden:hideSeparator];
 	
 	return cell;
 }
