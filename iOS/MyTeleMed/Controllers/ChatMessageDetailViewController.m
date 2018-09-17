@@ -122,7 +122,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -198,7 +198,7 @@
 				[self setConversationID:chatMessage.ID];
 				
 				// Cancel queued chat messages refresh
-				[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+				[NSObject cancelPreviousPerformRequestsWithTarget:self];
 				
 				// Get chat messages for conversation id
 				[self.chatMessageModel getChatMessagesByID:self.conversationID];
@@ -344,7 +344,7 @@
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
 		// Cancel queued chat messages refresh
-		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 		
 		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
 		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
@@ -458,8 +458,8 @@
 		self.chatMessageCount = chatMessageCount;
 	});
 	
-	// Refresh chat messages again after 15 second delay
-	[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:15.0];
+	// Refresh chat messages again after 25 second delay
+	[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:25.0];
 }
 
 // Return error from ChatMessageModel delegate
@@ -491,7 +491,7 @@
 	[chatMessage setID:pendingID];
 	[chatMessage setChatParticipants:self.selectedChatParticipants];
 	[chatMessage setSenderID:self.currentUserID];
-	[chatMessage setText:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)message, CFSTR(""), kCFStringEncodingUTF8))];
+	[chatMessage setText:[message stringByRemovingPercentEncoding]];
 	[chatMessage setUnopened:NO];
 	
 	// Create local date

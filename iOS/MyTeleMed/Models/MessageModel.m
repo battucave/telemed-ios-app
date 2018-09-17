@@ -128,6 +128,7 @@
 		{
 			MessageModel *message = [[parser messages] objectAtIndex:0];
 			
+			// Handle success via callback
 			callback(YES, message, nil);
 		}
 		// Error parsing xml file
@@ -135,6 +136,7 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via callback
 			callback(NO, nil, error);
 		}
 	}
@@ -145,6 +147,7 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message." andTitle:@"Message Error"];
 		
+		// Handle error via callback
 		callback(NO, nil, error);
 	}];
 }

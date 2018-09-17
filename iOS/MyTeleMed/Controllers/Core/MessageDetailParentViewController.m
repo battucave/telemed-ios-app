@@ -164,7 +164,7 @@
 	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 	{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
 			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
 			@try
@@ -186,7 +186,7 @@
 	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 	{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
 			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
 			@try

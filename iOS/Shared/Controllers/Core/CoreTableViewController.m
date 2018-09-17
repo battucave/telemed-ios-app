@@ -122,7 +122,7 @@
 			AudioServicesPlaySystemSound(self.systemSoundID);
 			
 			// Stop notification sound automatically after a short time in case action view erroneously doesn't show up
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 			{
 				AudioServicesDisposeSystemSoundID(self.systemSoundID);
 			});

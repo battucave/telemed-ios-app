@@ -19,13 +19,30 @@
 
 - (void)callTeleMed
 {
-	// Show activity indicator
-	[self showActivityIndicator];
-	
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	// Return error if no phone number is set (this should only be applicable to debug builds since they bypass phone number registration)
+	if (! registeredDeviceModel.PhoneNumber)
+	{
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Call TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
+	
+		// Show error
+		[self showError:error];
+	
+		// Handle error via delegate
+		/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+		{
+			[self.delegate callTeleMedError:error];
+		}*/
+		
+		return;
+	}
+	
+	// Show activity indicator
+	[self showActivityIndicator];
 	
 	NSDictionary *parameters = @{
 		@"recordCall"	: @"false",

@@ -85,7 +85,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 			if (weakSelf.reachabilityManager.isReachable)
 			{
 				// Delay here is required because there is a slight delay between device going back online and requests actually going through
-				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 				{
 					[weakSelf refreshTokens];
 				});
@@ -466,7 +466,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		{
 			NSLog(@"Retry Operation");
 			
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 			{
 				[self addAuthenticatedOperation:newOperation success:success failure:wrappedFailure];
 			});
@@ -614,7 +614,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		[self processPendingFailures:error];
 		
 		// Resume Operation Queue after a delay (if operation simply timed out rather than it being offline, then Operation Queue will never get reset otherwise)
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
 			[self.operationQueue setSuspended:NO];
 			
