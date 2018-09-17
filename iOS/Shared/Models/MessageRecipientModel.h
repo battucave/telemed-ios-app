@@ -10,16 +10,6 @@
 
 #import "Model.h"
 
-@protocol MessageRecipientDelegate <NSObject>
-
-@required
-- (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients;
-
-@optional
-- (void)updateMessageRecipientsError:(NSError *)error;
-
-@end
-
 @interface MessageRecipientModel : Model
 
 @property (weak) id delegate;
@@ -33,16 +23,16 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID;
-	- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID;
-	- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID;
+	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
+	- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
+	- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
 #endif
 
 
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID;
+	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
 #endif
 
 @end

@@ -83,13 +83,19 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		return;
 	#endif
 	
-	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from app delegate's didRegisterForRemoteNotificationsWithDeviceToken:
+	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from AppDelegate's didRegisterForRemoteNotificationsWithDeviceToken:
 	// Also ensure that device actually needs to register
 	if (self.Token == NULL || self.PhoneNumber == NULL || ! self.shouldRegister)
 	{
 		if (self.Token == NULL)
 		{
 			NSLog(@"IMPORTANT: Device does not have a token so it is not being registered with TeleMed. If this persists, make sure that an explicit provisioning profile is being used for MyTeleMed and that its certificate has Push Notifications enabled.");
+			
+			// If user has already entered their phone number, but notification permissions are disabled/rejected, then pretend that the device has registered anyway to avoid infinite loop of showing phone number screen
+			if (self.PhoneNumber != NULL)
+			{
+				self.hasRegistered = YES;
+			}
 		}
 		
 		callback(YES, nil);

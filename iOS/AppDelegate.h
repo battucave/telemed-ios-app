@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <UserNotifications/UserNotifications.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
 
 @property (nonatomic) UIWindow *window;
 @property (nonatomic) UIStoryboard *storyboard;
+
+#ifdef MYTELEMED
+	@property (nonatomic) void (^goToRemoteNotificationScreen)(UINavigationController *navigationController); // Used by AppDelegate, CoreViewController, and CoreTableViewController
+#endif
 
 - (void)showMainScreen;
 

@@ -10,16 +10,6 @@
 
 #import "Model.h"
 
-@protocol MessageEventDelegate <NSObject>
-
-@required
-- (void)updateMessageEvents:(NSMutableArray *)messageEvents;
-
-@optional
-- (void)updateMessageEventsError:(NSError *)error;
-
-@end
-
 @interface MessageEventModel : Model
 
 @property (weak) id delegate;
@@ -33,7 +23,7 @@
 @property (nonatomic) NSString *Time_LCL;
 @property (nonatomic) NSString *Time_UTC;
 
-- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID;
-- (void)getMessageEventsForMessageID:(NSNumber *)messageID;
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback;
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback;
 
 @end

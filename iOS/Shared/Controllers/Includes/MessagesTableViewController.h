@@ -21,7 +21,7 @@
 
 @property (weak) id delegate;
 
-- (void)initMessagesWithType:(int)newMessagesType;
+- (void)initMessagesWithType:(NSString *)newMessagesType;
 - (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (void)hideSelectedMessages:(NSArray *)messages;
 - (void)reloadMessages;

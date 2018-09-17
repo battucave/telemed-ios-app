@@ -227,7 +227,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([segue isKindOfClass:[SWRevealViewControllerSegue class]])
+	if ([segue isKindOfClass:SWRevealViewControllerSegue.class])
 	{
 		SWRevealViewControllerSegue *swSegue = (SWRevealViewControllerSegue *)segue;
 		

@@ -12,6 +12,9 @@
 #import "CDMAVoiceDataViewController.h"
 
 #ifdef MYTELEMED
+	#import "AppDelegate.h"
+	#import "ChatMessageDetailViewController.h"
+	#import "MessageDetailViewController.h"
 	#import "NotificationSettingModel.h"
 #endif
 
@@ -23,7 +26,7 @@
 
 @implementation CoreViewController
 
-// NOTE: All functionality from this file is duplicated in CoreTableViewController.m
+// NOTE: All functionality in this file is duplicated in CoreTableViewController.m
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -87,70 +90,12 @@
 #ifdef MYTELEMED
 - (void)didReceiveRemoteNotification:(NSNotification *)notification
 {
-	NSDictionary *userInfo = notification.object;
+	NSLog(@"CoreViewController Remote Notification Data: %@", notification.object);
+	NSLog(@"CoreViewController Remote Notification Extras: %@", notification.userInfo);
 	
-	NSLog(@"CoreViewController Remote Notification: %@", userInfo);
+	UIAlertAction *actionView;
+	NSString *tone = [notification.object objectForKey:@"tone"];
 	
-	NSDictionary *aps = [userInfo objectForKey:@"aps"];
-	NSString *notificationType = [userInfo objectForKey:@"NotificationType"];
-	id alert = [aps objectForKey:@"alert"];
-	NSNumber *deliveryID;
-	NSString *message = nil;
-	NSString *tone = [aps objectForKey:@"sound"];
-	
-	// If no notification type was sent, assume it's a message.
-	if (! notificationType)
-	{
-		notificationType = @"Message";
-		
-		// If message contains specific substring, then it's a notification for comment.
-		if ([message rangeOfString:@" added a comment to a message"].location != NSNotFound)
-		{
-			notificationType = @"Comment";
-		}
-	}
-	
-	// Extract delivery id, message id, or chat message id
-	if ([notificationType isEqualToString:@"Comment"])
-	{
-		// Message id is used for sent messages; delivery id is used for received messages
-		deliveryID = ([userInfo objectForKey:@"MessageID"] ?: [userInfo objectForKey:@"DeliveryID"]);
-	}
-	else if ([notificationType isEqualToString:@"Chat"])
-	{
-		deliveryID = [userInfo objectForKey:@"ChatMsgID"];
-	}
-	
-	// Convert delivery id to a number if it is not already
-	if (! [deliveryID isKindOfClass:[NSNumber class]])
-	{
-		deliveryID = [NSNumber numberWithInteger:[deliveryID integerValue]];
-	}
-	
-	// Determine whether message was sent as an object or a string.
-	if ([alert isKindOfClass:[NSString class]])
-	{
-		message = alert;
-	}
-	else if ([alert isKindOfClass:[NSDictionary class]])
-	{
-		message = [alert objectForKey:@"body"];
-	}
-	
-	NSLog(@"NotificationType: %@", notificationType);
-	NSLog(@"DeliveryID: %@", deliveryID);
-	NSLog(@"Alert: %@", alert);
-	NSLog(@"Message: %@", message);
-	
-	// If message does not exist, then this is a reminder. Ignore reminders.
-	if (message != nil)
-	{
-		[self handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
-	}
-}
-
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
-{
 	// Play notification sound
 	if (tone != nil)
 	{
@@ -175,8 +120,50 @@
 			NSURL *toneURL = [NSURL fileURLWithPath:tonePath];
 			AudioServicesCreateSystemSoundID((__bridge CFURLRef)toneURL, &_systemSoundID);
 			AudioServicesPlaySystemSound(self.systemSoundID);
+			
+			// Stop notification sound automatically after a short time in case action view erroneously doesn't show up
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
+			{
+				AudioServicesDisposeSystemSoundID(self.systemSoundID);
+			});
 		}
 	}
+	
+	// If there is a remote notification screen to navigate to, then create an extra alert action for navigating to the remote notification screen
+	if (notification.userInfo && [notification.userInfo objectForKey:@"goToRemoteNotificationScreen"])
+	{
+		void (^goToRemoteNotificationScreen)(UINavigationController *navigationController) = [notification.userInfo objectForKey:@"goToRemoteNotificationScreen"];
+		
+		if (goToRemoteNotificationScreen != nil)
+		{
+			actionView = [UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				// Stop notification sound
+				AudioServicesDisposeSystemSoundID(self.systemSoundID);
+				
+				// User has completed the login process
+				if ([[self.storyboard valueForKey:@"name"] isEqualToString:@"Main"])
+				{
+					dispatch_async(dispatch_get_main_queue(), ^{
+						goToRemoteNotificationScreen(self.navigationController);
+					});
+				}
+				// User was not logged in so assign the block to a property for the showMainScreen method to handle
+				else
+				{
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] setGoToRemoteNotificationScreen:goToRemoteNotificationScreen];
+				}
+			}];
+		}
+	}
+	
+	// Execute the handleRemoteNotification method on the current view controller. Some view controllers override the method below to execute additional logic if the notification specifically pertains to it (ChatMessageDetailViewController, MessageDetailViewController)
+	[self handleRemoteNotification:((NSDictionary *)notification.object).mutableCopy ofType:[notification.object objectForKey:@"notificationType"] withViewAction:actionView];
+}
+
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+{
+	NSString *message = [notificationInfo objectForKey:@"message"];
 	
 	// Present user with the message from notification
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"MyTeleMed" message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -188,10 +175,15 @@
 	
 	[alertController addAction:actionClose];
 	
+	if (actionView != nil)
+	{
+		[alertController addAction:actionView];
+	}
+	
 	// PreferredAction only supported in 9.0+
 	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[alertController setPreferredAction:actionClose];
+		[alertController setPreferredAction:(actionView ?: actionClose)];
 	}
 	
 	// Show Alert

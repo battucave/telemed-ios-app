@@ -29,6 +29,11 @@
 
 - (void)getChatMessagesByID:(NSNumber *)chatMessageID
 {
+	[self getChatMessagesByID:chatMessageID withCallback:nil];
+}
+
+- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL, NSMutableArray *, NSError *))callback
+{
 	NSDictionary *parameters = nil;
 	
 	if (chatMessageID)
@@ -66,8 +71,13 @@
 				}
 			}
 			
+			// Handle success via callback block
+			if (callback)
+			{
+				callback(YES, chatMessages, nil);
+			}
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateChatMessages:)])
+			else if ([self.delegate respondsToSelector:@selector(updateChatMessages:)])
 			{
 				[self.delegate updateChatMessages:chatMessages];
 			}
@@ -77,8 +87,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via callback block
+			if (callback)
+			{
+				callback(NO, nil, error);
+			}
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
+			else if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 			{
 				[self.delegate updateChatMessagesError:error];
 			}
@@ -91,8 +106,13 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages." andTitle:@"Chat Messages Error"];
 		
+		// Handle error via callback block
+		if (callback)
+		{
+			callback(NO, nil, error);
+		}
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
+		else if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 		{
 			[self.delegate updateChatMessagesError:error];
 		}

@@ -78,7 +78,7 @@
 
 - (IBAction)getPhoneNumberHelp:(id)sender
 {
-	UIAlertController *phoneNumberHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"As a security precaution, Apple requires apps that use your Phone Number to ask you for it." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *phoneNumberHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"We use your phone number as an added security precaution. The phone number you enter must already be a callback number in your account." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
 	[phoneNumberHelpAlertController addAction:actionOK];

@@ -12,7 +12,7 @@
 @implementation MessageRecipientModel
 
 // Private method shared by getNewMessageRecipients and getForwardMessageRecipients
-- (void)getMessageRecipients:(NSDictionary *)parameters
+- (void)getMessageRecipients:(NSDictionary *)parameters withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
 {
 	[self.operationManager GET:@"MsgRecips" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -30,22 +30,16 @@
 				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
 			}];
 			
-			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateMessageRecipients:)])
-			{
-				[self.delegate updateMessageRecipients:[messageRecipients mutableCopy]];
-			}
+			// Handle success via callback
+			callback(YES, [messageRecipients mutableCopy], nil);
 		}
 		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Recipients Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Recipients.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
-			{
-				[self.delegate updateMessageRecipientsError:error];
-			}
+			// Handle error via callback
+			callback(NO, nil, error);
 		}
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
@@ -55,11 +49,8 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Recipients." andTitle:@"Message Recipients Error"];
 		
-		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateMessageRecipientsError:)])
-		{
-			[self.delegate updateMessageRecipientsError:error];
-		}
+		// Handle error via callback
+			callback(NO, nil, error);
 	}];
 }
 
@@ -67,31 +58,31 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"acctID"	: accountID
 	};
 	
-	[self getMessageRecipients:parameters];
+	[self getMessageRecipients:parameters withCallback:callback];
 }
 
-- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mdid"	: messageDeliveryID
 	};
 	
-	[self getMessageRecipients:parameters];
+	[self getMessageRecipients:parameters withCallback:callback];
 }
 
-- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID
+- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mid"	: messageID
 	};
 	
-	[self getMessageRecipients:parameters];
+	[self getMessageRecipients:parameters withCallback:callback];
 }
 #endif
 
@@ -99,14 +90,14 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"acctID"	: accountID,
 		@"slotID"	: slotID
 	};
 	
-	[self getMessageRecipients:parameters];
+	[self getMessageRecipients:parameters withCallback:callback];
 }
 #endif
 

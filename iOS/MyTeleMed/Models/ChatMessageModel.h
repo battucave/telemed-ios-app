@@ -41,6 +41,7 @@
 
 - (void)getChatMessages;
 - (void)getChatMessagesByID:(NSNumber *)chatMessageID;
+- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL success, NSMutableArray *chatMessages, NSError *error))callback;
 - (void)deleteChatMessage:(NSNumber *)chatMessageID;
 - (void)deleteMultipleChatMessages:(NSArray *)chatMessages;
 

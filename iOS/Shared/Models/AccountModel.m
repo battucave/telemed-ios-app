@@ -123,11 +123,6 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getAccountsByHospital:(NSNumber *)hospitalID
-{
-	[self getAccountsByHospital:hospitalID withCallback:nil];
-}
-
 - (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL, NSMutableArray *, NSError *))callback
 {
 	NSDictionary *parameters = @{

@@ -19,8 +19,10 @@
 	#import "MessageEventCell.h" // Med2Med Phase 2
 	#import "CommentModel.h" // Med2Med Phase 2
 	#import "MessageEventModel.h" // Med2Med Phase 2
+	#import "MessageModel.h"
 	#import "MessageRecipientModel.h"
 	#import "MyProfileModel.h"
+	#import "SentMessageModel.h"
 #endif
 
 #ifdef MED2MED
@@ -46,8 +48,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableComments;
 @property (weak, nonatomic) IBOutlet AutoGrowingTextView *textViewComment;
 @property (weak, nonatomic) IBOutlet UITextView *textViewMessage;
-@property (weak, nonatomic) IBOutlet UIView *viewAccount;
 @property (weak, nonatomic) IBOutlet UIView *viewButtons;
+@property (weak, nonatomic) IBOutlet UIView *viewMessageAccount;
+@property (weak, nonatomic) IBOutlet UIView *viewMessageDetails;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableCommentsHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewButtonsHeight;
@@ -58,10 +61,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonAddCommentHeight;
 // END TEMPORARY MED2MED PHASE 1
 
-@property (nonatomic) NSUInteger messageCount;
 @property (nonatomic) NSNumber *currentUserID;
+@property (nonatomic) NSUInteger messageCount;
 @property (nonatomic) NSString *textViewCommentPlaceholder;
 
+@property (nonatomic) BOOL isFromPushNotification;// MyTeleMed only
 @property (nonatomic) BOOL isLoaded;
 
 @end
@@ -73,21 +77,11 @@
 	// Perform shared logic in MessageDetailParentViewController
 	[super viewDidLoad];
 	
-	// Set current user id
 	id <ProfileProtocol> profile;
 	self.currentUserID = 0;
 	
-	#ifdef MYTELEMED
-	 	profile = [MyProfileModel sharedInstance];
-	
-	#elif defined MED2MED
-			profile = [UserProfileModel sharedInstance];
-	#endif
-	
-	if (profile)
-	{
-		self.currentUserID = profile.ID;
-	}
+	// Default message type to active
+	self.messageType = @"Archived";
 	
 	#ifdef MYTELEMED
 		// Initialize basic event model
@@ -105,46 +99,167 @@
 		[self.textViewComment setTextContainerInset:UIEdgeInsetsMake(textViewCommentEdgeInsets.top, 12.0f, textViewCommentEdgeInsets.bottom, 12.0f)];
 		[self.textViewComment setMaxHeight:120.0f];
 		self.textViewCommentPlaceholder = self.textViewComment.text;
+	
+		// Initialize my profile model
+		profile = [MyProfileModel sharedInstance];
+	
+		// Set current user id
+		self.currentUserID = profile.ID;
+	
+	// Initialize user profile model
+	#elif defined MED2MED
+		profile = [UserProfileModel sharedInstance];
+	
+		// Set current user id
+		self.currentUserID = profile.ID;
 	#endif
+	
+	// Set message type and id using message details from previous screen
+	if (self.message)
+	{
+		self.messageID = self.message.MessageID;
+		self.messageType = self.message.MessageType;
+		
+		// MyTeleMed - Active or archived message
+		#ifdef MYTELEMED
+			if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID)
+			{
+				self.messageDeliveryID = self.message.MessageDeliveryID;
+			}
+		#endif
+	}
+	// Change message type sent message received from push notification
+	else if (self.messageID)
+	{
+		self.messageType = @"Sent";
+	}
+	
+	// Prevent user from viewing screen without any message information
+	if (! self.messageID && ! self.messageDeliveryID)
+	{
+		[self.navigationController popViewControllerAnimated:NO];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+	// Perform shared logic in MessageDetailParentViewController
 	[super viewWillAppear:animated];
 	
-	NSLog(@"Message ID: %@", self.message.MessageID);
-	
-	if ([self.message respondsToSelector:@selector(MessageDeliveryID)])
+	// Change title for sent message in navigation bar
+	if ([self.messageType isEqualToString:@"Sent"])
 	{
-		NSLog(@"Message Delivery ID: %@", self.message.MessageDeliveryID);
-	}
-	
-	// Set sent message details
-	if (self.message.messageType == 2)
-	{
-		[self setSentMessageDetails];
-		
-		// Change title in navigation bar
 		[self.navigationItem setTitle:@"Sent Message Detail"];
 	}
 	
-	#ifdef MYTELEMED
-		// Set active or archived message details
-		else
+	// Hide message details and account by default (hiding them in storyboard causes confusion since they disappear from the storyboard itself)
+	[self.viewMessageAccount setHidden:YES];
+	[self.viewMessageDetails setHidden:YES];
+	
+	// Initialize message details if they are available from previous screen
+	if (self.message)
+	{
+		// Set sent message details
+		if ([self.messageType isEqualToString:@"Sent"])
 		{
-			[self setMessageDetails];
+			[self setSentMessageDetails];
 		}
-	#endif
-	
-	// Set account details (if any)
-	[self setAccountDetails];
+		// MyTeleMed - Set active or archived message details
+		#ifdef MYTELEMED
+			else
+			{
+				[self setMessageDetails];
+				
+				// Mark message as read if it is active and unread
+				[self modifyMessageAsRead];
+			}
+		
+			// Load message events
+			[self getMessageEvents];
+		
+			// Load forward message recipients to determine if message is forwardable
+			[self getMessageRecipients];
+		#endif
+	}
 	
 	#ifdef MYTELEMED
-		// Load message events
-		[self.messageEventModel getMessageEventsForMessageID:self.message.MessageID];
+		// Load message details from server (opened via push notification)
+		else if (self.messageDeliveryID)
+		{
+			NSLog(@"Push Notification Message Delivery ID: %@", self.messageDeliveryID);
+			
+			MessageModel *messageModel = [[MessageModel alloc] init];
+			
+			// Flag message as being loaded from push notification
+			[self setIsFromPushNotification:YES];
+			
+			[messageModel getMessageByDeliveryID:self.messageDeliveryID withCallback:^(BOOL success, MessageModel *message, NSError *error)
+			{
+				if (success)
+				{
+					self.message = message;
+					self.messageID = message.MessageID;
+					self.messageType = message.MessageType;
+					
+					[self setMessageDetails];
+					
+					// Mark message as read if it is active and unread
+					[self modifyMessageAsRead];
+					
+					// Load message events (must be loaded after message completes fetching to avoid issue with comments table UI getting stuck showing the "Loading" message)
+					[self getMessageEvents];
 	
-		// Load forward message recipients to determine if message is forwardable
-		[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
+					// Load forward message recipients to determine if message is forwardable
+					[self getMessageRecipients];
+					
+					// Enable archive button for active messages
+					if ([self.messageType isEqualToString:@"Active"])
+					{
+						[self.buttonArchive setEnabled:YES];
+					}
+				}
+				// Show error
+				else
+				{
+					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					
+					[errorAlertController show:error];
+				}
+			}];
+		}
+		// Load sent message details from server (opened via push notification)
+		else if (self.messageID)
+		{
+			NSLog(@"Push Notification Sent Message ID: %@", self.messageID);
+			
+			SentMessageModel *sentMessageModel = [[SentMessageModel alloc] init];
+			
+			// Flag message as being loaded from push notification
+			[self setIsFromPushNotification:YES];
+			
+			[sentMessageModel getSentMessageByID:self.messageID withCallback:^(BOOL success, SentMessageModel *message, NSError *error)
+			{
+				if (success)
+				{
+					self.message = message;
+					
+					[self setSentMessageDetails];
+					
+					// Load message events (must be loaded after message completes fetching to avoid issue with comments table UI getting stuck showing the "Loading" message)
+					[self getMessageEvents];
+	
+					// Load forward message recipients to determine if message is forwardable
+					[self getMessageRecipients];
+				}
+				// Show error
+				else
+				{
+					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					
+					[errorAlertController show:error];
+				}
+			}];
+		}
 	
 		// Add keyboard observers
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -155,56 +270,30 @@
 		// Add call disconnected observer to hide keyboard
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
 	
-		// Mark message as read if active and unread
-		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID && [self.message respondsToSelector:@selector(State)] && self.message.State)
-		{
-			if (self.message.messageType == 0 && [self.message.State isEqualToString:@"Unread"])
-			{
-				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
-				
-				/*/ TESTING ONLY (set message back to unread)
-				#ifdef DEBUG
-					[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unread"];
-				#endif
-				// END TESTING ONLY */
-			}
-			/*/ TESTING ONLY (unarchive archived messages)
-			else if (self.message.messageType == 1)
-			{
-				#ifdef DEBUG
-					[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
-				#endif
-			}
-			// END TESTING ONLY */
-		}
-	#endif
-	
-	// Med2Med - modify appearance
-	#ifdef MED2MED
-		// Hide buttons
+	// Med2Med - Hide buttons
+	#elif defined MED2MED
 		[self.viewButtons setHidden:YES];
 		[self.constraintViewButtonsHeight setConstant:0.0f];
 	#endif
+	
+	NSLog(@"Message ID: %@", self.messageID);
+	
+	if (self.messageDeliveryID)
+	{
+		NSLog(@"Message Delivery ID: %@", self.messageDeliveryID);
+	}
 }
 
-- (void)setAccountDetails
+- (void)setMessageAccountDetails
 {
 	// Set account name and number
-	if (self.message.Account)
+	if (self.message && self.message.Account)
 	{
 		[self.labelAccountName setText:self.message.Account.Name];
 		[self.labelAccountPublicKey setText:self.message.Account.PublicKey];
-	}
-	// Hide account information if not available
-	else
-	{
-		[self.viewAccount setHidden:YES];
 		
-		// Deactivate existing constraints on account view
-		[NSLayoutConstraint deactivateConstraints:self.viewAccount.constraints];
-		
-		// Add new 0 height constraint to account view
-		[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.viewAccount attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0]];
+		// Show account information
+		[self.viewMessageAccount setHidden:NO];
 	}
 }
 
@@ -238,6 +327,12 @@
 	
 	[self.labelDate setText:date];
 	[self.labelTime setText:time];
+	
+	// Show message details
+	[self.viewMessageDetails setHidden:NO];
+	
+	// Set account details (if any)
+	[self setMessageAccountDetails];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -271,7 +366,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Stop refreshing message events when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -295,158 +390,214 @@
 	[self.commentModel addMessageComment:self.message comment:self.textViewComment.text withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 
-// Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
+// Load message events
+- (void)getMessageEvents
 {
-	NSLog(@"Received Remote Notification MessageDetailViewController");
+	// Message event model callback
+	void (^callback)(BOOL success, NSMutableArray *newMessageEvents, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageEvents, NSError *error)
+	{
+		[self setIsLoaded:YES];
+		
+		if (success)
+		{
+			[self setMessageEvents:newMessageEvents];
+			
+			[self.filteredMessageEvents removeAllObjects];
+			
+			// Filter message events to include only comments and user events
+			for(MessageEventModel *messageEvent in newMessageEvents)
+			{
+				if ([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
+				{
+					[self.filteredMessageEvents addObject:messageEvent];
+				}
+			}
+			
+			/*/ TESTING ONLY (used for generating screenshots)
+			#ifdef DEBUG
+				[self.filteredMessageEvents removeAllObjects];
+			 
+				for(int i = 0; i < 3; i++)
+				{
+					MessageEventModel *messageEvent = [[MessageEventModel alloc] init];
+					NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+			 
+					[messageEvent setValue:@"Comment" forKey:@"Type"];
+			 
+					// Test message from Jason
+					if (i == 0)
+					{
+						[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
+						[messageEvent setValue:@"2015-04-11T13:24:06.444" forKey:@"Time_LCL"];
+						[messageEvent setValue:@"Introducing the new TeleMed comments section" forKey:@"Detail"];
+					}
+					// Test message from me (ensure entered by id matches own logged in id)
+					else if (i == 1)
+					{
+						[messageEvent setValue:[numberFormatter numberFromString:@"14140220"] forKey:@"EnteredByID"];
+						[messageEvent setValue:@"2015-04-11T15:46:06.444" forKey:@"Time_LCL"];
+						[messageEvent setValue:@"Tap on the message field at the bottom of the screen to send messages back and forth." forKey:@"Detail"];
+					}
+					// Test message from Jason
+					else if (i == 2)
+					{
+						[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
+						[messageEvent setValue:@"2015-04-12T10:58:39.444" forKey:@"Time_LCL"];
+						[messageEvent setValue:@"Events are now found by tapping the History button located above." forKey:@"Detail"];
+					}
+			 
+					[self.filteredMessageEvents addObject:messageEvent];
+				}
+			#endif
+			// END TESTING ONLY */
+			
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[self.tableComments reloadData];
+				
+				// Scroll to bottom of comments after table reloads data only if message loaded directly from push notification or a new comment has been added since last check
+				if (self.isFromPushNotification || (self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount))
+				{
+					[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.5];
+					
+					// Reset from push notification flag
+					[self setIsFromPushNotification:NO];
+				}
+				
+				// Update message count with new number of filtered message events
+				self.messageCount = [self.filteredMessageEvents count];
+				
+				// Refresh message events again after 25 second delay
+				[self performSelector:@selector(getMessageEvents) withObject:nil afterDelay:25.0];
+			});
+		}
+		else
+		{
+			// Show error message only if device offline
+			if (error.code == NSURLErrorNotConnectedToInternet)
+			{
+				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				
+				[errorAlertController show:error];
+			}
+		}
+	};
+	
+	// Get message events by message delivery id (received message)
+	if (self.messageDeliveryID)
+	{
+		[self.messageEventModel getMessageEventsForMessageDeliveryID:self.messageDeliveryID withCallback:callback];
+	}
+	// Get message events by message id (sent message)
+	else if (self.messageID)
+	{
+		[self.messageEventModel getMessageEventsForMessageID:self.messageID withCallback:callback];
+	}
+}
+
+// Load message recipients to determine if message is forwardable
+- (void)getMessageRecipients
+{
+	// Message recipient model callback
+	void (^callback)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageRecipients, NSError *error)
+	{
+		if (success)
+		{
+			// Enable forward button if there are valid message recipients to forward to
+			if ([newMessageRecipients count] > 0)
+			{
+				[self.buttonForward setEnabled:YES];
+			}
+		}
+		else
+		{
+			// Show error message only if device offline
+			if (error.code == NSURLErrorNotConnectedToInternet)
+			{
+				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				
+				[errorAlertController show:error];
+			}
+		}
+	};
+	
+	if (self.messageDeliveryID)
+	{
+		[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.messageDeliveryID withCallback:callback];
+	}
+	else if (self.messageID)
+	{
+		[self.messageRecipientModel getMessageRecipientsForMessageID:self.messageID withCallback:callback];
+	}
+}
+
+// Override default remote notification action from CoreViewController
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+{
+	NSLog(@"Received Push Notification MessageDetailViewController");
 	
 	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message)
 	#ifdef DEBUG
-		message = @"Shane Goodwin added a comment to a message.";
-		type = @"comment";
-		deliveryId = 5133538688695397;
+		[notificationInfo setValue:@"Shane Goodwin added a comment to a message." forKey:@"message"];
+		[notificationInfo setValue:5133538688695397 forKey:@"notificationID"];
+		notificationType = @"Comment";
 	#endif
 	//*/
 	
-	// Reload message events if remote notification is a comment specifically for the current message
-	if ([notificationType isEqualToString:@"Comment"] && deliveryID)
+	// Reload message events if push notification is a comment specifically for the current message
+	if (([notificationType isEqualToString:@"Comment"] || [notificationType isEqualToString:@"SentComment"]) && [notificationInfo objectForKey:@"notificationID"])
 	{
-		// Received messages
-		if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && [deliveryID isEqualToNumber:self.message.MessageDeliveryID])
-		{
-			NSLog(@"Refresh Comments with Message Delivery ID: %@", deliveryID);
+		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
+		
+		if (
+			// Received message
+			(self.messageDeliveryID && [notificationID isEqualToNumber:self.messageDeliveryID]) ||
+			// Sent message
+			(self.messageID && [notificationID isEqualToNumber:self.messageID])
+		) {
+			NSLog(@"Refresh Comments with Message %@ ID: %@", (self.messageDeliveryID && [notificationID isEqualToNumber:self.messageDeliveryID] ? @"Delivery" : @""), notificationID);
 			
 			// Cancel queued comments refresh
-			[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
+			[NSObject cancelPreviousPerformRequestsWithTarget:self];
 			
-			[self.messageEventModel getMessageEventsForMessageDeliveryID:self.message.MessageDeliveryID];
-		}
-		// Sent messages
-		else if (self.message.MessageID && [deliveryID isEqualToNumber:self.message.MessageID])
-		{
-			NSLog(@"Refresh Comments with Message ID: %@", deliveryID);
+			[self getMessageEvents];
 			
-			// Cancel queued comments refresh
-			[NSObject cancelPreviousPerformRequestsWithTarget:self.messageEventModel];
+			// Alter notification message
+			NSString *message = [notificationInfo valueForKey:@"message"] ?: @"";
+			[notificationInfo setValue:[message stringByReplacingOccurrencesOfString:@"comment to a message" withString:@"comment to this message"] forKey:@"message"];
 			
-			[self.messageEventModel getMessageEventsForMessageID:self.message.MessageID];
+			// Remove action view
+			actionView = nil;
 		}
 	}
 	
-	// If remote notification is NOT a comment specifically for the current message, execute the default notification message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
+	// Execute the default notification message action
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:actionView];
 }
 
-// Return events from MessageEventModel delegate
-- (void)updateMessageEvents:(NSMutableArray *)newMessageEvents
+- (void)modifyMessageAsRead
 {
-	[self setIsLoaded:YES];
-	[self setMessageEvents:newMessageEvents];
-	
-	[self.filteredMessageEvents removeAllObjects];
-	
-	// Add only comments from basic events
-	for(MessageEventModel *messageEvent in newMessageEvents)
+	// Mark message as read if it is active and unread
+	if (self.message && [self.message respondsToSelector:@selector(State)])
 	{
-		if ([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
+		if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Unread"])
 		{
-			[self.filteredMessageEvents addObject:messageEvent];
+			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
 		}
-	}
-	
-	/*/ TESTING ONLY (used for generating screenshots)
-	#ifdef DEBUG
-		[self.filteredMessageEvents removeAllObjects];
-	 
-		for(int i = 0; i < 3; i++)
-		{
-			MessageEventModel *messageEvent = [[MessageEventModel alloc] init];
-			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-	 
-			[messageEvent setValue:@"Comment" forKey:@"Type"];
-	 
-			// Test message from Jason
-			if (i == 0)
+		/*/ TESTING ONLY (set message back to unread)
+		#ifdef DEBUG
+			// Set message back to unread
+			else if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Read"])
 			{
-				[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
-				[messageEvent setValue:@"2015-04-11T13:24:06.444" forKey:@"Time_LCL"];
-				[messageEvent setValue:@"Introducing the new TeleMed comments section" forKey:@"Detail"];
+				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unread"];
 			}
-			// Test message from me (ensure entered by id matches own logged in id)
-			else if (i == 1)
+			// Unarchive archived message
+			else if ([self.message.MessageType isEqualToString:@"Archived"])
 			{
-				[messageEvent setValue:[numberFormatter numberFromString:@"14140220"] forKey:@"EnteredByID"];
-				[messageEvent setValue:@"2015-04-11T15:46:06.444" forKey:@"Time_LCL"];
-				[messageEvent setValue:@"Tap on the message field at the bottom of the screen to send messages back and forth." forKey:@"Detail"];
+				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
 			}
-			// Test message from Jason
-			else if (i == 2)
-			{
-				[messageEvent setValue:@"Jason Hutchison" forKey:@"EnteredBy"];
-				[messageEvent setValue:@"2015-04-12T10:58:39.444" forKey:@"Time_LCL"];
-				[messageEvent setValue:@"Events are now found by tapping the History button located above." forKey:@"Detail"];
-			}
-	 
-			[self.filteredMessageEvents addObject:messageEvent];
-		}
-	#endif
-	// END TESTING ONLY */
-	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableComments reloadData];
-		
-		// Scroll to bottom of comments after table reloads data only if a new comment has been added since last check
-		if (self.messageCount > 0 && [self.filteredMessageEvents count] > self.messageCount)
-		{
-			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
-		}
-		
-		// Update message count with new number of filtered message events
-		self.messageCount = [self.filteredMessageEvents count];
-	});
-	
-	// Refresh message events again after 15 second delay
-	[self.messageEventModel performSelector:@selector(getMessageEventsForMessageID:) withObject:self.message.MessageID afterDelay:15.0];
-}
-
-// Return error from MessageEventModel delegate
-- (void)updateMessageEventsError:(NSError *)error
-{
-	NSLog(@"Error getting Basic Events");
-	
-	self.isLoaded = YES;
-	
-	// Show error message only if device offline
-	if (error.code == NSURLErrorNotConnectedToInternet)
-	{
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController show:error];
-	}
-}
-
-// Return message recipients from MessageRecipientModel delegate
-- (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients
-{
-	// Disable forward button if there are no valid message recipients to forward to
-	if ([newMessageRecipients count] > 0)
-	{
-		[self.buttonForward setEnabled:YES];
-	}
-}
-
-// Return error from MessageRecipientModel delegate
-- (void)updateMessageRecipientsError:(NSError *)error
-{
-	NSLog(@"There was a problem retrieving recipients for the Message");
-	
-	// Show error message only if device offline
-	if (error.code == NSURLErrorNotConnectedToInternet)
-	{
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController show:error];
+		#endif
+		// END TESTING ONLY */
 	}
 }
 
@@ -460,9 +611,9 @@
 	
 	// Set comment details
 	[comment setID:pendingID];
-	[comment setDetail:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)commentText, CFSTR(""), kCFStringEncodingUTF8))];
+	[comment setDetail:[commentText stringByRemovingPercentEncoding]];
 	[comment setEnteredByID:self.currentUserID];
-	[comment setMessageID:self.message.MessageID];
+	[comment setMessageID:self.messageID];
 	[comment setType:@"Comment"];
 	
 	// Create local date
@@ -555,7 +706,7 @@
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
 	[comment setTime_UTC:[dateFormatter stringFromDate:currentDate]];
  
-	[comment setDetail:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)commentText, CFSTR(""), kCFStringEncodingUTF8))];
+	[comment setDetail:[commentText stringByRemovingPercentEncoding]];
 	[comment setType:@"Comment"];
 	[comment setEnteredByID:self.currentUserID];
  
@@ -637,6 +788,12 @@
 	
 	[self.labelDate setText:date];
 	[self.labelTime setText:time];
+	
+	// Show message details
+	[self.viewMessageDetails setHidden:NO];
+	
+	// Set account details (if any)
+	[self setMessageAccountDetails];
 }
 
 // Scroll to bottom of scroll view

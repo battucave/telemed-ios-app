@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-// No need to extend CoreViewController here because the app will never receive push notifications until after this step has completed
-@interface PhoneNumberViewController : UIViewController <UITextFieldDelegate>
+#import "CoreViewController.h"
+
+@interface PhoneNumberViewController : CoreViewController <UITextFieldDelegate>
 
 @end

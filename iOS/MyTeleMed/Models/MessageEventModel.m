@@ -11,28 +11,26 @@
 
 @implementation MessageEventModel
 
-- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mdid"	: messageDeliveryID
 	};
 	
-	[self getMessageEvents:parameters];
+	[self getMessageEvents:parameters withCallback:callback];
 }
 
-- (void)getMessageEventsForMessageID:(NSNumber *)messageID
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mid"	: messageID
 	};
 	
-	[self getMessageEvents:parameters];
+	[self getMessageEvents:parameters withCallback:callback];
 }
 
-- (void)getMessageEvents:(NSDictionary *)parameters
+- (void)getMessageEvents:(NSDictionary *)parameters withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getMessageEvents:) object:parameters];
-	
 	[self.operationManager GET:@"MsgEvents" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
@@ -43,22 +41,16 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateMessageEvents:)])
-			{
-				[self.delegate updateMessageEvents:[parser messageEvents]];
-			}
+			// Handle success via callback
+			callback(YES, [parser messageEvents], nil);
 		}
 		// Error parsing xml file
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Events Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Message Events.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateMessageEventsError:)])
-			{
-				[self.delegate updateMessageEventsError:error];
-			}
+			// Handle error via callback
+			callback(NO, nil, error);
 		}
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
@@ -68,11 +60,8 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Events." andTitle:@"Message Events Error"];
 		
-		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateMessageEventsError:)])
-		{
-			[self.delegate updateMessageEventsError:error];
-		}
+		// Handle error via callback
+		callback(NO, nil, error);
 	}];
 }
 
