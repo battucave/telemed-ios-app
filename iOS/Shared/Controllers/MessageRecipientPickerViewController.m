@@ -149,6 +149,24 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
+	// Message recipient model callback
+	void (^callback)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageRecipients, NSError *error)
+	{
+		self.isLoaded = YES;
+		
+		if (success)
+		{
+			[self updateMessageRecipients:newMessageRecipients];
+		}
+		else
+		{
+			// Show error message
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error];
+		}
+	};
+	
 	#ifdef MED2MED
 		// Force single selection of recipients
 		[self.tableMessageRecipients setAllowsMultipleSelection:NO];
@@ -172,7 +190,7 @@
 		}
 	
 		// Load list of message recipients for new message
-		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID slotID:self.selectedOnCallSlot.ID];
+		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID slotID:self.selectedOnCallSlot.ID withCallback:callback];
 	
 	#else
 		// Load list of chat participants
@@ -183,12 +201,12 @@
 		// Load list of message recipients for forward message
 		else if ([self.messageRecipientType isEqualToString:@"Forward"])
 		{
-			[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID];
+			[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:callback];
 		}
 		// Load list of message recipients for new message
 		else
 		{
-			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID];
+			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID withCallback:callback];
 		}
 	#endif
 }
@@ -353,8 +371,6 @@
 {
 	[self setMessageRecipients:newMessageRecipients];
 	
-	self.isLoaded = YES;
-	
 	// Delete any selected message recipients that do not exist in the message recipients list (because they belong to a different account)
 	NSMutableIndexSet *removeIndexes = [[NSMutableIndexSet alloc] init];
 	
@@ -397,17 +413,6 @@
 			[self.navigationItem.rightBarButtonItem setEnabled:YES];
 		}
 	#endif
-}
-
-// Return error from message recipient model delegate
-- (void)updateMessageRecipientsError:(NSError *)error
-{
-	self.isLoaded = YES;
-	
-	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
 }
 
 // Delegate method for updating search results

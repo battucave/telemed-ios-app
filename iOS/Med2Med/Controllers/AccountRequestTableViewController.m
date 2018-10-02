@@ -101,7 +101,7 @@
 // Avoid upper case header
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-	if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
+	if ([view isKindOfClass:UITableViewHeaderFooterView.class])
 	{
 		UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
 		

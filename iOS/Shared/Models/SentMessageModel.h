@@ -42,9 +42,9 @@
 @property (nonatomic) NSNumber *SenderID;
 @property (nonatomic) NSString *SenderName;
 
-@property (nonatomic) int messageType; // Always 2 (this property not set by web services)
+@property (nonatomic) NSString *MessageType; // Always Sent (this property not set by web services)
 
 - (void)getSentMessages;
-
+- (void)getSentMessageByID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, SentMessageModel *message, NSError *error))callback;
 
 @end

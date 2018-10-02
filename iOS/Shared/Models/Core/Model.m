@@ -83,7 +83,7 @@
 			if (callback != nil)
 			{
 				// Delay callback to ensure that activity indicator has finished dismissing
-				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 				{
 					callback();
 				});
@@ -139,15 +139,16 @@
 
 - (id)getRootViewController
 {
+	// In TeleMed apps, root view controller will almost always be of type SWRevealViewController
 	id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
 	
-	if ([rootViewController isKindOfClass:[UINavigationController class]])
+	if ([rootViewController isKindOfClass:UINavigationController.class])
 	{
-		rootViewController = ((UINavigationController *) rootViewController).viewControllers.firstObject;
+		rootViewController = ((UINavigationController *)rootViewController).viewControllers.firstObject;
 	
-	} else if ([rootViewController isKindOfClass:[UITabBarController class]])
+	} else if ([rootViewController isKindOfClass:UITabBarController.class])
 	{
-		rootViewController = ((UITabBarController *) rootViewController).selectedViewController;
+		rootViewController = ((UITabBarController *)rootViewController).selectedViewController;
 	}
 	
 	return rootViewController;

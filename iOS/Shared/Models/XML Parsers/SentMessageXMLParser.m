@@ -45,6 +45,7 @@
 	{
 		// Initialize the sent message
 		self.sentMessage = [[SentMessageModel alloc] init];
+		self.sentMessage.MessageType = @"Sent";
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{

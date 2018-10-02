@@ -37,12 +37,12 @@
 	[super viewWillAppear:animated];
 	
 	// Set buttons for archived message details
-	if (self.message.messageType == 1)
+	if ([self.messageType isEqualToString:@"Archived"])
 	{
 		[self.buttonArchive setEnabled:NO];
 	}
 	// Set buttons for sent message details
-	else if (self.message.messageType == 2)
+	else if ([self.messageType isEqualToString:@"Sent"])
 	{
 		CGFloat buttonWidth = self.buttonReturnCall.frame.size.width;
 		CGFloat spaceAdjustment = (buttonWidth / 2);
@@ -59,19 +59,18 @@
 		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
 	}
 	
-	// Set message priority color (defaults to "Normal" green color)
-	if ([self.message.Priority isEqualToString:@"Priority"])
-	{
-		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
-	}
-	else if ([self.message.Priority isEqualToString:@"Stat"])
-	{
-		[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
-	}
+	// Set message priority color
+	[self setMessagePriority];
 }
 
 - (IBAction)returnCall:(id)sender
 {
+	// Don't do anything if message isn't set yet (opened via push notification)
+	if (! self.message)
+	{
+		return;
+	}
+	
 	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *actionReturnCall = [UIAlertAction actionWithTitle:@"Return Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -103,6 +102,12 @@
 
 - (IBAction)archiveMessage:(id)sender
 {
+	// Don't do anything if message isn't set yet (opened via push notification)
+	if (! self.message)
+	{
+		return;
+	}
+	
 	UIAlertController *archiveMessageAlertController = [UIAlertController alertControllerWithTitle:@"Archive Message" message:@"Selecting Continue will archive this message. Archived messages can be accessed from the Main Menu." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -123,13 +128,43 @@
 	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
 }
 
+/*/ Return success from CallTeleMedModel delegate (no longer used)
+- (void)callSenderSuccess
+{
+	NSLog(@"Call Message Sender request sent successfully");
+}
+
+// Return error from CallTeleMedModel delegate (no longer used)
+- (void)callSenderError:(NSError *)error
+{
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+ 
+	[errorAlertController show:error];
+}*/
+
+// Set message priority color (defaults to "Normal" green color)
+- (void)setMessagePriority
+{
+	if (self.message && [self.message respondsToSelector:@selector(Priority)])
+	{
+		if ([self.message.Priority isEqualToString:@"Priority"])
+		{
+			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+		}
+		else if ([self.message.Priority isEqualToString:@"Stat"])
+		{
+			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+		}
+	}
+}
+
 /*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
 {
 	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 	{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
 			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
 			@try
@@ -151,7 +186,7 @@
 	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 	{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
 			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
 			@try
@@ -177,20 +212,6 @@
  
 		[errorAlertController show:error];
 	}
-}*/
-
-/*/ Return success from CallTeleMedModel delegate (no longer used)
-- (void)callSenderSuccess
-{
-	NSLog(@"Call Message Sender request sent successfully");
-}
-
-// Return error from CallTeleMedModel delegate (no longer used)
-- (void)callSenderError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
 }*/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

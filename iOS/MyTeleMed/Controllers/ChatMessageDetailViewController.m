@@ -122,7 +122,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -198,7 +198,7 @@
 				[self setConversationID:chatMessage.ID];
 				
 				// Cancel queued chat messages refresh
-				[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+				[NSObject cancelPreviousPerformRequestsWithTarget:self];
 				
 				// Get chat messages for conversation id
 				[self.chatMessageModel getChatMessagesByID:self.conversationID];
@@ -331,23 +331,56 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
 {
-	NSLog(@"Received Remote Notification ChatMessageDetailViewController");
+	NSLog(@"Received Push Notification ChatMessageDetailViewController");
     
-    // Reload chat messages if remote notification is a chat message (there is no way to verify that the message is specifically for the current conversation because the deliveryID will be a newly generated value that won't match conversationID)
-	if ([notificationType isEqualToString:@"Chat"]/* && deliveryID && self.conversationID && [deliveryID isEqualToNumber:self.conversationID]*/)
+    // Reload chat messages if conversation id is set (not a new chat) and push notification is a chat message for *any* conversation (notification id is a newly generated value that won't exist yet in any current chat messages)
+	if (self.conversationID && [notificationType isEqualToString:@"Chat"] && [notificationInfo objectForKey:@"notificationID"])
 	{
 		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
 		
-		// Cancel queued chat messages refresh
-		[NSObject cancelPreviousPerformRequestsWithTarget:self.chatMessageModel];
+		__block UIAlertAction *actionViewBlock = actionView;
+		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
-		[self.chatMessageModel getChatMessagesByID:self.conversationID];
+		// Cancel queued chat messages refresh
+		[NSObject cancelPreviousPerformRequestsWithTarget:self];
+		
+		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
+		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
+		{
+			if (success)
+			{
+				// Execute the existing success delegate method
+				[self updateChatMessages:chatMessages];
+				
+				// Determine if notification id exists in the updated chat messages
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", notificationID];
+				NSArray *results = [chatMessages filteredArrayUsingPredicate:predicate];
+				
+				// Push notification is specifically for this conversation so remove the action view to prevent the user from opening a duplicate screen of the same chat messages
+				if ([results count] > 0)
+				{
+					// Remove action view
+					actionViewBlock = nil;
+				}
+			}
+			else
+			{
+				// Execute the existing error delegate method
+				[self updateChatMessagesError:error];
+			}
+
+			// Execute the default notification message action
+			[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionViewBlock];
+		}];
+		
+		// Delay executing the default notification message action until chat messages have finished loading
+		return;
 	}
 	
-	// If remote notification is NOT a chat message specifically for the current conversation, execute the default notification message action
-	[super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
+	// Execute the default notification message action
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionView];
 }
 
 // Reset chat messages back to loading state
@@ -405,25 +438,28 @@
 		}
 	}
 	
-	[self setIsLoaded:YES];
+	// Keep current value of is loaded to determine whether to scroll to bottom of chat messages
+	BOOL hadLoaded = self.isLoaded;
+	
 	[self setChatMessages:chatMessages];
+	[self setIsLoaded:YES];
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableChatMessages reloadData];
 		
-		// Scroll to bottom of chat messages after table reloads data only if a new chat message has been added since last check
-		if (self.chatMessageCount > 0 && chatMessageCount > self.chatMessageCount)
+		// Scroll to bottom of chat messages after table reloads data only if this is the first load or a new chat message has been added since last check
+		if (! hadLoaded || (self.chatMessageCount > 0 && chatMessageCount > self.chatMessageCount))
 		{
-			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
+			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.5];
 		}
 		
 		// Update chat message count with new number of chat messages
 		self.chatMessageCount = chatMessageCount;
 	});
 	
-	// Refresh chat messages again after 15 second delay
-	[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:15.0];
+	// Refresh chat messages again after 25 second delay
+	[self.chatMessageModel performSelector:@selector(getChatMessagesByID:) withObject:self.conversationID afterDelay:25.0];
 }
 
 // Return error from ChatMessageModel delegate
@@ -455,7 +491,7 @@
 	[chatMessage setID:pendingID];
 	[chatMessage setChatParticipants:self.selectedChatParticipants];
 	[chatMessage setSenderID:self.currentUserID];
-	[chatMessage setText:(NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)message, CFSTR(""), kCFStringEncodingUTF8))];
+	[chatMessage setText:[message stringByRemovingPercentEncoding]];
 	[chatMessage setUnopened:NO];
 	
 	// Create local date

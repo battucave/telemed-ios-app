@@ -21,6 +21,8 @@
 #import "TeleMedHTTPRequestOperationManager.h"
 
 #ifdef MYTELEMED
+	#import "ChatMessageDetailViewController.h"
+	#import "MessageDetailViewController.h"
 	#import "MyProfileModel.h"
 	#import "MyStatusModel.h"
 	#import "RegisteredDeviceModel.h"
@@ -56,6 +58,11 @@
 	__unused TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	
+	// Med2Med - Prevent swipe message from ever appearing
+	#ifdef MED2MED
+		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+	#endif
 	
 	// Initialize cdma voice data settings
 	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
@@ -101,17 +108,40 @@
 	
 	// MyTeleMed - push notification registration
 	#ifdef MYTELEMED
-		if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+		// Register for push notification in iOS 10+
+		if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
 		{
-			// iOS 8+ push notifications
+			UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+			
+			[userNotificationCenter setDelegate:self];
+			[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
+			{
+				if (granted)
+				{
+					dispatch_async(dispatch_get_main_queue(), ^
+					{
+						[application registerForRemoteNotifications];
+					});
+				}
+			}];
+		}
+		// Register for push notifications in iOS < 10
+		else
+		{
 			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-			[application registerForRemoteNotifications];
+			
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[application registerForRemoteNotifications];
+			});
 		}
 	
-	// Med2Med - Prevent swipe message from ever appearing
-	#elif defined MED2MED
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
-		[settings synchronize];
+		NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+	
+		if (remoteNotification)
+		{
+			[self handleRemoteNotification:remoteNotification applicationState:application.applicationState];
+		}
 	#endif
 	
 	return YES;
@@ -230,7 +260,7 @@
 	if (timeoutEnabled && ! [self isCallConnected])
 	{
 		// Delay logout to ensure application is fully loaded
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
 			[authenticationModel doLogout];
 		});
@@ -246,17 +276,15 @@
 	
 	// Load timeout preference
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
-	if (! timeoutEnabled)
+	// If enable timeout has never been set, the default it to true
+	if (! [settings objectForKey:@"enableTimeout"])
 	{
-		// If Enable timeout string is null, then it has never been set. Set it to true
-		if ([settings objectForKey:@"enableTimeout"] == nil)
-		{
-			[settings setBool:YES forKey:@"enableTimeout"];
-			[settings synchronize];
-		}
+		[settings setBool:YES forKey:@"enableTimeout"];
+		[settings synchronize];
 	}
+	
+	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
 	
 	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
 	
@@ -391,7 +419,7 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
 	NSLog(@"My Device Token: %@", deviceToken);
 	
@@ -419,7 +447,7 @@
 	}];
 }
 
-- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
 }
@@ -429,7 +457,7 @@
 	//NSLog(@"Local Notification received: %@", notification.userInfo);
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
 {
 	// IMPORTANT: TeleMed's test and production servers both send push notifications through apple's production server. Only apps signed with ad hoc or distribution provisioning profiles can receive these notifications - not debug
 	// See project's ReadMe.md for instructions on how to test push notifications using apn tester free
@@ -437,6 +465,7 @@
 	// Sample notifications that can be used with apn tester free (these are real notifications that come from TeleMed)
 	/* Message push notification
 	{
+		"DeliveryID":5133538688695397, // This property has been requested, but not yet implemented
 		"NotificationType":"Message",
 		"aps":
 		{
@@ -449,6 +478,7 @@
 	/* Message comment push notification
 	{
 		"DeliveryID":5133538688695397,
+		"MessageID":"",
 		"NotificationType":"Comment",
 		"aps":
 		{
@@ -481,29 +511,218 @@
 		}
 	}*/
 	
-	/*/ TESTING ONLY (push notifications can generally only be tested in ad hoc mode where nothing can be logged, so show result in an alert instead)
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Push Notification Received" message:[NSString stringWithFormat:@"%@", userInfo] preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	// Handle remote notification. This method is only called if the app is in foreground or in background when notification is received; it is never called when app is inactive. However, the application state is erroneously set as UIApplicationStateInactive when app was in background so manually set it to UIApplicationStateBackground
+	[self handleRemoteNotification:notification applicationState:(application.applicationState == UIApplicationStateActive ? UIApplicationStateActive : UIApplicationStateBackground)];
 	
-	[alertController addAction:actionOK];
-	
-	// PreferredAction only supported in 9.0+
-	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
+	completionHandler(UIBackgroundFetchResultNoData);
+}
+
+/*
+ * Get current root view controller
+ */
+- (UINavigationController *)getCurrentNavigationController
+{
+	id navigationController = self.window.rootViewController;
+
+	if ([navigationController isKindOfClass:SWRevealViewController.class])
 	{
-		[alertController setPreferredAction:actionOK];
+		navigationController = ((SWRevealViewController *)navigationController).frontViewController;
 	}
 	
-	// Show alert
-	[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	if ([navigationController isKindOfClass:UINavigationController.class])
+	{
+		return (UINavigationController *)navigationController;
+	}
 	
+	return nil;
+}
+
+/**
+ * Handle remote notification
+ */
+- (void)handleRemoteNotification:(NSDictionary *)notification applicationState:(UIApplicationState)applicationState
+{
+	NSLog(@"%@ Push Notification: %@", (applicationState == UIApplicationStateActive ? @"Foreground" : (applicationState == UIApplicationStateBackground ? @"Background" : @"Inactive")), notification);
+	
+	/*/ TESTING ONLY (push notifications can generally only be tested in ad hoc mode where nothing can be logged, so show result in an alert instead)
+	#if !defined RELEASE
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			NSString *applicationStateString = (applicationState == UIApplicationStateActive ? @"Foreground" : (applicationState == UIApplicationStateBackground ? @"Background" : @"Inactive"));
+			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Push Notification", applicationStateString] message:[NSString stringWithFormat:@"%@", notification] preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	 
+			[alertController addAction:actionOK];
+	 
+			// Show alert
+			[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+		});
+	#endif
 	// END TESTING ONLY */
 	
-	// Handle push notification when app is active
-	if ([application applicationState] == UIApplicationStateActive)
+	// Initialize a block used for navigating to a remote notification's corresponding screen
+	void (^goToRemoteNotificationScreen)(UINavigationController *navigationController);
+	
+	// Parse the remote notification data
+	NSDictionary *notificationData = [self parseRemoteNotification:notification];
+	NSNumber *notificationID = [notificationData objectForKey:@"notificationID"];
+	NSString *notificationType = [notificationData objectForKey:@"notificationType"];
+	
+	// Only handle the notification if it contains a message
+	if (! [notificationData objectForKey:@"message"])
 	{
-		// Push notification to any observers within the app (CoreViewController, CoreTableViewController, MessageDetailViewController, and MessagesTableViewController)
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:userInfo];
+		return;
 	}
+	
+	// If notification data is for a specific chat/comment/message, then create a block for navigating to it's corresponding screen
+	if (notificationID)
+	{
+		// Received chat notification
+		if ([notificationType isEqualToString:@"Chat"])
+		{
+			goToRemoteNotificationScreen = ^(UINavigationController *navigationController)
+			{
+				ChatMessageDetailViewController *chatMessageDetailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ChatMessageDetailViewController"];
+				
+				[chatMessageDetailViewController setIsNewChat:NO];
+				[chatMessageDetailViewController setConversationID:notificationID];
+				
+				[navigationController pushViewController:chatMessageDetailViewController animated:YES];
+			};
+		}
+		// Received comment or message notification
+		else if ([notificationType isEqualToString:@"Comment"] || [notificationType isEqualToString:@"Message"] || [notificationType isEqualToString:@"SentComment"])
+		{
+			goToRemoteNotificationScreen = ^(UINavigationController *navigationController)
+			{
+				MessageDetailViewController *messageDetailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MessageDetailViewController"];
+				
+				// Comment notifications on sent messages only contain MessageID
+				if ([notificationType isEqualToString:@"SentComment"])
+				{
+					[messageDetailViewController setMessageID:notificationID];
+				}
+				// Comment and message notifications contain DeliveryID
+				else
+				{
+					[messageDetailViewController setMessageDeliveryID:notificationID];
+				}
+				
+				[navigationController pushViewController:messageDetailViewController animated:YES];
+			};
+		}
+	}
+	
+	// Notification received while app is active
+	if (applicationState == UIApplicationStateActive)
+	{
+		// Post notification to any observers within the app (CoreViewController and CoreTableViewController) regardless of whether user is logged in
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
+			@"goToRemoteNotificationScreen": [goToRemoteNotificationScreen copy]
+		} : NULL)];
+	}
+	// Notification received while app was in the background or inactive and there is a remote notification screen to navigate to
+	else if (goToRemoteNotificationScreen)
+	{
+		// User has completed the login process
+		if ([[self.window.rootViewController.storyboard valueForKey:@"name"] isEqualToString:@"Main"])
+		{
+			UINavigationController *navigationController = [self getCurrentNavigationController];
+			
+			// To avoid crashes, first confirm that navigation controller actually exists (it should ALWAYS exist here)
+			if (navigationController)
+			{
+				// Push relevant view controller onto existing navigation stack
+				dispatch_async(dispatch_get_main_queue(), ^
+				{
+					goToRemoteNotificationScreen(navigationController);
+				});
+			}
+		}
+		// User was not logged in or the app was inactive so assign the block to a property for the showMainScreen method to handle
+		else
+		{
+			[self setGoToRemoteNotificationScreen:goToRemoteNotificationScreen];
+		}
+	}
+}
+
+/*
+ * Parse and clean up push notification data from didReceiveRemoteNotification or didFinishLaunchingWithOptions methods
+ */
+- (NSDictionary *)parseRemoteNotification:(NSDictionary *)notification
+{
+	NSDictionary *aps = [notification objectForKey:@"aps"];
+	id alert = [aps objectForKey:@"alert"];
+	NSString *message;
+	id notificationID;
+	NSString *notificationType = [notification objectForKey:@"NotificationType"] ?: @"Message";
+	
+	// Determine whether notification's alert was sent as an object or a string
+	if ([alert isKindOfClass:NSString.class])
+	{
+		message = alert;
+	}
+	else if ([alert isKindOfClass:NSDictionary.class])
+	{
+		message = [alert objectForKey:@"body"];
+	}
+	
+	// Only parse the notification if it contains a message
+	if (! message)
+	{
+		return @{};
+	}
+	
+	// Extract chat message id from chat notification
+	if ([notification objectForKey:@"ChatMsgID"])
+	{
+		notificationID = [notification objectForKey:@"ChatMsgID"];
+		notificationType = @"Chat"; // Ensure that notification type is set properly
+	}
+	// Extract delivery id from comment or message notification (ensure that delivery id actually has a value because sent comment notification also contains a delivery id, but with no value)
+	else if ([notification objectForKey:@"DeliveryID"] && [[notification objectForKey:@"DeliveryID"] respondsToSelector:@selector(integerValue)] && [[notification objectForKey:@"DeliveryID"] integerValue] > 0)
+	{
+		notificationID = [notification objectForKey:@"DeliveryID"];
+		notificationType = ([notificationType isEqualToString:@"Comment"] ? @"Comment" : @"Message"); // Ensure that notification type is set properly
+	}
+	// Extract message id from sent comment notification
+	else if ([notification objectForKey:@"MessageID"])
+	{
+		notificationID = [notification objectForKey:@"MessageID"];
+		notificationType = @"SentComment"; // Change notification type from Comment to SentComment to simplify further handling of the remote notification
+	}
+	
+	NSLog(@"Notification Type: %@", notificationType);
+	NSLog(@"Notification ID: %@", notificationID);
+	NSLog(@"Message: %@", message);
+	
+	NSMutableDictionary *notificationData = [@{
+		// @"notification"		: notification, // If specific properties need to handled by specific view controllers, then pass the entire notification and do that parsing in the specific view controller
+		@"notificationType"	: notificationType,
+		@"message"			: message
+	} mutableCopy];
+	
+	// Add notification id to notification data if it is a valid number
+	if ([notificationID isKindOfClass:NSNumber.class] && [notificationID integerValue] > 1)
+	{
+		[notificationData setObject:(NSNumber *)notificationID forKey:@"notificationID"];
+	}
+	// Add notification id to notification data if it is a valid numeric string
+	else if ([notificationID isKindOfClass:NSString.class] && [notificationID integerValue] > 1)
+	{
+		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+		
+		[notificationData setObject:[numberFormatter numberFromString:(NSString *)notificationID] forKey:@"notificationID"];
+	}
+	
+	// Add tone to notification data
+	if ([aps objectForKey:@"sound"])
+	{
+		[notificationData setObject:[aps objectForKey:@"sound"] forKey:@"tone"];
+	}
+	
+	return [notificationData copy];
 }
 
 /*
@@ -520,7 +739,7 @@
 		BOOL hasNavigationController = self.window.rootViewController.class == UINavigationController.class;
 		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-	
+		
 		// If device has not previously registered with TeleMed web service, then show PhoneNumberViewController
 		if (! registeredDeviceModel.hasRegistered)
 		{
@@ -577,6 +796,24 @@
 	
 	[self.window setRootViewController:initialViewController];
 	[self.window makeKeyAndVisible];
+	
+	// If app should navigate to remote notification screen after login or app launch
+	if (self.goToRemoteNotificationScreen)
+	{
+		UINavigationController *navigationController = [self getCurrentNavigationController];
+		
+		// To avoid crashes, first confirm that navigation controller actually exists (it should ALWAYS exist here)
+		if (navigationController)
+		{
+			// Push relevant view controller onto existing navigation stack
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				self.goToRemoteNotificationScreen(navigationController);
+				
+				[self setGoToRemoteNotificationScreen:nil];
+			});
+		}
+	}
 }
 
 - (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
@@ -588,10 +825,9 @@
 	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 	
-	// Check if user has previously registered this device with TeleMed
+	// If this device was previously registered with TeleMed, we should update the device token in case it changed
 	if (registeredDeviceModel.hasRegistered)
 	{
-		// Phone number was previously registered with TeleMed, but we should update the device token in case it changed
 		[registeredDeviceModel setShouldRegister:YES];
 		
 		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)

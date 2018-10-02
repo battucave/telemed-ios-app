@@ -78,7 +78,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to sent
-		[self.messagesTableViewController initMessagesWithType:2];
+		[self.messagesTableViewController initMessagesWithType:@"Sent"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

@@ -120,23 +120,6 @@
 	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
 }
 
-// Override default remote notification action from CoreViewController
-- (void)handleRemoteNotificationMessage:(NSString *)message ofType:(NSString *)notificationType withDeliveryID:(NSNumber *)deliveryID withTone:(NSString *)tone
-{
-	NSLog(@"Received Remote Notification MessagesViewController");
-	
-	// Reload messages list to get the new message only if the notification was for a message
-	if ([notificationType isEqualToString:@"Message"])
-	{
-		NSLog(@"Refresh Messages");
-		
-		[self.messagesTableViewController reloadMessages];
-	}
-    
-    // Execute the default notification message action
-    [super handleRemoteNotificationMessage:message ofType:notificationType withDeliveryID:deliveryID withTone:tone];
-}
-
 // Override selectedMessages setter
 - (void)setSelectedMessages:(NSArray *)theSelectedMessages
 {
@@ -262,7 +245,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to active
-		[self.messagesTableViewController initMessagesWithType:0];
+		[self.messagesTableViewController initMessagesWithType:@"Active"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

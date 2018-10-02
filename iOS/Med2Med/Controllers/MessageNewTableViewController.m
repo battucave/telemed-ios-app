@@ -109,7 +109,29 @@
 			// Callback number
 			else if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
-				[textField setText:profile.PhoneNumber];
+				NSMutableString *phoneNumber = [NSMutableString stringWithString:[[profile.PhoneNumber ?: @"" componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+				NSUInteger phoneNumberLength = phoneNumber.length;
+			
+				if (phoneNumberLength >= 4)
+				{
+					// Add hyphen separator
+					[phoneNumber insertString:@"-" atIndex:3];
+				}
+
+				if (phoneNumberLength >= 7)
+				{
+					// Add hyphen separator
+					[phoneNumber insertString:@"-" atIndex:7];
+				}
+			
+				if (phoneNumberLength >= 11)
+				{
+					// Add extension separator
+					[phoneNumber insertString:@"x" atIndex:12];
+				}
+
+				// Update callback phone number field with formatted phone number
+				[textField setText:phoneNumber];
 				[self.formValues setValue:textField.text forKey:textField.accessibilityIdentifier];
 			}
 			// Callback title
@@ -341,14 +363,14 @@
 		NSString *newReplacementString = [string stringByReplacingOccurrencesOfString:@"+1" withString:@""];
 		
 		// Remove all non-numeric characters from replacement string
-		newReplacementString = [NSString stringWithString:[[newReplacementString componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+		newReplacementString = [NSString stringWithString:[[newReplacementString ?: @"" componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 		
 		// Insert replacement string into replacement range and adjust the cursor offset
 		[textField replaceRange:replacementRange withText:newReplacementString];
 		cursorOffset += newReplacementString.length;
 		
 		// Remove all non-numeric characters from text field's text so it can be formatted with separator characters
-		NSMutableString *phoneNumber = [NSMutableString stringWithString:[[textField.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+		NSMutableString *phoneNumber = [NSMutableString stringWithString:[[textField.text ?: @"" componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 		NSUInteger phoneNumberLength = phoneNumber.length;
 		
 		// Adjust the cursor offset to reflect the removed non-numeric characters
@@ -510,7 +532,7 @@
 			if ([textField.accessibilityIdentifier isEqualToString:@"CallbackPhoneNumber"])
 			{
 				// Strip any non-numeric characters from phone number
-				NSString *phoneNumber = [NSString stringWithString:[[textField.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+				NSString *phoneNumber = [NSString stringWithString:[[textField.text ?: @"" componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 				
 				if (phoneNumber.length < 10)
 				{
@@ -518,7 +540,7 @@
 				}
 			}
 			// Verify that field is not empty and contains at least one alphanumeric character (NOTE: client requested that callback title be required, but I suspect this will change in the future so the condition is simply commented out)
-			else if (/*! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] &&*/ [[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] isEqualToString:@""])
+			else if (/*! [textField.accessibilityIdentifier isEqualToString:@"CallbackTitle"] &&*/ [[textField.text ?: @"" stringByTrimmingCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] isEqualToString:@""])
 			{
 				isValidated = NO;
 			}

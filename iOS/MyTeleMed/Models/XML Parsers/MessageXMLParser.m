@@ -122,22 +122,37 @@
 	{
 		[self.message setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
-	// Future compatibility - State is currently Unread/Read/Archive, but seems to be going to number system
-	/*else if ([elementName isEqualToString:@"State"])
+	// State is currently Unread/Read/Archive on iOS, but is an integer on Android
+	else if ([elementName isEqualToString:@"State"])
 	{
+		// Not currently used (Android uses this value)
 		if ([self.currentElementValue isEqualToString:@"0"])
 		{
 			[self.message setValue:@"Unread" forKey:elementName];
 		}
+		// Not currently used (Android uses this value)
 		else if ([self.currentElementValue isEqualToString:@"1"])
 		{
 			[self.message setValue:@"Read" forKey:elementName];
+		}
+		// Not currently used (Android uses this value)
+		else if ([self.currentElementValue isEqualToString:@"2"])
+		{
+			[self.message setValue:@"Archived" forKey:elementName];
+		}
+		// Not currently used (Android uses this value)
+		else if ([self.currentElementValue isEqualToString:@"3"])
+		{
+			[self.message setValue:@"ReadAndArchived" forKey:elementName];
 		}
 		else
 		{
 			[self.message setValue:self.currentElementValue forKey:elementName];
 		}
-	}*/
+		
+		// Set message type depending on state
+		self.message.MessageType = ([self.message.State containsString:@"Archived"] ? @"Archived" : @"Active");
+	}
 	else
 	{
 		@try
