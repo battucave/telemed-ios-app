@@ -55,7 +55,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableCommentsHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewButtonsHeight;
 
-// TEMPORARY MED2MED PHASE 1 (remove in phase 2)
+// TEMPORARY MED2MED PHASE 1 (remove in phase 2 if comments/events added to sent messages)
 @property (weak, nonatomic) IBOutlet UILabel *labelCommentsEvents;
 @property (weak, nonatomic) IBOutlet UIView *viewAddCommentContainer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtonAddCommentHeight;
@@ -973,7 +973,7 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-// TEMPORARY (remove in phase 2)
+// TEMPORARY (remove in phase 2 if comments/events added to sent messages)
 - (void)viewDidLayoutSubviews
 {
 	// Hide comments label
