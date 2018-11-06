@@ -1,0 +1,16 @@
+# Global platform
+platform :ios, '9.0'
+
+# Project path (required when project is run from an external drive)
+project 'TeleMed.xcodeproj'
+
+
+abstract_target 'TeleMed' do
+	pod 'AFNetworking', '~> 2.6'
+	pod 'AFNetworkActivityLogger', '~> 2.0'
+	pod 'KeychainItemWrapper'
+
+	target 'Med2Med'
+
+	target 'MyTeleMed'
+end
