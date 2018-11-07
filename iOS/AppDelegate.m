@@ -18,6 +18,7 @@
 #import "SWRevealViewController.h"
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
+#import "Harpy.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 
 #ifdef MYTELEMED
@@ -267,6 +268,28 @@
 	}
 }
 
+// Notify user if a new version of the app is available in the app store
+- (void)checkAppStoreVersion
+{
+	Harpy *harpy = [Harpy sharedInstance];
+	
+	[harpy setPresentingViewController:self.window.rootViewController];
+	
+	// Only perform check after 10 days have elapsed to allow for 7 day phased release + padding for potential pauses in the release
+	[harpy setShowAlertAfterCurrentVersionHasBeenReleasedForDays:10];
+	
+	// DEBUG Only - check version on every app launch
+	#ifdef DEBUG
+		// [harpy testSetCurrentInstalledVersion:@"4.04"];
+		[harpy setDebugEnabled:YES];
+		[harpy checkVersion];
+	
+	// Perform check only once per day
+	#else
+		[harpy checkVersionDaily];
+	#endif
+}
+
 - (void)didFinishInitialization:(NSNotification *)notification
 {
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
@@ -371,6 +394,9 @@
 	
 	[self.window setRootViewController:loginSSONavigationController];
 	[self.window makeKeyAndVisible];
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
 }
 
 - (void)toggleScreenshotView:(BOOL)shouldHide
@@ -814,6 +840,9 @@
 			});
 		}
 	}
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
 }
 
 - (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
@@ -889,6 +918,9 @@
 	
 	[self.window setRootViewController:initialViewController];
 	[self.window makeKeyAndVisible];
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
 }
 
 - (void)validateMed2MedAuthorization:(id <ProfileProtocol>)profile

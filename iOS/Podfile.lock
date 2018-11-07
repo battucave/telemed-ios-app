@@ -23,24 +23,28 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - Harpy (4.1.14)
   - KeychainItemWrapper (1.2)
 
 DEPENDENCIES:
   - AFNetworkActivityLogger (~> 2.0)
   - AFNetworking (~> 2.6)
+  - Harpy
   - KeychainItemWrapper
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworkActivityLogger
     - AFNetworking
+    - Harpy
     - KeychainItemWrapper
 
 SPEC CHECKSUMS:
   AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  Harpy: b2fbe6819f6a8932df32d7cd2fb20f442df86bbc
   KeychainItemWrapper: 67a240172ed669842bc6bc13ed554dcd50469fa2
 
-PODFILE CHECKSUM: 22b08775f9de78ed856e1dcce075a74167ca2e1b
+PODFILE CHECKSUM: d1244b42ea1390bbb7f2d7d9568baaca82a57ad9
 
 COCOAPODS: 1.5.3

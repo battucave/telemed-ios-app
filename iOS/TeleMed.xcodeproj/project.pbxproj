@@ -1747,6 +1747,7 @@
 				28CCCD3917F517A50093CEE2 /* Frameworks */,
 				28CCCD3A17F517A50093CEE2 /* Resources */,
 				0817108F1C495603000DD7C9 /* Embed Watch Content */,
+				03087B2E060DF6C721226218 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1766,6 +1767,7 @@
 				E250368F1FBB88F400099C7E /* Sources */,
 				E25037001FBB88F400099C7E /* Frameworks */,
 				E250370C1FBB88F400099C7E /* Resources */,
+				4295BC51CFCFF4E672A6548F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2071,6 +2073,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		03087B2E060DF6C721226218 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-resources.sh",
+				"${PODS_ROOT}/Harpy/Harpy/Harpy.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Harpy.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		38810F0F67B09B9E8FD6F328 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2091,6 +2115,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4295BC51CFCFF4E672A6548F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-resources.sh",
+				"${PODS_ROOT}/Harpy/Harpy/Harpy.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Harpy.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E9D108714D25E1B93407DA15 /* [CP] Check Pods Manifest.lock */ = {
