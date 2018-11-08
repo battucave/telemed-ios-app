@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 SolutionBuilt. All rights reserved.
 //
 
-#import <MediaPlayer/MediaPlayer.h>
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 #import "HelpViewController.h"
 #import "AccountPickerViewController.h"
@@ -80,9 +81,15 @@
 - (IBAction)showDemoVideo:(id)sender
 {
 	NSURL *videoStreamURL = [NSURL URLWithString:@"http://www.telemedinc.com/ios-app/resources/TeleMed-AppPreview-Update.mp4"];
-	MPMoviePlayerViewController *player = [[MPMoviePlayerViewController alloc] initWithContentURL:videoStreamURL];
+	AVPlayerViewController *player = [[AVPlayerViewController alloc] init];
 	
-	[self presentMoviePlayerViewControllerAnimated:player];
+	[player setPlayer:[AVPlayer playerWithURL:videoStreamURL]];
+	
+	[self presentViewController:player animated:YES completion:^
+	{
+		[player.player play];
+	}];
+	
 }
 
 // Override CoreViewController's logic to prevent showing CDMAVoiceDataViewController

@@ -6,6 +6,8 @@ project 'TeleMed.xcodeproj'
 
 
 abstract_target 'TeleMed' do
+	use_frameworks!
+	
 	pod 'AFNetworking', '~> 2.6'
 	pod 'AFNetworkActivityLogger', '~> 2.0'
 	pod 'Harpy'

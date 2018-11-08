@@ -9,7 +9,7 @@
 #import "AuthenticationModel.h"
 #import "AppDelegate.h"
 #import "AuthenticationHTTPSessionManager.h"
-#import "KeyChainItemWrapper.h"
+#import "KeychainItemWrapper.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 

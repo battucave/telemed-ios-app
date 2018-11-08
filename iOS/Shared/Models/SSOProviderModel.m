@@ -52,7 +52,7 @@
 	
 	AuthenticationHTTPSessionManager *authenticationManager = [AuthenticationHTTPSessionManager sharedInstance];
 	
-	newName = [newName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	newName = [newName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 	
 	[authenticationManager GET:[NSString stringWithFormat:@"SsoProvider/%@", newName] parameters:nil success:^(__unused NSURLSessionDataTask *task, id responseObject)
 	{
