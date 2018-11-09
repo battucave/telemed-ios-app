@@ -23,7 +23,7 @@
 @property (nonatomic) NSString *Time_LCL;
 @property (nonatomic) NSString *Time_UTC;
 
-- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback;
-- (void)getMessageEventsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback;
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSArray *messageEvents, NSError *error))callback;
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSArray *messageEvents, NSError *error))callback;
 
 @end

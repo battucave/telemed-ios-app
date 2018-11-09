@@ -30,7 +30,7 @@
 			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateSentMessages:)])
 			{
-				[self.delegate updateSentMessages:[parser sentMessages]];
+				[self.delegate updateSentMessages:[[parser sentMessages] copy]];
 			}
 		}
 		// Error parsing xml file

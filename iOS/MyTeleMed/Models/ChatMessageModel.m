@@ -32,7 +32,7 @@
 	[self getChatMessagesByID:chatMessageID withCallback:nil];
 }
 
-- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL, NSMutableArray *, NSError *))callback
+- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL success, NSArray *chatMessages, NSError *error))callback
 {
 	NSDictionary *parameters = nil;
 	
@@ -54,10 +54,10 @@
 		if ([xmlParser parse])
 		{
 			// Sort chat messages by time sent
-			NSMutableArray *chatMessages = [[[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+			NSArray *chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
 			{
 				return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
-			}] mutableCopy];
+			}];
 			
 			if ([chatMessages count] > 0)
 			{

@@ -26,7 +26,7 @@
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
 @property (nonatomic) UIRefreshControl *savedRefreshControl;
-@property (nonatomic) NSMutableArray *messages;
+@property (nonatomic) NSArray *messages;
 @property (nonatomic) NSMutableArray *filteredMessages;
 @property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
@@ -164,8 +164,9 @@
 
 - (void)removeSelectedMessages:(NSArray *)messages
 {
-	NSMutableArray *indexPaths = [NSMutableArray new];
 	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	NSMutableArray *mutableMessages = [self.messages mutableCopy];
 	
 	// If no messages to remove, cancel
 	if (messages == nil || [messages count] == 0)
@@ -176,13 +177,16 @@
 	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
 	for(id <MessageProtocol> message in messages)
 	{
-		[self.messages removeObject:message];
+		[mutableMessages removeObject:message];
 		[self.filteredMessages removeObject:message];
 		[self.hiddenMessages removeObject:message];
 		[self.selectedMessages removeObject:message];
 		
 		[indexPaths addObject:[NSIndexPath indexPathForItem:[filteredMessagesCopy indexOfObject:message] inSection:0]];
 	}
+	
+	// Remove selected messages from messages array
+	[self setMessages:[mutableMessages copy]];
 	
 	// Remove rows
 	if ([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
@@ -212,11 +216,11 @@
 }
 
 // Return messages from MessageModel delegate
-- (void)updateMessages:(NSMutableArray *)messages
+- (void)updateMessages:(NSArray *)messages
 {
 	[self setIsLoaded:YES];
 	[self setMessages:messages];
-	[self setFilteredMessages:messages];
+	[self setFilteredMessages:[messages mutableCopy]];
 
 	// If messages type is active, toggle the parent view controller's edit button based on whether there are any filtered messages
 	if ([self.messagesType isEqualToString:@"Active"])

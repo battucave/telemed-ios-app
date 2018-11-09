@@ -216,7 +216,7 @@
 }
 
 // Return accounts from account model delegate
-- (void)updateAccounts:(NSMutableArray *)accounts
+- (void)updateAccounts:(NSArray *)accounts
 {
 	#ifdef MED2MED
 		// Filter and store only authorized or pending medical groups (accounts)
@@ -233,7 +233,7 @@
 			predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@ OR MyAuthorizationStatus = %@", @"Authorized", @"Pending"];
 		}
 	
-		accounts = [[accounts filteredArrayUsingPredicate:predicate] mutableCopy];
+		accounts = [accounts filteredArrayUsingPredicate:predicate];
 	#endif
 	
 	[self setAccounts:accounts];
@@ -592,7 +592,7 @@
 			[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
 			
 			// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
-			[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+			[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 		}
 	#endif
 	

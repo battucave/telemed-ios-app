@@ -23,12 +23,10 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			NSMutableArray *timeZones = [[parser timeZones] mutableCopy];
-			
 			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateTimeZones:)])
 			{
-				[self.delegate updateTimeZones:timeZones];
+				[self.delegate updateTimeZones:[[parser timeZones] copy]];
 			}
 		}
 		// Error parsing xml file

@@ -31,7 +31,7 @@
 @property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
-@property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) NSArray *accounts;
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) NSMutableArray *hospitals;
 @property (nonatomic) BOOL isLoading;
@@ -438,13 +438,13 @@
 	[self.tableView endUpdates];
 	
 	// Load accounts for hospital
-	[self.accountModel getAccountsByHospital:self.selectedHospital.ID withCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	[self.accountModel getAccountsByHospital:self.selectedHospital.ID withCallback:^(BOOL success, NSArray *accounts, NSError *error)
 	{
 		if (success)
 		{
 			// Filter and store only authorized accounts
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@", @"Authorized"];
-			[self setAccounts:[[accounts filteredArrayUsingPredicate:predicate] mutableCopy]];
+			[self setAccounts:[accounts filteredArrayUsingPredicate:predicate]];
 			
 			dispatch_async(dispatch_get_main_queue(), ^
 			{

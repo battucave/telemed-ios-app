@@ -11,7 +11,7 @@
 
 @implementation MessageEventModel
 
-- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback
+- (void)getMessageEventsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSArray *messageEvents, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mdid"	: messageDeliveryID
@@ -20,7 +20,7 @@
 	[self getMessageEvents:parameters withCallback:callback];
 }
 
-- (void)getMessageEventsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback
+- (void)getMessageEventsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSArray *messageEvents, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mid"	: messageID
@@ -29,7 +29,7 @@
 	[self getMessageEvents:parameters withCallback:callback];
 }
 
-- (void)getMessageEvents:(NSDictionary *)parameters withCallback:(void (^)(BOOL success, NSMutableArray *newMessageEvents, NSError *error))callback
+- (void)getMessageEvents:(NSDictionary *)parameters withCallback:(void (^)(BOOL success, NSArray *messageEvents, NSError *error))callback
 {
 	[self.operationManager GET:@"MsgEvents" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -42,7 +42,7 @@
 		if ([xmlParser parse])
 		{
 			// Handle success via callback
-			callback(YES, [parser messageEvents], nil);
+			callback(YES, [[parser messageEvents] copy], nil);
 		}
 		// Error parsing xml file
 		else

@@ -13,7 +13,7 @@
 
 @interface AccountPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) NSArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
 
 #ifdef MYTELEMED

@@ -16,7 +16,7 @@
 	[self getHospitalsWithCallback:nil];
 }
 
-- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSMutableArray *hospitals, NSError *error))callback
+- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSArray *hospitals, NSError *error))callback
 {
 	[self.operationManager GET:@"Hospitals" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -29,10 +29,10 @@
 		if ([xmlParser parse])
 		{
 			// Sort hospitals by name
-			NSMutableArray *hospitals = [[[parser hospitals] sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
+			NSArray *hospitals = [[parser hospitals] sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
 			{
 				return [hospitalModelA.Name compare:hospitalModelB.Name];
-			}] mutableCopy];
+			}];
 			
 			/*/ TESTING ONLY (generate fictitious hospitals for testing)
 			for (int i = 0; i < 5; i++)

@@ -13,7 +13,7 @@
 @protocol HospitalDelegate <NSObject>
 
 @required
-- (void)updateHospitals:(NSMutableArray *)hospitals;
+- (void)updateHospitals:(NSArray *)hospitals;
 
 @optional
 - (void)updateHospitalsError:(NSError *)error;
@@ -30,7 +30,7 @@
 @property (nonatomic) NSString *MyAuthenticationStatus; // Possible values: NONE, Requested, OK, Admin, Denied, Blocked
 
 - (void)getHospitals;
-- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSMutableArray *hospitals, NSError *error))callback;
+- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSArray *hospitals, NSError *error))callback;
 - (BOOL)isAdmin;
 - (BOOL)isAuthenticated;
 - (BOOL)isBlocked;

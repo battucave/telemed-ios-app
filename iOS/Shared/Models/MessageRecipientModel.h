@@ -23,16 +23,16 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
-	- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
-	- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
+	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
+	- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
+	- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
 #endif
 
 
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback;
+	- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
 #endif
 
 @end

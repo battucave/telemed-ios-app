@@ -47,7 +47,7 @@
 		if (success)
 		{
 			// Fetch Accounts and check the authorization status for each
-			[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+			[accountModel getAccountsWithCallback:^(BOOL success, NSArray *accounts, NSError *error)
 			{
 				if (success)
 				{

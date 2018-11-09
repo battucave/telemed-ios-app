@@ -80,7 +80,7 @@
 			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateMessages:)])
 			{
-				[self.delegate updateMessages:[parser messages]];
+				[self.delegate updateMessages:[[parser messages] copy]];
 			}
 		}
 		// Error parsing xml file

@@ -20,7 +20,7 @@
 @interface ChatMessagesTableViewController : UITableViewController
 
 @property (weak) id delegate;
-@property (nonatomic) NSMutableArray *chatMessages;
+@property (nonatomic) NSArray *chatMessages;
 
 - (void)hideSelectedChatMessages:(NSArray *)chatMessages;
 - (void)reloadChatMessages;

@@ -13,7 +13,7 @@
 @protocol TimeZoneDelegate <NSObject>
 
 @required
-- (void)updateTimeZones:(NSMutableArray *)newTimeZones;
+- (void)updateTimeZones:(NSArray *)newTimeZones;
 
 @optional
 - (void)updateTimeZonesError:(NSError *)error;

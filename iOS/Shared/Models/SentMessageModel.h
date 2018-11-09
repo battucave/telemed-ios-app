@@ -15,7 +15,7 @@
 @protocol SentMessageDelegate <NSObject>
 
 @required
-- (void)updateSentMessages:(NSMutableArray *)sentMessages;
+- (void)updateSentMessages:(NSArray *)sentMessages;
 
 @optional
 - (void)updateSentMessagesError:(NSError *)error;

@@ -14,7 +14,7 @@
 @protocol AccountDelegate <NSObject>
 
 @required
-- (void)updateAccounts:(NSMutableArray *)accounts;
+- (void)updateAccounts:(NSArray *)accounts;
 
 @optional
 - (void)updateAccountsError:(NSError *)error;
@@ -33,7 +33,7 @@
 @property (nonatomic) NSString *MyAuthorizationStatus; // Med2Med only - Possible values: Authorized, Pending, Unauthorized
 
 - (void)getAccounts;
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback;
 
 
 #pragma mark - MyTeleMed
@@ -47,7 +47,7 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
+- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback;
 - (BOOL)isAuthorized;
 - (BOOL)isPending;
 #endif

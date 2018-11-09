@@ -12,7 +12,7 @@
 @implementation MessageRecipientModel
 
 // Private method shared by getNewMessageRecipients and getForwardMessageRecipients
-- (void)getMessageRecipients:(NSDictionary *)parameters withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
+- (void)getMessageRecipients:(NSDictionary *)parameters withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	[self.operationManager GET:@"MsgRecips" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -31,7 +31,7 @@
 			}];
 			
 			// Handle success via callback
-			callback(YES, [messageRecipients mutableCopy], nil);
+			callback(YES, messageRecipients, nil);
 		}
 		// Error parsing xml file
 		else
@@ -58,7 +58,7 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"acctID"	: accountID
@@ -67,7 +67,7 @@
 	[self getMessageRecipients:parameters withCallback:callback];
 }
 
-- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mdid"	: messageDeliveryID
@@ -76,7 +76,7 @@
 	[self getMessageRecipients:parameters withCallback:callback];
 }
 
-- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
+- (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"mid"	: messageID
@@ -90,7 +90,7 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error))callback
+- (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"acctID"	: accountID,

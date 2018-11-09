@@ -394,18 +394,18 @@
 - (void)getMessageEvents
 {
 	// Message event model callback
-	void (^callback)(BOOL success, NSMutableArray *newMessageEvents, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageEvents, NSError *error)
+	void (^callback)(BOOL success, NSArray *messageEvents, NSError *error) = ^void(BOOL success, NSArray *messageEvents, NSError *error)
 	{
 		[self setIsLoaded:YES];
 		
 		if (success)
 		{
-			[self setMessageEvents:newMessageEvents];
+			[self setMessageEvents:messageEvents];
 			
 			[self.filteredMessageEvents removeAllObjects];
 			
 			// Filter message events to include only comments and user events
-			for(MessageEventModel *messageEvent in newMessageEvents)
+			for(MessageEventModel *messageEvent in messageEvents)
 			{
 				if ([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
 				{
@@ -499,12 +499,12 @@
 - (void)getMessageRecipients
 {
 	// Message recipient model callback
-	void (^callback)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageRecipients, NSError *error)
+	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
 	{
 		if (success)
 		{
 			// Enable forward button if there are valid message recipients to forward to
-			if ([newMessageRecipients count] > 0)
+			if ([messageRecipients count] > 0)
 			{
 				[self.buttonForward setEnabled:YES];
 			}

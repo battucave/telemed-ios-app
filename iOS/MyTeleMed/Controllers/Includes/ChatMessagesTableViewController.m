@@ -123,7 +123,7 @@
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
 {
 	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSArray *chatMessagesCopy = [self.chatMessages copy];
+	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
 	
 	// If no chat messages to remove, cancel
 	if (chatMessages == nil || [chatMessages count] == 0)
@@ -134,12 +134,15 @@
 	// Remove each chat message from the source data, selected data, and the table itself
 	for(ChatMessageModel *chatMessage in chatMessages)
 	{
-		[self.chatMessages removeObject:chatMessage];
+		[mutableChatMessages removeObject:chatMessage];
 		[self.hiddenChatMessages removeObject:chatMessage];
 		[self.selectedChatMessages removeObject:chatMessage];
 		
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[chatMessagesCopy indexOfObject:chatMessage] inSection:0]];
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
 	}
+	
+	// Remove selected chat messages from chat messages array
+	[self setChatMessages:[mutableChatMessages copy]];
 	
 	// Remove rows
 	if ([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
@@ -160,7 +163,7 @@
 }
 
 // Return chat messages from ChatMessageModel delegate
-- (void)updateChatMessages:(NSMutableArray *)chatMessages
+- (void)updateChatMessages:(NSArray *)chatMessages
 {
 	// Sort chat messages by time sent in descending order
 	chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)

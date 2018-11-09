@@ -32,7 +32,7 @@
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) BOOL isLoaded;
-@property (nonatomic) NSMutableArray *messageRecipients;
+@property (nonatomic) NSArray *messageRecipients;
 @property (nonatomic, strong) UISearchController *searchController;
 
 @end
@@ -150,13 +150,13 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
 	// Message recipient model callback
-	void (^callback)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageRecipients, NSError *error)
+	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
 	{
 		self.isLoaded = YES;
 		
 		if (success)
 		{
-			[self updateMessageRecipients:newMessageRecipients];
+			[self updateMessageRecipients:messageRecipients];
 		}
 		else
 		{
@@ -367,7 +367,7 @@
 }
 
 // Return message recipients from message recipient model delegate
-- (void)updateMessageRecipients:(NSMutableArray *)newMessageRecipients
+- (void)updateMessageRecipients:(NSArray *)newMessageRecipients
 {
 	[self setMessageRecipients:newMessageRecipients];
 	

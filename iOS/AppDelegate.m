@@ -928,7 +928,7 @@
 	// Fetch accounts and check the authorization status for each
 	AccountModel *accountModel = [[AccountModel alloc] init];
 	
-	[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	[accountModel getAccountsWithCallback:^(BOOL success, NSArray *accounts, NSError *error)
 	{
 		if (success)
 		{

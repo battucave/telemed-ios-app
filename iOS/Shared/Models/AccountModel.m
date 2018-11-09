@@ -16,13 +16,13 @@
 	[self getAccountsWithCallback:nil parameters:nil];
 }
 
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback
 {
 	[self getAccountsWithCallback:callback parameters:nil];
 }
 
 // Private method used for all accounts lookups
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback parameters:(NSDictionary *)parameters
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback parameters:(NSDictionary *)parameters
 {
 	[self.operationManager GET:@"Accounts" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -35,10 +35,10 @@
 		if ([xmlParser parse])
 		{
 			// Sort accounts by name
-			NSMutableArray *accounts = [[[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
+			NSArray *accounts = [[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
 			{
 				return [accountModelA.Name compare:accountModelB.Name];
-			}] mutableCopy];
+			}];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
 			#ifdef MED2MED
@@ -123,7 +123,7 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL, NSMutableArray *, NSError *))callback
+- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"hospID"	: hospitalID

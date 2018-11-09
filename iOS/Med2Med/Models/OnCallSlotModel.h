@@ -13,7 +13,7 @@
 @protocol OnCallSlotDelegate <NSObject>
 
 @required
-- (void)updateOnCallSlots:(NSMutableArray *)newOnCallSlots;
+- (void)updateOnCallSlots:(NSArray *)newOnCallSlots;
 
 @optional
 - (void)updateOnCallSlotsError:(NSError *)error;

@@ -31,7 +31,7 @@
 	// Load user's medical groups (accounts)
 	AccountModel *accountModel = [[AccountModel alloc] init];
 	
-	[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	[accountModel getAccountsWithCallback:^(BOOL success, NSArray *accounts, NSError *error)
 	{
 		if (success)
 		{
@@ -59,7 +59,7 @@
 			{
 				HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 	 
-				[hospitalModel getHospitalsWithCallback:^(BOOL success, NSMutableArray *hospitals, NSError *error)
+				[hospitalModel getHospitalsWithCallback:^(BOOL success, NSArray *hospitals, NSError *error)
 				{
 					if (success)
 					{
@@ -106,7 +106,7 @@
 			{
 				HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 	 
-				[hospitalModel getHospitalsWithCallback:^(BOOL success, NSMutableArray *hospitals, NSError *error)
+				[hospitalModel getHospitalsWithCallback:^(BOOL success, NSArray *hospitals, NSError *error)
 				{
 					if (success)
 					{

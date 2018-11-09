@@ -347,7 +347,7 @@
 		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 		
 		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
-		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
+		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSArray *chatMessages, NSError *error)
 		{
 			if (success)
 			{
@@ -394,7 +394,7 @@
 }
 
 // Return chat messages from ChatMessageModel delegate
-- (void)updateChatMessages:(NSMutableArray *)chatMessages
+- (void)updateChatMessages:(NSArray *)chatMessages
 {
 	NSUInteger chatMessageCount = [chatMessages count];
 	
@@ -441,7 +441,7 @@
 	// Keep current value of is loaded to determine whether to scroll to bottom of chat messages
 	BOOL hadLoaded = self.isLoaded;
 	
-	[self setChatMessages:chatMessages];
+	[self setChatMessages:[chatMessages mutableCopy]];
 	[self setIsLoaded:YES];
 	
 	dispatch_async(dispatch_get_main_queue(), ^

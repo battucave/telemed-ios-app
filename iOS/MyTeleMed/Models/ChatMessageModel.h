@@ -13,7 +13,7 @@
 @protocol ChatMessageDelegate <NSObject>
 
 @required
-- (void)updateChatMessages:(NSMutableArray *)chatMessages;
+- (void)updateChatMessages:(NSArray *)chatMessages;
 
 @optional
 - (void)updateChatMessagesError:(NSError *)error;
@@ -41,7 +41,7 @@
 
 - (void)getChatMessages;
 - (void)getChatMessagesByID:(NSNumber *)chatMessageID;
-- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL success, NSMutableArray *chatMessages, NSError *error))callback;
+- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL success, NSArray *chatMessages, NSError *error))callback;
 - (void)deleteChatMessage:(NSNumber *)chatMessageID;
 - (void)deleteMultipleChatMessages:(NSArray *)chatMessages;
 

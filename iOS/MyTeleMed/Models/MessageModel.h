@@ -15,7 +15,7 @@
 @protocol MessageDelegate <NSObject>
 
 @required
-- (void)updateMessages:(NSMutableArray *)messages;
+- (void)updateMessages:(NSArray *)messages;
 
 @optional
 - (void)updateMessagesError:(NSError *)error;

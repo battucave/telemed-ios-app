@@ -13,7 +13,7 @@
 @protocol ChatParticipantDelegate <NSObject>
 
 @required
-- (void)updateChatParticipants:(NSMutableArray *)newChatParticipants;
+- (void)updateChatParticipants:(NSArray *)newChatParticipants;
 
 @optional
 - (void)updateChatParticipantsError:(NSError *)error;

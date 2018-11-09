@@ -37,7 +37,7 @@
 	}*/
 	
 	/*/ Set message recipients (NOTE: only used if web service changed back to allow multiple message recipients)
-	NSMutableArray *messageRecipients = (NSMutableArray *)[messageData objectForKey:@"MessageRecipients"];
+	NSArray *messageRecipients = (NSArray *)[messageData objectForKey:@"MessageRecipients"];
 	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
 	
 	for(MessageRecipientModel *messageRecipient in messageRecipients)

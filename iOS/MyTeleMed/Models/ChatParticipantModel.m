@@ -39,7 +39,7 @@
 			// Handle success via delegate
 			if ([self.delegate respondsToSelector:@selector(updateChatParticipants:)])
 			{
-				[self.delegate updateChatParticipants:[chatParticipants mutableCopy]];
+				[self.delegate updateChatParticipants:chatParticipants];
 			}
 		}
 		// Error parsing xml file
