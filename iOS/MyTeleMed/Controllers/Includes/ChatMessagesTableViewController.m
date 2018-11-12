@@ -249,7 +249,7 @@
 		[cell setHidden:YES];
 	}
 	
-	// Set Participants
+	// Set chat participants
 	if (chatMessage.ChatParticipants)
 	{
 		// Remove self from chat participants
@@ -344,7 +344,7 @@
 	{
 		return;
 	}
-	// If in editing mode, toggle the delete button in ChatMessagesViewController
+	// If in editing mode, toggle the delete button in chat MessagesViewController
 	else if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
@@ -364,7 +364,7 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If in editing mode, toggle the delete button in ChatMessagesViewController
+	// If in editing mode, toggle the delete button in chat MessagesViewController
 	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])

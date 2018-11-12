@@ -47,7 +47,7 @@
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Add message identifier if a message delivery id exists (exists for message telemed view controller, doesn't exist for contact email view controller)
+	// Add message identifier if a message delivery id exists (exists for MessageTelemedViewController, doesn't exist for ContactEmailViewController)
 	NSString *messageIdentifier = (messageDeliveryID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageDeliveryID] : @"");
 	
 	NSString *xmlBody = [NSString stringWithFormat:

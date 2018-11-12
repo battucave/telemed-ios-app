@@ -22,7 +22,7 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -30,7 +30,7 @@
 {
 	if ([elementName isEqualToString:@"MyTimeZone"])
 	{
-		// Initialize the time zone
+		// Initialize a time zone
 		self.userProfile.MyTimeZone = [[TimeZoneModel alloc] init];
 		
 		self.currentModel = @"TimeZoneModel";
@@ -59,42 +59,42 @@
 	{
 		if ([self.currentModel isEqualToString:@"TimeZoneModel"])
 		{
-			@try
+			if ([elementName isEqualToString:@"ID"])
 			{
-				if ([elementName isEqualToString:@"ID"])
-				{
-					[self.userProfile.MyTimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
-				}
-				else
+				[self.userProfile.MyTimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+			}
+			else
+			{
+				@try
 				{
 					[self.userProfile.MyTimeZone setValue:self.currentElementValue forKey:elementName];
 				}
-			}
-			@catch(NSException *exception)
-			{
-				NSLog(@"Key not found on Time Zone: %@", elementName);
+				@catch(NSException *exception)
+				{
+					NSLog(@"Key not found on Time Zone: %@", elementName);
+				}
 			}
 		}
 		else
 		{
-			@try
+			if ([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"TimeoutPeriodMins"])
 			{
-				if ([elementName isEqualToString:@"ID"] || [elementName isEqualToString:@"TimeoutPeriodMins"])
-				{
-					[self.userProfile setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
-				}
-				else if ([elementName isEqualToString:@"MayDisableTimeout"])
-				{
-					self.userProfile.MayDisableTimeout = [self.currentElementValue boolValue];
-				}
-				else
+				[self.userProfile setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+			}
+			else if ([elementName isEqualToString:@"MayDisableTimeout"])
+			{
+				self.userProfile.MayDisableTimeout = [self.currentElementValue boolValue];
+			}
+			else
+			{
+				@try
 				{
 					[self.userProfile setValue:self.currentElementValue forKey:elementName];
 				}
-			}
-			@catch(NSException *exception)
-			{
-				NSLog(@"Key not found on My Profile: %@", elementName);
+				@catch(NSException *exception)
+				{
+					NSLog(@"Key not found on User Profile: %@", elementName);
+				}
 			}
 		}
 	}

@@ -23,11 +23,13 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize my status and on call entries
+	// Initialize current on call entries array
 	self.currentOnCallEntries = [[NSMutableArray alloc] init];
+	
+	// Initialize future on call entries array
 	self.futureOnCallEntries = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -146,7 +148,7 @@
 		}
 		else
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on My Status: %@", elementName);
 		}
 	}
 	

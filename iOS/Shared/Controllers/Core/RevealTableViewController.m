@@ -19,7 +19,7 @@
     _sideNavigationButton.target = self.revealViewController;
 	_sideNavigationButton.action = @selector(revealToggle:);
 	
-	// Set review view controller delegate
+	// Set RevealViewController delegate
 	[self.revealViewController setDelegate:self];
 	
 	// Register a gesture recognizer for navigation controller

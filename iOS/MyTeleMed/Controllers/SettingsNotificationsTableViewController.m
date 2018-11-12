@@ -82,7 +82,7 @@
 	[self.notificationSettingModel saveNotificationSettingsByName:self.notificationSettingsName settings:self.notificationSettings];
 }
 
-// Unwind Segue from SettingsNotificationsPickerTableViewController
+// Unwind segue from SettingsNotificationsPickerTableViewController
 - (IBAction)setSelectedNotificationSetting:(UIStoryboardSegue *)segue
 {
 	SettingsNotificationsPickerTableViewController *settingsNotificationsPickerTableViewController = segue.sourceViewController;

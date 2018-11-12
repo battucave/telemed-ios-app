@@ -28,13 +28,13 @@
 	[self.buttonCreateAccount setTitle:@""];
 }
 
-// Unwind Segue from AccountNewViewController
+// Unwind segue from AccountNewViewController
 - (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
 {
 	NSLog(@"unwindFromAccountRequest");
 }
 
-// Obtain User Data from server and initialize app
+// Obtain user data from server and initialize app
 - (void)finalizeLogin
 {
 	NSLog(@"Finalize MedToTeleMed Login");
@@ -46,7 +46,7 @@
 	{
 		if (success)
 		{
-			// Fetch Accounts and check the authorization status for each
+			// Fetch accounts and check the authorization status for each
 			[accountModel getAccountsWithCallback:^(BOOL success, NSArray *accounts, NSError *error)
 			{
 				if (success)
@@ -62,14 +62,14 @@
 						NSLog(@"Account Name: %@; Status: %@", account.Name, account.MyAuthorizationStatus);
 					}
 					
-					// Go to Main Storyboard
+					// Go to main storyboard
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
 				}
 				else
 				{
 					NSLog(@"LoginSSOMed2MedViewController Error: %@", error);
 					
-					// Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
+					// Even if device offline, show this error message so that user can re-attempt to login (LoginSSOViewController will show offline message)
 					[self showWebViewError:[NSString stringWithFormat:@"There was a problem completing the login process:<br>%@", error.localizedDescription]];
 				}
 			}];

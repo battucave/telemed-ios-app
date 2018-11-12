@@ -28,8 +28,6 @@
 
 @property (nonatomic) NSString *textViewMessagePlaceholder;
 
-#ifdef MYTELEMED
-	- (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients;
-#endif
+- (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients;
 
 @end

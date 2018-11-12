@@ -102,7 +102,7 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableOnCallSlots setTableFooterView:[[UIView alloc] init]];
 	
-	// Initialize on call slot model
+	// Initialize OnCallSlotModel
 	OnCallSlotModel *onCallSlotModel = [[OnCallSlotModel alloc] init];
 	
 	// Get list of on call slots
@@ -217,7 +217,7 @@
 	}
 }
 
-// Return on call slots from on call slot model delegate
+// Return on call slots from OnCallSlotModel delegate
 - (void)updateOnCallSlots:(NSMutableArray *)newOnCallSlots
 {
 	[self setOnCallSlots:newOnCallSlots];
@@ -229,7 +229,7 @@
 	[self scrollToSelectedOnCallSlot];
 }
 
-// Return error from on call slot model delegate
+// Return error from OnCallSlotModel delegate
 - (void)updateOnCallSlotsError:(NSError *)error
 {
 	self.isLoaded = YES;

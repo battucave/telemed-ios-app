@@ -21,10 +21,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize on call slots array
 	self.onCallSlots = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"OnCallSlot"])
 	{
-		// Initialize the on call slot
+		// Initialize an on call slot
 		self.onCallSlot = [[OnCallSlotModel alloc] init];
 	}
 }
@@ -69,7 +69,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on On Call Slot: %@", elementName);
 		}
 	}
 	

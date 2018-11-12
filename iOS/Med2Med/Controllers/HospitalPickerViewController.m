@@ -119,7 +119,7 @@
 	// Get list of hospitals if none were passed from previous controller
 	if ([self.hospitals count] == 0)
 	{
-		// Initialize hospital model
+		// Initialize HospitalModel
 		HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 		
 		[hospitalModel setDelegate:self];
@@ -222,7 +222,7 @@
 	}
 }
 
-// Return hospitals from hospital model delegate
+// Return hospitals from HospitalModel delegate
 - (void)updateHospitals:(NSMutableArray *)newHospitals
 {
 	// Filter and store only authenticated or requested hospitals
@@ -248,7 +248,7 @@
 	[self scrollToSelectedHospital];
 }
 
-// Return error from hospital model delegate
+// Return error from HospitalModel delegate
 - (void)updateHospitalsError:(NSError *)error
 {
 	self.isLoaded = YES;

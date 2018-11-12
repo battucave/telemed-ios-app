@@ -145,7 +145,7 @@
 	[newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:self.isGroupChat withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 
-// Perform Segue to MessageRecipientPickerTableViewController
+// Perform segue to MessageRecipientPickerViewController
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	// New chat message
@@ -405,7 +405,7 @@
 		
 		if ([chatMessage.ChatParticipants count] > 0)
 		{
-			// If a new chat, verify that chat participants still match selected chat participants in the event that user changed Participants while chat messages were still loading
+			// If a new chat, verify that chat participants still match selected chat participants in the event that user changed participants while chat messages were still loading
 			if (self.isNewChat)
 			{
 				// Get array of id's from selected chat participants
@@ -718,7 +718,7 @@
 	BOOL currentUserIsSender = ([chatMessage.SenderID isEqualToNumber:self.currentUserID]);
 	//BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
 	
-	// Set both types of events to use CommentCell (purposely reusing CommentCell here instead of creating duplicate ChatMessageDetailCell)
+	// Set both types of events to use comment cell (purposely reusing comment cell here instead of creating duplicate chat message detail cell)
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];
 
 	// Set message event date and time

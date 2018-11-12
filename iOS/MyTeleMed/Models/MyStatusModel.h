@@ -15,13 +15,17 @@
 
 @property (weak) id delegate;
 
-@property (nonatomic) NSNumber *ActiveChatConvoCount;
+// Message counts
 @property (nonatomic) NSNumber *ActiveMessageCount;
-@property (nonatomic) BOOL OnCallNow;
-@property (nonatomic) NSDate *NextOnCall;
-@property (nonatomic) NSNumber *UnopenedChatConvoCount;
 @property (nonatomic) NSNumber *UnreadMessageCount;
 
+// Chat message counts
+@property (nonatomic) NSNumber *ActiveChatConvoCount;
+@property (nonatomic) NSNumber *UnopenedChatConvoCount;
+
+// On call status
+@property (nonatomic) BOOL OnCallNow;
+@property (nonatomic) NSDate *NextOnCall;
 @property (nonatomic) NSArray *CurrentOnCallEntries;
 @property (nonatomic) NSArray *FutureOnCallEntries;
 
@@ -42,7 +46,7 @@
 @property (nonatomic) NSDate *WillEnd;
 @property (nonatomic) NSDate *WillStart;
 
-// Temporary property only used in on call schedule view controller to control output of date
+// Temporary property only used in OnCallScheduleViewController to control output of date
 @property (nonatomic) BOOL shouldDisplayDate;
 
 @end

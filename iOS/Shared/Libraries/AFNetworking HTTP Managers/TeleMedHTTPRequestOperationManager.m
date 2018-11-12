@@ -48,7 +48,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	{
 		__weak typeof(self) weakSelf = self;
 		
-		// Initialize Authentication Model
+		// Initialize AuthenticationModel
 		self.authenticationModel = [AuthenticationModel sharedInstance];
 		
 		self.pendingOperations = [[NSMutableArray alloc] init];
@@ -601,7 +601,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		// Add all Pending Operations to the Queue
 		[self processPendingOperations];
 		
-		// Turn off Authentication Model's isWorking only after everything is done
+		// Turn off AuthenticationModel's isWorking only after everything is done
 		self.authenticationModel.isWorking = NO;
 	};
 	
@@ -618,12 +618,12 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		{
 			[self.operationQueue setSuspended:NO];
 			
-			// Turn off Authentication Model's isWorking only after everything is done
+			// Turn off AuthenticationModel's isWorking only after everything is done
 			self.authenticationModel.isWorking = NO;
 		});
 	};
 	
-	// If there are pending operations and Authentication Model is not already in the process of refreshing tokens, then refresh tokens using our Refresh Token
+	// If there are pending operations and AuthenticationModel is not already in the process of refreshing tokens, then refresh tokens using our Refresh Token
 	if ([self.pendingOperations count] > 0 && ! self.authenticationModel.isWorking)
 	{
 		[self.authenticationModel getNewTokensWithSuccess:authenticationSuccess failure:authenticationFailure];

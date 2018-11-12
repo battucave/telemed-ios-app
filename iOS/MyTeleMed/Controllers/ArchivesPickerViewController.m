@@ -36,7 +36,7 @@
 	// Initialize accounts
 	self.accounts = [[NSMutableArray alloc] init];
 	
-	// Initialize AccountModel
+	// Initialize AccountModel 
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	
@@ -86,7 +86,7 @@
 	[self.pickerViewDefault selectRow:self.selectedDateIndex inComponent:0 animated:NO];
 }
 
-// Return accounts from account model delegate
+// Return accounts from AccountModel delegate
 - (void)updateAccounts:(NSMutableArray *)accounts
 {
 	[self setAccounts:accounts];
@@ -111,7 +111,7 @@
 	}
 }
 
-// Return error from account model delegate
+// Return error from AccountModel delegate
 - (void)updateAccountsError:(NSError *)error
 {
 	// Customize error message if device not offline

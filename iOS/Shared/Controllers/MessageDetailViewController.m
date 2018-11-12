@@ -84,11 +84,11 @@
 	self.messageType = @"Archived";
 	
 	#ifdef MYTELEMED
-		// Initialize basic event model
+		// Initialize BasiceEventModel
 		[self setMessageEventModel:[[MessageEventModel alloc] init]];
 		[self.messageEventModel setDelegate:self];
 	
-		// Initialize message recipient model
+		// Initialize MessageRecipientModel
 		[self setMessageRecipientModel:[[MessageRecipientModel alloc] init]];
 		[self.messageRecipientModel setDelegate:self];
 	
@@ -100,13 +100,13 @@
 		[self.textViewComment setMaxHeight:120.0f];
 		self.textViewCommentPlaceholder = self.textViewComment.text;
 	
-		// Initialize my profile model
+		// Initialize MyProfileModel
 		profile = [MyProfileModel sharedInstance];
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
 	
-	// Initialize user profile model
+	// Initialize UserProfileModel
 	#elif defined MED2MED
 		profile = [UserProfileModel sharedInstance];
 	
@@ -393,7 +393,7 @@
 // Load message events
 - (void)getMessageEvents
 {
-	// Message event model callback
+	// MessageEventModel callback
 	void (^callback)(BOOL success, NSArray *messageEvents, NSError *error) = ^void(BOOL success, NSArray *messageEvents, NSError *error)
 	{
 		[self setIsLoaded:YES];
@@ -498,7 +498,7 @@
 // Load message recipients to determine if message is forwardable
 - (void)getMessageRecipients
 {
-	// Message recipient model callback
+	// MessageRecipientModel callback
 	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
 	{
 		if (success)

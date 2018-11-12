@@ -23,10 +23,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize messages array
 	self.messages = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -34,7 +34,7 @@
 {
 	if ([elementName isEqualToString:@"Account"])
 	{
-		// Initialize account
+		// Initialize an account
 		self.message.Account = [[AccountModel alloc] init];
 		
 		self.currentModel = @"AccountModel";
@@ -42,12 +42,12 @@
 	// Received message is current on test server; message is deprecated but still current on production server
 	else if ([elementName isEqualToString:@"ReceivedMessage"] || [elementName isEqualToString:@"Message"])
 	{
-		// Initialize the message
+		// Initialize a message
 		self.message = [[MessageModel alloc] init];
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
-		// Initialize the account time zone
+		// Initialize a time zone
 		self.message.Account.TimeZone = [[TimeZoneModel alloc] init];
 		
 		self.currentModel = @"TimeZoneModel";
@@ -147,7 +147,14 @@
 		}
 		else
 		{
-			[self.message setValue:self.currentElementValue forKey:elementName];
+			@try
+			{
+				[self.message setValue:self.currentElementValue forKey:elementName];
+			}
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found on State: %@", elementName);
+			}
 		}
 		
 		// Set message type depending on state
@@ -161,7 +168,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Message: %@", elementName);
 		}
 	}
 	

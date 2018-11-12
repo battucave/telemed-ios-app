@@ -54,7 +54,7 @@
 		_timeoutPeriodMins = DEFAULT_APP_TIMEOUT_PERIOD_MINS;
 	}
 	
-	// On app launch and/or login, the timeout period will be overwritten with the timeout period set in profile model
+	// On app launch and/or login, the timeout period will be overwritten with the timeout period set in MyProfileModel/UserProfileModel
 	
 	_idleTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeoutPeriodMins * 60 target:self selector:@selector(idleTimerExceeded) userInfo:nil repeats:NO];
 }

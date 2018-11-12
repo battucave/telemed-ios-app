@@ -109,7 +109,7 @@
 	}];
 }
 
-// Restore MyPreferredAccount to previous value (only used by preferred account model in case of error saving my preferred account to server)
+// Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving my preferred account to server)
 - (void)restoreMyPreferredAccount
 {
 	if (_oldMyPreferredAccount != nil)

@@ -83,7 +83,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
 }
 
-// Unwind Segue from SSOProviderViewController
+// Unwind segue from SSOProviderViewController
 - (IBAction)unwindFromSSOProvider:(UIStoryboardSegue *)segue
 {
 	NSLog(@"unwindFromSSOProvider");

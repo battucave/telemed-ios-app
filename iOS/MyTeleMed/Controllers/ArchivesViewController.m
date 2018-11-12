@@ -46,7 +46,7 @@
 	[super viewWillAppear:animated];
 }
 
-// Unwind Segue from ArchivesPickerViewController
+// Unwind segue from ArchivesPickerViewController
 - (IBAction)setArchiveFilter:(UIStoryboardSegue *)segue
 {
 	// Reset MessagesTableViewController back to loading state
@@ -87,7 +87,7 @@
 	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
 }
 
-// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if gesture resulted in opening the SWRevealController
+// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded delegate method so we can determine if gesture resulted in opening the SWRevealController
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
 	// If position is open

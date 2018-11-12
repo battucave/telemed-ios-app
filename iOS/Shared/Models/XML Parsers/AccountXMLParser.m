@@ -23,10 +23,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize accounts array
 	self.accounts = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -34,12 +34,12 @@
 {
 	if ([elementName isEqualToString:@"Account"])
 	{
-		// Initialize the account
+		// Initialize an account
 		self.account = [[AccountModel alloc] init];
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
-		// Initialize the time zone
+		// Initialize a time zone
 		self.account.TimeZone = [[TimeZoneModel alloc] init];
 		
 		self.currentModel = @"TimeZoneModel";
@@ -76,20 +76,20 @@
 	}
 	else if ([self.currentModel isEqualToString:@"TimeZoneModel"])
 	{
-		@try
+		if ([elementName isEqualToString:@"ID"])
 		{
-			if ([elementName isEqualToString:@"ID"])
-			{
-				[self.account.TimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
-			}
-			else
+			[self.account.TimeZone setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
+		}
+		else
+		{
+			@try
 			{
 				[self.account.TimeZone setValue:self.currentElementValue forKey:elementName];
 			}
-		}
-		@catch(NSException *exception)
-		{
-			NSLog(@"Key not found on Time Zone: %@", elementName);
+			@catch(NSException *exception)
+			{
+				NSLog(@"Key not found on Time Zone: %@", elementName);
+			}
 		}
 	}
 	else
@@ -100,7 +100,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Account: %@", elementName);
 		}
 	}
 	

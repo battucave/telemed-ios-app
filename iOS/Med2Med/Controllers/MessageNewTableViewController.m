@@ -49,11 +49,11 @@
 	// Initialize form values
 	[self setFormValues:[[NSMutableDictionary alloc] init]];
 	
-	// Initialize account model
+	// Initialize AccountModel
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	
-	// Initialize hospital model
+	// Initialize HospitalModel
 	HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 	
 	[hospitalModel setDelegate:self];
@@ -158,7 +158,7 @@
 	[self.view endEditing:YES];
 }
 
-// Error Unwind Segue for Callback Number from MessageNew2TableViewController
+// Error unwind segue for callback number from MessageNew2TableViewController
 - (IBAction)handleErrorCallbackNumber:(UIStoryboardSegue *)segue
 {
 	NSString *callbackPhoneNumberValue = @"";
@@ -182,7 +182,7 @@
 	[errorAlertController show:error];
 }
 
-// Success Unwind Segue from MessageNew2TableViewController
+// Success unwind segue from MessageNew2TableViewController
 - (IBAction)resetMessageNewForm:(UIStoryboardSegue *)segue
 {
 	// NOTE: Static cells do not reset when [self.tableView reloadData] is called. Instead, manually reset all data
@@ -492,7 +492,7 @@
 	[self performSegueWithIdentifier:@"showOnCallSlotPicker" sender:self];
 }
 
-// Return hospitals from hospital model delegate
+// Return hospitals from HospitalModel delegate
 - (void)updateHospitals:(NSMutableArray *)newHospitals
 {
 	// Filter and store only authenticated hospitals
@@ -512,7 +512,7 @@
 	}
 }
 
-// Return error from hospital model delegate
+// Return error from HospitalModel delegate
 - (void)updateHospitalsError:(NSError *)error
 {
 	// Don't show error here - there will be another chance to load hospitals on HospitalPickerViewController

@@ -24,10 +24,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize sent messages array
 	self.sentMessages = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -36,20 +36,20 @@
 	// MyTeleMed only
 	if ([elementName isEqualToString:@"Account"])
 	{
-		// Initialize account
+		// Initialize an account
 		self.sentMessage.Account = [[AccountModel alloc] init];
 		
 		self.currentModel = @"AccountModel";
 	}
 	else if ([elementName isEqualToString:@"SentMessage"])
 	{
-		// Initialize the sent message
+		// Initialize a sent message
 		self.sentMessage = [[SentMessageModel alloc] init];
 		self.sentMessage.MessageType = @"Sent";
 	}
 	else if ([elementName isEqualToString:@"TimeZone"])
 	{
-		// Initialize the account time zone
+		// Initialize a time zone
 		self.sentMessage.Account.TimeZone = [[TimeZoneModel alloc] init];
 		
 		self.currentModel = @"TimeZoneModel";
@@ -136,7 +136,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Sent Message: %@", elementName);
 		}
 	}
 	

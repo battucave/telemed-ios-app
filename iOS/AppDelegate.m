@@ -202,7 +202,7 @@
 			{
 				MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 				
-				// Update my status model with updated number of unread messages
+				// Update MyStatusModel with updated number of unread messages
 				[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
 				{
 					// No callback needed - values stored in shared instance automatically
@@ -460,7 +460,7 @@
 	
 	[registeredDeviceModel setToken:tokenString];
 	
-	// Run update device token web service. This will only fire if either my profile model's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
+	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 	{
 		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down

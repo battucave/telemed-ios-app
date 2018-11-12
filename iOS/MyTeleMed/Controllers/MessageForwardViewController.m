@@ -29,14 +29,14 @@
 {
     [super viewDidLoad];
 	
-	// Initialize Selected message recipients array
+	// Initialize selected message recipients array
 	self.selectedMessageRecipients = [[NSMutableArray alloc] init];
 	
 	// Update placeholder to custom message
 	[self.messageComposeTableViewController.textViewMessage setText:@"Add Optional Comment:"];
 }
 
-// Unwind Segue from MessageRecipientPickerViewController
+// Unwind segue from MessageRecipientPickerViewController
 - (IBAction)setMessageRecipients:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
@@ -93,18 +93,19 @@
 	[errorAlertController show:error];
 }*/
 
-// Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
-- (void)validateForm:(NSString *)messageText
-{
-	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	[self.navigationItem.rightBarButtonItem setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
-}
-
-// Fired from message compose table to perform segue to MessageRecipientPickerTableViewController - simplifies passing of data to the picker
+// Fired from message compose table to perform segue to MessageRecipientPickerViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageForward" sender:sender];
+}
+
+// Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
+- (void)validateForm:(NSString *)messageText
+{
+	// Message text is optional for forwarding a message
+	// messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	[self.navigationItem.rightBarButtonItem setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

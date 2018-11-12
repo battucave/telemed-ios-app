@@ -35,7 +35,7 @@
 {
     [super viewDidLoad];
 	
-	// Initialize my status model
+	// Initialize MyStatusModel
 	[self setMyStatusModel:[MyStatusModel sharedInstance]];
 	[self.myStatusModel setDelegate:self];
 }
@@ -47,7 +47,7 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableOnCallSchedule setTableFooterView:[[UIView alloc] init]];
 	
-	// Set segmented control index to any default set in side navigation view controller
+	// Set segmented control index to any default set by SideNavigationViewController
 	[self.segmentedControl setSelectedSegmentIndex:self.defaultSegmentControlIndex];
 	
 	// Set initial cell identifier

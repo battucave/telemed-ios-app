@@ -291,7 +291,7 @@
 		// Set selected option on new view controller
 		[segue.destinationViewController setSelectedOption:self.selectedOption];
 	}
-	// Unwind Segue
+	// Unwind segue
 	else
 	{
 		NSInteger selectedRow = [[self.tableView indexPathForSelectedRow] row];

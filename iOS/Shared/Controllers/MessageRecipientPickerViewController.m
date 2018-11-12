@@ -43,13 +43,13 @@
 {
 	[super viewDidLoad];
 	
-	// Initialize chat participant model (only used for chat)
+	// Initialize ChatParticipantModel (only used for chat)
 	#ifdef MYTELEMED
 		[self setChatParticipantModel:[[ChatParticipantModel alloc] init]];
 		[self.chatParticipantModel setDelegate:self];
 	#endif
 	
-	// Initialize message recipient model (only used for new and forward message)
+	// Initialize MessageRecipientModel (only used for new and forward message)
 	[self setMessageRecipientModel:[[MessageRecipientModel alloc] init]];
 	[self.messageRecipientModel setDelegate:self];
 	
@@ -149,7 +149,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
-	// Message recipient model callback
+	// MessageRecipientModel callback
 	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
 	{
 		self.isLoaded = YES;
@@ -366,7 +366,7 @@
 	}
 }
 
-// Return message recipients from message recipient model delegate
+// Return message recipients from MessageRecipientModel delegate
 - (void)updateMessageRecipients:(NSArray *)newMessageRecipients
 {
 	[self setMessageRecipients:newMessageRecipients];
@@ -700,7 +700,7 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-// Return chat participants from chat participation model delegate
+// Return chat participants from ChatParticipantModel delegate
 - (void)updateChatParticipants:(NSMutableArray *)newChatParticipants
 {
 	[self setMessageRecipients:newChatParticipants];
@@ -714,7 +714,7 @@
 	});
 }
 
-// Return error from chat participation model delegate
+// Return error from ChatParticipantModel delegate
 - (void)updateChatParticipantsError:(NSError *)error
 {
 	self.isLoaded = YES;

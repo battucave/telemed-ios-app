@@ -526,7 +526,7 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-	// If navigating to MessageDetailViewContoller, but there are no filtered messages, then user clicked the no messages found cell
+	// If navigating to MessageDetailViewController, but there are no filtered messages, then user clicked the no messages found cell
 	if ([identifier isEqualToString:@"showMessageDetail"])
 	{
 		return ! self.editing && [self.filteredMessages count] > 0;

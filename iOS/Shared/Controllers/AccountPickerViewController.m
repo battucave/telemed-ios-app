@@ -107,7 +107,7 @@
 	}
 	
 	#ifdef MYTELEMED
-		// If selected account not already set, then set it to my profile model's MyPreferredAccount
+		// If selected account not already set, then set it to MyProfileModel's MyPreferredAccount
 		if (! self.selectedAccount)
 		{
 			MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
@@ -130,7 +130,7 @@
 	// Get list of accounts if none were passed from previous controller
 	if ([self.accounts count] == 0)
 	{
-		// Initialize account model
+		// Initialize AccountModel
 		AccountModel *accountModel = [[AccountModel alloc] init];
 		
 		[accountModel setDelegate:self];
@@ -215,7 +215,7 @@
 	} completion:nil];
 }
 
-// Return accounts from account model delegate
+// Return accounts from AccountModel delegate
 - (void)updateAccounts:(NSArray *)accounts
 {
 	#ifdef MED2MED
@@ -246,7 +246,7 @@
 	[self scrollToSelectedAccount];
 }
 
-// Return error from account model delegate
+// Return error from AccountModel delegate
 - (void)updateAccountsError:(NSError *)error
 {
 	self.isLoaded = YES;
@@ -257,7 +257,7 @@
 	[errorAlertController show:error];
 }
 
-// Return pending from preferred account model delegate
+// Return pending from PreferredAccountModel delegate
 - (void)savePreferredAccountPending
 {
 	// Go back to settings (assume success)
