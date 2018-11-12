@@ -72,28 +72,28 @@
 	}
 	
 	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *actionReturnCall = [UIAlertAction actionWithTitle:@"Return Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *returnCallAction = [UIAlertAction actionWithTitle:@"Return Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		[self setCallModel:[[CallModel alloc] init]];
 		[self.callModel setDelegate:self];
 		[self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"false"];
 	}];
-	UIAlertAction *actionReturnRecordCall = [UIAlertAction actionWithTitle:@"Return & Record Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *returnRecordCallAction = [UIAlertAction actionWithTitle:@"Return & Record Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		[self setCallModel:[[CallModel alloc] init]];
 		[self.callModel setDelegate:self];
 		[self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"true"];
 	}];
 
-	[returnCallAlertController addAction:actionCancel];
-	[returnCallAlertController addAction:actionReturnCall];
-	[returnCallAlertController addAction:actionReturnRecordCall];
+	[returnCallAlertController addAction:cancelAction];
+	[returnCallAlertController addAction:returnCallAction];
+	[returnCallAlertController addAction:returnRecordCallAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[returnCallAlertController setPreferredAction:actionReturnCall];
+		[returnCallAlertController setPreferredAction:returnCallAction];
 	}
 
 	// Show alert
@@ -109,19 +109,19 @@
 	}
 	
 	UIAlertController *archiveMessageAlertController = [UIAlertController alertControllerWithTitle:@"Archive Message" message:@"Selecting Continue will archive this message. Archived messages can be accessed from the Main Menu." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Archive"];
 	}];
 
-	[archiveMessageAlertController addAction:actionCancel];
-	[archiveMessageAlertController addAction:actionContinue];
+	[archiveMessageAlertController addAction:cancelAction];
+	[archiveMessageAlertController addAction:continueAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[archiveMessageAlertController setPreferredAction:actionContinue];
+		[archiveMessageAlertController setPreferredAction:continueAction];
 	}
 
 	// Show alert

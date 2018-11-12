@@ -90,8 +90,8 @@
 	}
 	
 	UIAlertController *deleteChatMessagesAlertController = [UIAlertController alertControllerWithTitle:@"Delete Chat Messages" message:notificationMessage preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Added this because a minority of users were complaining that chat sometimes causes crash
 		if (self.chatMessageModel == nil)
@@ -103,13 +103,13 @@
 		[self.chatMessageModel deleteMultipleChatMessages:self.selectedChatMessages];
 	}];
 
-	[deleteChatMessagesAlertController addAction:actionCancel];
-	[deleteChatMessagesAlertController addAction:actionContinue];
+	[deleteChatMessagesAlertController addAction:cancelAction];
+	[deleteChatMessagesAlertController addAction:continueAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([deleteChatMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[deleteChatMessagesAlertController setPreferredAction:actionContinue];
+		[deleteChatMessagesAlertController setPreferredAction:continueAction];
 	}
 
 	// Show alert

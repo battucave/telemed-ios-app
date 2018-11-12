@@ -532,7 +532,7 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
 	NSLog(@"Received Push Notification MessageDetailViewController");
 	
@@ -567,12 +567,12 @@
 			[notificationInfo setValue:[message stringByReplacingOccurrencesOfString:@"comment to a message" withString:@"comment to this message"] forKey:@"message"];
 			
 			// Remove action view
-			actionView = nil;
+			viewAction = nil;
 		}
 	}
 	
 	// Execute the default notification message action
-	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:actionView];
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:viewAction];
 }
 
 - (void)modifyMessageAsRead

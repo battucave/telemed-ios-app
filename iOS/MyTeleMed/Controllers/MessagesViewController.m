@@ -89,8 +89,8 @@
 	}
 	
 	UIAlertController *archiveMessagesAlertController = [UIAlertController alertControllerWithTitle:@"Archive Messages" message:notificationMessage preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *actionContinue = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		MessageModel *messageModel = [[MessageModel alloc] init];
 		[messageModel setDelegate:self];
@@ -98,13 +98,13 @@
 		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
 	}];
 
-	[archiveMessagesAlertController addAction:actionCancel];
-	[archiveMessagesAlertController addAction:actionContinue];
+	[archiveMessagesAlertController addAction:cancelAction];
+	[archiveMessagesAlertController addAction:continueAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([archiveMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[archiveMessagesAlertController setPreferredAction:actionContinue];
+		[archiveMessagesAlertController setPreferredAction:continueAction];
 	}
 
 	// Show alert

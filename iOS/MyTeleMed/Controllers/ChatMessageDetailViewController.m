@@ -331,7 +331,7 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
 	NSLog(@"Received Push Notification ChatMessageDetailViewController");
     
@@ -340,7 +340,7 @@
 	{
 		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
 		
-		__block UIAlertAction *actionViewBlock = actionView;
+		__block UIAlertAction *viewActionBlock = viewAction;
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
 		// Cancel queued chat messages refresh
@@ -362,7 +362,7 @@
 				if ([results count] > 0)
 				{
 					// Remove action view
-					actionViewBlock = nil;
+					viewActionBlock = nil;
 				}
 			}
 			else
@@ -372,7 +372,7 @@
 			}
 
 			// Execute the default notification message action
-			[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionViewBlock];
+			[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)viewActionBlock];
 		}];
 		
 		// Delay executing the default notification message action until chat messages have finished loading
@@ -380,7 +380,7 @@
 	}
 	
 	// Execute the default notification message action
-	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionView];
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)viewAction];
 }
 
 // Reset chat messages back to loading state

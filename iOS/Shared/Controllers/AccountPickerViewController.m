@@ -534,14 +534,14 @@
 				if (! [callUnavailableMessage isEqualToString:@""])
 				{
 					UIAlertController *callUnavailableAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:callUnavailableMessage preferredStyle:UIAlertControllerStyleAlert];
-					UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+					UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 				
-					[callUnavailableAlertController addAction:actionOK];
+					[callUnavailableAlertController addAction:okAction];
 				
 					// PreferredAction only supported in 9.0+
 					if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
 					{
-						[callUnavailableAlertController setPreferredAction:actionOK];
+						[callUnavailableAlertController setPreferredAction:okAction];
 					}
 				
 					// Show Alert

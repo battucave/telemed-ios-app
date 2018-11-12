@@ -112,18 +112,18 @@
 - (void)sendMessageSuccess
 {
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Thank you. Your message has been sent." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Unwind to first screen of MessageNewTableViewController form
 		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
 	}];
 
-	[successAlertController addAction:actionOK];
+	[successAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[successAlertController setPreferredAction:actionOK];
+		[successAlertController setPreferredAction:okAction];
 	}
 
 	// Show Alert

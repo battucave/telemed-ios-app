@@ -93,7 +93,7 @@
 	NSLog(@"CoreTableViewController Remote Notification Data: %@", notification.object);
 	NSLog(@"CoreTableViewController Remote Notification Extras: %@", notification.userInfo);
 	
-	UIAlertAction *actionView;
+	UIAlertAction *viewAction;
 	NSString *tone = [notification.object objectForKey:@"tone"];
 	
 	// Play notification sound
@@ -136,7 +136,7 @@
 		
 		if (goToRemoteNotificationScreen != nil)
 		{
-			actionView = [UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			viewAction = [UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 			{
 				// Stop notification sound
 				AudioServicesDisposeSystemSoundID(self.systemSoundID);
@@ -158,32 +158,32 @@
 	}
 	
 	// Execute the handleRemoteNotification method on the current view controller. Some view controllers override the method below to execute additional logic if the notification specifically pertains to it (ChatMessageDetailViewController, MessageDetailViewController)
-	[self handleRemoteNotification:((NSDictionary *)notification.object).mutableCopy ofType:[notification.object objectForKey:@"notificationType"] withViewAction:actionView];
+	[self handleRemoteNotification:((NSDictionary *)notification.object).mutableCopy ofType:[notification.object objectForKey:@"notificationType"] withViewAction:viewAction];
 }
 
-- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
 	NSString *message = [notificationInfo objectForKey:@"message"];
 	
 	// Present user with the message from notification
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"MyTeleMed" message:message preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionClose = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *closeAction = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Stop notification sound
 		AudioServicesDisposeSystemSoundID(self.systemSoundID);
 	}];
 	
-	[alertController addAction:actionClose];
+	[alertController addAction:closeAction];
 	
-	if (actionView != nil)
+	if (viewAction != nil)
 	{
-		[alertController addAction:actionView];
+		[alertController addAction:viewAction];
 	}
 	
 	// PreferredAction only supported in 9.0+
 	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[alertController setPreferredAction:(actionView ?: actionClose)];
+		[alertController setPreferredAction:(viewAction ?: closeAction)];
 	}
 	
 	// Show Alert

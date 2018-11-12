@@ -576,9 +576,9 @@
 		{
 			NSString *applicationStateString = (applicationState == UIApplicationStateActive ? @"Foreground" : (applicationState == UIApplicationStateBackground ? @"Background" : @"Inactive"));
 			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Push Notification", applicationStateString] message:[NSString stringWithFormat:@"%@", notification] preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+			UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	 
-			[alertController addAction:actionOK];
+			[alertController addAction:okAction];
 	 
 			// Show alert
 			[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
