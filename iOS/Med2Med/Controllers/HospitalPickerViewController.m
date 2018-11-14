@@ -400,13 +400,13 @@
 	{
 		[self dismissViewControllerAnimated:YES completion:^
 		{
-			[self performSegueWithIdentifier:@"setHospital" sender:self];
+			[self performSegueWithIdentifier:@"unwindSetHospital" sender:self];
 		}];
 	}
 	// Execute unwind segue
 	else
 	{
-		[self performSegueWithIdentifier:@"setHospital" sender:self];
+		[self performSegueWithIdentifier:@"unwindSetHospital" sender:self];
 	}
 }
 

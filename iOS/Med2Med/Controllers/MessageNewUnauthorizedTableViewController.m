@@ -156,13 +156,13 @@
 	[self setTextDefaultHeader:[self tableView:self.tableView titleForHeaderInSection:0]];
 }
 
-// Unwind from AccountRequestTableViewController and update header text to show pending medical group (account) message
+// Unwind segue from AccountRequestTableViewController and update header text to show pending medical group (account) message
 - (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
 {
 	[self setDidRequestAccount:YES];
 }
 
-// Unwind from HospitalRequestTableViewController and update header text to show pending hospital message
+// Unwind segue from HospitalRequestTableViewController and update header text to show pending hospital message
 - (IBAction)unwindFromHospitalRequest:(UIStoryboardSegue *)segue
 {
 	[self setDidRequestHospital:YES];

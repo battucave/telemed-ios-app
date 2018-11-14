@@ -816,15 +816,15 @@
                         <outlet property="searchBar" destination="fdQ-tg-0kE" id="DF9-7k-MFx"/>
                         <outlet property="tableMessageRecipients" destination="ayW-Td-L8K" id="a84-Z8-2Fe"/>
                         <outlet property="viewSearchBarContainer" destination="7fW-0Y-ehL" id="UYh-ao-RWS"/>
-                        <segue destination="Xer-aF-ffG" kind="unwind" identifier="setMessageRecipients" unwindAction="setMessageRecipients:" id="D8m-ec-QWY"/>
-                        <segue destination="Xer-aF-ffG" kind="unwind" identifier="setChatParticipants" unwindAction="setChatParticipants:" id="e6l-5F-pvm"/>
+                        <segue destination="Xer-aF-ffG" kind="unwind" identifier="unwindSetMessageRecipients" unwindAction="unwindSetMessageRecipients:" id="D8m-ec-QWY"/>
+                        <segue destination="Xer-aF-ffG" kind="unwind" identifier="unwindSetChatParticipants" unwindAction="unwindSetChatParticipants:" id="e6l-5F-pvm"/>
                         <segue destination="Dim-mn-IBH" kind="show" identifier="showMessageNew2" id="NE6-e7-vSZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qmR-jp-ZGN" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Xer-aF-ffG" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6584" y="-892.3538230884559"/>
+            <point key="canvasLocation" x="6580" y="-1891"/>
         </scene>
         <!--MessageNew2TableViewController-->
         <scene sceneID="5hQ-Vn-iBV">
@@ -1659,7 +1659,7 @@
                         <outlet property="viewMessageAccount" destination="Rbb-Jr-ymV" id="q9q-ky-NCL"/>
                         <outlet property="viewMessageDetails" destination="wVS-kb-72j" id="hbw-oX-V89"/>
                         <outlet property="viewPriority" destination="eRo-nv-eAF" id="hwN-Hb-3pc"/>
-                        <segue destination="1Dd-nf-09i" kind="unwind" identifier="archiveFromMessageDetailArchive" unwindAction="archiveFromMessageDetailArchive:" id="rBP-cQ-Q0T"/>
+                        <segue destination="1Dd-nf-09i" kind="unwind" identifier="unwindArchiveMessage" unwindAction="unwindArchiveMessage:" id="rBP-cQ-Q0T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1i-V9-Qf2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1829,7 +1829,7 @@
                     <navigationItem key="navigationItem" title="Filter" id="kYm-CT-nDD">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="0M4-ol-yAe">
                             <connections>
-                                <segue destination="om0-K9-bus" kind="unwind" unwindAction="setArchiveFilter:" id="mj9-QT-eps"/>
+                                <segue destination="om0-K9-bus" kind="unwind" identifier="unwindSetArchiveFilter" unwindAction="unwindSetArchiveFilter:" id="mj9-QT-eps"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2950,7 +2950,7 @@
                     <navigationItem key="navigationItem" id="KXu-UX-slf">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="ubb-Xe-leF">
                             <connections>
-                                <segue destination="5XR-pZ-Rgq" kind="unwind" identifier="unwindToSettingsNotifications" unwindAction="setSelectedNotificationSetting:" id="K8s-6I-EIK"/>
+                                <segue destination="5XR-pZ-Rgq" kind="unwind" identifier="unwindSetNotificationSetting" unwindAction="unwindSetNotificationSetting:" id="K8s-6I-EIK"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -3676,7 +3676,7 @@
                         <outlet property="tableAccounts" destination="QZ7-a8-rYA" id="Ye1-JO-GxR"/>
                         <outlet property="viewSearchBarContainer" destination="pUs-a0-7Pa" id="rIK-mX-COl"/>
                         <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromAccountPicker" id="Wxx-iI-zqX"/>
-                        <segue destination="cOi-kn-978" kind="unwind" identifier="setAccount" unwindAction="setAccount:" id="402-LO-fNm"/>
+                        <segue destination="cOi-kn-978" kind="unwind" identifier="unwindSetAccount" unwindAction="unwindSetAccount:" id="402-LO-fNm"/>
                         <segue destination="xJG-LZ-YxZ" kind="show" identifier="showAccountRequest" id="fSt-vb-7aH"/>
                     </connections>
                 </viewController>

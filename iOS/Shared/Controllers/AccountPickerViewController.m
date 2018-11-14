@@ -552,7 +552,7 @@
 				// Add checkmark of selected account
 				[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 
-				[self performSegueWithIdentifier:@"setAccount" sender:self];
+				[self performSegueWithIdentifier:@"unwindSetAccount" sender:self];
 			}
 		#endif
 	};

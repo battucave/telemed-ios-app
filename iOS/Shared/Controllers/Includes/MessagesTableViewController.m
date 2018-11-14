@@ -142,26 +142,6 @@
 	[self.tableView reloadData];
 }
 
-- (void)unHideSelectedMessages:(NSArray *)messages
-{
-	// If no messages to hide, cancel
-	if (messages == nil || [messages count] == 0)
-	{
-		return;
-	}
-	
-	// Remove each message from hidden messages
-	for(id <MessageProtocol> message in messages)
-	{
-		[self.hiddenMessages removeObject:message];
-	}
-	
-	// Show the edit button (there will always be at least one message when unhiding)
-	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
-	
-	[self.tableView reloadData];
-}
-
 - (void)removeSelectedMessages:(NSArray *)messages
 {
 	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
@@ -211,6 +191,26 @@
 {
 	[self setIsLoaded:NO];
 	[self setMessages:[[NSMutableArray alloc] init]];
+	
+	[self.tableView reloadData];
+}
+
+- (void)unHideSelectedMessages:(NSArray *)messages
+{
+	// If no messages to hide, cancel
+	if (messages == nil || [messages count] == 0)
+	{
+		return;
+	}
+	
+	// Remove each message from hidden messages
+	for(id <MessageProtocol> message in messages)
+	{
+		[self.hiddenMessages removeObject:message];
+	}
+	
+	// Show the edit button (there will always be at least one message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
 	
 	[self.tableView reloadData];
 }

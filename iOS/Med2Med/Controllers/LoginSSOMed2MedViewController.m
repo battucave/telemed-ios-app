@@ -28,7 +28,7 @@
 	[self.buttonCreateAccount setTitle:@""];
 }
 
-// Unwind segue from AccountNewViewController
+// Unwind segue from AccountRequestTableViewController
 - (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
 {
 	NSLog(@"unwindFromAccountRequest");

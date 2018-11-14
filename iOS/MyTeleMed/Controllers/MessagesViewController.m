@@ -112,7 +112,7 @@
 }
 
 // Unwind segue from MessageDetailViewController (only after archive action)
-- (IBAction)archiveFromMessageDetailArchive:(UIStoryboardSegue *)segue
+- (IBAction)unwindArchiveMessage:(UIStoryboardSegue *)segue
 {
 	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
 	

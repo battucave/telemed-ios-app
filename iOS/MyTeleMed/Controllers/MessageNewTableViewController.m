@@ -49,7 +49,7 @@
 }
 
 // Unwind segue from MessageRecipientPickerViewController
-- (IBAction)setMessageRecipients:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetMessageRecipients:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;

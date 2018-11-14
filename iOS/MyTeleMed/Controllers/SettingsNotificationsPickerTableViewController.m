@@ -244,12 +244,12 @@
 	// If showing Notification Intervals, make selection final
 	if (self.pickerType == 1)
 	{
-		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
+		[self performSegueWithIdentifier:@"unwindSetNotificationSetting" sender:cell];
 	}
 	// If showing Subcategory and Silent Tones and user selects Silent, make selection final
 	else if (self.pickerType == 0 && [self.pickerOptions count] >= indexPath.row && [[self.pickerOptions objectAtIndex:indexPath.row] isEqualToString:@"Silent"])
 	{
-		[self performSegueWithIdentifier:@"unwindToSettingsNotifications" sender:cell];
+		[self performSegueWithIdentifier:@"unwindSetNotificationSetting" sender:cell];
 	}
 	// If showing standard Notification Tones, add checkmark to selected option and play sound
 	else if (cell.tag == 0)

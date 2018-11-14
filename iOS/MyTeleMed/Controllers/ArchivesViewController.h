@@ -12,4 +12,6 @@
 
 @interface ArchivesViewController : RevealViewController
 
+- (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue;
+
 @end

@@ -161,7 +161,7 @@
 }
 
 // Unwind segue from MessageRecipientPickerViewController (new chat only)
-- (IBAction)setChatParticipants:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetChatParticipants:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;

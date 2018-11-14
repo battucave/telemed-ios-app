@@ -243,7 +243,7 @@
 		[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 	
 	#else
-		// Unwind to ChatMessageDetailViewController
+		// Unwind segue to ChatMessageDetailViewController
 		if ([self.messageRecipientType isEqualToString:@"Chat"])
 		{
 			if ([self.selectedMessageRecipients count] > 1)
@@ -255,7 +255,7 @@
 					self.isGroupChat = NO;
 					
 					// Execute unwind segue
-					[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+					[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
 				}];
 				UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 				{
@@ -263,7 +263,7 @@
 					self.isGroupChat = YES;
 					
 					// Execute unwind segue
-					[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+					[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
 				}];
 				
 				[groupChatAlertController addAction:noAction];
@@ -284,14 +284,14 @@
 				self.isGroupChat = NO;
 				
 				// Execute unwind segue
-				[self performSegueWithIdentifier:@"setChatParticipants" sender:self];
+				[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
 			}
 		}
-		// Unwind to forward message or new message
+		// Unwind segue to forward message or new message
 		else
 		{
 			// Execute unwind segue
-			[self performSegueWithIdentifier:@"setMessageRecipients" sender:self];
+			[self performSegueWithIdentifier:@"unwindSetMessageRecipients" sender:self];
 		}
 	#endif
 }

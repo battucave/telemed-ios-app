@@ -26,8 +26,6 @@
 @property (nonatomic) NSInteger selectedDateIndex;
 @property (nonatomic) NSString *selectedDate;
 
-- (IBAction)setArchiveFilter:(UIStoryboardSegue *)segue;
-
 @end
 
 @implementation ArchivesViewController
@@ -47,7 +45,7 @@
 }
 
 // Unwind segue from ArchivesPickerViewController
-- (IBAction)setArchiveFilter:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue
 {
 	// Reset MessagesTableViewController back to loading state
 	[self.messagesTableViewController resetMessages];

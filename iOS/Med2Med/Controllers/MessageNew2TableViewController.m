@@ -115,7 +115,7 @@
 	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Unwind to first screen of MessageNewTableViewController form
-		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
+		[self performSegueWithIdentifier:@"unwindResetMessageNewForm" sender:self];
 	}];
 
 	[successAlertController addAction:okAction];
@@ -136,7 +136,7 @@
 	// Unwind to first screen of MessageNewTableViewController form to show error for callback number
 	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
 	{
-		[self performSegueWithIdentifier:@"handleErrorCallbackNumber" sender:self];
+		[self performSegueWithIdentifier:@"unwindErrorCallbackNumber" sender:self];
 	}
 }
 

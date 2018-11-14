@@ -159,7 +159,7 @@
 }
 
 // Error unwind segue for callback number from MessageNew2TableViewController
-- (IBAction)handleErrorCallbackNumber:(UIStoryboardSegue *)segue
+- (IBAction)unwindErrorCallbackNumber:(UIStoryboardSegue *)segue
 {
 	NSString *callbackPhoneNumberValue = @"";
 	
@@ -183,7 +183,7 @@
 }
 
 // Success unwind segue from MessageNew2TableViewController
-- (IBAction)resetMessageNewForm:(UIStoryboardSegue *)segue
+- (IBAction)unwindResetMessageNewForm:(UIStoryboardSegue *)segue
 {
 	// NOTE: Static cells do not reset when [self.tableView reloadData] is called. Instead, manually reset all data
 	
@@ -249,7 +249,7 @@
 }
 
 // Unwind segue from AccountPickerViewController
-- (IBAction)setAccount:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetAccount:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	AccountPickerViewController *accountPickerViewController = segue.sourceViewController;
@@ -278,7 +278,7 @@
 }
 
 // Unwind segue from HospitalPickerViewController
-- (IBAction)setHospital:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetHospital:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	HospitalPickerViewController *hospitalPickerViewController = segue.sourceViewController;

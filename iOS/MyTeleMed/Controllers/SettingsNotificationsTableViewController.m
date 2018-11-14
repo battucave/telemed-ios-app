@@ -21,8 +21,6 @@
 
 @property (nonatomic) NSString *notificationSettingsName;
 
-- (IBAction)setSelectedNotificationSetting:(UIStoryboardSegue *)segue;
-
 @end
 
 @implementation SettingsNotificationsTableViewController
@@ -83,7 +81,7 @@
 }
 
 // Unwind segue from SettingsNotificationsPickerTableViewController
-- (IBAction)setSelectedNotificationSetting:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetNotificationSetting:(UIStoryboardSegue *)segue
 {
 	SettingsNotificationsPickerTableViewController *settingsNotificationsPickerTableViewController = segue.sourceViewController;
 	

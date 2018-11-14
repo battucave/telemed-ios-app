@@ -169,7 +169,7 @@
 			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
 			@try
 			{
-				[self performSegueWithIdentifier:@"archiveFromMessageDetailArchive" sender:self];
+				[self performSegueWithIdentifier:@"unwindArchiveMessage" sender:self];
 			}
 			// Just in case the unwind segue isn't found, simply pop the view controller
 			@catch(NSException *exception)
@@ -191,7 +191,7 @@
 			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
 			@try
 			{
-				[self performSegueWithIdentifier:@"archiveFromMessageDetailArchive" sender:self];
+				[self performSegueWithIdentifier:@"unwindArchiveMessage" sender:self];
 			}
 			// Just in case the unwind segue isn't found, simply pop the view controller
 			@catch(NSException *exception)
