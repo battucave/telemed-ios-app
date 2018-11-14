@@ -47,7 +47,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
 			{
 				[self.delegate savePreferredAccountSuccess];
 			}
@@ -67,7 +67,7 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
 			}*/
@@ -90,7 +90,7 @@
 			[self.myProfileModel restoreMyPreferredAccount];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
 			} */
@@ -118,7 +118,7 @@
 		[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
 		
 		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 		{
 			[self.delegate savePreferredAccountPending];
 		};

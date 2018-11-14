@@ -71,13 +71,13 @@
 				}
 			}
 			
-			// Handle success via callback block
+			// Handle success via callback
 			if (callback)
 			{
 				callback(YES, chatMessages, nil);
 			}
 			// Handle success via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateChatMessages:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateChatMessages:)])
 			{
 				[self.delegate updateChatMessages:chatMessages];
 			}
@@ -87,13 +87,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Messages.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via callback block
+			// Handle error via callback
 			if (callback)
 			{
 				callback(NO, nil, error);
 			}
 			// Handle error via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 			{
 				[self.delegate updateChatMessagesError:error];
 			}
@@ -106,13 +106,13 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Messages." andTitle:@"Chat Messages Error"];
 		
-		// Handle error via callback block
+		// Handle error via callback
 		if (callback)
 		{
 			callback(NO, nil, error);
 		}
 		// Handle error via delegate
-		else if ([self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
+		else if (self.delegate && [self.delegate respondsToSelector:@selector(updateChatMessagesError:)])
 		{
 			[self.delegate updateChatMessagesError:error];
 		}
@@ -140,7 +140,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(deleteChatMessageSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageSuccess)])
 			{
 				[self.delegate deleteChatMessageSuccess];
 			}
@@ -157,7 +157,7 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 			{
 				[self.delegate deleteChatMessageError:error];
 			}*/
@@ -177,7 +177,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 			{
 				[self.delegate deleteChatMessageError:error];
 			} */
@@ -289,7 +289,7 @@
 			NSArray *failedChatMessages = [self.failedChatMessages copy];
 		
 			// Handle success via delegate to reset chat messages
-			if ([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
 			{
 				[self.delegate deleteMultipleChatMessagesError:failedChatMessages];
 			}
@@ -314,7 +314,7 @@
 			}];
 		}
 		// If request was not cancelled, then handle success via delegate (not currently used)
-		else if (! self.queueCancelled && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
+		else if (! self.queueCancelled && self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesSuccess)])
 		{
 			[self.delegate deleteMultipleChatMessagesSuccess];
 		}
@@ -337,12 +337,12 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that delete chat message has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
 		{
 			[self.delegate deleteChatMessagePending];
 		}
 		// Notify delegate that multiple chat message deletions have begun being sent to server (should always run multiple times if needed)
-		else if ([self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
+		else if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
 		{
 			[self.delegate deleteMultipleChatMessagesPending];
 		}

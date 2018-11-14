@@ -97,7 +97,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the notification settings." andTitle:@"notification settings Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
 		}
@@ -154,7 +154,7 @@
 			[settings synchronize];
 			
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
 			{
 				[self.delegate updateNotificationSettings:self forName:name];
 			}
@@ -165,7 +165,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"notification settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the notification settings.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 			{
 				[self.delegate updateNotificationSettingsError:error];
 			}
@@ -179,7 +179,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the notification settings." andTitle:@"notification settings Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
 		}
@@ -240,7 +240,7 @@
 				[self saveNotificationSettingsByName:@"priority" settings:notificationSettings];
 			}
 			// Handle success via delegate (not currently used)
-			else if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
 			}
@@ -257,7 +257,7 @@
 			}];
 			
 			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
-			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
 			}
@@ -277,7 +277,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
-			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
 			}
@@ -302,7 +302,7 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that notification settings has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 		{
 			[self.delegate saveNotificationSettingsPending];
 		}

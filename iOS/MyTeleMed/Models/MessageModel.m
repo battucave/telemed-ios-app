@@ -78,7 +78,7 @@
 		if ([xmlParser parse])
 		{
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateMessages:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateMessages:)])
 			{
 				[self.delegate updateMessages:[[parser messages] copy]];
 			}
@@ -89,7 +89,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Messages.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateMessagesError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateMessagesError:)])
 			{
 				[self.delegate updateMessagesError:error];
 			}
@@ -103,7 +103,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Messages." andTitle:@"Messages Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateMessagesError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateMessagesError:)])
 		{
 			[self.delegate updateMessagesError:error];
 		}
@@ -190,7 +190,7 @@
 			if (operation.response.statusCode == 204)
 			{
 				// Handle success via delegate
-				if ([self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateSuccess:)])
 				{
 					[self.delegate modifyMessageStateSuccess:state];
 				}
@@ -198,7 +198,7 @@
 			else
 			{
 				// Handle error via delegate
-				/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
+				/* if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 				{
 					[self.delegate modifyMessageStateError:error forState:state];
 				} */
@@ -232,7 +232,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
 			{
 				[self.delegate modifyMessageStateError:error forState:state];
 			} */
@@ -361,7 +361,7 @@
 			NSArray *failedMessages = [self.failedMessages copy];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
 			{
 				[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
 			}
@@ -386,7 +386,7 @@
 			}];
 		}
 		// If request was not cancelled, then handle success via delegate (still being used)
-		else if (! self.queueCancelled && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
+		else if (! self.queueCancelled && self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
 		{
 			[self.delegate modifyMultipleMessagesStateSuccess:state];
 		}
@@ -409,12 +409,12 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that message state has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
 		{
 			[self.delegate modifyMessageStatePending:self.messageState];
 		}
 		// Notify delegate that multiple message states have begun being sent to server (should always run multiple times if needed)
-		else if ([self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
+		else if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
 		{
 			[self.delegate modifyMultipleMessagesStatePending:self.messageState];
 		}

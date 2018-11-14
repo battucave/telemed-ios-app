@@ -117,7 +117,7 @@
 			if (operation.response.statusCode == 204)
 			{
 				// Handle success via delegate (not currently used)
-				if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 				{
 					[self.delegate sendMessageSuccess];
 				}
@@ -134,7 +134,7 @@
 				}];
 				
 				// Handle error via delegate
-				/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+				/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageError:)])
 				{
 					[self.delegate sendMessageError:error];
 				} */
@@ -155,7 +155,7 @@
 			if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
 			{
 				// Handle error via delegate
-				if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageError:)])
 				{
 					[self.delegate sendMessageError:error];
 					

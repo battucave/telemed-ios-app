@@ -30,8 +30,8 @@
 		// Show error even if user has navigated to another screen
 		[self showError:error];
 		
-		/*/ Not needed here
-		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+		/*/ Handle error via delegate (not needed here)
+		if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			[self.delegate sendChatMessageError:error withPendingID:pendingID];
 		}*/
@@ -81,7 +81,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
 			{
 				[self.delegate sendChatMessageSuccess:message withPendingID:pendingID];
 			}
@@ -98,7 +98,7 @@
 			}];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
@@ -118,7 +118,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
@@ -143,7 +143,7 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that chat message has been sent to server
-		if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
+		if (/* ! self.pendingComplete &&*/ self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 		{
 			[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
 		}

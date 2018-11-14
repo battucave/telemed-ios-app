@@ -27,7 +27,7 @@
 		[self showError:error];
 		
 		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
+		/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
 		}*/
@@ -58,7 +58,7 @@
 			if (operation.response.statusCode == 204)
 			{
 				// Handle success via delegate
-				if ([self.delegate respondsToSelector:@selector(changePasswordSuccess)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordSuccess)])
 				{
 					[self.delegate changePasswordSuccess];
 				}
@@ -66,7 +66,7 @@
 			else
 			{
 				// Handle error via delegate
-				/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
+				/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 				{
 					[self.delegate changePasswordError:error];
 				} */
@@ -89,7 +89,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(changePasswordError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
 				[self.delegate changePasswordError:error];
 			} */

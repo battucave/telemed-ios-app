@@ -56,7 +56,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageSuccess)])
 			{
 				[self.delegate sendMessageSuccess];
 			}
@@ -73,7 +73,7 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			}*/
@@ -93,7 +93,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageError:)])
 			{
 				[self.delegate sendMessageError:error];
 			} */
@@ -118,7 +118,7 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that mssage has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(sendMessagePending)])
 		{
 			[self.delegate sendMessagePending];
 		}

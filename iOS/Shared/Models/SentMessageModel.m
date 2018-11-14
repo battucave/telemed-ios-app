@@ -28,7 +28,7 @@
 		if ([xmlParser parse])
 		{
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateSentMessages:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateSentMessages:)])
 			{
 				[self.delegate updateSentMessages:[[parser sentMessages] copy]];
 			}
@@ -39,7 +39,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Sent Messages Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Sent Messages.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
 			{
 				[self.delegate updateSentMessagesError:error];
 			}
@@ -53,7 +53,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Sent Messages." andTitle:@"Sent Messages Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateSentMessagesError:)])
 		{
 			[self.delegate updateSentMessagesError:error];
 		}

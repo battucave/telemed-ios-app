@@ -33,7 +33,7 @@
 		[self showError:error];
 	
 		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+		/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
 			[self.delegate callTeleMedError:error];
 		}*/
@@ -62,7 +62,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
 			{
 				[self.delegate callTeleMedSuccess];
 			}
@@ -79,7 +79,7 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
 			}*/
@@ -99,7 +99,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
 			} */
@@ -150,7 +150,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(callSenderSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderSuccess)])
 			{
 				[self.delegate callSenderSuccess];
 			}
@@ -167,7 +167,7 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
 			} */
@@ -187,7 +187,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
 			} */
@@ -217,12 +217,12 @@
 		if (! self.pendingComplete)
 		{
 			// Notify delegate that TeleMed call request has been sent to server
-			if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedPending)])
 			{
 				[self.delegate callTeleMedPending];
 			}
 			// Notify delegate that sender call request has been sent to server
-			else if ([self.delegate respondsToSelector:@selector(callSenderPending)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderPending)])
 			{
 				[self.delegate callSenderPending];
 			}

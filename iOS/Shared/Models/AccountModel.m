@@ -56,13 +56,13 @@
 			#endif
 			// END TESTING ONLY */
 			
-			// Handle success via callback block
+			// Handle success via callback
 			if (callback)
 			{
 				callback(YES, accounts, nil);
 			}
 			// Handle success via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateAccounts:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateAccounts:)])
 			{
 				[self.delegate updateAccounts:accounts];
 			}
@@ -72,13 +72,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Accounts Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Accounts.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via callback block
+			// Handle error via callback
 			if (callback)
 			{
 				callback(NO, nil, error);
 			}
 			// Handle error via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateAccountsError:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateAccountsError:)])
 			{
 				[self.delegate updateAccountsError:error];
 			}
@@ -91,13 +91,13 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Accounts." andTitle:@"Accounts Error"];
 		
-		// Handle error via callback block
+		// Handle error via callback
 		if (callback)
 		{
 			callback(NO, nil, error);
 		}
 		// Handle error via delegate
-		else if ([self.delegate respondsToSelector:@selector(updateAccountsError:)])
+		else if (self.delegate && [self.delegate respondsToSelector:@selector(updateAccountsError:)])
 		{
 			[self.delegate updateAccountsError:error];
 		}
