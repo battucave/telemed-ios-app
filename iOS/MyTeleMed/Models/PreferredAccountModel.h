@@ -11,19 +11,20 @@
 #import "Model.h"
 #import "AccountModel.h"
 
+@interface PreferredAccountModel : Model
+
+@property (weak) id delegate;
+
+- (void)savePreferredAccount:(AccountModel *)account;
+
+@end
+
+
 @protocol PreferredAccountDelegate <NSObject>
 
 @optional
 - (void)savePreferredAccountPending;
 - (void)savePreferredAccountSuccess;
 - (void)savePreferredAccountError:(NSError *)error;
-
-@end
-
-@interface PreferredAccountModel : Model
-
-@property (weak) id delegate;
-
-- (void)savePreferredAccount:(AccountModel *)account;
 
 @end

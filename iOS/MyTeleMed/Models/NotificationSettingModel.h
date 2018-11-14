@@ -10,19 +10,6 @@
 
 #import "Model.h"
 
-@protocol NotificationSettingDelegate <NSObject>
-
-@required
-- (void)updateNotificationSettings:(id)serverNotificationSettings forName:(NSString *)name;
-
-@optional
-- (void)updateNotificationSettingsError:(NSError *)error;
-- (void)saveNotificationSettingsPending;
-- (void)saveNotificationSettingsSuccess;
-- (void)saveNotificationSettingsError:(NSError *)error;
-
-@end
-
 @interface NotificationSettingModel : Model
 
 @property (weak) id delegate;
@@ -37,5 +24,19 @@
 - (NSString *)getToneFromToneTitle:(NSString *)toneTitle;
 - (NotificationSettingModel *)getNotificationSettingsByName:(NSString *)name;
 - (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings;
+
+@end
+
+
+@protocol NotificationSettingDelegate <NSObject>
+
+@required
+- (void)updateNotificationSettings:(id)serverNotificationSettings forName:(NSString *)name;
+
+@optional
+- (void)updateNotificationSettingsError:(NSError *)error;
+- (void)saveNotificationSettingsPending;
+- (void)saveNotificationSettingsSuccess;
+- (void)saveNotificationSettingsError:(NSError *)error;
 
 @end

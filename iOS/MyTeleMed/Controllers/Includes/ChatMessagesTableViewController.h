@@ -10,13 +10,6 @@
 
 @class ChatMessagesViewController;
 
-@protocol ChatMessagesDelegate <NSObject>
-
-@optional
-- (void)setSelectedChatMessages:(NSArray *)selectedChatMessages;
-
-@end
-
 @interface ChatMessagesTableViewController : UITableViewController
 
 @property (weak) id delegate;
@@ -26,5 +19,13 @@
 - (void)reloadChatMessages;
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages;
 - (void)unHideSelectedChatMessages:(NSArray *)chatMessages;
+
+@end
+
+
+@protocol ChatMessagesDelegate <NSObject>
+
+@optional
+- (void)setSelectedChatMessages:(NSArray *)selectedChatMessages;
 
 @end

@@ -12,16 +12,6 @@
 #import "MessageProtocol.h"
 #import "AccountModel.h"
 
-@protocol SentMessageDelegate <NSObject>
-
-@required
-- (void)updateSentMessages:(NSArray *)sentMessages;
-
-@optional
-- (void)updateSentMessagesError:(NSError *)error;
-
-@end
-
 @interface SentMessageModel : Model <MessageProtocol>
 
 @property (weak) id delegate;
@@ -46,5 +36,16 @@
 
 - (void)getSentMessages;
 - (void)getSentMessageByID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, SentMessageModel *message, NSError *error))callback;
+
+@end
+
+
+@protocol SentMessageDelegate <NSObject>
+
+@required
+- (void)updateSentMessages:(NSArray *)sentMessages;
+
+@optional
+- (void)updateSentMessagesError:(NSError *)error;
 
 @end

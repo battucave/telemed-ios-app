@@ -10,15 +10,6 @@
 
 #import "Model.h"
 
-@protocol EmailTelemedDelegate <NSObject>
-
-@optional
-- (void)sendMessagePending;
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
-
-@end
-
 @interface EmailTelemedModel : Model
 
 @property (weak) id delegate;
@@ -27,5 +18,15 @@
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress;
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID;
+
+@end
+
+
+@protocol EmailTelemedDelegate <NSObject>
+
+@optional
+- (void)sendMessagePending;
+- (void)sendMessageSuccess;
+- (void)sendMessageError:(NSError *)error;
 
 @end

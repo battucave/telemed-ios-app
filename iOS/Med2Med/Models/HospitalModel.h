@@ -10,16 +10,6 @@
 
 #import "Model.h"
 
-@protocol HospitalDelegate <NSObject>
-
-@required
-- (void)updateHospitals:(NSArray *)hospitals;
-
-@optional
-- (void)updateHospitalsError:(NSError *)error;
-
-@end
-
 @interface HospitalModel : Model
 
 @property (weak) id delegate;
@@ -36,5 +26,16 @@
 - (BOOL)isBlocked;
 - (BOOL)isDenied;
 - (BOOL)isRequested;
+
+@end
+
+
+@protocol HospitalDelegate <NSObject>
+
+@required
+- (void)updateHospitals:(NSArray *)hospitals;
+
+@optional
+- (void)updateHospitalsError:(NSError *)error;
 
 @end

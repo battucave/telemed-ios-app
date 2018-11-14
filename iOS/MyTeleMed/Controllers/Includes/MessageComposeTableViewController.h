@@ -10,16 +10,6 @@
 
 #import "CoreTableViewController.h"
 
-@protocol MessageComposeTableDelegate <NSObject>
-
-@required
-- (void)performSegueToMessageRecipientPicker:(id)sender;
-
-@optional
-- (void)validateForm:(NSString *)messageText;
-
-@end
-
 @interface MessageComposeTableViewController : CoreTableViewController <UITextViewDelegate>
 
 @property (weak) id delegate;
@@ -29,5 +19,16 @@
 @property (nonatomic) NSString *textViewMessagePlaceholder;
 
 - (void)updateSelectedMessageRecipients:(NSArray *)messageRecipients;
+
+@end
+
+
+@protocol MessageComposeTableDelegate <NSObject>
+
+@required
+- (void)performSegueToMessageRecipientPicker:(id)sender;
+
+@optional
+- (void)validateForm:(NSString *)messageText;
 
 @end

@@ -10,15 +10,6 @@
 
 #import "Model.h"
 
-@protocol NewChatMessageDelegate <NSObject>
-
-@optional
-- (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID;
-- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID;
-- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID;
-
-@end
-
 @interface NewChatMessageModel : Model
 
 @property (weak) id delegate;
@@ -27,5 +18,15 @@
 
 //- (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat;
 - (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID;
+
+@end
+
+
+@protocol NewChatMessageDelegate <NSObject>
+
+@optional
+- (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID;
+- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID;
+- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID;
 
 @end

@@ -12,15 +12,6 @@
 
 #import "Model.h"
 
-@protocol NewMessageDelegate <NSObject>
-
-@optional
-- (void)sendMessagePending;
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
-
-@end
-
 @interface NewMessageModel : Model
 
 @property (weak) id delegate;
@@ -36,5 +27,15 @@
 #ifdef MED2MED
 	- (void)sendNewMessage:(NSDictionary *)data;
 #endif
+
+@end
+
+
+@protocol NewMessageDelegate <NSObject>
+
+@optional
+- (void)sendMessagePending;
+- (void)sendMessageSuccess;
+- (void)sendMessageError:(NSError *)error;
 
 @end

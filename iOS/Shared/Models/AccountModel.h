@@ -11,16 +11,6 @@
 #import "Model.h"
 #import "TimeZoneModel.h"
 
-@protocol AccountDelegate <NSObject>
-
-@required
-- (void)updateAccounts:(NSArray *)accounts;
-
-@optional
-- (void)updateAccountsError:(NSError *)error;
-
-@end
-
 @interface AccountModel : Model
 
 @property (weak) id delegate;
@@ -51,5 +41,16 @@
 - (BOOL)isAuthorized;
 - (BOOL)isPending;
 #endif
+
+@end
+
+
+@protocol AccountDelegate <NSObject>
+
+@required
+- (void)updateAccounts:(NSArray *)accounts;
+
+@optional
+- (void)updateAccountsError:(NSError *)error;
 
 @end

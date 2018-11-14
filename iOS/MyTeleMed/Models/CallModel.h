@@ -10,6 +10,16 @@
 
 #import "Model.h"
 
+@interface CallModel : Model
+
+@property (weak) id delegate;
+
+- (void)callTeleMed;
+- (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall;
+
+@end
+
+
 @protocol CallDelegate <NSObject>
 
 @optional
@@ -19,14 +29,5 @@
 - (void)callSenderPending;
 - (void)callSenderSuccess;
 - (void)callSenderError:(NSError *)error;
-
-@end
-
-@interface CallModel : Model
-
-@property (weak) id delegate;
-
-- (void)callTeleMed;
-- (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall;
 
 @end

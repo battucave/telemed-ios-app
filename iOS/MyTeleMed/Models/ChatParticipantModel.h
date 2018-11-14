@@ -10,16 +10,6 @@
 
 #import "Model.h"
 
-@protocol ChatParticipantDelegate <NSObject>
-
-@required
-- (void)updateChatParticipants:(NSArray *)newChatParticipants;
-
-@optional
-- (void)updateChatParticipantsError:(NSError *)error;
-
-@end
-
 @interface ChatParticipantModel : Model
 
 @property (weak) id delegate;
@@ -32,5 +22,16 @@
 @property (nonatomic) NSString *FormattedNameLNF;
 
 - (void)getChatParticipants;
+
+@end
+
+
+@protocol ChatParticipantDelegate <NSObject>
+
+@required
+- (void)updateChatParticipants:(NSArray *)newChatParticipants;
+
+@optional
+- (void)updateChatParticipantsError:(NSError *)error;
 
 @end

@@ -10,16 +10,6 @@
 
 #import "Model.h"
 
-@protocol TimeZoneDelegate <NSObject>
-
-@required
-- (void)updateTimeZones:(NSArray *)newTimeZones;
-
-@optional
-- (void)updateTimeZonesError:(NSError *)error;
-
-@end
-
 @interface TimeZoneModel : Model
 
 @property (weak) id delegate;
@@ -29,5 +19,16 @@
 @property (nonatomic) NSNumber *Offset;
 
 - (void)getTimeZones;
+
+@end
+
+
+@protocol TimeZoneDelegate <NSObject>
+
+@required
+- (void)updateTimeZones:(NSArray *)newTimeZones;
+
+@optional
+- (void)updateTimeZonesError:(NSError *)error;
 
 @end
