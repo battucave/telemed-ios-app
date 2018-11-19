@@ -12,7 +12,7 @@
 
 @interface MessageNew2TableViewController ()
 
-@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
+@property (nonatomic) IBOutletCollection(UITextField) NSArray *textFields; // Must be a strong reference
 @property (weak, nonatomic) IBOutlet UITextView *textViewAdditionalInformation;
 
 @property (nonatomic) NSString *textViewAdditionalInformationPlaceholder;

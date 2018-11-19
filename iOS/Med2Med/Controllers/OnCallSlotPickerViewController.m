@@ -15,12 +15,12 @@
 @interface OnCallSlotPickerViewController ()
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (nonatomic) IBOutlet UITableView *tableOnCallSlots;
+@property (weak, nonatomic) IBOutlet UITableView *tableOnCallSlots;
 @property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
 @property (nonatomic) NSMutableArray *filteredOnCallSlots;
 @property (nonatomic) BOOL isLoaded;
-@property (nonatomic) NSMutableArray *onCallSlots;
+@property (nonatomic) NSArray *onCallSlots;
 @property (nonatomic, strong) UISearchController *searchController;
 
 @end
@@ -218,9 +218,9 @@
 }
 
 // Return on call slots from OnCallSlotModel delegate
-- (void)updateOnCallSlots:(NSMutableArray *)newOnCallSlots
+- (void)updateOnCallSlots:(NSArray *)onCallSlots
 {
-	[self setOnCallSlots:newOnCallSlots];
+	[self setOnCallSlots:onCallSlots];
 	
 	self.isLoaded = YES;
 	

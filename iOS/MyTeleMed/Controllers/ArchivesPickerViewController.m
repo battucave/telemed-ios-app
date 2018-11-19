@@ -87,9 +87,9 @@
 }
 
 // Return accounts from AccountModel delegate
-- (void)updateAccounts:(NSMutableArray *)accounts
+- (void)updateAccounts:(NSArray *)accounts
 {
-	[self setAccounts:accounts];
+	[self setAccounts:[accounts mutableCopy]];
 	
 	// Add all accounts option to beginning of array
 	AccountModel *accountAll = [[AccountModel alloc] init];
@@ -98,7 +98,7 @@
 	[accountAll setName:@"All Accounts"];
 	[accountAll setPublicKey:@"0"];
 	
-	[accounts insertObject:accountAll atIndex:0];
+	[self.accounts insertObject:accountAll atIndex:0];
 	
 	// Set account button title to preselected row if any
 	if (self.selectedAccountIndex > 0 && [self.accounts count] > self.selectedAccountIndex)

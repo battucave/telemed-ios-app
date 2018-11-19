@@ -13,7 +13,7 @@
 
 @interface HospitalPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) NSMutableArray *hospitals;
+@property (nonatomic) NSArray *hospitals;
 @property (nonatomic) HospitalModel *selectedHospital;
 @property (nonatomic) BOOL shouldSelectHospital;
 

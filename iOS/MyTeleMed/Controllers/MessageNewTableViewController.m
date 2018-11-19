@@ -20,7 +20,7 @@
 
 @property (nonatomic) AccountModel *accountModel;
 
-@property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) NSArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
@@ -79,7 +79,7 @@
 }
 
 // Return accounts from AccountModel delegate
-- (void)updateAccounts:(NSMutableArray *)accounts
+- (void)updateAccounts:(NSArray *)accounts
 {
 	[self setAccounts:accounts];
 	

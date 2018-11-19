@@ -19,9 +19,9 @@
 
 @interface AccountPickerViewController ()
 
-@property (nonatomic) IBOutlet UISearchBar *searchBar;
-@property (nonatomic) IBOutlet UITableView *tableAccounts;
-@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableAccounts;
+@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
 @property (nonatomic) NSMutableArray *filteredAccounts;
 @property (nonatomic) BOOL isLoaded;

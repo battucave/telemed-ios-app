@@ -389,6 +389,8 @@
 		E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */; };
 		E2ECFB691B3471C00024D970 /* AuthenticationHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB641B3471C00024D970 /* AuthenticationHTTPSessionManager.m */; };
 		E2ED891F1D9DB2EE0094214C /* NewChatMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ED891E1D9DB2EE0094214C /* NewChatMessageModel.m */; };
+		E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */; };
+		E2FB4035219E30A60037C7A7 /* icon-SwipeMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -835,6 +837,8 @@
 		E2ECFB651B3471C00024D970 /* AuthenticationHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationHTTPSessionManager.h; sourceTree = "<group>"; };
 		E2ED891D1D9DB2EE0094214C /* NewChatMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewChatMessageModel.h; sourceTree = "<group>"; };
 		E2ED891E1D9DB2EE0094214C /* NewChatMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewChatMessageModel.m; sourceTree = "<group>"; };
+		E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeRefresh.png"; sourceTree = "<group>"; };
+		E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeMenu.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1330,6 +1334,8 @@
 				E2D5675D1CDB85B80054FD3F /* icon-Mail-Unread.png */,
 				E2D567421CDB85B80054FD3F /* icon-Mail-Unread@2x.png */,
 				E2D5675A1CDB85B80054FD3F /* icon-Mail-Unread@3x.png */,
+				E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */,
+				E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */,
 				E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */,
 				E2D567241CDB85B80054FD3F /* indicator-CommentLeft@2x.png */,
 				E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */,
@@ -1915,6 +1921,7 @@
 				E2D567DA1CDB85B80054FD3F /* button-WebViewBack.png in Resources */,
 				283DF2CD18CA09EE00A344D2 /* note.caf in Resources */,
 				E2D5679E1CDB85B80054FD3F /* button-WebViewForward@2x.png in Resources */,
+				E2FB4035219E30A60037C7A7 /* icon-SwipeMenu.png in Resources */,
 				283DF2EE18CA09EE00A344D2 /* glass.caf in Resources */,
 				283DF2ED18CA09EE00A344D2 /* horn.caf in Resources */,
 				283DF2FD18CA09EE00A344D2 /* descent.caf in Resources */,
@@ -1948,6 +1955,7 @@
 				283DF2EC18CA09EE00A344D2 /* sci-fi.caf in Resources */,
 				283DF2D418CA09EE00A344D2 /* hello.caf in Resources */,
 				E21A0A8D1FC38E7E00CB8B9F /* button-Help@2x.png in Resources */,
+				E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */,
 				E2D567C41CDB85B80054FD3F /* icon-Mail-Unread.png in Resources */,
 				283DF30318CA09EE00A344D2 /* update.caf in Resources */,
 				283DF2D118CA09EE00A344D2 /* chord.caf in Resources */,

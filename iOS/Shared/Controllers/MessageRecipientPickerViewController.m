@@ -25,15 +25,15 @@
 
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
-@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
-@property (nonatomic) IBOutlet UISearchBar *searchBar;
-@property (nonatomic) IBOutlet UITableView *tableMessageRecipients;
+@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableMessageRecipients;
 
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) BOOL isLoaded;
 @property (nonatomic) NSArray *messageRecipients;
-@property (nonatomic, strong) UISearchController *searchController;
+@property (nonatomic) UISearchController *searchController;
 
 @end
 

@@ -11,6 +11,6 @@
 @interface SideNavigationCountCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *labelCounts;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintCountsWidth;
+@property (nonatomic) IBOutlet NSLayoutConstraint *constraintCountsWidth;
 
 @end

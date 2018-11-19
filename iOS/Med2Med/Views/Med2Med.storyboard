@@ -83,7 +83,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a hospital to get started." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bv5-9z-IsC">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="35.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.43137254899999999" green="0.43137254899999999" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -1994,8 +1994,8 @@
         <segue reference="GBe-0v-zRW"/>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="ojM-FY-erA"/>
-        <segue reference="HgO-po-FXF"/>
-        <segue reference="I95-64-Mdk"/>
+        <segue reference="FEU-cP-WQX"/>
+        <segue reference="6bW-Sj-6zP"/>
         <segue reference="10R-JR-NUE"/>
     </inferredMetricsTieBreakers>
 </document>

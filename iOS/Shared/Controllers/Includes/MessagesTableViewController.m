@@ -252,7 +252,7 @@
 #endif
 
 // Return sent messages from SentMessageModel delegate
-- (void)updateSentMessages:(NSMutableArray *)sentMessages
+- (void)updateSentMessages:(NSArray *)sentMessages
 {
 	[self updateMessages:sentMessages];
 }

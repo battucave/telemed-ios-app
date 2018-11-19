@@ -223,7 +223,7 @@
 }
 
 // Return hospitals from HospitalModel delegate
-- (void)updateHospitals:(NSMutableArray *)newHospitals
+- (void)updateHospitals:(NSArray *)hospitals
 {
 	// Filter and store only authenticated or requested hospitals
 	NSPredicate *predicate;
@@ -239,7 +239,7 @@
 		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin", @"Requested"];
 	}
 	
-	[self setHospitals:[[newHospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	[self setHospitals:[hospitals filteredArrayUsingPredicate:predicate]];
 	
 	self.isLoaded = YES;
 	

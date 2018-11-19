@@ -11,8 +11,8 @@
 @interface HelpUserGuideViewController ()
 
 @property (weak, nonatomic) IBOutlet UIWebView *webViewPDFViewer;
-@property (nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic) IBOutlet UILabel *labelLoading;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UILabel *labelLoading;
 
 @property (nonatomic) NSTimer *timerPDFBackgroundFix;
 

@@ -17,9 +17,10 @@
 @property (nonatomic) ArchivesPickerViewController *archivesPickerViewController;
 
 @property (weak, nonatomic) IBOutlet UILabel *labelResults;
-@property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTopSpace;
+@property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
+
+@property (nonatomic) IBOutlet NSLayoutConstraint *constraintLabelResultsBorderHeight;
 
 @property (nonatomic) NSInteger selectedAccountIndex;
 @property (nonatomic) NSString *selectedAccount;
@@ -34,14 +35,16 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If swipe message has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
+	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 11 (keep swipe message there as it will simply be hidden under the container view and we can still use the top border of it)
-		self.constraintTopSpace.constant = 10.0 + (1.0 / [UIScreen mainScreen].scale);
+		[self.viewSwipeMessage setHidden:YES];
 	}
 	
 	[super viewWillAppear:animated];
+	
+	// Adjust height of label results border to be 1px regardless of device scale
+	[self.constraintLabelResultsBorderHeight setConstant:1.0 / [UIScreen mainScreen].scale];
 }
 
 // Unwind segue from ArchivesPickerViewController

@@ -26,14 +26,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelUrgencyLevel;
 @property (weak, nonatomic) IBOutlet UISwitch *switchUrgencyLevel;
-@property (strong, nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
+@property (nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
 
-@property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;
-@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
+@property (nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields; // Must be a strong reference
+@property (nonatomic) IBOutletCollection(UITextField) NSArray *textFields; // Must be a strong reference
 
 @property (nonatomic) NSArray *accounts;
 @property (nonatomic) BOOL hasSubmitted;
-@property (nonatomic) NSMutableArray *hospitals;
+@property (nonatomic) NSArray *hospitals;
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL shouldInitializeCallbackData;
 @property (nonatomic) NSString *textUrgencyLevel;
@@ -493,12 +493,12 @@
 }
 
 // Return hospitals from HospitalModel delegate
-- (void)updateHospitals:(NSMutableArray *)newHospitals
+- (void)updateHospitals:(NSArray *)hospitals
 {
 	// Filter and store only authenticated hospitals
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
 	
-	[self setHospitals:[[newHospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	[self setHospitals:[hospitals filteredArrayUsingPredicate:predicate]];
 	
 	// If user has exactly one hospital, then set it as the selected hospital
 	if ([self.hospitals count] == 1) {

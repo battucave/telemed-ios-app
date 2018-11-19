@@ -19,10 +19,10 @@
 @property (nonatomic) ChatMessageModel *chatMessageModel;
 
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
-@property (nonatomic) IBOutlet UIBarButtonItem *barButtonDelete; // (Must be strong reference)
-@property (nonatomic) IBOutlet UIBarButtonItem *barButtonCompose; // (Must be strong reference)
-@property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // (Must be strong reference)
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTopSpace;
+@property (nonatomic) IBOutlet UIBarButtonItem *barButtonDelete; // Must be a strong reference
+@property (nonatomic) IBOutlet UIBarButtonItem *barButtonCompose; // Must be a strong reference
+@property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // Must be a strong reference
+@property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
 @property (nonatomic) NSArray *selectedChatMessages;
 @property (nonatomic) NSString *navigationBarTitle;
@@ -45,11 +45,10 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If swipe message has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
+	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:@"swipeMessageDisabled"])
 	{
-		// Change top layout constraint to 0 (keep swipe message there as it will simply be hidden under the container view)
-		self.constraintTopSpace.constant = 0;
+		[self.viewSwipeMessage setHidden:YES];
 	}
 	
 	[self toggleToolbarButtons:NO];
