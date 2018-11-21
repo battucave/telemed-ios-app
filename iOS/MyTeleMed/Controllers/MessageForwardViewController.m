@@ -74,7 +74,7 @@
 // Return pending from ForwardMessageModel delegate
 - (void)sendMessagePending
 {
-	// Go back to messages (assume success)
+	// Go back to message detail (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -120,13 +120,10 @@
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set message recipient type
-		[messageRecipientPickerViewController setMessageRecipientType:@"Forward"];
-		
-		// Set message
+		// Set message, message recipients, message recipient type, and any previously selected message recipients
 		[messageRecipientPickerViewController setMessage:self.message];
-		
-		// Set selected message recipients if previously set
+		[messageRecipientPickerViewController setMessageRecipientType:@"Forward"];
+		[messageRecipientPickerViewController setMessageRecipients:self.messageRecipients];
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 }

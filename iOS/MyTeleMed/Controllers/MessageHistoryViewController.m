@@ -141,6 +141,30 @@
 	});
 }
 
+// Go to MessageEscalateViewController (override method from MessageDetailParentViewController)
+- (void)showMessageEscalate
+{
+	NSLog(@"showMessageEscalateFromMessageHistory");
+	
+	[self performSegueWithIdentifier:@"showMessageEscalateFromMessageHistory" sender:self];
+}
+
+// Go to MessageForwardViewController (override method from MessageDetailParentViewController)
+- (void)showMessageForward
+{
+	NSLog(@"showMessageForwardFromMessageHistory");
+	
+	[self performSegueWithIdentifier:@"showMessageForwardFromMessageHistory" sender:self];
+}
+
+// Go to MessageRedirectViewController (override method from MessageDetailParentViewController)
+- (void)showMessageRedirect
+{
+	NSLog(@"showMessageRedirectFromMessageHistory");
+	
+	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageHistory" sender:self];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;

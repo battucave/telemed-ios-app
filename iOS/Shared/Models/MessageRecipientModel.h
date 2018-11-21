@@ -26,7 +26,7 @@
 @property (nonatomic) NSString *Type;
 
 - (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
-- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
+- (void)getMessageRecipientsForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback; // No longer used
 - (void)getMessageRecipientsForMessageID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback;
 #endif
 

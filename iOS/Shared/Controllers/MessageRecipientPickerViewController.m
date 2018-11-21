@@ -32,7 +32,6 @@
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) BOOL isLoaded;
-@property (nonatomic) NSArray *messageRecipients;
 @property (nonatomic) UISearchController *searchController;
 
 @end
@@ -201,12 +200,34 @@
 		// Load list of message recipients for forward message
 		else if ([self.messageRecipientType isEqualToString:@"Forward"])
 		{
-			[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:callback];
+			// Message recipients should always be pre-populated
+			if (self.messageRecipients)
+			{
+				self.isLoaded = YES;
+			}
+			// Load message recipients just in case they weren't pre-populated
+			else if (self.message)
+			{
+				[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:callback];
+			}
 		}
 		// Load list of message recipients for new message
-		else
+		else if ([self.messageRecipientType isEqualToString:@"New"])
 		{
 			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID withCallback:callback];
+		}
+		// Initialize for redirect messages
+		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
+		{
+			// Force single selection of recipients
+			[self.tableMessageRecipients setAllowsMultipleSelection:NO];
+			
+			// Disable next button and change its title
+			[self.navigationItem.rightBarButtonItem setEnabled:NO];
+			[self.navigationItem.rightBarButtonItem setTitle:@"Send"];
+			
+			// Message recipients will always be pre-populated for redirect message
+			self.isLoaded = YES;
 		}
 	#endif
 }
@@ -234,7 +255,7 @@
 	#endif
 }
 
-// MyTeleMed only - Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (MessageNew2TableViewController)
+// Unwind to previous controller (ChatMessageDetailViewController, MessageForwardViewController, or MessageNewViewController), send message (MessageRedirectTableViewController), or go to next controller (MessageNew2TableViewController)
 - (IBAction)saveMessageRecipients:(id)sender
 {
 	[self setHasSubmitted:YES];
@@ -285,6 +306,18 @@
 				
 				// Execute unwind segue
 				[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
+			}
+		}
+		// Send redirect message
+		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
+		{
+			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:)])
+			{
+				// Verify that at least one message recipient is selected
+				if ([self.selectedMessageRecipients count] > 0)
+				{
+					[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0]];
+				}
 			}
 		}
 		// Unwind segue to forward message or new message
@@ -440,6 +473,9 @@
 	
 	[self setFilteredMessageRecipients:[NSMutableArray arrayWithArray:[self.messageRecipients filteredArrayUsingPredicate:predicate]]];
 	
+	NSLog(@"MESSAGE RECIPIENTS: %lu", (unsigned long)[self.messageRecipients count]);
+	NSLog(@"FILTERED MESSAGE RECIPIENTS: %lu", (unsigned long)[self.filteredMessageRecipients count]);
+	
 	[self.tableMessageRecipients reloadData];
 }
 
@@ -529,7 +565,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Med2Med only - Reset selected message recipients
+	// Med2Med and message type Redirect only - Reset selected message recipients
 	if (! self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		[self.selectedMessageRecipients removeAllObjects];
@@ -566,14 +602,16 @@
 	// Add checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
+	// Med2Med - Enable next button if table allows multiple selection (not currently used)
+	// MyTeleMed - Enable send button if message recipient type is Redirect
+	if (self.navigationItem.rightBarButtonItem != nil)
+	{
+		[self.navigationItem.rightBarButtonItem setEnabled:YES];
+	}
+	
 	#ifdef MED2MED
-		// Re-enable next button (not currently used - only used if table allows multiple selection)
-		if (self.navigationItem.rightBarButtonItem != nil)
-		{
-			[self.navigationItem.rightBarButtonItem setEnabled:YES];
-		}
 		// Execute segue (only used if table is limited to single selection)
-		else
+		if (! self.navigationItem.rightBarButtonItem)
 		{
 			// Close the search results, then execute segue
 			if (self.searchController.active && self.definesPresentationContext)
@@ -642,13 +680,23 @@
 			[self.searchController setActive:NO];
 		}
 		
-		// Med2Med - Disable next button if no recipients still selected (not currently used - only used if table allows multiple selection)
-		#ifdef MED2MED
-			if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
-			{
-				[self.navigationItem.rightBarButtonItem setEnabled:NO];
-			}
-		#endif
+		if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
+		{
+			// Med2Med - Disable next button if no recipients selected and table allows multiple selection (not currently used)
+			#ifdef MED2MED
+				if (self.tableMessageRecipients.allowsMultipleSelection)
+				{
+					[self.navigationItem.rightBarButtonItem setEnabled:NO];
+				}
+			
+			// MyTeleMed - Disable send button if no recipients selected and message redirect type is Redirect
+			#else
+				if ([self.messageRecipientType isEqualToString:@"Redirect"])
+				{
+					[self.navigationItem.rightBarButtonItem setEnabled:NO];
+				}
+			#endif
+		}
 	}
 }
 
@@ -701,9 +749,9 @@
 
 #ifdef MYTELEMED
 // Return chat participants from ChatParticipantModel delegate
-- (void)updateChatParticipants:(NSMutableArray *)newChatParticipants
+- (void)updateChatParticipants:(NSArray *)chatParticipants
 {
-	[self setMessageRecipients:newChatParticipants];
+	[self setMessageRecipients:chatParticipants];
 	
 	self.isLoaded = YES;
 	

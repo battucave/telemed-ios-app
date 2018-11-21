@@ -20,7 +20,6 @@
 
 @property (nonatomic) NSMutableArray *filteredOnCallSlots;
 @property (nonatomic) BOOL isLoaded;
-@property (nonatomic) NSArray *onCallSlots;
 @property (nonatomic, strong) UISearchController *searchController;
 
 @end
@@ -102,49 +101,69 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableOnCallSlots setTableFooterView:[[UIView alloc] init]];
 	
-	// Initialize OnCallSlotModel
-	OnCallSlotModel *onCallSlotModel = [[OnCallSlotModel alloc] init];
-	
-	// Get list of on call slots
-	[onCallSlotModel setDelegate:self];
-	[onCallSlotModel getOnCallSlots:self.selectedAccount.ID];
-	
 	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
+	#ifdef MED2MED
+		// Initialize OnCallSlotModel
+		OnCallSlotModel *onCallSlotModel = [[OnCallSlotModel alloc] init];
+	
+		// Get list of on call slots
+		[onCallSlotModel setDelegate:self];
+		[onCallSlotModel getOnCallSlots:self.selectedAccount.ID];
+	
+		// Remove right bar button
+		[self.navigationItem setRightBarButtonItem:nil];
+	
+	#else
+		// On call slots will always be pre-populated for redirect message
+		self.isLoaded = YES;
+	#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
-	if ([self.delegate respondsToSelector:@selector(setFormValues:)])
-	{
-		[self.delegate setFormValues:self.formValues];
-	}
-	
-	// Return selected message recipients back to previous screen (only used if user returned to this screen from MessageRecipientPickerViewController)
-	if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
-	{
-		[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
-	}
-	
-	// Return selected on call slot back to previous screen
-	if ([self.delegate respondsToSelector:@selector(setSelectedOnCallSlot:)])
-	{
-		[self.delegate setSelectedOnCallSlot:self.selectedOnCallSlot];
-	}
-	
 	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	
+	#ifdef MED2MED
+		// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
+		if ([self.delegate respondsToSelector:@selector(setFormValues:)])
+		{
+			[self.delegate setFormValues:self.formValues];
+		}
+	
+		// Return selected message recipients back to previous screen (only used if user returned to this screen from MessageRecipientPickerViewController)
+		if ([self.delegate respondsToSelector:@selector(setSelectedMessageRecipients:)])
+		{
+			[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
+		}
+	
+		// Return selected on call slot back to previous screen
+		if ([self.delegate respondsToSelector:@selector(setSelectedOnCallSlot:)])
+		{
+			[self.delegate setSelectedOnCallSlot:self.selectedOnCallSlot];
+		}
+	#endif
 }
 
-// Go to next controller (MessageRecipientPickerViewController)
+// MyTeleMed only - Send message from MessageRedirectTableViewController
 - (IBAction)saveOnCallSlot:(id)sender
 {
-	NSLog(@"Save On Call Slot");
+	#ifdef MYTELEMED
+		if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToOnCallSlot:)])
+		{
+			// Verify that on call slot is selected
+			if (self.selectedOnCallSlot)
+			{
+				[self.delegate redirectMessageToOnCallSlot:self.selectedOnCallSlot];
+			}
+		}
+	#endif
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -215,29 +234,6 @@
 			});
 		}
 	}
-}
-
-// Return on call slots from OnCallSlotModel delegate
-- (void)updateOnCallSlots:(NSArray *)onCallSlots
-{
-	[self setOnCallSlots:onCallSlots];
-	
-	self.isLoaded = YES;
-	
-	// Reload table with updated data and scroll to any previously selected on call slot
-	[self.tableOnCallSlots reloadData];
-	[self scrollToSelectedOnCallSlot];
-}
-
-// Return error from OnCallSlotModel delegate
-- (void)updateOnCallSlotsError:(NSError *)error
-{
-	self.isLoaded = YES;
-	
-	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
 }
 
 // Delegate method for updating search results
@@ -363,7 +359,7 @@
 		// Set selected on call slot
 		[self setSelectedOnCallSlot:[self.filteredOnCallSlots objectAtIndex:indexPath.row]];
 	}
-	// Hospitals table
+	// On call slots table
 	else
 	{
 		// Set selected on call slot
@@ -376,19 +372,39 @@
 	// Add checkmark of selected on call slot
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
-	// Close the search results, then execute segue
-	if (self.searchController.active && self.definesPresentationContext)
-	{
-		[self dismissViewControllerAnimated:YES completion:^
+	#ifdef MED2MED
+		// Close the search results, then go to MessageRecipientPickerTableViewController
+		if (self.searchController.active && self.definesPresentationContext)
 		{
-			[self performSegueWithIdentifier:@"showMessageRecipientPicker" sender:self];
-		}];
-	}
-	// Execute segue
-	else
-	{
-		[self performSegueWithIdentifier:@"showMessageRecipientPicker" sender:self];
-	}
+			[self dismissViewControllerAnimated:YES completion:^
+			{
+				[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
+			}];
+		}
+		// Go to MessageRecipientPickerTableViewController
+		else
+		{
+			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
+		}
+	
+	#else
+		// Close the search results
+		if (self.searchController.active && self.definesPresentationContext)
+		{
+			[self dismissViewControllerAnimated:YES completion:nil];
+		}
+	
+		// If selected on call slot is the self on-call slot, then go to MessageRecipientPickerViewController
+		if (self.selectedOnCallSlot.SelectRecipient)
+		{
+			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
+		}
+		// Enable next button
+		else if (self.navigationItem.rightBarButtonItem != nil)
+		{
+			[self.navigationItem.rightBarButtonItem setEnabled:YES];
+		}
+	#endif
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -398,6 +414,14 @@
 	
 	// Remove checkmark of selected on call slot
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	
+	#ifdef MYTELEMED
+		// MyTeleMed - Disable send button if no on call slot selected
+		if (self.navigationItem.rightBarButtonItem != nil && ! self.selectedOnCallSlot)
+		{
+			[self.navigationItem.rightBarButtonItem setEnabled:NO];
+		}
+	#endif
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -409,23 +433,29 @@
 	}
 	
 	// Message recipient picker
-	if ([segue.identifier isEqualToString:@"showMessageRecipientPicker"])
+	if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromOnCallSlotPicker"])
 	{
-		NSLog(@"Show Message Recipients Picker");
-		
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Add on call slot id to form values
-		[self.formValues setValue:self.selectedOnCallSlot.ID forKey:@"OnCallSlotID"];
-		
-		[messageRecipientPickerViewController setDelegate:self];
-		[messageRecipientPickerViewController setFormValues:self.formValues];
-		[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
-		[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
 		
-		// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the MessageRecipientPickerViewController
-		[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
+		#ifdef MED2MED
+			// Add on call slot id to form values
+			[self.formValues setValue:self.selectedOnCallSlot.ID forKey:@"OnCallSlotID"];
+		
+			[messageRecipientPickerViewController setDelegate:self];
+			[messageRecipientPickerViewController setFormValues:self.formValues];
+			[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
+			[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
+		
+			// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the MessageRecipientPickerViewController
+			[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
+		
+		#elif defined MYTELEMED
+			[messageRecipientPickerViewController setDelegate:self.delegate];
+			[messageRecipientPickerViewController setMessageRecipients:self.messageRecipients];
+			[messageRecipientPickerViewController setMessageRecipientType:@"Redirect"];
+		#endif
 	}
 }
 
@@ -434,5 +464,33 @@
 	[super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - Med2Med
+
+#ifdef MED2MED
+// Return on call slots from OnCallSlotModel delegate
+- (void)updateOnCallSlots:(NSArray *)onCallSlots
+{
+	[self setOnCallSlots:onCallSlots];
+	
+	self.isLoaded = YES;
+	
+	// Reload table with updated data and scroll to any previously selected on call slot
+	[self.tableOnCallSlots reloadData];
+	[self scrollToSelectedOnCallSlot];
+}
+
+// Return error from OnCallSlotModel delegate
+- (void)updateOnCallSlotsError:(NSError *)error
+{
+	self.isLoaded = YES;
+	
+	// Show error message
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
+}
+#endif
 
 @end

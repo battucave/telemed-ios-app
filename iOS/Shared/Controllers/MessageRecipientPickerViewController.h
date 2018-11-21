@@ -13,17 +13,22 @@
 #import "AccountModel.h"
 #import "OnCallSlotModel.h"
 
+#ifdef MYTELEMED
+	#import "MessageRecipientModel.h"
+#endif
+
 @interface MessageRecipientPickerViewController : CoreViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
+
+@property (weak) id delegate;
 
 @property (nonatomic) AccountModel *selectedAccount;
 
-@property (nonatomic) NSString *messageRecipientType;
+@property (nonatomic) NSArray *messageRecipients;
+@property (nonatomic) NSString *messageRecipientType; // Chat, Forward, New, or Redirect
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
 
 #ifdef MED2MED
-	@property (weak) id delegate;
-
 	@property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
 
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
@@ -35,3 +40,13 @@
 #endif
 
 @end
+
+
+#ifdef MYTELEMED
+	@protocol MessageRedirectRecipientDelegate <NSObject>
+
+	@optional
+	- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient;
+
+	@end
+#endif

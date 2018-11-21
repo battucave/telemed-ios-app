@@ -15,4 +15,6 @@
 
 @property (nonatomic) id <MessageProtocol> message;
 
+@property (nonatomic) NSArray *messageRecipients;
+
 @end

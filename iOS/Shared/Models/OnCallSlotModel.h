@@ -10,16 +10,6 @@
 
 #import "Model.h"
 
-@protocol OnCallSlotDelegate <NSObject>
-
-@required
-- (void)updateOnCallSlots:(NSArray *)newOnCallSlots;
-
-@optional
-- (void)updateOnCallSlotsError:(NSError *)error;
-
-@end
-
 @interface OnCallSlotModel : Model
 
 @property (weak) id delegate;
@@ -31,5 +21,24 @@
 @property (nonatomic) NSString *Name;
 
 - (void)getOnCallSlots:(NSNumber *)accountID;
+
+
+#pragma mark - MyTeleMed
+
+#ifdef MYTELEMED
+@property (nonatomic) BOOL IsEscalationSlot;
+@property (nonatomic) BOOL SelectRecipient;
+#endif
+
+@end
+
+
+@protocol OnCallSlotDelegate <NSObject>
+
+@required
+- (void)updateOnCallSlots:(NSArray *)newOnCallSlots;
+
+@optional
+- (void)updateOnCallSlotsError:(NSError *)error;
 
 @end

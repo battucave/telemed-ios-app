@@ -8,14 +8,7 @@
 
 #import "MessageTeleMedComposeTableViewController.h"
 #import "ProfileProtocol.h"
-
-#ifdef MYTELEMED
-	#import "MyProfileModel.h"
-#endif
-
-#ifdef MED2MED
-	#import "UserProfileModel.h"
-#endif
+#import "MyProfileModel.h"
 
 @interface MessageTeleMedComposeTableViewController ()
 
@@ -49,19 +42,9 @@
 	}
 	
 	// Set user's email address
-	id <ProfileProtocol> profile;
+	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 	
-	#ifdef MYTELEMED
-		profile = [MyProfileModel sharedInstance];
-
-	#elif defined MED2MED
-		profile = [UserProfileModel sharedInstance];
-	#endif
-	
-	if (profile)
-	{
-		[self.textFieldSender setText:profile.Email];
-	}
+	[self.textFieldSender setText:profile.Email];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

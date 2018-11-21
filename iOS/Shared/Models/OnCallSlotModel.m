@@ -34,7 +34,7 @@
 			}];*/
 			
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateOnCallSlots:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateOnCallSlots:)])
 			{
 				[self.delegate updateOnCallSlots:[[parser onCallSlots] copy]];
 			}
@@ -45,7 +45,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"On Call Slots Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the On Call Slots.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateOnCallSlotsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateOnCallSlotsError:)])
 			{
 				[self.delegate updateOnCallSlotsError:error];
 			}
@@ -59,7 +59,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the On Call Slots." andTitle:@"On Call Slots Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateOnCallSlotsError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateOnCallSlotsError:)])
 		{
 			[self.delegate updateOnCallSlotsError:error];
 		}

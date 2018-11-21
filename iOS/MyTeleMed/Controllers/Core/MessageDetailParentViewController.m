@@ -7,10 +7,15 @@
 //
 
 #import "MessageDetailParentViewController.h"
+#import "ErrorAlertController.h"
+#import "MessageEscalateViewController.h"
 #import "MessageForwardViewController.h"
+#import "MessageRedirectTableViewController.h"
 #import "MessageTeleMedViewController.h"
 #import "CallModel.h"
 #import "MessageModel.h"
+#import "MessageRecipientModel.h"
+#import "MessageRedirectInfoModel.h"
 
 @interface MessageDetailParentViewController ()
 
@@ -63,10 +68,129 @@
 	[self setMessagePriority];
 }
 
+- (IBAction)archiveMessage:(id)sender
+{
+	// Don't do anything if message isn't set yet (opened via push notification)
+	if (! self.messageDeliveryID || ! self.message)
+	{
+		return;
+	}
+	
+	UIAlertController *archiveMessageAlertController = [UIAlertController alertControllerWithTitle:@"Archive Message" message:@"Selecting Continue will archive this message. Archived messages can be accessed from the Main Menu." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Archive"];
+	}];
+
+	[archiveMessageAlertController addAction:cancelAction];
+	[archiveMessageAlertController addAction:continueAction];
+
+	// PreferredAction only supported in 9.0+
+	if ([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[archiveMessageAlertController setPreferredAction:continueAction];
+	}
+
+	// Show alert
+	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
+}
+
+- (IBAction)forwardMessage:(id)sender
+{
+	// Don't do anything if message isn't set yet (opened via push notification) or does not have a message delivery id
+	if (! self.message)
+	{
+		return;
+	}
+	
+	// Sent messages
+	if ([self.messageType isEqualToString:@"Sent"])
+	{
+		// Reuse sent message recipients if they already exist
+		if ([self.sentMessageRecipients count] > 0)
+		{
+			[self showMessageForward];
+		}
+		else
+		{
+			// Initialize MessageRecipientModel
+			MessageRecipientModel *messageRecipientModel = [[MessageRecipientModel alloc] init];
+			
+			[messageRecipientModel getMessageRecipientsForMessageID:self.messageID withCallback:^void(BOOL success, NSArray *messageRecipients, NSError *error)
+			{
+				if (success)
+				{
+					// Store sent message recipients so they can be reused if user presses forward button again
+					[self setSentMessageRecipients:messageRecipients];
+					
+					// Go to ForwardMessageViewController
+					if ([messageRecipients count] > 0)
+					{
+						[self showMessageForward];
+					}
+					// Message cannot be forwarded
+					else
+					{
+						// Disable button
+						[self.buttonForward setEnabled:NO];
+						
+						// Notify user that message cannot be forwarded
+						[self showMessageCannotForwardError];
+					}
+				}
+				else
+				{
+					// Show error message only if device offline
+					if (error.code == NSURLErrorNotConnectedToInternet)
+					{
+						ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+						
+						[errorAlertController show:error];
+					}
+				}
+			}];
+		}
+	}
+	// Received messages
+	else if (self.messageDeliveryID)
+	{
+		// Reuse message redirect info if it already exists
+		if (self.messageRedirectInfo)
+		{
+			[self processMessageRedirectOptions:self.messageRedirectInfo];
+		}
+		// Fetch message redirect info
+		else
+		{
+			// Initialize MessageRedirectInfoModel
+			MessageRedirectInfoModel *messageRedirectInfoModel = [[MessageRedirectInfoModel alloc] init];
+			
+			[messageRedirectInfoModel getMessageRedirectInfoForMessageDeliveryID:self.messageDeliveryID withCallback:^(BOOL success, MessageRedirectInfoModel *messageRedirectInfo, NSError *error)
+			{
+				if (success)
+				{
+					// Store message redirect info so it can be reused if user presses forward button again
+					[self setMessageRedirectInfo:messageRedirectInfo];
+					
+					[self processMessageRedirectOptions:messageRedirectInfo];
+				}
+				// Show error
+				else
+				{
+					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					
+					[errorAlertController show:error];
+				}
+			}];
+		}
+	}
+}
+
 - (IBAction)returnCall:(id)sender
 {
 	// Don't do anything if message isn't set yet (opened via push notification)
-	if (! self.message)
+	if (! self.messageDeliveryID || ! self.message)
 	{
 		return;
 	}
@@ -77,13 +201,13 @@
 	{
 		[self setCallModel:[[CallModel alloc] init]];
 		[self.callModel setDelegate:self];
-		[self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"false"];
+		[self.callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
 	}];
 	UIAlertAction *returnRecordCallAction = [UIAlertAction actionWithTitle:@"Return & Record Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		[self setCallModel:[[CallModel alloc] init]];
 		[self.callModel setDelegate:self];
-		[self.callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"true"];
+		[self.callModel callSenderForMessage:self.messageDeliveryID recordCall:@"true"];
 	}];
 
 	[returnCallAlertController addAction:cancelAction];
@@ -100,32 +224,10 @@
 	[self presentViewController:returnCallAlertController animated:YES completion:nil];
 }
 
-- (IBAction)archiveMessage:(id)sender
+// Unwind segue from MessageRedirectTableViewController
+- (IBAction)unwindFromMessageRedirect:(UIStoryboardSegue *)segue
 {
-	// Don't do anything if message isn't set yet (opened via push notification)
-	if (! self.message)
-	{
-		return;
-	}
-	
-	UIAlertController *archiveMessageAlertController = [UIAlertController alertControllerWithTitle:@"Archive Message" message:@"Selecting Continue will archive this message. Archived messages can be accessed from the Main Menu." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Archive"];
-	}];
-
-	[archiveMessageAlertController addAction:cancelAction];
-	[archiveMessageAlertController addAction:continueAction];
-
-	// PreferredAction only supported in 9.0+
-	if ([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[archiveMessageAlertController setPreferredAction:continueAction];
-	}
-
-	// Show alert
-	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
+	NSLog(@"Unwind from Message Redirect");
 }
 
 /*/ Return success from CallTeleMedModel delegate (no longer used)
@@ -141,22 +243,6 @@
  
 	[errorAlertController show:error];
 }*/
-
-// Set message priority color (defaults to "Normal" green color)
-- (void)setMessagePriority
-{
-	if (self.message && [self.message respondsToSelector:@selector(Priority)])
-	{
-		if ([self.message.Priority isEqualToString:@"Priority"])
-		{
-			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
-		}
-		else if ([self.message.Priority isEqualToString:@"Stat"])
-		{
-			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
-		}
-	}
-}
 
 /*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
@@ -214,18 +300,208 @@
 	}
 }*/
 
+// Show error alert that message cannot be forwarded
+- (void)showMessageCannotForwardError
+{
+	// Notify user that message cannot be forwarded
+	UIAlertController *forwardMessageAlertController = [UIAlertController alertControllerWithTitle:@"Forward Message" message:@"This message cannot be forwarded." preferredStyle:UIAlertControllerStyleAlert];
+
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+
+	[forwardMessageAlertController addAction:okAction];
+
+	// PreferredAction only supported in 9.0+
+	if ([forwardMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[forwardMessageAlertController setPreferredAction:okAction];
+	}
+
+	// Show alert
+	[self presentViewController:forwardMessageAlertController animated:YES completion:nil];
+}
+
+// Process options for forwarding a copy, redirecting, and/or escalating a message. Either present an alert with possible options or go to relevant screen if only 1 option is available
+- (void)processMessageRedirectOptions:(MessageRedirectInfoModel *)messageRedirectInfo
+{
+	BOOL canEscalate = messageRedirectInfo.EscalationSlot && messageRedirectInfo.EscalationSlot.ID;
+	BOOL canForwardCopy = [messageRedirectInfo.ForwardRecipients count] > 0;
+	BOOL canRedirect = [messageRedirectInfo.RedirectRecipients count] > 0 || [messageRedirectInfo.RedirectSlots count] > 0;
+
+	UIAlertController *forwardMessageAlertController = [UIAlertController alertControllerWithTitle:@"Forward Message" message:@"How you would like to forward your message?" preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+
+	// Add forward a copy action if forward recipients exist
+	if (canForwardCopy)
+	{
+		// If more than one forwarding option exists, then add an action
+		if (canEscalate || canRedirect)
+		{
+			UIAlertAction *forwardCopyAction = [UIAlertAction actionWithTitle:@"Forward a Copy" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				[self showMessageForward];
+			}];
+			
+			[forwardMessageAlertController addAction:forwardCopyAction];
+		}
+		// If no other forwarding option exists, then go to ForwardMessageViewController
+		else
+		{
+			[self showMessageForward];
+			
+			return;
+		}
+	}
+
+	// Add redirect action if redirect recipients or redirect slots exist
+	if (canRedirect)
+	{
+		// If more than one forwarding option exists, then add an action
+		if (canEscalate || canForwardCopy)
+		{
+			UIAlertAction *redirectAction = [UIAlertAction actionWithTitle:@"Redirect" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				[self showMessageRedirect];
+			}];
+			
+			[forwardMessageAlertController addAction:redirectAction];
+		}
+		// If no other forwarding option exists, then go to RedirectMessageViewController
+		else
+		{
+			[self showMessageRedirect];
+			
+			return;
+		}
+	}
+
+	// Add escalate action if an escalation slot exists
+	if (canEscalate)
+	{
+		// If more than one forwarding option exists, then add an action
+		if (canForwardCopy || canRedirect)
+		{
+			UIAlertAction *escalateAction = [UIAlertAction actionWithTitle:@"Escalate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				[self showMessageEscalate];
+			}];
+			
+			[forwardMessageAlertController addAction:escalateAction];
+		}
+		// If no other forwarding option exists, then go to ForwardMessageViewController
+		else
+		{
+			[self showMessageEscalate];
+			
+			return;
+		}
+	}
+
+	if ([forwardMessageAlertController.actions count] > 0)
+	{
+		[forwardMessageAlertController addAction:cancelAction];
+		
+		// Show alert
+		[self presentViewController:forwardMessageAlertController animated:YES completion:nil];
+	}
+	// Message cannot be forwarded
+	else
+	{
+		// Disable button
+		[self.buttonForward setEnabled:NO];
+		
+		// Notify user that message cannot be forwarded
+		[self showMessageCannotForwardError];
+	}
+
+	
+}
+
+// Set message priority color (defaults to "Normal" green color)
+- (void)setMessagePriority
+{
+	if (self.message && [self.message respondsToSelector:@selector(Priority)])
+	{
+		if ([self.message.Priority isEqualToString:@"Priority"])
+		{
+			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+		}
+		else if ([self.message.Priority isEqualToString:@"Stat"])
+		{
+			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+		}
+	}
+}
+
+// Go to MessageEscalateViewController (triggered and handled by MessageDetailParentViewController)
+- (void)showMessageEscalate
+{
+	NSLog(@"showMessageEscalateFromMessageDetail");
+	
+	[self performSegueWithIdentifier:@"showMessageEscalateFromMessageDetail" sender:self];
+}
+
+// Go to MessageForwardViewController (triggered and handled by MessageDetailParentViewController)
+- (void)showMessageForward
+{
+	NSLog(@"showMessageForwardFromMessageDetail");
+	
+	[self performSegueWithIdentifier:@"showMessageForwardFromMessageDetail" sender:self];
+}
+
+// Go to MessageRedirectViewController (triggered and handled by MessageDetailParentViewController)
+- (void)showMessageRedirect
+{
+	NSLog(@"showMessageRedirectFromMessageDetail");
+	
+	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageDetail" sender:self];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])
+	// Go to MessageEscalateViewController
+	if ([segue.identifier isEqualToString:@"showMessageEscalateFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageEscalateFromMessageHistory"])
+	{
+		MessageEscalateViewController *messageEscalateViewController = segue.destinationViewController;
+		
+		// Set message and escalation slot
+		[messageEscalateViewController setMessage:self.message];
+		[messageEscalateViewController setSelectedOnCallSlot:self.messageRedirectInfo.EscalationSlot];
+	}
+	// Go to MessageForwardViewController
+	else if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])
 	{
 		MessageForwardViewController *messageForwardViewController = segue.destinationViewController;
 		
+		// Set message
 		[messageForwardViewController setMessage:self.message];
+		
+		// Set message recipients for received message
+		if ([self.messageRedirectInfo.ForwardRecipients count] > 0)
+		{
+			[messageForwardViewController setMessageRecipients:self.messageRedirectInfo.ForwardRecipients];
+		}
+		// Set message recipients for sent message
+		else if ([self.sentMessageRecipients count] > 0)
+		{
+			[messageForwardViewController setMessageRecipients:self.sentMessageRecipients];
+		}
 	}
+	// Go to MessageRedirectViewController
+	else if ([segue.identifier isEqualToString:@"showMessageRedirectFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageRedirectFromMessageHistory"])
+	{
+		MessageRedirectTableViewController *messageRedirectTableViewController = segue.destinationViewController;
+		
+		// Set message, message recipients, and on call slots
+		[messageRedirectTableViewController setMessage:self.message];
+		[messageRedirectTableViewController setMessageRecipients:self.messageRedirectInfo.RedirectRecipients];
+		[messageRedirectTableViewController setOnCallSlots:self.messageRedirectInfo.RedirectSlots];
+	}
+	// Go to MessageTeleMedViewController
 	else if ([segue.identifier isEqualToString:@"showMessageTeleMedFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageTeleMedFromMessageHistory"])
 	{
 		MessageTeleMedViewController *messageTeleMedViewController = segue.destinationViewController;
 		
+		// Set message
 		[messageTeleMedViewController setMessage:self.message];
 	}
 }

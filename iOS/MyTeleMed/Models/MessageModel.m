@@ -152,8 +152,14 @@
 	}];
 }
 
-- (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state
+- (void)modifyMessageState:(NSNumber *)messageDeliveryID state:(NSString *)state
 {
+	// Validate message delivery id
+	if (! messageDeliveryID)
+	{
+		return;
+	}
+	
 	// Validate message state
 	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
 	{
@@ -177,7 +183,7 @@
 	self.messageState = state;
 	
 	NSDictionary *parameters = @{
-		@"mdid"		: messageID,
+		@"mdid"		: messageDeliveryID,
 		@"method"	: state
 	};
 	
@@ -212,7 +218,7 @@
 					[self showError:error withCallback:^
 					{
 						// Include callback to retry the request
-						[self modifyMessageState:messageID state:state];
+						[self modifyMessageState:messageDeliveryID state:state];
 					}];
 				}
 			}
@@ -244,7 +250,7 @@
 				[self showError:error withCallback:^
 				{
 					// Include callback to retry the request
-					[self modifyMessageState:messageID state:state];
+					[self modifyMessageState:messageDeliveryID state:state];
 				}];
 			}
 		}];

@@ -37,7 +37,7 @@
 - (void)getActiveMessages;
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (void)getMessageByDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, MessageModel *message, NSError *error))callback;
-- (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state;
+- (void)modifyMessageState:(NSNumber *)messageDeliveryID state:(NSString *)state;
 - (void)modifyMultipleMessagesState:(NSArray *)messages state:(NSString *)state;
 
 

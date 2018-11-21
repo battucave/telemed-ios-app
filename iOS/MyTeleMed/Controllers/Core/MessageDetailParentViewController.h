@@ -11,6 +11,7 @@
 #import "CoreViewController.h"
 #import "MessageProtocol.h"
 #import "MessageModel.h"
+#import "MessageRedirectInfoModel.h"
 
 @interface MessageDetailParentViewController : CoreViewController
 
@@ -20,8 +21,11 @@
 @property (nonatomic) MessageModel *messageModel;
 @property (nonatomic) NSString *messageType; // Active, Archived, Sent
 
-@property (nonatomic) NSArray *messageEvents;
+
 @property (nonatomic) NSMutableArray *filteredMessageEvents;
+@property (nonatomic) NSArray *messageEvents;
+@property (nonatomic) MessageRedirectInfoModel *messageRedirectInfo;
+@property (nonatomic) NSArray *sentMessageRecipients;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonArchive;
 @property (weak, nonatomic) IBOutlet UIButton *buttonForward;
