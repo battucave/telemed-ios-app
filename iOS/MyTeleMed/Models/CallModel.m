@@ -54,8 +54,6 @@
 	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		NSLog(@"CallModel Success: %@", operation.response);
-		
 		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
 		// Successful post returns a 204 code with no response
@@ -133,17 +131,12 @@
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	NSLog(@"CallSenderForMessage");
-	NSLog(@"%@", parameters);
-	
 	// The web service method only returns a result after the phone call has been answered so increase timeout interval
 	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
 	// This web service method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		NSLog(@"CallModel Success: %@", operation.response);
-		
 		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
 		// Successful post returns a 204 code with no response

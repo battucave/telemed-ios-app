@@ -232,8 +232,6 @@
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:notificationSettings] forKey:notificationKey];
 			[settings synchronize];
 			
-			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], notificationSettings.Tone);
-			
 			// Priority message notification settings removed in version 3.85. If saving notification settings for normal messages, then also save them for priority messages
 			if ([name isEqualToString:@"normal"])
 			{

@@ -80,8 +80,8 @@
 		[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Archive"];
 	}];
 
-	[archiveMessageAlertController addAction:cancelAction];
 	[archiveMessageAlertController addAction:continueAction];
+	[archiveMessageAlertController addAction:cancelAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
@@ -166,9 +166,9 @@
 		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"true"];
 	}];
 
-	[returnCallAlertController addAction:cancelAction];
 	[returnCallAlertController addAction:returnCallAction];
 	[returnCallAlertController addAction:returnRecordCallAction];
+	[returnCallAlertController addAction:cancelAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])

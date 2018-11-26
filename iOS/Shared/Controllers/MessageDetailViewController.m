@@ -894,7 +894,8 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
+		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
 		
 		// Auto size table comments height to show all rows

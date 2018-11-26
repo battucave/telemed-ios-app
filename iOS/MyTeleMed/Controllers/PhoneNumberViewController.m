@@ -171,8 +171,8 @@
 					}];
 					UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
 				
-					[errorAlertController addAction:goBackAction];
 					[errorAlertController addAction:retryAction];
+					[errorAlertController addAction:goBackAction];
 				
 					// Show alert
 					[self presentViewController:errorAlertController animated:YES completion:nil];

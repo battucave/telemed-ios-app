@@ -56,7 +56,7 @@
 	}
 
 	// Show Alert
-	[self presentViewController:successAlertController animated:YES completion:nil];
+	[self.navigationController presentViewController:successAlertController animated:YES completion:nil];
 	// END TEMPORARY
 }
 
@@ -86,7 +86,7 @@
 	}
 
 	// Show Alert
-	[self presentViewController:successAlertController animated:YES completion:nil];
+	[self.navigationController presentViewController:successAlertController animated:YES completion:nil];
 	// END TEMPORARY
 }
 

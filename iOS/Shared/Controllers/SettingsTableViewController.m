@@ -92,8 +92,8 @@
 				[settings synchronize];
 			}];
 		
-			[updateTimeoutAlertController addAction:cancelAction];
 			[updateTimeoutAlertController addAction:confirmAction];
+			[updateTimeoutAlertController addAction:cancelAction];
 		
 			// PreferredAction only supported in 9.0+
 			if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])

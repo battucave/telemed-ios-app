@@ -14,7 +14,7 @@
 - (IBAction)callTeleMed:(id)sender
 {
 	UIAlertController *callTeleMedAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *closeAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		CallModel *callModel = [[CallModel alloc] init];
@@ -23,8 +23,8 @@
 		[callModel callTeleMed];
 	}];
 
-	[callTeleMedAlertController addAction:closeAction];
 	[callTeleMedAlertController addAction:callAction];
+	[callTeleMedAlertController addAction:cancelAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([callTeleMedAlertController respondsToSelector:@selector(setPreferredAction:)])

@@ -301,9 +301,9 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+		[emptyCell.textLabel setText:(self.isLoaded ? @"No messages available." : @"Loading...")];
 		
 		return emptyCell;
 	}
@@ -479,15 +479,16 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no filtered messages, then user clicked the no messages cell
+	return ([self.filteredMessages count] <= indexPath.row ? nil : indexPath);
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no filtered messages, then user clicked the no messages found cell so do nothing
-	if ([self.filteredMessages count] == 0)
-	{
-		return;
-	}
 	// If in editing mode, toggle the archive button in MessagesViewController
-	else if (self.editing)
+	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
 		{
@@ -540,10 +541,11 @@
 	if ([segue.identifier isEqualToString:@"showMessageDetail"])
 	{
 		MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
+		long selectedRow = [self.tableView indexPathForSelectedRow].row;
 		
-		if ([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
+		if ([self.filteredMessages count] > selectedRow)
 		{
-			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
+			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:selectedRow];
 			
 			[messageDetailViewController setMessage:message];
 		}

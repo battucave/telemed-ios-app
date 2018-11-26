@@ -230,9 +230,9 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+		[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
 		
 		return emptyCell;
 	}
@@ -337,15 +337,16 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no chat messages, then user clicked the no chat messages cell
+	return ([self.chatMessages count] <= indexPath.row ? nil : indexPath);
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no chat messages, then user clicked the no chat messages found cell so do nothing
-	if ([self.chatMessages count] == 0)
-	{
-		return;
-	}
 	// If in editing mode, toggle the delete button in chat MessagesViewController
-	else if (self.editing)
+	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
 		{
