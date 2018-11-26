@@ -292,13 +292,13 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		
 		// On call slots table
 		if ([self.onCallSlots count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No on call slots found." : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No on call slots available." : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -343,30 +343,38 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no on call slots, then user clicked the no on call slots cell
+	if ([self.onCallSlots count] <= indexPath.row)
+	{
+		return nil;
+	}
+	// If search is active and there are no filtered on call slots, then user clicked the no results cell
+	else if (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredOnCallSlots count] <= indexPath.row)
+	{
+		// Close search results
+		[self.searchController setActive:NO];
+	
+		// Scroll to selected on call slot (only if table is limited to single selection)
+		[self scrollToSelectedOnCallSlot];
+	
+		return nil;
+	}
+	
+	return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Search results table
+	// Set selected on call slot from search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no filtered on call slots, then user clicked "No results."
-		if ([self.filteredOnCallSlots count] == 0)
-		{
-			// Close search results (must execute before scrolling to selected on call slot)
-			[self.searchController setActive:NO];
-			
-			// Scroll to selected on call slot
-			[self scrollToSelectedOnCallSlot];
-			
-			return;
-		}
-		
-		// Set selected on call slot
 		[self setSelectedOnCallSlot:[self.filteredOnCallSlots objectAtIndex:indexPath.row]];
 	}
-	// Hospitals table
+	// Set selected on call slot from on call slots table
 	else
 	{
-		// Set selected on call slot
 		[self setSelectedOnCallSlot:[self.onCallSlots objectAtIndex:indexPath.row]];
 	}
 	

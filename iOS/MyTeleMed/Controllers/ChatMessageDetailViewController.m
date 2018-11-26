@@ -104,7 +104,7 @@
 	// Set max height of text view chat participants to half of screen size minus max height of text view chat message minus height of navigation bar
 	[self.textViewChatParticipants setMaxHeight:(([UIScreen mainScreen].bounds.size.height - 64.0f - self.textViewChatMessage.bounds.size.height) / 2.5)];
 	
-	// Add 10px to top and bottom of table comments
+	// Add 10px to top and bottom of table chat messages
 	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(10, 0, 10, 0)];
 	
 	// Add keyboard observers
@@ -536,8 +536,8 @@
 	// Commit row updates
 	[self.tableChatMessages endUpdates];
 	
-	// Auto size table comments height to show all rows
-	//[self autoSizeTableChatMessages];
+	// Auto size table chat messages height to show all rows
+	// [self autoSizeTableChatMessages];
 	
 	// Clear and resign focus from text view comment
 	[self.textViewChatMessage setText:@""];
@@ -577,7 +577,7 @@
 	}
 }
 
-// Scroll to bottom of table comments
+// Scroll to bottom of table chat messages
 - (void)scrollToBottom
 {
 	if ([self.chatMessages count] > 1)
@@ -699,8 +699,9 @@
 		// If loading chat messages, but there are no chat messages, show a message
 		if (self.conversationID)
 		{
-			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
+			[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
 		}
 		
 		// Auto size table chat messages height to show all rows

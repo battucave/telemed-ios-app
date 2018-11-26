@@ -98,8 +98,8 @@
 		[messageModel modifyMultipleMessagesState:self.selectedMessages state:@"Archive"];
 	}];
 
-	[archiveMessagesAlertController addAction:cancelAction];
 	[archiveMessagesAlertController addAction:continueAction];
+	[archiveMessagesAlertController addAction:cancelAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([archiveMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])

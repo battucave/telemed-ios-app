@@ -102,8 +102,8 @@
 		[self.chatMessageModel deleteMultipleChatMessages:self.selectedChatMessages];
 	}];
 
-	[deleteChatMessagesAlertController addAction:cancelAction];
 	[deleteChatMessagesAlertController addAction:continueAction];
+	[deleteChatMessagesAlertController addAction:cancelAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([deleteChatMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])

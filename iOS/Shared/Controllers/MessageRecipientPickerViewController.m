@@ -367,9 +367,9 @@
 }
 
 // Return message recipients from MessageRecipientModel delegate
-- (void)updateMessageRecipients:(NSArray *)newMessageRecipients
+- (void)updateMessageRecipients:(NSArray *)messageRecipients
 {
-	[self setMessageRecipients:newMessageRecipients];
+	[self setMessageRecipients:messageRecipients];
 	
 	// Delete any selected message recipients that do not exist in the message recipients list (because they belong to a different account)
 	NSMutableIndexSet *removeIndexes = [[NSMutableIndexSet alloc] init];
@@ -377,7 +377,7 @@
 	[self.selectedMessageRecipients enumerateObjectsUsingBlock:^(MessageRecipientModel *selectedMessageRecipient, NSUInteger index, BOOL * _Nonnull stop)
 	{
 		// Determine if selected message recipient exists in message recipients
-		NSUInteger messageRecipientIndex = [newMessageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient, NSUInteger foundIndex, BOOL *stop)
+		NSUInteger messageRecipientIndex = [messageRecipients indexOfObjectPassingTest:^BOOL(MessageRecipientModel *messageRecipient, NSUInteger foundIndex, BOOL *stop)
 		{
 			return [messageRecipient.ID isEqualToNumber:selectedMessageRecipient.ID];
 		}];
@@ -476,35 +476,36 @@
 {
 	static NSString *cellIdentifier = @"MessageRecipientCell";
 	UITableViewCell *cell = [self.tableMessageRecipients dequeueReusableCellWithIdentifier:cellIdentifier];
-	MessageRecipientModel *messageRecipient;
 	
-	// Set up the cell
-	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	if ([self.messageRecipients count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredMessageRecipients count] == 0))
+	{
+		[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[cell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+		
+		// On call slots table
+		if ([self.messageRecipients count] == 0)
+		{
+			[cell.textLabel setText:(self.isLoaded ? @"No recipients available." : @"Loading...")];
+		}
+		// Search results table
+		else
+		{
+			[cell.textLabel setText:@"No results."];
+		}
+		
+		return cell;
+	}
+	
+	MessageRecipientModel *messageRecipient;
 	
 	// Search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no filtered message recipients, create a not found message
-		if ([self.filteredMessageRecipients count] == 0)
-		{
-			[cell.textLabel setText:@"No results."];
-			
-			return cell;
-		}
-		
 		messageRecipient = [self.filteredMessageRecipients objectAtIndex:indexPath.row];
 	}
 	// Message recipients table
 	else
 	{
-		// If no message recipients, create a not found message
-		if ([self.messageRecipients count] == 0)
-		{
-			[cell.textLabel setText:(self.isLoaded ? @"No valid recipients available." : @"Loading...")];
-			
-			return cell;
-		}
-		
 		messageRecipient = [self.messageRecipients objectAtIndex:indexPath.row];
 	}
 	
@@ -513,6 +514,9 @@
 	{
 		return [messageRecipient2.ID isEqualToNumber:messageRecipient.ID];
 	}];
+	
+	// Set up the cell
+	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
 	// Set previously selected message recipients as selected and add checkmark
 	if (messageRecipientIndex != NSNotFound)
@@ -527,6 +531,28 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no message recipients, then user clicked the no message recipients cell
+	if ([self.messageRecipients count] <= indexPath.row)
+	{
+		return nil;
+	}
+	// If search is active and there are no filtered message recipients, then user clicked the no results cell
+	else if (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredMessageRecipients count] <= indexPath.row)
+	{
+		// Close search results
+		[self.searchController setActive:NO];
+	
+		// Scroll to selected message recipient (only if table is limited to single selection)
+		[self scrollToSelectedMessageRecipient];
+	
+		return nil;
+	}
+	
+	return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Med2Med only - Reset selected message recipients
@@ -535,28 +561,14 @@
 		[self.selectedMessageRecipients removeAllObjects];
 	}
 
-	// Search results table
+	// Add message recipient to selected message recipients from search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no filtered message recipients, then user clicked "No results."
-		if ([self.filteredMessageRecipients count] == 0)
-		{
-			// Close search results
-			[self.searchController setActive:NO];
-			
-			// Scroll to selected message recipient (only if table is limited to single selection)
-			[self scrollToSelectedMessageRecipient];
-			
-			return;
-		}
-		
-		// Add message recipient to selected message recipients
 		[self.selectedMessageRecipients addObject:(MessageRecipientModel *)[self.filteredMessageRecipients objectAtIndex:indexPath.row]];
 	}
-	// Message recipients table
+	// Add message recipient to selected message recipients from message recipients table
 	else
 	{
-		// Add message recipient to selected message recipients
 		[self.selectedMessageRecipients addObject:(MessageRecipientModel *)[self.messageRecipients objectAtIndex:indexPath.row]];
 	}
 	

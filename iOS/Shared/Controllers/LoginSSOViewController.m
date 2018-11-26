@@ -496,8 +496,8 @@
 		// Extract the headers
 		NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
 		
-		//NSLog(@"@@@ Response URL: %@", response.URL.absoluteString);
-		//NSLog(@"@@@ Response Headers: %@", headers);
+		// NSLog(@"Response URL: %@", response.URL.absoluteString);
+		// NSLog(@"Response Headers: %@", headers);
 		
 		// Get tokens from header
 		NSString *accessToken = [headers valueForKey:@"X-TeleMed-AccessToken"];

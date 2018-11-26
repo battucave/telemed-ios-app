@@ -384,13 +384,13 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		
 		// Accounts table
 		if ([self.accounts count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s found.", [self.textAccount lowercaseString]] : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s available.", [self.textAccount lowercaseString]] : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -401,6 +401,8 @@
 		return emptyCell;
 	}
 	
+	static NSString *cellIdentifier = @"AccountCell";
+	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	AccountModel *account;
 	
 	// Search results table
@@ -413,9 +415,6 @@
 	{
 		account = [self.accounts objectAtIndex:indexPath.row];
 	}
-	
-	static NSString *cellIdentifier = @"AccountCell";
-	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
@@ -454,30 +453,38 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no accounts, then user clicked the no accounts cell
+	if ([self.accounts count] <= indexPath.row)
+	{
+		return nil;
+	}
+	// If search is active and there are no filtered accounts, then user clicked the no results cell
+	else if (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] <= indexPath.row)
+	{
+		// Close search results
+		[self.searchController setActive:NO];
+	
+		// Scroll to selected account (only if table is limited to single selection)
+		[self scrollToSelectedAccount];
+	
+		return nil;
+	}
+	
+	return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Search results table
+	// Set selected account from search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no filtered accounts, then user clicked "No results."
-		if ([self.filteredAccounts count] == 0)
-		{
-			// Close search results (must execute before scrolling to selected account)
-			[self.searchController setActive:NO];
-			
-			// Scroll to selected account
-			[self scrollToSelectedAccount];
-			
-			return;
-		}
-		
-		// Set selected account
 		[self setSelectedAccount:[self.filteredAccounts objectAtIndex:indexPath.row]];
 	}
-	// Accounts table
+	// Set selected account from accounts table
 	else
 	{
-		// Set selected account
 		[self setSelectedAccount:[self.accounts objectAtIndex:indexPath.row]];
 	}
 	

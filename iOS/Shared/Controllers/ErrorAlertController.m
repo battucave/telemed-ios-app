@@ -110,8 +110,8 @@
 		});
 	}];
 	
-	[alertController addAction:cancelAction];
 	[alertController addAction:retryAction];
+	[alertController addAction:cancelAction];
 	
 	// PreferredAction only supported in 9.0+
 	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
