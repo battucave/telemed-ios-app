@@ -200,12 +200,12 @@
 		// Load list of message recipients for forward message
 		else if ([self.messageRecipientType isEqualToString:@"Forward"])
 		{
-			// Message recipients should always be pre-populated
+			// Message recipients should always be pre-populated for received message
 			if (self.messageRecipients)
 			{
 				self.isLoaded = YES;
 			}
-			// Load message recipients just in case they weren't pre-populated
+			// Load message recipients for sent message
 			else if (self.message)
 			{
 				[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:callback];
@@ -270,7 +270,7 @@
 			if ([self.selectedMessageRecipients count] > 1)
 			{
 				UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
-				UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+				UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 				{
 					// Disable group chat
 					self.isGroupChat = NO;
@@ -290,12 +290,6 @@
 				[groupChatAlertController addAction:noAction];
 				[groupChatAlertController addAction:yesAction];
 				
-				// PreferredAction only supported in 9.0+
-				if ([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
-				{
-					[groupChatAlertController setPreferredAction:yesAction];
-				}
-				
 				// Show alert
 				[self presentViewController:groupChatAlertController animated:YES completion:nil];
 			}
@@ -311,12 +305,28 @@
 		// Send redirect message
 		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
 		{
-			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:withChase:)])
 			{
 				// Verify that at least one message recipient is selected
 				if ([self.selectedMessageRecipients count] > 0)
 				{
-					[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0]];
+					UIAlertController *chaseMessageAlertController = [UIAlertController alertControllerWithTitle:@"Send Message" message:@"Would you like TeleMed to chase this message?" preferredStyle:UIAlertControllerStyleAlert];
+					UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+					UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No, Just Redirect" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+					{
+						[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0] withChase:NO];
+					}];
+					UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes, Chase Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+					{
+						[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0] withChase:YES];
+					}];
+					
+					[chaseMessageAlertController addAction:yesAction];
+					[chaseMessageAlertController addAction:noAction];
+					[chaseMessageAlertController addAction:cancelAction];
+					
+					// Show alert
+					[self presentViewController:chaseMessageAlertController animated:YES completion:nil];
 				}
 			}
 		}

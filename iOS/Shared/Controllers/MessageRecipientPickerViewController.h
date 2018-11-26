@@ -46,7 +46,7 @@
 	@protocol MessageRedirectRecipientDelegate <NSObject>
 
 	@optional
-	- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient;
+	- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient withChase:(BOOL)chase;
 
 	@end
 #endif

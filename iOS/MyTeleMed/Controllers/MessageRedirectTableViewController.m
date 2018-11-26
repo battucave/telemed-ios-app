@@ -60,14 +60,14 @@
 	// END TEMPORARY
 }
 
-- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient
+- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient withChase:(BOOL)chase
 {
-	NSLog(@"REDIRECT MESSAGE DELIVERY ID %@ TO RECIPIENT %@", self.message.MessageDeliveryID, messageRecipient.Name);
+	NSLog(@"REDIRECT MESSAGE DELIVERY ID %@ TO RECIPIENT %@ WITH CHASE %@", self.message.MessageDeliveryID, messageRecipient.Name, (chase ? @"Yes" : @"No"));
 	
 	/* RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
 	
 	[redirectMessageModel setDelegate:self];
-	[redirectMessageModel redirectMessage:self.message recipient:messageRecipient]; */
+	[redirectMessageModel redirectMessage:self.message recipient:messageRecipient withChase:chase]; */
 	
 	// TEMPORARY (remove when Redirect Message web service completed)
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Redirect Message Incomplete" message:@"Web services are incomplete for redirecting a message." preferredStyle:UIAlertControllerStyleAlert];
@@ -105,6 +105,22 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return 2;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// Hide redirect to on call slot cell if no slots available for redirect
+	if (indexPath.row == 0 && [self.onCallSlots count] == 0)
+	{
+		return 0;
+	}
+	// Hide redirect to recipient cell if no message recipients available for redirect
+	else if (indexPath.row == 1 && [self.messageRecipients count] == 0)
+	{
+		return 0;
+	}
+	
+	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

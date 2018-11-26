@@ -14,12 +14,9 @@
 #import "MessageTeleMedViewController.h"
 #import "CallModel.h"
 #import "MessageModel.h"
-#import "MessageRecipientModel.h"
 #import "MessageRedirectInfoModel.h"
 
 @interface MessageDetailParentViewController ()
-
-@property (nonatomic) CallModel *callModel;
 
 @end
 
@@ -98,7 +95,7 @@
 
 - (IBAction)forwardMessage:(id)sender
 {
-	// Don't do anything if message isn't set yet (opened via push notification) or does not have a message delivery id
+	// Don't do anything if message isn't set yet (opened via push notification)
 	if (! self.message)
 	{
 		return;
@@ -107,50 +104,7 @@
 	// Sent messages
 	if ([self.messageType isEqualToString:@"Sent"])
 	{
-		// Reuse sent message recipients if they already exist
-		if ([self.sentMessageRecipients count] > 0)
-		{
-			[self showMessageForward];
-		}
-		else
-		{
-			// Initialize MessageRecipientModel
-			MessageRecipientModel *messageRecipientModel = [[MessageRecipientModel alloc] init];
-			
-			[messageRecipientModel getMessageRecipientsForMessageID:self.messageID withCallback:^void(BOOL success, NSArray *messageRecipients, NSError *error)
-			{
-				if (success)
-				{
-					// Store sent message recipients so they can be reused if user presses forward button again
-					[self setSentMessageRecipients:messageRecipients];
-					
-					// Go to ForwardMessageViewController
-					if ([messageRecipients count] > 0)
-					{
-						[self showMessageForward];
-					}
-					// Message cannot be forwarded
-					else
-					{
-						// Disable button
-						[self.buttonForward setEnabled:NO];
-						
-						// Notify user that message cannot be forwarded
-						[self showMessageCannotForwardError];
-					}
-				}
-				else
-				{
-					// Show error message only if device offline
-					if (error.code == NSURLErrorNotConnectedToInternet)
-					{
-						ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-						
-						[errorAlertController show:error];
-					}
-				}
-			}];
-		}
+		[self showMessageForward];
 	}
 	// Received messages
 	else if (self.messageDeliveryID)
@@ -199,15 +153,17 @@
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *returnCallAction = [UIAlertAction actionWithTitle:@"Return Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		[self setCallModel:[[CallModel alloc] init]];
-		[self.callModel setDelegate:self];
-		[self.callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
+		CallModel *callModel = [[CallModel alloc] init];
+		
+		[callModel setDelegate:self];
+		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
 	}];
 	UIAlertAction *returnRecordCallAction = [UIAlertAction actionWithTitle:@"Return & Record Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		[self setCallModel:[[CallModel alloc] init]];
-		[self.callModel setDelegate:self];
-		[self.callModel callSenderForMessage:self.messageDeliveryID recordCall:@"true"];
+		CallModel *callModel = [[CallModel alloc] init];
+		
+		[callModel setDelegate:self];
+		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"true"];
 	}];
 
 	[returnCallAlertController addAction:cancelAction];
@@ -432,27 +388,21 @@
 	}
 }
 
-// Go to MessageEscalateViewController (triggered and handled by MessageDetailParentViewController)
+// Go to MessageEscalateViewController
 - (void)showMessageEscalate
 {
-	NSLog(@"showMessageEscalateFromMessageDetail");
-	
 	[self performSegueWithIdentifier:@"showMessageEscalateFromMessageDetail" sender:self];
 }
 
-// Go to MessageForwardViewController (triggered and handled by MessageDetailParentViewController)
+// Go to MessageForwardViewController
 - (void)showMessageForward
 {
-	NSLog(@"showMessageForwardFromMessageDetail");
-	
 	[self performSegueWithIdentifier:@"showMessageForwardFromMessageDetail" sender:self];
 }
 
-// Go to MessageRedirectViewController (triggered and handled by MessageDetailParentViewController)
+// Go to MessageRedirectViewController
 - (void)showMessageRedirect
 {
-	NSLog(@"showMessageRedirectFromMessageDetail");
-	
 	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageDetail" sender:self];
 }
 
@@ -479,11 +429,6 @@
 		if ([self.messageRedirectInfo.ForwardRecipients count] > 0)
 		{
 			[messageForwardViewController setMessageRecipients:self.messageRedirectInfo.ForwardRecipients];
-		}
-		// Set message recipients for sent message
-		else if ([self.sentMessageRecipients count] > 0)
-		{
-			[messageForwardViewController setMessageRecipients:self.sentMessageRecipients];
 		}
 	}
 	// Go to MessageRedirectViewController

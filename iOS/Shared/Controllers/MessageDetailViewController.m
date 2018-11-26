@@ -967,7 +967,6 @@
 		[messageHistoryViewController setMessageID:self.messageID];
 		[messageHistoryViewController setMessageType:self.messageType];
 		[messageHistoryViewController setMessageRedirectInfo:self.messageRedirectInfo];
-		[messageHistoryViewController setSentMessageRecipients:self.sentMessageRecipients];
 	}
 }
 #endif

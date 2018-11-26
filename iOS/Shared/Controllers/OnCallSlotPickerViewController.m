@@ -394,7 +394,7 @@
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
 	
-		// If selected on call slot is the self on-call slot, then go to MessageRecipientPickerViewController
+		// If selected on call slot is the self on call slot, then go to MessageRecipientPickerViewController
 		if (self.selectedOnCallSlot.SelectRecipient)
 		{
 			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
@@ -451,6 +451,7 @@
 			// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the MessageRecipientPickerViewController
 			[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 		
+		// Handle self on call slot which allows user to select a recipient
 		#elif defined MYTELEMED
 			[messageRecipientPickerViewController setDelegate:self.delegate];
 			[messageRecipientPickerViewController setMessageRecipients:self.messageRecipients];
