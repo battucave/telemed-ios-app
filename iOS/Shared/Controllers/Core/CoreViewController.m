@@ -59,8 +59,8 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// Show CDMA Voice Data after LoginSSO storyboard process has resolved if it hasn't already been disabled or hidden
-	if (! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:@"CDMAVoiceDataDisabled"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"])
+	// Show CDMAVoiceDataViewController after LoginSSO storyboard process has resolved if it hasn't already been shown or disabled
+	if (! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"] && ([settings boolForKey:@"showSprintVoiceDataWarning"] || [settings boolForKey:@"showVerizonVoiceDataWarning"]))
 	{
 		CDMAVoiceDataViewController *cdmaVoiceDataViewController = [[CDMAVoiceDataViewController alloc] initWithNibName:@"CDMAVoiceData" bundle:nil];
 		
