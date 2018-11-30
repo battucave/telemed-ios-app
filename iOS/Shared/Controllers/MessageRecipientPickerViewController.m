@@ -206,14 +206,11 @@
 		{
 			[self.chatParticipantModel getChatParticipants];
 		}
-		// Load list of message recipients for forward message
+		// Initialize for forward message
 		else if ([self.messageRecipientType isEqualToString:@"Forward"])
 		{
-			// Message recipients should always be pre-populated
-			if (self.messageRecipients)
-			{
-				self.isLoaded = YES;
-			}
+			// Message recipients will always be pre-populated
+			self.isLoaded = YES;
 		}
 		// Load list of message recipients for new message
 		else if ([self.messageRecipientType isEqualToString:@"New"])
@@ -230,7 +227,7 @@
 			[self.navigationItem.rightBarButtonItem setEnabled:NO];
 			[self.navigationItem.rightBarButtonItem setTitle:@"Send"];
 			
-			// Message recipients will always be pre-populated for redirect message
+			// Message recipients will always be pre-populated
 			self.isLoaded = YES;
 		}
 	#endif

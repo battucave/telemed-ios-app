@@ -86,4 +86,19 @@
 	}];
 }
 
+- (BOOL)canEscalate
+{
+	return self.EscalationSlot && self.EscalationSlot.ID;
+}
+
+- (BOOL)canForwardCopy
+{
+	return [self.ForwardRecipients count] > 0;
+}
+
+- (BOOL)canRedirect
+{
+	return [self.RedirectRecipients count] > 0 || [self.RedirectSlots count] > 0;
+}
+
 @end

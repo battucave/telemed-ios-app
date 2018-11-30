@@ -318,9 +318,9 @@
 // Process options for forwarding a copy, redirecting, and/or escalating a message. Either present an alert with possible options or go to relevant screen if only 1 option is available
 - (void)processMessageRedirectOptions:(MessageRedirectInfoModel *)messageRedirectInfo
 {
-	BOOL canEscalate = messageRedirectInfo.EscalationSlot && messageRedirectInfo.EscalationSlot.ID;
-	BOOL canForwardCopy = [messageRedirectInfo.ForwardRecipients count] > 0;
-	BOOL canRedirect = [messageRedirectInfo.RedirectRecipients count] > 0 || [messageRedirectInfo.RedirectSlots count] > 0;
+	BOOL canEscalate = [messageRedirectInfo canEscalate];
+	BOOL canForwardCopy = [messageRedirectInfo canForwardCopy];
+	BOOL canRedirect = [messageRedirectInfo canRedirect];
 
 	UIAlertController *forwardMessageAlertController = [UIAlertController alertControllerWithTitle:@"Forward Message" message:@"How you would like to forward your message?" preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];

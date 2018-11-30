@@ -21,4 +21,8 @@
 
 - (void)getMessageRedirectInfoForMessageDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, MessageRedirectInfoModel *messageRedirectInfo, NSError *error))callback;
 
+- (BOOL)canEscalate;
+- (BOOL)canForwardCopy;
+- (BOOL)canRedirect;
+
 @end
