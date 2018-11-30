@@ -24,7 +24,6 @@
 @property (nonatomic) AccountModel *selectedAccount;
 
 @property (nonatomic) NSArray *messageRecipients;
-@property (nonatomic) NSString *messageRecipientType; // Chat, Forward, New, or Redirect
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
 
@@ -34,9 +33,8 @@
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
 
 #else
-	@property (nonatomic) id <MessageProtocol> message;
-
 	@property (nonatomic) BOOL isGroupChat; // Only used for chat participants
+	@property (nonatomic) NSString *messageRecipientType; // Chat, Forward, New, or Redirect
 #endif
 
 @end

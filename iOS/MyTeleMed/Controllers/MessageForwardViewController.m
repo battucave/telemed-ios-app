@@ -120,8 +120,7 @@
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set message, message recipients, message recipient type, and any previously selected message recipients
-		[messageRecipientPickerViewController setMessage:self.message];
+		// Set message recipients, message recipient type, and any previously selected message recipients
 		[messageRecipientPickerViewController setMessageRecipientType:@"Forward"];
 		[messageRecipientPickerViewController setMessageRecipients:self.messageRecipients];
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];

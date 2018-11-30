@@ -74,8 +74,17 @@
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
-	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
 	[self.searchController.searchBar sizeToFit];
+	
+	// Initialize search bar placeholder for chat
+	if ([self.messageRecipientType isEqualToString:@"Chat"]) {
+		[self.searchController.searchBar setPlaceholder:@"Search Participants"];
+	}
+	// Initialize search bar placeholder for message
+	else
+	{
+		[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	}
 	
 	// iOS 11+ navigation bar has support for search controller
 	if (@available(iOS 11.0, *))
@@ -200,15 +209,10 @@
 		// Load list of message recipients for forward message
 		else if ([self.messageRecipientType isEqualToString:@"Forward"])
 		{
-			// Message recipients should always be pre-populated for received message
+			// Message recipients should always be pre-populated
 			if (self.messageRecipients)
 			{
 				self.isLoaded = YES;
-			}
-			// Load message recipients for sent message
-			else if (self.message)
-			{
-				[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:callback];
 			}
 		}
 		// Load list of message recipients for new message

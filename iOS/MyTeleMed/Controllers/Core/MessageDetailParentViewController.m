@@ -104,7 +104,46 @@
 	// Sent messages
 	if ([self.messageType isEqualToString:@"Sent"])
 	{
-		[self showMessageForward];
+		// Reuse sent message recipients if they already exist
+		if (self.sentMessageRecipients)
+		{
+			[self showMessageForward];
+		}
+		// Fetch sent message recipients
+		else
+		{
+			// Initialize MessageRecipientModel
+			MessageRecipientModel *messageRecipientModel = [[MessageRecipientModel alloc] init];
+			
+			[messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:^(BOOL success, NSArray *messageRecipients, NSError *error)
+			{
+				if (success) {
+					if ([messageRecipients count] > 0)
+					{
+						// Store sent message recipients so it can be reused if user presses forward button again
+						[self setSentMessageRecipients:messageRecipients];
+						
+						[self showMessageForward];
+					}
+					// Message cannot be forwarded
+					else
+					{
+						// Disable button
+						[self.buttonForward setEnabled:NO];
+						
+						// Notify user that message cannot be forwarded
+						[self showMessageCannotForwardError];
+					}
+				}
+				// Show error
+				else
+				{
+					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					
+					[errorAlertController show:error];
+				}
+			}];
+		}
 	}
 	// Received messages
 	else if (self.messageDeliveryID)
@@ -429,6 +468,11 @@
 		if ([self.messageRedirectInfo.ForwardRecipients count] > 0)
 		{
 			[messageForwardViewController setMessageRecipients:self.messageRedirectInfo.ForwardRecipients];
+		}
+		// Set message recipients for sent message
+		else if ([self.sentMessageRecipients count] > 0)
+		{
+			[messageForwardViewController setMessageRecipients:self.sentMessageRecipients];
 		}
 	}
 	// Go to MessageRedirectViewController

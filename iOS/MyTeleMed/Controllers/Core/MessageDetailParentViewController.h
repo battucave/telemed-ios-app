@@ -25,6 +25,7 @@
 @property (nonatomic) NSMutableArray *filteredMessageEvents;
 @property (nonatomic) NSArray *messageEvents;
 @property (nonatomic) MessageRedirectInfoModel *messageRedirectInfo;
+@property (nonatomic) NSArray *sentMessageRecipients;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonArchive;
 @property (weak, nonatomic) IBOutlet UIButton *buttonForward;
