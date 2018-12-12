@@ -6,8 +6,6 @@
 //  Copyright (c) 2016 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "CoreViewController.h"
 #import "AccountModel.h"
 

@@ -8,8 +8,6 @@
 
 // This file is exact duplicate of MyTeleMed's NewMessageModel.h
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 
 @interface NewMessageModel : Model

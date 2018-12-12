@@ -6,8 +6,6 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 
 @interface EmailTelemedModel : Model

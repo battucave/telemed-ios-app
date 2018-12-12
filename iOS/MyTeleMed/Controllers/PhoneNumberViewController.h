@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "CoreViewController.h"
 
 @interface PhoneNumberViewController : CoreViewController <UITextFieldDelegate>

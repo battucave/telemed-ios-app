@@ -6,8 +6,6 @@
 //  Copyright © 2018 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "CoreTableViewController.h"
 #import "MessageProtocol.h"
 #import "MessageRecipientModel.h"

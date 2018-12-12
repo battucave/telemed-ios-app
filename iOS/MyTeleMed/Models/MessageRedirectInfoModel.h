@@ -6,8 +6,6 @@
 //  Copyright (c) 2018 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 #import "OnCallSlotModel.h"
 

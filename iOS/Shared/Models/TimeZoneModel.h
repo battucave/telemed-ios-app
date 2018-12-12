@@ -6,8 +6,6 @@
 //  Copyright © 2018 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 
 @interface TimeZoneModel : Model
