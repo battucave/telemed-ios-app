@@ -13,8 +13,6 @@
 @interface EmailTelemedModel : Model
 
 @property (weak) id delegate;
-@property (nonatomic) BOOL Success;
-@property (nonatomic) NSString *Message;
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress;
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID;
@@ -25,8 +23,8 @@
 @protocol EmailTelemedDelegate <NSObject>
 
 @optional
-- (void)sendMessagePending;
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
+- (void)emailTeleMedMessagePending;
+- (void)emailTeleMedMessageSuccess;
+- (void)emailTeleMedMessageError:(NSError *)error;
 
 @end

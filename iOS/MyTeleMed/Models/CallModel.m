@@ -36,7 +36,7 @@
 		/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
 			[self.delegate callTeleMedError:error];
-		}*/
+		} */
 		
 		return;
 	}
@@ -80,7 +80,7 @@
 			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
-			}*/
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)

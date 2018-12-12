@@ -100,20 +100,20 @@
 }
 
 // Return pending from NewMessageModel delegate
-- (void)sendMessagePending
+- (void)sendNewMessagePending
 {
 	// Go back to MessagesViewController (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from NewMessageModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)sendNewMessageSuccess
 {
  
 }
 
 // Return error from NewMessageModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)sendNewMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
  

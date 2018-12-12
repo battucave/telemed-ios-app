@@ -72,21 +72,21 @@
 }
 
 // Return pending from ForwardMessageModel delegate
-- (void)sendMessagePending
+- (void)forwardMessagePending
 {
 	// Go back to message detail (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from ForwardMessageModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)forwardMessageSuccess
 {
 	// Go back to MessageDetailViewController
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // Return error from ForwardMessageModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)forwardMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	

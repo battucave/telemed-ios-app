@@ -25,11 +25,10 @@
 
 @property (nonatomic) NSArray *messageRecipients;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
+@property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
 
 
 #ifdef MED2MED
-	@property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
-
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
 
 #else
@@ -44,7 +43,7 @@
 	@protocol MessageRedirectRecipientDelegate <NSObject>
 
 	@optional
-	- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient withChase:(BOOL)chase;
+	- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot;
 
 	@end
 #endif

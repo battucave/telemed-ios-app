@@ -380,39 +380,51 @@
 	// Add checkmark of selected on call slot
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
+	// Define callback to execute either immediately or after search search results have closed
+	void (^callback)(void);
+	
 	#ifdef MED2MED
-		// Close the search results, then go to MessageRecipientPickerTableViewController
-		if (self.searchController.active && self.definesPresentationContext)
+		callback = ^
 		{
-			[self dismissViewControllerAnimated:YES completion:^
-			{
-				[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
-			}];
-		}
-		// Go to MessageRecipientPickerTableViewController
-		else
-		{
+			// Go to MessageRecipientPickerTableViewController
 			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
-		}
+		};
 	
 	#else
-		// Close the search results
-		if (self.searchController.active && self.definesPresentationContext)
+		callback = ^
 		{
-			[self dismissViewControllerAnimated:YES completion:nil];
-		}
-	
-		// If selected on call slot is the self on call slot, then go to MessageRecipientPickerViewController
-		if (self.selectedOnCallSlot.SelectRecipient)
-		{
-			[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
-		}
-		// Enable next button
-		else if (self.navigationItem.rightBarButtonItem != nil)
-		{
-			[self.navigationItem.rightBarButtonItem setEnabled:YES];
-		}
+			// If selected on call slot is the self on call slot, then go to MessageRecipientPickerViewController
+			if (self.selectedOnCallSlot.SelectRecipient)
+			{
+				if (self.navigationItem.rightBarButtonItem != nil)
+				{
+					[self.navigationItem.rightBarButtonItem setEnabled:NO];
+				}
+				
+				[self performSegueWithIdentifier:@"showMessageRecipientPickerFromOnCallSlotPicker" sender:self];
+			}
+			// Enable next button
+			else if (self.navigationItem.rightBarButtonItem != nil)
+			{
+				[self.navigationItem.rightBarButtonItem setEnabled:YES];
+			}
+		};
 	#endif
+	
+	// Close the search results, then execute the callback
+	if (self.searchController.active && self.definesPresentationContext)
+	{
+		[self dismissViewControllerAnimated:YES completion:^
+		{
+			callback();
+		}];
+	}
+	// Execute on call slot
+	else
+	{
+		callback();
+	}
+	
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -445,6 +457,7 @@
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
+		[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
 		
 		#ifdef MED2MED
@@ -454,7 +467,6 @@
 			[messageRecipientPickerViewController setDelegate:self];
 			[messageRecipientPickerViewController setFormValues:self.formValues];
 			[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
-			[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		
 			// If user returned back to this screen, then he/she may have already selected message recipients so pre-select them on the MessageRecipientPickerViewController
 			[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];

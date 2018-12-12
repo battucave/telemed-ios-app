@@ -16,19 +16,14 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *CurrentOncall;
+@property (nonatomic) NSString *CurrentOncallEntryTypeID; // MyTeleMed only
 @property (nonatomic) NSString *Description;
 @property (nonatomic) NSString *Header;
+@property (nonatomic) BOOL IsEscalationSlot; // MyTeleMed only
 @property (nonatomic) NSString *Name;
+@property (nonatomic) BOOL SelectRecipient; // MyTeleMed only
 
 - (void)getOnCallSlots:(NSNumber *)accountID;
-
-
-#pragma mark - MyTeleMed
-
-#ifdef MYTELEMED
-@property (nonatomic) BOOL IsEscalationSlot;
-@property (nonatomic) BOOL SelectRecipient;
-#endif
 
 @end
 

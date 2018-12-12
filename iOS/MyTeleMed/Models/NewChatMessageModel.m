@@ -34,7 +34,7 @@
 		if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			[self.delegate sendChatMessageError:error withPendingID:pendingID];
-		}*/
+		} */
 		
 		return;
 	}
@@ -69,7 +69,11 @@
 			"</Participants>"
 			"<Text>%@</Text>"
 		"</NewChatMsg>",
-		(isGroupChat ? @"true" : @"false"), xmlParticipants, [message escapeXML]];
+		
+		(isGroupChat ? @"true" : @"false"),
+		xmlParticipants,
+		[message escapeXML]
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	

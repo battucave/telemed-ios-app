@@ -182,7 +182,7 @@
 			}
 			@catch(NSException *exception)
 			{
-				NSLog(@"Key not found on Message Recipient: %@", elementName);
+				NSLog(@"Key not found on On Call Slot: %@", elementName);
 			}
 		}
 	}

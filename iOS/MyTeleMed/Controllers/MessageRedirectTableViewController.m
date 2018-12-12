@@ -10,6 +10,7 @@
 #import "MessageRecipientPickerViewController.h"
 #import "OnCallSlotPickerViewController.h"
 #import "MessageRecipientModel.h"
+#import "RedirectMessageModel.h"
 
 @interface MessageRedirectTableViewController ()
 
@@ -30,71 +31,29 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 }
 
+// Redirect message to an on call slot
 - (void)redirectMessageToOnCallSlot:(OnCallSlotModel *)onCallSlot
 {
-	NSLog(@"REDIRECT MESSAGE DELIVERY ID %@ TO ON CALL SLOT %@", self.message.MessageDeliveryID, onCallSlot.Name);
-	
-	/* RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
+	RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
 	
 	[redirectMessageModel setDelegate:self];
-	[redirectMessageModel redirectMessage:self.message onCallSlot:onCallSlot]; */
-	
-	// TEMPORARY (remove when Redirect Message web service completed)
-	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Redirect Message Incomplete" message:@"Web services are incomplete for redirecting a message." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		// Go back to message detail (assume success)
-		[self performSegueWithIdentifier:@"unwindFromMessageRedirect" sender:self];
-	}];
-
-	[successAlertController addAction:okAction];
-
-	// PreferredAction only supported in 9.0+
-	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[successAlertController setPreferredAction:okAction];
-	}
-
-	// Show Alert
-	[self.navigationController presentViewController:successAlertController animated:YES completion:nil];
-	// END TEMPORARY
+	[redirectMessageModel redirectMessage:self.message messageRecipient:nil onCallSlot:onCallSlot];
 }
 
-- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient withChase:(BOOL)chase
+// Redirect message to a message recipient or to an on call slot with SelectRecipient enabled
+- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot
 {
-	NSLog(@"REDIRECT MESSAGE DELIVERY ID %@ TO RECIPIENT %@ WITH CHASE %@", self.message.MessageDeliveryID, messageRecipient.Name, (chase ? @"Yes" : @"No"));
-	
-	/* RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
+	RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
 	
 	[redirectMessageModel setDelegate:self];
-	[redirectMessageModel redirectMessage:self.message recipient:messageRecipient withChase:chase]; */
-	
-	// TEMPORARY (remove when Redirect Message web service completed)
-	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Redirect Message Incomplete" message:@"Web services are incomplete for redirecting a message." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		// Go back to message detail (assume success)
-		[self performSegueWithIdentifier:@"unwindFromMessageRedirect" sender:self];
-	}];
-
-	[successAlertController addAction:okAction];
-
-	// PreferredAction only supported in 9.0+
-	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[successAlertController setPreferredAction:okAction];
-	}
-
-	// Show Alert
-	[self.navigationController presentViewController:successAlertController animated:YES completion:nil];
-	// END TEMPORARY
+	[redirectMessageModel redirectMessage:self.message messageRecipient:messageRecipient onCallSlot:onCallSlot];
 }
 
-// Return pending from ForwardMessageModel delegate
-- (void)sendMessagePending
+// Return pending from RedirectMessageModel delegate
+- (void)redirectMessagePending
 {
 	// Go back to message detail (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
+	[self performSegueWithIdentifier:@"unwindFromMessageRedirect" sender:self];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

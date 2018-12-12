@@ -42,7 +42,7 @@
 }
 
 // Return pending from EmailTeleMedModel delegate
-- (void)sendMessagePending
+- (void)emailTeleMedMessagePending
 {
 	// Go back to messages (assume success)
 	#ifdef MYTELEMED
@@ -51,7 +51,7 @@
 }
 
 // Return success from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)emailTeleMedMessageSuccess
 {
 	#ifdef MED2MED
 		// Reset message text
@@ -79,7 +79,7 @@
 }
 
 /*/ Return error from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)emailTeleMedMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	

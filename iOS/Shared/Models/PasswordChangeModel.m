@@ -45,7 +45,10 @@
 			"<NewPassword>%@</NewPassword>"
 			"<OldPassword>%@</OldPassword>"
 		"</PasswordChange>",
-		newPassword, oldPassword];
+		
+		newPassword,
+		oldPassword
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	

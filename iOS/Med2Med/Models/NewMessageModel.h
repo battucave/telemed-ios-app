@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-// NOTE: This file is exact duplicate of Med2Med's NewMessageModel.h
+// This file is exact duplicate of MyTeleMed's NewMessageModel.h
 
 #import <Foundation/Foundation.h>
 
@@ -15,8 +15,6 @@
 @interface NewMessageModel : Model
 
 @property (weak) id delegate;
-@property (nonatomic) BOOL Success;
-@property (nonatomic) NSString *Message;
 
 // Header files are shared by all targets so have to include the method signatures used by both MyTeleMed and Med2Med.
 
@@ -34,8 +32,8 @@
 @protocol NewMessageDelegate <NSObject>
 
 @optional
-- (void)sendMessagePending;
-- (void)sendMessageSuccess;
-- (void)sendMessageError:(NSError *)error;
+- (void)sendNewMessagePending;
+- (void)sendNewMessageSuccess;
+- (void)sendNewMessageError:(NSError *)error;
 
 @end

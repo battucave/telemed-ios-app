@@ -306,12 +306,13 @@
 		// Send redirect message
 		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
 		{
-			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:withChase:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:onCallSlot:)])
 			{
 				// Verify that at least one message recipient is selected
 				if ([self.selectedMessageRecipients count] > 0)
 				{
-					UIAlertController *chaseMessageAlertController = [UIAlertController alertControllerWithTitle:@"Send Message" message:@"Would you like TeleMed to chase this message?" preferredStyle:UIAlertControllerStyleAlert];
+					// Initial requirements called for user to be given option to chase the message, but this was later removed
+					/* UIAlertController *chaseMessageAlertController = [UIAlertController alertControllerWithTitle:@"Send Message" message:@"Would you like TeleMed to chase this message?" preferredStyle:UIAlertControllerStyleAlert];
 					UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 					UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No, Just Redirect" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 					{
@@ -327,7 +328,9 @@
 					[chaseMessageAlertController addAction:cancelAction];
 					
 					// Show alert
-					[self presentViewController:chaseMessageAlertController animated:YES completion:nil];
+					[self presentViewController:chaseMessageAlertController animated:YES completion:nil]; */
+					
+					[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0] onCallSlot:self.selectedOnCallSlot];
 				}
 			}
 		}

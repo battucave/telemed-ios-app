@@ -70,7 +70,7 @@
 			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
-			}*/
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
