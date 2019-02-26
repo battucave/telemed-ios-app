@@ -13,7 +13,7 @@
 @property (weak) id delegate;
 
 - (void)callTeleMed;
-- (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall;
+- (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall; // NOTE: recordCall option is no longer used
 
 @end
 

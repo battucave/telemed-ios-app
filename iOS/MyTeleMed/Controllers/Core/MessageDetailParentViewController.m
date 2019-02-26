@@ -188,35 +188,16 @@
 		return;
 	}
 	
-	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. There will be a brief hold while connecting. There is a fee for recording." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *returnCallAction = [UIAlertAction actionWithTitle:@"Return Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		CallModel *callModel = [[CallModel alloc] init];
-		
-		[callModel setDelegate:self];
-		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
-	}];
-	UIAlertAction *returnRecordCallAction = [UIAlertAction actionWithTitle:@"Return & Record Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		CallModel *callModel = [[CallModel alloc] init];
-		
-		[callModel setDelegate:self];
-		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"true"];
-	}];
-
-	[returnCallAlertController addAction:returnCallAction];
-	[returnCallAlertController addAction:returnRecordCallAction];
-	[returnCallAlertController addAction:cancelAction];
-
-	// PreferredAction only supported in 9.0+
-	if ([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[returnCallAlertController setPreferredAction:returnCallAction];
-	}
-
-	// Show alert
-	[self presentViewController:returnCallAlertController animated:YES completion:nil];
+	// NOTE: Return call recording options removed in commit "Remove the Return Call popup since all calls are recorded making the choice irrelevant" (3/01/2019)
+	
+	// Disable return call button
+	[self.buttonReturnCall setEnabled:NO];
+	
+	// Request a call from the server
+	CallModel *callModel = [[CallModel alloc] init];
+	
+	[callModel setDelegate:self];
+	[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
 }
 
 // Unwind segue from MessageRedirectTableViewController
@@ -225,13 +206,37 @@
 	NSLog(@"Unwind from Message Redirect");
 }
 
-/*/ Return success from CallTeleMedModel delegate (no longer used)
+// Return pending from CallTeleMedModel delegate
+- (void)callSenderPending
+{
+	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. Please wait while we return your call." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	
+	[returnCallAlertController addAction:okAction];
+	
+	// PreferredAction only supported in 9.0+
+	if ([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[returnCallAlertController setPreferredAction:okAction];
+	}
+
+	// Show alert
+	[self presentViewController:returnCallAlertController animated:YES completion:nil];
+}
+
+// Return success from CallTeleMedModel delegate
 - (void)callSenderSuccess
 {
 	NSLog(@"Call Message Sender request sent successfully");
+	
+	// Re-enable the return call button after a short delay
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
+	{
+		[self.buttonReturnCall setEnabled:YES];
+	});
 }
 
-// Return error from CallTeleMedModel delegate (no longer used)
+/*/ Return error from CallTeleMedModel delegate (no longer used)
 - (void)callSenderError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];

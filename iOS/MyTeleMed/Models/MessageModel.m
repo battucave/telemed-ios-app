@@ -391,7 +391,7 @@
 				[self modifyMultipleMessagesState:failedMessages state:state];
 			}];
 		}
-		// If request was not cancelled, then handle success via delegate (still being used)
+		// If request was not cancelled, then handle success via delegate
 		else if (! self.queueCancelled && self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
 		{
 			[self.delegate modifyMultipleMessagesStateSuccess:state];

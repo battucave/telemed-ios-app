@@ -117,14 +117,27 @@
 
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	// Phone number is not available when on simulator or debugging and will cause crash so skip calling the sender. (This should only happen when in debug mode; never for an actual user.)
+	if (! registeredDeviceModel.PhoneNumber)
+	{
+		NSLog(@"Skip Call Sender when on Simulator or Debugging because Phone Number is not available.");
+		
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Return Call Error", NSLocalizedFailureReasonErrorKey, @"A valid Phone Number is not available on this device.", NSLocalizedDescriptionKey, nil]];
+		
+		// Show error
+		[self showError:error];
+		
+		return;
+	}
+	
 	// Show activity indicator
 	[self showActivityIndicator];
 	
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-		
 	NSDictionary *parameters = @{
 		@"mdid"			: messageID,
 		@"recordCall"	: recordCall,
@@ -142,7 +155,7 @@
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate (not currently used)
+			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderSuccess)])
 			{
 				[self.delegate callSenderSuccess];
