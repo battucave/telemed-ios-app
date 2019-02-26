@@ -18,19 +18,44 @@
 
 - (void)escalateMessage:(id <MessageProtocol>)message
 {
+	[self escalateMessage:message withMessageRecipient:nil];
+}
+
+- (void)escalateMessage:(id <MessageProtocol>)message withMessageRecipient:(MessageRecipientModel *)messageRecipient
+{
 	// Show activity indicator
 	[self showActivityIndicator];
 	
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
+	NSString *xmlMessageRecipient = @"";
+	
+	// Add message recipient to xml if it exists
+	if (messageRecipient)
+	{
+		xmlMessageRecipient = [NSString stringWithFormat:
+			@"<RedirectRecipient>"
+				"<ID>%@</ID>"
+				"<Name>%@</Name>"
+				"<Type>%@</Type>"
+			"</RedirectRecipient>",
+			
+			messageRecipient.ID,
+			messageRecipient.Name,
+			messageRecipient.Type
+		];
+	}
+	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<MessageRedirectionRequest xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<DeliveryID>%@</DeliveryID>"
+			"%@"
 			"<UseSlotEscalation>true</UseSlotEscalation>"
 		"</MessageRedirectionRequest>",
 		
-		message.MessageDeliveryID
+		message.MessageDeliveryID,
+		xmlMessageRecipient
 	];
 	
 	NSLog(@"XML Body: %@", xmlBody);

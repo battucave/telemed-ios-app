@@ -217,8 +217,8 @@
 		{
 			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID withCallback:callback];
 		}
-		// Initialize for redirect messages
-		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
+		// Initialize for escalate or redirect message
+		else if ([self.messageRecipientType isEqualToString:@"Escalate"] || [self.messageRecipientType isEqualToString:@"Redirect"])
 		{
 			// Force single selection of recipients
 			[self.tableMessageRecipients setAllowsMultipleSelection:NO];
@@ -256,7 +256,7 @@
 	#endif
 }
 
-// Unwind to previous controller (ChatMessageDetailViewController, MessageForwardViewController, or MessageNewViewController), send message (MessageRedirectTableViewController), or go to next controller (MessageNew2TableViewController)
+// Unwind to previous controller (ChatMessageDetailViewController, MessageForwardViewController, or MessageNewViewController), send message (MessageEscalateTableViewController or MessageRedirectTableViewController), or go to next controller (MessageNew2TableViewController)
 - (IBAction)saveMessageRecipients:(id)sender
 {
 	[self setHasSubmitted:YES];
@@ -303,7 +303,19 @@
 				[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
 			}
 		}
-		// Send redirect message
+		// Escalate message
+		else if ([self.messageRecipientType isEqualToString:@"Escalate"])
+		{
+			if (self.delegate && [self.delegate respondsToSelector:@selector(escalateMessageWithRecipient:)])
+			{
+				// Verify that at least one message recipient is selected
+				if ([self.selectedMessageRecipients count] > 0)
+				{
+					[self.delegate escalateMessageWithRecipient:[self.selectedMessageRecipients objectAtIndex:0]];
+				}
+			}
+		}
+		// Redirect message
 		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
 		{
 			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:onCallSlot:)])
@@ -602,7 +614,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Med2Med and message type Redirect only - Reset selected message recipients
+	// Reset selected message recipients (only applies to Med2Med, message type Escalate, and message type Redirect)
 	if (! self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		[self.selectedMessageRecipients removeAllObjects];
@@ -626,7 +638,7 @@
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
 	// Med2Med - Enable next button if table allows multiple selection (not currently used)
-	// MyTeleMed - Enable send button if message recipient type is Redirect
+	// MyTeleMed - Enable send button if message recipient type is Escalate or Redirect
 	if (self.navigationItem.rightBarButtonItem != nil)
 	{
 		[self.navigationItem.rightBarButtonItem setEnabled:YES];
@@ -712,9 +724,9 @@
 					[self.navigationItem.rightBarButtonItem setEnabled:NO];
 				}
 			
-			// MyTeleMed - Disable send button if no recipients selected and message redirect type is Redirect
+			// MyTeleMed - Disable send button if no recipients selected and message redirect type is Escalate or Redirect
 			#else
-				if ([self.messageRecipientType isEqualToString:@"Redirect"])
+				if ([self.messageRecipientType isEqualToString:@"Escalate"] || [self.messageRecipientType isEqualToString:@"Redirect"])
 				{
 					[self.navigationItem.rightBarButtonItem setEnabled:NO];
 				}

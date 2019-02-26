@@ -8,12 +8,14 @@
 
 #import "Model.h"
 #import "MessageProtocol.h"
+#import "MessageRecipientModel.h"
 
 @interface EscalateMessageModel : Model
 
 @property (weak) id delegate;
 
 - (void)escalateMessage:(id <MessageProtocol>)message;
+- (void)escalateMessage:(id <MessageProtocol>)message withMessageRecipient:(MessageRecipientModel *)messageRecipient;
 
 @end
 

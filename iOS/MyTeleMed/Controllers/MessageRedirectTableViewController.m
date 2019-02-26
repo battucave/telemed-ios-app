@@ -31,7 +31,7 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 }
 
-// Redirect message to an on call slot
+// Redirect message to an on call slot (called from OnCallSlotPickerViewController)
 - (void)redirectMessageToOnCallSlot:(OnCallSlotModel *)onCallSlot
 {
 	RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
@@ -40,7 +40,7 @@
 	[redirectMessageModel redirectMessage:self.message messageRecipient:nil onCallSlot:onCallSlot];
 }
 
-// Redirect message to a message recipient or to an on call slot with SelectRecipient enabled
+// Redirect message to a message recipient or to an on call slot with SelectRecipient enabled (called from MessageRecipientPickerViewController)
 - (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot
 {
 	RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];

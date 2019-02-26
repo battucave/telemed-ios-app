@@ -41,6 +41,7 @@
 	@protocol MessageRedirectRecipientDelegate <NSObject>
 
 	@optional
+	- (void)escalateMessageWithRecipient:(MessageRecipientModel *)messageRecipient;
 	- (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot;
 
 	@end

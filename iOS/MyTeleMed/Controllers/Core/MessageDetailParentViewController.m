@@ -200,6 +200,12 @@
 	[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
 }
 
+// Unwind segue from MessageEscalateTableViewController
+- (IBAction)unwindFromMessageEscalate:(UIStoryboardSegue *)segue
+{
+	NSLog(@"Unwind from Message Escalate");
+}
+
 // Unwind segue from MessageRedirectTableViewController
 - (IBAction)unwindFromMessageRedirect:(UIStoryboardSegue *)segue
 {
@@ -387,7 +393,7 @@
 			
 			[forwardMessageAlertController addAction:escalateAction];
 		}
-		// If no other forwarding option exists, then go to ForwardMessageViewController
+		// If no other forwarding option exists, then go to EscalateMessageViewController
 		else
 		{
 			[self showMessageEscalate];
@@ -460,6 +466,12 @@
 		// Set message and escalation slot
 		[messageEscalateViewController setMessage:self.message];
 		[messageEscalateViewController setSelectedOnCallSlot:self.messageRedirectInfo.EscalationSlot];
+		
+		// If escalation slot requires recipient selection, then set message recipients
+		if (self.messageRedirectInfo.EscalationSlot.SelectRecipient)
+		{
+			[messageEscalateViewController setMessageRecipients:self.messageRedirectInfo.RedirectRecipients];
+		}
 	}
 	// Go to MessageForwardViewController
 	else if ([segue.identifier isEqualToString:@"showMessageForwardFromMessageDetail"] || [segue.identifier isEqualToString:@"showMessageForwardFromMessageHistory"])

@@ -4940,9 +4940,12 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                     <connections>
                         <outlet property="labelEscalationSlotCurrentOnCall" destination="uId-mg-r8Y" id="EeT-Ij-1lc"/>
                         <outlet property="labelEscalationSlotName" destination="82n-kC-noS" id="Up2-Kl-p3K"/>
+                        <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromMessageEscalate" id="0aA-SF-8qs"/>
+                        <segue destination="s8Y-Ot-ekY" kind="unwind" identifier="unwindFromMessageEscalate" unwindAction="unwindFromMessageEscalate:" id="YwZ-Uw-BBh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KCe-8v-Ade" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="s8Y-Ot-ekY" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4168.8000000000002" y="107.49625187406298"/>
         </scene>
@@ -5050,7 +5053,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="kvn-1A-BPM" kind="unwind" identifier="unwindFromMessageRedirect" unwindAction="unwindFromMessageRedirect:" id="Dtk-la-dkL"/>
+                        <segue destination="kvn-1A-BPM" kind="unwind" identifier="unwindToMessageDetailFromMessageRedirect" unwindAction="unwindFromMessageRedirect:" id="Dtk-la-dkL"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOy-w9-Lx9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5223,7 +5226,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="E1e-BY-bXG"/>
         <segue reference="VXf-fn-O9m"/>
         <segue reference="1fs-hi-JGd"/>
-        <segue reference="BhK-Le-o3I"/>
+        <segue reference="0aA-SF-8qs"/>
         <segue reference="dmg-yj-Han"/>
         <segue reference="FA7-fW-yLW"/>
     </inferredMetricsTieBreakers>

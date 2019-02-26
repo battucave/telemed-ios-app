@@ -13,6 +13,7 @@
 @interface MessageEscalateViewController : CoreViewController
 
 @property (nonatomic) id <MessageProtocol> message;
+@property (nonatomic) NSArray *messageRecipients;
 @property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
 
 @end
