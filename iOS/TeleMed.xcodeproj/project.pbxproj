@@ -171,8 +171,7 @@
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
-		E24E99C321C0703200FA2734 /* EscalateMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E99C221C0703200FA2734 /* EscalateMessageModel.m */; };
-		E24E99C621C0704100FA2734 /* RedirectMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E99C521C0704100FA2734 /* RedirectMessageModel.m */; };
+		E24E99C621C0704100FA2734 /* MessageRedirectRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E99C521C0704100FA2734 /* MessageRedirectRequestModel.m */; };
 		E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85131B14D09400AD50C6 /* GenericErrorXMLParser.m */; };
 		E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
 		E250369D1FBB88F400099C7E /* CoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66441CE1428300953EFA /* CoreViewController.m */; };
@@ -648,10 +647,8 @@
 		E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordChangeModel.m; sourceTree = "<group>"; };
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
-		E24E99C121C0703200FA2734 /* EscalateMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EscalateMessageModel.h; sourceTree = "<group>"; };
-		E24E99C221C0703200FA2734 /* EscalateMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EscalateMessageModel.m; sourceTree = "<group>"; };
-		E24E99C421C0704100FA2734 /* RedirectMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedirectMessageModel.h; sourceTree = "<group>"; };
-		E24E99C521C0704100FA2734 /* RedirectMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RedirectMessageModel.m; sourceTree = "<group>"; };
+		E24E99C421C0704100FA2734 /* MessageRedirectRequestModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageRedirectRequestModel.h; sourceTree = "<group>"; };
+		E24E99C521C0704100FA2734 /* MessageRedirectRequestModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectRequestModel.m; sourceTree = "<group>"; };
 		E25037B71FBB88F400099C7E /* M2M Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "M2M Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E254E3761FE2FDD400B3014F /* NewMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageModel.m; sourceTree = "<group>"; };
 		E254E3771FE2FDD700B3014F /* NewMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageModel.h; sourceTree = "<group>"; };
@@ -1622,8 +1619,6 @@
 				E27B84F01B14CF8000AD50C6 /* CommentModel.m */,
 				E2C9FE041CD9251D00B64D88 /* EmailTelemedModel.h */,
 				E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */,
-				E24E99C121C0703200FA2734 /* EscalateMessageModel.h */,
-				E24E99C221C0703200FA2734 /* EscalateMessageModel.m */,
 				E27B84F21B14CF8F00AD50C6 /* ForwardMessageModel.h */,
 				E27B84F31B14CF8F00AD50C6 /* ForwardMessageModel.m */,
 				E27B84F51B14CFAA00AD50C6 /* MessageEventModel.h */,
@@ -1632,6 +1627,8 @@
 				E27B84F91B14CFB700AD50C6 /* MessageModel.m */,
 				E2EE44432196099500FD61C0 /* MessageRedirectInfoModel.h */,
 				E2EE44422196099400FD61C0 /* MessageRedirectInfoModel.m */,
+				E24E99C421C0704100FA2734 /* MessageRedirectRequestModel.h */,
+				E24E99C521C0704100FA2734 /* MessageRedirectRequestModel.m */,
 				E27B84FB1B14CFC100AD50C6 /* MyProfileModel.h */,
 				E27B84FC1B14CFC100AD50C6 /* MyProfileModel.m */,
 				E27B84FE1B14CFCB00AD50C6 /* MyStatusModel.h */,
@@ -1644,8 +1641,6 @@
 				E27B85081B14D01C00AD50C6 /* NotificationSettingModel.m */,
 				E24D45091E89800900B36DD6 /* PreferredAccountModel.h */,
 				E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */,
-				E24E99C421C0704100FA2734 /* RedirectMessageModel.h */,
-				E24E99C521C0704100FA2734 /* RedirectMessageModel.m */,
 				E27B850A1B14D02A00AD50C6 /* RegisteredDeviceModel.h */,
 				E27B850B1B14D02A00AD50C6 /* RegisteredDeviceModel.m */,
 			);
@@ -2307,7 +2302,7 @@
 				E27B850F1B14D03500AD50C6 /* ScreenshotAlertModel.m in Sources */,
 				28CCCD5017F517A50093CEE2 /* AppDelegate.m in Sources */,
 				E27B84EE1B14CF7400AD50C6 /* CallModel.m in Sources */,
-				E24E99C621C0704100FA2734 /* RedirectMessageModel.m in Sources */,
+				E24E99C621C0704100FA2734 /* MessageRedirectRequestModel.m in Sources */,
 				E211D5981FBF571B00263497 /* MessageEventCell.m in Sources */,
 				E272B8861B0D30B900A7154B /* SSOProviderViewController.m in Sources */,
 				E2EE4446219621F500FD61C0 /* OnCallSlotModel.m in Sources */,
@@ -2341,7 +2336,6 @@
 				E27B84F71B14CFAA00AD50C6 /* MessageEventModel.m in Sources */,
 				E2CDEFAB1D25753400728F1A /* ChatMessageModel.m in Sources */,
 				28EAB9EA194B585100903772 /* HelpViewController.m in Sources */,
-				E24E99C321C0703200FA2734 /* EscalateMessageModel.m in Sources */,
 				E27B85371B14D12900AD50C6 /* MyStatusXMLParser.m in Sources */,
 				E27B84E81B14B96A00AD50C6 /* AuthenticationModel.m in Sources */,
 				28661E1918353B630071FADF /* RevealViewController.m in Sources */,
@@ -2496,6 +2490,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -2528,6 +2523,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -2559,6 +2555,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -2590,6 +2587,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
@@ -2622,6 +2620,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
@@ -2653,6 +2652,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
@@ -2706,7 +2706,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					BETA,
-					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
+					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;

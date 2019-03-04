@@ -10,7 +10,7 @@
 #import "MessageRecipientPickerViewController.h"
 #import "OnCallSlotPickerViewController.h"
 #import "MessageRecipientModel.h"
-#import "RedirectMessageModel.h"
+#import "MessageRedirectRequestModel.h"
 
 @interface MessageRedirectTableViewController ()
 
@@ -34,22 +34,22 @@
 // Redirect message to an on call slot (called from OnCallSlotPickerViewController)
 - (void)redirectMessageToOnCallSlot:(OnCallSlotModel *)onCallSlot
 {
-	RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
+	MessageRedirectRequestModel *messageRedirectRequestModel = [[MessageRedirectRequestModel alloc] init];
 	
-	[redirectMessageModel setDelegate:self];
-	[redirectMessageModel redirectMessage:self.message messageRecipient:nil onCallSlot:onCallSlot];
+	[messageRedirectRequestModel setDelegate:self];
+	[messageRedirectRequestModel redirectMessage:self.message messageRecipient:nil onCallSlot:onCallSlot];
 }
 
 // Redirect message to a message recipient or to an on call slot with SelectRecipient enabled (called from MessageRecipientPickerViewController)
 - (void)redirectMessageToRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot
 {
-	RedirectMessageModel *redirectMessageModel = [[RedirectMessageModel alloc] init];
+	MessageRedirectRequestModel *messageRedirectRequestModel = [[MessageRedirectRequestModel alloc] init];
 	
-	[redirectMessageModel setDelegate:self];
-	[redirectMessageModel redirectMessage:self.message messageRecipient:messageRecipient onCallSlot:onCallSlot];
+	[messageRedirectRequestModel setDelegate:self];
+	[messageRedirectRequestModel redirectMessage:self.message messageRecipient:messageRecipient onCallSlot:onCallSlot];
 }
 
-// Return pending from RedirectMessageModel delegate
+// Return pending from MessageRedirectRequestModel delegate
 - (void)redirectMessagePending
 {
 	// Go back to message detail (assume success)

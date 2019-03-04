@@ -8,8 +8,8 @@
 
 #import "MessageEscalateViewController.h"
 #import "MessageRecipientPickerViewController.h"
-#import "EscalateMessageModel.h"
 #import "MessageRecipientModel.h"
+#import "MessageRedirectRequestModel.h"
 
 @interface MessageEscalateViewController ()
 
@@ -50,24 +50,24 @@
 	// Otherwise, escalate the message
 	else
 	{
-		EscalateMessageModel *escalateMessageModel = [[EscalateMessageModel alloc] init];
+		MessageRedirectRequestModel *messageRedirectRequestModel = [[MessageRedirectRequestModel alloc] init];
 		
-		[escalateMessageModel setDelegate:self];
-		[escalateMessageModel escalateMessage:self.message];
+		[messageRedirectRequestModel setDelegate:self];
+		[messageRedirectRequestModel escalateMessage:self.message];
 	}
 }
 
 // Escalate message to escalation slot with recipient selection (SelectRecipient is enabled) (called from MessageRecipientPickerViewController)
 - (void)escalateMessageWithRecipient:(MessageRecipientModel *)messageRecipient
 {
-	EscalateMessageModel *escalateMessageModel = [[EscalateMessageModel alloc] init];
+	MessageRedirectRequestModel *messageRedirectRequestModel = [[MessageRedirectRequestModel alloc] init];
 
-	[escalateMessageModel setDelegate:self];
-	[escalateMessageModel escalateMessage:self.message withMessageRecipient:messageRecipient];
+	[messageRedirectRequestModel setDelegate:self];
+	[messageRedirectRequestModel escalateMessage:self.message withMessageRecipient:messageRecipient];
 }
 
-// Return pending from EscalateMessageModel delegate
-- (void)escalateMessagePending
+// Return pending from MessageRedirectRequestModel delegate
+- (void)redirectMessagePending
 {
 	// Go back to message detail (assume success)
 	[self performSegueWithIdentifier:@"unwindFromMessageEscalate" sender:self];

@@ -1,5 +1,5 @@
 //
-//  RedirectMessageModel.h
+//  MessageRedirectRequestModel.h
 //  MyTeleMed
 //
 //  Created by Shane Goodwin on 12/11/18.
@@ -11,16 +11,18 @@
 #import "MessageRecipientModel.h"
 #import "OnCallSlotModel.h"
 
-@interface RedirectMessageModel : Model
+@interface MessageRedirectRequestModel : Model
 
 @property (weak) id delegate;
 
+- (void)escalateMessage:(id <MessageProtocol>)message;
+- (void)escalateMessage:(id <MessageProtocol>)message withMessageRecipient:(MessageRecipientModel *)messageRecipient;
 - (void)redirectMessage:(id <MessageProtocol>)message messageRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot;
 
 @end
 
 
-@protocol RedirectMessageDelegate <NSObject>
+@protocol MessageRedirectRequestDelegate <NSObject>
 
 @optional
 - (void)redirectMessagePending;

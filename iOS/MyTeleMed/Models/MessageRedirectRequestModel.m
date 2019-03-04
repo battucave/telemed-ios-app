@@ -1,20 +1,30 @@
 //
-//  RedirectMessageModel.m
+//  MessageRedirectRequestModel.m
 //  MyTeleMed
 //
 //  Created by Shane Goodwin on 12/11/18.
 //  Copyright © 2018 SolutionBuilt. All rights reserved.
 //
 
-#import "RedirectMessageModel.h"
+#import "MessageRedirectRequestModel.h"
 
-@interface RedirectMessageModel ()
+@interface MessageRedirectRequestModel ()
 
 @property BOOL pendingComplete;
 
 @end
 
-@implementation RedirectMessageModel
+@implementation MessageRedirectRequestModel
+
+- (void)escalateMessage:(id <MessageProtocol>)message
+{
+	[self escalateMessage:message withMessageRecipient:nil];
+}
+
+- (void)escalateMessage:(id <MessageProtocol>)message withMessageRecipient:(MessageRecipientModel *)messageRecipient
+{
+	[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:nil useSlotEscalation:YES];
+}
 
 - (void)redirectMessage:(id <MessageProtocol>)message messageRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot
 {
@@ -28,6 +38,14 @@
 		
 		return;
 	}
+	
+	[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot useSlotEscalation:NO];
+}
+
+- (void)redirectMessage:(id <MessageProtocol>)message messageRecipient:(MessageRecipientModel *)messageRecipient onCallSlot:(OnCallSlotModel *)onCallSlot useSlotEscalation:(BOOL)useSlotEscalation
+{
+	NSString *errorMessage = [NSString stringWithFormat:@"There was a problem %@ your Message.", (useSlotEscalation ? @"escalating" : @"redirecting")];
+	NSString *errorTitle = [NSString stringWithFormat:@"%@ Message Error", (useSlotEscalation ? @"Escalate" : @"Redirect")];
 	
 	// Show activity indicator
 	[self showActivityIndicator];
@@ -84,11 +102,13 @@
 			"<DeliveryID>%@</DeliveryID>"
 			"%@"
 			"%@"
+			"<UseSlotEscalation>%@</UseSlotEscalation>"
 		"</MessageRedirectionRequest>",
 		
 		message.MessageDeliveryID,
 		xmlMessageRecipient,
-		xmlOnCallSlot
+		xmlOnCallSlot,
+		useSlotEscalation ? @"true" : @"false"
 	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
@@ -108,13 +128,13 @@
 		}
 		else
 		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Redirect Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem redirecting your Message.", NSLocalizedDescriptionKey, nil]];
+			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:errorTitle, NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
 			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
-				[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot];
+				[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot useSlotEscalation:useSlotEscalation];
 			}];
 			
 			// Handle error via delegate
@@ -126,13 +146,13 @@
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
-		NSLog(@"RedirectMessageModel Error: %@", error);
+		NSLog(@"MessageRedirectRequestModel Error: %@", error);
 		
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
-		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem redirecting your Message." andTitle:@"Redirect Message Error"];
+		error = [self buildError:error usingData:operation.responseData withGenericMessage:errorMessage andTitle:errorTitle];
 		
 		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
 		[self hideActivityIndicator:^
@@ -148,7 +168,7 @@
 			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
-				[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot];
+				[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot useSlotEscalation:useSlotEscalation];
 			}];
 		}];
 	}];

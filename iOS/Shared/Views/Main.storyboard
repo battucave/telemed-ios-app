@@ -4957,11 +4957,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                         <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="TqU-sH-RRl">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="TqU-sH-RRl">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="76.5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MR8-TQ-HCn">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MR8-TQ-HCn">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-ChaseOn.png" translatesAutoresizingMaskIntoConstraints="NO" id="MeC-rv-JP9">
@@ -4971,7 +4971,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                 <constraint firstAttribute="height" constant="24" id="zBK-zz-gQR"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Redirect this message to either a slot or recipient. This message will be reassigned to your selection and chased by TeleMed." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UvG-py-VFE">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Redirect this message to either a slot or a recipient. This message will be reassigned to your selection and chased by TeleMed." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UvG-py-VFE">
                                             <rect key="frame" x="53" y="13" width="312" height="50.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="l5S-ik-wl8"/>
@@ -5053,7 +5053,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="kvn-1A-BPM" kind="unwind" identifier="unwindToMessageDetailFromMessageRedirect" unwindAction="unwindFromMessageRedirect:" id="Dtk-la-dkL"/>
+                        <segue destination="kvn-1A-BPM" kind="unwind" identifier="unwindFromMessageRedirect" unwindAction="unwindFromMessageRedirect:" id="Dtk-la-dkL"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOy-w9-Lx9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5226,7 +5226,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="E1e-BY-bXG"/>
         <segue reference="VXf-fn-O9m"/>
         <segue reference="1fs-hi-JGd"/>
-        <segue reference="0aA-SF-8qs"/>
+        <segue reference="BhK-Le-o3I"/>
         <segue reference="dmg-yj-Han"/>
         <segue reference="FA7-fW-yLW"/>
     </inferredMetricsTieBreakers>
