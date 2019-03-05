@@ -44,13 +44,11 @@
 	}
 	failure:^(__unused AFHTTPRequestOperation *operation, NSError *error)
 	{
-		NSLog(@"MessageRecipientModel Error: %@", error);
-		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Message Recipients." andTitle:@"Message Recipients Error"];
 		
 		// Handle error via callback
-			callback(NO, nil, error);
+		callback(NO, nil, error);
 	}];
 }
 

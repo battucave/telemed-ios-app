@@ -172,8 +172,6 @@
 	// Save group chat setting
 	[self setIsGroupChat:messageRecipientPickerViewController.isGroupChat];
 	
-	NSLog(@"Is Group Chat: %@", (self.isGroupChat ? @"Yes" : @"No"));
-	
 	// Update text view chat participants with chat participant name(s)
 	[self setChatParticipantNames:self.selectedChatParticipants expanded:NO];
 	
@@ -773,6 +771,7 @@
 		
 		// Set message recipient type
 		[messageRecipientPickerViewController setMessageRecipientType:@"Chat"];
+		[messageRecipientPickerViewController setTitle:@"Choose Participants"];
 		
 		// Set selected message recipients if previously set
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedChatParticipants mutableCopy]];

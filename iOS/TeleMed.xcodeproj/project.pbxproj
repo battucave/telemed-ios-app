@@ -125,7 +125,6 @@
 		E21EC5D11CE37C880027AA14 /* AccountPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */; };
 		E22C7B222093801B005CFA4A /* TeleMedApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD96F7208FB3440012B1DB /* TeleMedApplication.m */; };
 		E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28CCCD8417F5185B0093CEE2 /* SideNavigationViewController.m */; };
-		E22EF0761FD74BC700A2E6F6 /* MessageTeleMedComposeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D57F1FBF571B00263497 /* MessageTeleMedComposeTableViewController.m */; };
 		E22EF0781FD89BC100A2E6F6 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58F1FBF571B00263497 /* MessageCell.m */; };
 		E22EF0791FD89BC100A2E6F6 /* MessagesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58C1FBF571B00263497 /* MessagesTableViewController.m */; };
 		E22EF07A1FD89D9C00A2E6F6 /* SentMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */; };
@@ -172,6 +171,7 @@
 		E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45041E8948E700B36DD6 /* SettingsPasswordTableViewController.m */; };
 		E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */; };
 		E24D450B1E89800900B36DD6 /* PreferredAccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */; };
+		E24E99C621C0704100FA2734 /* MessageRedirectRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E99C521C0704100FA2734 /* MessageRedirectRequestModel.m */; };
 		E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85131B14D09400AD50C6 /* GenericErrorXMLParser.m */; };
 		E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
 		E250369D1FBB88F400099C7E /* CoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66441CE1428300953EFA /* CoreViewController.m */; };
@@ -193,7 +193,6 @@
 		E25036D91FBB88F400099C7E /* AuthenticationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */; };
 		E25036DB1FBB88F400099C7E /* RevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661E1618353B630071FADF /* RevealViewController.m */; };
 		E25036E41FBB88F400099C7E /* HelpUserGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28990CEA194F3A7E009BA9E0 /* HelpUserGuideViewController.m */; };
-		E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB641B3471C00024D970 /* AuthenticationHTTPSessionManager.m */; };
 		E25036F41FBB88F400099C7E /* SSOProviderXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB5B1B33223C0024D970 /* SSOProviderXMLParser.m */; };
 		E25036F71FBB88F400099C7E /* RevealTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28661E1418353B630071FADF /* RevealTableViewController.m */; };
@@ -239,12 +238,26 @@
 		E250379A1FBB88F400099C7E /* button-Help-Video@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567491CDB85B80054FD3F /* button-Help-Video@3x.png */; };
 		E250379E1FBB88F400099C7E /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D567331CDB85B80054FD3F /* menu.png */; };
 		E25037A51FBB88F400099C7E /* button-Help-PDF@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5673B1CDB85B80054FD3F /* button-Help-PDF@2x.png */; };
-		E25037A71FBB88F400099C7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E0CD721822AF8100729B4A /* Main.storyboard */; };
 		E25037A91FBB88F400099C7E /* button-Contact-Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5677B1CDB85B80054FD3F /* button-Contact-Mail@2x.png */; };
 		E25037AC1FBB88F400099C7E /* button-Help-PDF@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5671C1CDB85B80054FD3F /* button-Help-PDF@3x.png */; };
 		E25037AE1FBB88F400099C7E /* button-Help-PDF.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5674A1CDB85B80054FD3F /* button-Help-PDF.png */; };
 		E25037AF1FBB88F400099C7E /* menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2D5672C1CDB85B80054FD3F /* menu@3x.png */; };
 		E254E3781FE2FDD700B3014F /* NewMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E254E3761FE2FDD400B3014F /* NewMessageModel.m */; };
+		E259B64B21A4A6770013A9EE /* icon-ChaseOff.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64521A4A66C0013A9EE /* icon-ChaseOff.png */; };
+		E259B64C21A4A6770013A9EE /* icon-ChaseOn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64621A4A66E0013A9EE /* icon-ChaseOn@3x.png */; };
+		E259B64D21A4A6770013A9EE /* icon-ChaseOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64721A4A6700013A9EE /* icon-ChaseOn@2x.png */; };
+		E259B64E21A4A6770013A9EE /* icon-ChaseOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64821A4A6720013A9EE /* icon-ChaseOff@2x.png */; };
+		E259B64F21A4A6770013A9EE /* icon-ChaseOn.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64921A4A6720013A9EE /* icon-ChaseOn.png */; };
+		E259B65021A4A6770013A9EE /* icon-ChaseOff@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64A21A4A6740013A9EE /* icon-ChaseOff@3x.png */; };
+		E259B65521A4A7C60013A9EE /* icon-SwipeMenu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65121A4A7B90013A9EE /* icon-SwipeMenu@3x.png */; };
+		E259B65621A4A7C60013A9EE /* icon-SwipeMenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65221A4A7BB0013A9EE /* icon-SwipeMenu@2x.png */; };
+		E259B65721A4A7C60013A9EE /* icon-SwipeRefresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65321A4A7BD0013A9EE /* icon-SwipeRefresh@2x.png */; };
+		E259B65821A4A7C60013A9EE /* icon-SwipeRefresh@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65421A4A7BF0013A9EE /* icon-SwipeRefresh@3x.png */; };
+		E259B65B21A4B7720013A9EE /* MessageEscalateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E259B65A21A4B7720013A9EE /* MessageEscalateViewController.m */; };
+		E259B65E21A59CE30013A9EE /* MessageRedirectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E259B65D21A59CE30013A9EE /* MessageRedirectTableViewController.m */; };
+		E259B65F21A5A46D0013A9EE /* OnCallSlotPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E289634E208557850055A18E /* OnCallSlotPickerViewController.m */; };
+		E259B66021A5AA290013A9EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E0CD721822AF8100729B4A /* Main.storyboard */; };
+		E259B66121A5BB7F0013A9EE /* OnCallSlotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896351208633AF0055A18E /* OnCallSlotCell.m */; };
 		E2622D0C1FC5F8B0008BCFF3 /* MessageNewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */; };
 		E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */; };
 		E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */; };
@@ -259,6 +272,8 @@
 		E271C1C52110AF7D00256D8B /* fa-light-300.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E271C1BD2110AF4200256D8B /* fa-light-300.ttf */; };
 		E272B8861B0D30B900A7154B /* SSOProviderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E272B8851B0D30B900A7154B /* SSOProviderViewController.m */; };
 		E272B8891B0D327200A7154B /* LoginSSOViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E272B8881B0D327100A7154B /* LoginSSOViewController.m */; };
+		E273718221ACA50600C6DD0C /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
+		E273718321ACA50700C6DD0C /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E275C2111D3836E1004C0744 /* image-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20E1D3836E1004C0744 /* image-logo@3x.png */; };
 		E275C2121D3836E1004C0744 /* image-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20F1D3836E1004C0744 /* image-logo.png */; };
 		E275C2131D3836E1004C0744 /* image-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C2101D3836E1004C0744 /* image-logo@2x.png */; };
@@ -301,7 +316,6 @@
 		E2920C941E81AB04004BEF10 /* SentMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C931E81AB04004BEF10 /* SentMessagesViewController.m */; };
 		E2920C971E82BC73004BEF10 /* SentMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C961E82BC73004BEF10 /* SentMessageModel.m */; };
 		E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */; };
-		E2964B471E675860002FF97B /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E2964B4A1E67587F002FF97B /* SideNavigationCountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B491E67587F002FF97B /* SideNavigationCountCell.m */; };
 		E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */; };
 		E2A607D41FDB27930014F1E2 /* AccountXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85191B14D09400AD50C6 /* AccountXMLParser.m */; };
@@ -389,6 +403,10 @@
 		E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB631B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m */; };
 		E2ECFB691B3471C00024D970 /* AuthenticationHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ECFB641B3471C00024D970 /* AuthenticationHTTPSessionManager.m */; };
 		E2ED891F1D9DB2EE0094214C /* NewChatMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2ED891E1D9DB2EE0094214C /* NewChatMessageModel.m */; };
+		E2EE44442196099500FD61C0 /* MessageRedirectInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE44422196099400FD61C0 /* MessageRedirectInfoModel.m */; };
+		E2EE4445219621D900FD61C0 /* OnCallSlotXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */; };
+		E2EE4446219621F500FD61C0 /* OnCallSlotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896346208540320055A18E /* OnCallSlotModel.m */; };
+		E2EE44492196262400FD61C0 /* MessageRedirectInfoXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */; };
 		E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */; };
 		E2FB4035219E30A60037C7A7 /* icon-SwipeMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */; };
 /* End PBXBuildFile section */
@@ -629,9 +647,25 @@
 		E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordChangeModel.m; sourceTree = "<group>"; };
 		E24D45091E89800900B36DD6 /* PreferredAccountModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferredAccountModel.h; sourceTree = "<group>"; };
 		E24D450A1E89800900B36DD6 /* PreferredAccountModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferredAccountModel.m; sourceTree = "<group>"; };
+		E24E99C421C0704100FA2734 /* MessageRedirectRequestModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageRedirectRequestModel.h; sourceTree = "<group>"; };
+		E24E99C521C0704100FA2734 /* MessageRedirectRequestModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectRequestModel.m; sourceTree = "<group>"; };
 		E25037B71FBB88F400099C7E /* M2M Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "M2M Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E254E3761FE2FDD400B3014F /* NewMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageModel.m; sourceTree = "<group>"; };
 		E254E3771FE2FDD700B3014F /* NewMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageModel.h; sourceTree = "<group>"; };
+		E259B64521A4A66C0013A9EE /* icon-ChaseOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ChaseOff.png"; sourceTree = "<group>"; };
+		E259B64621A4A66E0013A9EE /* icon-ChaseOn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ChaseOn@3x.png"; sourceTree = "<group>"; };
+		E259B64721A4A6700013A9EE /* icon-ChaseOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ChaseOn@2x.png"; sourceTree = "<group>"; };
+		E259B64821A4A6720013A9EE /* icon-ChaseOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ChaseOff@2x.png"; sourceTree = "<group>"; };
+		E259B64921A4A6720013A9EE /* icon-ChaseOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ChaseOn.png"; sourceTree = "<group>"; };
+		E259B64A21A4A6740013A9EE /* icon-ChaseOff@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ChaseOff@3x.png"; sourceTree = "<group>"; };
+		E259B65121A4A7B90013A9EE /* icon-SwipeMenu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeMenu@3x.png"; sourceTree = "<group>"; };
+		E259B65221A4A7BB0013A9EE /* icon-SwipeMenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeMenu@2x.png"; sourceTree = "<group>"; };
+		E259B65321A4A7BD0013A9EE /* icon-SwipeRefresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeRefresh@2x.png"; sourceTree = "<group>"; };
+		E259B65421A4A7BF0013A9EE /* icon-SwipeRefresh@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeRefresh@3x.png"; sourceTree = "<group>"; };
+		E259B65921A4B7720013A9EE /* MessageEscalateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageEscalateViewController.h; sourceTree = "<group>"; };
+		E259B65A21A4B7720013A9EE /* MessageEscalateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageEscalateViewController.m; sourceTree = "<group>"; };
+		E259B65C21A59CE30013A9EE /* MessageRedirectTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageRedirectTableViewController.h; sourceTree = "<group>"; };
+		E259B65D21A59CE30013A9EE /* MessageRedirectTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectTableViewController.m; sourceTree = "<group>"; };
 		E2622D0A1FC5F8B0008BCFF3 /* MessageNewTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNewTableViewController.h; sourceTree = "<group>"; };
 		E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNewTableViewController.m; sourceTree = "<group>"; };
 		E2622D0D1FC5F9A4008BCFF3 /* MessageNew2TableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNew2TableViewController.h; sourceTree = "<group>"; };
@@ -837,6 +871,10 @@
 		E2ECFB651B3471C00024D970 /* AuthenticationHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationHTTPSessionManager.h; sourceTree = "<group>"; };
 		E2ED891D1D9DB2EE0094214C /* NewChatMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewChatMessageModel.h; sourceTree = "<group>"; };
 		E2ED891E1D9DB2EE0094214C /* NewChatMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewChatMessageModel.m; sourceTree = "<group>"; };
+		E2EE44422196099400FD61C0 /* MessageRedirectInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectInfoModel.m; sourceTree = "<group>"; };
+		E2EE44432196099500FD61C0 /* MessageRedirectInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoModel.h; sourceTree = "<group>"; };
+		E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectInfoXMLParser.m; sourceTree = "<group>"; };
+		E2EE44482196262300FD61C0 /* MessageRedirectInfoXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoXMLParser.h; sourceTree = "<group>"; };
 		E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeRefresh.png"; sourceTree = "<group>"; };
 		E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeMenu.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1120,12 +1158,16 @@
 				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
 				E211D59D1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.h */,
 				E211D59E1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m */,
+				E259B65921A4B7720013A9EE /* MessageEscalateViewController.h */,
+				E259B65A21A4B7720013A9EE /* MessageEscalateViewController.m */,
 				28A8DA3F182BDEBC00C9DB08 /* MessageForwardViewController.h */,
 				28A8DA40182BDEBC00C9DB08 /* MessageForwardViewController.m */,
 				28BA8E901A7009800042D769 /* MessageHistoryViewController.h */,
 				28BA8E911A7009800042D769 /* MessageHistoryViewController.m */,
 				28A8DA5B182C56DB00C9DB08 /* MessageNewTableViewController.h */,
 				28A8DA5C182C56DB00C9DB08 /* MessageNewTableViewController.m */,
+				E259B65C21A59CE30013A9EE /* MessageRedirectTableViewController.h */,
+				E259B65D21A59CE30013A9EE /* MessageRedirectTableViewController.m */,
 				28CCCD8617F518800093CEE2 /* MessagesViewController.h */,
 				28CCCD8717F518800093CEE2 /* MessagesViewController.m */,
 				0865DBFA1C63AF060028E2B2 /* MessageTeleMedViewController.h */,
@@ -1328,6 +1370,12 @@
 				E2D567291CDB85B80054FD3F /* button-WebViewBack@2x.png */,
 				E2D5675F1CDB85B80054FD3F /* button-WebViewForward.png */,
 				E2D567371CDB85B80054FD3F /* button-WebViewForward@2x.png */,
+				E259B64521A4A66C0013A9EE /* icon-ChaseOff.png */,
+				E259B64821A4A6720013A9EE /* icon-ChaseOff@2x.png */,
+				E259B64A21A4A6740013A9EE /* icon-ChaseOff@3x.png */,
+				E259B64921A4A6720013A9EE /* icon-ChaseOn.png */,
+				E259B64721A4A6700013A9EE /* icon-ChaseOn@2x.png */,
+				E259B64621A4A66E0013A9EE /* icon-ChaseOn@3x.png */,
 				E2D567201CDB85B80054FD3F /* icon-Mail-Read.png */,
 				E2D567341CDB85B80054FD3F /* icon-Mail-Read@2x.png */,
 				E2D567221CDB85B80054FD3F /* icon-Mail-Read@3x.png */,
@@ -1335,7 +1383,11 @@
 				E2D567421CDB85B80054FD3F /* icon-Mail-Unread@2x.png */,
 				E2D5675A1CDB85B80054FD3F /* icon-Mail-Unread@3x.png */,
 				E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */,
+				E259B65221A4A7BB0013A9EE /* icon-SwipeMenu@2x.png */,
+				E259B65121A4A7B90013A9EE /* icon-SwipeMenu@3x.png */,
 				E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */,
+				E259B65321A4A7BD0013A9EE /* icon-SwipeRefresh@2x.png */,
+				E259B65421A4A7BF0013A9EE /* icon-SwipeRefresh@3x.png */,
 				E2D5673A1CDB85B80054FD3F /* indicator-CommentLeft.png */,
 				E2D567241CDB85B80054FD3F /* indicator-CommentLeft@2x.png */,
 				E2D5674B1CDB85B80054FD3F /* indicator-CommentRight.png */,
@@ -1388,6 +1440,8 @@
 				28176C131829AB0F00801EC7 /* MessageDetailViewController.m */,
 				28A8DA46182C3E5C00C9DB08 /* MessageRecipientPickerViewController.h */,
 				28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */,
+				E289634F208557860055A18E /* OnCallSlotPickerViewController.h */,
+				E289634E208557850055A18E /* OnCallSlotPickerViewController.m */,
 				E27B20B520A4A3F300FA3405 /* PasswordViewController.h */,
 				E27B20B620A4A3F300FA3405 /* PasswordViewController.m */,
 				E2920C921E81AB04004BEF10 /* SentMessagesViewController.h */,
@@ -1430,8 +1484,8 @@
 				E211D58F1FBF571B00263497 /* MessageCell.m */,
 				E211D5831FBF571B00263497 /* MessagesTableViewController.h */,
 				E211D58C1FBF571B00263497 /* MessagesTableViewController.m */,
-				E211D58B1FBF571B00263497 /* MessageTeleMedComposeTableViewController.h */,
-				E211D57F1FBF571B00263497 /* MessageTeleMedComposeTableViewController.m */,
+				E2896352208633AF0055A18E /* OnCallSlotCell.h */,
+				E2896351208633AF0055A18E /* OnCallSlotCell.m */,
 				E2964B481E67587F002FF97B /* SideNavigationCountCell.h */,
 				E2964B491E67587F002FF97B /* SideNavigationCountCell.m */,
 			);
@@ -1451,6 +1505,8 @@
 				E211D5851FBF571B00263497 /* MessageComposeTableViewController.m */,
 				E211D5801FBF571B00263497 /* MessageEventCell.h */,
 				E211D58A1FBF571B00263497 /* MessageEventCell.m */,
+				E211D58B1FBF571B00263497 /* MessageTeleMedComposeTableViewController.h */,
+				E211D57F1FBF571B00263497 /* MessageTeleMedComposeTableViewController.m */,
 				E211D57E1FBF571B00263497 /* OnCallSummaryCell.h */,
 				E211D5871FBF571B00263497 /* OnCallSummaryCell.m */,
 			);
@@ -1477,8 +1533,6 @@
 				E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */,
 				E2622D0D1FC5F9A4008BCFF3 /* MessageNew2TableViewController.h */,
 				E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */,
-				E289634F208557860055A18E /* OnCallSlotPickerViewController.h */,
-				E289634E208557850055A18E /* OnCallSlotPickerViewController.m */,
 				E22EF0981FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.h */,
 				E22EF0991FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.m */,
 			);
@@ -1499,8 +1553,6 @@
 			children = (
 				E24A443E1FCE1C7C00A06EE8 /* HospitalCell.h */,
 				E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */,
-				E2896352208633AF0055A18E /* OnCallSlotCell.h */,
-				E2896351208633AF0055A18E /* OnCallSlotCell.m */,
 			);
 			path = Includes;
 			sourceTree = "<group>";
@@ -1547,8 +1599,6 @@
 			children = (
 				E2CD93A11FCF1411006ED66F /* HospitalXMLParser.h */,
 				E2CD93A21FCF1411006ED66F /* HospitalXMLParser.m */,
-				E2896348208542BD0055A18E /* OnCallSlotXMLParser.h */,
-				E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */,
 				E275D2FA1FC4D52900AF3651 /* UserProfileXMLParser.h */,
 				E275D2FB1FC4D52900AF3651 /* UserProfileXMLParser.m */,
 			);
@@ -1571,10 +1621,14 @@
 				E2C9FE051CD9251D00B64D88 /* EmailTelemedModel.m */,
 				E27B84F21B14CF8F00AD50C6 /* ForwardMessageModel.h */,
 				E27B84F31B14CF8F00AD50C6 /* ForwardMessageModel.m */,
-				E27B84F81B14CFB700AD50C6 /* MessageModel.h */,
-				E27B84F91B14CFB700AD50C6 /* MessageModel.m */,
 				E27B84F51B14CFAA00AD50C6 /* MessageEventModel.h */,
 				E27B84F61B14CFAA00AD50C6 /* MessageEventModel.m */,
+				E27B84F81B14CFB700AD50C6 /* MessageModel.h */,
+				E27B84F91B14CFB700AD50C6 /* MessageModel.m */,
+				E2EE44432196099500FD61C0 /* MessageRedirectInfoModel.h */,
+				E2EE44422196099400FD61C0 /* MessageRedirectInfoModel.m */,
+				E24E99C421C0704100FA2734 /* MessageRedirectRequestModel.h */,
+				E24E99C521C0704100FA2734 /* MessageRedirectRequestModel.m */,
 				E27B84FB1B14CFC100AD50C6 /* MyProfileModel.h */,
 				E27B84FC1B14CFC100AD50C6 /* MyProfileModel.m */,
 				E27B84FE1B14CFCB00AD50C6 /* MyStatusModel.h */,
@@ -1611,6 +1665,8 @@
 				E2CDEFA21D25752100728F1A /* ChatParticipantXMLParser.m */,
 				E27B852F1B14D11200AD50C6 /* MessageEventXMLParser.h */,
 				E27B85301B14D11200AD50C6 /* MessageEventXMLParser.m */,
+				E2EE44482196262300FD61C0 /* MessageRedirectInfoXMLParser.h */,
+				E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */,
 				E27B85261B14D0C100AD50C6 /* MessageXMLParser.h */,
 				E27B85271B14D0C100AD50C6 /* MessageXMLParser.m */,
 				E27B85321B14D11D00AD50C6 /* MyProfileXMLParser.h */,
@@ -1631,8 +1687,6 @@
 				E2CD939F1FCF0D88006ED66F /* HospitalModel.m */,
 				E254E3771FE2FDD700B3014F /* NewMessageModel.h */,
 				E254E3761FE2FDD400B3014F /* NewMessageModel.m */,
-				E2896345208540320055A18E /* OnCallSlotModel.h */,
-				E2896346208540320055A18E /* OnCallSlotModel.m */,
 				E2C7C1BB1FC4917100E50F07 /* UserProfileModel.h */,
 				E2C7C1BC1FC4917100E50F07 /* UserProfileModel.m */,
 			);
@@ -1651,6 +1705,8 @@
 				E27B84D51B14B96A00AD50C6 /* AuthenticationModel.m */,
 				E27B85011B14CFE600AD50C6 /* MessageRecipientModel.h */,
 				E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */,
+				E2896345208540320055A18E /* OnCallSlotModel.h */,
+				E2896346208540320055A18E /* OnCallSlotModel.m */,
 				E24D45061E8953FD00B36DD6 /* PasswordChangeModel.h */,
 				E24D45071E8953FD00B36DD6 /* PasswordChangeModel.m */,
 				E27B850D1B14D03500AD50C6 /* ScreenshotAlertModel.h */,
@@ -1696,6 +1752,8 @@
 				E27B85131B14D09400AD50C6 /* GenericErrorXMLParser.m */,
 				E27B852C1B14D0F400AD50C6 /* MessageRecipientXMLParser.h */,
 				E27B852D1B14D0F400AD50C6 /* MessageRecipientXMLParser.m */,
+				E2896348208542BD0055A18E /* OnCallSlotXMLParser.h */,
+				E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */,
 				E2920C981E82BC96004BEF10 /* SentMessageXMLParser.h */,
 				E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */,
 				E2ECFB5A1B33223C0024D970 /* SSOProviderXMLParser.h */,
@@ -1912,9 +1970,14 @@
 				283DF2F018CA09EE00A344D2 /* telegraph.caf in Resources */,
 				283DF2EB18CA09EE00A344D2 /* ascending.caf in Resources */,
 				E2D567CE1CDB85B80054FD3F /* button-MessageDetail-Forward@3x.png in Resources */,
+				E259B64E21A4A6770013A9EE /* icon-ChaseOff@2x.png in Resources */,
+				E259B65621A4A7C60013A9EE /* icon-SwipeMenu@2x.png in Resources */,
 				283DF30B18CA13D300A344D2 /* digital_alarm_1.caf in Resources */,
+				E259B65021A4A6770013A9EE /* icon-ChaseOff@3x.png in Resources */,
 				E2D5678B1CDB85B80054FD3F /* indicator-CommentLeft@2x.png in Resources */,
+				E259B64F21A4A6770013A9EE /* icon-ChaseOn.png in Resources */,
 				E2D5678D1CDB85B80054FD3F /* button-Contact-Call.png in Resources */,
+				E259B65721A4A7C60013A9EE /* icon-SwipeRefresh@2x.png in Resources */,
 				E2D567801CDB85B80054FD3F /* button-Contact-Call@2x.png in Resources */,
 				E232D7081E675E7800B797E1 /* indicator-CommentRightBlue@2x.png in Resources */,
 				E2D567C71CDB85B80054FD3F /* button-MessageDetail-TeleMed@2x.png in Resources */,
@@ -1926,6 +1989,7 @@
 				283DF2ED18CA09EE00A344D2 /* horn.caf in Resources */,
 				283DF2FD18CA09EE00A344D2 /* descent.caf in Resources */,
 				283DF2D518CA09EE00A344D2 /* popcorn.caf in Resources */,
+				E259B64C21A4A6770013A9EE /* icon-ChaseOn@3x.png in Resources */,
 				283DF30C18CA13D300A344D2 /* digital_alarm_2.caf in Resources */,
 				E24A44321FCC6DF900A06EE8 /* CDMAVoiceData.xib in Resources */,
 				283DF2D318CA09EE00A344D2 /* aurora.caf in Resources */,
@@ -1939,6 +2003,7 @@
 				E2D567A11CDB85B80054FD3F /* indicator-CommentLeft.png in Resources */,
 				283DF2F618CA09EE00A344D2 /* spell.caf in Resources */,
 				E2D567B21CDB85B80054FD3F /* indicator-CommentRight.png in Resources */,
+				E259B65521A4A7C60013A9EE /* icon-SwipeMenu@3x.png in Resources */,
 				2892578018D38BFA00AB649A /* sonic_reverb.caf in Resources */,
 				283DF2D218CA09EE00A344D2 /* keys.caf in Resources */,
 				283DF2F518CA09EE00A344D2 /* bell.caf in Resources */,
@@ -1980,8 +2045,11 @@
 				E27B20C720A4D1B300FA3405 /* background-LoginSSO-Field.png in Resources */,
 				E2D567C61CDB85B80054FD3F /* button-WebViewForward.png in Resources */,
 				E2D567841CDB85B80054FD3F /* button-MessageDetail-History.png in Resources */,
+				E259B65821A4A7C60013A9EE /* icon-SwipeRefresh@3x.png in Resources */,
 				E2D567131CDA73430054FD3F /* default.caf in Resources */,
+				E259B64D21A4A6770013A9EE /* icon-ChaseOn@2x.png in Resources */,
 				283DF2FF18CA09EE00A344D2 /* noir.caf in Resources */,
+				E259B64B21A4A6770013A9EE /* icon-ChaseOff.png in Resources */,
 				283DF2F818CA09EE00A344D2 /* tiptoes.caf in Resources */,
 				E2D567BF1CDB85B80054FD3F /* button-MessageDetail-Forward.png in Resources */,
 				E232D7071E675E7800B797E1 /* indicator-CommentRightBlue.png in Resources */,
@@ -2022,6 +2090,7 @@
 				E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */,
 				E250372B1FBB88F400099C7E /* button-WebViewBack@2x.png in Resources */,
 				E250372E1FBB88F400099C7E /* button-TextField-Help@2x.png in Resources */,
+				E259B66021A5AA290013A9EE /* Main.storyboard in Resources */,
 				E250372F1FBB88F400099C7E /* button-Contact-Call@3x.png in Resources */,
 				E22EF0831FD9A38800A2E6F6 /* button-MessageDetail-Archive@3x.png in Resources */,
 				E25037301FBB88F400099C7E /* button-Contact-Mail.png in Resources */,
@@ -2069,7 +2138,6 @@
 				E22EF0951FD9A3CF00A2E6F6 /* icon-Mail-Unread@3x.png in Resources */,
 				E22EF0921FD9A3C700A2E6F6 /* icon-Mail-Read@3x.png in Resources */,
 				E25037A51FBB88F400099C7E /* button-Help-PDF@2x.png in Resources */,
-				E25037A71FBB88F400099C7E /* Main.storyboard in Resources */,
 				E22EF08F1FD9A3A800A2E6F6 /* button-MessageDetail-TeleMed@3x.png in Resources */,
 				E25037A91FBB88F400099C7E /* button-Contact-Mail@2x.png in Resources */,
 				E25037AC1FBB88F400099C7E /* button-Help-PDF@3x.png in Resources */,
@@ -2209,8 +2277,10 @@
 				E240EE6D1F54A462009D8ED1 /* UIView+IBDesignable.m in Sources */,
 				E2ED891F1D9DB2EE0094214C /* NewChatMessageModel.m in Sources */,
 				E27B84F41B14CF8F00AD50C6 /* ForwardMessageModel.m in Sources */,
+				E2EE44442196099500FD61C0 /* MessageRedirectInfoModel.m in Sources */,
 				E2AE66451CE1428300953EFA /* CoreViewController.m in Sources */,
 				E2CE248C20FD045E00785801 /* TimeZoneModel.m in Sources */,
+				E273718221ACA50600C6DD0C /* ErrorAlertController.m in Sources */,
 				E211D59A1FBF571B00263497 /* ChatMessagesTableViewController.m in Sources */,
 				28BA8E921A7009800042D769 /* MessageHistoryViewController.m in Sources */,
 				E2920C941E81AB04004BEF10 /* SentMessagesViewController.m in Sources */,
@@ -2222,6 +2292,7 @@
 				E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */,
 				E27B852E1B14D0F400AD50C6 /* MessageRecipientXMLParser.m in Sources */,
 				E27B850C1B14D02A00AD50C6 /* RegisteredDeviceModel.m in Sources */,
+				E2EE44492196262400FD61C0 /* MessageRedirectInfoXMLParser.m in Sources */,
 				E2CDEFAC1D25753400728F1A /* ChatParticipantModel.m in Sources */,
 				28CCCD8817F518800093CEE2 /* MessagesViewController.m in Sources */,
 				E27B85211B14D09400AD50C6 /* AccountXMLParser.m in Sources */,
@@ -2231,27 +2302,34 @@
 				E27B850F1B14D03500AD50C6 /* ScreenshotAlertModel.m in Sources */,
 				28CCCD5017F517A50093CEE2 /* AppDelegate.m in Sources */,
 				E27B84EE1B14CF7400AD50C6 /* CallModel.m in Sources */,
+				E24E99C621C0704100FA2734 /* MessageRedirectRequestModel.m in Sources */,
 				E211D5981FBF571B00263497 /* MessageEventCell.m in Sources */,
 				E272B8861B0D30B900A7154B /* SSOProviderViewController.m in Sources */,
+				E2EE4446219621F500FD61C0 /* OnCallSlotModel.m in Sources */,
 				E211D5951FBF571B00263497 /* OnCallSummaryCell.m in Sources */,
 				E21C14691D33E2240025B6ED /* OnePixelLayoutConstraint.m in Sources */,
 				E27B84FA1B14CFB700AD50C6 /* MessageModel.m in Sources */,
 				28CCCD9217F535DD0093CEE2 /* ContactViewController.m in Sources */,
+				E259B65E21A59CE30013A9EE /* MessageRedirectTableViewController.m in Sources */,
 				E27B85001B14CFCB00AD50C6 /* MyStatusModel.m in Sources */,
 				E2E7F6FC200E648F00648D61 /* NSString+XML.m in Sources */,
 				E211D5991FBF571B00263497 /* MessagesTableViewController.m in Sources */,
 				E2D83FB51C761502008D26A8 /* CDMAVoiceDataViewController.m in Sources */,
 				28176C141829AB0F00801EC7 /* MessageDetailViewController.m in Sources */,
+				E2EE4445219621D900FD61C0 /* OnCallSlotXMLParser.m in Sources */,
 				E2CDEFA61D25752100728F1A /* ChatMessageXMLParser.m in Sources */,
+				E259B66121A5BB7F0013A9EE /* OnCallSlotCell.m in Sources */,
 				E2D3E85C1D23063B00746265 /* ChatMessagesViewController.m in Sources */,
 				E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */,
 				28CCCD9417F535DD0093CEE2 /* SettingsTableViewController.m in Sources */,
 				E2CDEFA51D25752100728F1A /* ChatParticipantXMLParser.m in Sources */,
+				E259B65F21A5A46D0013A9EE /* OnCallSlotPickerViewController.m in Sources */,
 				E270ED8B1B18F24B00DD43B8 /* AuthenticationXMLParser.m in Sources */,
 				E27B20B720A4A3F300FA3405 /* PasswordViewController.m in Sources */,
 				E211D59F1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m in Sources */,
 				E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */,
 				E211D59C1FBF571B00263497 /* MessageCell.m in Sources */,
+				E259B65B21A4B7720013A9EE /* MessageEscalateViewController.m in Sources */,
 				28CCCD4C17F517A50093CEE2 /* main.m in Sources */,
 				E27B85061B14D01100AD50C6 /* NewMessageModel.m in Sources */,
 				E2AE66481CE146DC00953EFA /* CoreTableViewController.m in Sources */,
@@ -2276,7 +2354,6 @@
 				28A8DA5E182C56DB00C9DB08 /* MessageNewTableViewController.m in Sources */,
 				0865DBFC1C63AF060028E2B2 /* MessageTeleMedViewController.m in Sources */,
 				E2CE248D20FD0FB200785801 /* TimeZoneXMLParser.m in Sources */,
-				E2964B471E675860002FF97B /* ErrorAlertController.m in Sources */,
 				28ADA6ED17FA1585003A81A1 /* PhoneNumberViewController.m in Sources */,
 				E2ECFB691B3471C00024D970 /* AuthenticationHTTPSessionManager.m in Sources */,
 				E24D45051E8948E700B36DD6 /* SettingsPasswordTableViewController.m in Sources */,
@@ -2356,12 +2433,11 @@
 				E275D2FC1FC4D52900AF3651 /* UserProfileXMLParser.m in Sources */,
 				E2B0899C204DF6B7006697C7 /* NSMutableString+XML.m in Sources */,
 				E2CAB4471FE9D41100202CCD /* AccountRequestTableViewController.m in Sources */,
-				E25036EF1FBB88F400099C7E /* ErrorAlertController.m in Sources */,
 				E22EF0961FD9DBFE00A2E6F6 /* SettingsPasswordTableViewController.m in Sources */,
 				E25036F11FBB88F400099C7E /* AuthenticationHTTPSessionManager.m in Sources */,
+				E273718321ACA50700C6DD0C /* ErrorAlertController.m in Sources */,
 				E25036F41FBB88F400099C7E /* SSOProviderXMLParser.m in Sources */,
 				E2896353208633AF0055A18E /* OnCallSlotCell.m in Sources */,
-				E22EF0761FD74BC700A2E6F6 /* MessageTeleMedComposeTableViewController.m in Sources */,
 				E22EF0971FD9DBFE00A2E6F6 /* SettingsTableViewController.m in Sources */,
 				E24A443C1FCE181A00A06EE8 /* HospitalPickerViewController.m in Sources */,
 				E22EF07A1FD89D9C00A2E6F6 /* SentMessagesViewController.m in Sources */,
@@ -2414,6 +2490,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -2428,7 +2505,7 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug.watchkitapp;
 			};
 			name = Debug;
@@ -2446,6 +2523,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -2459,7 +2537,7 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.watchkitapp;
 			};
 			name = Release;
@@ -2477,6 +2555,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -2490,7 +2569,7 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc.watchkitapp;
 			};
 			name = "Ad Hoc";
@@ -2508,6 +2587,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
@@ -2521,7 +2601,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug;
 			};
 			name = Debug;
@@ -2540,6 +2620,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
@@ -2552,7 +2633,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed;
 			};
 			name = Release;
@@ -2571,6 +2652,7 @@
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
@@ -2583,7 +2665,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc;
 			};
 			name = "Ad Hoc";
@@ -2624,7 +2706,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					BETA,
-					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
+					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;

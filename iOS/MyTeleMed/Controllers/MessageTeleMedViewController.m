@@ -38,20 +38,20 @@
 }
 
 // Return pending from EmailTelemedModel delegate
-- (void)sendMessagePending
+- (void)emailTeleMedMessagePending
 {
 	// Go back to message detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)emailTeleMedMessageSuccess
 {
  
 }
 
 // Return error from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)emailTeleMedMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	

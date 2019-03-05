@@ -109,7 +109,7 @@
 }
 
 // Return success from NewMessageModel delegate (this logic should only be called after web service completes to avoid issues)
-- (void)sendMessageSuccess
+- (void)sendNewMessageSuccess
 {
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Thank you. Your message has been sent." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -131,7 +131,7 @@
 }
 
 // Return error from NewMessageModel delegate (currently only used for callback number error)
-- (void)sendMessageError:(NSError *)error
+- (void)sendNewMessageError:(NSError *)error
 {
 	// Unwind to first screen of MessageNewTableViewController form to show error for callback number
 	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)

@@ -49,6 +49,7 @@
 		@"<MessageRecipients xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">"
 			"%@"
 		"</MessageRecipients>",
+	 
 		xmlRecipients
 	];*/
 	
@@ -117,9 +118,9 @@
 			if (operation.response.statusCode == 204)
 			{
 				// Handle success via delegate (not currently used)
-				if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageSuccess)])
 				{
-					[self.delegate sendMessageSuccess];
+					[self.delegate sendNewMessageSuccess];
 				}
 			}
 			else
@@ -134,9 +135,9 @@
 				}];
 				
 				// Handle error via delegate
-				/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageError:)])
+				/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
 				{
-					[self.delegate sendMessageError:error];
+					[self.delegate sendNewMessageError:error];
 				} */
 			}
 		}];
@@ -155,9 +156,9 @@
 			if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
 			{
 				// Handle error via delegate
-				if (self.delegate && [self.delegate respondsToSelector:@selector(sendMessageError:)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
 				{
-					[self.delegate sendMessageError:error];
+					[self.delegate sendNewMessageError:error];
 					
 					return;
 				}

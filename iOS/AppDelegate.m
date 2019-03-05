@@ -63,6 +63,10 @@
 	// Med2Med - Prevent swipe message from ever appearing
 	#ifdef MED2MED
 		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+	
+	// DEBUG Only - reset swipe message on app launch
+	#elif defined DEBUG
+		[settings setBool:NO forKey:@"swipeMessageDisabled"];
 	#endif
 	
 	// Initialize cdma voice data settings
@@ -293,6 +297,9 @@
 // Notify user if a new version of the app is available in the app store
 - (void)checkAppStoreVersion
 {
+	/* TEMPORARILY COMMENTED OUT
+	 * Need to decide if there should be a remote server integration so that version checks can be disabled or prioritized (change showAlertAfterCurrentVersionHasBeenReleasedForDays to 1)
+	
 	Harpy *harpy = [Harpy sharedInstance];
 	
 	[harpy setPresentingViewController:self.window.rootViewController];
@@ -310,6 +317,7 @@
 	#else
 		[harpy checkVersionDaily];
 	#endif
+	*/
 }
 
 - (void)didFinishInitialization:(NSNotification *)notification

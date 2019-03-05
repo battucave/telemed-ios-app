@@ -160,7 +160,7 @@
 			/* if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 			{
 				[self.delegate deleteChatMessageError:error];
-			}*/
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)

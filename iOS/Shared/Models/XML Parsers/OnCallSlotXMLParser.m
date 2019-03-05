@@ -61,6 +61,14 @@
 	{
 		[self.onCallSlot setValue:[self.numberFormatter numberFromString:self.currentElementValue] forKey:elementName];
 	}
+	else if ([elementName isEqualToString:@"IsEscalationSlot"])
+	{
+		self.onCallSlot.IsEscalationSlot = [self.currentElementValue boolValue];
+	}
+	else if ([elementName isEqualToString:@"SelectRecipient"])
+	{
+		self.onCallSlot.SelectRecipient = [self.currentElementValue boolValue];
+	}
 	else
 	{
 		@try

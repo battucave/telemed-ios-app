@@ -147,7 +147,7 @@
 				
 				// Save new default to server
 				[self saveNotificationSettingsByName:name settings:self];
-			}*/
+			} */
 			
 			// Save notification settings for type to device
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
@@ -213,7 +213,12 @@
 			"<Name>%@</Name>"
 			"<Tone>%@</Tone>"
 		"</NotificationSetting>",
-		(notificationSettings.Enabled ? @"true" : @"false"), interval, [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString], [notificationSettings.Tone escapeXML]];
+		
+		(notificationSettings.Enabled ? @"true" : @"false"),
+		interval,
+		[([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString],
+		[notificationSettings.Tone escapeXML]
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 		

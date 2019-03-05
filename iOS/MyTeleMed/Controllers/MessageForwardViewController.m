@@ -72,21 +72,21 @@
 }
 
 // Return pending from ForwardMessageModel delegate
-- (void)sendMessagePending
+- (void)forwardMessagePending
 {
-	// Go back to messages (assume success)
+	// Go back to message detail (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from ForwardMessageModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)forwardMessageSuccess
 {
 	// Go back to MessageDetailViewController
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // Return error from ForwardMessageModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)forwardMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
@@ -120,13 +120,9 @@
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set message recipient type
+		// Set message recipients, message recipient type, and any previously selected message recipients
 		[messageRecipientPickerViewController setMessageRecipientType:@"Forward"];
-		
-		// Set message
-		[messageRecipientPickerViewController setMessage:self.message];
-		
-		// Set selected message recipients if previously set
+		[messageRecipientPickerViewController setMessageRecipients:self.messageRecipients];
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 }

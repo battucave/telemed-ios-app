@@ -6,8 +6,6 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "CoreViewController.h"
 #import "MessageProtocol.h"
 

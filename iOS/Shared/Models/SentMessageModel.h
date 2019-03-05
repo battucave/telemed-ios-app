@@ -6,8 +6,6 @@
 //  Copyright (c) 2017 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 #import "MessageProtocol.h"
 #import "AccountModel.h"

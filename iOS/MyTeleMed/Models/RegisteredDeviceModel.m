@@ -111,7 +111,12 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 			"<PlatformID>iOS</PlatformID>"
 			"<Token>%@</Token>"
 		"</RegisteredDevice>",
-		self.AppVersionInfo, self.ID, self.PhoneNumber, self.Token];
+		
+		self.AppVersionInfo,
+		self.ID,
+		self.PhoneNumber,
+		self.Token
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 		

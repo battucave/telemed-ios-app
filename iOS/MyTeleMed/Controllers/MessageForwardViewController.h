@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "CoreViewController.h"
 #import "MessageProtocol.h"
 
 @interface MessageForwardViewController : CoreViewController
 
 @property (nonatomic) id <MessageProtocol> message;
+
+@property (nonatomic) NSArray *messageRecipients;
 
 @end

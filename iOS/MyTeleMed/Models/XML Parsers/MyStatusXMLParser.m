@@ -97,14 +97,14 @@
 			if (self.currentElementValue != nil && ! [self.currentElementValue isEqualToString:@"Never"])
 			{
 				// Get date in utc timezone (not needed at this time, but keep here for future changes)
-				/*[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
+				/* [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
 				UTCDate = [dateFormatter dateFromString:self.currentElementValue];
 				
 				if (UTCDate == nil)
 				{
 					[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 					UTCDate = [dateFormatter dateFromString:self.currentElementValue];
-				}*/
+				} */
 				
 				// Get date as-is (server provides correct timezone)
 				self.currentElementValue = (NSMutableString *)[self.currentElementValue substringToIndex:19];

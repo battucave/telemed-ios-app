@@ -32,7 +32,6 @@
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
 @property (nonatomic) BOOL hasSubmitted;
 @property (nonatomic) BOOL isLoaded;
-@property (nonatomic) NSArray *messageRecipients;
 @property (nonatomic) UISearchController *searchController;
 
 @end
@@ -75,8 +74,17 @@
 	
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
-	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
 	[self.searchController.searchBar sizeToFit];
+	
+	// Initialize search bar placeholder for chat
+	if ([self.messageRecipientType isEqualToString:@"Chat"]) {
+		[self.searchController.searchBar setPlaceholder:@"Search Participants"];
+	}
+	// Initialize search bar placeholder for message
+	else
+	{
+		[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	}
 	
 	// iOS 11+ navigation bar has support for search controller
 	if (@available(iOS 11.0, *))
@@ -198,15 +206,29 @@
 		{
 			[self.chatParticipantModel getChatParticipants];
 		}
-		// Load list of message recipients for forward message
+		// Initialize for forward message
 		else if ([self.messageRecipientType isEqualToString:@"Forward"])
 		{
-			[self.messageRecipientModel getMessageRecipientsForMessageID:self.message.MessageID withCallback:callback];
+			// Message recipients will always be pre-populated
+			self.isLoaded = YES;
 		}
 		// Load list of message recipients for new message
-		else
+		else if ([self.messageRecipientType isEqualToString:@"New"])
 		{
 			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID withCallback:callback];
+		}
+		// Initialize for escalate or redirect message
+		else if ([self.messageRecipientType isEqualToString:@"Escalate"] || [self.messageRecipientType isEqualToString:@"Redirect"])
+		{
+			// Force single selection of recipients
+			[self.tableMessageRecipients setAllowsMultipleSelection:NO];
+			
+			// Disable next button and change its title
+			[self.navigationItem.rightBarButtonItem setEnabled:NO];
+			[self.navigationItem.rightBarButtonItem setTitle:@"Send"];
+			
+			// Message recipients will always be pre-populated
+			self.isLoaded = YES;
 		}
 	#endif
 }
@@ -234,7 +256,7 @@
 	#endif
 }
 
-// MyTeleMed only - Unwind to previous controller (chat message detail, forward message, or new message) or go to next controller (MessageNew2TableViewController)
+// Unwind to previous controller (ChatMessageDetailViewController, MessageForwardViewController, or MessageNewViewController), send message (MessageEscalateTableViewController or MessageRedirectTableViewController), or go to next controller (MessageNew2TableViewController)
 - (IBAction)saveMessageRecipients:(id)sender
 {
 	[self setHasSubmitted:YES];
@@ -249,7 +271,7 @@
 			if ([self.selectedMessageRecipients count] > 1)
 			{
 				UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
-				UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+				UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 				{
 					// Disable group chat
 					self.isGroupChat = NO;
@@ -269,12 +291,6 @@
 				[groupChatAlertController addAction:noAction];
 				[groupChatAlertController addAction:yesAction];
 				
-				// PreferredAction only supported in 9.0+
-				if ([groupChatAlertController respondsToSelector:@selector(setPreferredAction:)])
-				{
-					[groupChatAlertController setPreferredAction:yesAction];
-				}
-				
 				// Show alert
 				[self presentViewController:groupChatAlertController animated:YES completion:nil];
 			}
@@ -285,6 +301,49 @@
 				
 				// Execute unwind segue
 				[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
+			}
+		}
+		// Escalate message
+		else if ([self.messageRecipientType isEqualToString:@"Escalate"])
+		{
+			if (self.delegate && [self.delegate respondsToSelector:@selector(escalateMessageWithRecipient:)])
+			{
+				// Verify that at least one message recipient is selected
+				if ([self.selectedMessageRecipients count] > 0)
+				{
+					[self.delegate escalateMessageWithRecipient:[self.selectedMessageRecipients objectAtIndex:0]];
+				}
+			}
+		}
+		// Redirect message
+		else if ([self.messageRecipientType isEqualToString:@"Redirect"])
+		{
+			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToRecipient:onCallSlot:)])
+			{
+				// Verify that at least one message recipient is selected
+				if ([self.selectedMessageRecipients count] > 0)
+				{
+					// Initial requirements called for user to be given option to chase the message, but this was later removed
+					/* UIAlertController *chaseMessageAlertController = [UIAlertController alertControllerWithTitle:@"Send Message" message:@"Would you like TeleMed to chase this message?" preferredStyle:UIAlertControllerStyleAlert];
+					UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+					UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No, Just Redirect" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+					{
+						[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0] withChase:NO];
+					}];
+					UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes, Chase Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+					{
+						[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0] withChase:YES];
+					}];
+					
+					[chaseMessageAlertController addAction:yesAction];
+					[chaseMessageAlertController addAction:noAction];
+					[chaseMessageAlertController addAction:cancelAction];
+					
+					// Show alert
+					[self presentViewController:chaseMessageAlertController animated:YES completion:nil]; */
+					
+					[self.delegate redirectMessageToRecipient:[self.selectedMessageRecipients objectAtIndex:0] onCallSlot:self.selectedOnCallSlot];
+				}
 			}
 		}
 		// Unwind segue to forward message or new message
@@ -555,7 +614,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Med2Med only - Reset selected message recipients
+	// Reset selected message recipients (only applies to Med2Med, message type Escalate, and message type Redirect)
 	if (! self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		[self.selectedMessageRecipients removeAllObjects];
@@ -578,14 +637,16 @@
 	// Add checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 	
+	// Med2Med - Enable next button if table allows multiple selection (not currently used)
+	// MyTeleMed - Enable send button if message recipient type is Escalate or Redirect
+	if (self.navigationItem.rightBarButtonItem != nil)
+	{
+		[self.navigationItem.rightBarButtonItem setEnabled:YES];
+	}
+	
 	#ifdef MED2MED
-		// Re-enable next button (not currently used - only used if table allows multiple selection)
-		if (self.navigationItem.rightBarButtonItem != nil)
-		{
-			[self.navigationItem.rightBarButtonItem setEnabled:YES];
-		}
 		// Execute segue (only used if table is limited to single selection)
-		else
+		if (! self.navigationItem.rightBarButtonItem)
 		{
 			// Close the search results, then execute segue
 			if (self.searchController.active && self.definesPresentationContext)
@@ -654,13 +715,23 @@
 			[self.searchController setActive:NO];
 		}
 		
-		// Med2Med - Disable next button if no recipients still selected (not currently used - only used if table allows multiple selection)
-		#ifdef MED2MED
-			if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
-			{
-				[self.navigationItem.rightBarButtonItem setEnabled:NO];
-			}
-		#endif
+		if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
+		{
+			// Med2Med - Disable next button if no recipients selected and table allows multiple selection (not currently used)
+			#ifdef MED2MED
+				if (self.tableMessageRecipients.allowsMultipleSelection)
+				{
+					[self.navigationItem.rightBarButtonItem setEnabled:NO];
+				}
+			
+			// MyTeleMed - Disable send button if no recipients selected and message redirect type is Escalate or Redirect
+			#else
+				if ([self.messageRecipientType isEqualToString:@"Escalate"] || [self.messageRecipientType isEqualToString:@"Redirect"])
+				{
+					[self.navigationItem.rightBarButtonItem setEnabled:NO];
+				}
+			#endif
+		}
 	}
 }
 
@@ -713,9 +784,9 @@
 
 #ifdef MYTELEMED
 // Return chat participants from ChatParticipantModel delegate
-- (void)updateChatParticipants:(NSMutableArray *)newChatParticipants
+- (void)updateChatParticipants:(NSArray *)chatParticipants
 {
-	[self setMessageRecipients:newChatParticipants];
+	[self setMessageRecipients:chatParticipants];
 	
 	self.isLoaded = YES;
 	
