@@ -68,12 +68,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Hide redirect to on call slot cell if no slots available for redirect
+	// Hide redirect to on call slot cell if no slots are available for redirect
 	if (indexPath.row == 0 && [self.onCallSlots count] == 0)
 	{
 		return 0;
 	}
-	// Hide redirect to recipient cell if no message recipients available for redirect
+	// Hide redirect to recipient cell if no message recipients are available for redirect
 	else if (indexPath.row == 1 && [self.messageRecipients count] == 0)
 	{
 		return 0;

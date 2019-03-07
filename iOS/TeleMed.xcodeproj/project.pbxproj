@@ -2179,7 +2179,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworkActivityLogger/AFNetworkActivityLogger.framework",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Harpy/Harpy.framework",
@@ -2196,7 +2196,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C3DA69AA65EECE9A827AD0DA /* [CP] Embed Pods Frameworks */ = {
@@ -2207,7 +2207,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworkActivityLogger/AFNetworkActivityLogger.framework",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Harpy/Harpy.framework",
@@ -2224,7 +2224,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E9D108714D25E1B93407DA15 /* [CP] Check Pods Manifest.lock */ = {
@@ -2706,7 +2706,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					BETA,
-					"BASE_URL=\\@\\\"https://www.mytelemed.com\\\"",
+					"BASE_URL=\\@\\\"https://test.mytelemed.com\\\"",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
