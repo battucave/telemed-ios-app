@@ -58,7 +58,7 @@
 	
 	[hospitalModel setDelegate:self];
 	
-	// Get list of hospitals (no need to reload these if user revisits this screen so don't put this in viewWillAppear method)
+	// Get list of hospitals (no need to reload these if user revisits this screen so don't put this in viewWillAppear:)
 	[hospitalModel getHospitals];
 	
 	// Update flag to initialize callback data

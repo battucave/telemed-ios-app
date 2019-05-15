@@ -149,7 +149,7 @@
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no chat messages left in the source data, simply reload the table to show the no chat messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the no messages cell))
+	// If there are no chat messages left in the source data, simply reload the table to show the no chat messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from numberOfRowsInSection: (1 - for the no messages cell))
 	else
 	{
 		[self.tableView reloadData];

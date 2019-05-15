@@ -681,7 +681,7 @@
 	// Remove checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath method)
+	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath:)
 	if (self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		MessageRecipientModel *messageRecipient;

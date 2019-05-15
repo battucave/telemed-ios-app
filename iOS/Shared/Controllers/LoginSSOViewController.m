@@ -343,7 +343,7 @@
 {
 	NSString *currentURL = webView.request.URL.absoluteString;
 	
-	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse method.
+	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse:.
 	
 	// URL is the login screen
 	if ([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
