@@ -25,7 +25,14 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchTimeout;
 
 @property (nonatomic) BOOL mayDisableTimeout;
-@property (nonatomic) NSInteger aboutTeleMedSection;
+@property (nonatomic) NSInteger sectionAboutTeleMed;
+@property (nonatomic) NSInteger sectionNotifications;
+@property (nonatomic) NSInteger sectionSessionTimeout;
+
+@property (nonatomic) NotificationSettingModel *chatMessageNotificationSettings;
+@property (nonatomic) NotificationSettingModel *commentNotificationSettings;
+@property (nonatomic) NotificationSettingModel *normalMessageNotificationSettings;
+@property (nonatomic) NotificationSettingModel *statMessageNotificationSettings;
 
 @end
 
@@ -38,11 +45,15 @@
 	// Initialize may disable timeout value
 	self.mayDisableTimeout = NO;
 	
+	// Initialize sections
+	[self setSectionSessionTimeout:0];
+	
 	#ifdef MED2MED
-		[self setAboutTeleMedSection:2];
+		[self setsectionAboutTeleMed:2];
 	
 	#else
-		[self setAboutTeleMedSection:3];
+		[self setSectionAboutTeleMed:3];
+		[self setSectionNotifications:1];
 	#endif
 }
 
@@ -50,11 +61,26 @@
 {
 	[super viewWillAppear:animated];
 	
+	NSLog(@"SETTINGS WILL APPEAR");
+	
 	// Set may disable timeout value
 	id <ProfileProtocol> profile;
 	
 	#ifdef MYTELEMED
 		profile = [MyProfileModel sharedInstance];
+	
+		// Load notification settings for each type
+		NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
+	
+		[notificationSettingModel setDelegate:self];
+	
+		[self setChatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"chat"]];
+		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"comment"]];
+		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"normal"]];
+		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"stat"]];
+	
+		// Reload notification cells
+		[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
 
 	#elif defined MED2MED
 		profile = [UserProfileModel sharedInstance];
@@ -76,38 +102,30 @@
 	}
 	else
 	{
-		if (! [settings boolForKey:@"timeoutAlert"])
+		UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 		{
-			UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
-			{
-				[self.switchTimeout setOn:YES];
-			}];
-			UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-			{
-				NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-				
-				[settings setBool:YES forKey:@"timeoutAlert"];
-				[settings setBool:NO forKey:@"enableTimeout"];
-				[settings synchronize];
-			}];
-		
-			[updateTimeoutAlertController addAction:confirmAction];
-			[updateTimeoutAlertController addAction:cancelAction];
-		
-			// PreferredAction only supported in 9.0+
-			if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
-			{
-				[updateTimeoutAlertController setPreferredAction:cancelAction];
-			}
-		
-			// Show alert
-			[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];
-		}
-		else
+			[self.switchTimeout setOn:YES];
+		}];
+		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
+			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			
 			[settings setBool:NO forKey:@"enableTimeout"];
+			[settings synchronize];
+		}];
+	
+		[updateTimeoutAlertController addAction:confirmAction];
+		[updateTimeoutAlertController addAction:cancelAction];
+	
+		// PreferredAction only supported in 9.0+
+		if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[updateTimeoutAlertController setPreferredAction:cancelAction];
 		}
+	
+		// Show alert
+		[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];
 	}
 	
 	[settings synchronize];
@@ -116,7 +134,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section
-    if (section == 0 && ! self.mayDisableTimeout)
+    if (section == self.sectionSessionTimeout && ! self.mayDisableTimeout)
 	{
 		return 0;
 	}
@@ -127,42 +145,42 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its header height to 0
-	return (section == 0 && ! self.mayDisableTimeout ? 0.1f : ([self tableView:tableView titleForHeaderInSection:section] == nil ? 22.0f : 46.0f));
+	return (section == self.sectionSessionTimeout && ! self.mayDisableTimeout ? 0.1f : ([self tableView:tableView titleForHeaderInSection:section] == nil ? 22.0f : 46.0f));
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its footer height to 0
-	return (section == 0 && ! self.mayDisableTimeout ? 0.1f : [super tableView:tableView heightForFooterInSection:section]);
+	return (section == self.sectionSessionTimeout && ! self.mayDisableTimeout ? 0.1f : [super tableView:tableView heightForFooterInSection:section]);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its header title
 	// Note: it is not enough to simply set the header height to 0.1 because user can still drag the screen down and see the text
-	return (section == 0 && ! self.mayDisableTimeout ? @"" : [super tableView:tableView titleForHeaderInSection:section]);
+	return (section == self.sectionSessionTimeout && ! self.mayDisableTimeout ? @"" : [super tableView:tableView titleForHeaderInSection:section]);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its footer title
 	// Note: it is not enough to simply set the footer height to 0.1 because user can still drag the screen down and see the text
-	return (section == 0 && ! self.mayDisableTimeout ? @"" : [super tableView:tableView titleForFooterInSection:section]);
+	return (section == self.sectionSessionTimeout && ! self.mayDisableTimeout ? @"" : [super tableView:tableView titleForFooterInSection:section]);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    
+	
 	// Set timeout value
-	if (indexPath.section == 0)
+	if (indexPath.section == self.sectionSessionTimeout)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
 		[self.switchTimeout setOn:[settings boolForKey:@"enableTimeout"]];
 	}
 	// Add version and build numbers to version cell
-	else if (indexPath.section == self.aboutTeleMedSection)
+	else if (indexPath.section == self.sectionAboutTeleMed)
 	{
 		if (indexPath.row == 0)
 		{
@@ -179,6 +197,55 @@
 			#endif
 		}
 	}
+	
+	#ifdef MYTELEMED
+	// Set notification settings in cell's detail
+	else if (indexPath.section == self.sectionNotifications)
+	{
+		NSString *detailText;
+		
+		switch (indexPath.row)
+		{
+			// Stat message settings
+			case 0:
+				detailText = self.statMessageNotificationSettings.ToneTitle;
+				
+				// Append repeat details
+				if (self.statMessageNotificationSettings.isReminderOn)
+				{
+					detailText = [detailText stringByAppendingFormat:@", %@ min repeat", self.statMessageNotificationSettings.Interval];
+				}
+				break;
+			
+			// Normal message settings
+			case 1:
+				detailText = self.normalMessageNotificationSettings.ToneTitle;
+				
+				// Append repeat details
+				if (self.normalMessageNotificationSettings.isReminderOn)
+				{
+					detailText = [detailText stringByAppendingFormat:@", %@ min repeat", self.normalMessageNotificationSettings.Interval];
+				}
+				break;
+			
+			// Chat message settings (repeat notifications are not used)
+			case 2:
+				detailText = self.chatMessageNotificationSettings.ToneTitle;
+				break;
+			
+			// Comment settings (repeat notifications are not used)
+			case 3:
+				detailText = self.commentNotificationSettings.ToneTitle;
+				break;
+			
+			default:
+				detailText = @"Default";
+				break;
+		}
+		
+		[cell.detailTextLabel setText:detailText];
+	}
+	#endif
 	
     return cell;
 }
@@ -231,6 +298,55 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
+// Return server notification settings from NotificationSettingModel delegate
+- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name
+{
+	NSNumber *row;
+	
+	// Chat message settings
+	if ([name isEqualToString:@"chat"])
+	{
+		[self setChatMessageNotificationSettings:serverNotificationSettings];
+		
+		row = @2;
+	}
+	// Comment settings
+	else if ([name isEqualToString:@"comment"])
+	{
+		[self setCommentNotificationSettings:serverNotificationSettings];
+		
+		row = @3;
+	}
+	// Normal message settings
+	else if ([name isEqualToString:@"normal"])
+	{
+		[self setNormalMessageNotificationSettings:serverNotificationSettings];
+		
+		row = @1;
+	}
+	// Stat message settings
+	else if ([name isEqualToString:@"stat"])
+	{
+		[self setStatMessageNotificationSettings:serverNotificationSettings];
+		
+		row = @0;
+	}
+	
+	// Reload corresponding notification cell
+	if (row != NULL)
+	{
+		[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[row integerValue] inSection:self.sectionNotifications]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
+// Return error from NotificationSettingModel delegate
+- (void)updateNotificationSettingsError:(NSError *)error
+{
+	NSLog(@"Error loading notification settings");
+	
+	// Fail silently and let SettingsNotificationsTableViewController handle
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Segue to notification settings

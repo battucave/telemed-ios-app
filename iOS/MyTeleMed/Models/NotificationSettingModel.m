@@ -68,7 +68,7 @@
 		[notificationSettings setEnabled:YES];
 		[notificationSettings setIsReminderOn:YES];
 		
-		[notificationSettings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
+		[notificationSettings setToneTitle:@"Default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
 		
 		// Intervals should always exist
 		if ([intervals count] > 0)
