@@ -48,7 +48,7 @@
 {
 	[super viewDidLoad];
 	
-	// Fix bug in iOS 7 where text overlaps indicator on first run
+	// Fix bug in iOS 7+ where text overlaps indicator on first run
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.refreshControl beginRefreshing];
