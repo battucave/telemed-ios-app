@@ -137,7 +137,7 @@
 				if (success)
 				{
 					// Go to the next screen in the login process
-					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
 				}
 				else
 				{

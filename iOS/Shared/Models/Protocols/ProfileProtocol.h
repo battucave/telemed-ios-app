@@ -15,6 +15,7 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
+@property (nonatomic) BOOL IsAuthenticated;// Not passed from web service
 @property (nonatomic) BOOL IsAuthorized; // Med2Med manually sets this separately from web service
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) TimeZoneModel *MyTimeZone;

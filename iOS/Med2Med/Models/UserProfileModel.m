@@ -63,6 +63,9 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
+			// Update authenticated flag
+			[self setIsAuthenticated:YES];
+			
 			callback(YES, (id <ProfileProtocol>)self, nil);
 		}
 		// Error parsing xml file

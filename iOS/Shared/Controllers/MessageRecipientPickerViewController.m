@@ -76,15 +76,15 @@
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar sizeToFit];
 	
+	// Initialize search bar placeholder for message
+	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	
 	// Initialize search bar placeholder for chat
+	#ifdef MYTELEMED
 	if ([self.messageRecipientType isEqualToString:@"Chat"]) {
 		[self.searchController.searchBar setPlaceholder:@"Search Participants"];
 	}
-	// Initialize search bar placeholder for message
-	else
-	{
-		[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
-	}
+	#endif
 	
 	// iOS 11+ navigation bar has support for search controller
 	if (@available(iOS 11.0, *))

@@ -15,6 +15,7 @@
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
 @property (nonatomic) NSString *FirstName;
+@property (nonatomic) BOOL IsAuthenticated;// Not passed from web service
 @property (nonatomic) BOOL IsAuthorized;
 @property (nonatomic) NSString *JobTitlePrefix;
 @property (nonatomic) NSString *LastName;

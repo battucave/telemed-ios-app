@@ -148,7 +148,7 @@
 						goToRemoteNotificationScreen(self.navigationController);
 					});
 				}
-				// User was not logged in so assign the block to a property for the showMainScreen method to handle
+				// User was not logged in so assign the block to a property for AppDelegate's goToNextScreen: to handle
 				else
 				{
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] setGoToRemoteNotificationScreen:goToRemoteNotificationScreen];

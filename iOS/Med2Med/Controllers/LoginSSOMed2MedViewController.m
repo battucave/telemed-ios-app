@@ -63,7 +63,7 @@
 					}
 					
 					// Go to main storyboard
-					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
 				}
 				else
 				{

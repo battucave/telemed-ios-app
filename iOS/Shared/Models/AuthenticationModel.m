@@ -11,7 +11,16 @@
 #import "AuthenticationHTTPSessionManager.h"
 #import "KeychainItemWrapper.h"
 #import "TeleMedHTTPRequestOperationManager.h"
+#import "ProfileProtocol.h"
 #import "AuthenticationXMLParser.h"
+
+#ifdef MYTELEMED
+	#import "MyProfileModel.h"
+#endif
+
+#ifdef MED2MED
+	#import "UserProfileModel.h"
+#endif
 
 @interface AuthenticationModel()
 
@@ -252,26 +261,16 @@
 	self.AccessTokenExpiration = nil;
 	self.RefreshToken = nil;
 	
+	// Update profile's authenticated flag
+	#ifdef MYTELEMED
+		[[MyProfileModel sharedInstance] setIsAuthenticated:NO];
+
+	#elif defined MED2MED
+		[[UserProfileModel sharedInstance] setIsAuthenticated:NO];
+	#endif
+	
 	// Go to LoginSSOViewController
-	UIStoryboard *loginSSOStoryboard;
-	UIStoryboard *currentStoryboard = appDelegate.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
-	
-	NSLog(@"Current Storyboard: %@", currentStoryboardName);
-	
-	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
-	{
-		loginSSOStoryboard = currentStoryboard;
-	}
-	else
-	{
-		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
-	}
-	
-	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
-	
-	[appDelegate.window setRootViewController:loginSSONavigationController];
-	[appDelegate.window makeKeyAndVisible];
+	[appDelegate goToNextScreen];
 }
 
 @end
