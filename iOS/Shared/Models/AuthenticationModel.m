@@ -11,7 +11,6 @@
 #import "AuthenticationHTTPSessionManager.h"
 #import "KeychainItemWrapper.h"
 #import "TeleMedHTTPRequestOperationManager.h"
-#import "ProfileProtocol.h"
 #import "AuthenticationXMLParser.h"
 
 #ifdef MYTELEMED
@@ -261,12 +260,12 @@
 	self.AccessTokenExpiration = nil;
 	self.RefreshToken = nil;
 	
-	// Update profile's authenticated flag
+	// Log out of profile
 	#ifdef MYTELEMED
-		[[MyProfileModel sharedInstance] setIsAuthenticated:NO];
+		[[MyProfileModel sharedInstance] doLogout];
 
 	#elif defined MED2MED
-		[[UserProfileModel sharedInstance] setIsAuthenticated:NO];
+		[[UserProfileModel sharedInstance] doLogout];
 	#endif
 	
 	// Go to LoginSSOViewController

@@ -11,6 +11,12 @@
 #import "ProfileProtocol.h"
 #import "UserProfileXMLParser.h"
 
+@interface UserProfileModel()
+
+@property (nonatomic) BOOL IsAuthenticated; // Not passed from web service
+
+@end
+
 @implementation UserProfileModel
 
 + (id <ProfileProtocol>)sharedInstance
@@ -50,6 +56,11 @@
 	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
 }
 
+- (void)doLogout
+{
+	[self setIsAuthenticated:NO];
+}
+
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
 	[self.operationManager GET:@"UserProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
@@ -85,6 +96,14 @@
 		
 		callback(NO, nil, error);
 	}];
+}
+
+- (BOOL)isAuthenticated {
+	return _IsAuthenticated;
+}
+
+- (BOOL)isAuthorized {
+	return _IsAuthorized;
 }
 
 @end

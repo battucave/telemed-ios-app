@@ -15,8 +15,7 @@
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
 @property (nonatomic) NSString *FirstName;
-@property (nonatomic) BOOL IsAuthenticated;// Not passed from web service
-@property (nonatomic) BOOL IsAuthorized;
+@property (nonatomic) BOOL IsAuthorized; // Use isAuthorized: as getter
 @property (nonatomic) NSString *JobTitlePrefix;
 @property (nonatomic) NSString *LastName;
 @property (nonatomic) BOOL MayDisableTimeout;
@@ -26,6 +25,9 @@
 
 + (id <ProfileProtocol>)sharedInstance;
 
+- (void)doLogout;
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback;
+- (BOOL)isAuthenticated;
+- (BOOL)isAuthorized;
 
 @end

@@ -680,7 +680,7 @@
 	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 	
 	// If user requires authentication, then show login screen
-	if (! profile.IsAuthenticated)
+	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 		
@@ -982,7 +982,7 @@
 	UINavigationController *navigationController;
 	
 	// If user has at least one authorized account, then show MessageNewViewController
-	if (profile.IsAuthorized)
+	if ([profile isAuthorized])
 	{
 		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewNavigationController"];
 	}
@@ -1012,7 +1012,7 @@
 	NSLog(@"Future Phase: Check if password change is required");
 	
 	// If user requires authentication, then show login screen
-	if (! profile.IsAuthenticated)
+	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}

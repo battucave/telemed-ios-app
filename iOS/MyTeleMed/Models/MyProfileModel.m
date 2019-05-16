@@ -18,6 +18,7 @@
 @property (nonatomic) AccountModel *oldMyPreferredAccount;
 
 // @property (nonatomic) BOOL hasChangedPassword; // TESTING ONLY
+@property (nonatomic) BOOL IsAuthenticated; // Not passed from web service
 
 @end
 
@@ -60,6 +61,11 @@
 	}
 	
 	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
+}
+
+- (void)doLogout
+{
+	[self setIsAuthenticated:NO];
 }
 
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
@@ -110,6 +116,14 @@
 		
 		callback(NO, nil, error);
 	}];
+}
+
+- (BOOL)isAuthenticated {
+	return _IsAuthenticated;
+}
+
+- (BOOL)isAuthorized {
+	return _IsAuthorized;
 }
 
 // Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving my preferred account to server)

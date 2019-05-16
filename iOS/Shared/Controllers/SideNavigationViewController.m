@@ -17,7 +17,6 @@
 #endif
 
 #ifdef MED2MED
-	#import "ProfileProtocol.h"
 	#import "UserProfileModel.h"
 #endif
 
@@ -273,7 +272,7 @@
 	if ([cell.reuseIdentifier isEqualToString:@"New Message"])
 	{
 		// Show MessageNewTableViewController
-		if ([[UserProfileModel sharedInstance] IsAuthorized])
+		if ([[UserProfileModel sharedInstance] isAuthorized])
 		{
 			[self performSegueWithIdentifier:@"showMessageNew" sender:cell];
 		}
