@@ -391,20 +391,27 @@
 }
 
 /**
+ * Get the LoginSSOStoryboard
+ */
+- (UIStoryboard *)getLoginSSOStoryboard
+{
+	UIStoryboard *loginSSOStoryboard = self.window.rootViewController.storyboard;
+	
+	// Initialize new instance of LoginSSOStoryboard if needed
+	if (! [[loginSSOStoryboard valueForKey:@"name"] isEqualToString:@"LoginSSO"])
+	{
+		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
+	}
+	
+	return loginSSOStoryboard;
+}
+
+/**
  * Go to LoginSSOViewController
  */
 - (void)goToLoginScreen
 {
-	UIStoryboard *loginSSOStoryboard = self.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [loginSSOStoryboard valueForKey:@"name"];
-	
-	NSLog(@"Current Storyboard: %@", currentStoryboardName);
-	
-	// Initialize login sso storyboard
-	if (! [currentStoryboardName isEqualToString:@"LoginSSO"])
-	{
-		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
-	}
+	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
 	
 	// Set LoginSSONavigationController as the root view controller
 	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
@@ -419,33 +426,41 @@
 /**
  * Go to PasswordViewController
  */
-- (void)goToPasswordScreen
+- (void)goToPasswordChangeScreen
 {
-	UIStoryboard *loginSSOStoryboard = self.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [loginSSOStoryboard valueForKey:@"name"];
-	
-	NSLog(@"Current Storyboard: %@", currentStoryboardName);
-	
-	// Initialize login sso storyboard
-	if (! [currentStoryboardName isEqualToString:@"LoginSSO"])
+	[self goToViewControllerWithIdentifier:@"Password"];
+}
+
+/**
+ * Go to a screen in the LoginSSOStoryboard using identifier
+ */
+- (void)goToViewControllerWithIdentifier:(NSString *)identifier
+{
+	if ([identifier isEqualToString:@"LoginSSO"])
 	{
-		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
-	}
+		NSLog(@"WARNING: Use goToLoginScreen: directly for navigating to the LoginSSO screen.");
 		
-	// If root view controller is a navigation controller, then push PasswordViewController onto the existing navigation stack
+		[self goToLoginScreen];
+		
+		return;
+	}
+	
+	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
+	
+	// If root view controller is a navigation controller, then push screen onto the existing navigation stack
 	if (self.window.rootViewController.class == UINavigationController.class)
 	{
 		UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
-		UITableViewController *passwordViewController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"PasswordViewController"];
+		UIViewController *viewController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@ViewController", identifier]];
 	
-		[navigationController pushViewController:passwordViewController animated:YES];
+		[navigationController pushViewController:viewController animated:YES];
 	}
-	// Set PasswordNavigationController as the root view controller
+	// Set screen's navigation controller as the root view controller
 	else
 	{
-		UINavigationController *passwordNavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"PasswordNavigationController"];
+		UINavigationController *navigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@NavigationController", identifier]];
 		
-		[self.window setRootViewController:passwordNavigationController];
+		[self.window setRootViewController:navigationController];
 		[self.window makeKeyAndVisible];
 	}
 }
@@ -676,60 +691,42 @@
 - (void)goToNextScreen
 {
 	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
 	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
-	// If user requires authentication, then show login screen
+	// If user requires authentication, then go to login screen
 	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
-		
-		return;
 	}
-	// If user is currently on login sso storyboard, then perform additional checks before sending user to main storyboard
-	else if ([currentStoryboardName isEqualToString:@"LoginSSO"])
+	// If user is already on main storyboard, then skip additional checks
+	else if ([[currentStoryboard valueForKey:@"name"] isEqualToString:@"Main"])
 	{
-		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-		
-		// If device has not previously registered with TeleMed web service, then show PhoneNumberViewController
-		if (! registeredDeviceModel.hasRegistered)
-		{
-			// If using Simulator, skip phone number step because it is always invalid
-			// #ifdef DEBUG
-			#if TARGET_IPHONE_SIMULATOR
-				NSLog(@"Skip Phone Number step when on Simulator or Debugging");
-			
-			#else
-				// If root view controller is a navigation controller
-				if (self.window.rootViewController.class == UINavigationController.class)
-				{
-					UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
-					UIViewController *phoneNumberViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
-				
-					[navigationController pushViewController:phoneNumberViewController animated:YES];
-				}
-				else
-				{
-					UINavigationController *phoneNumberNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberNavigationController"];
-					
-					[self.window setRootViewController:phoneNumberNavigationController];
-					[self.window makeKeyAndVisible];
-				}
-			
-				return;
-			#endif
-		}
-		
-		// If TeleMed requires a password change for the user, then show PasswordChangeViewController
-		if (profile.PasswordChangeRequired)
-		{
-			[self goToPasswordScreen];
-			
-			return;
-		}
+		[self goToMainScreen];
 	}
-	
-	[self goToMainScreen];
+	// If device has not previously registered with TeleMed, then go to phone number screen
+	else if (! registeredDeviceModel.hasRegistered)
+	{
+		[self goToPhoneNumberScreen];
+	}
+	// If TeleMed requires a password change for the user, then go to password change screen
+	else if (profile.PasswordChangeRequired)
+	{
+		[self goToPasswordChangeScreen];
+	}
+	// User has completed login process so go to main screen
+	else
+	{
+		[self goToMainScreen];
+	}
+}
+
+/**
+ * Go to PhonenumberViewController
+ */
+- (void)goToPhoneNumberScreen
+{
+	[self goToViewControllerWithIdentifier:@"PhoneNumber"];
 }
 
 /**
@@ -1011,16 +1008,17 @@
 	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
 	NSLog(@"Future Phase: Check if password change is required");
 	
-	// If user requires authentication, then show login screen
+	// If user requires authentication, then go to login screen
 	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}
-	/*/ Future Phase: If TeleMed requires a password change for the user, then show PasswordChangeViewController
+	/*/ Future Phase: If TeleMed requires a password change for the user, then go to password change screen
 	else if (profile.PasswordChangeRequired)
 	{
-		[self goToPasswordScreen];
+		[self goToPasswordChangeScreen];
 	} */
+	// User has completed login process so go to main screen
 	else
 	{
 		[self goToMainScreen];

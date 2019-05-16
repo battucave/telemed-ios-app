@@ -22,6 +22,14 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	dispatch_once(&token, ^
 	{
 		sharedRegisteredDeviceInstance = [[self alloc] init];
+		
+		// If using Simulator, then skip phone number step because it is always invalid
+		// #ifdef DEBUG
+		#if TARGET_IPHONE_SIMULATOR
+			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
+		
+			[sharedRegisteredDeviceInstance setHasRegistered:YES];
+		#endif
 	});
 	
 	return sharedRegisteredDeviceInstance;
