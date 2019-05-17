@@ -18,6 +18,7 @@
 #import "SWRevealViewController.h"
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
+#import "SSOProviderModel.h"
 #import "Harpy.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 
@@ -368,7 +369,7 @@
 					#ifdef MYTELEMED
 						[self validateMyTeleMedRegistration:profile];
 					
-					// Med2Med - Validate at least one account is authorized
+					// Med2Med - Validate that at least one account is authorized
 					#elif defined MED2MED
 						[self validateMed2MedAuthorization:profile];
 					#endif
@@ -378,7 +379,7 @@
 				// Account is no longer valid so go to login screen
 				else
 				{
-					[self goToLoginScreen];
+					[self goToNextScreen];
 				}
 			}];
 			
@@ -387,7 +388,7 @@
 	}
 	
 	// Go to login screen by default
-	[self goToLoginScreen];
+	[self goToNextScreen];
 }
 
 /**
@@ -404,6 +405,14 @@
 	}
 	
 	return loginSSOStoryboard;
+}
+
+/**
+ * Go to EmailAddressViewController
+ */
+- (void)goToEmailAddressScreen
+{
+	[self goToViewControllerWithIdentifier:@"EmailAddress"];
 }
 
 /**
@@ -693,9 +702,15 @@
 	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
 	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
+	// If user has not previously provided an email address, then go to email address screen
+	if (! ssoProviderModel.EmailAddress)
+	{
+		[self goToEmailAddressScreen];
+	}
 	// If user requires authentication, then go to login screen
-	if (! [profile isAuthenticated])
+	else if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}
@@ -1008,8 +1023,13 @@
 	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
 	NSLog(@"Future Phase: Check if password change is required");
 	
+	// If user has not previously provided an email address, then go to email address screen
+	if (! ssoProviderModel.EmailAddress)
+	{
+		[self goToEmailAddressScreen];
+	}
 	// If user requires authentication, then go to login screen
-	if (! [profile isAuthenticated])
+	else if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}

@@ -260,6 +260,9 @@
 		E259B66121A5BB7F0013A9EE /* OnCallSlotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896351208633AF0055A18E /* OnCallSlotCell.m */; };
 		E2622D0C1FC5F8B0008BCFF3 /* MessageNewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0B1FC5F8B0008BCFF3 /* MessageNewTableViewController.m */; };
 		E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */; };
+		E26919DB228DF0470093BB60 /* EmailAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919DA228DF0470093BB60 /* EmailAddressViewController.m */; };
+		E26919E2228EEA750093BB60 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919E1228EEA750093BB60 /* Validation.m */; };
+		E26919E3228EEA750093BB60 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919E1228EEA750093BB60 /* Validation.m */; };
 		E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */; };
 		E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */; };
 		E270481B204C33BB005AFFFF /* MessageRecipientXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B852D1B14D0F400AD50C6 /* MessageRecipientXMLParser.m */; };
@@ -671,6 +674,10 @@
 		E2622D0D1FC5F9A4008BCFF3 /* MessageNew2TableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNew2TableViewController.h; sourceTree = "<group>"; };
 		E2622D0E1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNew2TableViewController.m; sourceTree = "<group>"; };
 		E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTeleMed.entitlements; sourceTree = "<group>"; };
+		E26919D9228DF0470093BB60 /* EmailAddressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmailAddressViewController.h; sourceTree = "<group>"; };
+		E26919DA228DF0470093BB60 /* EmailAddressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmailAddressViewController.m; sourceTree = "<group>"; };
+		E26919E0228EEA750093BB60 /* Validation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Validation.h; sourceTree = "<group>"; };
+		E26919E1228EEA750093BB60 /* Validation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Validation.m; sourceTree = "<group>"; };
 		E270ED891B18F24B00DD43B8 /* AuthenticationXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationXMLParser.h; sourceTree = "<group>"; };
 		E270ED8A1B18F24B00DD43B8 /* AuthenticationXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationXMLParser.m; sourceTree = "<group>"; };
 		E271C1BB2110AF4200256D8B /* fa-solid-900.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fa-solid-900.ttf"; sourceTree = "<group>"; };
@@ -1296,6 +1303,7 @@
 			children = (
 				E211D5781FBF551800263497 /* Controllers */,
 				E211D5771FBF4EE800263497 /* Extensions */,
+				E26919DC228EEA210093BB60 /* Helpers */,
 				28CCCD7417F517FC0093CEE2 /* Libraries */,
 				E2C7C1C41FC4B61300E50F07 /* Models */,
 				E211D5711FBF4A6C00263497 /* Resources */,
@@ -1428,6 +1436,8 @@
 				E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */,
 				E2D83FB31C761502008D26A8 /* CDMAVoiceDataViewController.h */,
 				E2D83FB41C761502008D26A8 /* CDMAVoiceDataViewController.m */,
+				E26919D9228DF0470093BB60 /* EmailAddressViewController.h */,
+				E26919DA228DF0470093BB60 /* EmailAddressViewController.m */,
 				E2964B451E675860002FF97B /* ErrorAlertController.h */,
 				E2964B461E675860002FF97B /* ErrorAlertController.m */,
 				28990CE9194F3A7E009BA9E0 /* HelpUserGuideViewController.h */,
@@ -1555,6 +1565,15 @@
 				E24A443F1FCE1C7C00A06EE8 /* HospitalCell.m */,
 			);
 			path = Includes;
+			sourceTree = "<group>";
+		};
+		E26919DC228EEA210093BB60 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				E26919E0228EEA750093BB60 /* Validation.h */,
+				E26919E1228EEA750093BB60 /* Validation.m */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		E271C1B92110AF4200256D8B /* Fonts */ = {
@@ -1903,6 +1922,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -2297,6 +2317,7 @@
 				28CCCD8817F518800093CEE2 /* MessagesViewController.m in Sources */,
 				E27B85211B14D09400AD50C6 /* AccountXMLParser.m in Sources */,
 				E211D59B1FBF571B00263497 /* AutoGrowingTextView.m in Sources */,
+				E26919E2228EEA750093BB60 /* Validation.m in Sources */,
 				E211D5941FBF571B00263497 /* MessageComposeTableViewController.m in Sources */,
 				E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */,
 				E27B850F1B14D03500AD50C6 /* ScreenshotAlertModel.m in Sources */,
@@ -2323,6 +2344,7 @@
 				E2ECFB681B3471C00024D970 /* TeleMedHTTPRequestOperationManager.m in Sources */,
 				28CCCD9417F535DD0093CEE2 /* SettingsTableViewController.m in Sources */,
 				E2CDEFA51D25752100728F1A /* ChatParticipantXMLParser.m in Sources */,
+				E26919DB228DF0470093BB60 /* EmailAddressViewController.m in Sources */,
 				E259B65F21A5A46D0013A9EE /* OnCallSlotPickerViewController.m in Sources */,
 				E270ED8B1B18F24B00DD43B8 /* AuthenticationXMLParser.m in Sources */,
 				E27B20B720A4A3F300FA3405 /* PasswordViewController.m in Sources */,
@@ -2418,6 +2440,7 @@
 				E25036CD1FBB88F400099C7E /* SSOProviderModel.m in Sources */,
 				E2896347208540320055A18E /* OnCallSlotModel.m in Sources */,
 				E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */,
+				E26919E3228EEA750093BB60 /* Validation.m in Sources */,
 				E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */,
 				E25036D01FBB88F400099C7E /* main.m in Sources */,
 				E25036D31FBB88F400099C7E /* CoreTableViewController.m in Sources */,
