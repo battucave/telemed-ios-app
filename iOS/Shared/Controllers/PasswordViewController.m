@@ -63,11 +63,8 @@
 {
 	[super viewDidAppear:animated];
 	
-	// iPhone > 4(S) - Auto-focus current password field (logic has to occur in viewDidAppear: so that keyboard observers can modify the scroll view; iPhone 4(S) cannot fit entire form while keyboard visible so show it without keyboard first)
-	if ([UIScreen mainScreen].bounds.size.height > 480.0f)
-	{
-		[self.textFieldCurrentPassword becomeFirstResponder];
-	}
+	// Auto-focus current password field (logic has to occur in viewDidAppear: so that keyboard observers can modify the scroll view)
+	[self.textFieldCurrentPassword becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -81,10 +78,6 @@
 
 - (IBAction)changePassword:(id)sender
 {
-	PasswordChangeModel *passwordChangeModel = [[PasswordChangeModel alloc] init];
-	
-	[passwordChangeModel setDelegate:self];
-	
 	// Verify that form is valid
 	if (! [self validateForm])
 	{
@@ -108,6 +101,9 @@
 	}
 	else
 	{
+		PasswordChangeModel *passwordChangeModel = [[PasswordChangeModel alloc] init];
+		
+		[passwordChangeModel setDelegate:self];
 		[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
 	}
 }

@@ -68,7 +68,7 @@
 	UIEdgeInsets textViewChatMessageEdgeInsets = self.textViewChatMessage.textContainerInset;
 	
 	[self.textViewChatMessage setDelegate:self];
-	[self.textViewChatMessage setMaxHeight:118.5f]; // (118.5 = iPhone 4s view height - keyboard height - chat participants view height - 1px border)
+	[self.textViewChatMessage setMaxHeight:206.5f]; // (118.5 = iPhone 5 view height - keyboard height - chat participants view height - 1px border)
 	[self.textViewChatMessage setTextContainerInset:UIEdgeInsetsMake(textViewChatMessageEdgeInsets.top, 12.0f, textViewChatMessageEdgeInsets.bottom, 12.0f)];
 	self.textViewChatMessagePlaceholder = self.textViewChatMessage.text;
 }
