@@ -343,7 +343,7 @@
 	
 	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
 	
-	// If user has timeout disabled and a refresh token already exists, attempt to bypass login screen
+	// If user has timeout disabled and a refresh token already exists, then attempt to bypass the login screen
 	if (! timeoutEnabled && authenticationModel.RefreshToken != nil)
 	{
 		id <ProfileProtocol> profile;

@@ -20,7 +20,7 @@
 // Override EmailAddress getter
 - (NSString *)EmailAddress
 {
-	// If email address is not already set, check user preferences
+	// If email address is not already set, then check user preferences
 	if (! _EmailAddress)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -48,7 +48,7 @@
 // Override Name getter
 - (NSString *)Name
 {
-	// If sso provider is not already set, check user preferences
+	// If name is not already set, then check user preferences
 	if (! _Name)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
