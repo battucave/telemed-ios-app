@@ -1019,6 +1019,7 @@
 - (void)goToNextScreen
 {
 	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
 	NSLog(@"Future Phase: Check if password change is required");

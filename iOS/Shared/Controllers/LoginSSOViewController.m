@@ -357,7 +357,7 @@
 						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
 						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
 						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
-						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tmd4321$$'; break;"
 					"}"
 				"};"
 				

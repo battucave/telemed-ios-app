@@ -143,7 +143,7 @@
 		// Error parsing xml file or generic response returned
 		else
 		{
-			errorString = @"The email address you entered is invalid.";
+			errorString = @"Email address field must be a valid email address.";
 		}
 		
 		// Build a generic error message

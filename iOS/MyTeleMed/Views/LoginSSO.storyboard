@@ -822,15 +822,14 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PA0-4Y-UgG">
-                                <rect key="frame" x="57" y="238" width="142" height="16"/>
+                                <rect key="frame" x="57" y="238" width="62" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="142" id="Hh4-XM-m6S"/>
+                                    <constraint firstAttribute="width" constant="62" id="Hh4-XM-m6S"/>
                                     <constraint firstAttribute="height" constant="16" id="NZq-ks-gjO"/>
                                 </constraints>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <inset key="titleEdgeInsets" minX="-10" minY="2" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="132" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="WHAT'S THIS FOR" image="button-Help.png">
+                                <inset key="titleEdgeInsets" minX="0.0" minY="2" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="PRIVACY">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -840,18 +839,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uU3-vs-QsZ">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UgT-Ah-PFv">
-                                        <rect key="frame" x="16" y="11.666666666666629" width="60" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="c6H-xF-cYy"/>
-                                            <constraint firstAttribute="height" constant="21" id="q1X-LU-KHA"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="Privacy">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jwv-zz-hWi">
                                         <rect key="frame" x="308" y="11.666666666666629" width="90" height="21"/>
                                         <constraints>
@@ -873,10 +860,8 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="UgT-Ah-PFv" firstAttribute="leading" secondItem="L8M-vE-984" secondAttribute="leading" constant="16" id="3GN-Rt-scP"/>
                                     <constraint firstAttribute="trailing" secondItem="Jwv-zz-hWi" secondAttribute="trailing" constant="16" id="9PK-Ia-TXl"/>
                                     <constraint firstItem="Jwv-zz-hWi" firstAttribute="centerY" secondItem="uU3-vs-QsZ" secondAttribute="centerY" id="WAX-ZH-xcu"/>
-                                    <constraint firstItem="UgT-Ah-PFv" firstAttribute="centerY" secondItem="uU3-vs-QsZ" secondAttribute="centerY" id="YHK-xP-BgE"/>
                                     <constraint firstAttribute="height" constant="44" id="gKE-pY-WCZ"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="L8M-vE-984"/>

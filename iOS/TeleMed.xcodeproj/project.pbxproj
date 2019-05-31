@@ -263,6 +263,22 @@
 		E26919DB228DF0470093BB60 /* EmailAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919DA228DF0470093BB60 /* EmailAddressViewController.m */; };
 		E26919E2228EEA750093BB60 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919E1228EEA750093BB60 /* Validation.m */; };
 		E26919E3228EEA750093BB60 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919E1228EEA750093BB60 /* Validation.m */; };
+		E26CB72C22A1CEFE0010ACFE /* EmailAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919DA228DF0470093BB60 /* EmailAddressViewController.m */; };
+		E26CB72D22A1D0AA0010ACFE /* background-LoginSSO-Field.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C420A4D1A000FA3405 /* background-LoginSSO-Field.png */; };
+		E26CB72E22A1D0AE0010ACFE /* background-LoginSSO-Field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C620A4D1AD00FA3405 /* background-LoginSSO-Field@2x.png */; };
+		E26CB72F22A1D0B10010ACFE /* background-LoginSSO-Field@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E27B20C520A4D1A800FA3405 /* background-LoginSSO-Field@3x.png */; };
+		E26CB73022A1D0D20010ACFE /* icon-ChaseOff.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64521A4A66C0013A9EE /* icon-ChaseOff.png */; };
+		E26CB73122A1D0D60010ACFE /* icon-ChaseOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64821A4A6720013A9EE /* icon-ChaseOff@2x.png */; };
+		E26CB73222A1D0DA0010ACFE /* icon-ChaseOff@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64A21A4A6740013A9EE /* icon-ChaseOff@3x.png */; };
+		E26CB73322A1D0DD0010ACFE /* icon-ChaseOn.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64921A4A6720013A9EE /* icon-ChaseOn.png */; };
+		E26CB73422A1D0E10010ACFE /* icon-ChaseOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64721A4A6700013A9EE /* icon-ChaseOn@2x.png */; };
+		E26CB73522A1D0E50010ACFE /* icon-ChaseOn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B64621A4A66E0013A9EE /* icon-ChaseOn@3x.png */; };
+		E26CB73622A1D0EE0010ACFE /* icon-SwipeMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */; };
+		E26CB73722A1D0F00010ACFE /* icon-SwipeMenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65221A4A7BB0013A9EE /* icon-SwipeMenu@2x.png */; };
+		E26CB73822A1D0F30010ACFE /* icon-SwipeMenu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65121A4A7B90013A9EE /* icon-SwipeMenu@3x.png */; };
+		E26CB73922A1D0F60010ACFE /* icon-SwipeRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */; };
+		E26CB73A22A1D0F90010ACFE /* icon-SwipeRefresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65321A4A7BD0013A9EE /* icon-SwipeRefresh@2x.png */; };
+		E26CB73B22A1D0FB0010ACFE /* icon-SwipeRefresh@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E259B65421A4A7BF0013A9EE /* icon-SwipeRefresh@3x.png */; };
 		E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */; };
 		E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */; };
 		E270481B204C33BB005AFFFF /* MessageRecipientXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B852D1B14D0F400AD50C6 /* MessageRecipientXMLParser.m */; };
@@ -2103,10 +2119,13 @@
 				E22EF0881FD9A39700A2E6F6 /* button-MessageDetail-History@2x.png in Resources */,
 				E202950A1FBBA53600811DA6 /* Launch Screen.xib in Resources */,
 				E25037121FBB88F400099C7E /* button-AddComment@2x.png in Resources */,
+				E26CB72E22A1D0AE0010ACFE /* background-LoginSSO-Field@2x.png in Resources */,
 				E22EF0931FD9A3CA00A2E6F6 /* icon-Mail-Unread.png in Resources */,
 				E25037161FBB88F400099C7E /* menu@2x.png in Resources */,
 				E271C1C52110AF7D00256D8B /* fa-light-300.ttf in Resources */,
+				E26CB73622A1D0EE0010ACFE /* icon-SwipeMenu.png in Resources */,
 				E20295081FBBA4B200811DA6 /* Med2Med.xcassets in Resources */,
+				E26CB73222A1D0DA0010ACFE /* icon-ChaseOff@3x.png in Resources */,
 				E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */,
 				E250372B1FBB88F400099C7E /* button-WebViewBack@2x.png in Resources */,
 				E250372E1FBB88F400099C7E /* button-TextField-Help@2x.png in Resources */,
@@ -2119,25 +2138,32 @@
 				E22EF08B1FD9A39E00A2E6F6 /* button-MessageDetail-ReturnCall@2x.png in Resources */,
 				E25037391FBB88F400099C7E /* button-Contact-Call.png in Resources */,
 				E250373A1FBB88F400099C7E /* button-Contact-Call@2x.png in Resources */,
+				E26CB73122A1D0D60010ACFE /* icon-ChaseOff@2x.png in Resources */,
 				E250373B1FBB88F400099C7E /* indicator-CommentRightBlue@2x.png in Resources */,
 				E22EF0841FD9A38B00A2E6F6 /* button-MessageDetail-Forward.png in Resources */,
+				E26CB73822A1D0F30010ACFE /* icon-SwipeMenu@3x.png in Resources */,
 				E22EF08E1FD9A3A600A2E6F6 /* button-MessageDetail-TeleMed@2x.png in Resources */,
 				E2C7C1B81FC3910D00E50F07 /* button-Help@2x.png in Resources */,
+				E26CB72F22A1D0B10010ACFE /* background-LoginSSO-Field@3x.png in Resources */,
 				E250373D1FBB88F400099C7E /* button-WebViewBack.png in Resources */,
 				E25037411FBB88F400099C7E /* button-WebViewForward@2x.png in Resources */,
 				E25037531FBB88F400099C7E /* indicator-CommentLeft.png in Resources */,
 				E2C7C1B91FC3911000E50F07 /* button-Help@3x.png in Resources */,
+				E26CB73322A1D0DD0010ACFE /* icon-ChaseOn.png in Resources */,
 				E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */,
 				E271C1C42110AF7A00256D8B /* fa-regular-400.ttf in Resources */,
 				E2C7C1B71FC3910A00E50F07 /* button-Help.png in Resources */,
+				E26CB72D22A1D0AA0010ACFE /* background-LoginSSO-Field.png in Resources */,
 				E25037581FBB88F400099C7E /* indicator-CommentRight.png in Resources */,
 				E22EF0861FD9A39200A2E6F6 /* button-MessageDetail-Forward@3x.png in Resources */,
 				E20295011FBB934F00811DA6 /* Med2Med.storyboard in Resources */,
 				E25037651FBB88F400099C7E /* button-Help-Video.png in Resources */,
 				E25037661FBB88F400099C7E /* button-Help-Video@2x.png in Resources */,
+				E26CB73922A1D0F60010ACFE /* icon-SwipeRefresh.png in Resources */,
 				E25037691FBB88F400099C7E /* button-AddComment.png in Resources */,
 				E22EF0891FD9A39A00A2E6F6 /* button-MessageDetail-History@3x.png in Resources */,
 				E271C1C32110AF7500256D8B /* fa-solid-900.ttf in Resources */,
+				E26CB73A22A1D0F90010ACFE /* icon-SwipeRefresh@2x.png in Resources */,
 				E22EF0821FD9A38500A2E6F6 /* button-MessageDetail-Archive@2x.png in Resources */,
 				E22EF0851FD9A38F00A2E6F6 /* button-MessageDetail-Forward@2x.png in Resources */,
 				E25037771FBB88F400099C7E /* button-TextField-Help@3x.png in Resources */,
@@ -2157,12 +2183,17 @@
 				E22EF0871FD9A39400A2E6F6 /* button-MessageDetail-History.png in Resources */,
 				E22EF0951FD9A3CF00A2E6F6 /* icon-Mail-Unread@3x.png in Resources */,
 				E22EF0921FD9A3C700A2E6F6 /* icon-Mail-Read@3x.png in Resources */,
+				E26CB73022A1D0D20010ACFE /* icon-ChaseOff.png in Resources */,
 				E25037A51FBB88F400099C7E /* button-Help-PDF@2x.png in Resources */,
+				E26CB73722A1D0F00010ACFE /* icon-SwipeMenu@2x.png in Resources */,
 				E22EF08F1FD9A3A800A2E6F6 /* button-MessageDetail-TeleMed@3x.png in Resources */,
 				E25037A91FBB88F400099C7E /* button-Contact-Mail@2x.png in Resources */,
+				E26CB73B22A1D0FB0010ACFE /* icon-SwipeRefresh@3x.png in Resources */,
 				E25037AC1FBB88F400099C7E /* button-Help-PDF@3x.png in Resources */,
 				E25037AE1FBB88F400099C7E /* button-Help-PDF.png in Resources */,
 				E25037AF1FBB88F400099C7E /* menu@3x.png in Resources */,
+				E26CB73522A1D0E50010ACFE /* icon-ChaseOn@3x.png in Resources */,
+				E26CB73422A1D0E10010ACFE /* icon-ChaseOn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2405,6 +2436,7 @@
 				E23A4F4A1FC3325C00DC899D /* LoginSSOMed2MedViewController.m in Sources */,
 				E22EF07C1FD99CBC00A2E6F6 /* MessageDetailViewController.m in Sources */,
 				E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */,
+				E26CB72C22A1CEFE0010ACFE /* EmailAddressViewController.m in Sources */,
 				E289634A208542BD0055A18E /* OnCallSlotXMLParser.m in Sources */,
 				E250369A1FBB88F400099C7E /* UIView+IBDesignable.m in Sources */,
 				E2622D0F1FC5F9A4008BCFF3 /* MessageNew2TableViewController.m in Sources */,
