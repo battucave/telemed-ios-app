@@ -47,10 +47,9 @@
 	// Load notification settings from device
 	if ([settings objectForKey:notificationKey] != nil)
 	{
-		// In MyTeleMed versions 3.0 - 3.2, the notification settings were archived using a different class. Use this class as a substitute when unarchiving the object
+		// Unarchive the notification settings
 		[NSKeyedUnarchiver setClass:self.class forClassName:@"NotificationSettingsModel"];
 		
-		// Unarchive the notification settings
 		notificationSettings = (NotificationSettingModel *)[NSKeyedUnarchiver unarchiveObjectWithData:[settings objectForKey:notificationKey]];
 	}
 	
