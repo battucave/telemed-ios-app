@@ -158,6 +158,9 @@
 		// Set accounts
 		[accountPickerViewController setAccounts:self.accounts];
 		
+		// Set message recipient type
+		[accountPickerViewController setMessageRecipientType:@"New"];
+		
 		// Set selected account if previously set
 		[accountPickerViewController setSelectedAccount:self.selectedAccount];
 		
