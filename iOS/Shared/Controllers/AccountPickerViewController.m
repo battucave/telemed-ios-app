@@ -521,13 +521,13 @@
 				// Verify that selected account has a phone number
 				if (self.selectedAccount.DID != nil && ! [self.selectedAccount.DID isEqualToString:@""])
 				{
-					// Use phone dialer to make call. Tel works same as telprompt in iOS 10.3+
+					// Use phone dialer to make call
 					NSURL *urlCallTeleMed = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@", self.selectedAccount.DID]];
 
 					// Verify that device can make phone calls
 					if ([[UIApplication sharedApplication] canOpenURL:urlCallTeleMed])
 					{
-						[[UIApplication sharedApplication] openURL:urlCallTeleMed];
+						[[UIApplication sharedApplication] openURL:urlCallTeleMed options:@{} completionHandler:nil];
 					}
 					else
 					{
@@ -545,11 +545,8 @@
 				
 					[callUnavailableAlertController addAction:okAction];
 				
-					// PreferredAction only supported in 9.0+
-					if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
-					{
-						[callUnavailableAlertController setPreferredAction:okAction];
-					}
+					// Set preferred action
+					[callUnavailableAlertController setPreferredAction:okAction];
 				
 					// Show Alert
 					[self presentViewController:callUnavailableAlertController animated:YES completion:nil];

@@ -136,33 +136,20 @@
 	
 	// MyTeleMed - push notification registration
 	#ifdef MYTELEMED
-		// Register for push notification in iOS 10+
-		if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
+		// Register for push notifications
+		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+		
+		[userNotificationCenter setDelegate:self];
+		[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
 		{
-			UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-			
-			[userNotificationCenter setDelegate:self];
-			[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
+			if (granted)
 			{
-				if (granted)
+				dispatch_async(dispatch_get_main_queue(), ^
 				{
-					dispatch_async(dispatch_get_main_queue(), ^
-					{
-						[application registerForRemoteNotifications];
-					});
-				}
-			}];
-		}
-		// Register for push notifications in iOS < 10
-		else
-		{
-			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-			
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				[application registerForRemoteNotifications];
-			});
-		}
+					[application registerForRemoteNotifications];
+				});
+			}
+		}];
 	
 		NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 	

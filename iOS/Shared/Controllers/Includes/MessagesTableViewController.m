@@ -418,7 +418,7 @@
 		
 		if ([messageRecipients count] > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %lu more...", [messageRecipients count] - 1];
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %u more...", [messageRecipients count] - 1];
 		}
 	}
 	

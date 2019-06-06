@@ -105,11 +105,8 @@
 	[deleteChatMessagesAlertController addAction:continueAction];
 	[deleteChatMessagesAlertController addAction:cancelAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([deleteChatMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[deleteChatMessagesAlertController setPreferredAction:continueAction];
-	}
+	// Set preferred action
+	[deleteChatMessagesAlertController setPreferredAction:continueAction];
 
 	// Show alert
 	[self presentViewController:deleteChatMessagesAlertController animated:YES completion:nil];

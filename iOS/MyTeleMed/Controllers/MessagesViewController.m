@@ -101,11 +101,8 @@
 	[archiveMessagesAlertController addAction:continueAction];
 	[archiveMessagesAlertController addAction:cancelAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([archiveMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[archiveMessagesAlertController setPreferredAction:continueAction];
-	}
+	// Set preferred action
+	[archiveMessagesAlertController setPreferredAction:continueAction];
 
 	// Show alert
 	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
