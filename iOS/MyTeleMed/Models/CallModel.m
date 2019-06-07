@@ -49,7 +49,7 @@
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	// This web service method only returns after the phone call has been answered so increase timeout interval
+	// This web service method requires a longer timeout interval
 	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
 	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)

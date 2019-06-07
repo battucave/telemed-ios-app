@@ -10,10 +10,10 @@
 
 @interface SSOProviderModel : NSObject
 
-@property (weak) id delegate;
-
+@property (nonatomic) NSString *EmailAddress;
 @property (nonatomic) NSString *Name;
 
-- (void)validate:(NSString *)newName withCallback:(void(^)(BOOL success, NSError *error))callback;
+- (void)validateEmailAddress:(NSString *)newEmailAddress withCallback:(void(^)(BOOL success, NSError *error))callback;
+- (void)validateName:(NSString *)newName withCallback:(void(^)(BOOL success, NSError *error))callback; // Deprecated
 
 @end

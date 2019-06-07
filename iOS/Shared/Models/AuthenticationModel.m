@@ -13,6 +13,14 @@
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 
+#ifdef MYTELEMED
+	#import "MyProfileModel.h"
+#endif
+
+#ifdef MED2MED
+	#import "UserProfileModel.h"
+#endif
+
 @interface AuthenticationModel()
 
 @property (nonatomic) NSDate *AccessTokenExpiration;
@@ -252,26 +260,16 @@
 	self.AccessTokenExpiration = nil;
 	self.RefreshToken = nil;
 	
+	// Log out of profile
+	#ifdef MYTELEMED
+		[[MyProfileModel sharedInstance] doLogout];
+
+	#elif defined MED2MED
+		[[UserProfileModel sharedInstance] doLogout];
+	#endif
+	
 	// Go to LoginSSOViewController
-	UIStoryboard *loginSSOStoryboard;
-	UIStoryboard *currentStoryboard = appDelegate.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
-	
-	NSLog(@"Current Storyboard: %@", currentStoryboardName);
-	
-	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
-	{
-		loginSSOStoryboard = currentStoryboard;
-	}
-	else
-	{
-		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
-	}
-	
-	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
-	
-	[appDelegate.window setRootViewController:loginSSONavigationController];
-	[appDelegate.window makeKeyAndVisible];
+	[appDelegate goToNextScreen];
 }
 
 @end

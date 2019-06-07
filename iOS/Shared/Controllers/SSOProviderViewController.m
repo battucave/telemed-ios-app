@@ -52,7 +52,7 @@
 	NSString *name = [self.textFieldSSOProvider.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 	
 	// Validate SSO provider using api
-	[self.ssoProviderModel validate:name withCallback:^(BOOL success, NSError *error)
+	[self.ssoProviderModel validateName:name withCallback:^(BOOL success, NSError *error)
 	{
 		// SSO provider is valid so save it and return to login
 		if (success)

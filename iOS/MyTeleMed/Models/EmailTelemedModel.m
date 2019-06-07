@@ -7,6 +7,7 @@
 //
 
 #import "EmailTelemedModel.h"
+#import "Validation.h"
 #import "NSString+XML.h"
 
 @interface EmailTelemedModel ()
@@ -24,8 +25,9 @@
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
+	
 	// Validate email address
-	if (! [self isValidEmailAddress:fromEmailAddress])
+	if (! [Validation isEmailAddressValid:fromEmailAddress])
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"From field must be a valid email address.", NSLocalizedDescriptionKey, nil]];
 		
@@ -142,52 +144,6 @@
 		// Ensure that pending callback doesn't fire again after possible error
 		self.pendingComplete = YES;
 	}];
-}
-
-- (BOOL)isValidEmailAddress:(NSString *)emailAddress
-{
-	if (! emailAddress.length)
-	{
-		return NO;
-	}
-
-	NSRange entireRange = NSMakeRange(0, emailAddress.length);
-	NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
-	NSArray *matches = [detector matchesInString:emailAddress options:0 range:entireRange];
- 
-	// Should be only a single match
-	if ([matches count] != 1)
-	{
-		return NO;
-	}
- 
-	NSTextCheckingResult *result = [matches firstObject];
- 
-	// Result should be a link type
-	if (result.resultType != NSTextCheckingTypeLink)
-	{
-		return NO;
-	}
- 
-	// Result should be a recognized email address
-	if (! [result.URL.scheme isEqualToString:@"mailto"])
-	{
-		return NO;
-	}
- 
-	// Match must include the entire string
-	if (! NSEqualRanges(result.range, entireRange))
-	{
-		return NO;
-	}
- 
-	// Should not have the mailto url scheme
-	if ([emailAddress hasPrefix:@"mailto:"])
-	{
-		return NO;
-	}
- 
-	return YES;
 }
 
 @end

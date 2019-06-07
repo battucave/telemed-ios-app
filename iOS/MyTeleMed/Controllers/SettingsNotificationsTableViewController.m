@@ -192,9 +192,6 @@
 		}
 	}
 	
-	// Fix iOS8 Issue that prevents detail text from appearing
-	[cell layoutSubviews];
-	
     return cell;
 }
 

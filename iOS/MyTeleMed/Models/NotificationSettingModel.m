@@ -47,10 +47,9 @@
 	// Load notification settings from device
 	if ([settings objectForKey:notificationKey] != nil)
 	{
-		// In MyTeleMed versions 3.0 - 3.2, the notification settings were archived using a different class. Use this class as a substitute when unarchiving the object
+		// Unarchive the notification settings
 		[NSKeyedUnarchiver setClass:self.class forClassName:@"NotificationSettingsModel"];
 		
-		// Unarchive the notification settings
 		notificationSettings = (NotificationSettingModel *)[NSKeyedUnarchiver unarchiveObjectWithData:[settings objectForKey:notificationKey]];
 	}
 	
@@ -133,21 +132,6 @@
 				// Default interval to 1
 				self.Interval = [NSNumber numberWithInt:1];
 			}
-			
-			// DEPRECATED: If the tone received from server is default, change it to the iOS default: "Note"
-			/* if ([self.Tone isEqualToString:@"Default"])
-			{
-				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
-				
-				// Tones should always exist
-				if ([tones count] > 8)
-				{
-					[self setTone:[tones objectAtIndex:8]]; // iOS 7+ Defaults to Note tone
-				}
-				
-				// Save new default to server
-				[self saveNotificationSettingsByName:name settings:self];
-			} */
 			
 			// Save notification settings for type to device
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];

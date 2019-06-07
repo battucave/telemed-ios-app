@@ -15,7 +15,7 @@
 
 @property (nonatomic) NSNumber *ID;
 @property (nonatomic) NSString *Email;
-@property (nonatomic) BOOL IsAuthorized; // Med2Med manually sets this separately from web service
+@property (nonatomic) BOOL IsAuthorized; // Use isAuthorized: as getter
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) TimeZoneModel *MyTimeZone;
 @property (nonatomic) NSNumber *TimeoutPeriodMins;
@@ -38,7 +38,10 @@
 
 
 @required
+- (void)doLogout;
 - (void)getWithCallback:(void (^)(BOOL success, NSObject <ProfileProtocol> *profile, NSError *error))callback;
+- (BOOL)isAuthenticated;
+- (BOOL)isAuthorized;
 - (id)valueForKey:(NSString *)key;
 
 @end

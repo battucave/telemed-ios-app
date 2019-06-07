@@ -76,15 +76,15 @@
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar sizeToFit];
 	
+	// Initialize search bar placeholder for message
+	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	
 	// Initialize search bar placeholder for chat
+	#ifdef MYTELEMED
 	if ([self.messageRecipientType isEqualToString:@"Chat"]) {
 		[self.searchController.searchBar setPlaceholder:@"Search Participants"];
 	}
-	// Initialize search bar placeholder for message
-	else
-	{
-		[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
-	}
+	#endif
 	
 	// iOS 11+ navigation bar has support for search controller
 	if (@available(iOS 11.0, *))
@@ -201,21 +201,15 @@
 		[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID slotID:self.selectedOnCallSlot.ID withCallback:callback];
 	
 	#else
+		// If message recipients were pre-populated (Forward message, escalate message, and redirect message)
+		if ([self.messageRecipients count] > 0)
+		{
+			[self setIsLoaded:YES];
+		}
 		// Load list of chat participants
-		if ([self.messageRecipientType isEqualToString:@"Chat"])
+		else if ([self.messageRecipientType isEqualToString:@"Chat"])
 		{
 			[self.chatParticipantModel getChatParticipants];
-		}
-		// Initialize for forward message
-		else if ([self.messageRecipientType isEqualToString:@"Forward"])
-		{
-			// Message recipients will always be pre-populated
-			self.isLoaded = YES;
-		}
-		// Load list of message recipients for new message
-		else if ([self.messageRecipientType isEqualToString:@"New"])
-		{
-			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID withCallback:callback];
 		}
 		// Initialize for escalate or redirect message
 		else if ([self.messageRecipientType isEqualToString:@"Escalate"] || [self.messageRecipientType isEqualToString:@"Redirect"])
@@ -226,9 +220,19 @@
 			// Disable next button and change its title
 			[self.navigationItem.rightBarButtonItem setEnabled:NO];
 			[self.navigationItem.rightBarButtonItem setTitle:@"Send"];
+		}
+		// Load list of message recipients for account (New message)
+		else if (self.selectedAccount && self.selectedAccount.ID)
+		{
+			[self.messageRecipientModel getMessageRecipientsForAccountID:self.selectedAccount.ID withCallback:callback];
+		}
+		// If no message recipients are available and there is no way to load any recipients
+		else
+		{
+			NSLog(@"ERROR: INVALID MESSAGE RECIPIENTS");
 			
-			// Message recipients will always be pre-populated
-			self.isLoaded = YES;
+			// Show no message recipients message
+			[self setIsLoaded:YES];
 		}
 	#endif
 }
@@ -681,7 +685,7 @@
 	// Remove checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath method)
+	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath:)
 	if (self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		MessageRecipientModel *messageRecipient;

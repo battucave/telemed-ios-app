@@ -18,6 +18,7 @@
 #import "SWRevealViewController.h"
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
+#import "SSOProviderModel.h"
 #import "Harpy.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 
@@ -58,7 +59,7 @@
 	// Add reachability observer to defer web services until reachability has been determined
 	__unused TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitialization:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLaunching:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
 	// Med2Med - Prevent swipe message from ever appearing
 	#ifdef MED2MED
@@ -122,7 +123,7 @@
 			
 			[errorAlertController dismiss];
 			
-			// Post a notification to other files in the project
+			// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
 			
 			// Reset idle timer
@@ -297,6 +298,8 @@
 // Notify user if a new version of the app is available in the app store
 - (void)checkAppStoreVersion
 {
+	NSLog(@"Future Phase: Check app store version");
+	
 	/* TEMPORARILY COMMENTED OUT
 	 * Need to decide if there should be a remote server integration so that version checks can be disabled or prioritized (change showAlertAfterCurrentVersionHasBeenReleasedForDays to 1)
 	
@@ -320,17 +323,16 @@
 	*/
 }
 
-- (void)didFinishInitialization:(NSNotification *)notification
+- (void)didFinishLaunching:(NSNotification *)notification
 {
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	
 	// Remove reachability observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
-	// Load timeout preference
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If enable timeout has never been set, the default it to true
+	// If session timeout preference has never been set, then default it to true
 	if (! [settings objectForKey:@"enableTimeout"])
 	{
 		[settings setBool:YES forKey:@"enableTimeout"];
@@ -341,53 +343,140 @@
 	
 	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
 	
-	// If user has timeout disabled and a refresh token already exists, attempt to bypass login screen
+	// If user has timeout disabled and a refresh token already exists, then attempt to bypass the login screen
 	if (! timeoutEnabled && authenticationModel.RefreshToken != nil)
 	{
+		id <ProfileProtocol> profile;
+		
 		#ifdef MYTELEMED
-			id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+			profile = [MyProfileModel sharedInstance];
 		
 		#elif defined MED2MED
-			id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+			profile = [UserProfileModel sharedInstance];
 		
 		#else
 			NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
-		
-			[self showLoginSSOScreen];
-		
-			return;
 		#endif
 
 		// Verify account is valid
-		[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+		if (profile)
 		{
-			if (success)
+			[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 			{
-				// MyTeleMed - Validate device registration with server
-				#ifdef MYTELEMED
-					[self validateMyTeleMedRegistration:profile];
-				
-				// Med2Med - Validate at least one account is authorized
-				#elif defined MED2MED
-					[self validateMed2MedAuthorization:profile];
-				#endif
-				
-				// Else condition will never be reached since it would have been handled while defining profile
-			}
-			// Account is no longer valid so go to login screen
-			else
-			{
-				[self showLoginSSOScreen];
-			}
-		}];
+				if (success)
+				{
+					// MyTeleMed - Validate device registration with server
+					#ifdef MYTELEMED
+						[self validateMyTeleMedRegistration:profile];
+					
+					// Med2Med - Validate that at least one account is authorized
+					#elif defined MED2MED
+						[self validateMed2MedAuthorization:profile];
+					#endif
+					
+					// Else condition will never be reached since it would have been handled while defining profile
+				}
+				// Account is no longer valid so go to login screen
+				else
+				{
+					[self goToNextScreen];
+				}
+			}];
+			
+			return;
+		}
 	}
+	
 	// Go to login screen by default
+	[self goToNextScreen];
+}
+
+/**
+ * Get the LoginSSOStoryboard
+ */
+- (UIStoryboard *)getLoginSSOStoryboard
+{
+	UIStoryboard *loginSSOStoryboard = self.window.rootViewController.storyboard;
+	
+	// Initialize new instance of LoginSSOStoryboard if needed
+	if (! [[loginSSOStoryboard valueForKey:@"name"] isEqualToString:@"LoginSSO"])
+	{
+		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
+	}
+	
+	return loginSSOStoryboard;
+}
+
+/**
+ * Go to EmailAddressViewController
+ */
+- (void)goToEmailAddressScreen
+{
+	[self goToViewControllerWithIdentifier:@"EmailAddress"];
+}
+
+/**
+ * Go to LoginSSOViewController
+ */
+- (void)goToLoginScreen
+{
+	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
+	
+	// Set LoginSSONavigationController as the root view controller
+	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
+	
+	[self.window setRootViewController:loginSSONavigationController];
+	[self.window makeKeyAndVisible];
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
+}
+
+/**
+ * Go to PasswordViewController
+ */
+- (void)goToPasswordChangeScreen
+{
+	[self goToViewControllerWithIdentifier:@"Password"];
+}
+
+/**
+ * Go to a screen in the LoginSSOStoryboard using identifier
+ */
+- (void)goToViewControllerWithIdentifier:(NSString *)identifier
+{
+	if ([identifier isEqualToString:@"LoginSSO"])
+	{
+		NSLog(@"WARNING: Use goToLoginScreen: directly for navigating to the LoginSSO screen.");
+		
+		[self goToLoginScreen];
+		
+		return;
+	}
+	
+	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
+	
+	// If root view controller is a navigation controller, then push screen onto the existing navigation stack
+	if (self.window.rootViewController.class == UINavigationController.class)
+	{
+		UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
+		UIViewController *viewController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@ViewController", identifier]];
+	
+		[navigationController pushViewController:viewController animated:YES];
+	}
+	// Set screen's navigation controller as the root view controller
 	else
 	{
-		[self showLoginSSOScreen];
+		UINavigationController *navigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@NavigationController", identifier]];
+		
+		[self.window setRootViewController:navigationController];
+		[self.window makeKeyAndVisible];
 	}
 }
 
+/**
+ * Determine if a phone call is actively connected
+ */
 - (BOOL)isCallConnected
 {
 	for(CTCall *call in self.callCenter.currentCalls)
@@ -401,34 +490,9 @@
 	return NO;
 }
 
-- (void)showLoginSSOScreen
-{
-	UIStoryboard *loginSSOStoryboard;
-	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
-	
-	NSLog(@"Current Storyboard: %@", currentStoryboardName);
-	
-	// Already on login sso storyboard
-	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
-	{
-		loginSSOStoryboard = currentStoryboard;
-	}
-	// Go to login sso storyboard
-	else
-	{
-		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
-	}
-	
-	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
-	
-	[self.window setRootViewController:loginSSONavigationController];
-	[self.window makeKeyAndVisible];
-	
-	// Check whether a new version of the app is available in the app store
-	[self checkAppStoreVersion];
-}
-
+/**
+ * Obscure screen to prevent user from taking a screenshot of the app
+ */
 - (void)toggleScreenshotView:(BOOL)shouldHide
 {
 	UIView *screenshotView = [self.window viewWithTag:8353633];
@@ -466,6 +530,9 @@
 	}
 }
 
+/**
+ * TODO: Notify TeleMed that user has taken a screenshot of the app
+ */
 - (void)userDidTakeScreenshot:(NSNotification *)notification
 {
 	NSLog(@"Screenshot Taken");
@@ -573,8 +640,8 @@
 	completionHandler(UIBackgroundFetchResultNoData);
 }
 
-/*
- * Get current root view controller
+/**
+ * Get the current root view controller
  */
 - (UINavigationController *)getCurrentNavigationController
 {
@@ -591,6 +658,90 @@
 	}
 	
 	return nil;
+}
+
+/**
+ * Go to MessagesViewController
+ */
+- (void)goToMainScreen
+{
+	// Set MessagesNavigationController as the root view controller
+	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
+	
+	[self.window setRootViewController:initialViewController];
+	[self.window makeKeyAndVisible];
+	
+	// If app should navigate to remote notification screen after login or app launch
+	if (self.goToRemoteNotificationScreen)
+	{
+		UINavigationController *navigationController = [self getCurrentNavigationController];
+		
+		// To avoid crashes, first confirm that navigation controller actually exists (it should ALWAYS exist here)
+		if (navigationController)
+		{
+			// Push relevant view controller onto the existing navigation stack
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				self.goToRemoteNotificationScreen(navigationController);
+				
+				[self setGoToRemoteNotificationScreen:nil];
+			});
+		}
+	}
+	
+	// Check whether a new version of the app is available in the app store
+	// [self checkAppStoreVersion];
+}
+
+/**
+ * Go to the next screen in the login process
+ */
+- (void)goToNextScreen
+{
+	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
+	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
+	
+	// If user has not previously provided an email address, then go to email address screen
+	if (! ssoProviderModel.EmailAddress)
+	{
+		[self goToEmailAddressScreen];
+	}
+	// If user requires authentication, then go to login screen
+	else if (! [profile isAuthenticated])
+	{
+		[self goToLoginScreen];
+	}
+	// If user is already on main storyboard, then skip additional checks
+	else if ([[currentStoryboard valueForKey:@"name"] isEqualToString:@"Main"])
+	{
+		[self goToMainScreen];
+	}
+	// If device has not previously registered with TeleMed, then go to phone number screen
+	else if (! registeredDeviceModel.hasRegistered)
+	{
+		[self goToPhoneNumberScreen];
+	}
+	// If TeleMed requires a password change for the user, then go to password change screen
+	else if (profile.PasswordChangeRequired)
+	{
+		[self goToPasswordChangeScreen];
+	}
+	// User has completed login process so go to main screen
+	else
+	{
+		[self goToMainScreen];
+	}
+}
+
+/**
+ * Go to PhonenumberViewController
+ */
+- (void)goToPhoneNumberScreen
+{
+	[self goToViewControllerWithIdentifier:@"PhoneNumber"];
 }
 
 /**
@@ -688,14 +839,14 @@
 			// To avoid crashes, first confirm that navigation controller actually exists (it should ALWAYS exist here)
 			if (navigationController)
 			{
-				// Push relevant view controller onto existing navigation stack
+				// Push relevant view controller onto the existing navigation stack
 				dispatch_async(dispatch_get_main_queue(), ^
 				{
 					goToRemoteNotificationScreen(navigationController);
 				});
 			}
 		}
-		// User was not logged in or the app was inactive so assign the block to a property for the showMainScreen method to handle
+		// User was not logged in or the app was inactive so assign the block to a property for goToNextScreen: to handle
 		else
 		{
 			[self setGoToRemoteNotificationScreen:goToRemoteNotificationScreen];
@@ -703,8 +854,8 @@
 	}
 }
 
-/*
- * Parse and clean up push notification data from didReceiveRemoteNotification or didFinishLaunchingWithOptions methods
+/**
+ * Parse and clean up push notification data from didReceiveRemoteNotification: or didFinishLaunchingWithOptions:
  */
 - (NSDictionary *)parseRemoteNotification:(NSDictionary *)notification
 {
@@ -781,100 +932,9 @@
 	return [notificationData copy];
 }
 
-/*
- * Show main screen: ChangePasswordViewController, PhoneNumberViewController, or MessagesViewController
+/**
+ * Re-register user's device with TeleMed if needed
  */
-- (void)showMainScreen
-{
-	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
-	
-	// If user is currently on login sso storyboard, then perform additional checks before sending user to main storyboard
-	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
-	{
-		BOOL hasNavigationController = self.window.rootViewController.class == UINavigationController.class;
-		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
-		RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-		
-		// If device has not previously registered with TeleMed web service, then show PhoneNumberViewController
-		if (! registeredDeviceModel.hasRegistered)
-		{
-			// If using Simulator, skip phone number step because it is always invalid
-			// #ifdef DEBUG
-			#if TARGET_IPHONE_SIMULATOR
-				NSLog(@"Skip Phone Number step when on Simulator or Debugging");
-			
-			#else
-				if (hasNavigationController)
-				{
-					UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
-					UIViewController *phoneNumberViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberViewController"];
-				
-					[navigationController pushViewController:phoneNumberViewController animated:YES];
-				}
-				else
-				{
-					UINavigationController *phoneNumberNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PhoneNumberNavigationController"];
-					
-					[self.window setRootViewController:phoneNumberNavigationController];
-					[self.window makeKeyAndVisible];
-				}
-			
-				return;
-			#endif
-		}
-		
-		// If TeleMed requires a password change for the user, then show PasswordChangeViewController
-		if (profile.PasswordChangeRequired)
-		{
-			if (hasNavigationController)
-			{
-				UINavigationController *navigationController = (UINavigationController *) self.window.rootViewController;
-				UITableViewController *passwordViewController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PasswordViewController"];
-			
-				[navigationController pushViewController:passwordViewController animated:YES];
-			}
-			else
-			{
-				UINavigationController *passwordNavigationController = [currentStoryboard instantiateViewControllerWithIdentifier:@"PasswordNavigationController"];
-				
-				[self.window setRootViewController:passwordNavigationController];
-				[self.window makeKeyAndVisible];
-			}
-			
-			return;
-		}
-	}
-	
-	// Show MessagesViewController
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
-	
-	[self.window setRootViewController:initialViewController];
-	[self.window makeKeyAndVisible];
-	
-	// If app should navigate to remote notification screen after login or app launch
-	if (self.goToRemoteNotificationScreen)
-	{
-		UINavigationController *navigationController = [self getCurrentNavigationController];
-		
-		// To avoid crashes, first confirm that navigation controller actually exists (it should ALWAYS exist here)
-		if (navigationController)
-		{
-			// Push relevant view controller onto existing navigation stack
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				self.goToRemoteNotificationScreen(navigationController);
-				
-				[self setGoToRemoteNotificationScreen:nil];
-			});
-		}
-	}
-	
-	// Check whether a new version of the app is available in the app store
-	[self checkAppStoreVersion];
-}
-
 - (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
 {
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
@@ -884,7 +944,7 @@
 	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 	
-	// If this device was previously registered with TeleMed, we should update the device token in case it changed
+	// If this device was previously registered with TeleMed, then we should update the device token in case it changed
 	if (registeredDeviceModel.hasRegistered)
 	{
 		[registeredDeviceModel setShouldRegister:YES];
@@ -899,21 +959,21 @@
 				[errorAlertController show:registeredDeviceError];
 			}
 			
-			// If the request was not successful, direct the user to re-enter their phone number again (handled by showMainScreen:)
+			// If the request was not successful, direct the user to re-enter their phone number again (handled by goToNextScreen:)
 			if (! success)
 			{
 				[registeredDeviceModel setHasRegistered:NO];
 			}
 			
 			// Go to the next screen in the login process
-			[self showMainScreen];
+			[self goToNextScreen];
 		}];
 	}
-	// Account is valid, but phone number is not yet registered with TeleMed so go directly to PhoneNumberViewController (handled by showMainScreen:)
+	// Account is valid, but phone number is not yet registered with TeleMed so go directly to PhoneNumberViewController (handled by goToNextScreen:)
 	else
 	{
-		// Go the next screen in the login process
-		[self showMainScreen];
+		// Go to the next screen in the login process
+		[self goToNextScreen];
 	}
 }
 #endif
@@ -923,10 +983,10 @@
 
 #ifdef MED2MED
 
-/*
- * Show main screen: MessageNewTableViewController or MessageNewUnauthorizedTableViewController
+/**
+ * Go to MessageNewTableViewController or MessageNewUnauthorizedTableViewController depending on authorization status
  */
-- (void)showMainScreen
+- (void)goToMainScreen
 {
 	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Med2Med" bundle:nil];
@@ -934,7 +994,7 @@
 	UINavigationController *navigationController;
 	
 	// If user has at least one authorized account, then show MessageNewViewController
-	if (profile.IsAuthorized)
+	if ([profile isAuthorized])
 	{
 		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewNavigationController"];
 	}
@@ -950,9 +1010,45 @@
 	[self.window makeKeyAndVisible];
 	
 	// Check whether a new version of the app is available in the app store
-	[self checkAppStoreVersion];
+	// [self checkAppStoreVersion];
 }
 
+/**
+ * Go to the next screen in the login process
+ */
+- (void)goToNextScreen
+{
+	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
+	
+	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
+	NSLog(@"Future Phase: Check if password change is required");
+	
+	// If user has not previously provided an email address, then go to email address screen
+	if (! ssoProviderModel.EmailAddress)
+	{
+		[self goToEmailAddressScreen];
+	}
+	// If user requires authentication, then go to login screen
+	else if (! [profile isAuthenticated])
+	{
+		[self goToLoginScreen];
+	}
+	/*/ Future Phase: If TeleMed requires a password change for the user, then go to password change screen
+	else if (profile.PasswordChangeRequired)
+	{
+		[self goToPasswordChangeScreen];
+	} */
+	// User has completed login process so go to main screen
+	else
+	{
+		[self goToMainScreen];
+	}
+}
+
+/**
+ * Determine the user's authorization status
+ */
 - (void)validateMed2MedAuthorization:(id <ProfileProtocol>)profile
 {
 	// Fetch accounts and check the authorization status for each
@@ -972,9 +1068,6 @@
 				
 				NSLog(@"Account Name: %@; Status: %@", account.Name, account.MyAuthorizationStatus);
 			}
-			
-			// Go to main storyboard
-			[self showMainScreen];
 		}
 		else
 		{
@@ -982,6 +1075,9 @@
 			
 			[errorAlertController show:error];
 		}
+		
+		// Go to the next screen in the login process
+		[self goToNextScreen];
 	}];
 }
 #endif

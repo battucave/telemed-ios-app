@@ -18,7 +18,6 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonBack;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonChangeIDPRovider;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintToolbarBottom;
 @property (weak, nonatomic) IBOutlet UIView *loadingView;
@@ -37,9 +36,6 @@
 	
 	// Hide keyboard accessory view for UIWebView text fields
 	[self hideKeyboardAccessoryView:self.webView];
-	
-	// TEMPORARY: Client requested to hide Change ID Provider button
-	[self.buttonChangeIDPRovider setTitle:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,12 +77,6 @@
 	
 	// Remove reachability observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
-}
-
-// Unwind segue from SSOProviderViewController
-- (IBAction)unwindFromSSOProvider:(UIStoryboardSegue *)segue
-{
-	NSLog(@"unwindFromSSOProvider");
 }
 
 - (IBAction)doLogin:(id)sender
@@ -343,7 +333,7 @@
 {
 	NSString *currentURL = webView.request.URL.absoluteString;
 	
-	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse method.
+	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse:.
 	
 	// URL is the login screen
 	if ([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
@@ -367,7 +357,7 @@
 						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
 						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
 						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
-						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tmd4321$$'; break;"
 					"}"
 				"};"
 				

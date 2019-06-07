@@ -101,7 +101,7 @@
 	
 	if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
 	{
-		UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"Invalid Phone Number" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
 		[errorAlertController addAction:okAction];
@@ -137,7 +137,7 @@
 				if (success)
 				{
 					// Go to the next screen in the login process
-					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
 				}
 				else
 				{

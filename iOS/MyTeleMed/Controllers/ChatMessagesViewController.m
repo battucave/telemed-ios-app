@@ -128,7 +128,7 @@
 	[self.navigationItem setTitle:(selectedChatMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedChatMessageCount] : self.navigationBarTitle)];
 }
 
-// Override setEditing method
+// Override setEditing:
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
 	[super setEditing:editing animated:animated];

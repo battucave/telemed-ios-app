@@ -598,6 +598,9 @@
 			// Set account
 			[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
 			
+			// Set message recipient type
+			[messageRecipientPickerViewController setMessageRecipientType:self.messageRecipientType];
+			
 			// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
 			[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 		}

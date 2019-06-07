@@ -19,7 +19,7 @@
 @property (nonatomic) BOOL BlockCallerID;
 @property (nonatomic) NSString *CallTelemedNumber;
 @property (nonatomic) NSString *Email;
-@property (nonatomic) BOOL IsAuthorized;
+@property (nonatomic) BOOL IsAuthorized; // Use isAuthorized: as getter
 @property (nonatomic) BOOL MayDisableTimeout;
 @property (nonatomic) AccountModel *MyPreferredAccount;
 @property (nonatomic) NSArray *MyRegisteredDevices;
@@ -29,7 +29,10 @@
 
 + (id <ProfileProtocol>)sharedInstance;
 
+- (void)doLogout;
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback;
+- (BOOL)isAuthenticated;
+- (BOOL)isAuthorized;
 - (void)restoreMyPreferredAccount;
 
 @end

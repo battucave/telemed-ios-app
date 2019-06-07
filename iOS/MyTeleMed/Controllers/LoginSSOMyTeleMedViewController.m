@@ -43,7 +43,7 @@
 					// If there is an error other than the device offline error, show an error and require user to enter their phone number again
 					if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 					{
-						// If the request was not successful, direct the user to re-enter their phone number again (handled by AppDelegate's showMainScreen:)
+						// If the request was not successful, direct the user to re-enter their phone number again (handled by AppDelegate's goToNextScreen:)
 						[registeredDeviceModel setHasRegistered:NO];
 						
 						// Show the error even if success returned true so that TeleMed can track issue down
@@ -51,14 +51,14 @@
 					}
 					
 					// Go to the next screen in the login process
-					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+					[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
 				}];
 			}
 			// Device id is not yet registered with TeleMed, so show PhoneNumberViewController
 			else
 			{
 				// Go to the next screen in the login process
-				[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+				[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
 			}
 		}
 		else
