@@ -24,7 +24,6 @@
 
 @interface SettingsTableViewController ()
 
-@property (weak, nonatomic) IBOutlet UISwitch *switchNotifications;
 @property (weak, nonatomic) IBOutlet UISwitch *switchTimeout;
 
 @property (nonatomic) BOOL mayDisableTimeout;
@@ -32,11 +31,15 @@
 @property (nonatomic) NSInteger sectionNotifications;
 @property (nonatomic) NSInteger sectionSessionTimeout;
 
-@property (nonatomic) NotificationSettingModel *chatMessageNotificationSettings;
-@property (nonatomic) NotificationSettingModel *commentNotificationSettings;
-@property (nonatomic) NotificationSettingModel *normalMessageNotificationSettings;
-@property (nonatomic) NotificationSettingModel *statMessageNotificationSettings;
-@property (nonatomic) BOOL areNotificationsEnabled;
+#ifdef MYTELEMED
+	@property (weak, nonatomic) IBOutlet UISwitch *switchNotifications;
+
+	@property (nonatomic) NotificationSettingModel *chatMessageNotificationSettings;
+	@property (nonatomic) NotificationSettingModel *commentNotificationSettings;
+	@property (nonatomic) NotificationSettingModel *normalMessageNotificationSettings;
+	@property (nonatomic) NotificationSettingModel *statMessageNotificationSettings;
+	@property (nonatomic) BOOL areNotificationsEnabled;
+#endif
 
 @end
 
@@ -47,17 +50,20 @@
     [super viewDidLoad];
 	
 	// Initialize may disable timeout value
-	self.mayDisableTimeout = NO;
+	[self setMayDisableTimeout:NO];
 	
 	// Initialize sections
 	[self setSectionSessionTimeout:0];
 	
 	#ifdef MED2MED
-		[self setsectionAboutTeleMed:2];
+		[self setSectionAboutTeleMed:2];
 	
 	#elif defined MYTELEMED
 		[self setSectionAboutTeleMed:3];
 		[self setSectionNotifications:1];
+	
+		// Initialize notifications enabled value
+		[self setAreNotificationsEnabled:YES];
 	
 		// Add application will enter foreground observer to refresh notifications section when user returns from Settings app
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -67,8 +73,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	NSLog(@"SETTINGS WILL APPEAR");
 	
 	// Set may disable timeout value
 	id <ProfileProtocol> profile;
@@ -91,14 +95,17 @@
 	
 		[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
 		{
-			if (settings.authorizationStatus == UNAuthorizationStatusAuthorized)
+			if (settings.authorizationStatus != UNAuthorizationStatusAuthorized)
 			{
-				[self setAreNotificationsEnabled:YES];
+				[self setAreNotificationsEnabled:NO];
+				
+				// Reload notification cells
+				dispatch_async(dispatch_get_main_queue(), ^
+				{
+					[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
+				});
 			}
 		}];
-	
-		// Reload notification cells
-		[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
 
 	#elif defined MED2MED
 		profile = [UserProfileModel sharedInstance];
@@ -136,11 +143,8 @@
 		[updateTimeoutAlertController addAction:confirmAction];
 		[updateTimeoutAlertController addAction:cancelAction];
 	
-		// PreferredAction only supported in 9.0+
-		if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[updateTimeoutAlertController setPreferredAction:cancelAction];
-		}
+		// Set preferred action
+		[updateTimeoutAlertController setPreferredAction:cancelAction];
 	
 		// Show alert
 		[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];
@@ -169,11 +173,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section by setting its footer height to 0
-	// Or, if notifications are disabled, hide notifications section by setting its footer height to 0
-	if ((section == self.sectionSessionTimeout && ! self.mayDisableTimeout) || (section == self.sectionNotifications && ! self.areNotificationsEnabled))
+	if (section == self.sectionSessionTimeout && ! self.mayDisableTimeout)
 	{
 		return 0.1f;
 	}
+	
+	#ifdef MYTELEMED
+		// If notifications are disabled, hide notifications section by setting its footer height to 0
+		if (section == self.sectionNotifications && ! self.areNotificationsEnabled)
+		{
+			return 0.1f;
+		}
+	#endif
 	
 	return [super tableView:tableView heightForFooterInSection:section];
 }
@@ -188,11 +199,18 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
 	// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its footer title
-	// Or, if notifications are disabled, hide notifications section by clearing its footer title
-	if ((section == self.sectionSessionTimeout && ! self.mayDisableTimeout) || (section == self.sectionNotifications && ! self.areNotificationsEnabled))
+	if (section == self.sectionSessionTimeout && ! self.mayDisableTimeout)
 	{
 		return @"";
 	}
+	
+	#ifdef MYTELEMED
+		// If notifications are disabled, hide notifications section by clearing its footer title
+		if (section == self.sectionNotifications && ! self.areNotificationsEnabled)
+		{
+			return @"";
+		}
+	#endif
 	
 	return [super tableView:tableView titleForFooterInSection:section];
 }
@@ -368,18 +386,18 @@
 
 - (void)viewDidBecomeActive:(NSNotification *)notification
 {
+	// Refresh notifications enabled status when app returns from Settings app
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 	{
-		// Refresh notifications enabled status when app returns from Settings app
 		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
 
 		[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
 		{
 			[self setAreNotificationsEnabled:(settings.authorizationStatus == UNAuthorizationStatusAuthorized)];
+			
+			// Reload notification cells
+			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
 		}];
-
-		// Reload notification cells
-		[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
 	});
 }
 

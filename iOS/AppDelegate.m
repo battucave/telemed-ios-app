@@ -6,8 +6,7 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
+#import <CallKit/CallKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <UserNotifications/UserNotifications.h>
@@ -37,7 +36,7 @@
 
 @interface AppDelegate()
 
-@property (nonatomic) CTCallCenter *callCenter;
+@property (nonatomic) CXCallObserver *callObserver;
 
 @end
 
@@ -49,6 +48,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
+	// Initialize call observer
+	self.callObserver = [CXCallObserver new];
+	
+	[self.callObserver setDelegate:self queue:dispatch_get_main_queue()];
 	
 	// Setup app timeout feature
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:kApplicationDidTimeoutNotification object:nil];
@@ -109,60 +113,21 @@
 	
 	[settings synchronize];
 	
-	// Initialize call center
-	self.callCenter = [[CTCallCenter alloc] init];
-	
-	[self.callCenter setCallEventHandler:^(CTCall *call)
-	{
-		if ([[call callState] isEqual:CTCallStateDisconnected])
-		{
-			NSLog(@"Call disconnected");
-			
-			// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-			
-			[errorAlertController dismiss];
-			
-			// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
-			
-			// Reset idle timer
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
-			});
-		}
-	}];
-	
-	// MyTeleMed - push notification registration
+	// MyTeleMed - // Register for push notifications
 	#ifdef MYTELEMED
-		// Register for push notification in iOS 10+
-		if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
+		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+		
+		[userNotificationCenter setDelegate:self];
+		[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
 		{
-			UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-			
-			[userNotificationCenter setDelegate:self];
-			[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
+			if (granted)
 			{
-				if (granted)
+				dispatch_async(dispatch_get_main_queue(), ^
 				{
-					dispatch_async(dispatch_get_main_queue(), ^
-					{
-						[application registerForRemoteNotifications];
-					});
-				}
-			}];
-		}
-		// Register for push notifications in iOS < 10
-		else
-		{
-			[application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-			
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				[application registerForRemoteNotifications];
-			});
-		}
+					[application registerForRemoteNotifications];
+				});
+			}
+		}];
 	
 		NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 	
@@ -267,6 +232,28 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:
+}
+
+- (void)callObserver:(CXCallObserver *)callObserver callChanged:(CXCall *)call
+{
+	if (call != nil && call.hasEnded == YES)
+	{
+		NSLog(@"CXCallState: Disconnected");
+		
+		// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		
+		[errorAlertController dismiss];
+		
+		// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
+		
+		// Reset idle timer
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
+		});
+	}
 }
 
 - (void)dealloc
@@ -479,9 +466,9 @@
  */
 - (BOOL)isCallConnected
 {
-	for(CTCall *call in self.callCenter.currentCalls)
+	for (CXCall *call in self.callObserver.calls)
 	{
-		if (call.callState == CTCallStateConnected)
+		if (! call.hasEnded)
 		{
 			return YES;
 		}
@@ -573,11 +560,6 @@
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
-}
-
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-	//NSLog(@"Local Notification received: %@", notification.userInfo);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler

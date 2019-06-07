@@ -26,11 +26,8 @@
 	[callTeleMedAlertController addAction:callAction];
 	[callTeleMedAlertController addAction:cancelAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([callTeleMedAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[callTeleMedAlertController setPreferredAction:callAction];
-	}
+	// Set preferred action
+	[callTeleMedAlertController setPreferredAction:callAction];
 
 	// Show alert dialog
 	[self presentViewController:callTeleMedAlertController animated:YES completion:nil];

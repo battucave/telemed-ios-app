@@ -83,11 +83,8 @@
 
 	[phoneNumberHelpAlertController addAction:okAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([phoneNumberHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[phoneNumberHelpAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[phoneNumberHelpAlertController setPreferredAction:okAction];
 
 	// Show alert
 	[self presentViewController:phoneNumberHelpAlertController animated:YES completion:nil];
@@ -106,11 +103,8 @@
 	
 		[errorAlertController addAction:okAction];
 	
-		// PreferredAction only supported in 9.0+
-		if ([errorAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[errorAlertController setPreferredAction:okAction];
-		}
+		// Set preferred action
+		[errorAlertController setPreferredAction:okAction];
 	
 		// Show alert
 		[self presentViewController:errorAlertController animated:YES completion:nil];
@@ -183,11 +177,8 @@
 		[confirmPhoneNumberAlertController addAction:noAction];
 		[confirmPhoneNumberAlertController addAction:yesAction];
 
-		// PreferredAction only supported in 9.0+
-		if ([confirmPhoneNumberAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[confirmPhoneNumberAlertController setPreferredAction:yesAction];
-		}
+		// Set preferred action
+		[confirmPhoneNumberAlertController setPreferredAction:yesAction];
 
 		// Show alert
 		[self presentViewController:confirmPhoneNumberAlertController animated:YES completion:nil];

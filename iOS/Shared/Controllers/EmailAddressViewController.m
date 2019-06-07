@@ -49,11 +49,8 @@
 
 	[emailAddressHelpAlertController addAction:okAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([emailAddressHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[emailAddressHelpAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[emailAddressHelpAlertController setPreferredAction:okAction];
 
 	// Show alert
 	[self presentViewController:emailAddressHelpAlertController animated:YES completion:nil];

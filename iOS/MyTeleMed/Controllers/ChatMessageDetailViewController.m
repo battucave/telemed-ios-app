@@ -285,9 +285,6 @@
 		}
 	}
 	
-	// Fix bug on iOS < 10 that UITextView font size changes when setting button text if it is not selectable
-	[self.textViewChatParticipants setSelectable:YES];
-	
 	// Update text view chat participants with chat participant name(s)
 	[self.textViewChatParticipants setText:chatParticipantNames];
 	
@@ -295,11 +292,6 @@
 	if (expanded)
 	{
 		[self.textViewChatParticipants flashScrollIndicators];
-	}
-	// Prevent text selection unless text view chat participants is expanded
-	else
-	{
-		[self.textViewChatParticipants setSelectable:NO];
 	}
 	
 	// Toggle participants expanded flag

@@ -67,11 +67,8 @@
 
 		[successAlertController addAction:okAction];
 
-		// PreferredAction only supported in 9.0+
-		if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[successAlertController setPreferredAction:okAction];
-		}
+		// Set preferred action
+		[successAlertController setPreferredAction:okAction];
 
 		// Show Alert
 		[self presentViewController:successAlertController animated:YES completion:nil];

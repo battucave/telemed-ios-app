@@ -104,17 +104,6 @@
 {
 	// Fix issue in iPad where background defaulted to White (unfixable in IB because of bug)
 	[cell setBackgroundColor:[UIColor clearColor]];
-	
-	/*/ Fix bugs on iOS < 10 (only required if not using Automatic Separator Insets)
-	if (! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
-	{
-		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
-		[cell setPreservesSuperviewLayoutMargins:NO];
-		[cell.contentView setPreservesSuperviewLayoutMargins:NO];
-		
-		// Eliminate any left margin from label (Fix issue in iOS 8-9)
-		[cell setLayoutMargins:UIEdgeInsetsZero];
-	} */
 }
 
 // Customize the appearance of table view cells.
