@@ -16,7 +16,7 @@
 	[self getHospitalsWithCallback:nil];
 }
 
-- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSMutableArray *hospitals, NSError *error))callback
+- (void)getHospitalsWithCallback:(void (^)(BOOL success, NSArray *hospitals, NSError *error))callback
 {
 	[self.operationManager GET:@"Hospitals" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -29,10 +29,10 @@
 		if ([xmlParser parse])
 		{
 			// Sort hospitals by name
-			NSMutableArray *hospitals = [[[parser hospitals] sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
+			NSArray *hospitals = [[parser hospitals] sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
 			{
 				return [hospitalModelA.Name compare:hospitalModelB.Name];
-			}] mutableCopy];
+			}];
 			
 			/*/ TESTING ONLY (generate fictitious hospitals for testing)
 			for (int i = 0; i < 5; i++)
@@ -48,13 +48,13 @@
 			}
 			// END TESTING ONLY */
 			
-			// Handle success via callback block
+			// Handle success via callback
 			if (callback)
 			{
 				callback(YES, hospitals, nil);
 			}
 			// Handle success via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateHospitals:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateHospitals:)])
 			{
 				[self.delegate updateHospitals:hospitals];
 			}
@@ -64,13 +64,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Hospitals Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Hospitals.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via callback block
+			// Handle error via callback
 			if (callback)
 			{
 				callback(NO, nil, error);
 			}
 			// Handle error via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateHospitalsError:)])
 			{
 				[self.delegate updateHospitalsError:error];
 			}
@@ -83,13 +83,13 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Hospitals." andTitle:@"Hospitals Error"];
 		
-		// Handle error via callback block
+		// Handle error via callback
 		if (callback)
 		{
 			callback(NO, nil, error);
 		}
 		// Handle error via delegate
-		else if ([self.delegate respondsToSelector:@selector(updateHospitalsError:)])
+		else if (self.delegate && [self.delegate respondsToSelector:@selector(updateHospitalsError:)])
 		{
 			[self.delegate updateHospitalsError:error];
 		}

@@ -20,7 +20,7 @@
 
 @property (nonatomic) AccountModel *accountModel;
 
-@property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) NSArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
 @property (nonatomic) NSMutableArray *selectedMessageRecipients;
 
@@ -48,8 +48,8 @@
 	[self.accountModel getAccounts];
 }
 
-// Unwind Segue from MessageRecipientPickerViewController
-- (IBAction)setMessageRecipients:(UIStoryboardSegue *)segue
+// Unwind segue from MessageRecipientPickerViewController
+- (IBAction)unwindSetMessageRecipients:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;
@@ -79,7 +79,7 @@
 }
 
 // Return accounts from AccountModel delegate
-- (void)updateAccounts:(NSMutableArray *)accounts
+- (void)updateAccounts:(NSArray *)accounts
 {
 	[self setAccounts:accounts];
 	
@@ -100,27 +100,27 @@
 }
 
 // Return pending from NewMessageModel delegate
-- (void)sendMessagePending
+- (void)sendNewMessagePending
 {
 	// Go back to MessagesViewController (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from NewMessageModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)sendNewMessageSuccess
 {
  
 }
 
 // Return error from NewMessageModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)sendNewMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
  
 	[errorAlertController show:error];
 }*/
 
-// Fired from MessageComposeTableViewController to perform segue to either AccountPickerTableViewController or MessageRecipientPickerTableViewController - simplifies passing of data to the picker
+// Fired from MessageComposeTableViewController to perform segue to either AccountPickerViewController or MessageRecipientPickerViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender
 {
 	// User only has one account so skip the AccountPickerViewController and go straight to MessageRecipientPickerViewController
@@ -128,7 +128,7 @@
 	{
 		[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageNew" sender:sender];
 	}
-	// If user has more than one account (or accounts haven't loaded yet due to slow connection), then they must first select an account from AccountPickerTableViewController
+	// If user has more than one account (or accounts haven't loaded yet due to slow connection), then they must first select an account from AccountPickerViewController
 	else
 	{
 		[self performSegueWithIdentifier:@"showAccountPickerFromMessageNew" sender:sender];
@@ -158,10 +158,13 @@
 		// Set accounts
 		[accountPickerViewController setAccounts:self.accounts];
 		
+		// Set message recipient type
+		[accountPickerViewController setMessageRecipientType:@"New"];
+		
 		// Set selected account if previously set
 		[accountPickerViewController setSelectedAccount:self.selectedAccount];
 		
-		// Set selected message recipients if previously set (to pass through to MessageRecipientPickerTableViewController)
+		// Set selected message recipients if previously set (to pass through to MessageRecipientPickerViewController)
 		[accountPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 	else if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromMessageNew"])

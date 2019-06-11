@@ -6,22 +6,7 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
-
-@protocol NotificationSettingDelegate <NSObject>
-
-@required
-- (void)updateNotificationSettings:(id)serverNotificationSettings forName:(NSString *)name;
-
-@optional
-- (void)updateNotificationSettingsError:(NSError *)error;
-- (void)saveNotificationSettingsPending;
-- (void)saveNotificationSettingsSuccess;
-- (void)saveNotificationSettingsError:(NSError *)error;
-
-@end
 
 @interface NotificationSettingModel : Model
 
@@ -37,5 +22,19 @@
 - (NSString *)getToneFromToneTitle:(NSString *)toneTitle;
 - (NotificationSettingModel *)getNotificationSettingsByName:(NSString *)name;
 - (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings;
+
+@end
+
+
+@protocol NotificationSettingDelegate <NSObject>
+
+@required
+- (void)updateNotificationSettings:(id)serverNotificationSettings forName:(NSString *)name;
+
+@optional
+- (void)updateNotificationSettingsError:(NSError *)error;
+- (void)saveNotificationSettingsPending;
+- (void)saveNotificationSettingsSuccess;
+- (void)saveNotificationSettingsError:(NSError *)error;
 
 @end

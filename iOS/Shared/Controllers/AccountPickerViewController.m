@@ -19,9 +19,9 @@
 
 @interface AccountPickerViewController ()
 
-@property (nonatomic) IBOutlet UISearchBar *searchBar;
-@property (nonatomic) IBOutlet UITableView *tableAccounts;
-@property (nonatomic) IBOutlet UIView *viewSearchBarContainer;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableAccounts;
+@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
 @property (nonatomic) NSMutableArray *filteredAccounts;
 @property (nonatomic) BOOL isLoaded;
@@ -107,7 +107,7 @@
 	}
 	
 	#ifdef MYTELEMED
-		// If selected account not already set, then set it to my profile model's MyPreferredAccount
+		// If selected account not already set, then set it to MyProfileModel's MyPreferredAccount
 		if (! self.selectedAccount)
 		{
 			MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
@@ -130,7 +130,7 @@
 	// Get list of accounts if none were passed from previous controller
 	if ([self.accounts count] == 0)
 	{
-		// Initialize account model
+		// Initialize AccountModel
 		AccountModel *accountModel = [[AccountModel alloc] init];
 		
 		[accountModel setDelegate:self];
@@ -215,8 +215,8 @@
 	} completion:nil];
 }
 
-// Return accounts from account model delegate
-- (void)updateAccounts:(NSMutableArray *)accounts
+// Return accounts from AccountModel delegate
+- (void)updateAccounts:(NSArray *)accounts
 {
 	#ifdef MED2MED
 		// Filter and store only authorized or pending medical groups (accounts)
@@ -233,7 +233,7 @@
 			predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@ OR MyAuthorizationStatus = %@", @"Authorized", @"Pending"];
 		}
 	
-		accounts = [[accounts filteredArrayUsingPredicate:predicate] mutableCopy];
+		accounts = [accounts filteredArrayUsingPredicate:predicate];
 	#endif
 	
 	[self setAccounts:accounts];
@@ -246,7 +246,7 @@
 	[self scrollToSelectedAccount];
 }
 
-// Return error from account model delegate
+// Return error from AccountModel delegate
 - (void)updateAccountsError:(NSError *)error
 {
 	self.isLoaded = YES;
@@ -257,7 +257,7 @@
 	[errorAlertController show:error];
 }
 
-// Return pending from preferred account model delegate
+// Return pending from PreferredAccountModel delegate
 - (void)savePreferredAccountPending
 {
 	// Go back to settings (assume success)
@@ -384,13 +384,13 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		
 		// Accounts table
 		if ([self.accounts count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s found.", [self.textAccount lowercaseString]] : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s available.", [self.textAccount lowercaseString]] : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -401,6 +401,8 @@
 		return emptyCell;
 	}
 	
+	static NSString *cellIdentifier = @"AccountCell";
+	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	AccountModel *account;
 	
 	// Search results table
@@ -413,9 +415,6 @@
 	{
 		account = [self.accounts objectAtIndex:indexPath.row];
 	}
-	
-	static NSString *cellIdentifier = @"AccountCell";
-	AccountCell *cell = [self.tableAccounts dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	// Set up the cell
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
@@ -454,30 +453,38 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no accounts, then user clicked the no accounts cell
+	if ([self.accounts count] <= indexPath.row)
+	{
+		return nil;
+	}
+	// If search is active and there are no filtered accounts, then user clicked the no results cell
+	else if (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] <= indexPath.row)
+	{
+		// Close search results
+		[self.searchController setActive:NO];
+	
+		// Scroll to selected account (only if table is limited to single selection)
+		[self scrollToSelectedAccount];
+	
+		return nil;
+	}
+	
+	return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Search results table
+	// Set selected account from search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no filtered accounts, then user clicked "No results."
-		if ([self.filteredAccounts count] == 0)
-		{
-			// Close search results (must execute before scrolling to selected account)
-			[self.searchController setActive:NO];
-			
-			// Scroll to selected account
-			[self scrollToSelectedAccount];
-			
-			return;
-		}
-		
-		// Set selected account
 		[self setSelectedAccount:[self.filteredAccounts objectAtIndex:indexPath.row]];
 	}
-	// Accounts table
+	// Set selected account from accounts table
 	else
 	{
-		// Set selected account
 		[self setSelectedAccount:[self.accounts objectAtIndex:indexPath.row]];
 	}
 	
@@ -534,14 +541,14 @@
 				if (! [callUnavailableMessage isEqualToString:@""])
 				{
 					UIAlertController *callUnavailableAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:callUnavailableMessage preferredStyle:UIAlertControllerStyleAlert];
-					UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+					UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 				
-					[callUnavailableAlertController addAction:actionOK];
+					[callUnavailableAlertController addAction:okAction];
 				
 					// PreferredAction only supported in 9.0+
 					if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
 					{
-						[callUnavailableAlertController setPreferredAction:actionOK];
+						[callUnavailableAlertController setPreferredAction:okAction];
 					}
 				
 					// Show Alert
@@ -552,7 +559,7 @@
 				// Add checkmark of selected account
 				[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 
-				[self performSegueWithIdentifier:@"setAccount" sender:self];
+				[self performSegueWithIdentifier:@"unwindSetAccount" sender:self];
 			}
 		#endif
 	};
@@ -591,8 +598,11 @@
 			// Set account
 			[messageRecipientPickerViewController setSelectedAccount:self.selectedAccount];
 			
+			// Set message recipient type
+			[messageRecipientPickerViewController setMessageRecipientType:self.messageRecipientType];
+			
 			// Set selected message recipients if previously set (this is simply passed through from MessageNewTableViewController)
-			[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
+			[messageRecipientPickerViewController setSelectedMessageRecipients:self.selectedMessageRecipients];
 		}
 	#endif
 	

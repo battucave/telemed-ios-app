@@ -18,6 +18,7 @@
 #import "SWRevealViewController.h"
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
+#import "Harpy.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 
 #ifdef MYTELEMED
@@ -62,22 +63,48 @@
 	// Med2Med - Prevent swipe message from ever appearing
 	#ifdef MED2MED
 		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+	
+	// DEBUG Only - reset swipe message on app launch
+	#elif defined DEBUG
+		[settings setBool:NO forKey:@"swipeMessageDisabled"];
 	#endif
 	
 	// Initialize cdma voice data settings
 	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
 	
-	#if !TARGET_IPHONE_SIMULATOR && !defined(DEBUG)
-		// Initialize carrier
-		CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-		CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-	
-		// AT&T and T-Mobile are guaranteed to support voice and data simultaneously, so turn off cdma voice data message by default for them
-		if ([carrier.carrierName isEqualToString:@"AT&T"] || [carrier.carrierName hasPrefix:@"T-M"])
-		{
-			[settings setBool:YES forKey:@"CDMAVoiceDataDisabled"];
-		}
-	#endif
+	if ([settings objectForKey:@"showSprintVoiceDataWarning"] == nil || [settings objectForKey:@"showVerizonVoiceDataWarning"] == nil)
+	{
+		[settings setBool:NO forKey:@"showSprintVoiceDataWarning"];
+		[settings setBool:NO forKey:@"showVerizonVoiceDataWarning"];
+		
+		#if !TARGET_IPHONE_SIMULATOR && !defined(DEBUG)
+			// Initialize carrier
+			CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+			CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+		
+			// Initialize lists of mobile network codes for CDMA carriers (from https://en.wikipedia.org/wiki/Mobile_country_code#United_States_of_America_-_US)
+			NSArray *sprintMobileNetworkCodes = @[@"053", @"054", @"120", @"190", @"240", @"250", @"260", @"490", @"530", @"830", @"870", @"880", @"940"];
+			NSArray *verizonMobileNetworkCodes = @[@"004", @"005", @"006", @"010", @"012", @"013", @"110", @"270", @"271", @"272", @"273", @"274", @"275", @"276", @"277", @"278", @"279", @"280", @"281", @"282", @"283", @"284", @"285", @"286", @"287", @"288", @"289", @"350", @"390", @"480", @"481", @"482", @"483", @"484", @"485", @"486", @"487", @"488", @"489", @"590", @"770", @"820", @"890", @"910"];
+		
+			// If mobile network code is available and user had not previously disabled the old CDMA warning
+			if (carrier.mobileNetworkCode && [settings boolForKey:@"CDMAVoiceDataDisabled"] != YES)
+			{
+				// Enable voice data warning for Sprint
+				if ([sprintMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
+				{
+					[settings setBool:YES forKey:@"showSprintVoiceDataWarning"];
+				}
+				// Enable voice data warning for Verizon
+				else if ([verizonMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
+				{
+					[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+				}
+			}
+		
+			// Remove old CDMA warning setting
+			[settings removeObjectForKey:@"CDMAVoiceDataDisabled"];
+		#endif
+	}
 	
 	[settings synchronize];
 	
@@ -185,7 +212,7 @@
 	// If more than 15 minutes have passed since app was closed, then reset cdma voice data hidden value
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 900)
+	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 1)
 	{
 		[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
 		[settings synchronize];
@@ -201,7 +228,7 @@
 			{
 				MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 				
-				// Update my status model with updated number of unread messages
+				// Update MyStatusModel with updated number of unread messages
 				[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
 				{
 					// No callback needed - values stored in shared instance automatically
@@ -265,6 +292,32 @@
 			[authenticationModel doLogout];
 		});
 	}
+}
+
+// Notify user if a new version of the app is available in the app store
+- (void)checkAppStoreVersion
+{
+	/* TEMPORARILY COMMENTED OUT
+	 * Need to decide if there should be a remote server integration so that version checks can be disabled or prioritized (change showAlertAfterCurrentVersionHasBeenReleasedForDays to 1)
+	
+	Harpy *harpy = [Harpy sharedInstance];
+	
+	[harpy setPresentingViewController:self.window.rootViewController];
+	
+	// Only perform check after 10 days have elapsed to allow for 7 day phased release + padding for potential pauses in the release
+	[harpy setShowAlertAfterCurrentVersionHasBeenReleasedForDays:10];
+	
+	// DEBUG Only - check version on every app launch
+	#ifdef DEBUG
+		// [harpy testSetCurrentInstalledVersion:@"4.04"];
+		[harpy setDebugEnabled:YES];
+		[harpy checkVersion];
+	
+	// Perform check only once per day
+	#else
+		[harpy checkVersionDaily];
+	#endif
+	*/
 }
 
 - (void)didFinishInitialization:(NSNotification *)notification
@@ -371,6 +424,9 @@
 	
 	[self.window setRootViewController:loginSSONavigationController];
 	[self.window makeKeyAndVisible];
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
 }
 
 - (void)toggleScreenshotView:(BOOL)shouldHide
@@ -434,7 +490,7 @@
 	
 	[registeredDeviceModel setToken:tokenString];
 	
-	// Run update device token web service. This will only fire if either my profile model's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
+	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 	{
 		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
@@ -550,9 +606,9 @@
 		{
 			NSString *applicationStateString = (applicationState == UIApplicationStateActive ? @"Foreground" : (applicationState == UIApplicationStateBackground ? @"Background" : @"Inactive"));
 			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Push Notification", applicationStateString] message:[NSString stringWithFormat:@"%@", notification] preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+			UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	 
-			[alertController addAction:actionOK];
+			[alertController addAction:okAction];
 	 
 			// Show alert
 			[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
@@ -814,6 +870,9 @@
 			});
 		}
 	}
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
 }
 
 - (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
@@ -889,6 +948,9 @@
 	
 	[self.window setRootViewController:initialViewController];
 	[self.window makeKeyAndVisible];
+	
+	// Check whether a new version of the app is available in the app store
+	[self checkAppStoreVersion];
 }
 
 - (void)validateMed2MedAuthorization:(id <ProfileProtocol>)profile
@@ -896,7 +958,7 @@
 	// Fetch accounts and check the authorization status for each
 	AccountModel *accountModel = [[AccountModel alloc] init];
 	
-	[accountModel getAccountsWithCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	[accountModel getAccountsWithCallback:^(BOOL success, NSArray *accounts, NSError *error)
 	{
 		if (success)
 		{

@@ -26,7 +26,7 @@
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
 @property (nonatomic) UIRefreshControl *savedRefreshControl;
-@property (nonatomic) NSMutableArray *messages;
+@property (nonatomic) NSArray *messages;
 @property (nonatomic) NSMutableArray *filteredMessages;
 @property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
@@ -142,30 +142,11 @@
 	[self.tableView reloadData];
 }
 
-- (void)unHideSelectedMessages:(NSArray *)messages
-{
-	// If no messages to hide, cancel
-	if (messages == nil || [messages count] == 0)
-	{
-		return;
-	}
-	
-	// Remove each message from hidden messages
-	for(id <MessageProtocol> message in messages)
-	{
-		[self.hiddenMessages removeObject:message];
-	}
-	
-	// Show the edit button (there will always be at least one message when unhiding)
-	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
-	
-	[self.tableView reloadData];
-}
-
 - (void)removeSelectedMessages:(NSArray *)messages
 {
-	NSMutableArray *indexPaths = [NSMutableArray new];
 	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	NSMutableArray *mutableMessages = [self.messages mutableCopy];
 	
 	// If no messages to remove, cancel
 	if (messages == nil || [messages count] == 0)
@@ -176,13 +157,16 @@
 	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
 	for(id <MessageProtocol> message in messages)
 	{
-		[self.messages removeObject:message];
+		[mutableMessages removeObject:message];
 		[self.filteredMessages removeObject:message];
 		[self.hiddenMessages removeObject:message];
 		[self.selectedMessages removeObject:message];
 		
 		[indexPaths addObject:[NSIndexPath indexPathForItem:[filteredMessagesCopy indexOfObject:message] inSection:0]];
 	}
+	
+	// Remove selected messages from messages array
+	[self setMessages:[mutableMessages copy]];
 	
 	// Remove rows
 	if ([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
@@ -211,12 +195,32 @@
 	[self.tableView reloadData];
 }
 
+- (void)unHideSelectedMessages:(NSArray *)messages
+{
+	// If no messages to hide, cancel
+	if (messages == nil || [messages count] == 0)
+	{
+		return;
+	}
+	
+	// Remove each message from hidden messages
+	for(id <MessageProtocol> message in messages)
+	{
+		[self.hiddenMessages removeObject:message];
+	}
+	
+	// Show the edit button (there will always be at least one message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+	
+	[self.tableView reloadData];
+}
+
 // Return messages from MessageModel delegate
-- (void)updateMessages:(NSMutableArray *)messages
+- (void)updateMessages:(NSArray *)messages
 {
 	[self setIsLoaded:YES];
 	[self setMessages:messages];
-	[self setFilteredMessages:messages];
+	[self setFilteredMessages:[messages mutableCopy]];
 
 	// If messages type is active, toggle the parent view controller's edit button based on whether there are any filtered messages
 	if ([self.messagesType isEqualToString:@"Active"])
@@ -248,7 +252,7 @@
 #endif
 
 // Return sent messages from SentMessageModel delegate
-- (void)updateSentMessages:(NSMutableArray *)sentMessages
+- (void)updateSentMessages:(NSArray *)sentMessages
 {
 	[self updateMessages:sentMessages];
 }
@@ -297,9 +301,9 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? @"No messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+		[emptyCell.textLabel setText:(self.isLoaded ? @"No messages available." : @"Loading...")];
 		
 		return emptyCell;
 	}
@@ -475,15 +479,16 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no filtered messages, then user clicked the no messages cell
+	return ([self.filteredMessages count] <= indexPath.row ? nil : indexPath);
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no filtered messages, then user clicked the no messages found cell so do nothing
-	if ([self.filteredMessages count] == 0)
-	{
-		return;
-	}
 	// If in editing mode, toggle the archive button in MessagesViewController
-	else if (self.editing)
+	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
 		{
@@ -522,7 +527,7 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-	// If navigating to MessageDetailViewContoller, but there are no filtered messages, then user clicked the no messages found cell
+	// If navigating to MessageDetailViewController, but there are no filtered messages, then user clicked the no messages found cell
 	if ([identifier isEqualToString:@"showMessageDetail"])
 	{
 		return ! self.editing && [self.filteredMessages count] > 0;
@@ -536,10 +541,11 @@
 	if ([segue.identifier isEqualToString:@"showMessageDetail"])
 	{
 		MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
+		long selectedRow = [self.tableView indexPathForSelectedRow].row;
 		
-		if ([self.filteredMessages count] > [self.tableView indexPathForSelectedRow].row)
+		if ([self.filteredMessages count] > selectedRow)
 		{
-			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:[self.tableView indexPathForSelectedRow].row];
+			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:selectedRow];
 			
 			[messageDetailViewController setMessage:message];
 		}

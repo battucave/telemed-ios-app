@@ -22,18 +22,19 @@
 - (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID
 {
 	// Validate max length
-	if ([[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] length] > 1000)
+	// if ([[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] length] > 1000)
+	if ([[message stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] length] > 1000)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"Message field cannot exceed 1000 characters.", NSLocalizedDescriptionKey, nil]];
 		
 		// Show error even if user has navigated to another screen
 		[self showError:error];
 		
-		/*/ Not needed here
-		if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+		/*/ Handle error via delegate (not needed here)
+		if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			[self.delegate sendChatMessageError:error withPendingID:pendingID];
-		}*/
+		} */
 		
 		return;
 	}
@@ -68,7 +69,11 @@
 			"</Participants>"
 			"<Text>%@</Text>"
 		"</NewChatMsg>",
-		(isGroupChat ? @"true" : @"false"), xmlParticipants, [message escapeXML]];
+		
+		(isGroupChat ? @"true" : @"false"),
+		xmlParticipants,
+		[message escapeXML]
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
@@ -80,7 +85,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageSuccess:withPendingID:)])
 			{
 				[self.delegate sendChatMessageSuccess:message withPendingID:pendingID];
 			}
@@ -97,7 +102,7 @@
 			}];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
@@ -117,7 +122,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
@@ -142,7 +147,7 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that chat message has been sent to server
-		if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
+		if (/* ! self.pendingComplete &&*/ self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 		{
 			[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
 		}

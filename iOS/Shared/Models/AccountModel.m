@@ -16,13 +16,13 @@
 	[self getAccountsWithCallback:nil parameters:nil];
 }
 
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback
 {
 	[self getAccountsWithCallback:callback parameters:nil];
 }
 
 // Private method used for all accounts lookups
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback parameters:(NSDictionary *)parameters
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback parameters:(NSDictionary *)parameters
 {
 	[self.operationManager GET:@"Accounts" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -35,10 +35,10 @@
 		if ([xmlParser parse])
 		{
 			// Sort accounts by name
-			NSMutableArray *accounts = [[[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
+			NSArray *accounts = [[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
 			{
 				return [accountModelA.Name compare:accountModelB.Name];
-			}] mutableCopy];
+			}];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
 			#ifdef MED2MED
@@ -56,13 +56,13 @@
 			#endif
 			// END TESTING ONLY */
 			
-			// Handle success via callback block
+			// Handle success via callback
 			if (callback)
 			{
 				callback(YES, accounts, nil);
 			}
 			// Handle success via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateAccounts:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateAccounts:)])
 			{
 				[self.delegate updateAccounts:accounts];
 			}
@@ -72,13 +72,13 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Accounts Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Accounts.", NSLocalizedDescriptionKey, nil]];
 			
-			// Handle error via callback block
+			// Handle error via callback
 			if (callback)
 			{
 				callback(NO, nil, error);
 			}
 			// Handle error via delegate
-			else if ([self.delegate respondsToSelector:@selector(updateAccountsError:)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(updateAccountsError:)])
 			{
 				[self.delegate updateAccountsError:error];
 			}
@@ -91,13 +91,13 @@
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Accounts." andTitle:@"Accounts Error"];
 		
-		// Handle error via callback block
+		// Handle error via callback
 		if (callback)
 		{
 			callback(NO, nil, error);
 		}
 		// Handle error via delegate
-		else if ([self.delegate respondsToSelector:@selector(updateAccountsError:)])
+		else if (self.delegate && [self.delegate respondsToSelector:@selector(updateAccountsError:)])
 		{
 			[self.delegate updateAccountsError:error];
 		}
@@ -123,7 +123,7 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL, NSMutableArray *, NSError *))callback
+- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback
 {
 	NSDictionary *parameters = @{
 		@"hospID"	: hospitalID

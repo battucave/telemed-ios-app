@@ -23,11 +23,13 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize my status and on call entries
+	// Initialize current on call entries array
 	self.currentOnCallEntries = [[NSMutableArray alloc] init];
+	
+	// Initialize future on call entries array
 	self.futureOnCallEntries = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -95,14 +97,14 @@
 			if (self.currentElementValue != nil && ! [self.currentElementValue isEqualToString:@"Never"])
 			{
 				// Get date in utc timezone (not needed at this time, but keep here for future changes)
-				/*[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
+				/* [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
 				UTCDate = [dateFormatter dateFromString:self.currentElementValue];
 				
 				if (UTCDate == nil)
 				{
 					[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 					UTCDate = [dateFormatter dateFromString:self.currentElementValue];
-				}*/
+				} */
 				
 				// Get date as-is (server provides correct timezone)
 				self.currentElementValue = (NSMutableString *)[self.currentElementValue substringToIndex:19];
@@ -146,7 +148,7 @@
 		}
 		else
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on My Status: %@", elementName);
 		}
 	}
 	

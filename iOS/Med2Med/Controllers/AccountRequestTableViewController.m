@@ -28,14 +28,14 @@
 - (IBAction)getAccountCodeHelp:(id)sender
 {
 	UIAlertController *accountCodeHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"To request access to a new medical group, you must enter the code provided to you by TeleMed." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
-	[accountCodeHelpAlertController addAction:actionOK];
+	[accountCodeHelpAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([accountCodeHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[accountCodeHelpAlertController setPreferredAction:actionOK];
+		[accountCodeHelpAlertController setPreferredAction:okAction];
 	}
 
 	// Show Alert
@@ -46,18 +46,18 @@
 {
 	// TEMPORARY (remove when Account Request web service completed)
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Request Medical Group Incomplete" message:@"Web services are incomplete for requesting a medical group." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Go back to AccountPickerViewController or MessageNewUnauthorizedTableViewController
 		[self performSegueWithIdentifier:@"unwindFromAccountRequest" sender:self];
 	}];
 
-	[successAlertController addAction:actionOK];
+	[successAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[successAlertController setPreferredAction:actionOK];
+		[successAlertController setPreferredAction:okAction];
 	}
 
 	// Show alert

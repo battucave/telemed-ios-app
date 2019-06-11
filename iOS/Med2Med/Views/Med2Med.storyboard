@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ohb-em-xrs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ohb-em-xrs">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,7 +26,7 @@
                         <viewLayoutGuide key="safeArea" id="z08-WD-afK"/>
                     </view>
                     <connections>
-                        <segue destination="1Xk-Bg-Ml6" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegue" id="03j-Og-cOL"/>
+                        <segue destination="1Xk-Bg-Ml6" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegueSetController" id="03j-Og-cOL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rAT-8r-XQA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -85,7 +83,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a hospital to get started." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bv5-9z-IsC">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="35.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.43137254899999999" green="0.43137254899999999" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -167,7 +165,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="XJk-8F-ycy"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="given-name"/>
                                                     <userDefinedRuntimeAttributes>
@@ -213,7 +211,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="vZ5-xv-yA8"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="family-name"/>
                                                     <userDefinedRuntimeAttributes>
@@ -259,7 +257,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="THs-db-Pji"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="name"/>
                                                     <userDefinedRuntimeAttributes>
@@ -305,7 +303,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="68J-0r-4sF"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="name"/>
                                                     <userDefinedRuntimeAttributes>
@@ -351,7 +349,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="6Gu-NO-pSH"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" textContentType="name"/>
                                                     <userDefinedRuntimeAttributes>
@@ -397,7 +395,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="ak7-GS-28W"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="phonePad" textContentType="tel"/>
                                                     <userDefinedRuntimeAttributes>
@@ -438,13 +436,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Urgency Level: Normal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vH2-Ng-Cm7">
-                                                    <rect key="frame" x="16" y="0.0" width="278" height="44"/>
+                                                    <rect key="frame" x="16" y="0.0" width="278" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.5568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mJm-xO-9KK">
-                                                    <rect key="frame" x="310" y="6" width="51" height="31"/>
+                                                    <rect key="frame" x="310" y="6.5" width="51" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="49" id="f0Z-nq-x5J"/>
                                                     </constraints>
@@ -476,7 +474,7 @@
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="zfS-jn-zhV"/>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Next" id="5YE-9V-Wlx">
                             <connections>
-                                <segue destination="Clu-ea-WLy" kind="show" identifier="showOnCallSlotPicker" id="OYQ-LW-gn8"/>
+                                <segue destination="Thg-Kd-Rdi" kind="show" identifier="showOnCallSlotPicker" id="Fa8-qw-aeX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -526,14 +524,6 @@
             </objects>
             <point key="canvasLocation" x="1600" y="1165"/>
         </scene>
-        <!--MessageRecipientPickerViewController-->
-        <scene sceneID="tbU-qI-VYd">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="MessageRecipientPickerViewController" id="Nso-hm-3eS" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LXU-9l-lZM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3300" y="-2"/>
-        </scene>
         <!--New Message-->
         <scene sceneID="LhX-mb-nh8">
             <objects>
@@ -553,7 +543,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All fields on this screen are optional." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xoT-Yk-li4">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="35"/>
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="35.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="0.43137254901960786" green="0.43137254901960786" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -582,7 +572,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="R0H-fd-hET"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                                     <userDefinedRuntimeAttributes>
@@ -627,7 +617,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="jaO-U8-66H"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                                     <userDefinedRuntimeAttributes>
@@ -672,7 +662,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="mN4-8L-2RM"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                                     <userDefinedRuntimeAttributes>
@@ -752,14 +742,14 @@
                         <outletCollection property="textFields" destination="K5e-bM-Dpd" id="rfP-C7-gWv"/>
                         <outletCollection property="textFields" destination="d4f-nj-FfT" id="2YH-mV-D5B"/>
                         <outletCollection property="textFields" destination="fN3-yA-K1l" id="UR2-uc-OOT"/>
-                        <segue destination="CEW-Eo-LzX" kind="unwind" identifier="resetMessageNewForm" unwindAction="resetMessageNewForm:" id="Tcj-Gb-xQm"/>
-                        <segue destination="CEW-Eo-LzX" kind="unwind" identifier="handleErrorCallbackNumber" unwindAction="handleErrorCallbackNumber:" id="cXa-it-lvE"/>
+                        <segue destination="CEW-Eo-LzX" kind="unwind" identifier="unwindResetMessageNewForm" unwindAction="unwindResetMessageNewForm:" id="Tcj-Gb-xQm"/>
+                        <segue destination="CEW-Eo-LzX" kind="unwind" identifier="unwindErrorCallbackNumber" unwindAction="unwindErrorCallbackNumber:" id="cXa-it-lvE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0UZ-zN-8aD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="CEW-Eo-LzX" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4150" y="0.0"/>
+            <point key="canvasLocation" x="3300" y="0.0"/>
         </scene>
         <!--New Message-->
         <scene sceneID="azh-ZU-P0L">
@@ -848,7 +838,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authentication Pending" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oCL-OG-oId">
-                                                    <rect key="frame" x="15" y="32" width="345" height="17"/>
+                                                    <rect key="frame" x="15" y="31.5" width="345" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="17" id="nKC-55-zyN"/>
                                                     </constraints>
@@ -901,7 +891,7 @@
                         <outlet property="searchBar" destination="YzY-BS-Us5" id="7pG-Qx-grx"/>
                         <outlet property="tableHospitals" destination="XHJ-kj-frf" id="srQ-rg-zuG"/>
                         <outlet property="viewSearchBarContainer" destination="EcX-hZ-Vc9" id="hDl-Un-mxR"/>
-                        <segue destination="Mbd-Jc-dVd" kind="unwind" identifier="setHospital" unwindAction="setHospital:" id="WDb-iL-Gaq"/>
+                        <segue destination="Mbd-Jc-dVd" kind="unwind" identifier="unwindSetHospital" unwindAction="unwindSetHospital:" id="WDb-iL-Gaq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wd7-Ju-rqa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1169,7 +1159,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1189,7 +1179,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1236,16 +1226,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timeout Enabled" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B3R-KA-4Gu">
-                                                    <rect key="frame" x="16" y="10.5" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="11.5" width="160" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="160" id="wzy-aa-wIl"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mio-hw-4sA">
-                                                    <rect key="frame" x="309" y="6" width="51" height="31"/>
+                                                    <rect key="frame" x="309" y="6.5" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="timeoutChanged:" destination="cPe-rz-HUb" eventType="valueChanged" id="1qv-rd-CLJ"/>
                                                     </connections>
@@ -1274,7 +1264,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1294,7 +1284,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1314,7 +1304,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1334,7 +1324,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1358,7 +1348,7 @@
                                                     <rect key="frame" x="16" y="12" width="57" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="0 (0)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XKL-u6-gAE">
@@ -1431,7 +1421,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="roU-Xh-e9B" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="FirstName"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="BT8-je-HGn"/>
@@ -1450,11 +1440,12 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xd7-nA-pUZ">
-                                                    <rect key="frame" x="16" y="11" width="100" height="21"/>
+                                                    <rect key="frame" x="16" y="11.5" width="100" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="8QX-hw-ndD"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1475,7 +1466,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z8I-Nj-JA8" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="LastName"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="m9d-Q1-2AT"/>
@@ -1494,11 +1485,12 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5pL-j4-tok">
-                                                    <rect key="frame" x="16" y="11" width="100" height="21"/>
+                                                    <rect key="frame" x="16" y="11.5" width="100" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="Fhe-KQ-QcZ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1519,7 +1511,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rQK-Fv-mHV" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="Email"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="WOs-Jo-aNc"/>
@@ -1538,11 +1530,12 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P5M-6Q-QqY">
-                                                    <rect key="frame" x="16" y="11" width="100" height="21"/>
+                                                    <rect key="frame" x="16" y="11.5" width="100" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="bLu-9O-W1l"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1563,7 +1556,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tmz-hj-GuV" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="PhoneNumber"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="rkR-yc-7SP"/>
@@ -1582,11 +1575,12 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fQ7-ep-lIq">
-                                                    <rect key="frame" x="16" y="11" width="124" height="21"/>
+                                                    <rect key="frame" x="16" y="11.5" width="124" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="124" id="H6e-CL-Bqa"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1607,7 +1601,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yuz-CM-7wN" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="JobTitlePrefix"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="ATo-Zx-aXM"/>
@@ -1626,11 +1620,12 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Job Title (Optional)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yGb-Yf-rKs">
-                                                    <rect key="frame" x="16" y="11" width="160" height="21"/>
+                                                    <rect key="frame" x="16" y="11.5" width="160" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="160" id="7tg-7J-iju"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1710,11 +1705,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Hospital Code" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="I40-pu-pm3" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="hs4-g2-lG8"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                                     <userDefinedRuntimeAttributes>
@@ -1728,7 +1723,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="snq-Jg-GYy">
-                                                    <rect key="frame" x="324" y="6.5" width="30" height="30"/>
+                                                    <rect key="frame" x="324" y="7.5" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="tEu-fs-IDW"/>
                                                         <constraint firstAttribute="width" constant="30" id="zF7-3K-kgd"/>
@@ -1798,11 +1793,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Medical Group Code" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="4YD-SE-Bhe" customClass="InsetTextField">
-                                                    <rect key="frame" x="16" y="2" width="343" height="40"/>
+                                                    <rect key="frame" x="16" y="2.5" width="343" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="kr5-5Q-NBV"/>
                                                     </constraints>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                                     <userDefinedRuntimeAttributes>
@@ -1816,7 +1811,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q2F-4Q-LSI">
-                                                    <rect key="frame" x="324" y="6.5" width="30" height="30"/>
+                                                    <rect key="frame" x="324" y="7.5" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="Xul-XU-XiC"/>
                                                         <constraint firstAttribute="height" constant="30" id="ejs-UX-4dM"/>
@@ -1867,124 +1862,13 @@
             </objects>
             <point key="canvasLocation" x="3316" y="2265"/>
         </scene>
-        <!--Choose On Call Slots-->
-        <scene sceneID="a9S-In-c7j">
+        <!--OnCallSlotPickerViewController-->
+        <scene sceneID="xbc-1v-Of2">
             <objects>
-                <viewController storyboardIdentifier="OnCallSlotPickerViewController" id="Clu-ea-WLy" customClass="OnCallSlotPickerViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="EXn-77-eBN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dQY-Ft-1sh">
-                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
-                                <subviews>
-                                    <searchBar contentMode="redraw" text="" placeholder="Search On Call Slots (this is a placeholder only)" translatesAutoresizingMaskIntoConstraints="NO" id="aFi-gS-goL">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                        <textInputTraits key="textInputTraits" textContentType="name"/>
-                                        <scopeButtonTitles>
-                                            <string>Title</string>
-                                            <string>Title</string>
-                                        </scopeButtonTitles>
-                                        <connections>
-                                            <outlet property="delegate" destination="Clu-ea-WLy" id="Spv-h4-gUs"/>
-                                        </connections>
-                                    </searchBar>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="aFi-gS-goL" firstAttribute="leading" secondItem="dQY-Ft-1sh" secondAttribute="leading" id="9Rj-AD-Z7b"/>
-                                    <constraint firstAttribute="trailing" secondItem="aFi-gS-goL" secondAttribute="trailing" id="YFh-8q-5BV"/>
-                                    <constraint firstItem="aFi-gS-goL" firstAttribute="top" secondItem="dQY-Ft-1sh" secondAttribute="top" id="kPy-jT-ieb"/>
-                                    <constraint firstAttribute="bottom" secondItem="aFi-gS-goL" secondAttribute="bottom" id="uaD-ze-ela"/>
-                                    <constraint firstAttribute="height" constant="44" id="xTO-QH-ApF"/>
-                                </constraints>
-                            </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="66" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="sYv-RP-1AT">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OnCallSlotCell" rowHeight="66" id="5KD-AH-YOW" customClass="OnCallSlotCell">
-                                        <rect key="frame" x="0.0" y="1" width="375" height="66"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="5KD-AH-YOW" id="s8E-IP-Hdh">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="On Call Slot Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpZ-SA-IGs">
-                                                    <rect key="frame" x="15" y="11" width="345" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="251" text="Current On Call:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNt-J5-Y1a">
-                                                    <rect key="frame" x="15" y="37.5" width="98" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="98" id="5ri-LX-6oy"/>
-                                                        <constraint firstAttribute="height" constant="17" id="D84-d6-TXx"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{Name}" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNd-Cj-nDg">
-                                                    <rect key="frame" x="118" y="37.5" width="242" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="17" id="Uwl-dC-qc5"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="leading" secondItem="dNt-J5-Y1a" secondAttribute="leading" id="50P-5b-zzs"/>
-                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="trailing" secondItem="s8E-IP-Hdh" secondAttribute="trailingMargin" id="PNZ-Aa-1io"/>
-                                                <constraint firstItem="uNd-Cj-nDg" firstAttribute="leading" secondItem="dNt-J5-Y1a" secondAttribute="trailing" constant="5" id="Vhc-dj-h4I"/>
-                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="top" secondItem="s8E-IP-Hdh" secondAttribute="topMargin" id="YhC-Xw-iNi"/>
-                                                <constraint firstItem="uNd-Cj-nDg" firstAttribute="top" secondItem="cpZ-SA-IGs" secondAttribute="bottom" constant="6" id="dUf-lq-cYb"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="dNt-J5-Y1a" secondAttribute="bottom" constant="0.5" id="hXh-bg-36x"/>
-                                                <constraint firstItem="uNd-Cj-nDg" firstAttribute="trailing" secondItem="cpZ-SA-IGs" secondAttribute="trailing" id="oVs-he-z6J"/>
-                                                <constraint firstItem="dNt-J5-Y1a" firstAttribute="top" secondItem="cpZ-SA-IGs" secondAttribute="bottom" constant="6" id="p01-wG-HUa"/>
-                                                <constraint firstItem="dNt-J5-Y1a" firstAttribute="centerY" secondItem="uNd-Cj-nDg" secondAttribute="centerY" id="x9F-gq-Ta0"/>
-                                                <constraint firstItem="cpZ-SA-IGs" firstAttribute="leading" secondItem="s8E-IP-Hdh" secondAttribute="leadingMargin" id="zFz-A4-zjF"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="labelCurrentOnCall" destination="uNd-Cj-nDg" id="0x4-3L-ggB"/>
-                                            <outlet property="labelOnCallSlotName" destination="cpZ-SA-IGs" id="K66-8f-tuC"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="Clu-ea-WLy" id="tx9-Tj-gmM"/>
-                                    <outlet property="delegate" destination="Clu-ea-WLy" id="CsT-V5-aie"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="sYv-RP-1AT" firstAttribute="top" secondItem="dQY-Ft-1sh" secondAttribute="bottom" id="3fN-QZ-5FM"/>
-                            <constraint firstItem="dQY-Ft-1sh" firstAttribute="top" secondItem="uc9-85-qct" secondAttribute="top" id="5cb-Nf-eVK"/>
-                            <constraint firstItem="uc9-85-qct" firstAttribute="bottom" secondItem="sYv-RP-1AT" secondAttribute="bottom" id="Ac9-tz-xWc"/>
-                            <constraint firstItem="dQY-Ft-1sh" firstAttribute="trailing" secondItem="uc9-85-qct" secondAttribute="trailing" id="Cwg-bQ-0rP"/>
-                            <constraint firstItem="uc9-85-qct" firstAttribute="trailing" secondItem="sYv-RP-1AT" secondAttribute="trailing" id="dm9-gg-3UP"/>
-                            <constraint firstItem="dQY-Ft-1sh" firstAttribute="leading" secondItem="uc9-85-qct" secondAttribute="leading" id="lEe-of-yHN"/>
-                            <constraint firstItem="sYv-RP-1AT" firstAttribute="leading" secondItem="uc9-85-qct" secondAttribute="leading" id="xfX-Wo-Yym"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="uc9-85-qct"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Choose On Call Slots" id="L01-fa-car"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <connections>
-                        <outlet property="searchBar" destination="aFi-gS-goL" id="Zxv-Cj-37t"/>
-                        <outlet property="tableOnCallSlots" destination="sYv-RP-1AT" id="hfX-d6-sPn"/>
-                        <outlet property="viewSearchBarContainer" destination="dQY-Ft-1sh" id="z8v-bN-nsa"/>
-                        <segue destination="Nso-hm-3eS" kind="show" identifier="showMessageRecipientPicker" id="UO6-TV-m8z"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SUg-td-9Zq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="OnCallSlotPickerViewController" id="Thg-Kd-Rdi" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0mE-8l-O6c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2450" y="0.0"/>
+            <point key="canvasLocation" x="2450" y="-1"/>
         </scene>
     </scenes>
     <resources>
@@ -1993,7 +1877,7 @@
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="UlW-eW-Gmn"/>
+        <segue reference="GBe-0v-zRW"/>
         <segue reference="rpH-Mr-Mcb"/>
         <segue reference="ojM-FY-erA"/>
         <segue reference="HgO-po-FXF"/>

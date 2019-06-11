@@ -33,10 +33,10 @@
 		[self showError:error];
 		
 		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+		/* if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
 		{
-			[self.delegate sendMessageError:error];
-		}*/
+			[self.delegate emailTeleMedMessageError:error];
+		} */
 		
 		return;
 	}
@@ -47,7 +47,7 @@
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Add message identifier if a message delivery id exists (exists for message telemed view controller, doesn't exist for contact email view controller)
+	// Add message identifier if a message delivery id exists (exists for MessageTelemedViewController, doesn't exist for ContactEmailViewController)
 	NSString *messageIdentifier = (messageDeliveryID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageDeliveryID] : @"");
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -56,7 +56,11 @@
 			"<FromAddress>%@</FromAddress>"
 			"%@"
 		"</EmailToTelemed>",
-		[message escapeXML], [fromEmailAddress escapeXML], messageIdentifier];
+		
+		[message escapeXML],
+		[fromEmailAddress escapeXML],
+		messageIdentifier
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
@@ -68,9 +72,9 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageSuccess)])
 			{
-				[self.delegate sendMessageSuccess];
+				[self.delegate emailTeleMedMessageSuccess];
 			}
 		}
 		else
@@ -85,10 +89,10 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
 			{
-				[self.delegate sendMessageError:error];
-			}*/
+				[self.delegate emailTeleMedMessageError:error];
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -105,9 +109,9 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
 			{
-				[self.delegate sendMessageError:error];
+				[self.delegate emailTeleMedMessageError:error];
 			} */
 		
 			// Show error even if user has navigated to another screen
@@ -130,9 +134,9 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessagePending)])
 		{
-			[self.delegate sendMessagePending];
+			[self.delegate emailTeleMedMessagePending];
 		}
 	
 		// Ensure that pending callback doesn't fire again after possible error

@@ -79,14 +79,14 @@
 - (IBAction)getPhoneNumberHelp:(id)sender
 {
 	UIAlertController *phoneNumberHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"We use your phone number as an added security precaution. The phone number you enter must already be a callback number in your account." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
-	[phoneNumberHelpAlertController addAction:actionOK];
+	[phoneNumberHelpAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([phoneNumberHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[phoneNumberHelpAlertController setPreferredAction:actionOK];
+		[phoneNumberHelpAlertController setPreferredAction:okAction];
 	}
 
 	// Show alert
@@ -102,14 +102,14 @@
 	if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
 	{
 		UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"Invalid Phone Number" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+		UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
-		[errorAlertController addAction:actionOK];
+		[errorAlertController addAction:okAction];
 	
 		// PreferredAction only supported in 9.0+
 		if ([errorAlertController respondsToSelector:@selector(setPreferredAction:)])
 		{
-			[errorAlertController setPreferredAction:actionOK];
+			[errorAlertController setPreferredAction:okAction];
 		}
 	
 		// Show alert
@@ -120,8 +120,8 @@
 		NSString *messagestring = [NSString stringWithFormat:@"Is %@ the correct Phone Number for this device? Your TeleMed profile will be updated.", phoneNumber];
 		
 		UIAlertController *confirmPhoneNumberAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Phone Number" message:messagestring preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
-		UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+		UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
+		UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
@@ -154,7 +154,7 @@
 					}
 					
 					UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
-					UIAlertAction *actionGoBack = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+					UIAlertAction *goBackAction = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 					{
 						// Go back to login sso (user navigated here from login sso)
 						if ([self.navigationController.viewControllers count] > 1)
@@ -169,10 +169,10 @@
 							[self.navigationController setViewControllers:@[loginSSOViewController] animated:NO];
 						}
 					}];
-					UIAlertAction *actionRetry = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
+					UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
 				
-					[errorAlertController addAction:actionGoBack];
-					[errorAlertController addAction:actionRetry];
+					[errorAlertController addAction:retryAction];
+					[errorAlertController addAction:goBackAction];
 				
 					// Show alert
 					[self presentViewController:errorAlertController animated:YES completion:nil];
@@ -180,13 +180,13 @@
 			}];
 		}];
 
-		[confirmPhoneNumberAlertController addAction:actionNo];
-		[confirmPhoneNumberAlertController addAction:actionYes];
+		[confirmPhoneNumberAlertController addAction:noAction];
+		[confirmPhoneNumberAlertController addAction:yesAction];
 
 		// PreferredAction only supported in 9.0+
 		if ([confirmPhoneNumberAlertController respondsToSelector:@selector(setPreferredAction:)])
 		{
-			[confirmPhoneNumberAlertController setPreferredAction:actionYes];
+			[confirmPhoneNumberAlertController setPreferredAction:yesAction];
 		}
 
 		// Show alert

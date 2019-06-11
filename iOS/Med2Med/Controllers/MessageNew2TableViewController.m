@@ -12,7 +12,7 @@
 
 @interface MessageNew2TableViewController ()
 
-@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
+@property (nonatomic) IBOutletCollection(UITextField) NSArray *textFields; // Must be a strong reference
 @property (weak, nonatomic) IBOutlet UITextView *textViewAdditionalInformation;
 
 @property (nonatomic) NSString *textViewAdditionalInformationPlaceholder;
@@ -109,21 +109,21 @@
 }
 
 // Return success from NewMessageModel delegate (this logic should only be called after web service completes to avoid issues)
-- (void)sendMessageSuccess
+- (void)sendNewMessageSuccess
 {
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"New Message" message:@"Thank you. Your message has been sent." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Unwind to first screen of MessageNewTableViewController form
-		[self performSegueWithIdentifier:@"resetMessageNewForm" sender:self];
+		[self performSegueWithIdentifier:@"unwindResetMessageNewForm" sender:self];
 	}];
 
-	[successAlertController addAction:actionOK];
+	[successAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[successAlertController setPreferredAction:actionOK];
+		[successAlertController setPreferredAction:okAction];
 	}
 
 	// Show Alert
@@ -131,12 +131,12 @@
 }
 
 // Return error from NewMessageModel delegate (currently only used for callback number error)
-- (void)sendMessageError:(NSError *)error
+- (void)sendNewMessageError:(NSError *)error
 {
 	// Unwind to first screen of MessageNewTableViewController form to show error for callback number
 	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
 	{
-		[self performSegueWithIdentifier:@"handleErrorCallbackNumber" sender:self];
+		[self performSegueWithIdentifier:@"unwindErrorCallbackNumber" sender:self];
 	}
 }
 

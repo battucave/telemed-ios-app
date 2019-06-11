@@ -6,20 +6,8 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 #import "TimeZoneModel.h"
-
-@protocol AccountDelegate <NSObject>
-
-@required
-- (void)updateAccounts:(NSMutableArray *)accounts;
-
-@optional
-- (void)updateAccountsError:(NSError *)error;
-
-@end
 
 @interface AccountModel : Model
 
@@ -33,7 +21,7 @@
 @property (nonatomic) NSString *MyAuthorizationStatus; // Med2Med only - Possible values: Authorized, Pending, Unauthorized
 
 - (void)getAccounts;
-- (void)getAccountsWithCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
+- (void)getAccountsWithCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback;
 
 
 #pragma mark - MyTeleMed
@@ -47,9 +35,20 @@
 #pragma mark - Med2Med
 
 #ifdef MED2MED
-- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSMutableArray *accounts, NSError *error))callback;
+- (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback;
 - (BOOL)isAuthorized;
 - (BOOL)isPending;
 #endif
+
+@end
+
+
+@protocol AccountDelegate <NSObject>
+
+@required
+- (void)updateAccounts:(NSArray *)accounts;
+
+@optional
+- (void)updateAccountsError:(NSError *)error;
 
 @end

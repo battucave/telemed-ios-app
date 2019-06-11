@@ -44,7 +44,12 @@
 			"<MessageText>%@</MessageText>"
 			"<SenderDeviceID>%@</SenderDeviceID>"
 		"</NewMsg>",
-		accountID, xmlRecipients, [message escapeXML], registeredDeviceModel.ID];
+		
+		accountID,
+		xmlRecipients,
+		[message escapeXML],
+		registeredDeviceModel.ID
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
@@ -56,9 +61,9 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageSuccess)])
 			{
-				[self.delegate sendMessageSuccess];
+				[self.delegate sendNewMessageSuccess];
 			}
 		}
 		else
@@ -73,10 +78,10 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
 			{
-				[self.delegate sendMessageError:error];
-			}*/
+				[self.delegate sendNewMessageError:error];
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -93,9 +98,9 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
 			{
-				[self.delegate sendMessageError:error];
+				[self.delegate sendNewMessageError:error];
 			} */
 		
 			// Show error even if user has navigated to another screen
@@ -118,9 +123,9 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that mssage has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessagePending)])
 		{
-			[self.delegate sendMessagePending];
+			[self.delegate sendNewMessagePending];
 		}
 		
 		// Ensure that pending callback doesn't fire again after possible error

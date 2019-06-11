@@ -19,10 +19,10 @@
     _sideNavigationButton.target = self.revealViewController;
 	_sideNavigationButton.action = @selector(revealToggle:);
 	
-	// HelpViewController may not have reveal view controller when navigated to from LoginViewController or PhoneNumberViewController
+	// HelpViewController may not have RevealViewController when navigated to from LoginViewController or PhoneNumberViewController
 	if (self.revealViewController)
 	{
-		// Set reveal view controller delegate
+		// Set RevealViewController delegate
 		[self.revealViewController setDelegate:self];
 		
 		// Register a gesture recognizer for navigation controller

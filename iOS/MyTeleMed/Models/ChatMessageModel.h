@@ -6,25 +6,7 @@
 //  Copyright (c) 2016 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
-
-@protocol ChatMessageDelegate <NSObject>
-
-@required
-- (void)updateChatMessages:(NSMutableArray *)chatMessages;
-
-@optional
-- (void)updateChatMessagesError:(NSError *)error;
-- (void)deleteChatMessagePending;
-- (void)deleteChatMessageSuccess;
-- (void)deleteChatMessageError:(NSError *)error;
-- (void)deleteMultipleChatMessagesPending;
-- (void)deleteMultipleChatMessagesSuccess;
-- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages;
-
-@end
 
 @interface ChatMessageModel : Model
 
@@ -41,9 +23,25 @@
 
 - (void)getChatMessages;
 - (void)getChatMessagesByID:(NSNumber *)chatMessageID;
-- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL success, NSMutableArray *chatMessages, NSError *error))callback;
+- (void)getChatMessagesByID:(NSNumber *)chatMessageID withCallback:(void (^)(BOOL success, NSArray *chatMessages, NSError *error))callback;
 - (void)deleteChatMessage:(NSNumber *)chatMessageID;
 - (void)deleteMultipleChatMessages:(NSArray *)chatMessages;
 
+@end
+
+
+@protocol ChatMessageDelegate <NSObject>
+
+@required
+- (void)updateChatMessages:(NSArray *)chatMessages;
+
+@optional
+- (void)updateChatMessagesError:(NSError *)error;
+- (void)deleteChatMessagePending;
+- (void)deleteChatMessageSuccess;
+- (void)deleteChatMessageError:(NSError *)error;
+- (void)deleteMultipleChatMessagesPending;
+- (void)deleteMultipleChatMessagesSuccess;
+- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages;
 
 @end

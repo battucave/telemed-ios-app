@@ -20,10 +20,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize notification settings array
 	self.notificationSettings = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -31,7 +31,7 @@
 {
 	if ([elementName isEqualToString:@"NotificationSettings"])
 	{
-		// Initialize the notification setting (Only when retrieving all notification settings. When retrieving a single notification setting, this will already be initialized)
+		// Initialize a notification setting (Only when retrieving all notification settings. When retrieving a single notification setting, this will already be initialized)
 		if (! self.notificationSetting)
 		{
 			self.notificationSetting = [[NotificationSettingModel alloc] init];
@@ -77,7 +77,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Notification Setting: %@", elementName);
 		}
 	}
 	

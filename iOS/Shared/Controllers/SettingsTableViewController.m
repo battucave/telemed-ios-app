@@ -79,11 +79,11 @@
 		if (! [settings boolForKey:@"timeoutAlert"])
 		{
 			UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+			UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 			{
 				[self.switchTimeout setOn:YES];
 			}];
-			UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 			{
 				NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 				
@@ -92,13 +92,13 @@
 				[settings synchronize];
 			}];
 		
-			[updateTimeoutAlertController addAction:actionCancel];
-			[updateTimeoutAlertController addAction:actionConfirm];
+			[updateTimeoutAlertController addAction:confirmAction];
+			[updateTimeoutAlertController addAction:cancelAction];
 		
 			// PreferredAction only supported in 9.0+
 			if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
 			{
-				[updateTimeoutAlertController setPreferredAction:actionCancel];
+				[updateTimeoutAlertController setPreferredAction:cancelAction];
 			}
 		
 			// Show alert

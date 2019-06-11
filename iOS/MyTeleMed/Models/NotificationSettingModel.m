@@ -47,10 +47,9 @@
 	// Load notification settings from device
 	if ([settings objectForKey:notificationKey] != nil)
 	{
-		// In MyTeleMed versions 3.0 - 3.2, the notification settings were archived using a different class. Use this class as a substitute when unarchiving the object
+		// Unarchive the notification settings
 		[NSKeyedUnarchiver setClass:self.class forClassName:@"NotificationSettingsModel"];
 		
-		// Unarchive the notification settings
 		notificationSettings = (NotificationSettingModel *)[NSKeyedUnarchiver unarchiveObjectWithData:[settings objectForKey:notificationKey]];
 	}
 	
@@ -97,7 +96,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the notification settings." andTitle:@"notification settings Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
 		}
@@ -147,14 +146,14 @@
 				
 				// Save new default to server
 				[self saveNotificationSettingsByName:name settings:self];
-			}*/
+			} */
 			
 			// Save notification settings for type to device
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
 			[settings synchronize];
 			
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettings:forName:)])
 			{
 				[self.delegate updateNotificationSettings:self forName:name];
 			}
@@ -165,7 +164,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"notification settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the notification settings.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 			{
 				[self.delegate updateNotificationSettingsError:error];
 			}
@@ -179,7 +178,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the notification settings." andTitle:@"notification settings Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateNotificationSettingsError:)])
 		{
 			[self.delegate updateNotificationSettingsError:error];
 		}
@@ -213,7 +212,12 @@
 			"<Name>%@</Name>"
 			"<Tone>%@</Tone>"
 		"</NotificationSetting>",
-		(notificationSettings.Enabled ? @"true" : @"false"), interval, [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString], [notificationSettings.Tone escapeXML]];
+		
+		(notificationSettings.Enabled ? @"true" : @"false"),
+		interval,
+		[([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString],
+		[notificationSettings.Tone escapeXML]
+	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
 		
@@ -232,15 +236,13 @@
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:notificationSettings] forKey:notificationKey];
 			[settings synchronize];
 			
-			NSLog(@"Saved %@ Tone: %@", [name capitalizedString], notificationSettings.Tone);
-			
 			// Priority message notification settings removed in version 3.85. If saving notification settings for normal messages, then also save them for priority messages
 			if ([name isEqualToString:@"normal"])
 			{
 				[self saveNotificationSettingsByName:@"priority" settings:notificationSettings];
 			}
 			// Handle success via delegate (not currently used)
-			else if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
 			{
 				[self.delegate saveNotificationSettingsSuccess];
 			}
@@ -257,7 +259,7 @@
 			}];
 			
 			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
-			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
 			}
@@ -277,7 +279,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
-			if ([self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsError:)])
 			{
 				[self.delegate saveNotificationSettingsError:error];
 			}
@@ -302,7 +304,7 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that notification settings has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsPending)])
 		{
 			[self.delegate saveNotificationSettingsPending];
 		}

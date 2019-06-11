@@ -49,14 +49,14 @@
 - (IBAction)getAccountCodeHelp:(id)sender
 {
 	UIAlertController *accountCodeHelpAlertController = [UIAlertController alertControllerWithTitle:@"What's This For?" message:@"To create your new account, you must enter the code sent to you by TeleMed." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
-	[accountCodeHelpAlertController addAction:actionOK];
+	[accountCodeHelpAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([accountCodeHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[accountCodeHelpAlertController setPreferredAction:actionOK];
+		[accountCodeHelpAlertController setPreferredAction:okAction];
 	}
 
 	// Show Alert
@@ -67,18 +67,18 @@
 {
 	// TEMPORARY (remove when Hospital Request web service completed)
 	UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Medical Group Authorization Incomplete" message:@"Web services are incomplete for requesting medical group authorization." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Account Code saved successfully so return to Login
 		[self.navigationController popViewControllerAnimated:YES];
 	}];
 
-	[successAlertController addAction:actionOK];
+	[successAlertController addAction:okAction];
 
 	// PreferredAction only supported in 9.0+
 	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[successAlertController setPreferredAction:actionOK];
+		[successAlertController setPreferredAction:okAction];
 	}
 
 	// Show Alert

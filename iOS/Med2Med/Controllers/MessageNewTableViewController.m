@@ -26,14 +26,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelMedicalGroup;
 @property (weak, nonatomic) IBOutlet UILabel *labelUrgencyLevel;
 @property (weak, nonatomic) IBOutlet UISwitch *switchUrgencyLevel;
-@property (strong, nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
+@property (nonatomic) IBOutlet UIView *viewSectionFooter; // Must be a strong reference to show in table section footer
 
-@property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields;
-@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
+@property (nonatomic) IBOutletCollection(UITableViewCell) NSArray *cellFormFields; // Must be a strong reference
+@property (nonatomic) IBOutletCollection(UITextField) NSArray *textFields; // Must be a strong reference
 
-@property (nonatomic) NSMutableArray *accounts;
+@property (nonatomic) NSArray *accounts;
 @property (nonatomic) BOOL hasSubmitted;
-@property (nonatomic) NSMutableArray *hospitals;
+@property (nonatomic) NSArray *hospitals;
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL shouldInitializeCallbackData;
 @property (nonatomic) NSString *textUrgencyLevel;
@@ -49,11 +49,11 @@
 	// Initialize form values
 	[self setFormValues:[[NSMutableDictionary alloc] init]];
 	
-	// Initialize account model
+	// Initialize AccountModel
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	
-	// Initialize hospital model
+	// Initialize HospitalModel
 	HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 	
 	[hospitalModel setDelegate:self];
@@ -158,8 +158,8 @@
 	[self.view endEditing:YES];
 }
 
-// Error Unwind Segue for Callback Number from MessageNew2TableViewController
-- (IBAction)handleErrorCallbackNumber:(UIStoryboardSegue *)segue
+// Error unwind segue for callback number from MessageNew2TableViewController
+- (IBAction)unwindErrorCallbackNumber:(UIStoryboardSegue *)segue
 {
 	NSString *callbackPhoneNumberValue = @"";
 	
@@ -182,8 +182,8 @@
 	[errorAlertController show:error];
 }
 
-// Success Unwind Segue from MessageNew2TableViewController
-- (IBAction)resetMessageNewForm:(UIStoryboardSegue *)segue
+// Success unwind segue from MessageNew2TableViewController
+- (IBAction)unwindResetMessageNewForm:(UIStoryboardSegue *)segue
 {
 	// NOTE: Static cells do not reset when [self.tableView reloadData] is called. Instead, manually reset all data
 	
@@ -249,7 +249,7 @@
 }
 
 // Unwind segue from AccountPickerViewController
-- (IBAction)setAccount:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetAccount:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	AccountPickerViewController *accountPickerViewController = segue.sourceViewController;
@@ -278,7 +278,7 @@
 }
 
 // Unwind segue from HospitalPickerViewController
-- (IBAction)setHospital:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetHospital:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	HospitalPickerViewController *hospitalPickerViewController = segue.sourceViewController;
@@ -438,13 +438,13 @@
 	[self.tableView endUpdates];
 	
 	// Load accounts for hospital
-	[self.accountModel getAccountsByHospital:self.selectedHospital.ID withCallback:^(BOOL success, NSMutableArray *accounts, NSError *error)
+	[self.accountModel getAccountsByHospital:self.selectedHospital.ID withCallback:^(BOOL success, NSArray *accounts, NSError *error)
 	{
 		if (success)
 		{
 			// Filter and store only authorized accounts
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthorizationStatus = %@", @"Authorized"];
-			[self setAccounts:[[accounts filteredArrayUsingPredicate:predicate] mutableCopy]];
+			[self setAccounts:[accounts filteredArrayUsingPredicate:predicate]];
 			
 			dispatch_async(dispatch_get_main_queue(), ^
 			{
@@ -492,13 +492,13 @@
 	[self performSegueWithIdentifier:@"showOnCallSlotPicker" sender:self];
 }
 
-// Return hospitals from hospital model delegate
-- (void)updateHospitals:(NSMutableArray *)newHospitals
+// Return hospitals from HospitalModel delegate
+- (void)updateHospitals:(NSArray *)hospitals
 {
 	// Filter and store only authenticated hospitals
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin"];
 	
-	[self setHospitals:[[newHospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	[self setHospitals:[hospitals filteredArrayUsingPredicate:predicate]];
 	
 	// If user has exactly one hospital, then set it as the selected hospital
 	if ([self.hospitals count] == 1) {
@@ -512,7 +512,7 @@
 	}
 }
 
-// Return error from hospital model delegate
+// Return error from HospitalModel delegate
 - (void)updateHospitalsError:(NSError *)error
 {
 	// Don't show error here - there will be another chance to load hospitals on HospitalPickerViewController

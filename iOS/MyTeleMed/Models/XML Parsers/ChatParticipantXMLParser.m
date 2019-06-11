@@ -21,10 +21,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize chat participants array
 	self.chatParticipants = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"Person"])
 	{
-		// Initialize the chat participant
+		// Initialize a chat participant
 		self.chatParticipant = [[ChatParticipantModel alloc] init];
 	}
 }
@@ -76,7 +76,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Chat Participant: %@", elementName);
 		}
 	}
 	

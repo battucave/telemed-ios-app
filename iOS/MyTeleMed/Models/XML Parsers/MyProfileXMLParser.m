@@ -27,10 +27,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize my profile and my registered devices
+	// Initialize my registered devices array
 	self.myRegisteredDevices = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -38,7 +38,7 @@
 {
 	if ([elementName isEqualToString:@"MyPreferredAccount"])
 	{
-		// Initialize my preferred account
+		// Initialize a preferred account
 		self.myProfile.MyPreferredAccount = [[AccountModel alloc] init];
 		
 		self.currentModel = @"MyPreferredAccountModel";
@@ -52,6 +52,7 @@
 	}
 	else if ([elementName isEqualToString:@"TimeZone"] || [elementName isEqualToString:@"MyTimeZone"])
 	{
+		// Initialize a time zone
 		self.timeZone = [[TimeZoneModel alloc] init];
 		
 		self.currentModel = @"TimeZoneModel";

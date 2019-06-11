@@ -29,15 +29,15 @@
 {
     [super viewDidLoad];
 	
-	// Initialize Selected message recipients array
+	// Initialize selected message recipients array
 	self.selectedMessageRecipients = [[NSMutableArray alloc] init];
 	
 	// Update placeholder to custom message
 	[self.messageComposeTableViewController.textViewMessage setText:@"Add Optional Comment:"];
 }
 
-// Unwind Segue from MessageRecipientPickerViewController
-- (IBAction)setMessageRecipients:(UIStoryboardSegue *)segue
+// Unwind segue from MessageRecipientPickerViewController
+- (IBAction)unwindSetMessageRecipients:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;
@@ -72,39 +72,40 @@
 }
 
 // Return pending from ForwardMessageModel delegate
-- (void)sendMessagePending
+- (void)forwardMessagePending
 {
-	// Go back to messages (assume success)
+	// Go back to message detail (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 /*/ Return success from ForwardMessageModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)forwardMessageSuccess
 {
 	// Go back to MessageDetailViewController
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 // Return error from ForwardMessageModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)forwardMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
 	[errorAlertController show:error];
 }*/
 
-// Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
-- (void)validateForm:(NSString *)messageText
-{
-	messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	[self.navigationItem.rightBarButtonItem setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
-}
-
-// Fired from message compose table to perform segue to MessageRecipientPickerTableViewController - simplifies passing of data to the picker
+// Fired from message compose table to perform segue to MessageRecipientPickerViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender
 {
 	[self performSegueWithIdentifier:@"showMessageRecipientPickerFromMessageForward" sender:sender];
+}
+
+// Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
+- (void)validateForm:(NSString *)messageText
+{
+	// Message text is optional for forwarding a message
+	// messageText = [messageText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	[self.navigationItem.rightBarButtonItem setEnabled:(self.selectedMessageRecipients != nil && [self.selectedMessageRecipients count] > 0)];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -119,13 +120,9 @@
 	{
 		MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.destinationViewController;
 		
-		// Set message recipient type
+		// Set message recipients, message recipient type, and any previously selected message recipients
 		[messageRecipientPickerViewController setMessageRecipientType:@"Forward"];
-		
-		// Set message
-		[messageRecipientPickerViewController setMessage:self.message];
-		
-		// Set selected message recipients if previously set
+		[messageRecipientPickerViewController setMessageRecipients:self.messageRecipients];
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedMessageRecipients mutableCopy]];
 	}
 }

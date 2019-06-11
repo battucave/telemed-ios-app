@@ -104,7 +104,7 @@
 	// Set max height of text view chat participants to half of screen size minus max height of text view chat message minus height of navigation bar
 	[self.textViewChatParticipants setMaxHeight:(([UIScreen mainScreen].bounds.size.height - 64.0f - self.textViewChatMessage.bounds.size.height) / 2.5)];
 	
-	// Add 10px to top and bottom of table comments
+	// Add 10px to top and bottom of table chat messages
 	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(10, 0, 10, 0)];
 	
 	// Add keyboard observers
@@ -145,7 +145,7 @@
 	[newChatMessageModel sendNewChatMessage:self.textViewChatMessage.text chatParticipantIDs:[self.selectedChatParticipants valueForKey:@"ID"] isGroupChat:self.isGroupChat withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 
-// Perform Segue to MessageRecipientPickerTableViewController
+// Perform segue to MessageRecipientPickerViewController
 - (IBAction)performSegueToMessageRecipientPicker:(id)sender
 {
 	// New chat message
@@ -161,7 +161,7 @@
 }
 
 // Unwind segue from MessageRecipientPickerViewController (new chat only)
-- (IBAction)setChatParticipants:(UIStoryboardSegue *)segue
+- (IBAction)unwindSetChatParticipants:(UIStoryboardSegue *)segue
 {
 	// Obtain reference to source view controller
 	MessageRecipientPickerViewController *messageRecipientPickerViewController = segue.sourceViewController;
@@ -171,8 +171,6 @@
 	
 	// Save group chat setting
 	[self setIsGroupChat:messageRecipientPickerViewController.isGroupChat];
-	
-	NSLog(@"Is Group Chat: %@", (self.isGroupChat ? @"Yes" : @"No"));
 	
 	// Update text view chat participants with chat participant name(s)
 	[self setChatParticipantNames:self.selectedChatParticipants expanded:NO];
@@ -331,7 +329,7 @@
 }
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
 	NSLog(@"Received Push Notification ChatMessageDetailViewController");
     
@@ -340,14 +338,14 @@
 	{
 		NSLog(@"Refresh Chat Messages with Conversation ID: %@", self.conversationID);
 		
-		__block UIAlertAction *actionViewBlock = actionView;
+		__block UIAlertAction *viewActionBlock = viewAction;
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
 		
 		// Cancel queued chat messages refresh
 		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 		
 		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
-		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSMutableArray *chatMessages, NSError *error)
+		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSArray *chatMessages, NSError *error)
 		{
 			if (success)
 			{
@@ -362,7 +360,7 @@
 				if ([results count] > 0)
 				{
 					// Remove action view
-					actionViewBlock = nil;
+					viewActionBlock = nil;
 				}
 			}
 			else
@@ -372,7 +370,7 @@
 			}
 
 			// Execute the default notification message action
-			[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionViewBlock];
+			[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)viewActionBlock];
 		}];
 		
 		// Delay executing the default notification message action until chat messages have finished loading
@@ -380,7 +378,7 @@
 	}
 	
 	// Execute the default notification message action
-	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)actionView];
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:(UIAlertAction *)viewAction];
 }
 
 // Reset chat messages back to loading state
@@ -394,7 +392,7 @@
 }
 
 // Return chat messages from ChatMessageModel delegate
-- (void)updateChatMessages:(NSMutableArray *)chatMessages
+- (void)updateChatMessages:(NSArray *)chatMessages
 {
 	NSUInteger chatMessageCount = [chatMessages count];
 	
@@ -405,7 +403,7 @@
 		
 		if ([chatMessage.ChatParticipants count] > 0)
 		{
-			// If a new chat, verify that chat participants still match selected chat participants in the event that user changed Participants while chat messages were still loading
+			// If a new chat, verify that chat participants still match selected chat participants in the event that user changed participants while chat messages were still loading
 			if (self.isNewChat)
 			{
 				// Get array of id's from selected chat participants
@@ -441,7 +439,7 @@
 	// Keep current value of is loaded to determine whether to scroll to bottom of chat messages
 	BOOL hadLoaded = self.isLoaded;
 	
-	[self setChatMessages:chatMessages];
+	[self setChatMessages:[chatMessages mutableCopy]];
 	[self setIsLoaded:YES];
 	
 	dispatch_async(dispatch_get_main_queue(), ^
@@ -536,8 +534,8 @@
 	// Commit row updates
 	[self.tableChatMessages endUpdates];
 	
-	// Auto size table comments height to show all rows
-	//[self autoSizeTableChatMessages];
+	// Auto size table chat messages height to show all rows
+	// [self autoSizeTableChatMessages];
 	
 	// Clear and resign focus from text view comment
 	[self.textViewChatMessage setText:@""];
@@ -577,7 +575,7 @@
 	}
 }
 
-// Scroll to bottom of table comments
+// Scroll to bottom of table chat messages
 - (void)scrollToBottom
 {
 	if ([self.chatMessages count] > 1)
@@ -699,8 +697,9 @@
 		// If loading chat messages, but there are no chat messages, show a message
 		if (self.conversationID)
 		{
-			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
+			[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
 		}
 		
 		// Auto size table chat messages height to show all rows
@@ -718,7 +717,7 @@
 	BOOL currentUserIsSender = ([chatMessage.SenderID isEqualToNumber:self.currentUserID]);
 	//BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
 	
-	// Set both types of events to use CommentCell (purposely reusing CommentCell here instead of creating duplicate ChatMessageDetailCell)
+	// Set both types of events to use comment cell (purposely reusing comment cell here instead of creating duplicate chat message detail cell)
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];
 
 	// Set message event date and time
@@ -772,6 +771,7 @@
 		
 		// Set message recipient type
 		[messageRecipientPickerViewController setMessageRecipientType:@"Chat"];
+		[messageRecipientPickerViewController setTitle:@"Choose Participants"];
 		
 		// Set selected message recipients if previously set
 		[messageRecipientPickerViewController setSelectedMessageRecipients:[self.selectedChatParticipants mutableCopy]];

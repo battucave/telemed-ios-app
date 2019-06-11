@@ -1,0 +1,50 @@
+PODS:
+  - AFNetworkActivityLogger (2.0.4):
+    - AFNetworking/NSURLConnection (~> 2.0)
+    - AFNetworking/NSURLSession (~> 2.0)
+  - AFNetworking (2.6.3):
+    - AFNetworking/NSURLConnection (= 2.6.3)
+    - AFNetworking/NSURLSession (= 2.6.3)
+    - AFNetworking/Reachability (= 2.6.3)
+    - AFNetworking/Security (= 2.6.3)
+    - AFNetworking/Serialization (= 2.6.3)
+    - AFNetworking/UIKit (= 2.6.3)
+  - AFNetworking/NSURLConnection (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.6.3)
+  - AFNetworking/Security (2.6.3)
+  - AFNetworking/Serialization (2.6.3)
+  - AFNetworking/UIKit (2.6.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - Harpy (4.1.14)
+  - KeychainItemWrapper (1.2)
+
+DEPENDENCIES:
+  - AFNetworkActivityLogger (~> 2.0)
+  - AFNetworking (~> 2.6)
+  - Harpy
+  - KeychainItemWrapper
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworkActivityLogger
+    - AFNetworking
+    - Harpy
+    - KeychainItemWrapper
+
+SPEC CHECKSUMS:
+  AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
+  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  Harpy: b2fbe6819f6a8932df32d7cd2fb20f442df86bbc
+  KeychainItemWrapper: 67a240172ed669842bc6bc13ed554dcd50469fa2
+
+PODFILE CHECKSUM: f9d17f22c7f6df1977fc5b7dcc7db337fad370f9
+
+COCOAPODS: 1.6.1

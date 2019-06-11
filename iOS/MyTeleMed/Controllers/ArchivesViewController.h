@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "RevealViewController.h"
 
 @interface ArchivesViewController : RevealViewController
+
+- (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue;
 
 @end

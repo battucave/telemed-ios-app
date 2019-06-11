@@ -119,7 +119,7 @@
 	// Get list of hospitals if none were passed from previous controller
 	if ([self.hospitals count] == 0)
 	{
-		// Initialize hospital model
+		// Initialize HospitalModel
 		HospitalModel *hospitalModel = [[HospitalModel alloc] init];
 		
 		[hospitalModel setDelegate:self];
@@ -222,8 +222,8 @@
 	}
 }
 
-// Return hospitals from hospital model delegate
-- (void)updateHospitals:(NSMutableArray *)newHospitals
+// Return hospitals from HospitalModel delegate
+- (void)updateHospitals:(NSArray *)hospitals
 {
 	// Filter and store only authenticated or requested hospitals
 	NSPredicate *predicate;
@@ -239,7 +239,7 @@
 		predicate = [NSPredicate predicateWithFormat:@"MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@ OR MyAuthenticationStatus = %@", @"OK", @"Admin", @"Requested"];
 	}
 	
-	[self setHospitals:[[newHospitals filteredArrayUsingPredicate:predicate] mutableCopy]];
+	[self setHospitals:[hospitals filteredArrayUsingPredicate:predicate]];
 	
 	self.isLoaded = YES;
 	
@@ -248,7 +248,7 @@
 	[self scrollToSelectedHospital];
 }
 
-// Return error from hospital model delegate
+// Return error from HospitalModel delegate
 - (void)updateHospitalsError:(NSError *)error
 {
 	self.isLoaded = YES;
@@ -311,13 +311,13 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		
 		// Hospitals table
 		if ([self.hospitals count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? @"No hospitals found." : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? @"No hospitals available." : @"Loading...")];
 		}
 		// Search results table
 		else
@@ -362,30 +362,38 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no hospitals, then user clicked the no hospitals cell
+	if ([self.hospitals count] <= indexPath.row)
+	{
+		return nil;
+	}
+	// If search is active and there are no filtered hospitals, then user clicked the no results cell
+	else if (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredHospitals count] <= indexPath.row)
+	{
+		// Close search results
+		[self.searchController setActive:NO];
+	
+		// Scroll to selected on call slot (only if table is limited to single selection)
+		[self scrollToSelectedHospital];
+	
+		return nil;
+	}
+	
+	return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Search results table
+	// Set selected hospital from search results table
 	if (self.searchController.active && self.searchController.searchBar.text.length > 0)
 	{
-		// If no filtered hospitals, then user clicked "No results."
-		if ([self.filteredHospitals count] == 0)
-		{
-			// Close search results (must execute before scrolling to selected hospital)
-			[self.searchController setActive:NO];
-			
-			// Scroll to selected hospital
-			[self scrollToSelectedHospital];
-			
-			return;
-		}
-		
-		// Set selected hospital
 		[self setSelectedHospital:[self.filteredHospitals objectAtIndex:indexPath.row]];
 	}
-	// Hospitals table
+	// Set selected hospital from hospitals table
 	else
 	{
-		// Set selected hospital
 		[self setSelectedHospital:[self.hospitals objectAtIndex:indexPath.row]];
 	}
 	
@@ -400,13 +408,13 @@
 	{
 		[self dismissViewControllerAnimated:YES completion:^
 		{
-			[self performSegueWithIdentifier:@"setHospital" sender:self];
+			[self performSegueWithIdentifier:@"unwindSetHospital" sender:self];
 		}];
 	}
 	// Execute unwind segue
 	else
 	{
-		[self performSegueWithIdentifier:@"setHospital" sender:self];
+		[self performSegueWithIdentifier:@"unwindSetHospital" sender:self];
 	}
 }
 

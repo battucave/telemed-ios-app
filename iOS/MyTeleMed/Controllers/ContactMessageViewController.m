@@ -42,7 +42,7 @@
 }
 
 // Return pending from EmailTeleMedModel delegate
-- (void)sendMessagePending
+- (void)emailTeleMedMessagePending
 {
 	// Go back to messages (assume success)
 	#ifdef MYTELEMED
@@ -51,7 +51,7 @@
 }
 
 // Return success from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageSuccess
+- (void)emailTeleMedMessageSuccess
 {
 	#ifdef MED2MED
 		// Reset message text
@@ -63,14 +63,14 @@
 	
 		// Show succcess message (assume success)
 		UIAlertController *successAlertController = [UIAlertController alertControllerWithTitle:@"Contact TeleMed" message:@"Message sent successfully." preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+		UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 
-		[successAlertController addAction:actionOK];
+		[successAlertController addAction:okAction];
 
 		// PreferredAction only supported in 9.0+
 		if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
 		{
-			[successAlertController setPreferredAction:actionOK];
+			[successAlertController setPreferredAction:okAction];
 		}
 
 		// Show Alert
@@ -79,7 +79,7 @@
 }
 
 /*/ Return error from EmailTelemedModel delegate (no longer used)
-- (void)sendMessageError:(NSError *)error
+- (void)emailTeleMedMessageError:(NSError *)error
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	

@@ -123,7 +123,7 @@
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
 {
 	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSArray *chatMessagesCopy = [self.chatMessages copy];
+	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
 	
 	// If no chat messages to remove, cancel
 	if (chatMessages == nil || [chatMessages count] == 0)
@@ -134,12 +134,15 @@
 	// Remove each chat message from the source data, selected data, and the table itself
 	for(ChatMessageModel *chatMessage in chatMessages)
 	{
-		[self.chatMessages removeObject:chatMessage];
+		[mutableChatMessages removeObject:chatMessage];
 		[self.hiddenChatMessages removeObject:chatMessage];
 		[self.selectedChatMessages removeObject:chatMessage];
 		
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[chatMessagesCopy indexOfObject:chatMessage] inSection:0]];
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
 	}
+	
+	// Remove selected chat messages from chat messages array
+	[self setChatMessages:[mutableChatMessages copy]];
 	
 	// Remove rows
 	if ([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
@@ -160,7 +163,7 @@
 }
 
 // Return chat messages from ChatMessageModel delegate
-- (void)updateChatMessages:(NSMutableArray *)chatMessages
+- (void)updateChatMessages:(NSArray *)chatMessages
 {
 	// Sort chat messages by time sent in descending order
 	chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
@@ -227,9 +230,9 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages found." : @"Loading...")];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
+		[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
 		
 		return emptyCell;
 	}
@@ -246,7 +249,7 @@
 		[cell setHidden:YES];
 	}
 	
-	// Set Participants
+	// Set chat participants
 	if (chatMessage.ChatParticipants)
 	{
 		// Remove self from chat participants
@@ -334,15 +337,16 @@
 	return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	// If there are no chat messages, then user clicked the no chat messages cell
+	return ([self.chatMessages count] <= indexPath.row ? nil : indexPath);
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no chat messages, then user clicked the no chat messages found cell so do nothing
-	if ([self.chatMessages count] == 0)
-	{
-		return;
-	}
-	// If in editing mode, toggle the delete button in ChatMessagesViewController
-	else if (self.editing)
+	// If in editing mode, toggle the delete button in chat MessagesViewController
+	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
 		{
@@ -361,7 +365,7 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If in editing mode, toggle the delete button in ChatMessagesViewController
+	// If in editing mode, toggle the delete button in chat MessagesViewController
 	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])

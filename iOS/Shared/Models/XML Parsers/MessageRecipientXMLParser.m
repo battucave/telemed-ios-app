@@ -21,10 +21,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize message recipients array
 	self.messageRecipients = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"MsgRecip"])
 	{
-		// Initialize the message event
+		// Initialize a message recipient
 		self.messageRecipient = [[MessageRecipientModel alloc] init];
 	}
 }
@@ -103,7 +103,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Message Recipient: %@", elementName);
 		}
 	}
 	

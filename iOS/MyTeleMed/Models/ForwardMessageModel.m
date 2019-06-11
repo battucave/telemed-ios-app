@@ -43,12 +43,20 @@
 	// Forward with message delivery id
 	if ([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
-		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageDeliveryID", message.MessageDeliveryID, xmlRecipients];
+		xmlBody = [NSString stringWithFormat:xmlBody,
+			@"MessageDeliveryID",
+			message.MessageDeliveryID,
+			xmlRecipients
+		];
 	}
 	// Forward with message id
 	else if (message.MessageID)
 	{
-		xmlBody = [NSString stringWithFormat:xmlBody, @"MessageID", message.MessageID, xmlRecipients];
+		xmlBody = [NSString stringWithFormat:xmlBody,
+			@"MessageID",
+			message.MessageID,
+			xmlRecipients
+		];
 	}
 	// Message must contain either message delivery id or message id
 	else
@@ -77,9 +85,9 @@
 			}
 			
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(sendMessageSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageSuccess)])
 			{
-				[self.delegate sendMessageSuccess];
+				[self.delegate forwardMessageSuccess];
 			}
 		}
 		else
@@ -94,10 +102,10 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
 			{
-				[self.delegate sendMessageError:error];
-			}*/
+				[self.delegate forwardMessageError:error];
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -114,9 +122,9 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(sendMessageError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
 			{
-				[self.delegate sendMessageError:error];
+				[self.delegate forwardMessageError:error];
 				}];
 			} */
 		
@@ -140,9 +148,9 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(sendMessagePending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(forwardMessagePending)])
 		{
-			[self.delegate sendMessagePending];
+			[self.delegate forwardMessagePending];
 		}
 		
 		// Ensure that pending callback doesn't fire again after possible error

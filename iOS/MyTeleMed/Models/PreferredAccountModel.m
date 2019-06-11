@@ -23,7 +23,7 @@
 
 - (void)savePreferredAccount:(AccountModel *)account
 {
-	// Initialize my profile model
+	// Initialize MyProfileModel
 	[self setMyProfileModel:[MyProfileModel sharedInstance]];
 	
 	// Show activity indicator
@@ -47,14 +47,14 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountSuccess)])
 			{
 				[self.delegate savePreferredAccountSuccess];
 			}
 		}
 		else
 		{
-			// Roll back my profile model's my preferred account to previous value
+			// Roll back MyProfileModel's my preferred account to previous value
 			[self.myProfileModel restoreMyPreferredAccount];
 			
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Preferred Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Preferred Account.", NSLocalizedDescriptionKey, nil]];
@@ -67,10 +67,10 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
-			}*/
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -86,11 +86,11 @@
 		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
 		[self hideActivityIndicator:^
 		{
-			// Roll back My Profile Model's MyPreferredAccount to previous value
+			// Roll back MyProfileModel's MyPreferredAccount to previous value
 			[self.myProfileModel restoreMyPreferredAccount];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
 			} */
@@ -114,11 +114,11 @@
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^
 	{
-		// Save preferred account to my profile model (assume success so save it immediately and then roll back if error occurs)
+		// Save preferred account to MyProfileModel (assume success so save it immediately and then roll back if error occurs)
 		[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
 		
 		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
+		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 		{
 			[self.delegate savePreferredAccountPending];
 		};

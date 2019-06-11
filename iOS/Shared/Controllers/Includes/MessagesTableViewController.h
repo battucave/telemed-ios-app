@@ -10,13 +10,6 @@
 
 @class MessagesViewController;
 
-@protocol MessagesDelegate <NSObject>
-
-@optional
-- (void)setSelectedMessages:(NSArray *)theSelectedMessages;
-
-@end
-
 @interface MessagesTableViewController : UITableViewController
 
 @property (weak) id delegate;
@@ -28,5 +21,13 @@
 - (void)removeSelectedMessages:(NSArray *)messages;
 - (void)resetMessages;
 - (void)unHideSelectedMessages:(NSArray *)messages;
+
+@end
+
+
+@protocol MessagesDelegate <NSObject>
+
+@optional
+- (void)setSelectedMessages:(NSArray *)theSelectedMessages;
 
 @end

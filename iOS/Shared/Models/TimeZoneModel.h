@@ -6,19 +6,7 @@
 //  Copyright © 2018 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
-
-@protocol TimeZoneDelegate <NSObject>
-
-@required
-- (void)updateTimeZones:(NSMutableArray *)newTimeZones;
-
-@optional
-- (void)updateTimeZonesError:(NSError *)error;
-
-@end
 
 @interface TimeZoneModel : Model
 
@@ -29,5 +17,16 @@
 @property (nonatomic) NSNumber *Offset;
 
 - (void)getTimeZones;
+
+@end
+
+
+@protocol TimeZoneDelegate <NSObject>
+
+@required
+- (void)updateTimeZones:(NSArray *)newTimeZones;
+
+@optional
+- (void)updateTimeZonesError:(NSError *)error;
 
 @end

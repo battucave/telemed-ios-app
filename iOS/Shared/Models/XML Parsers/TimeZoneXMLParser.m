@@ -21,10 +21,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize time zones array
 	self.timeZones = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"TimeZone"])
 	{
-		// Initialize the time zone
+		// Initialize a time zone
 		self.timeZone = [[TimeZoneModel alloc] init];
 	}
 }
@@ -69,7 +69,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Time Zone: %@", elementName);
 		}
 	}
 	

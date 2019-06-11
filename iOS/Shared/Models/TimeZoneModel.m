@@ -23,12 +23,10 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			NSMutableArray *timeZones = [[parser timeZones] mutableCopy];
-			
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateTimeZones:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateTimeZones:)])
 			{
-				[self.delegate updateTimeZones:timeZones];
+				[self.delegate updateTimeZones:[[parser timeZones] copy]];
 			}
 		}
 		// Error parsing xml file
@@ -37,7 +35,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Time Zones Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Time Zones.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateTimeZonesError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateTimeZonesError:)])
 			{
 				[self.delegate updateTimeZonesError:error];
 			}
@@ -51,7 +49,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Time Zones." andTitle:@"Time Zones Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateTimeZonesError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateTimeZonesError:)])
 		{
 			[self.delegate updateTimeZonesError:error];
 		}

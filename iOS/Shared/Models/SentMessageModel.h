@@ -6,21 +6,9 @@
 //  Copyright (c) 2017 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 #import "MessageProtocol.h"
 #import "AccountModel.h"
-
-@protocol SentMessageDelegate <NSObject>
-
-@required
-- (void)updateSentMessages:(NSMutableArray *)sentMessages;
-
-@optional
-- (void)updateSentMessagesError:(NSError *)error;
-
-@end
 
 @interface SentMessageModel : Model <MessageProtocol>
 
@@ -46,5 +34,16 @@
 
 - (void)getSentMessages;
 - (void)getSentMessageByID:(NSNumber *)messageID withCallback:(void (^)(BOOL success, SentMessageModel *message, NSError *error))callback;
+
+@end
+
+
+@protocol SentMessageDelegate <NSObject>
+
+@required
+- (void)updateSentMessages:(NSArray *)sentMessages;
+
+@optional
+- (void)updateSentMessagesError:(NSError *)error;
 
 @end

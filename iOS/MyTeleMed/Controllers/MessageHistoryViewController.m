@@ -141,6 +141,24 @@
 	});
 }
 
+// Go to MessageEscalateViewController (override method from MessageDetailParentViewController)
+- (void)showMessageEscalate
+{
+	[self performSegueWithIdentifier:@"showMessageEscalateFromMessageHistory" sender:self];
+}
+
+// Go to MessageForwardViewController (override method from MessageDetailParentViewController)
+- (void)showMessageForward
+{
+	[self performSegueWithIdentifier:@"showMessageForwardFromMessageHistory" sender:self];
+}
+
+// Go to MessageRedirectViewController (override method from MessageDetailParentViewController)
+- (void)showMessageRedirect
+{
+	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageHistory" sender:self];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;

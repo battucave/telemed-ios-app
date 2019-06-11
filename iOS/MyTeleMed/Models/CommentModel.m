@@ -53,12 +53,20 @@
 	// Comment with message delivery id
 	if ([message respondsToSelector:@selector(MessageDeliveryID)] && message.MessageDeliveryID)
 	{
-		xmlBody = [NSString stringWithFormat: xmlBody, [comment escapeXML], @"MessageDeliveryID", message.MessageDeliveryID];
+		xmlBody = [NSString stringWithFormat:xmlBody,
+			[comment escapeXML],
+			@"MessageDeliveryID",
+			message.MessageDeliveryID
+		];
 	}
 	// Comment with message id
 	else if (message.MessageID)
 	{
-		xmlBody = [NSString stringWithFormat: xmlBody, [comment escapeXML], @"MessageID", message.MessageID];
+		xmlBody = [NSString stringWithFormat:xmlBody,
+			[comment escapeXML],
+			@"MessageID",
+			message.MessageID
+		];
 	}
 	// Message must contain either message delivery id or message id
 	else
@@ -70,7 +78,7 @@
 		[self showError:error];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
 			[self.delegate saveCommentError:error withPendingID:pendingID];
 		}
@@ -86,7 +94,7 @@
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentSuccess:withPendingID:)])
 			{
 				[self.delegate saveCommentSuccess:comment withPendingID:pendingID];
 			}
@@ -104,7 +112,7 @@
 			}];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 			{
 				[self.delegate saveCommentError:error withPendingID:pendingID];
 			}
@@ -125,7 +133,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 			{
 				[self.delegate saveCommentError:error withPendingID:pendingID];
 			}
@@ -150,7 +158,7 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that comment has been sent to server
-		if (/* ! self.pendingComplete &&*/ [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
+		if (/* ! self.pendingComplete &&*/ self.delegate && [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 		{
 			[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
 		}

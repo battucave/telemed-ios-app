@@ -21,8 +21,6 @@
 
 @property (nonatomic) NSString *notificationSettingsName;
 
-- (IBAction)setSelectedNotificationSetting:(UIStoryboardSegue *)segue;
-
 @end
 
 @implementation SettingsNotificationsTableViewController
@@ -82,8 +80,8 @@
 	[self.notificationSettingModel saveNotificationSettingsByName:self.notificationSettingsName settings:self.notificationSettings];
 }
 
-// Unwind Segue from SettingsNotificationsPickerTableViewController
-- (IBAction)setSelectedNotificationSetting:(UIStoryboardSegue *)segue
+// Unwind segue from SettingsNotificationsPickerTableViewController
+- (IBAction)unwindSetNotificationSetting:(UIStoryboardSegue *)segue
 {
 	SettingsNotificationsPickerTableViewController *settingsNotificationsPickerTableViewController = segue.sourceViewController;
 	
@@ -149,8 +147,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Hide everything except alert sound for chat and comments
-	return (self.notificationSettingsType >= 2 && indexPath.row != 1 ? 0 : UITableViewAutomaticDimension);
+	// Chat and comments: Hide everything except alert sound
+	if (self.notificationSettingsType >= 2 && indexPath.row > 0)
+	{
+		return 0;
+	}
+	// Messages: Hide repeat interval row if repeat notifications is disabled
+	else if (! self.switchReminders.isOn && indexPath.row == 2)
+	{
+		return 0;
+	}
+	
+	return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -159,23 +167,23 @@
 	
 	switch (indexPath.row)
 	{
-		// Reminders row
-		case 0:
-		{
-			// Set reminders value
-			[self.switchReminders setOn:self.notificationSettings.isReminderOn];
-			break;
-		}
-		
 		// Tone row
-		case 1:
+		case 0:
 		{
 			// Set tone text
 			[cell.detailTextLabel setText:self.notificationSettings.ToneTitle];
 			break;
 		}
 		
-		// Interval row
+		// Repeat notifications row
+		case 1:
+		{
+			// Set reminders value
+			[self.switchReminders setOn:self.notificationSettings.isReminderOn];
+			break;
+		}
+		
+		// Repeat interval row
 		case 2:
 		{
 			// Set interval text
@@ -192,8 +200,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Segue to notification settings picker
-	if (indexPath.row > 0)
+	// Segue to notification settings picker (excluding repeat notifications row)
+	if (indexPath.row != 1)
 	{
 		[self performSegueWithIdentifier:@"showSettingsNotificationsPicker" sender:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}

@@ -73,9 +73,9 @@
 	
 	// Configure alert controller
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
-	[alertController addAction:actionOK];
+	[alertController addAction:okAction];
 	
 	// Show alert
 	dispatch_async(dispatch_get_main_queue(), ^
@@ -100,8 +100,8 @@
 	
 	// Configure alert controller
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@\nWould you like to try again?", errorMessage] preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *actionRetry = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Execute callback
 		dispatch_async(dispatch_get_main_queue(), ^
@@ -110,13 +110,13 @@
 		});
 	}];
 	
-	[alertController addAction:actionCancel];
-	[alertController addAction:actionRetry];
+	[alertController addAction:retryAction];
+	[alertController addAction:cancelAction];
 	
 	// PreferredAction only supported in 9.0+
 	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
 	{
-		[alertController setPreferredAction:actionRetry];
+		[alertController setPreferredAction:retryAction];
 	}
 	
 	// Show alert
@@ -141,13 +141,13 @@
 		{
 			// Configure alert controller
 			self.offlineAlertController = [ErrorAlertController alertControllerWithTitle:@"Data Connection Unavailable" message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 			{
 				// Toggle error alert to show again
 				self.isErrorAlertShowing = NO;
 			}];
 			
-			[self.offlineAlertController addAction:actionOK];
+			[self.offlineAlertController addAction:okAction];
 			
 			// Show alert
 			dispatch_async(dispatch_get_main_queue(), ^

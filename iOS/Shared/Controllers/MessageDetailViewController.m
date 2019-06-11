@@ -84,11 +84,11 @@
 	self.messageType = @"Archived";
 	
 	#ifdef MYTELEMED
-		// Initialize basic event model
+		// Initialize BasiceEventModel
 		[self setMessageEventModel:[[MessageEventModel alloc] init]];
 		[self.messageEventModel setDelegate:self];
 	
-		// Initialize message recipient model
+		// Initialize MessageRecipientModel
 		[self setMessageRecipientModel:[[MessageRecipientModel alloc] init]];
 		[self.messageRecipientModel setDelegate:self];
 	
@@ -100,21 +100,28 @@
 		[self.textViewComment setMaxHeight:120.0f];
 		self.textViewCommentPlaceholder = self.textViewComment.text;
 	
-		// Initialize my profile model
+		// Initialize MyProfileModel
 		profile = [MyProfileModel sharedInstance];
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
 	
-	// Initialize user profile model
+	// Initialize UserProfileModel
 	#elif defined MED2MED
 		profile = [UserProfileModel sharedInstance];
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
+	
+		// Set message id and type using message details from previous screen
+		if (self.message)
+		{
+			self.messageID = self.message.MessageID;
+			self.messageType = self.message.MessageType;
+		}
 	#endif
 	
-	// Set message type and id using message details from previous screen
+	// Set message id and type using message details from previous screen
 	if (self.message)
 	{
 		self.messageID = self.message.MessageID;
@@ -176,9 +183,6 @@
 		
 			// Load message events
 			[self getMessageEvents];
-		
-			// Load forward message recipients to determine if message is forwardable
-			[self getMessageRecipients];
 		#endif
 	}
 	
@@ -208,9 +212,6 @@
 					
 					// Load message events (must be loaded after message completes fetching to avoid issue with comments table UI getting stuck showing the "Loading" message)
 					[self getMessageEvents];
-	
-					// Load forward message recipients to determine if message is forwardable
-					[self getMessageRecipients];
 					
 					// Enable archive button for active messages
 					if ([self.messageType isEqualToString:@"Active"])
@@ -247,9 +248,6 @@
 					
 					// Load message events (must be loaded after message completes fetching to avoid issue with comments table UI getting stuck showing the "Loading" message)
 					[self getMessageEvents];
-	
-					// Load forward message recipients to determine if message is forwardable
-					[self getMessageRecipients];
 				}
 				// Show error
 				else
@@ -390,22 +388,33 @@
 	[self.commentModel addMessageComment:self.message comment:self.textViewComment.text withPendingID:[NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]]];
 }
 
+// Auto size table comments height to show all rows
+- (void)autoSizeTableComments
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		CGSize newSize = [self.tableComments sizeThatFits:CGSizeMake(self.tableComments.frame.size.width, MAXFLOAT)];
+		
+		self.constraintTableCommentsHeight.constant = newSize.height;
+	});
+}
+
 // Load message events
 - (void)getMessageEvents
 {
-	// Message event model callback
-	void (^callback)(BOOL success, NSMutableArray *newMessageEvents, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageEvents, NSError *error)
+	// MessageEventModel callback
+	void (^callback)(BOOL success, NSArray *messageEvents, NSError *error) = ^void(BOOL success, NSArray *messageEvents, NSError *error)
 	{
 		[self setIsLoaded:YES];
 		
 		if (success)
 		{
-			[self setMessageEvents:newMessageEvents];
+			[self setMessageEvents:messageEvents];
 			
 			[self.filteredMessageEvents removeAllObjects];
 			
 			// Filter message events to include only comments and user events
-			for(MessageEventModel *messageEvent in newMessageEvents)
+			for(MessageEventModel *messageEvent in messageEvents)
 			{
 				if ([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
 				{
@@ -495,16 +504,16 @@
 	}
 }
 
-// Load message recipients to determine if message is forwardable
+/*/ Load message recipients to determine if message is forwardable
 - (void)getMessageRecipients
 {
-	// Message recipient model callback
-	void (^callback)(BOOL success, NSMutableArray *newMessageRecipients, NSError *error) = ^void(BOOL success, NSMutableArray *newMessageRecipients, NSError *error)
+	// MessageRecipientModel callback
+	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
 	{
 		if (success)
 		{
 			// Enable forward button if there are valid message recipients to forward to
-			if ([newMessageRecipients count] > 0)
+			if ([messageRecipients count] > 0)
 			{
 				[self.buttonForward setEnabled:YES];
 			}
@@ -529,10 +538,10 @@
 	{
 		[self.messageRecipientModel getMessageRecipientsForMessageID:self.messageID withCallback:callback];
 	}
-}
+} */
 
 // Override default remote notification action from CoreViewController
-- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
 	NSLog(@"Received Push Notification MessageDetailViewController");
 	
@@ -567,12 +576,12 @@
 			[notificationInfo setValue:[message stringByReplacingOccurrencesOfString:@"comment to a message" withString:@"comment to this message"] forKey:@"message"];
 			
 			// Remove action view
-			actionView = nil;
+			viewAction = nil;
 		}
 	}
 	
 	// Execute the default notification message action
-	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:actionView];
+	[super handleRemoteNotification:notificationInfo ofType:notificationType withViewAction:viewAction];
 }
 
 - (void)modifyMessageAsRead
@@ -582,19 +591,19 @@
 	{
 		if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Unread"])
 		{
-			[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Read"];
+			[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Read"];
 		}
 		/*/ TESTING ONLY (set message back to unread)
 		#ifdef DEBUG
 			// Set message back to unread
 			else if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Read"])
 			{
-				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unread"];
+				[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Unread"];
 			}
 			// Unarchive archived message
 			else if ([self.message.MessageType isEqualToString:@"Archived"])
 			{
-				[self.messageModel modifyMessageState:self.message.MessageDeliveryID state:@"Unarchive"];
+				[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Unarchive"];
 			}
 		#endif
 		// END TESTING ONLY */
@@ -810,17 +819,6 @@
 	}
 }
 
-// Auto size table comments height to show all rows
-- (void)autoSizeTableComments
-{
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		CGSize newSize = [self.tableComments sizeThatFits:CGSizeMake(self.tableComments.frame.size.width, MAXFLOAT)];
-		
-		self.constraintTableCommentsHeight.constant = newSize.height;
-	});
-}
-
 - (void)dismissKeyboard:(NSNotification *)notification
 {
 	dispatch_async(dispatch_get_main_queue(), ^
@@ -896,7 +894,8 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
-		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:12.0]];
+		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
 		
 		// Auto size table comments height to show all rows
@@ -962,9 +961,13 @@
 	{
 		MessageHistoryViewController *messageHistoryViewController = [segue destinationViewController];
 		
-		[messageHistoryViewController setMessage:self.message];
-		[messageHistoryViewController setMessageEvents:self.messageEvents];
 		[messageHistoryViewController setCanForward:self.buttonForward.enabled];
+		[messageHistoryViewController setMessage:self.message];
+		[messageHistoryViewController setMessageDeliveryID:self.messageDeliveryID];
+		[messageHistoryViewController setMessageEvents:self.messageEvents];
+		[messageHistoryViewController setMessageID:self.messageID];
+		[messageHistoryViewController setMessageType:self.messageType];
+		[messageHistoryViewController setMessageRedirectInfo:self.messageRedirectInfo];
 	}
 }
 #endif

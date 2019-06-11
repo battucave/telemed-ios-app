@@ -13,6 +13,6 @@
 
 @interface RevealViewController : CoreViewController <SWRevealViewControllerDelegate>
 
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *sideNavigationButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *sideNavigationButton;
 
 @end

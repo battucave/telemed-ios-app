@@ -33,10 +33,10 @@
 		[self showError:error];
 	
 		// Handle error via delegate
-		/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+		/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 		{
 			[self.delegate callTeleMedError:error];
-		}*/
+		} */
 		
 		return;
 	}
@@ -54,15 +54,13 @@
 	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		NSLog(@"CallModel Success: %@", operation.response);
-		
 		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
 			{
 				[self.delegate callTeleMedSuccess];
 			}
@@ -79,10 +77,10 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
-			}*/
+			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -99,7 +97,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
 			{
 				[self.delegate callTeleMedError:error];
 			} */
@@ -119,22 +117,32 @@
 
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	// Phone number is not available when on simulator or debugging and will cause crash so skip calling the sender. (This should only happen when in debug mode; never for an actual user.)
+	if (! registeredDeviceModel.PhoneNumber)
+	{
+		NSLog(@"Skip Call Sender when on Simulator or Debugging because Phone Number is not available.");
+		
+		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Return Call Error", NSLocalizedFailureReasonErrorKey, @"A valid Phone Number is not available on this device.", NSLocalizedDescriptionKey, nil]];
+		
+		// Show error
+		[self showError:error];
+		
+		return;
+	}
+	
 	// Show activity indicator
 	[self showActivityIndicator];
 	
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-		
 	NSDictionary *parameters = @{
 		@"mdid"			: messageID,
 		@"recordCall"	: recordCall,
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
-	
-	NSLog(@"CallSenderForMessage");
-	NSLog(@"%@", parameters);
 	
 	// The web service method only returns a result after the phone call has been answered so increase timeout interval
 	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
@@ -142,15 +150,13 @@
 	// This web service method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		NSLog(@"CallModel Success: %@", operation.response);
-		
 		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
 		
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate (not currently used)
-			if ([self.delegate respondsToSelector:@selector(callSenderSuccess)])
+			// Handle success via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderSuccess)])
 			{
 				[self.delegate callSenderSuccess];
 			}
@@ -167,7 +173,7 @@
 			}];
 			
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
 			} */
@@ -187,7 +193,7 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if ([self.delegate respondsToSelector:@selector(callSenderError:)])
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
 			} */
@@ -217,12 +223,12 @@
 		if (! self.pendingComplete)
 		{
 			// Notify delegate that TeleMed call request has been sent to server
-			if ([self.delegate respondsToSelector:@selector(callTeleMedPending)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedPending)])
 			{
 				[self.delegate callTeleMedPending];
 			}
 			// Notify delegate that sender call request has been sent to server
-			else if ([self.delegate respondsToSelector:@selector(callSenderPending)])
+			else if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderPending)])
 			{
 				[self.delegate callSenderPending];
 			}

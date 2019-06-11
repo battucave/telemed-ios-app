@@ -6,19 +6,7 @@
 //  Copyright (c) 2016 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
-
-@protocol ChatParticipantDelegate <NSObject>
-
-@required
-- (void)updateChatParticipants:(NSMutableArray *)newChatParticipants;
-
-@optional
-- (void)updateChatParticipantsError:(NSError *)error;
-
-@end
 
 @interface ChatParticipantModel : Model
 
@@ -32,5 +20,16 @@
 @property (nonatomic) NSString *FormattedNameLNF;
 
 - (void)getChatParticipants;
+
+@end
+
+
+@protocol ChatParticipantDelegate <NSObject>
+
+@required
+- (void)updateChatParticipants:(NSArray *)newChatParticipants;
+
+@optional
+- (void)updateChatParticipantsError:(NSError *)error;
 
 @end

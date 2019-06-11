@@ -11,7 +11,7 @@
 @interface CoreViewController : UIViewController
 
 #ifdef MYTELEMED
-- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)actionView;
+- (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction;
 #endif
 
 @end

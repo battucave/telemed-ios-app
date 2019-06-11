@@ -21,10 +21,10 @@
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
-	// Initialize the array
+	// Initialize hospitals array
 	self.hospitals = [[NSMutableArray alloc] init];
 	
-	// Initialize the number formatter
+	// Initialize number formatter
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 }
 
@@ -32,7 +32,7 @@
 {
 	if ([elementName isEqualToString:@"Hospital"])
 	{
-		// Initialize the hospital
+		// Initialize a hospital
 		self.hospital = [[HospitalModel alloc] init];
 	}
 }
@@ -69,7 +69,7 @@
 		}
 		@catch(NSException *exception)
 		{
-			NSLog(@"Key not found: %@", elementName);
+			NSLog(@"Key not found on Hospital: %@", elementName);
 		}
 	}
 	

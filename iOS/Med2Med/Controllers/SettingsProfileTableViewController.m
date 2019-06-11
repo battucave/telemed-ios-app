@@ -11,7 +11,7 @@
 
 @interface SettingsProfileTableViewController ()
 
-@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
+@property (nonatomic) IBOutletCollection(UITextField) NSArray *textFields; // Must be a strong reference
 
 @end
 

@@ -6,8 +6,6 @@
 //  Copyright © 2017 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "RevealViewController.h"
 
 @interface SentMessagesViewController : RevealViewController

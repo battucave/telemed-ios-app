@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "CoreViewController.h"
 
 @interface LoginSSOViewController : CoreViewController <UIScrollViewDelegate, UIWebViewDelegate>

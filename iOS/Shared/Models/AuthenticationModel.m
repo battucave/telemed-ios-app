@@ -9,7 +9,7 @@
 #import "AuthenticationModel.h"
 #import "AppDelegate.h"
 #import "AuthenticationHTTPSessionManager.h"
-#import "KeyChainItemWrapper.h"
+#import "KeychainItemWrapper.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 
@@ -131,7 +131,10 @@
 			"<AccessToken>%@</AccessToken>"
 			"<RefreshToken>%@</RefreshToken>"
 		"</AuthNToken>",
-		(self.AccessToken ?: @""), self.RefreshToken];
+		
+		(self.AccessToken ?: @""),
+		self.RefreshToken
+	];
 	
 	NSLog(@"Get New Access and Refresh Tokens");
 	//NSLog(@"XML Body: %@", xmlBody);

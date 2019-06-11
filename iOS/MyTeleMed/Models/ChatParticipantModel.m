@@ -37,9 +37,9 @@
 			}];
 			
 			// Handle success via delegate
-			if ([self.delegate respondsToSelector:@selector(updateChatParticipants:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateChatParticipants:)])
 			{
-				[self.delegate updateChatParticipants:[chatParticipants mutableCopy]];
+				[self.delegate updateChatParticipants:chatParticipants];
 			}
 		}
 		// Error parsing xml file
@@ -48,7 +48,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Participants Error", NSLocalizedFailureReasonErrorKey, @"There was a problem retrieving the Chat Participants.", NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if ([self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
 			{
 				[self.delegate updateChatParticipantsError:error];
 			}
@@ -62,7 +62,7 @@
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem retrieving the Chat Participants." andTitle:@"Chat Participants Error"];
 		
 		// Handle error via delegate
-		if ([self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(updateChatParticipantsError:)])
 		{
 			[self.delegate updateChatParticipantsError:error];
 		}

@@ -36,7 +36,7 @@
 	// Initialize accounts
 	self.accounts = [[NSMutableArray alloc] init];
 	
-	// Initialize AccountModel
+	// Initialize AccountModel 
 	[self setAccountModel:[[AccountModel alloc] init]];
 	[self.accountModel setDelegate:self];
 	
@@ -86,10 +86,10 @@
 	[self.pickerViewDefault selectRow:self.selectedDateIndex inComponent:0 animated:NO];
 }
 
-// Return accounts from account model delegate
-- (void)updateAccounts:(NSMutableArray *)accounts
+// Return accounts from AccountModel delegate
+- (void)updateAccounts:(NSArray *)accounts
 {
-	[self setAccounts:accounts];
+	[self setAccounts:[accounts mutableCopy]];
 	
 	// Add all accounts option to beginning of array
 	AccountModel *accountAll = [[AccountModel alloc] init];
@@ -98,7 +98,7 @@
 	[accountAll setName:@"All Accounts"];
 	[accountAll setPublicKey:@"0"];
 	
-	[accounts insertObject:accountAll atIndex:0];
+	[self.accounts insertObject:accountAll atIndex:0];
 	
 	// Set account button title to preselected row if any
 	if (self.selectedAccountIndex > 0 && [self.accounts count] > self.selectedAccountIndex)
@@ -111,7 +111,7 @@
 	}
 }
 
-// Return error from account model delegate
+// Return error from AccountModel delegate
 - (void)updateAccountsError:(NSError *)error
 {
 	// Customize error message if device not offline

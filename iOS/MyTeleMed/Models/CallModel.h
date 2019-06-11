@@ -6,9 +6,17 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
+
+@interface CallModel : Model
+
+@property (weak) id delegate;
+
+- (void)callTeleMed;
+- (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall; // NOTE: recordCall option is no longer used
+
+@end
+
 
 @protocol CallDelegate <NSObject>
 
@@ -19,14 +27,5 @@
 - (void)callSenderPending;
 - (void)callSenderSuccess;
 - (void)callSenderError:(NSError *)error;
-
-@end
-
-@interface CallModel : Model
-
-@property (weak) id delegate;
-
-- (void)callTeleMed;
-- (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall;
 
 @end

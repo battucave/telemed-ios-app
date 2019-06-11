@@ -6,27 +6,9 @@
 //  Copyright (c) 2015 SolutionBuilt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "Model.h"
 #import "MessageProtocol.h"
 #import "AccountModel.h"
-
-@protocol MessageDelegate <NSObject>
-
-@required
-- (void)updateMessages:(NSMutableArray *)messages;
-
-@optional
-- (void)updateMessagesError:(NSError *)error;
-- (void)modifyMessageStatePending:(NSString *)state;
-- (void)modifyMessageStateSuccess:(NSString *)state;
-- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state;
-- (void)modifyMultipleMessagesStatePending:(NSString *)state;
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state;
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state;
-
-@end
 
 @interface MessageModel : Model <MessageProtocol>
 
@@ -53,8 +35,25 @@
 - (void)getActiveMessages;
 - (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (void)getMessageByDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, MessageModel *message, NSError *error))callback;
-- (void)modifyMessageState:(NSNumber *)messageID state:(NSString *)state;
+- (void)modifyMessageState:(NSNumber *)messageDeliveryID state:(NSString *)state;
 - (void)modifyMultipleMessagesState:(NSArray *)messages state:(NSString *)state;
 
+
+@end
+
+
+@protocol MessageDelegate <NSObject>
+
+@required
+- (void)updateMessages:(NSArray *)messages;
+
+@optional
+- (void)updateMessagesError:(NSError *)error;
+- (void)modifyMessageStatePending:(NSString *)state;
+- (void)modifyMessageStateSuccess:(NSString *)state;
+- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state;
+- (void)modifyMultipleMessagesStatePending:(NSString *)state;
+- (void)modifyMultipleMessagesStateSuccess:(NSString *)state;
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state;
 
 @end
