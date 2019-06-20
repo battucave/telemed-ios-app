@@ -9,6 +9,7 @@
 #import <CallKit/CallKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#import <sys/utsname.h>
 #import <UserNotifications/UserNotifications.h>
 
 #import "AppDelegate.h"
@@ -94,15 +95,33 @@
 			// If mobile network code is available and user had not previously disabled the old CDMA warning
 			if (carrier.mobileNetworkCode && [settings boolForKey:@"CDMAVoiceDataDisabled"] != YES)
 			{
-				// Enable voice data warning for Sprint
+				// Enable voice data warning for Sprint users
 				if ([sprintMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
 				{
 					[settings setBool:YES forKey:@"showSprintVoiceDataWarning"];
 				}
-				// Enable voice data warning for Verizon
+				// Enable voice data warning for Verizon users on devices that don't support VoLTE
 				else if ([verizonMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
 				{
-					[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+					// Get device model
+					struct utsname systemInfo;
+					
+					uname(&systemInfo);
+					
+					NSString *deviceModelName = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+					deviceModelName = [[deviceModelName componentsSeparatedByString:@","] objectAtIndex:0];
+					
+					if (deviceModelName.length >= 6)
+					{
+						NSString *deviceType = [deviceModelName substringToIndex:6];
+						NSInteger deviceNumber = [[deviceModelName substringFromIndex:6] integerValue];
+						
+						// Enable voice data warning if device is an iPhone and the model is less than 7 (iPhone 6 and iPhone 6+ are model 7)
+						if ([deviceType isEqualToString:@"iPhone"] && (int)deviceNumber < 7)
+						{
+							[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+						}
+					}
 				}
 			}
 		
