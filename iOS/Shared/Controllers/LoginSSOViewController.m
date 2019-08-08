@@ -18,7 +18,6 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonBack;
-@property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintToolbarBottom;
 @property (weak, nonatomic) IBOutlet UIView *loadingView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -52,9 +51,6 @@
 	
 	// Reset toolbar to bottom of view
 	[self.constraintToolbarBottom setConstant:0.0f];
-	
-	// Dynamically add a width constraint to Login button to resolve iOS 11 issue (if this doesn't work, then replace entire UIToolbar with UIView - see PhoneNumber view)
-	[self.buttonLogin.widthAnchor constraintEqualToConstant:62.0].active = YES;
 	
 	// Add reachability observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWebView:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
@@ -229,13 +225,20 @@
 {
 	// Obtain keyboard size
 	CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	CGFloat safeAreaBottomPadding = 0;
+	
+	// Eliminate the extra padding under the toolbar on iPhone X devices
+	if (@available(iOS 11.0, *))
+	{
+		safeAreaBottomPadding = UIApplication.sharedApplication.keyWindow.safeAreaInsets.bottom;
+	}
 	
 	// Animate toolbar above keyboard
 	[UIView beginAnimations:@"ToolbarAboveKeyboard" context:nil];
 	[UIView setAnimationDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
 	[UIView setAnimationCurve:[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
 	
-	[self.constraintToolbarBottom setConstant:keyboardFrame.size.height];
+	[self.constraintToolbarBottom setConstant:keyboardFrame.size.height - safeAreaBottomPadding];
 	[self.view layoutIfNeeded];
 	
 	[UIView commitAnimations];

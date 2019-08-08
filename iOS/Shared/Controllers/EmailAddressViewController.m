@@ -13,10 +13,9 @@
 
 @interface EmailAddressViewController ()
 
-// @property (weak, nonatomic) IBOutlet UIImageView *imageLogo;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldEmailAddress;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldConfirmEmailAddress;
-@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end
 
@@ -29,9 +28,9 @@
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
 	// Attach toolbar to top of keyboard
-	[self.textFieldEmailAddress setInputAccessoryView:self.viewToolbar];
-	[self.textFieldConfirmEmailAddress setInputAccessoryView:self.viewToolbar];
-	[self.viewToolbar removeFromSuperview];
+	[self.textFieldEmailAddress setInputAccessoryView:self.toolbar];
+	[self.textFieldConfirmEmailAddress setInputAccessoryView:self.toolbar];
+	[self.toolbar removeFromSuperview];
 }
 
 - (void)viewDidAppear:(BOOL)animated

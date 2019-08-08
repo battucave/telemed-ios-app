@@ -148,7 +148,6 @@
                     <connections>
                         <outlet property="activityIndicator" destination="veN-bL-Vga" id="pSD-cl-WyW"/>
                         <outlet property="buttonBack" destination="L6n-6o-7ZE" id="Zev-OQ-XxH"/>
-                        <outlet property="buttonLogin" destination="eZi-Wo-MRE" id="cc4-So-gqe"/>
                         <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="Rgv-gr-GBL"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>
                         <outlet property="webView" destination="HAU-mb-TqS" id="QO0-LX-oBu"/>
@@ -224,71 +223,70 @@
                                     <segue destination="aua-Qa-l8H" kind="show" identifier="showHelpFromSSOProvider" id="7Cm-Eo-Uci"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWY-Sk-ivO">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYd-W7-08S">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgb-mk-ii5">
-                                        <rect key="frame" x="16" y="11.666666666666629" width="74" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="74" id="9Ev-Ra-aRF"/>
-                                            <constraint firstAttribute="height" constant="21" id="PcH-q0-xfY"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="titleEdgeInsets" minX="7" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Cancel" image="button-WebViewBack.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="Frn-L8-EDA" kind="unwind" identifier="unwindFromSSOProvider" unwindAction="unwindFromSSOProvider:" id="DEz-tk-Ek0"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j2Q-cv-cgY">
-                                        <rect key="frame" x="341" y="11.666666666666629" width="57" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="57" id="GMh-Wo-2Xz"/>
-                                            <constraint firstAttribute="height" constant="21" id="LEN-Vb-U9X"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="45" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Save" image="button-WebViewForward.png"/>
-                                        <connections>
-                                            <action selector="submitSSOProvider:" destination="5BC-59-clT" eventType="touchUpInside" id="PB2-bj-qdF"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="j2Q-cv-cgY" secondAttribute="trailing" constant="16" id="1Qz-5b-Iat"/>
-                                    <constraint firstItem="pgb-mk-ii5" firstAttribute="leading" secondItem="MWY-Sk-ivO" secondAttribute="leading" constant="16" id="AO2-hk-VKw"/>
-                                    <constraint firstAttribute="height" constant="44" id="L0Q-5f-Vk4"/>
-                                    <constraint firstItem="pgb-mk-ii5" firstAttribute="centerY" secondItem="MWY-Sk-ivO" secondAttribute="centerY" id="ULY-XN-WcE"/>
-                                    <constraint firstItem="j2Q-cv-cgY" firstAttribute="centerY" secondItem="MWY-Sk-ivO" secondAttribute="centerY" id="bSu-yv-Pee"/>
+                                    <constraint firstAttribute="height" constant="44" id="1Dj-nv-hMQ"/>
                                 </constraints>
-                            </view>
+                                <items>
+                                    <barButtonItem title="Cancel" width="74" style="plain" id="TpR-xs-z4l">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pgb-mk-ii5">
+                                            <rect key="frame" x="20" y="11.666666666666664" width="74" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="74" id="9Ev-Ra-aRF"/>
+                                                <constraint firstAttribute="height" constant="21" id="PcH-q0-xfY"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <inset key="titleEdgeInsets" minX="7" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Cancel" image="button-WebViewBack.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <segue destination="Frn-L8-EDA" kind="unwind" identifier="unwindFromSSOProvider" unwindAction="unwindFromSSOProvider:" id="DEz-tk-Ek0"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="sBt-rY-09t"/>
+                                    <barButtonItem title="Save" style="plain" id="oIe-lE-DoR">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nqh-Aq-oGv">
+                                            <rect key="frame" x="337" y="11.666666666666664" width="57" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="45" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Save" image="button-WebViewForward.png"/>
+                                            <connections>
+                                                <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="Rgq-5B-fjI"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="sGk-HG-IID" firstAttribute="top" secondItem="r63-GT-mcY" secondAttribute="top" constant="10" id="02y-Mp-VPw"/>
-                            <constraint firstItem="MWY-Sk-ivO" firstAttribute="bottom" secondItem="r63-GT-mcY" secondAttribute="bottom" id="6YG-dL-Xgh"/>
-                            <constraint firstItem="MWY-Sk-ivO" firstAttribute="trailing" secondItem="r63-GT-mcY" secondAttribute="trailing" id="7eD-xf-aBM"/>
                             <constraint firstItem="SBj-Vd-cPA" firstAttribute="leading" secondItem="FYg-5w-oKo" secondAttribute="leading" id="CP5-bu-EY9"/>
                             <constraint firstItem="r63-GT-mcY" firstAttribute="centerX" secondItem="SmX-0A-xkH" secondAttribute="centerX" id="EBO-8z-COg"/>
                             <constraint firstItem="SmX-0A-xkH" firstAttribute="top" secondItem="sGk-HG-IID" secondAttribute="bottom" constant="6" id="EDl-ja-SuY"/>
                             <constraint firstItem="SBj-Vd-cPA" firstAttribute="top" secondItem="SmX-0A-xkH" secondAttribute="bottom" constant="19" id="EQm-y6-lp8"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="trailing" secondItem="FYg-5w-oKo" secondAttribute="trailing" constant="-10" id="GmU-sg-bj5"/>
                             <constraint firstItem="r63-GT-mcY" firstAttribute="centerX" secondItem="sGk-HG-IID" secondAttribute="centerX" id="M1j-sP-pNP"/>
-                            <constraint firstItem="MWY-Sk-ivO" firstAttribute="leading" secondItem="r63-GT-mcY" secondAttribute="leading" id="Pb8-gH-cPr"/>
                             <constraint firstItem="FYg-5w-oKo" firstAttribute="top" secondItem="SBj-Vd-cPA" secondAttribute="bottom" constant="5" id="Vek-4r-180"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="leading" secondItem="FYg-5w-oKo" secondAttribute="leading" constant="10" id="amX-hw-yd9"/>
                             <constraint firstItem="SpO-Dz-0I6" firstAttribute="centerY" secondItem="Yjw-jX-gad" secondAttribute="centerY" id="dVp-oJ-sOa"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="bottom" secondItem="FYg-5w-oKo" secondAttribute="bottom" constant="-3" id="fSo-lf-Mw5"/>
                             <constraint firstItem="r63-GT-mcY" firstAttribute="centerX" secondItem="FYg-5w-oKo" secondAttribute="centerX" id="lZ1-J4-jzJ"/>
                             <constraint firstItem="Yjw-jX-gad" firstAttribute="top" secondItem="FYg-5w-oKo" secondAttribute="top" constant="3" id="lzk-e2-te5"/>
+                            <constraint firstItem="RYd-W7-08S" firstAttribute="leading" secondItem="r63-GT-mcY" secondAttribute="leading" id="oEq-c0-vRQ"/>
                             <constraint firstItem="SpO-Dz-0I6" firstAttribute="trailing" secondItem="Yjw-jX-gad" secondAttribute="trailing" constant="10" id="oQv-Ia-1Vi"/>
+                            <constraint firstItem="RYd-W7-08S" firstAttribute="bottom" secondItem="r63-GT-mcY" secondAttribute="bottom" id="qA8-Pg-qNl"/>
+                            <constraint firstItem="RYd-W7-08S" firstAttribute="trailing" secondItem="r63-GT-mcY" secondAttribute="trailing" id="wlu-WG-e8X"/>
                             <constraint firstItem="SBj-Vd-cPA" firstAttribute="trailing" secondItem="FYg-5w-oKo" secondAttribute="trailing" id="yF4-wY-9BN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="r63-GT-mcY"/>
@@ -297,13 +295,13 @@
                     <connections>
                         <outlet property="buttonHelp" destination="SpO-Dz-0I6" id="3bp-pw-yHM"/>
                         <outlet property="textFieldSSOProvider" destination="Yjw-jX-gad" id="ZYh-sW-xe3"/>
-                        <outlet property="viewToolbar" destination="MWY-Sk-ivO" id="5Wv-Gm-sSf"/>
+                        <outlet property="toolbar" destination="RYd-W7-08S" id="pHW-wj-vQG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YGw-OH-T0q" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Frn-L8-EDA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2545" y="258"/>
+            <point key="canvasLocation" x="2544.9275362318845" y="257.60869565217394"/>
         </scene>
         <!--Phone Number View Controller-->
         <scene sceneID="Ywa-UN-9m2">
@@ -376,55 +374,51 @@
                                     <segue destination="aua-Qa-l8H" kind="show" identifier="showHelpFromPhoneNumber" id="EId-x6-V12"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vlM-42-BSe">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HyV-rs-JVc">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VnA-dr-oLF">
-                                        <rect key="frame" x="308" y="11.666666666666629" width="90" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="90" id="Jnd-kD-yCA"/>
-                                            <constraint firstAttribute="height" constant="21" id="OFb-EU-i8Q"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="77.5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Continue" image="button-WebViewForward.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="8kV-5p-fUR"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="VnA-dr-oLF" firstAttribute="centerY" secondItem="vlM-42-BSe" secondAttribute="centerY" id="3Nc-va-bMY"/>
-                                    <constraint firstAttribute="trailing" secondItem="VnA-dr-oLF" secondAttribute="trailing" constant="16" id="hn3-cE-JGm"/>
-                                    <constraint firstAttribute="height" constant="44" id="zXs-PB-Ysj"/>
+                                    <constraint firstAttribute="height" constant="44" id="Ssb-kq-BuW"/>
                                 </constraints>
-                            </view>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ufR-Jb-GaO"/>
+                                    <barButtonItem title="Continue" width="90" style="plain" id="Ixx-li-gj6">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zIX-63-xXa">
+                                            <rect key="frame" x="304" y="11.666666666666664" width="90" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="76.5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Continue" image="button-WebViewForward.png"/>
+                                            <connections>
+                                                <action selector="submitPhoneNumber:" destination="2av-Uk-df6" eventType="touchUpInside" id="EBF-J9-VyH"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="bottom" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="-3" id="1gj-cm-Y49"/>
                             <constraint firstItem="2Rk-A7-EG8" firstAttribute="centerX" secondItem="mjW-gH-UIm" secondAttribute="centerX" id="4l9-zD-Dno"/>
+                            <constraint firstItem="HyV-rs-JVc" firstAttribute="bottom" secondItem="2Rk-A7-EG8" secondAttribute="bottom" id="A2Z-y2-biw"/>
+                            <constraint firstItem="HyV-rs-JVc" firstAttribute="leading" secondItem="2Rk-A7-EG8" secondAttribute="leading" id="Fuj-b9-ddE"/>
                             <constraint firstItem="Li6-va-OV1" firstAttribute="centerY" secondItem="CrA-Ex-elv" secondAttribute="centerY" id="HcQ-st-BV0"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="trailing" secondItem="mjW-gH-UIm" secondAttribute="trailing" constant="-10" id="NsZ-Wy-RfC"/>
                             <constraint firstItem="Gm9-BN-gJl" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="bottom" constant="11" id="O8K-cs-WBq"/>
-                            <constraint firstItem="vlM-42-BSe" firstAttribute="bottom" secondItem="2Rk-A7-EG8" secondAttribute="bottom" id="QNj-t7-JFV"/>
                             <constraint firstItem="mjW-gH-UIm" firstAttribute="top" secondItem="TNx-l8-qo5" secondAttribute="bottom" constant="5" id="Ws2-Oc-nyd"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="top" secondItem="mjW-gH-UIm" secondAttribute="top" constant="3" id="aSz-xG-d5t"/>
-                            <constraint firstItem="vlM-42-BSe" firstAttribute="trailing" secondItem="2Rk-A7-EG8" secondAttribute="trailing" id="cE9-qd-Sc4"/>
                             <constraint firstItem="Gm9-BN-gJl" firstAttribute="leading" secondItem="mjW-gH-UIm" secondAttribute="leading" id="e16-vv-4bU"/>
                             <constraint firstItem="TNx-l8-qo5" firstAttribute="trailing" secondItem="mjW-gH-UIm" secondAttribute="trailing" id="gbO-GM-HV7"/>
                             <constraint firstItem="TNx-l8-qo5" firstAttribute="top" secondItem="8nY-Zs-edb" secondAttribute="bottom" constant="52" id="iBQ-Qa-fwJ"/>
                             <constraint firstItem="2Rk-A7-EG8" firstAttribute="centerX" secondItem="8nY-Zs-edb" secondAttribute="centerX" id="ljj-qL-TRB"/>
                             <constraint firstItem="CrA-Ex-elv" firstAttribute="leading" secondItem="mjW-gH-UIm" secondAttribute="leading" constant="10" id="n7Z-O1-F2h"/>
                             <constraint firstItem="8nY-Zs-edb" firstAttribute="top" secondItem="2Rk-A7-EG8" secondAttribute="top" constant="10" id="nUv-cE-rLz"/>
-                            <constraint firstItem="vlM-42-BSe" firstAttribute="leading" secondItem="2Rk-A7-EG8" secondAttribute="leading" id="ohR-YC-HjM"/>
                             <constraint firstItem="Li6-va-OV1" firstAttribute="trailing" secondItem="CrA-Ex-elv" secondAttribute="trailing" id="oux-yg-eip"/>
+                            <constraint firstItem="HyV-rs-JVc" firstAttribute="trailing" secondItem="2Rk-A7-EG8" secondAttribute="trailing" id="tmV-dV-Eix"/>
                             <constraint firstItem="TNx-l8-qo5" firstAttribute="leading" secondItem="mjW-gH-UIm" secondAttribute="leading" id="uEu-d8-X05"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2Rk-A7-EG8"/>
@@ -434,7 +428,7 @@
                         <outlet property="buttonHelp" destination="Li6-va-OV1" id="6An-ZW-7Cv"/>
                         <outlet property="constraintFormTop" destination="iBQ-Qa-fwJ" id="lvc-uA-e44"/>
                         <outlet property="textPhoneNumber" destination="CrA-Ex-elv" id="uAc-KN-WQg"/>
-                        <outlet property="viewToolbar" destination="vlM-42-BSe" id="jJ2-aQ-T13"/>
+                        <outlet property="toolbar" destination="HyV-rs-JVc" id="BR5-ES-lvf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BUi-ro-vlv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -681,47 +675,42 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     <constraint firstItem="EAD-Qg-S5Z" firstAttribute="leading" secondItem="tRK-B7-eMK" secondAttribute="leading" priority="750" id="t0F-Ma-cj4"/>
                                 </constraints>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VmL-tU-dom">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gg6-tC-p9e">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ImH-6w-yrK">
-                                        <rect key="frame" x="308" y="11.666666666666629" width="90" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="M0x-vF-Qm8"/>
-                                            <constraint firstAttribute="width" constant="90" id="dU0-Zd-DxR"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="77.5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Continue" image="button-WebViewForward.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="changePassword:" destination="PeX-ou-eAc" eventType="touchUpInside" id="i5N-uc-b2t"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="ImH-6w-yrK" firstAttribute="centerY" secondItem="VmL-tU-dom" secondAttribute="centerY" id="UyN-1F-kmR"/>
-                                    <constraint firstAttribute="height" constant="44" id="mdQ-58-kg1"/>
-                                    <constraint firstAttribute="trailing" secondItem="ImH-6w-yrK" secondAttribute="trailing" constant="16" id="ozF-im-gYk"/>
+                                    <constraint firstAttribute="height" constant="44" id="uwc-cj-Ehp"/>
                                 </constraints>
-                                <viewLayoutGuide key="safeArea" id="Coz-ja-sk3"/>
-                            </view>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="CHr-4y-1nn"/>
+                                    <barButtonItem title="Continue" width="90" style="plain" id="eu8-ge-xWK">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MsX-v3-yLE">
+                                            <rect key="frame" x="304" y="11.666666666666664" width="90" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="76.5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Continue" image="button-WebViewForward.png"/>
+                                            <connections>
+                                                <action selector="changePassword:" destination="PeX-ou-eAc" eventType="touchUpInside" id="anP-fe-JLh"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="VmL-tU-dom" firstAttribute="trailing" secondItem="QFa-kD-Dm3" secondAttribute="trailing" id="36V-9Q-I0S"/>
+                            <constraint firstItem="gg6-tC-p9e" firstAttribute="leading" secondItem="QFa-kD-Dm3" secondAttribute="leading" id="6we-cf-xt1"/>
                             <constraint firstItem="tRK-B7-eMK" firstAttribute="leading" secondItem="QFa-kD-Dm3" secondAttribute="leading" id="Rg9-NF-iSI"/>
                             <constraint firstItem="0w2-hP-xF9" firstAttribute="top" secondItem="QFa-kD-Dm3" secondAttribute="top" constant="10" id="SK8-wq-FJd"/>
-                            <constraint firstItem="VmL-tU-dom" firstAttribute="bottom" secondItem="QFa-kD-Dm3" secondAttribute="bottom" id="Uh5-kA-TYc"/>
-                            <constraint firstItem="VmL-tU-dom" firstAttribute="leading" secondItem="QFa-kD-Dm3" secondAttribute="leading" id="baR-Mq-hHZ"/>
                             <constraint firstItem="tRK-B7-eMK" firstAttribute="top" secondItem="QFa-kD-Dm3" secondAttribute="top" constant="86" id="dZP-uX-Fxa"/>
+                            <constraint firstItem="gg6-tC-p9e" firstAttribute="bottom" secondItem="QFa-kD-Dm3" secondAttribute="bottom" id="iFK-Gt-ZS5"/>
                             <constraint firstItem="QFa-kD-Dm3" firstAttribute="centerX" secondItem="0w2-hP-xF9" secondAttribute="centerX" id="nQD-vD-Gjz"/>
                             <constraint firstItem="tRK-B7-eMK" firstAttribute="trailing" secondItem="QFa-kD-Dm3" secondAttribute="trailing" id="sMp-l4-C0V"/>
+                            <constraint firstItem="gg6-tC-p9e" firstAttribute="trailing" secondItem="QFa-kD-Dm3" secondAttribute="trailing" id="xlY-cv-0Wa"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QFa-kD-Dm3"/>
                     </view>
@@ -734,7 +723,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                         <outlet property="textFieldConfirmNewPassword" destination="qEC-iK-Uud" id="T6b-yi-BfB"/>
                         <outlet property="textFieldCurrentPassword" destination="Xi6-G0-af0" id="mvE-bn-8Et"/>
                         <outlet property="textFieldNewPassword" destination="WeA-hq-wLi" id="W11-1S-HwR"/>
-                        <outlet property="viewToolbar" destination="VmL-tU-dom" id="R7I-l0-oHa"/>
+                        <outlet property="toolbar" destination="gg6-tC-p9e" id="J7S-PB-IRN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vD9-qH-fi6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -774,7 +763,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="t2w-43-o3T">
                                         <rect key="frame" x="10" y="2.6666666666666572" width="280" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="email"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
                                         <connections>
                                             <outlet property="delegate" destination="PqB-eJ-BZR" id="lhe-L3-GPk"/>
                                         </connections>
@@ -802,7 +791,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Email Address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WjY-br-WVF">
                                         <rect key="frame" x="10" y="2.6666666666666572" width="280" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="done" textContentType="email"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" textContentType="email"/>
                                         <connections>
                                             <outlet property="delegate" destination="PqB-eJ-BZR" id="sEi-f5-isG"/>
                                         </connections>
@@ -836,53 +825,48 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     <action selector="getEmailAddressHelp:" destination="PqB-eJ-BZR" eventType="touchUpInside" id="HM8-wl-uoH"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uU3-vs-QsZ">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iGY-TE-4x1">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jwv-zz-hWi">
-                                        <rect key="frame" x="308" y="11.666666666666629" width="90" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="Jiu-m0-CuX"/>
-                                            <constraint firstAttribute="width" constant="90" id="bGO-th-foQ"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="77.5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Continue" image="button-WebViewForward.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="submitEmailAddress:" destination="PqB-eJ-BZR" eventType="touchUpInside" id="zmx-lI-48n"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Jwv-zz-hWi" secondAttribute="trailing" constant="16" id="9PK-Ia-TXl"/>
-                                    <constraint firstItem="Jwv-zz-hWi" firstAttribute="centerY" secondItem="uU3-vs-QsZ" secondAttribute="centerY" id="WAX-ZH-xcu"/>
-                                    <constraint firstAttribute="height" constant="44" id="gKE-pY-WCZ"/>
+                                    <constraint firstAttribute="height" constant="44" id="YOS-Q0-62K"/>
                                 </constraints>
-                                <viewLayoutGuide key="safeArea" id="L8M-vE-984"/>
-                            </view>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="UlA-7A-qQd"/>
+                                    <barButtonItem title="Continue" width="90" style="plain" id="Ikt-bS-b3W">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OG9-dd-VRe">
+                                            <rect key="frame" x="304" y="11.666666666666664" width="90" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="76.5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Continue" image="button-WebViewForward.png"/>
+                                            <connections>
+                                                <action selector="submitEmailAddress:" destination="PqB-eJ-BZR" eventType="touchUpInside" id="KLh-qh-274"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="uU3-vs-QsZ" firstAttribute="bottom" secondItem="qKA-ff-WtC" secondAttribute="bottom" id="2YB-m5-ViF"/>
                             <constraint firstItem="HBG-P8-y5W" firstAttribute="centerX" secondItem="Sv3-yj-BRw" secondAttribute="centerX" id="4Sb-OR-9ry"/>
                             <constraint firstItem="lWM-E0-dER" firstAttribute="leading" secondItem="bls-NE-woN" secondAttribute="leading" constant="1" id="AzI-vj-0VH"/>
                             <constraint firstItem="i2s-OT-yX8" firstAttribute="top" secondItem="lWM-E0-dER" secondAttribute="bottom" constant="5" id="EE7-dO-x5P"/>
                             <constraint firstItem="lWM-E0-dER" firstAttribute="top" secondItem="bls-NE-woN" secondAttribute="bottom" constant="4" id="Gw9-y1-vL9"/>
+                            <constraint firstItem="iGY-TE-4x1" firstAttribute="trailing" secondItem="qKA-ff-WtC" secondAttribute="trailing" id="H0i-ly-Dvx"/>
                             <constraint firstItem="i2s-OT-yX8" firstAttribute="leading" secondItem="lWM-E0-dER" secondAttribute="leading" id="NRa-LZ-ER9"/>
-                            <constraint firstItem="uU3-vs-QsZ" firstAttribute="leading" secondItem="qKA-ff-WtC" secondAttribute="leading" id="URD-vh-DvA"/>
+                            <constraint firstItem="iGY-TE-4x1" firstAttribute="leading" secondItem="qKA-ff-WtC" secondAttribute="leading" id="PQu-jm-H4l"/>
                             <constraint firstItem="bls-NE-woN" firstAttribute="top" secondItem="HBG-P8-y5W" secondAttribute="bottom" constant="16" id="VCa-UH-90i"/>
+                            <constraint firstItem="iGY-TE-4x1" firstAttribute="bottom" secondItem="qKA-ff-WtC" secondAttribute="bottom" id="VQT-Fj-ybZ"/>
                             <constraint firstItem="lWM-E0-dER" firstAttribute="centerX" secondItem="Sv3-yj-BRw" secondAttribute="centerX" id="aNb-bX-cPm"/>
                             <constraint firstItem="i2s-OT-yX8" firstAttribute="trailing" secondItem="lWM-E0-dER" secondAttribute="trailing" id="amz-QG-0vg"/>
                             <constraint firstItem="lWM-E0-dER" firstAttribute="trailing" secondItem="bls-NE-woN" secondAttribute="trailing" constant="-1" id="g5o-8q-kMg"/>
                             <constraint firstItem="HBG-P8-y5W" firstAttribute="top" secondItem="qKA-ff-WtC" secondAttribute="top" constant="10" id="iTX-ah-1L0"/>
                             <constraint firstItem="PA0-4Y-UgG" firstAttribute="top" secondItem="i2s-OT-yX8" secondAttribute="bottom" constant="11" id="igT-Gv-R6B"/>
-                            <constraint firstItem="uU3-vs-QsZ" firstAttribute="trailing" secondItem="qKA-ff-WtC" secondAttribute="trailing" id="vvE-CI-C6u"/>
                             <constraint firstItem="PA0-4Y-UgG" firstAttribute="leading" secondItem="i2s-OT-yX8" secondAttribute="leading" id="wZs-sA-fnZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qKA-ff-WtC"/>
@@ -892,7 +876,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                     <connections>
                         <outlet property="textFieldConfirmEmailAddress" destination="WjY-br-WVF" id="BTY-px-Ygq"/>
                         <outlet property="textFieldEmailAddress" destination="t2w-43-o3T" id="D7b-LN-aL2"/>
-                        <outlet property="viewToolbar" destination="uU3-vs-QsZ" id="hvu-rL-3Rv"/>
+                        <outlet property="toolbar" destination="iGY-TE-4x1" id="H0S-5B-wnS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xlE-rV-NlK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -927,6 +911,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="button-WebViewForward.png" width="12" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="EId-x6-V12"/>
+        <segue reference="7Cm-Eo-Uci"/>
     </inferredMetricsTieBreakers>
 </document>
