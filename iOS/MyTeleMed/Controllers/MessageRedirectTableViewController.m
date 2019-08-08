@@ -31,6 +31,33 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 }
 
+- (void)viewDidLayoutSubviews
+{
+	[super viewDidLayoutSubviews];
+	
+	UIView *tableHeaderView = self.tableView.tableHeaderView;
+	
+	// Update header height to fit its content (constraints can't be applied to the table header itself within a UITableViewController)
+	// See https://useyourloaf.com/blog/variable-height-table-view-header/
+	if (tableHeaderView)
+	{
+		CGRect tableHeaderViewFrame = tableHeaderView.frame;
+		CGSize tableHeaderViewNewSize = [tableHeaderView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+		
+		// If the height differs, then update the header's height (changing the height triggers a new layout cycle - only change height if it changed to avoid an infinite loop)
+		if (tableHeaderViewFrame.size.height != tableHeaderViewNewSize.height)
+		{
+			tableHeaderViewFrame.size.height = tableHeaderViewNewSize.height;
+			
+			[tableHeaderView setFrame:tableHeaderViewFrame];
+			
+			// Reassign the table view header to force the new size to take effect
+			[self.tableView setTableHeaderView:tableHeaderView];
+			[self.tableView layoutIfNeeded];
+		}
+	}
+}
+
 // Redirect message to an on call slot (called from OnCallSlotPickerViewController)
 - (void)redirectMessageToOnCallSlot:(OnCallSlotModel *)onCallSlot
 {

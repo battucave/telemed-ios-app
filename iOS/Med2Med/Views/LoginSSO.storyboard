@@ -115,7 +115,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
-                                    <barButtonItem title="Login" width="62" style="plain" id="Itb-rU-N1i">
+                                    <barButtonItem title="Login" style="plain" id="Itb-rU-N1i">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TDP-rD-Tb8">
                                             <rect key="frame" x="332" y="11.666666666666664" width="62" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -154,7 +154,6 @@
                         <outlet property="activityIndicator" destination="veN-bL-Vga" id="pSD-cl-WyW"/>
                         <outlet property="buttonBack" destination="L6n-6o-7ZE" id="vLX-8e-EvT"/>
                         <outlet property="buttonCreateAccount" destination="UXd-lq-IaI" id="GsW-fO-aMS"/>
-                        <outlet property="buttonLogin" destination="TDP-rD-Tb8" id="IyR-dT-WfB"/>
                         <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="mKI-No-NAc"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>
                         <outlet property="webView" destination="HAU-mb-TqS" id="QO0-LX-oBu"/>
@@ -162,7 +161,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zbR-an-VdQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1796" y="258"/>
+            <point key="canvasLocation" x="1795.6521739130437" y="257.60869565217394"/>
         </scene>
         <!--Enter SSO ID Provider-->
         <scene sceneID="Az2-Pj-ksJ">

@@ -8,7 +8,7 @@ Description:
 ### Steps to run the project on local machine:
 
 Open the following file:
-> iOS/MyTeleMed.xcodeproj
+> iOS/MyTeleMed.xcworkspace
 
 
 
@@ -33,5 +33,5 @@ However, the Mac app "APN Tester Free" provides a way to test push notifications
 	* Gateway: Development (always use Development for testing).  
 5. Press "Push".
 
-##### How to test Release Version:
-Its difficult to test the release version. Only known way is to change the Beta version's bundle identifier to "com.solutionbuilt.telemed" and BASE_URL to "https://www.mytelemed.com". These can both be found in the project's "Build Settings". Then run the app using the Ad Hoc scheme and follow the APN Tester Free instructions for testing Beta app.
+##### How to test Release version:
+The only known way to test push notifications for the production app before release to the app store is to repurpose the Beta version of the app. Change the Beta version's bundle identifier to "com.solutionbuilt.telemed" and its BASE_URL to "https://www.mytelemed.com". These can both be found in the project's "Build Settings". Then run the app using the Ad Hoc scheme and follow the APN Tester Free instructions for testing Beta app.
