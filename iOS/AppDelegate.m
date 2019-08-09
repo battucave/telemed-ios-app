@@ -228,7 +228,11 @@
 				{
 					AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 					
+					// Clear stored authentication data
 					[authenticationModel doLogout];
+					
+					// Go to login screen
+					[self goToLoginScreen];
 				}
 			}
 		}];
@@ -296,7 +300,11 @@
 		// Delay logout to ensure application is fully loaded
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
+			// Clear stored authentication data
 			[authenticationModel doLogout];
+			
+			// Go to login screen
+			[self goToLoginScreen];
 		});
 	}
 }

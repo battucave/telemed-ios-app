@@ -7,6 +7,7 @@
 //
 
 #import "SideNavigationViewController.h"
+#import "AppDelegate.h"
 #import "SWRevealViewController.h"
 #import "SideNavigationCountCell.h"
 #import "AuthenticationModel.h"
@@ -71,9 +72,14 @@
 
 - (IBAction)doLogout:(id)sender
 {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	
+	// Clear stored authenticated data
 	[authenticationModel doLogout];
+	
+	// Go to login screen
+	[appDelegate goToLoginScreen];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -155,18 +155,12 @@
 	// Remove all cached responses
 	[[NSURLCache sharedURLCache] removeAllCachedResponses];
 	
-	// Remove all cookies of domain to clear the login page's session (otherwise login page will recognize that user is already logged in and automatically log them in again with same credentials)
+	// Remove all cookies to clear the login page's session (otherwise login page will recognize that user is already logged in and automatically log them in again with same credentials)
 	NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
 	
-	for(NSHTTPCookie *cookie in [cookieStorage cookies])
+	for (NSHTTPCookie *cookie in [cookieStorage cookies])
 	{
-		NSString *baseDomain = [BASE_URL stringByReplacingOccurrencesOfString:@"https://" withString:@""];
-		NSRange domainRange = [[cookie domain] rangeOfString:baseDomain];
-		
-		if (domainRange.length > 0)
-		{
-			[cookieStorage deleteCookie:cookie];
-		}
+		[cookieStorage deleteCookie:cookie];
 	}
 	
 	NSString *fullURL = [NSString stringWithFormat:AUTHENTICATION_BASE_URL @"Authentication?idp=%@&aud=%@",

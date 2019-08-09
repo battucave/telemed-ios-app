@@ -7,6 +7,7 @@
 //
 
 #import "TeleMedHTTPRequestOperationManager.h"
+#import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "AuthenticationModel.h"
 #import <CoreTelephony/CTCallCenter.h>
@@ -448,7 +449,13 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 				
 				dispatch_async(dispatch_get_main_queue(), ^
 				{
+					AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+					
+					// Clear stored authentication data
 					[self.authenticationModel doLogout];
+					
+					// Go to login screen
+					[appDelegate goToLoginScreen];
 				});
 			}
 			// Attempt to obtain a new Access Token and retry the operation

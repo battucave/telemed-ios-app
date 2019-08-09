@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "ErrorAlertController.h"
 #import "HelpViewController.h"
+#import "AuthenticationModel.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -128,10 +129,12 @@
 			// Run register device web service
 			[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 			{
+				AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+				
 				if (success)
 				{
 					// Go to the next screen in the login process
-					[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
+					[appDelegate goToNextScreen];
 				}
 				else
 				{
@@ -150,17 +153,20 @@
 					UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
 					UIAlertAction *goBackAction = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 					{
-						// Go back to login sso (user navigated here from login sso)
+						AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	
+						// Clear stored authenticated data
+						[authenticationModel doLogout];
+						
+						// Go back to login screen (user navigated here from login screen)
 						if ([self.navigationController.viewControllers count] > 1)
 						{
 							[self.navigationController popToRootViewControllerAnimated:YES];
 						}
-						// Go back to login sso (user bypassed login, but was sent here due to invalid phone number)
+						// Go back to login screen (user bypassed login, but was sent here due to invalid phone number)
 						else
 						{
-							UIViewController *loginSSOViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
-						
-							[self.navigationController setViewControllers:@[loginSSOViewController] animated:NO];
+							[appDelegate goToLoginScreen];
 						}
 					}];
 					UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
