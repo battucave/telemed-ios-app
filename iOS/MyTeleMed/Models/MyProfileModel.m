@@ -145,7 +145,7 @@
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
 	// Search user's registered devices for the current device
-	for(RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
+	for (RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
 	{
 		// If found, set the current device's phone number
 		if ([registeredDevice.ID caseInsensitiveCompare:registeredDeviceModel.ID] == NSOrderedSame)

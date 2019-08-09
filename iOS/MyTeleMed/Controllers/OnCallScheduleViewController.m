@@ -136,7 +136,7 @@
 	// Display date grouping only if showing future on call entries
 	if (onCallPeriod == 1)
 	{
-		for(OnCallEntryModel *onCallEntry in self.filteredOnCallEntries)
+		for (OnCallEntryModel *onCallEntry in self.filteredOnCallEntries)
 		{
 			// Parse and format on call entry start date to remove time
 			NSDate *dateOnCall = [calendar dateFromComponents:[calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:onCallEntry.WillStart]];

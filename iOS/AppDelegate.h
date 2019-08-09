@@ -19,6 +19,7 @@
 	@property (nonatomic) void (^goToRemoteNotificationScreen)(UINavigationController *navigationController); // Used by AppDelegate, CoreViewController, and CoreTableViewController
 #endif
 
+- (void)goToLoginScreen;
 - (void)goToNextScreen;
 
 @end

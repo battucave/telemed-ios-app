@@ -40,7 +40,7 @@
 	NSArray *messageRecipients = (NSArray *)[messageData objectForKey:@"MessageRecipients"];
 	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
 	
-	for(MessageRecipientModel *messageRecipient in messageRecipients)
+	for (MessageRecipientModel *messageRecipient in messageRecipients)
 	{
 		[xmlRecipients appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", messageRecipient.ID]];
 	}

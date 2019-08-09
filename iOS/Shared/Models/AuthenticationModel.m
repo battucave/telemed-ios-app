@@ -123,7 +123,13 @@
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
+			AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+			
+			// Clear stored authentication data
 			[self doLogout];
+			
+			// Go to login screen
+			[appDelegate goToLoginScreen];
 		});
 		
 		return;
@@ -174,10 +180,16 @@
 		
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
+			AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+			
 			// Turn off isWorking
 			self.isWorking = NO;
 			
+			// Clear stored authentication data
 			[self doLogout];
+			
+			// Go to login screen
+			[appDelegate goToLoginScreen];
 		});
 	}
 	failure:^(__unused NSURLSessionDataTask *task, NSError *error)
@@ -226,7 +238,11 @@
 				// Turn off isWorking
 				self.isWorking = NO;
 				
+				// Clear stored authentication data
 				[self doLogout];
+				
+				// Go to login screen
+				[appDelegate goToLoginScreen];
 			});
 		}
 	}];
@@ -246,7 +262,6 @@
 - (void)doLogout
 {
 	KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	
 	// Reset refresh token in keychain
@@ -267,9 +282,6 @@
 	#elif defined MED2MED
 		[[UserProfileModel sharedInstance] doLogout];
 	#endif
-	
-	// Go to LoginSSOViewController
-	[appDelegate goToNextScreen];
 }
 
 @end
