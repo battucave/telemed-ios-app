@@ -187,7 +187,7 @@
 		NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
 		
 		// Check each conversation to determine if its chat participants are the same as the selected chat participants
-		for(ChatMessageModel *chatMessage in self.conversations)
+		for (ChatMessageModel *chatMessage in self.conversations)
 		{
 			NSArray *chatParticipantIDs = [[chatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
 			

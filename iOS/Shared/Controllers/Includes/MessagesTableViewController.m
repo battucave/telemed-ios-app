@@ -131,7 +131,7 @@
 	}
 	
 	// Add each message to hidden messages
-	for(id <MessageProtocol> message in messages)
+	for (id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages addObject:message];
 	}
@@ -155,7 +155,7 @@
 	}
 	
 	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
-	for(id <MessageProtocol> message in messages)
+	for (id <MessageProtocol> message in messages)
 	{
 		[mutableMessages removeObject:message];
 		[self.filteredMessages removeObject:message];
@@ -204,7 +204,7 @@
 	}
 	
 	// Remove each message from hidden messages
-	for(id <MessageProtocol> message in messages)
+	for (id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages removeObject:message];
 	}
@@ -495,7 +495,7 @@
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedMessages = [NSMutableArray new];
 			
-			for(NSIndexPath *indexPath in indexPaths)
+			for (NSIndexPath *indexPath in indexPaths)
 			{
 				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
 			}
@@ -515,7 +515,7 @@
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedMessages = [NSMutableArray new];
 			
-			for(NSIndexPath *indexPath in indexPaths)
+			for (NSIndexPath *indexPath in indexPaths)
 			{
 				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
 			}

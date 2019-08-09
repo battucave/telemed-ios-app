@@ -69,7 +69,7 @@
 		return;
 	}
 	
-	for(MessageModel *message in self.selectedMessages)
+	for (MessageModel *message in self.selectedMessages)
 	{
 		if ([message.State isEqualToString:@"Unread"])
 		{
