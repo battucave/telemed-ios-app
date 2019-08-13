@@ -711,6 +711,8 @@
 	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
 	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	/*/ 8/09/2019 - SSO email collection has been postponed to a future release
 	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	// If user has not previously provided an email address, then go to email address screen
@@ -718,8 +720,10 @@
 	{
 		[self goToEmailAddressScreen];
 	}
+	else */
+	
 	// If user requires authentication, then go to login screen
-	else if (! [profile isAuthenticated])
+	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}
@@ -1028,18 +1032,19 @@
 - (void)goToNextScreen
 {
 	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
-	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
-	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
-	NSLog(@"Future Phase: Check if password change is required");
+	/*/ 8/09/2019 - SSO email collection has been postponed to a future release
+	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	// If user has not previously provided an email address, then go to email address screen
 	if (! ssoProviderModel.EmailAddress)
 	{
 		[self goToEmailAddressScreen];
 	}
+	else */
+	
 	// If user requires authentication, then go to login screen
-	else if (! [profile isAuthenticated])
+	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}
@@ -1053,6 +1058,9 @@
 	{
 		[self goToMainScreen];
 	}
+	
+	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
+	NSLog(@"Future Phase: Check if password change is required");
 }
 
 /**
