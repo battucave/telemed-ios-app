@@ -133,7 +133,8 @@
 	[settings synchronize];
 	
 	// MyTeleMed - Register for push notifications
-	#ifdef MYTELEMED
+	// #if defined(MYTELEMED) && ! defined(DEBUG)
+	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
 		
 		[userNotificationCenter setDelegate:self];
@@ -559,17 +560,22 @@
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
 	NSLog(@"My Device Token: %@", deviceToken);
-	
-	// Convert the token to a hex string and make sure it's all caps
-	NSMutableString *tokenString = [NSMutableString stringWithString:[[deviceToken description] uppercaseString]];
-	[tokenString replaceOccurrencesOfString:@"<" withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
-	[tokenString replaceOccurrencesOfString:@">" withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
-	[tokenString replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
+
+    // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
+    const char *data = [deviceToken bytes];
+    NSMutableString *tokenString = [NSMutableString string];
+
+    for (NSUInteger i = 0; i < deviceToken.length; i++)
+    {
+        [tokenString appendFormat:@"%02.2hhX", data[i]];
+    }
+
+    NSLog(@"Token String: %@", tokenString);
 	
 	// Set device token
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
-	[registeredDeviceModel setToken:tokenString];
+	[registeredDeviceModel setToken:[tokenString copy]];
 	
 	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
@@ -597,7 +603,7 @@
 	// Sample notifications that can be used with apn tester free (these are real notifications that come from TeleMed)
 	/* Message push notification
 	{
-		"DeliveryID":5133538688695397, // This property has been requested, but not yet implemented
+		"DeliveryID":6099510726108687,
 		"NotificationType":"Message",
 		"aps":
 		{
@@ -609,7 +615,7 @@
 
 	/* Message comment push notification
 	{
-		"DeliveryID":5133538688695397,
+		"DeliveryID":6099510726108458,
 		"MessageID":"",
 		"NotificationType":"Comment",
 		"aps":
