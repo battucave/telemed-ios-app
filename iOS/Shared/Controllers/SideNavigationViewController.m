@@ -145,16 +145,16 @@
 				// If cell is for secure chat, set chat counts
 				if ([cell.reuseIdentifier isEqualToString:@"Secure Chat"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnopenedChatConvoCount integerValue], 99), MIN([self.myStatusModel.ActiveChatConvoCount integerValue], 99)]];
 				}
 				// If cell is for messages, set message counts
 				else if ([cell.reuseIdentifier isEqualToString:@"Messages"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnreadMessageCount, self.myStatusModel.ActiveMessageCount]];
-					
-					// TESTING ONLY (set counts to random numbers)
-					//[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnreadMessageCount integerValue], 99), MIN([self.myStatusModel.ActiveMessageCount integerValue], 99)]];
 				}
+                
+                // TESTING ONLY (set counts to random numbers)
+                // [cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
 				
 				// Store old frame size
 				CGRect oldFrame = cell.labelCounts.frame;
@@ -166,7 +166,7 @@
 				
 				// Increase new frame size and restore its old height
 				newFrame.size.width = newFrame.size.width + 22.0;
-				newFrame.size.height = oldFrame.size.height+ 4.0;
+				newFrame.size.height = oldFrame.size.height;
 				
 				[cell.labelCounts setFrame:newFrame];
 				[cell.constraintCountsWidth setConstant:newFrame.size.width];

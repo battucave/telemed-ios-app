@@ -198,20 +198,20 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6r-Ld-dvh">
-                                                            <rect key="frame" x="16" y="12" width="23" height="20"/>
+                                                            <rect key="frame" x="16" y="11.5" width="23" height="20"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Secure Chat" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xsr-eW-5WW">
-                                                            <rect key="frame" x="47" y="0.0" width="203" height="43.5"/>
+                                                            <rect key="frame" x="47" y="0.0" width="203" height="43"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0/0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iYx-x1-Rrv">
-                                                            <rect key="frame" x="209" y="9.5" width="44" height="25"/>
+                                                            <rect key="frame" x="209" y="9" width="44" height="25"/>
                                                             <color key="backgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" priority="500" constant="44" id="gGn-ta-aif"/>
@@ -239,15 +239,17 @@
                                                     <constraints>
                                                         <constraint firstItem="Xsr-eW-5WW" firstAttribute="top" secondItem="LFi-JL-QKv" secondAttribute="top" id="2zF-ft-JQ9"/>
                                                         <constraint firstItem="l6r-Ld-dvh" firstAttribute="leading" secondItem="LFi-JL-QKv" secondAttribute="leadingMargin" constant="1" id="6dg-3o-HYh"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Xsr-eW-5WW" secondAttribute="trailing" constant="15" id="72n-DE-Qxl"/>
                                                         <constraint firstItem="l6r-Ld-dvh" firstAttribute="centerY" secondItem="Xsr-eW-5WW" secondAttribute="centerY" id="ZNJ-xi-VkX"/>
                                                         <constraint firstAttribute="trailing" secondItem="iYx-x1-Rrv" secondAttribute="trailing" constant="12" id="fq0-ra-aXp"/>
                                                         <constraint firstItem="iYx-x1-Rrv" firstAttribute="centerY" secondItem="Xsr-eW-5WW" secondAttribute="centerY" id="g2l-yR-mic"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Xsr-eW-5WW" secondAttribute="bottom" id="iTJ-aD-IWE"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Xsr-eW-5WW" secondAttribute="bottom" constant="0.5" id="iTJ-aD-IWE"/>
                                                         <constraint firstItem="Xsr-eW-5WW" firstAttribute="leading" secondItem="l6r-Ld-dvh" secondAttribute="trailing" constant="8" id="men-Uy-kzN"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="Xsr-eW-5WW" secondAttribute="trailing" constant="15" id="nUO-5T-uOw"/>
+                                                </constraints>
                                                 <connections>
                                                     <outlet property="constraintCountsWidth" destination="gGn-ta-aif" id="o7x-MY-Foh"/>
                                                     <outlet property="labelCounts" destination="iYx-x1-Rrv" id="BYM-DT-Z9W"/>

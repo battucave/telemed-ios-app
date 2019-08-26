@@ -85,6 +85,10 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	// #ifdef DEBUG
 	#if TARGET_IPHONE_SIMULATOR
 		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
+	
+		// Disable future registration until next login
+		self.hasRegistered = YES;
+		self.shouldRegister = NO;
 		
 		callback(YES, nil);
 		
