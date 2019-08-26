@@ -1896,7 +1896,7 @@
 					081710721C495603000DD7C9 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = FLMB52V94K;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = "";
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -2642,7 +2642,6 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug;
@@ -2674,7 +2673,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed;
@@ -2706,7 +2704,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc;
