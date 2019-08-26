@@ -29,7 +29,7 @@
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	NSMutableString *xmlRecipients = [[NSMutableString alloc] init];
 	
-	for(NSString *messageRecipientID in messageRecipientIDs)
+	for (NSString *messageRecipientID in messageRecipientIDs)
 	{
 		[xmlRecipients appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", messageRecipientID]];
 	}

@@ -36,7 +36,7 @@
 	[super viewDidLoad];
 	
 	// Initialize filtered message events
-	for(MessageEventModel *messageEvent in self.messageEvents)
+	for (MessageEventModel *messageEvent in self.messageEvents)
 	{
 		if (! [messageEvent.Type isEqualToString:@"Comment"])
 		{
@@ -101,7 +101,7 @@
 	// If basic event set
 	if (messageEventString != nil)
 	{
-		for(MessageEventModel *messageEvent in self.messageEvents)
+		for (MessageEventModel *messageEvent in self.messageEvents)
 		{
 			if ([messageEvent.Type isEqualToString:messageEventString])
 			{

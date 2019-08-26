@@ -51,7 +51,7 @@
 	
 	NSMutableString *xmlParticipants = [[NSMutableString alloc] init];
 	
-	for(NSString *chatParticipantID in chatParticipantIDs)
+	for (NSString *chatParticipantID in chatParticipantIDs)
 	{
 		[xmlParticipants appendString:[NSString stringWithFormat:@"<d2p1:long>%@</d2p1:long>", chatParticipantID]];
 	}

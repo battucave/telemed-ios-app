@@ -9,6 +9,7 @@
 #import <CallKit/CallKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#import <sys/utsname.h>
 #import <UserNotifications/UserNotifications.h>
 
 #import "AppDelegate.h"
@@ -94,15 +95,33 @@
 			// If mobile network code is available and user had not previously disabled the old CDMA warning
 			if (carrier.mobileNetworkCode && [settings boolForKey:@"CDMAVoiceDataDisabled"] != YES)
 			{
-				// Enable voice data warning for Sprint
+				// Enable voice data warning for Sprint users
 				if ([sprintMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
 				{
 					[settings setBool:YES forKey:@"showSprintVoiceDataWarning"];
 				}
-				// Enable voice data warning for Verizon
+				// Enable voice data warning for Verizon users on devices that don't support VoLTE
 				else if ([verizonMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
 				{
-					[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+					// Get device model
+					struct utsname systemInfo;
+					
+					uname(&systemInfo);
+					
+					NSString *deviceModelName = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+					deviceModelName = [[deviceModelName componentsSeparatedByString:@","] objectAtIndex:0];
+					
+					if (deviceModelName.length >= 6)
+					{
+						NSString *deviceType = [deviceModelName substringToIndex:6];
+						NSInteger deviceNumber = [[deviceModelName substringFromIndex:6] integerValue];
+						
+						// Enable voice data warning if device is an iPhone and the model is less than 7 (iPhone 6 and iPhone 6+ are model 7)
+						if ([deviceType isEqualToString:@"iPhone"] && (int)deviceNumber < 7)
+						{
+							[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+						}
+					}
 				}
 			}
 		
@@ -114,7 +133,8 @@
 	[settings synchronize];
 	
 	// MyTeleMed - Register for push notifications
-	#ifdef MYTELEMED
+	// #if defined(MYTELEMED) && ! defined(DEBUG)
+	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
 		
 		[userNotificationCenter setDelegate:self];
@@ -209,7 +229,11 @@
 				{
 					AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 					
+					// Clear stored authentication data
 					[authenticationModel doLogout];
+					
+					// Go to login screen
+					[self goToLoginScreen];
 				}
 			}
 		}];
@@ -277,7 +301,11 @@
 		// Delay logout to ensure application is fully loaded
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
+			// Clear stored authentication data
 			[authenticationModel doLogout];
+			
+			// Go to login screen
+			[self goToLoginScreen];
 		});
 	}
 }
@@ -532,17 +560,22 @@
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
 	NSLog(@"My Device Token: %@", deviceToken);
-	
-	// Convert the token to a hex string and make sure it's all caps
-	NSMutableString *tokenString = [NSMutableString stringWithString:[[deviceToken description] uppercaseString]];
-	[tokenString replaceOccurrencesOfString:@"<" withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
-	[tokenString replaceOccurrencesOfString:@">" withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
-	[tokenString replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, tokenString.length)];
+
+    // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
+    const char *data = [deviceToken bytes];
+    NSMutableString *tokenString = [NSMutableString string];
+
+    for (NSUInteger i = 0; i < deviceToken.length; i++)
+    {
+        [tokenString appendFormat:@"%02.2hhX", data[i]];
+    }
+
+    NSLog(@"Token String: %@", tokenString);
 	
 	// Set device token
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
-	[registeredDeviceModel setToken:tokenString];
+	[registeredDeviceModel setToken:[tokenString copy]];
 	
 	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
@@ -570,7 +603,7 @@
 	// Sample notifications that can be used with apn tester free (these are real notifications that come from TeleMed)
 	/* Message push notification
 	{
-		"DeliveryID":5133538688695397, // This property has been requested, but not yet implemented
+		"DeliveryID":6099510726108687,
 		"NotificationType":"Message",
 		"aps":
 		{
@@ -582,7 +615,7 @@
 
 	/* Message comment push notification
 	{
-		"DeliveryID":5133538688695397,
+		"DeliveryID":6099510726108458,
 		"MessageID":"",
 		"NotificationType":"Comment",
 		"aps":
@@ -684,6 +717,8 @@
 	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
 	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	/*/ 8/09/2019 - SSO email collection has been postponed to a future release
 	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	// If user has not previously provided an email address, then go to email address screen
@@ -691,8 +726,10 @@
 	{
 		[self goToEmailAddressScreen];
 	}
+	else */
+	
 	// If user requires authentication, then go to login screen
-	else if (! [profile isAuthenticated])
+	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}
@@ -1001,18 +1038,19 @@
 - (void)goToNextScreen
 {
 	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
-	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
-	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
-	NSLog(@"Future Phase: Check if password change is required");
+	/*/ 8/09/2019 - SSO email collection has been postponed to a future release
+	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
 	
 	// If user has not previously provided an email address, then go to email address screen
 	if (! ssoProviderModel.EmailAddress)
 	{
 		[self goToEmailAddressScreen];
 	}
+	else */
+	
 	// If user requires authentication, then go to login screen
-	else if (! [profile isAuthenticated])
+	if (! [profile isAuthenticated])
 	{
 		[self goToLoginScreen];
 	}
@@ -1026,6 +1064,9 @@
 	{
 		[self goToMainScreen];
 	}
+	
+	// TODO: Future Phase: PasswordChangeRequired not yet implemented in UserProfileModel
+	NSLog(@"Future Phase: Check if password change is required");
 }
 
 /**

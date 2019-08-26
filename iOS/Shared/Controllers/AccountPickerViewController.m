@@ -66,7 +66,7 @@
 		
 		[self.viewSearchBarContainer setHidden:YES];
 		
-		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+		for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
 			if (constraint.firstAttribute == NSLayoutAttributeHeight)
 			{
@@ -85,7 +85,7 @@
 		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
 		
 		// Copy constraints from Storyboard's placeholder search bar onto the search controller's search bar
-		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+		for (NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
 			if (constraint.firstItem == self.searchBar)
 			{
@@ -97,7 +97,7 @@
 			}
 		}
 		
-		for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+		for (NSLayoutConstraint *constraint in self.searchBar.constraints)
 		{
 			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 		}

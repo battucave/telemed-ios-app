@@ -15,7 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *textFieldSSOProvider;
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
-@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @property (nonatomic) SSOProviderModel *ssoProviderModel;
 
@@ -35,8 +35,8 @@
 	[self.textFieldSSOProvider setText:self.ssoProviderModel.Name];
 	
 	// Attach toolbar to top of keyboard
-	[self.textFieldSSOProvider setInputAccessoryView:self.viewToolbar];
-	[self.viewToolbar removeFromSuperview];
+	[self.textFieldSSOProvider setInputAccessoryView:self.toolbar];
+	[self.toolbar removeFromSuperview];
 }
 
 - (void)viewDidAppear:(BOOL)animated

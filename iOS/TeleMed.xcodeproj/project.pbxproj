@@ -1896,7 +1896,7 @@
 					081710721C495603000DD7C9 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = FLMB52V94K;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = "";
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -2226,8 +2226,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworkActivityLogger/AFNetworkActivityLogger.framework",
@@ -2236,8 +2234,6 @@
 				"${BUILT_PRODUCTS_DIR}/KeychainItemWrapper/KeychainItemWrapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworkActivityLogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
@@ -2254,8 +2250,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworkActivityLogger/AFNetworkActivityLogger.framework",
@@ -2264,8 +2258,6 @@
 				"${BUILT_PRODUCTS_DIR}/KeychainItemWrapper/KeychainItemWrapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworkActivityLogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
@@ -2650,7 +2642,6 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug;
@@ -2682,7 +2673,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed;
@@ -2714,7 +2704,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 				WK_COMPANION_APP_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc;

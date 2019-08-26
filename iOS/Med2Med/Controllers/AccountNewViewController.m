@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldAccountCode;
-@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end
 
@@ -42,8 +42,8 @@
 	[self.textFieldAccountCode becomeFirstResponder];
 	
 	// Attach toolbar to top of keyboard
-	[self.textFieldAccountCode setInputAccessoryView:self.viewToolbar];
-	[self.viewToolbar removeFromSuperview];
+	[self.textFieldAccountCode setInputAccessoryView:self.toolbar];
+	[self.toolbar removeFromSuperview];
 }
 
 - (IBAction)getAccountCodeHelp:(id)sender

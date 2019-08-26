@@ -7,6 +7,7 @@
 //
 
 #import "TeleMedHTTPRequestOperationManager.h"
+#import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "AuthenticationModel.h"
 #import <CoreTelephony/CTCallCenter.h>
@@ -448,7 +449,13 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 				
 				dispatch_async(dispatch_get_main_queue(), ^
 				{
+					AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+					
+					// Clear stored authentication data
 					[self.authenticationModel doLogout];
+					
+					// Go to login screen
+					[appDelegate goToLoginScreen];
 				});
 			}
 			// Attempt to obtain a new Access Token and retry the operation
@@ -543,7 +550,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	// Verify whether the request has already been added as a Pending Operation
 	if ([self.pendingOperations count] > 0)
 	{
-		for(NSDictionary *pendingOperation in self.pendingOperations)
+		for (NSDictionary *pendingOperation in self.pendingOperations)
 		{
 			// If the request already exists, don't add it to Pending Operations
 			if ([[request.URL absoluteString] isEqualToString:(NSString *)[pendingOperation objectForKey:@"url"]])
@@ -578,7 +585,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	// Add any dependencies from original operation to new operation
 	if ([originalOperation.dependencies count] > 0)
 	{
-		for(NSOperation *dependency in originalOperation.dependencies)
+		for (NSOperation *dependency in originalOperation.dependencies)
 		{
 			[operation addDependency:dependency];
 		}
@@ -645,7 +652,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	{
 		NSLog(@"Authentication Success Pending Operations: %lu", (unsigned long)[self.pendingOperations count]);
 		
-		for(NSDictionary *pendingOperation in self.pendingOperations)
+		for (NSDictionary *pendingOperation in self.pendingOperations)
 		{
 			// Recreate the AFHTTPRequestOperation with an updated NSURLRequest that includes a new Authorization Header with new Access Token
 			AFHTTPRequestOperation *newOperation = [self duplicateOperation:(AFHTTPRequestOperation *)[pendingOperation objectForKey:@"operation"] success:[pendingOperation objectForKey:@"success"] failure:[pendingOperation objectForKey:@"failure"]];
@@ -666,8 +673,8 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		
 		NSMutableArray *deletePendingOperations = [[NSMutableArray alloc] init];
 		
-		//for(NSDictionary *pendingOperation in self.pendingOperations) // Have to do it with regular for loop to avoid "NSArray was mutated while being enumerated" error
-		for(int i = 0; i < [self.pendingOperations count]; i++)
+		// for (NSDictionary *pendingOperation in self.pendingOperations) // Have to do it with regular for loop to avoid "NSArray was mutated while being enumerated" error
+		for (int i = 0; i < [self.pendingOperations count]; i++)
 		{
 			NSDictionary *pendingOperation = self.pendingOperations[i];
 			

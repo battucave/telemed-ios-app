@@ -69,7 +69,7 @@
 		return;
 	}
 	
-	for(ChatMessageModel *chatMessage in self.selectedChatMessages)
+	for (ChatMessageModel *chatMessage in self.selectedChatMessages)
 	{
 		if (chatMessage.Unopened)
 		{

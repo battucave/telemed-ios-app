@@ -34,7 +34,7 @@
 - (void)commonInit
 {
 	// If we are using auto layouts, than get a handler to the height constraint.
-	for(NSLayoutConstraint *constraint in self.constraints)
+	for (NSLayoutConstraint *constraint in self.constraints)
 	{
 		if (constraint.firstAttribute == NSLayoutAttributeHeight)
 		{
