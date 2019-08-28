@@ -76,15 +76,15 @@
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar sizeToFit];
 	
+	// Initialize search bar placeholder for message
+	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+	
 	// Initialize search bar placeholder for chat
+	#ifdef MYTELEMED
 	if ([self.messageRecipientType isEqualToString:@"Chat"]) {
 		[self.searchController.searchBar setPlaceholder:@"Search Participants"];
 	}
-	// Initialize search bar placeholder for message
-	else
-	{
-		[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
-	}
+	#endif
 	
 	// iOS 11+ navigation bar has support for search controller
 	if (@available(iOS 11.0, *))
@@ -93,7 +93,7 @@
 		
 		[self.viewSearchBarContainer setHidden:YES];
 		
-		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+		for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
 			if (constraint.firstAttribute == NSLayoutAttributeHeight)
 			{
@@ -112,7 +112,7 @@
 		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
 		
 		// Copy constraints from storyboard's placeholder search bar onto the search controller's search bar
-		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+		for (NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
 			if (constraint.firstItem == self.searchBar)
 			{
@@ -124,7 +124,7 @@
 			}
 		}
 		
-		for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+		for (NSLayoutConstraint *constraint in self.searchBar.constraints)
 		{
 			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 		}
@@ -685,7 +685,7 @@
 	// Remove checkmark of selected message recipient
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath method)
+	// MyTeleMed only - If table allows multiple selection, then remove the message recipient from selected message recipients (if not, then this is handled by resetting selected message recipients in didSelectRowAtIndexPath:)
 	if (self.tableMessageRecipients.allowsMultipleSelection)
 	{
 		MessageRecipientModel *messageRecipient;

@@ -69,7 +69,7 @@
 		return;
 	}
 	
-	for(MessageModel *message in self.selectedMessages)
+	for (MessageModel *message in self.selectedMessages)
 	{
 		if ([message.State isEqualToString:@"Unread"])
 		{
@@ -101,11 +101,8 @@
 	[archiveMessagesAlertController addAction:continueAction];
 	[archiveMessagesAlertController addAction:cancelAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([archiveMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[archiveMessagesAlertController setPreferredAction:continueAction];
-	}
+	// Set preferred action
+	[archiveMessagesAlertController setPreferredAction:continueAction];
 
 	// Show alert
 	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
@@ -133,7 +130,7 @@
 	[self.navigationItem setTitle:(selectedMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedMessageCount] : self.navigationBarTitle)];
 }
 
-// Override setEditing method
+// Override setEditing:
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
 	[super setEditing:editing animated:animated];

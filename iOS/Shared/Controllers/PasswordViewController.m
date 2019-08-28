@@ -27,7 +27,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textFieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldConfirmNewPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textFieldNewPassword;
-@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintScrollViewTop;
 
@@ -42,10 +42,10 @@
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
 	// Attach toolbar to top of keyboard
-	[self.textFieldCurrentPassword setInputAccessoryView:self.viewToolbar];
-	[self.textFieldNewPassword setInputAccessoryView:self.viewToolbar];
-	[self.textFieldConfirmNewPassword setInputAccessoryView:self.viewToolbar];
-	[self.viewToolbar removeFromSuperview];
+	[self.textFieldCurrentPassword setInputAccessoryView:self.toolbar];
+	[self.textFieldNewPassword setInputAccessoryView:self.toolbar];
+	[self.textFieldConfirmNewPassword setInputAccessoryView:self.toolbar];
+	[self.toolbar removeFromSuperview];
 	
 	// iPhone < 6 - Hide logo image so that the entire form is visible
 	if ([UIScreen mainScreen].bounds.size.height < 667.0f)
@@ -63,11 +63,8 @@
 {
 	[super viewDidAppear:animated];
 	
-	// iPhone > 4(S) - Auto-focus current password field (logic has to occur in viewDidAppear: so that keyboard observers can modify the scroll view; iPhone 4(S) cannot fit entire form while keyboard visible so show it without keyboard first)
-	if ([UIScreen mainScreen].bounds.size.height > 480.0f)
-	{
-		[self.textFieldCurrentPassword becomeFirstResponder];
-	}
+	// Auto-focus current password field (logic has to occur in viewDidAppear: so that keyboard observers can modify the scroll view)
+	[self.textFieldCurrentPassword becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -81,10 +78,6 @@
 
 - (IBAction)changePassword:(id)sender
 {
-	PasswordChangeModel *passwordChangeModel = [[PasswordChangeModel alloc] init];
-	
-	[passwordChangeModel setDelegate:self];
-	
 	// Verify that form is valid
 	if (! [self validateForm])
 	{
@@ -108,6 +101,9 @@
 	}
 	else
 	{
+		PasswordChangeModel *passwordChangeModel = [[PasswordChangeModel alloc] init];
+		
+		[passwordChangeModel setDelegate:self];
 		[passwordChangeModel changePassword:self.textFieldNewPassword.text withOldPassword:self.textFieldCurrentPassword.text];
 	}
 }
@@ -197,7 +193,7 @@
 	#endif
 	
 	// Go to the next screen in the login process
-	[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+	[(AppDelegate *)[[UIApplication sharedApplication] delegate] goToNextScreen];
 }
 
 // Check required fields to determine if form can be submitted

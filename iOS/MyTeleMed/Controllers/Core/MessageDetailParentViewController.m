@@ -83,11 +83,8 @@
 	[archiveMessageAlertController addAction:continueAction];
 	[archiveMessageAlertController addAction:cancelAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([archiveMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[archiveMessageAlertController setPreferredAction:continueAction];
-	}
+	// Set preferred action
+	[archiveMessageAlertController setPreferredAction:continueAction];
 
 	// Show alert
 	[self presentViewController:archiveMessageAlertController animated:YES completion:nil];
@@ -220,11 +217,8 @@
 	
 	[returnCallAlertController addAction:okAction];
 	
-	// PreferredAction only supported in 9.0+
-	if ([returnCallAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[returnCallAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[returnCallAlertController setPreferredAction:okAction];
 
 	// Show alert
 	[self presentViewController:returnCallAlertController animated:YES completion:nil];
@@ -316,11 +310,8 @@
 
 	[forwardMessageAlertController addAction:okAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([forwardMessageAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[forwardMessageAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[forwardMessageAlertController setPreferredAction:okAction];
 
 	// Show alert
 	[self presentViewController:forwardMessageAlertController animated:YES completion:nil];

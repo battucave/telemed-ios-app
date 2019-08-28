@@ -95,11 +95,8 @@
 			[updateTimeoutAlertController addAction:confirmAction];
 			[updateTimeoutAlertController addAction:cancelAction];
 		
-			// PreferredAction only supported in 9.0+
-			if ([updateTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
-			{
-				[updateTimeoutAlertController setPreferredAction:cancelAction];
-			}
+			// Set preferred action
+			[updateTimeoutAlertController setPreferredAction:cancelAction];
 		
 			// Show alert
 			[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];

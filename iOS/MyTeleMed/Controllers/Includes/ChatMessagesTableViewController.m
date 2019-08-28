@@ -34,7 +34,7 @@
 {
 	[super viewDidLoad];
 	
-	// Fix bug in iOS 7 where text overlaps indicator on first run
+	// Fix bug in iOS 7+ where text overlaps indicator on first run
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.refreshControl beginRefreshing];
@@ -89,7 +89,7 @@
 	}
 	
 	// Add each chat message to hidden chat messages
-	for(ChatMessageModel *chatMessage in chatMessages)
+	for (ChatMessageModel *chatMessage in chatMessages)
 	{
 		[self.hiddenChatMessages addObject:chatMessage];
 	}
@@ -109,7 +109,7 @@
 	}
 	
 	// Remove each chat message from hidden chat messages
-	for(ChatMessageModel *chatMessage in chatMessages)
+	for (ChatMessageModel *chatMessage in chatMessages)
 	{
 		[self.hiddenChatMessages removeObject:chatMessage];
 	}
@@ -132,7 +132,7 @@
 	}
 	
 	// Remove each chat message from the source data, selected data, and the table itself
-	for(ChatMessageModel *chatMessage in chatMessages)
+	for (ChatMessageModel *chatMessage in chatMessages)
 	{
 		[mutableChatMessages removeObject:chatMessage];
 		[self.hiddenChatMessages removeObject:chatMessage];
@@ -149,7 +149,7 @@
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no chat messages left in the source data, simply reload the table to show the no chat messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from the numberOfRowsInSection method (1 - for the no messages cell))
+	// If there are no chat messages left in the source data, simply reload the table to show the no chat messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from numberOfRowsInSection: (1 - for the no messages cell))
 	else
 	{
 		[self.tableView reloadData];
@@ -353,7 +353,7 @@
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedChatMessages = [NSMutableArray new];
 			
-			for(NSIndexPath *indexPath in indexPaths)
+			for (NSIndexPath *indexPath in indexPaths)
 			{
 				[self.selectedChatMessages addObject:[self.chatMessages objectAtIndex:indexPath.row]];
 			}
@@ -373,7 +373,7 @@
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedChatMessages = [NSMutableArray new];
 			
-			for(NSIndexPath *indexPath in indexPaths)
+			for (NSIndexPath *indexPath in indexPaths)
 			{
 				[self.selectedChatMessages addObject:[self.chatMessages objectAtIndex:indexPath.row]];
 			}

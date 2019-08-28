@@ -69,7 +69,7 @@
 		return;
 	}
 	
-	for(ChatMessageModel *chatMessage in self.selectedChatMessages)
+	for (ChatMessageModel *chatMessage in self.selectedChatMessages)
 	{
 		if (chatMessage.Unopened)
 		{
@@ -105,11 +105,8 @@
 	[deleteChatMessagesAlertController addAction:continueAction];
 	[deleteChatMessagesAlertController addAction:cancelAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([deleteChatMessagesAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[deleteChatMessagesAlertController setPreferredAction:continueAction];
-	}
+	// Set preferred action
+	[deleteChatMessagesAlertController setPreferredAction:continueAction];
 
 	// Show alert
 	[self presentViewController:deleteChatMessagesAlertController animated:YES completion:nil];
@@ -128,7 +125,7 @@
 	[self.navigationItem setTitle:(selectedChatMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedChatMessageCount] : self.navigationBarTitle)];
 }
 
-// Override setEditing method
+// Override setEditing:
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
 	[super setEditing:editing animated:animated];

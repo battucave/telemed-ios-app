@@ -22,6 +22,14 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	dispatch_once(&token, ^
 	{
 		sharedRegisteredDeviceInstance = [[self alloc] init];
+		
+		// If using Simulator, then skip phone number step because it is always invalid
+		// #ifdef DEBUG
+		#if TARGET_IPHONE_SIMULATOR
+			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
+		
+			[sharedRegisteredDeviceInstance setHasRegistered:YES];
+		#endif
 	});
 	
 	return sharedRegisteredDeviceInstance;
@@ -77,6 +85,10 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	// #ifdef DEBUG
 	#if TARGET_IPHONE_SIMULATOR
 		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
+	
+		// Disable future registration until next login
+		self.hasRegistered = YES;
+		self.shouldRegister = NO;
 		
 		callback(YES, nil);
 		
@@ -85,14 +97,14 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	
 	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from AppDelegate's didRegisterForRemoteNotificationsWithDeviceToken:
 	// Also ensure that device actually needs to register
-	if (self.Token == NULL || self.PhoneNumber == NULL || ! self.shouldRegister)
+	if (! self.Token || ! self.PhoneNumber || ! self.shouldRegister)
 	{
-		if (self.Token == NULL)
+		if (! self.Token)
 		{
 			NSLog(@"IMPORTANT: Device does not have a token so it is not being registered with TeleMed. If this persists, make sure that an explicit provisioning profile is being used for MyTeleMed and that its certificate has Push Notifications enabled.");
 			
 			// If user has already entered their phone number, but notification permissions are disabled/rejected, then pretend that the device has registered anyway to avoid infinite loop of showing phone number screen
-			if (self.PhoneNumber != NULL)
+			if (self.PhoneNumber != nil)
 			{
 				self.hasRegistered = YES;
 			}

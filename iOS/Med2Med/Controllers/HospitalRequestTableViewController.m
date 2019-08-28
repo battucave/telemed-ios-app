@@ -32,11 +32,8 @@
 
 	[accountCodeHelpAlertController addAction:okAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([accountCodeHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[accountCodeHelpAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[accountCodeHelpAlertController setPreferredAction:okAction];
 
 	// Show Alert
 	[self presentViewController:accountCodeHelpAlertController animated:YES completion:nil];
@@ -54,11 +51,8 @@
 
 	[successAlertController addAction:okAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([successAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[successAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[successAlertController setPreferredAction:okAction];
 
 	// Show alert
 	[self presentViewController:successAlertController animated:YES completion:nil];

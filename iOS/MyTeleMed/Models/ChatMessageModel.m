@@ -61,7 +61,7 @@
 			
 			if ([chatMessages count] > 0)
 			{
-				for(ChatMessageModel *chatMessage in chatMessages)
+				for (ChatMessageModel *chatMessage in chatMessages)
 				{
 					// Sort chat participants by last name, first name
 					chatMessage.ChatParticipants = [chatMessage.ChatParticipants sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
@@ -209,7 +209,7 @@
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	for(ChatMessageModel *chatMessage in chatMessages)
+	for (ChatMessageModel *chatMessage in chatMessages)
 	{
 		NSDictionary *parameters = @{
 			@"chatMsgID"	: chatMessage.ID,

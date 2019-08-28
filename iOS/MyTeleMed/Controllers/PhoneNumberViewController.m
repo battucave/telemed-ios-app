@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "ErrorAlertController.h"
 #import "HelpViewController.h"
+#import "AuthenticationModel.h"
 #import "MyProfileModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -18,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintFormTop;
 @property (weak, nonatomic) IBOutlet UITextField *textPhoneNumber;
-@property (weak, nonatomic) IBOutlet UIView *viewToolbar;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end                              
 
@@ -37,8 +38,8 @@
 	}
 	
 	// Attach toolbar to top of keyboard
-	[self.textPhoneNumber setInputAccessoryView:self.viewToolbar];
-	[self.viewToolbar removeFromSuperview];
+	[self.textPhoneNumber setInputAccessoryView:self.toolbar];
+	[self.toolbar removeFromSuperview];
 	
 	#ifdef DEBUG
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
@@ -83,11 +84,8 @@
 
 	[phoneNumberHelpAlertController addAction:okAction];
 
-	// PreferredAction only supported in 9.0+
-	if ([phoneNumberHelpAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[phoneNumberHelpAlertController setPreferredAction:okAction];
-	}
+	// Set preferred action
+	[phoneNumberHelpAlertController setPreferredAction:okAction];
 
 	// Show alert
 	[self presentViewController:phoneNumberHelpAlertController animated:YES completion:nil];
@@ -101,16 +99,13 @@
 	
 	if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
 	{
-		UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"Invalid Phone Number" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
 		[errorAlertController addAction:okAction];
 	
-		// PreferredAction only supported in 9.0+
-		if ([errorAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[errorAlertController setPreferredAction:okAction];
-		}
+		// Set preferred action
+		[errorAlertController setPreferredAction:okAction];
 	
 		// Show alert
 		[self presentViewController:errorAlertController animated:YES completion:nil];
@@ -134,10 +129,12 @@
 			// Run register device web service
 			[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 			{
+				AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+				
 				if (success)
 				{
 					// Go to the next screen in the login process
-					[(AppDelegate *)[[UIApplication sharedApplication] delegate] showMainScreen];
+					[appDelegate goToNextScreen];
 				}
 				else
 				{
@@ -156,17 +153,20 @@
 					UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
 					UIAlertAction *goBackAction = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 					{
-						// Go back to login sso (user navigated here from login sso)
+						AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	
+						// Clear stored authenticated data
+						[authenticationModel doLogout];
+						
+						// Go back to login screen (user navigated here from login screen)
 						if ([self.navigationController.viewControllers count] > 1)
 						{
 							[self.navigationController popToRootViewControllerAnimated:YES];
 						}
-						// Go back to login sso (user bypassed login, but was sent here due to invalid phone number)
+						// Go back to login screen (user bypassed login, but was sent here due to invalid phone number)
 						else
 						{
-							UIViewController *loginSSOViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginSSOViewController"];
-						
-							[self.navigationController setViewControllers:@[loginSSOViewController] animated:NO];
+							[appDelegate goToLoginScreen];
 						}
 					}];
 					UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
@@ -183,11 +183,8 @@
 		[confirmPhoneNumberAlertController addAction:noAction];
 		[confirmPhoneNumberAlertController addAction:yesAction];
 
-		// PreferredAction only supported in 9.0+
-		if ([confirmPhoneNumberAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[confirmPhoneNumberAlertController setPreferredAction:yesAction];
-		}
+		// Set preferred action
+		[confirmPhoneNumberAlertController setPreferredAction:yesAction];
 
 		// Show alert
 		[self presentViewController:confirmPhoneNumberAlertController animated:YES completion:nil];

@@ -13,6 +13,14 @@
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 
+#ifdef MYTELEMED
+	#import "MyProfileModel.h"
+#endif
+
+#ifdef MED2MED
+	#import "UserProfileModel.h"
+#endif
+
 @interface AuthenticationModel()
 
 @property (nonatomic) NSDate *AccessTokenExpiration;
@@ -115,7 +123,13 @@
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
+			AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+			
+			// Clear stored authentication data
 			[self doLogout];
+			
+			// Go to login screen
+			[appDelegate goToLoginScreen];
 		});
 		
 		return;
@@ -166,10 +180,16 @@
 		
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
+			AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+			
 			// Turn off isWorking
 			self.isWorking = NO;
 			
+			// Clear stored authentication data
 			[self doLogout];
+			
+			// Go to login screen
+			[appDelegate goToLoginScreen];
 		});
 	}
 	failure:^(__unused NSURLSessionDataTask *task, NSError *error)
@@ -218,7 +238,11 @@
 				// Turn off isWorking
 				self.isWorking = NO;
 				
+				// Clear stored authentication data
 				[self doLogout];
+				
+				// Go to login screen
+				[appDelegate goToLoginScreen];
 			});
 		}
 	}];
@@ -238,7 +262,6 @@
 - (void)doLogout
 {
 	KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	
 	// Reset refresh token in keychain
@@ -252,26 +275,13 @@
 	self.AccessTokenExpiration = nil;
 	self.RefreshToken = nil;
 	
-	// Go to LoginSSOViewController
-	UIStoryboard *loginSSOStoryboard;
-	UIStoryboard *currentStoryboard = appDelegate.window.rootViewController.storyboard;
-	NSString *currentStoryboardName = [currentStoryboard valueForKey:@"name"];
-	
-	NSLog(@"Current Storyboard: %@", currentStoryboardName);
-	
-	if ([currentStoryboardName isEqualToString:@"LoginSSO"])
-	{
-		loginSSOStoryboard = currentStoryboard;
-	}
-	else
-	{
-		loginSSOStoryboard = [UIStoryboard storyboardWithName:@"LoginSSO" bundle:nil];
-	}
-	
-	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
-	
-	[appDelegate.window setRootViewController:loginSSONavigationController];
-	[appDelegate.window makeKeyAndVisible];
+	// Log out of profile
+	#ifdef MYTELEMED
+		[[MyProfileModel sharedInstance] doLogout];
+
+	#elif defined MED2MED
+		[[UserProfileModel sharedInstance] doLogout];
+	#endif
 }
 
 @end

@@ -66,7 +66,7 @@
 		
 		[self.viewSearchBarContainer setHidden:YES];
 		
-		for(NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+		for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
 		{
 			if (constraint.firstAttribute == NSLayoutAttributeHeight)
 			{
@@ -85,7 +85,7 @@
 		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
 		
 		// Copy constraints from Storyboard's placeholder search bar onto the search controller's search bar
-		for(NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
+		for (NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
 		{
 			if (constraint.firstItem == self.searchBar)
 			{
@@ -97,7 +97,7 @@
 			}
 		}
 		
-		for(NSLayoutConstraint *constraint in self.searchBar.constraints)
+		for (NSLayoutConstraint *constraint in self.searchBar.constraints)
 		{
 			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
 		}
@@ -521,13 +521,13 @@
 				// Verify that selected account has a phone number
 				if (self.selectedAccount.DID != nil && ! [self.selectedAccount.DID isEqualToString:@""])
 				{
-					// Use phone dialer to make call. Tel works same as telprompt in iOS 10.3+
+					// Use phone dialer to make call
 					NSURL *urlCallTeleMed = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@", self.selectedAccount.DID]];
 
 					// Verify that device can make phone calls
 					if ([[UIApplication sharedApplication] canOpenURL:urlCallTeleMed])
 					{
-						[[UIApplication sharedApplication] openURL:urlCallTeleMed];
+						[[UIApplication sharedApplication] openURL:urlCallTeleMed options:@{} completionHandler:nil];
 					}
 					else
 					{
@@ -545,11 +545,8 @@
 				
 					[callUnavailableAlertController addAction:okAction];
 				
-					// PreferredAction only supported in 9.0+
-					if ([callUnavailableAlertController respondsToSelector:@selector(setPreferredAction:)])
-					{
-						[callUnavailableAlertController setPreferredAction:okAction];
-					}
+					// Set preferred action
+					[callUnavailableAlertController setPreferredAction:okAction];
 				
 					// Show Alert
 					[self presentViewController:callUnavailableAlertController animated:YES completion:nil];

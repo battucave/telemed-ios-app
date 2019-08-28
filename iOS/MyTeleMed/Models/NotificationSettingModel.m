@@ -133,21 +133,6 @@
 				self.Interval = [NSNumber numberWithInt:1];
 			}
 			
-			// DEPRECATED: If the tone received from server is default, change it to the iOS default: "Note"
-			/* if ([self.Tone isEqualToString:@"Default"])
-			{
-				NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
-				
-				// Tones should always exist
-				if ([tones count] > 8)
-				{
-					[self setTone:[tones objectAtIndex:8]]; // iOS 7+ Defaults to Note tone
-				}
-				
-				// Save new default to server
-				[self saveNotificationSettingsByName:name settings:self];
-			} */
-			
 			// Save notification settings for type to device
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:self] forKey:notificationKey];
 			[settings synchronize];

@@ -148,7 +148,7 @@
 						goToRemoteNotificationScreen(self.navigationController);
 					});
 				}
-				// User was not logged in so assign the block to a property for the showMainScreen method to handle
+				// User was not logged in so assign the block to a property for AppDelegate's goToNextScreen: to handle
 				else
 				{
 					[(AppDelegate *)[[UIApplication sharedApplication] delegate] setGoToRemoteNotificationScreen:goToRemoteNotificationScreen];
@@ -180,11 +180,8 @@
 		[alertController addAction:viewAction];
 	}
 	
-	// PreferredAction only supported in 9.0+
-	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[alertController setPreferredAction:(viewAction ?: closeAction)];
-	}
+	// Set preferred action
+	[alertController setPreferredAction:(viewAction ?: closeAction)];
 	
 	// Show Alert
 	[self presentViewController:alertController animated:YES completion:nil];

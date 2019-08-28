@@ -7,6 +7,7 @@
 //
 
 #import "SideNavigationViewController.h"
+#import "AppDelegate.h"
 #import "SWRevealViewController.h"
 #import "SideNavigationCountCell.h"
 #import "AuthenticationModel.h"
@@ -17,7 +18,6 @@
 #endif
 
 #ifdef MED2MED
-	#import "ProfileProtocol.h"
 	#import "UserProfileModel.h"
 #endif
 
@@ -72,9 +72,14 @@
 
 - (IBAction)doLogout:(id)sender
 {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	
+	// Clear stored authenticated data
 	[authenticationModel doLogout];
+	
+	// Go to login screen
+	[appDelegate goToLoginScreen];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -105,17 +110,6 @@
 {
 	// Fix issue in iPad where background defaulted to White (unfixable in IB because of bug)
 	[cell setBackgroundColor:[UIColor clearColor]];
-	
-	/*/ Fix bugs on iOS < 10 (only required if not using Automatic Separator Insets)
-	if (! [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10}])
-	{
-		// iOS 11+ requires "Preserve Superview Margins" to be true for custom cells to line up correctly with any other type cell. However, this messes up the layout for iOS < 10 so undo the change for those versions.
-		[cell setPreservesSuperviewLayoutMargins:NO];
-		[cell.contentView setPreservesSuperviewLayoutMargins:NO];
-		
-		// Eliminate any left margin from label (Fix issue in iOS 8-9)
-		[cell setLayoutMargins:UIEdgeInsetsZero];
-	} */
 }
 
 // Customize the appearance of table view cells.
@@ -151,16 +145,16 @@
 				// If cell is for secure chat, set chat counts
 				if ([cell.reuseIdentifier isEqualToString:@"Secure Chat"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnopenedChatConvoCount, self.myStatusModel.ActiveChatConvoCount]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnopenedChatConvoCount integerValue], 99), MIN([self.myStatusModel.ActiveChatConvoCount integerValue], 99)]];
 				}
 				// If cell is for messages, set message counts
 				else if ([cell.reuseIdentifier isEqualToString:@"Messages"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%@/%@", self.myStatusModel.UnreadMessageCount, self.myStatusModel.ActiveMessageCount]];
-					
-					// TESTING ONLY (set counts to random numbers)
-					//[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnreadMessageCount integerValue], 99), MIN([self.myStatusModel.ActiveMessageCount integerValue], 99)]];
 				}
+                
+                // TESTING ONLY (set counts to random numbers)
+                // [cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
 				
 				// Store old frame size
 				CGRect oldFrame = cell.labelCounts.frame;
@@ -172,7 +166,7 @@
 				
 				// Increase new frame size and restore its old height
 				newFrame.size.width = newFrame.size.width + 22.0;
-				newFrame.size.height = oldFrame.size.height+ 4.0;
+				newFrame.size.height = oldFrame.size.height;
 				
 				[cell.labelCounts setFrame:newFrame];
 				[cell.constraintCountsWidth setConstant:newFrame.size.width];
@@ -273,7 +267,7 @@
 	if ([cell.reuseIdentifier isEqualToString:@"New Message"])
 	{
 		// Show MessageNewTableViewController
-		if ([[UserProfileModel sharedInstance] IsAuthorized])
+		if ([[UserProfileModel sharedInstance] isAuthorized])
 		{
 			[self performSegueWithIdentifier:@"showMessageNew" sender:cell];
 		}

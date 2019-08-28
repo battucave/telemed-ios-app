@@ -18,6 +18,7 @@
 @property (nonatomic) AccountModel *oldMyPreferredAccount;
 
 // @property (nonatomic) BOOL hasChangedPassword; // TESTING ONLY
+@property (nonatomic) BOOL IsAuthenticated; // Not passed from web service
 
 @end
 
@@ -62,6 +63,11 @@
 	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
 }
 
+- (void)doLogout
+{
+	[self setIsAuthenticated:NO];
+}
+
 - (void)getWithCallback:(void (^)(BOOL success, id <ProfileProtocol> profile, NSError *error))callback
 {
 	[self.operationManager GET:@"MyProfile" parameters:nil success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
@@ -75,6 +81,9 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
+			// Update authenticated flag
+			[self setIsAuthenticated:YES];
+			
 			// Search user's registered devices to determine whether any match the current device. If so, update the current device with the new phone number
 			[self setCurrentDevice];
 			
@@ -109,6 +118,14 @@
 	}];
 }
 
+- (BOOL)isAuthenticated {
+	return _IsAuthenticated;
+}
+
+- (BOOL)isAuthorized {
+	return _IsAuthorized;
+}
+
 // Restore MyPreferredAccount to previous value (only used by PreferredAccountModel in case of error saving my preferred account to server)
 - (void)restoreMyPreferredAccount
 {
@@ -128,7 +145,7 @@
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
 	// Search user's registered devices for the current device
-	for(RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
+	for (RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)
 	{
 		// If found, set the current device's phone number
 		if ([registeredDevice.ID caseInsensitiveCompare:registeredDeviceModel.ID] == NSOrderedSame)

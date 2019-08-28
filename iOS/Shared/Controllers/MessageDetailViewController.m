@@ -414,7 +414,7 @@
 			[self.filteredMessageEvents removeAllObjects];
 			
 			// Filter message events to include only comments and user events
-			for(MessageEventModel *messageEvent in messageEvents)
+			for (MessageEventModel *messageEvent in messageEvents)
 			{
 				if ([messageEvent.Type isEqualToString:@"Comment"] || [messageEvent.Type isEqualToString:@"User"])
 				{
@@ -426,7 +426,7 @@
 			#ifdef DEBUG
 				[self.filteredMessageEvents removeAllObjects];
 			 
-				for(int i = 0; i < 3; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					MessageEventModel *messageEvent = [[MessageEventModel alloc] init];
 					NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];

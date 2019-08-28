@@ -68,7 +68,7 @@
 	UIEdgeInsets textViewChatMessageEdgeInsets = self.textViewChatMessage.textContainerInset;
 	
 	[self.textViewChatMessage setDelegate:self];
-	[self.textViewChatMessage setMaxHeight:118.5f]; // (118.5 = iPhone 4s view height - keyboard height - chat participants view height - 1px border)
+	[self.textViewChatMessage setMaxHeight:206.5f]; // (118.5 = iPhone 5 view height - keyboard height - chat participants view height - 1px border)
 	[self.textViewChatMessage setTextContainerInset:UIEdgeInsetsMake(textViewChatMessageEdgeInsets.top, 12.0f, textViewChatMessageEdgeInsets.bottom, 12.0f)];
 	self.textViewChatMessagePlaceholder = self.textViewChatMessage.text;
 }
@@ -187,7 +187,7 @@
 		NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
 		
 		// Check each conversation to determine if its chat participants are the same as the selected chat participants
-		for(ChatMessageModel *chatMessage in self.conversations)
+		for (ChatMessageModel *chatMessage in self.conversations)
 		{
 			NSArray *chatParticipantIDs = [[chatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
 			
@@ -285,9 +285,6 @@
 		}
 	}
 	
-	// Fix bug on iOS < 10 that UITextView font size changes when setting button text if it is not selectable
-	[self.textViewChatParticipants setSelectable:YES];
-	
 	// Update text view chat participants with chat participant name(s)
 	[self.textViewChatParticipants setText:chatParticipantNames];
 	
@@ -295,11 +292,6 @@
 	if (expanded)
 	{
 		[self.textViewChatParticipants flashScrollIndicators];
-	}
-	// Prevent text selection unless text view chat participants is expanded
-	else
-	{
-		[self.textViewChatParticipants setSelectable:NO];
 	}
 	
 	// Toggle participants expanded flag

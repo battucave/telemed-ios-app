@@ -48,7 +48,7 @@
 {
 	[super viewDidLoad];
 	
-	// Fix bug in iOS 7 where text overlaps indicator on first run
+	// Fix bug in iOS 7+ where text overlaps indicator on first run
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.refreshControl beginRefreshing];
@@ -131,7 +131,7 @@
 	}
 	
 	// Add each message to hidden messages
-	for(id <MessageProtocol> message in messages)
+	for (id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages addObject:message];
 	}
@@ -155,7 +155,7 @@
 	}
 	
 	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
-	for(id <MessageProtocol> message in messages)
+	for (id <MessageProtocol> message in messages)
 	{
 		[mutableMessages removeObject:message];
 		[self.filteredMessages removeObject:message];
@@ -204,7 +204,7 @@
 	}
 	
 	// Remove each message from hidden messages
-	for(id <MessageProtocol> message in messages)
+	for (id <MessageProtocol> message in messages)
 	{
 		[self.hiddenMessages removeObject:message];
 	}
@@ -418,7 +418,7 @@
 		
 		if ([messageRecipients count] > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %lu more...", [messageRecipients count] - 1];
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %u more...", [messageRecipients count] - 1];
 		}
 	}
 	
@@ -495,7 +495,7 @@
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedMessages = [NSMutableArray new];
 			
-			for(NSIndexPath *indexPath in indexPaths)
+			for (NSIndexPath *indexPath in indexPaths)
 			{
 				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
 			}
@@ -515,7 +515,7 @@
 			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
 			self.selectedMessages = [NSMutableArray new];
 			
-			for(NSIndexPath *indexPath in indexPaths)
+			for (NSIndexPath *indexPath in indexPaths)
 			{
 				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
 			}

@@ -56,7 +56,7 @@
 }
 
 // MED2MED PHASE 2 LOGIC (figure out how to prevent updating value for field if user has already begun typing in it)
-- (void)setTextFieldValues:(id <ProfileProtocol>) profile
+- (void)setTextFieldValues:(UserProfileModel *) profile
 {
 	for (UITextField *textField in self.textFields)
 	{

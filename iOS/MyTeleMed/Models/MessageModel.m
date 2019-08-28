@@ -288,7 +288,7 @@
 	// Store state for modifyMessageStatePending:
 	self.messageState = state;
 	
-	for(MessageModel *message in messages)
+	for (MessageModel *message in messages)
 	{
 		NSDictionary *parameters = @{
 			@"mdid"		: message.MessageDeliveryID,

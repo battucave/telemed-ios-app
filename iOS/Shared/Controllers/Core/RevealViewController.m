@@ -37,7 +37,7 @@
 	if (position == FrontViewPositionRight)
 	{
 		// Prevent user interaction on everything except the navigation bar (so that menu button is still clickable)
-		for(id subview in [revealController.frontViewController.view subviews])
+		for (id subview in [revealController.frontViewController.view subviews])
 		{
 			if (! [subview isKindOfClass:UINavigationBar.class])
 			{
@@ -48,7 +48,7 @@
 	else
 	{
 		// Re-enable user interaction on everything
-		for(id subview in [revealController.frontViewController.view subviews])
+		for (id subview in [revealController.frontViewController.view subviews])
 		{
 			[subview setUserInteractionEnabled:YES];
 		}

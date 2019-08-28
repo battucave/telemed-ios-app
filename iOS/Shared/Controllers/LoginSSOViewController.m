@@ -18,8 +18,6 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonBack;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonChangeIDPRovider;
-@property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintToolbarBottom;
 @property (weak, nonatomic) IBOutlet UIView *loadingView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -37,9 +35,6 @@
 	
 	// Hide keyboard accessory view for UIWebView text fields
 	[self hideKeyboardAccessoryView:self.webView];
-	
-	// TEMPORARY: Client requested to hide Change ID Provider button
-	[self.buttonChangeIDPRovider setTitle:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -56,9 +51,6 @@
 	
 	// Reset toolbar to bottom of view
 	[self.constraintToolbarBottom setConstant:0.0f];
-	
-	// Dynamically add a width constraint to Login button to resolve iOS 11 issue (if this doesn't work, then replace entire UIToolbar with UIView - see PhoneNumber view)
-	[self.buttonLogin.widthAnchor constraintEqualToConstant:62.0].active = YES;
 	
 	// Add reachability observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWebView:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
@@ -81,12 +73,6 @@
 	
 	// Remove reachability observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
-}
-
-// Unwind segue from SSOProviderViewController
-- (IBAction)unwindFromSSOProvider:(UIStoryboardSegue *)segue
-{
-	NSLog(@"unwindFromSSOProvider");
 }
 
 - (IBAction)doLogin:(id)sender
@@ -169,18 +155,12 @@
 	// Remove all cached responses
 	[[NSURLCache sharedURLCache] removeAllCachedResponses];
 	
-	// Remove all cookies of domain to clear the login page's session (otherwise login page will recognize that user is already logged in and automatically log them in again with same credentials)
+	// Remove all cookies to clear the login page's session (otherwise login page will recognize that user is already logged in and automatically log them in again with same credentials)
 	NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
 	
-	for(NSHTTPCookie *cookie in [cookieStorage cookies])
+	for (NSHTTPCookie *cookie in [cookieStorage cookies])
 	{
-		NSString *baseDomain = [BASE_URL stringByReplacingOccurrencesOfString:@"https://" withString:@""];
-		NSRange domainRange = [[cookie domain] rangeOfString:baseDomain];
-		
-		if (domainRange.length > 0)
-		{
-			[cookieStorage deleteCookie:cookie];
-		}
+		[cookieStorage deleteCookie:cookie];
 	}
 	
 	NSString *fullURL = [NSString stringWithFormat:AUTHENTICATION_BASE_URL @"Authentication?idp=%@&aud=%@",
@@ -239,13 +219,20 @@
 {
 	// Obtain keyboard size
 	CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	CGFloat safeAreaBottomPadding = 0;
+	
+	// Eliminate the extra padding under the toolbar on iPhone X devices
+	if (@available(iOS 11.0, *))
+	{
+		safeAreaBottomPadding = UIApplication.sharedApplication.keyWindow.safeAreaInsets.bottom;
+	}
 	
 	// Animate toolbar above keyboard
 	[UIView beginAnimations:@"ToolbarAboveKeyboard" context:nil];
 	[UIView setAnimationDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
 	[UIView setAnimationCurve:[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
 	
-	[self.constraintToolbarBottom setConstant:keyboardFrame.size.height];
+	[self.constraintToolbarBottom setConstant:keyboardFrame.size.height - safeAreaBottomPadding];
 	[self.view layoutIfNeeded];
 	
 	[UIView commitAnimations];
@@ -343,7 +330,7 @@
 {
 	NSString *currentURL = webView.request.URL.absoluteString;
 	
-	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse method.
+	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse:.
 	
 	// URL is the login screen
 	if ([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
@@ -367,7 +354,7 @@
 						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
 						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
 						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
-						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tm4321$$'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tmd4321$$'; break;"
 					"}"
 				"};"
 				

@@ -6,8 +6,7 @@
 //  Copyright © 2016 SolutionBuilt. All rights reserved.
 //
 
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
+#import <CallKit/CallKit.h>
 
 #import "ErrorAlertController.h"
 
@@ -113,11 +112,8 @@
 	[alertController addAction:retryAction];
 	[alertController addAction:cancelAction];
 	
-	// PreferredAction only supported in 9.0+
-	if ([alertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[alertController setPreferredAction:retryAction];
-	}
+	// Set preferred action
+	[alertController setPreferredAction:retryAction];
 	
 	// Show alert
 	dispatch_async(dispatch_get_main_queue(), ^
@@ -195,13 +191,13 @@
 
 - (NSString *)getOfflineMessage
 {
+	CXCallObserver *callObserver = [CXCallObserver new];
 	NSString *offlineMessage = @"You must connect to a Wi-Fi or cellular data network to continue.";
-	CTCallCenter *callCenter = [[CTCallCenter alloc] init];
 	
 	// Update messaging if a call is currently connected
-	for(CTCall *call in callCenter.currentCalls)
+	for (CXCall *call in callObserver.calls)
 	{
-		if (call.callState == CTCallStateConnected)
+		if (! call.hasEnded)
 		{
 			offlineMessage = @"Your device does not support simultaneous voice and cellular data connections. You must connect to a Wi-Fi network to continue.";
 		}

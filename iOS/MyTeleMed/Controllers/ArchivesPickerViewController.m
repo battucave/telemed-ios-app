@@ -65,7 +65,7 @@
 	// Get list of accounts
 	[self.accountModel getAccounts];
 	
-	// Note: Account button title set to preselected row in updateAccounts method
+	// Note: Account button title set to preselected row in updateAccounts:
 }
 
 - (IBAction)selectAccounts:(id)sender
