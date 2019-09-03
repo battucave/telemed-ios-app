@@ -440,18 +440,18 @@
 - (void)viewDidBecomeActive:(NSNotification *)notification
 {
 	// Refresh notifications enabled status when app returns from Settings app
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
-	{
-		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
 
-		[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
+	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
+	{
+		[self setAreNotificationsEnabled:(settings.authorizationStatus == UNAuthorizationStatusAuthorized)];
+		
+		// Reload notification cells
+		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			[self setAreNotificationsEnabled:(settings.authorizationStatus == UNAuthorizationStatusAuthorized)];
-			
-			// Reload notification cells
 			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
-		}];
-	});
+		});
+	}];
 }
 
 // Return server notification settings from NotificationSettingModel delegate
