@@ -26,7 +26,9 @@
 
 @property (weak, nonatomic) IBOutlet UISwitch *switchTimeout;
 
+@property (nonatomic) NSString *defaultTimeoutFooterTitle;
 @property (nonatomic) BOOL mayDisableTimeout;
+@property (nonatomic) id <ProfileProtocol> profile;
 @property (nonatomic) NSInteger sectionAboutTeleMed;
 @property (nonatomic) NSInteger sectionNotifications;
 @property (nonatomic) NSInteger sectionSessionTimeout;
@@ -74,11 +76,8 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Set may disable timeout value
-	id <ProfileProtocol> profile;
-	
 	#ifdef MYTELEMED
-		profile = [MyProfileModel sharedInstance];
+		[self setProfile:[MyProfileModel sharedInstance]];
 	
 		// Load notification settings for each type
 		NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
@@ -108,29 +107,33 @@
 		}];
 
 	#elif defined MED2MED
-		profile = [UserProfileModel sharedInstance];
+		[self setProfile:[UserProfileModel sharedInstance]];
 	#endif
 	
-	if (profile)
+	// Set may disable timeout value
+	if (self.profile)
 	{
-		self.mayDisableTimeout = profile.MayDisableTimeout;
+		self.mayDisableTimeout = self.profile.MayDisableTimeout;
 	}
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	
+	// Store default timeout footer title
+	[self setDefaultTimeoutFooterTitle:[super tableView:self.tableView titleForFooterInSection:0]];
 }
 
 - (IBAction)timeoutChanged:(id)sender
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	
+	// If remember me option is enabled
 	if (self.switchTimeout.isOn)
-	{
-		[settings setBool:YES forKey:@"enableTimeout"];
-	}
-	else
 	{
 		UIAlertController *updateTimeoutAlertController = [UIAlertController alertControllerWithTitle:@"Confirm Time-Out is Disabled" message:@"HIPAA standards mandate a timeout. If this feature is disabled, please utilize your phone's lock settings to manually enforce this." preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 		{
-			[self.switchTimeout setOn:YES];
+			[self.switchTimeout setOn:NO];
 		}];
 		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
@@ -138,6 +141,9 @@
 			
 			[settings setBool:NO forKey:@"enableTimeout"];
 			[settings synchronize];
+		
+			// Toggle title of footer in timeout section
+			[self toggleSectionTimeoutFooterTitle:NO];
 		}];
 	
 		[updateTimeoutAlertController addAction:confirmAction];
@@ -149,8 +155,45 @@
 		// Show alert
 		[self presentViewController:updateTimeoutAlertController animated:YES completion:nil];
 	}
+	// If remember me option is disabled
+	else
+	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		[settings setBool:YES forKey:@"enableTimeout"];
+		[settings synchronize];
+		
+		// Toggle title of footer in timeout section
+		[self toggleSectionTimeoutFooterTitle:YES];
+	}
+}
+
+- (NSString *)getSectionTimeoutFooterTitle:(BOOL)isTimeoutEnabled
+{
+	if (isTimeoutEnabled)
+	{
+		NSNumber *timeoutPeriodMins = (self.profile ? self.profile.TimeoutPeriodMins : [NSNumber numberWithInteger:30]);
+		
+		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:[timeoutPeriodMins stringValue]];
+	}
+	else
+	{
+		return @"Your login session will not expire.";
+	}
+}
+
+- (void)toggleSectionTimeoutFooterTitle: (BOOL)isTimeoutEnabled
+{
+	UITableViewHeaderFooterView *footerView = [self.tableView footerViewForSection:self.sectionSessionTimeout];
 	
-	[settings synchronize];
+	[UIView setAnimationsEnabled:NO];
+	[self.tableView beginUpdates];
+
+	[footerView.textLabel setText:[self getSectionTimeoutFooterTitle:isTimeoutEnabled]];
+	[footerView sizeToFit];
+
+	[self.tableView endUpdates];
+	[UIView setAnimationsEnabled:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -198,10 +241,20 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-	// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its footer title
-	if (section == self.sectionSessionTimeout && ! self.mayDisableTimeout)
+	if (section == self.sectionSessionTimeout)
 	{
-		return @"";
+		// If user's account settings prevent MayDisableTimeout, hide session timeout section by clearing its footer title
+		if (! self.mayDisableTimeout)
+		{
+			return @"";
+		}
+		// Update default footer title with user's account TimeoutPeriodMins
+		else
+		{
+			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			
+			return [self getSectionTimeoutFooterTitle:[settings boolForKey:@"enableTimeout"]];
+		}
 	}
 	
 	#ifdef MYTELEMED
@@ -224,7 +277,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[self.switchTimeout setOn:[settings boolForKey:@"enableTimeout"]];
+		[self.switchTimeout setOn:! [settings boolForKey:@"enableTimeout"]];
 	}
 	// Add version and build numbers to version cell
 	else if (indexPath.section == self.sectionAboutTeleMed)

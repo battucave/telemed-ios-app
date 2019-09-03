@@ -2530,7 +2530,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.89411764705882346" green="0.89411764705882346" blue="0.89411764705882346" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <sections>
-                            <tableViewSection headerTitle="SESSION TIMEOUT" footerTitle="Your login session will timeout after 30 minutes of inactivity if enabled." id="MeM-Hz-69f">
+                            <tableViewSection headerTitle="SESSION TIMEOUT" footerTitle="Your login session will expire after %d minutes of inactivity. This period is set by your provider." id="MeM-Hz-69f">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Fbf-Tq-EvW">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
@@ -2539,7 +2539,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timeout Enabled" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ylM-Vr-5XF">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remember Me" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ylM-Vr-5XF">
                                                     <rect key="frame" x="16" y="11.5" width="273" height="21"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
@@ -5283,7 +5283,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="ejp-fl-nDj"/>
         <segue reference="9pZ-e2-2FC"/>
         <segue reference="ZfR-s3-nyT"/>
-        <segue reference="xfy-la-02K"/>
+        <segue reference="bgc-j8-Gjl"/>
         <segue reference="xeH-nb-wrL"/>
         <segue reference="KfY-sd-ej7"/>
         <segue reference="V9Q-rq-EEe"/>
