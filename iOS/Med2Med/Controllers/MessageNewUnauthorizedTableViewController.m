@@ -15,7 +15,7 @@
 @property (nonatomic) BOOL didRequestAccount;
 @property (nonatomic) BOOL didRequestHospital;
 @property (nonatomic) CGFloat headerHeight;
-@property (nonatomic) NSString *textDefaultHeader;
+@property (nonatomic) NSString *defaultHeaderTitle;
 
 @end
 
@@ -52,7 +52,7 @@
 			if (isAccountPending)
 			{
 				// Update header text
-				[self setHeaderText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval. Please contact TeleMed for assistance.", self.textDefaultHeader]];
+				[self setHeaderText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval. Please contact TeleMed for assistance.", self.defaultHeaderTitle]];
 			}
 			// Load user's hospitals
 			else
@@ -88,7 +88,7 @@
 						}
 						
 						// Update header text
-						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, textHeader]];
+						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.defaultHeaderTitle, textHeader]];
 					}
 				}];
 			}
@@ -99,7 +99,7 @@
 			if (isAccountPending)
 			{
 				// Update header text
-				[self setHeaderText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval.", self.textDefaultHeader]];
+				[self setHeaderText:[NSString stringWithFormat:@"%@ Your requested Medical Group is currently pending approval.", self.defaultHeaderTitle]];
 			}
 			// Load user's hospitals
 			else
@@ -140,7 +140,7 @@
 						}
 						
 						// Update header text
-						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.textDefaultHeader, textHeader]];
+						[self setHeaderText:[NSString stringWithFormat:@"%@ %@", self.defaultHeaderTitle, textHeader]];
 					}
 				}];
 			}*/
@@ -152,8 +152,8 @@
 {
 	[super viewDidAppear:animated];
 	
-	// Store default header text
-	[self setTextDefaultHeader:[self tableView:self.tableView titleForHeaderInSection:0]];
+	// Store default header title
+	[self setDefaultHeaderTitle:[self tableView:self.tableView titleForHeaderInSection:0]];
 }
 
 // Unwind segue from AccountRequestTableViewController and update header text to show pending medical group (account) message
