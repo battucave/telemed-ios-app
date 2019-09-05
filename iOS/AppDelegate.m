@@ -48,8 +48,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	
 	// Initialize call observer
 	self.callObserver = [CXCallObserver new];
 	
@@ -65,6 +63,8 @@
 	__unused TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLaunching:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Med2Med - Prevent swipe message from ever appearing
 	#ifdef MED2MED
@@ -293,10 +293,10 @@
 {
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
+	BOOL timeoutDisabled = [settings boolForKey:@"disableTimeout"];
 	
 	// Only log user out if timeout is enabled and user is not currently on phone call
-	if (timeoutEnabled && ! [self isCallConnected])
+	if (! timeoutDisabled && ! [self isCallConnected])
 	{
 		// Delay logout to ensure application is fully loaded
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
@@ -340,26 +340,26 @@
 
 - (void)didFinishLaunching:(NSNotification *)notification
 {
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	
 	// Remove reachability observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If session timeout preference has never been set, then default it to true
-	if (! [settings objectForKey:@"enableTimeout"])
+	// TEMPORARY (Version 4.08) - Timeout logic was changed to use disableTimeout so that it doesn't have to be initialized - This logic can be removed in a future update (only after Med2Med has received the update)
+	if ([settings objectForKey:@"enableTimeout"])
 	{
-		[settings setBool:YES forKey:@"enableTimeout"];
+		[settings setBool:! [settings boolForKey:@"enableTimeout"] forKey:@"disableTimeout"];
+		[settings removeObjectForKey:@"enableTimeout"];
 		[settings synchronize];
 	}
 	
-	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
+	BOOL timeoutDisabled = [settings boolForKey:@"disableTimeout"];
 	
-	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
+	NSLog(@"Timeout Disabled: %@", (timeoutDisabled ? @"YES" : @"NO"));
 	
 	// If user has timeout disabled and a refresh token already exists, then attempt to bypass the login screen
-	if (! timeoutEnabled && authenticationModel.RefreshToken != nil)
+	if (timeoutDisabled && authenticationModel.RefreshToken != nil)
 	{
 		id <ProfileProtocol> profile;
 		

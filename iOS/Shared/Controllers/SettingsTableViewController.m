@@ -139,11 +139,11 @@
 		{
 			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
-			[settings setBool:NO forKey:@"enableTimeout"];
+			[settings setBool:YES forKey:@"disableTimeout"];
 			[settings synchronize];
 		
 			// Toggle title of footer in timeout section
-			[self toggleSectionTimeoutFooterTitle:NO];
+			[self toggleSectionTimeoutFooterTitle:YES];
 		}];
 	
 		[updateTimeoutAlertController addAction:confirmAction];
@@ -160,36 +160,36 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setBool:YES forKey:@"enableTimeout"];
+		[settings setBool:NO forKey:@"disableTimeout"];
 		[settings synchronize];
 		
 		// Toggle title of footer in timeout section
-		[self toggleSectionTimeoutFooterTitle:YES];
+		[self toggleSectionTimeoutFooterTitle:NO];
 	}
 }
 
-- (NSString *)getSectionTimeoutFooterTitle:(BOOL)isTimeoutEnabled
+- (NSString *)getSectionTimeoutFooterTitle:(BOOL)isTimeoutDisabled
 {
-	if (isTimeoutEnabled)
+	if (isTimeoutDisabled)
+	{
+		return @"Your login session will not expire.";
+	}
+	else
 	{
 		NSNumber *timeoutPeriodMins = (self.profile ? self.profile.TimeoutPeriodMins : [NSNumber numberWithInteger:30]);
 		
 		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:[timeoutPeriodMins stringValue]];
 	}
-	else
-	{
-		return @"Your login session will not expire.";
-	}
 }
 
-- (void)toggleSectionTimeoutFooterTitle: (BOOL)isTimeoutEnabled
+- (void)toggleSectionTimeoutFooterTitle: (BOOL)isTimeoutDisabled
 {
 	UITableViewHeaderFooterView *footerView = [self.tableView footerViewForSection:self.sectionSessionTimeout];
 	
 	[UIView setAnimationsEnabled:NO];
 	[self.tableView beginUpdates];
 
-	[footerView.textLabel setText:[self getSectionTimeoutFooterTitle:isTimeoutEnabled]];
+	[footerView.textLabel setText:[self getSectionTimeoutFooterTitle:isTimeoutDisabled]];
 	[footerView sizeToFit];
 
 	[self.tableView endUpdates];
@@ -253,7 +253,7 @@
 		{
 			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
-			return [self getSectionTimeoutFooterTitle:[settings boolForKey:@"enableTimeout"]];
+			return [self getSectionTimeoutFooterTitle:[settings boolForKey:@"disableTimeout"]];
 		}
 	}
 	
@@ -277,7 +277,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[self.switchTimeout setOn:! [settings boolForKey:@"enableTimeout"]];
+		[self.switchTimeout setOn:[settings boolForKey:@"disableTimeout"]];
 	}
 	// Add version and build numbers to version cell
 	else if (indexPath.section == self.sectionAboutTeleMed)
