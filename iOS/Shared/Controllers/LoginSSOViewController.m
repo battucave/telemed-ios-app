@@ -299,7 +299,7 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	//NSLog(@"Current URL: %@", request.URL.absoluteString);
+	// NSLog(@"Current URL: %@", request.URL.absoluteString);
 	
 	NSString *targetURL = AUTHENTICATION_BASE_URL AUTHENTICATION_CALLBACK_PAGE;
 	

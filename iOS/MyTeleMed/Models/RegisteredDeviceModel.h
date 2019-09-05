@@ -16,11 +16,9 @@
 @property (nonatomic) NSString *PlatformID;
 @property (nonatomic) NSString *Token;
 
-@property (nonatomic) BOOL shouldRegister; // This property not set by web service
-
 + (instancetype)sharedInstance;
 
-- (BOOL)didSkipRegistration;
+- (BOOL)hasSkippedRegistration;
 - (BOOL)isRegistered;
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback;
 - (void)setCurrentDevice:(RegisteredDeviceModel *)registeredDevice;

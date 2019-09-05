@@ -575,7 +575,7 @@
                                     <barButtonItem systemItem="refresh" id="fOg-rh-QWw">
                                         <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <action selector="registerApp:" destination="2Ma-B1-RxK" id="nid-TA-xg5"/>
+                                            <action selector="registerDevice:" destination="2Ma-B1-RxK" id="xSe-gS-fUn"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Z3d-2n-jK7"/>
@@ -602,7 +602,7 @@
                     <connections>
                         <outlet property="barButtonArchive" destination="mCr-bh-Hsa" id="eJK-q9-pnv"/>
                         <outlet property="barButtonCompose" destination="KT9-F2-kDn" id="pAM-EY-4Qw"/>
-                        <outlet property="barButtonRegisterApp" destination="fOg-rh-QWw" id="Nzg-ck-utQ"/>
+                        <outlet property="barButtonRegisterDevice" destination="fOg-rh-QWw" id="Po0-80-k0X"/>
                         <outlet property="barButtonRightFlexibleSpace" destination="Z3d-2n-jK7" id="LAv-GT-is4"/>
                         <outlet property="sideNavigationButton" destination="0mz-kV-hYi" id="q96-PI-adq"/>
                         <outlet property="toolbarBottom" destination="51k-8H-waR" id="esS-S2-IQd"/>

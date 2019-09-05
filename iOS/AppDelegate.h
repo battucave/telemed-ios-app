@@ -22,8 +22,4 @@
 - (void)goToLoginScreen;
 - (void)goToNextScreen;
 
-#ifdef MYTELEMED
-	- (void)registerForRemoteNotifications;
-#endif
-
 @end

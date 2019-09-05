@@ -36,8 +36,6 @@
 			if ([registeredDeviceModel isRegistered])
 			{
 				// Phone Number was previously registered with TeleMed, but we should update the device token in case it changed
-				[registeredDeviceModel setShouldRegister:YES];
-				
 				[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
 				{
 					// If there is an error other than the device offline error, show an error and require user to enter their phone number again

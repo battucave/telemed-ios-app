@@ -120,7 +120,6 @@
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
-			[registeredDeviceModel setShouldRegister:YES];
 			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
 			
 			// Register device with TeleMed
@@ -130,8 +129,17 @@
 				
 				if (success)
 				{
-					// Go to the next screen in the login process
-					[appDelegate goToNextScreen];
+					// Ask user to authorize push notifications for the app
+					UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+
+					[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
+					{
+						dispatch_async(dispatch_get_main_queue(), ^
+						{
+							// Go to the next screen in the login process
+							[appDelegate goToNextScreen];
+						});
+					}];
 				}
 				else
 				{
