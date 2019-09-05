@@ -120,13 +120,10 @@
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
-			// Register phone number along with new device token
 			[registeredDeviceModel setShouldRegister:YES];
-			
-			// Save phone number to device
 			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
 			
-			// Run register device web service
+			// Register device with TeleMed
 			[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 			{
 				AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

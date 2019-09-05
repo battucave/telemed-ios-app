@@ -33,7 +33,7 @@
 			NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
 			
 			// Check if user has previously registered this device with TeleMed
-			if (registeredDeviceModel.hasRegistered)
+			if ([registeredDeviceModel isRegistered])
 			{
 				// Phone Number was previously registered with TeleMed, but we should update the device token in case it changed
 				[registeredDeviceModel setShouldRegister:YES];
@@ -43,9 +43,6 @@
 					// If there is an error other than the device offline error, show an error and require user to enter their phone number again
 					if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 					{
-						// If the request was not successful, direct the user to re-enter their phone number again (handled by AppDelegate's goToNextScreen:)
-						[registeredDeviceModel setHasRegistered:NO];
-						
 						// Show the error even if success returned true so that TeleMed can track issue down
 						[self showWebViewError:[NSString stringWithFormat:@"There was a problem registering your device on our network:<br>%@", registeredDeviceError.localizedDescription]];
 					}

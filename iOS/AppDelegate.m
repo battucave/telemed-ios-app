@@ -132,22 +132,10 @@
 	
 	[settings synchronize];
 	
-	// MyTeleMed - Register for push notifications
+	// MyTeleMed - Register device for push notifications
 	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
-		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-		
-		[userNotificationCenter setDelegate:self];
-		[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
-		{
-			if (granted)
-			{
-				dispatch_async(dispatch_get_main_queue(), ^
-				{
-					[application registerForRemoteNotifications];
-				});
-			}
-		}];
+		[self registerForRemoteNotifications];
 	
 		NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 	
@@ -580,8 +568,15 @@
 	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 	{
-		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-		if (error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
+		// If device registration was successful, then post notification to any observers within the app (MessagesViewController and SettingsTableViewController)
+		if (success)
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidRegisterForRemoteNotifications" object:self userInfo:@{
+				@"deviceToken": [tokenString copy]
+			}];
+		}
+		// If there is an error other than the device offline error, then show it
+		else if (error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 		{
 			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			
@@ -593,6 +588,11 @@
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
+	
+	// Post notification to any observers within the app (MessagesViewController and SettingsTableViewController)
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:self userInfo:@{
+		@"errorMessage": error.localizedDescription
+	}];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
@@ -739,7 +739,7 @@
 		[self goToMainScreen];
 	}
 	// If device has not previously registered with TeleMed, then go to phone number screen
-	else if (! registeredDeviceModel.hasRegistered)
+	else if (! [registeredDeviceModel isRegistered] && ! [registeredDeviceModel didSkipRegistration])
 	{
 		[self goToPhoneNumberScreen];
 	}
@@ -951,6 +951,23 @@
 	return [notificationData copy];
 }
 
+// Register device for push notifications
+- (void)registerForRemoteNotifications
+{
+	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+
+	[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
+	{
+		if (granted)
+		{
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[[UIApplication sharedApplication] registerForRemoteNotifications];
+			});
+		}
+	}];
+}
+
 /**
  * Re-register user's device with TeleMed if needed
  */
@@ -962,9 +979,10 @@
 	NSLog(@"Preferred Account ID: %@", profile.MyPreferredAccount.ID);
 	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
+	NSLog(@"Has Registered: %@", [registeredDeviceModel isRegistered] ? @"Yes" : @"No");
 	
 	// If this device was previously registered with TeleMed, then we should update the device token in case it changed
-	if (registeredDeviceModel.hasRegistered)
+	if ([registeredDeviceModel isRegistered])
 	{
 		[registeredDeviceModel setShouldRegister:YES];
 		
@@ -976,12 +994,6 @@
 				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 				
 				[errorAlertController show:registeredDeviceError];
-			}
-			
-			// If the request was not successful, direct the user to re-enter their phone number again (handled by goToNextScreen:)
-			if (! success)
-			{
-				[registeredDeviceModel setHasRegistered:NO];
 			}
 			
 			// Go to the next screen in the login process

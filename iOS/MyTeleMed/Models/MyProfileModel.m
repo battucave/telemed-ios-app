@@ -150,8 +150,7 @@
 		// If found, set the current device's phone number
 		if ([registeredDevice.ID caseInsensitiveCompare:registeredDeviceModel.ID] == NSOrderedSame)
 		{
-			[registeredDeviceModel setHasRegistered:YES];
-			[registeredDeviceModel setPhoneNumber:registeredDevice.PhoneNumber];
+			[registeredDeviceModel setCurrentDevice:registeredDevice];
 			
 			NSLog(@"Current Device already Registered with ID: %@ and Phone Number: %@", registeredDeviceModel.ID, registeredDeviceModel.PhoneNumber);
 		}

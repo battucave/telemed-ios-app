@@ -79,13 +79,13 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oyb-iw-vYL">
-                                                            <rect key="frame" x="17" y="11.5" width="20" height="20"/>
+                                                            <rect key="frame" x="17" y="10" width="23" height="23.5"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Messages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFg-Ic-1iw">
-                                                            <rect key="frame" x="47" y="0.0" width="258" height="43"/>
+                                                            <rect key="frame" x="50" y="0.0" width="255" height="43"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -198,7 +198,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6r-Ld-dvh">
-                                                            <rect key="frame" x="16" y="11.5" width="23" height="20"/>
+                                                            <rect key="frame" x="16" y="10" width="23" height="23.5"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -572,6 +572,12 @@
                                             <segue destination="s5K-mq-c5U" kind="show" identifier="showMessageNewFromMessages" id="L7H-SQ-oo6"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem systemItem="refresh" id="fOg-rh-QWw">
+                                        <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="registerApp:" destination="2Ma-B1-RxK" id="nid-TA-xg5"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Z3d-2n-jK7"/>
                                 </items>
                                 <color key="barTintColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -596,6 +602,7 @@
                     <connections>
                         <outlet property="barButtonArchive" destination="mCr-bh-Hsa" id="eJK-q9-pnv"/>
                         <outlet property="barButtonCompose" destination="KT9-F2-kDn" id="pAM-EY-4Qw"/>
+                        <outlet property="barButtonRegisterApp" destination="fOg-rh-QWw" id="Nzg-ck-utQ"/>
                         <outlet property="barButtonRightFlexibleSpace" destination="Z3d-2n-jK7" id="LAv-GT-is4"/>
                         <outlet property="sideNavigationButton" destination="0mz-kV-hYi" id="q96-PI-adq"/>
                         <outlet property="toolbarBottom" destination="51k-8H-waR" id="esS-S2-IQd"/>
@@ -670,7 +677,7 @@
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="Tcd-A0-vuW" customClass="MessageComposeTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="TlV-qX-6XJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="428"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <sections>
@@ -801,7 +808,7 @@
             <objects>
                 <viewController storyboardIdentifier="MessageRecipientPickerViewController" id="dbR-X4-VWn" customClass="MessageRecipientPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vCf-2A-71b">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7fW-0Y-ehL">
@@ -825,7 +832,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="108" width="375" height="415"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="427"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
@@ -899,7 +906,7 @@
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="4fX-RS-WG1" customClass="MessagesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="89" sectionHeaderHeight="1" sectionFooterHeight="1" id="60m-NG-kHz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
@@ -1738,7 +1745,7 @@
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="Zku-Ds-7w4" customClass="MessageForwardViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1jG-UR-rFx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yc7-wn-ucx">
@@ -1784,7 +1791,7 @@
                                 </constraints>
                             </view>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afd-mk-ap7">
-                                <rect key="frame" x="0.0" y="107" width="375" height="416"/>
+                                <rect key="frame" x="0.0" y="107" width="375" height="428"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <segue destination="Tcd-A0-vuW" kind="embed" identifier="embedMessageForwardTable" id="dmg-yj-Han"/>
@@ -1823,11 +1830,11 @@
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="VD9-gx-QWd" customClass="MessageTeleMedViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vMX-sx-xfo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vjQ-9g-J4Z">
-                                <rect key="frame" x="0.0" y="64" width="375" height="459"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="471"/>
                                 <connections>
                                     <segue destination="vUd-oo-bvD" kind="embed" identifier="embedMessageTeleMedTable" id="jIb-YA-bfg"/>
                                 </connections>
@@ -3292,7 +3299,7 @@
             <objects>
                 <viewController id="WLz-LF-MQ6" customClass="MessageHistoryViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tsp-Tx-wNi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvx-gW-eRD">
@@ -3441,7 +3448,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="62" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Cwo-PI-RCQ">
-                                <rect key="frame" x="0.0" y="215" width="375" height="308"/>
+                                <rect key="frame" x="0.0" y="215" width="375" height="320"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="MessageEventCell" rowHeight="62" id="kRw-nD-ZKD" customClass="MessageEventCell">
@@ -4863,7 +4870,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="wHJ-kp-64t" customClass="MessageEscalateViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rnM-pC-9VD">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ih4-WG-1sO">
@@ -5024,7 +5031,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <objects>
                 <tableViewController title="Redirect" id="tgV-mw-u1T" customClass="MessageRedirectTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" id="qDf-W0-JUb">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="rAy-RQ-zuX">
@@ -5133,7 +5140,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <objects>
                 <viewController storyboardIdentifier="OnCallSlotPickerViewController" id="i6a-8F-IOQ" customClass="OnCallSlotPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T4n-EA-Fvy">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="523"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="535"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u12-YD-jFC">
@@ -5161,7 +5168,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="66" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="0Yb-Ay-S4Z">
-                                <rect key="frame" x="0.0" y="108" width="375" height="415"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="427"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OnCallSlotCell" rowHeight="66" id="IB2-aV-hhd" customClass="OnCallSlotCell">
@@ -5292,7 +5299,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="duc-Go-Hul"/>
         <segue reference="E1e-BY-bXG"/>
         <segue reference="VXf-fn-O9m"/>
-        <segue reference="1fs-hi-JGd"/>
+        <segue reference="yVi-an-TG3"/>
         <segue reference="BhK-Le-o3I"/>
         <segue reference="dmg-yj-Han"/>
         <segue reference="FA7-fW-yLW"/>

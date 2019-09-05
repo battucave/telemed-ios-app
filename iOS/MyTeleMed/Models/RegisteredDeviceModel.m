@@ -8,6 +8,13 @@
 
 #import "RegisteredDeviceModel.h"
 
+@interface RegisteredDeviceModel()
+
+@property (nonatomic) BOOL didSkipRegistration;
+@property (nonatomic) BOOL isRegistered;
+
+@end
+
 @implementation RegisteredDeviceModel
 
 @synthesize ID = _ID;
@@ -28,7 +35,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		#if TARGET_IPHONE_SIMULATOR
 			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
 		
-			[sharedRegisteredDeviceInstance setHasRegistered:YES];
+			[sharedRegisteredDeviceInstance setIsRegistered:YES];
 		#endif
 	});
 	
@@ -79,16 +86,32 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	return _AppVersionInfo;
 }
 
+// Set public didSkipRegistration setter
+- (BOOL)didSkipRegistration
+{
+	return _didSkipRegistration;
+}
+
+// Set public isRegistered setter
+- (BOOL)isRegistered
+{
+	return _isRegistered;
+}
+
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback
 {
+	// Reset isRegistered flag
+	[self setIsRegistered:NO];
+	
 	// Device simulator has no phone number and no device token. Continuing will cause web service error
 	// #ifdef DEBUG
 	#if TARGET_IPHONE_SIMULATOR
 		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
 	
 		// Disable future registration until next login
-		self.hasRegistered = YES;
-		self.shouldRegister = NO;
+		[self setDidSkipRegistration:YES];
+		[self setIsRegistered:YES];
+		[self setShouldRegister:NO];
 		
 		callback(YES, nil);
 		
@@ -106,7 +129,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 			// If user has already entered their phone number, but notification permissions are disabled/rejected, then pretend that the device has registered anyway to avoid infinite loop of showing phone number screen
 			if (self.PhoneNumber != nil)
 			{
-				self.hasRegistered = YES;
+				[self setDidSkipRegistration:YES];
 			}
 		}
 		
@@ -138,8 +161,9 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		if (operation.response.statusCode == 204)
 		{
 			// Disable future registration until next login
-			self.hasRegistered = YES;
-			self.shouldRegister = NO;
+			[self setDidSkipRegistration:NO];
+			[self setIsRegistered:YES];
+			[self setShouldRegister:NO];
 			
 			callback(YES, nil);
 		}
@@ -159,6 +183,20 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		
 		callback(NO, error);
 	}];
+}
+
+- (void)setCurrentDevice:(RegisteredDeviceModel *)registeredDevice
+{
+	if (! registeredDevice)
+	{
+		return;
+	}
+	
+	// Set current device phone number (ID, AppVersionInfo, and Platform ID are generated locally on the device; Token should only be set by Apple's notifications service)
+	[self setPhoneNumber:registeredDevice.PhoneNumber];
+	
+	// Device is registered
+	[self setIsRegistered:YES];
 }
 
 @end

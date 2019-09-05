@@ -6,11 +6,16 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
+#import <UserNotifications/UserNotifications.h>
+
 #import "MessagesViewController.h"
+#import "AppDelegate.h"
+#import "ErrorAlertController.h"
 #import "MessageDetailViewController.h"
 #import "MessagesTableViewController.h"
 #import "SWRevealViewController.h"
 #import "MessageModel.h"
+#import "RegisteredDeviceModel.h"
 
 @interface MessagesViewController ()
 
@@ -20,12 +25,14 @@
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonArchive; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonCompose; // Must be a strong reference
+@property (nonatomic) IBOutlet UIBarButtonItem *barButtonRegisterApp; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // Must be a strong reference
 @property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
-@property (nonatomic) NSArray *selectedMessages;
 @property (nonatomic) NSString *navigationBarTitle;
+@property (nonatomic) RegisteredDeviceModel *registeredDevice;
 @property (weak, nonatomic) UIColor *segmentedControlColor;
+@property (nonatomic) NSArray *selectedMessages;
 
 @end
 
@@ -38,7 +45,20 @@
 	// Store navigation bar title
 	[self setNavigationBarTitle:self.navigationItem.title];
 	
-	// Note: programmatically set right bar button item to Apple's built-in edit button is toggled from within MessagesTableViewController.m based on number of filtered messages
+	[self setRegisteredDevice:[RegisteredDeviceModel sharedInstance]];
+	
+	// If user skipped device registration (rejected push notifications prompt), then add observers to detect if/when the user successfully registers using the register app button
+	if ([self.registeredDevice didSkipRegistration])
+	{
+		// Add application will enter foreground observer to register for remote notifications when user returns from Settings app
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+		
+		// Add remote notification registration observers to detect if user has registered for remote notifications
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+	}
+	
+	// Note: programmatically setting the right bar button item to Apple's built-in edit button is toggled from within MessagesTableViewController.m based on number of filtered messages
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -108,6 +128,47 @@
 	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
 }
 
+- (IBAction)registerApp:(id)sender
+{
+	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+	
+	// Check whether user has already enabled notifications
+	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
+	{
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			// If notifications are already enabled, then user had an issue registering the device with TeleMed so prompt the user to confirm their phone number
+			if (settings.authorizationStatus == UNAuthorizationStatusAuthorized)
+			{
+				[self showPhoneNumberDialog];
+			}
+			// Notifications are not enabled so prompt user to enable them
+			else
+			{
+				UIAlertController *allowNotificationsAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Your device is not registered for notifications. To enable them:\n\n1) Press the Settings button\n2) Tap Notifications\n3) Set 'Allow Notifications' to On" preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+				UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+				{
+					// Open settings app for user to enable notifications
+					[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+				}];
+
+				[allowNotificationsAlertController addAction:settingsAction];
+				[allowNotificationsAlertController addAction:cancelAction];
+
+				// PreferredAction only supported in 9.0+
+				if ([allowNotificationsAlertController respondsToSelector:@selector(setPreferredAction:)])
+				{
+					[allowNotificationsAlertController setPreferredAction:settingsAction];
+				}
+
+				// Show alert
+				[self presentViewController:allowNotificationsAlertController animated:YES completion:nil];
+			}
+		});
+	}];
+}
+
 // Unwind segue from MessageDetailViewController (only after archive action)
 - (IBAction)unwindArchiveMessage:(UIStoryboardSegue *)segue
 {
@@ -115,19 +176,6 @@
 	
 	// Remove selected rows from messages table
 	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
-}
-
-// Override selectedMessages setter
-- (void)setSelectedMessages:(NSArray *)theSelectedMessages
-{
-	_selectedMessages = [NSArray arrayWithArray:theSelectedMessages];
-	NSInteger selectedMessageCount = [theSelectedMessages count];
-	
-	// Toggle archive bar button on/off based on number of selected messages
-	[self.barButtonArchive setEnabled:(selectedMessageCount > 0)];
-	
-	// Update navigation bar title based on number of messages selected
-	[self.navigationItem setTitle:(selectedMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedMessageCount] : self.navigationBarTitle)];
 }
 
 // Override setEditing:
@@ -156,26 +204,33 @@
 	[self toggleToolbarButtons:editing];
 }
 
-- (void)toggleToolbarButtons:(BOOL)editing
+- (void)didFailToRegisterForRemoteNotifications:(NSNotification *)notification
 {
-	// Initialize toolbar items with only the left flexible space button
-	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
+	NSLog(@"Did Fail To Register for Remote Notifications Extras: %@", notification.userInfo);
 	
-	// If in editing mode, add the archive and right flexible space buttons
-	if (editing)
+	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Device Registration Error", NSLocalizedFailureReasonErrorKey, @"There was a problem registering your device. Please try again.", NSLocalizedDescriptionKey, nil]];
+	
+	if ([notification.userInfo objectForKey:@"error"])
 	{
-		[self.barButtonArchive setEnabled:NO];
+		error = (NSError *)[notification.userInfo objectForKey:@"error"];
+	}
+	
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 		
-		[toolbarItems addObject:self.barButtonArchive];
-		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
-	}
-	// If not in editing mode, add the compose button
-	else
-	{
-		[toolbarItems addObject:self.barButtonCompose];
-	}
+		[errorAlertController show:error];
+	});
+}
+
+- (void)didRegisterForRemoteNotifications:(NSNotification *)notification
+{
+	NSLog(@"Did Register for Remote Notifications Extras: %@", notification.userInfo);
 	
-	[self.toolbarBottom setItems:toolbarItems animated:YES];
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self toggleToolbarButtons:super.isEditing];
+	});
 }
 
 // Return modify multiple message states pending from MessageModel delegate
@@ -221,6 +276,74 @@
 	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
 }
 
+// Override selectedMessages setter
+- (void)setSelectedMessages:(NSArray *)theSelectedMessages
+{
+	_selectedMessages = [NSArray arrayWithArray:theSelectedMessages];
+	NSInteger selectedMessageCount = [theSelectedMessages count];
+	
+	// Toggle archive bar button on/off based on number of selected messages
+	[self.barButtonArchive setEnabled:(selectedMessageCount > 0)];
+	
+	// Update navigation bar title based on number of messages selected
+	[self.navigationItem setTitle:(selectedMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedMessageCount] : self.navigationBarTitle)];
+}
+
+- (void)showPhoneNumberDialog
+{
+	UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Please enter the phone number for this device. Your TeleMed profile will be updated." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+	{
+		NSString *phoneNumber = [[registerDeviceAlertController textFields][0] text];
+		
+		// Validate phone number
+		if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
+		{
+			UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+			{
+				// Re-show phone number dialog
+				[self showPhoneNumberDialog];
+			}];
+		
+			[errorAlertController addAction:okAction];
+		
+			// Set preferred action
+			[errorAlertController setPreferredAction:okAction];
+		
+			// Show alert
+			[self presentViewController:errorAlertController animated:YES completion:nil];
+		}
+		// Register device for remote notifications
+		else
+		{
+			[self.registeredDevice setShouldRegister:YES];
+			[self.registeredDevice setPhoneNumber:phoneNumber];
+			
+			[(AppDelegate *)[[UIApplication sharedApplication] delegate] registerForRemoteNotifications];
+		}
+	}];
+
+	[registerDeviceAlertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+		[textField setTextContentType:UITextContentTypeTelephoneNumber];
+		[textField setKeyboardType:UIKeyboardTypePhonePad];
+		[textField setPlaceholder:@"Phone Number"];
+		[textField setText:self.registeredDevice.PhoneNumber];
+	}];
+	[registerDeviceAlertController addAction:continueAction];
+	[registerDeviceAlertController addAction:cancelAction];
+
+	// PreferredAction only supported in 9.0+
+	if ([registerDeviceAlertController respondsToSelector:@selector(setPreferredAction:)])
+	{
+		[registerDeviceAlertController setPreferredAction:continueAction];
+	}
+
+	// Show alert
+	[self presentViewController:registerDeviceAlertController animated:YES completion:nil];
+}
+
 // Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if gesture resulted in opening the SWRevealController
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
@@ -232,6 +355,51 @@
 		[settings setBool:YES forKey:@"swipeMessageDisabled"];
 		[settings synchronize];
 	}
+}
+
+- (void)toggleToolbarButtons:(BOOL)editing
+{
+	// Initialize toolbar items with only the left flexible space button
+	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
+	
+	// If in editing mode, add the archive and right flexible space buttons
+	if (editing)
+	{
+		[self.barButtonArchive setEnabled:NO];
+		
+		[toolbarItems addObject:self.barButtonArchive];
+		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
+	}
+	// If user skipped device registration (rejected push notifications prompt), add the register app button
+	else if ([self.registeredDevice didSkipRegistration])
+	{
+		[toolbarItems addObject:self.barButtonRegisterApp];
+	}
+	// Add the compose button
+	else
+	{
+		[toolbarItems addObject:self.barButtonCompose];
+	}
+	
+	[self.toolbarBottom setItems:toolbarItems animated:YES];
+}
+
+// Check notifications status when app returns to foreground (specifically when app returns from Settings app)
+- (void)viewDidBecomeActive:(NSNotification *)notification
+{
+	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+
+	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
+	{
+		// If user enabled notifications for the first time, then register device for push notifications
+		if (settings.authorizationStatus == UNAuthorizationStatusAuthorized)
+		{
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[self showPhoneNumberDialog];
+			});
+		}
+	}];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -262,6 +430,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc
+{
+	// Remove notification observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

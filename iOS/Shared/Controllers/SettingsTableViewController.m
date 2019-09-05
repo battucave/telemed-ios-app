@@ -437,9 +437,9 @@
 	}
 }
 
+// Refresh notifications enabled status when app returns to foreground (specifically when app returns from Settings app)
 - (void)viewDidBecomeActive:(NSNotification *)notification
 {
-	// Refresh notifications enabled status when app returns from Settings app
 	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
 
 	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
