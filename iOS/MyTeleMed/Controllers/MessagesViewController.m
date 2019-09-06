@@ -29,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
 @property (nonatomic) NSString *navigationBarTitle;
-@property (nonatomic) RegisteredDeviceModel *registeredDevice;
 @property (weak, nonatomic) UIColor *segmentedControlColor;
 @property (nonatomic) NSArray *selectedMessages;
 
@@ -43,19 +42,6 @@
 	
 	// Store navigation bar title
 	[self setNavigationBarTitle:self.navigationItem.title];
-	
-	[self setRegisteredDevice:[RegisteredDeviceModel sharedInstance]];
-	
-	// Add application will enter foreground observer to register for remote notifications when user returns from Settings app
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-	
-	// If device is not registered with TeleMed (rarely the case), then add observers to detect if/when the user successfully registers using the register app button
-	if (! [self.registeredDevice isRegistered])
-	{
-		// Add remote notification registration observers to detect if user has registered for remote notifications
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
-	}
 	
 	// Note: programmatically setting the right bar button item to Apple's built-in edit button is toggled from within MessagesTableViewController.m based on number of filtered messages
 }
@@ -129,16 +115,8 @@
 
 - (IBAction)registerDevice:(id)sender
 {
-	// If device is already registered with TeleMed, then prompt user to enable push notifications
-	if ([self.registeredDevice isRegistered])
-	{
-		[self showNotificationAuthorization];
-	}
-	// If device is not registered with TeleMed, then prompt user to confirm their phone number
-	else
-	{
-		[self showPhoneNumberAlert];
-	}
+	// Run CoreViewController's enableNotifications:
+	[self enableNotifications];
 }
 
 // Unwind segue from MessageDetailViewController (only after archive action)
@@ -176,51 +154,12 @@
 	[self toggleToolbarButtons:editing];
 }
 
-- (void)didFailToRegisterForRemoteNotifications:(NSNotification *)notification
+// Override CoreViewController's didChangeRemoteNotificationAuthorization:
+- (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
 {
-	NSLog(@"Did Fail To Register for Remote Notifications Extras: %@", notification.userInfo);
+	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
 	
-	NSString *errorMessage = @"There was a problem registering your device.";
-	
-	if ([notification.userInfo objectForKey:@"error"])
-	{
-		NSError *originalError = ((NSError *)[notification.userInfo objectForKey:@"error"]);
-		
-		errorMessage = [originalError.localizedDescription stringByAppendingString:@" Please ensure that the phone number already exists in your account."];
-	}
-	
-	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Device Registration Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
-	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController show:error];
-	});
-}
-
-- (void)didRegisterForRemoteNotifications:(NSNotification *)notification
-{
-	NSLog(@"Did Register for Remote Notifications Extras: %@", notification.userInfo);
-	
-	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-	
-	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
-	{
-		dispatch_async(dispatch_get_main_queue(), ^
-		{
-			// If user has already enabled push notifications, then toggle toolbar buttons
-			if (settings.authorizationStatus == UNAuthorizationStatusAuthorized)
-			{
-				[self toggleToolbarButtons:super.isEditing];
-			}
-			// If user has not enabled push notifications, then prompt user to enable them
-			else
-			{
-				[self showNotificationAuthorization];
-			}
-		});
-	}];
+	[self toggleToolbarButtons:super.isEditing];
 }
 
 // Return modify multiple message states pending from MessageModel delegate
@@ -279,84 +218,6 @@
 	[self.navigationItem setTitle:(selectedMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedMessageCount] : self.navigationBarTitle)];
 }
 
-- (void)showNotificationAuthorization
-{
-	UIAlertController *allowNotificationsAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Your device is not registered for notifications. To enable them:\n\n1) Press the Settings button\n2) Tap Notifications\n3) Set 'Allow Notifications' to On" preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		// Open settings app for user to enable notifications
-		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
-	}];
-
-	[allowNotificationsAlertController addAction:settingsAction];
-	[allowNotificationsAlertController addAction:cancelAction];
-
-	// PreferredAction only supported in 9.0+
-	if ([allowNotificationsAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[allowNotificationsAlertController setPreferredAction:settingsAction];
-	}
-
-	// Show alert
-	[self presentViewController:allowNotificationsAlertController animated:YES completion:nil];
-}
-
-- (void)showPhoneNumberAlert
-{
-	UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Please enter the phone number for this device. Your TeleMed profile will be updated." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-	{
-		NSString *phoneNumber = [[registerDeviceAlertController textFields][0] text];
-		
-		// Validate phone number
-		if (phoneNumber.length < 9 || phoneNumber.length > 18 || [phoneNumber isEqualToString:@"0000000000"] || [phoneNumber isEqualToString:@"000-000-0000"])
-		{
-			UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:@"" message:@"Please enter a valid Phone Number." preferredStyle:UIAlertControllerStyleAlert];
-			UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-			{
-				// Re-show phone number dialog
-				[self showPhoneNumberAlert];
-			}];
-		
-			[errorAlertController addAction:okAction];
-		
-			// Set preferred action
-			[errorAlertController setPreferredAction:okAction];
-		
-			// Show alert
-			[self presentViewController:errorAlertController animated:YES completion:nil];
-		}
-		// Register device for remote notifications
-		else
-		{
-			[self.registeredDevice setPhoneNumber:phoneNumber];
-			
-			// (Re-)Register device for push notifications
-			[[UIApplication sharedApplication] registerForRemoteNotifications];
-		}
-	}];
-
-	[registerDeviceAlertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-		[textField setTextContentType:UITextContentTypeTelephoneNumber];
-		[textField setKeyboardType:UIKeyboardTypePhonePad];
-		[textField setPlaceholder:@"Phone Number"];
-		[textField setText:self.registeredDevice.PhoneNumber];
-	}];
-	[registerDeviceAlertController addAction:continueAction];
-	[registerDeviceAlertController addAction:cancelAction];
-
-	// PreferredAction only supported in 9.0+
-	if ([registerDeviceAlertController respondsToSelector:@selector(setPreferredAction:)])
-	{
-		[registerDeviceAlertController setPreferredAction:continueAction];
-	}
-
-	// Show alert
-	[self presentViewController:registerDeviceAlertController animated:YES completion:nil];
-}
-
 // Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if gesture resulted in opening the SWRevealController
 - (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
 {
@@ -372,10 +233,12 @@
 
 - (void)toggleToolbarButtons:(BOOL)editing
 {
-	// Initialize toolbar items with only the left flexible space button
-	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
 
+	// Initialize toolbar items with only the left flexible space button
+	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
+	
 	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
 	{
 		// If in editing mode, add the archive and right flexible space buttons
@@ -387,7 +250,7 @@
 			[toolbarItems addObject:self.barButtonRightFlexibleSpace];
 		}
 		// If device is not registered with TeleMed or push notifications are not enabled, then add register app button
-		else if (! [self.registeredDevice isRegistered] || settings.authorizationStatus != UNAuthorizationStatusAuthorized)
+		else if (! [registeredDevice isRegistered] || settings.authorizationStatus != UNAuthorizationStatusAuthorized)
 		{
 			[toolbarItems addObject:self.barButtonRegisterDevice];
 		}
@@ -402,16 +265,6 @@
 			[self.toolbarBottom setItems:toolbarItems animated:YES];
 		});
 	}];
-}
-
-// Event for when app returns to foreground (specifically when app returns from Settings app)
-- (void)viewDidBecomeActive:(NSNotification *)notification
-{
-	// If device is already registered with TeleMed, then toggle toolbar buttons in case the user enabled notifications
-	if ([self.registeredDevice isRegistered])
-	{
-		[self toggleToolbarButtons:super.isEditing];
-	}
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -442,12 +295,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

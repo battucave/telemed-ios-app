@@ -15,6 +15,7 @@
 #ifdef MYTELEMED
 	#import "SettingsNotificationsTableViewController.h"
 	#import "MyProfileModel.h"
+	#import "RegisteredDeviceModel.h"
 #endif
 
 #ifdef MED2MED
@@ -61,14 +62,13 @@
 		[self setSectionAboutTeleMed:2];
 	
 	#elif defined MYTELEMED
+		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	
 		[self setSectionAboutTeleMed:3];
 		[self setSectionNotifications:1];
 	
 		// Initialize notifications enabled value
-		[self setAreNotificationsEnabled:YES];
-	
-		// Add application will enter foreground observer to refresh notifications section when user returns from Settings app
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+		[self setAreNotificationsEnabled:[registeredDevice isRegistered]];
 	#endif
 }
 
@@ -406,52 +406,28 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
+// Override CoreTableViewController's didChangeRemoteNotificationAuthorization:
+- (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
+{
+	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
+	
+	[self setAreNotificationsEnabled:isEnabled];
+	
+	// Reload notification cells
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
+	});
+}
+
 -(IBAction)notificationsChanged:(id)sender
 {
 	// Instruct user how to enable notifications
 	if (self.switchNotifications.isOn)
 	{
-		UIAlertController *allowNotificationsAlertController = [UIAlertController alertControllerWithTitle:@"Enable Notifications" message:@"Please confirm your preference to enable notifications.\n\n1) Press the Settings button\n2) Tap Notifications\n3) Set 'Allow Notifications' to On" preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
-		{
-			// Notifications are still disabled so disable switch
-			[self.switchNotifications setOn:NO];
-		}];
-		UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-		{
-			// Open settings app for user to enable notifications
-			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
-		}];
-
-		[allowNotificationsAlertController addAction:settingsAction];
-		[allowNotificationsAlertController addAction:cancelAction];
-
-		// PreferredAction only supported in 9.0+
-		if ([allowNotificationsAlertController respondsToSelector:@selector(setPreferredAction:)])
-		{
-			[allowNotificationsAlertController setPreferredAction:settingsAction];
-		}
-
-		// Show alert
-		[self presentViewController:allowNotificationsAlertController animated:YES completion:nil];
+		// Run CoreTableViewController's enableNotifications:
+		[self enableNotifications:@"Please confirm your preference to enable notifications."];
 	}
-}
-
-// Refresh notifications enabled status when app returns to foreground (specifically when app returns from Settings app)
-- (void)viewDidBecomeActive:(NSNotification *)notification
-{
-	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-
-	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
-	{
-		[self setAreNotificationsEnabled:(settings.authorizationStatus == UNAuthorizationStatusAuthorized)];
-		
-		// Reload notification cells
-		dispatch_async(dispatch_get_main_queue(), ^
-		{
-			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
-		});
-	}];
 }
 
 // Return server notification settings from NotificationSettingModel delegate
