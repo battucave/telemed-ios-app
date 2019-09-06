@@ -96,18 +96,18 @@
 		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
 		[self hideActivityIndicator:^
 		{
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
-			{
-				[self.delegate callTeleMedError:error];
-			} */
-		
 			// Show error even if user has navigated to another screen
 			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self callTeleMed];
 			}];
+			
+			// Handle error via delegate
+			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			{
+				[self.delegate callTeleMedError:error];
+			} */
 		}];
 	}];
 	
@@ -172,11 +172,11 @@
 				[self callSenderForMessage:messageID recordCall:recordCall];
 			}];
 			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
+			// Handle error via delegate (still used)
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
 			{
 				[self.delegate callSenderError:error];
-			} */
+			}
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -192,18 +192,18 @@
 		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
 		[self hideActivityIndicator:^
 		{
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
-			{
-				[self.delegate callSenderError:error];
-			} */
-		
 			// Show error even if user has navigated to another screen
 			[self showError:error withCallback:^
 			{
 				// Include callback to retry the request
 				[self callSenderForMessage:messageID recordCall:recordCall];
 			}];
+			
+			// Handle error via delegate (still used)
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
+			{
+				[self.delegate callSenderError:error];
+			}
 		}];
 	}];
 	

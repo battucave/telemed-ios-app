@@ -115,8 +115,8 @@
 
 - (IBAction)registerDevice:(id)sender
 {
-	// Run CoreViewController's enableNotifications:
-	[self enableNotifications];
+	// Run CoreViewController's authorizeForRemoteNotifications:
+	[self authorizeForRemoteNotifications];
 }
 
 // Unwind segue from MessageDetailViewController (only after archive action)

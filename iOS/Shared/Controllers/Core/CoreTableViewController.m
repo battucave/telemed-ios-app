@@ -24,6 +24,7 @@
 @interface CoreTableViewController ()
 
 @property (nonatomic) NSString *remoteNotificationAuthorizationMessage;
+@property (nonatomic) BOOL shouldAuthorizeRemoteNotifications;
 @property (nonatomic) SystemSoundID systemSoundID;
 
 @end
@@ -45,7 +46,7 @@
 		// Add application did receive remote notification observer
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
 	
-		// Additional observers are added in enableNotifications:
+		// Additional observers are added in registerForRemoteNotifications:
 	#endif
 }
 
@@ -121,6 +122,42 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
+- (void)authorizeForRemoteNotifications
+{
+	[self authorizeForRemoteNotifications:nil];
+}
+
+// Register and authorize for remote notifications
+- (void)authorizeForRemoteNotifications:(NSString *)authorizationMessage
+{
+	// Set authorization message
+	if (authorizationMessage != nil)
+	{
+		[self setRemoteNotificationAuthorizationMessage:authorizationMessage];
+	}
+	// Set default authorization message
+	else if (self.remoteNotificationAuthorizationMessage == nil)
+	{
+		[self setRemoteNotificationAuthorizationMessage:@"Your device is not registered for notifications. To enable them:"];
+	}
+	
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	
+	// If device is already registered with TeleMed, then prompt user to authorize remote notifications
+	if ([registeredDevice isRegistered])
+	{
+		[self showNotificationAuthorization];
+	}
+	// If device is not registered with TeleMed, then prompt user to register for remote notifications
+	else
+	{
+		// After device is registered, also prompt user to authorize remote notifications
+		[self setShouldAuthorizeRemoteNotifications:YES];
+		
+		[self registerForRemoteNotifications];
+	}
+}
+
 - (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
 {
 	NSLog(@"Remote notification authorization did change to %@. Override didChangeRemoteNotificationAuthorization: in the view controller to provide custom functionality.", (isEnabled ? @"enabled" : @"disabled"));
@@ -242,53 +279,19 @@
 			// Update remote notification authorization status
 			[self didChangeRemoteNotificationAuthorization:settings.authorizationStatus == UNAuthorizationStatusAuthorized];
 			
-			// If user has not authorized remote notifications, then prompt user to authorize them
-			if (settings.authorizationStatus != UNAuthorizationStatusAuthorized)
+			// If authorizing remote notifications and user has not yet authorized, then prompt user to authorize them
+			if (self.shouldAuthorizeRemoteNotifications)
 			{
-				[self showNotificationAuthorization];
+				if (settings.authorizationStatus != UNAuthorizationStatusAuthorized)
+				{
+					[self showNotificationAuthorization];
+				}
+				
+				// Reset should authorize remote notifications flag
+				[self setShouldAuthorizeRemoteNotifications:NO];
 			}
 		});
 	}];
-}
-
-- (void)enableNotifications
-{
-	[self enableNotifications:nil];
-}
-
-- (void)enableNotifications:(NSString *)authorizationMessage
-{
-	// Set authorization message
-	if (authorizationMessage != nil)
-	{
-		[self setRemoteNotificationAuthorizationMessage:authorizationMessage];
-	}
-	// Set default authorization message
-	else if (self.remoteNotificationAuthorizationMessage == nil)
-	{
-		[self setRemoteNotificationAuthorizationMessage:@"Your device is not registered for notifications. To enable them:"];
-	}
-	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
-	
-	// If device is already registered with TeleMed, then prompt user to enable remote notifications
-	if ([registeredDevice isRegistered])
-	{
-		[self showNotificationAuthorization];
-	}
-	// If device is not registered with TeleMed, then prompt user to register for remote notifications
-	else
-	{
-		// Remove any existing remote notification registration observers
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
-	
-		// Add remote notification registration observers to detect if user has registered for remote notifications
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
-		
-		[self showNotificationRegistration];
-	}
 }
 
 - (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
@@ -315,6 +318,20 @@
 	
 	// Show Alert
 	[self presentViewController:alertController animated:YES completion:nil];
+}
+
+// Register for remote notifications (don't authorize)
+- (void)registerForRemoteNotifications
+{
+	// Remove any existing remote notification registration observers
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+
+	// Add remote notification registration observers to detect if user has registered for remote notifications
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+
+	[self showNotificationRegistration];
 }
 
 - (void)showNotificationAuthorization

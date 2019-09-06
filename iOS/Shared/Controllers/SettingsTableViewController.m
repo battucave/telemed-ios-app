@@ -425,8 +425,8 @@
 	// Instruct user how to enable notifications
 	if (self.switchNotifications.isOn)
 	{
-		// Run CoreTableViewController's enableNotifications:
-		[self enableNotifications:@"Please confirm your preference to enable notifications."];
+		// Run CoreTableViewController's authorizeForRemoteNotifications:
+		[self authorizeForRemoteNotifications:@"Please confirm your preference to enable notifications."];
 	}
 }
 

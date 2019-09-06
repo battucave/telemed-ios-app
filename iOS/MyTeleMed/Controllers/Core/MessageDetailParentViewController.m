@@ -15,6 +15,7 @@
 #import "CallModel.h"
 #import "MessageModel.h"
 #import "MessageRedirectInfoModel.h"
+#import "RegisteredDeviceModel.h"
 
 @interface MessageDetailParentViewController ()
 
@@ -190,11 +191,40 @@
 	// Disable return call button
 	[self.buttonReturnCall setEnabled:NO];
 	
-	// Request a call from the server
-	CallModel *callModel = [[CallModel alloc] init];
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
-	[callModel setDelegate:self];
-	[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
+	// Require device registration with TeleMed in order to return call
+	if ([registeredDevice isRegistered])
+	{
+		// Request a call from the server
+		CallModel *callModel = [[CallModel alloc] init];
+		
+		[callModel setDelegate:self];
+		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
+	}
+	// If device is not already registered with TeleMed, then prompt user to register it
+	else
+	{
+		UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"Please register your device to enable the Return Call feature." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+		UIAlertAction *registerAction = [UIAlertAction actionWithTitle:@"Register" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+		{
+			// Run CoreViewController's registerForRemoteNotifications:
+			[self registerForRemoteNotifications];
+		}];
+		
+		[registerDeviceAlertController addAction:registerAction];
+		[registerDeviceAlertController addAction:cancelAction];
+
+		// PreferredAction only supported in 9.0+
+		if ([registerDeviceAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[registerDeviceAlertController setPreferredAction:registerAction];
+		}
+
+		// Show alert
+		[self presentViewController:registerDeviceAlertController animated:YES completion:nil];
+	}
 }
 
 // Unwind segue from MessageEscalateTableViewController
@@ -212,7 +242,7 @@
 // Return pending from CallTeleMedModel delegate
 - (void)callSenderPending
 {
-	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. Please wait while we return your call." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed is connecting you to your party. Please hold while we connect your call." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
 	
 	[returnCallAlertController addAction:okAction];
@@ -229,20 +259,45 @@
 {
 	NSLog(@"Call Message Sender request sent successfully");
 	
-	// Re-enable the return call button after a short delay
+	// Re-enable the return call button after a delay
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 	{
 		[self.buttonReturnCall setEnabled:YES];
 	});
 }
 
-/*/ Return error from CallTeleMedModel delegate (no longer used)
+// Return error from CallTeleMedModel delegate
 - (void)callSenderError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
- 
-	[errorAlertController show:error];
-}*/
+	NSLog(@"Call Message Sender request failed");
+	
+	// Re-enable the return call button
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.buttonReturnCall setEnabled:YES];
+	});
+}
+
+// Override CoreViewController's didChangeRemoteNotificationAuthorization:
+- (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
+{
+	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
+	
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		// If device is registered successfully, then enable the return call button and attempt to return call
+		if ([registeredDevice isRegistered])
+		{
+			[self.buttonReturnCall setEnabled:YES];
+			
+			[self returnCall:nil];
+		}
+	});
+}
+
+
 
 /*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
