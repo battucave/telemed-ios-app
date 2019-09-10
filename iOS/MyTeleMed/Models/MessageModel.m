@@ -56,7 +56,7 @@
 	} mutableCopy];
 	
 	// If using specific Account, alter the URL to include the Account Public Key
-	if (accountID > 0)
+	if ([accountID integerValue] > 0)
 	{
 		[parameters setValue:accountID forKey:@"acctID"];
 	}

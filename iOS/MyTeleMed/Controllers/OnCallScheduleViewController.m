@@ -99,27 +99,15 @@
 	NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
 	NSDate *datePreviousOnCall = [NSDate dateWithTimeIntervalSinceNow:-24 * 60 * 60]; // Initially set to Yesterday
 	
-	NSDate *dateTime;
-	
 	// Filter to current on call entries
 	if (onCallPeriod == 0)
 	{
 		[self setFilteredOnCallEntries:self.currentOnCallEntries];
-		
-		if ([self.filteredOnCallEntries count] > 0)
-		{
-			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] Started];
-		}
 	}
 	// Filter to future on call entries
 	else
 	{
 		[self setFilteredOnCallEntries:self.futureOnCallEntries];
-		
-		if ([self.filteredOnCallEntries count] > 0)
-		{
-			dateTime = [[self.filteredOnCallEntries objectAtIndex:0] WillStart];
-		}
 	}
 	
 	// Cancel filtering if no filtered on call entries
