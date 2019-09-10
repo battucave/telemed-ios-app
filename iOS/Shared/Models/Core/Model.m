@@ -130,11 +130,11 @@
 	[errorAlertController show:error];
 }
 
-- (void)showError:(NSError *)error withCallback:(void (^)(void))callback
+- (void)showError:(NSError *)error withRetryCallback:(void (^)(void))callback
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	[errorAlertController show:error withCallback:callback];
+	[errorAlertController show:error withRetryCallback:callback];
 }
 
 - (void)showError:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback

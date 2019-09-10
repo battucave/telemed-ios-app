@@ -20,7 +20,7 @@
 - (void)hideActivityIndicator:(void (^)(void))callback;
 - (NSError *)buildError:(NSError *)error usingData:(NSData *)data withGenericMessage:(NSString *)message andTitle:(NSString *)title;
 - (void)showError:(NSError *)error;
-- (void)showError:(NSError *)error withCallback:(void (^)(void))callback;
+- (void)showError:(NSError *)error withRetryCallback:(void (^)(void))callback;
 - (void)showError:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback;
 
 @end

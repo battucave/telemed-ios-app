@@ -85,7 +85,7 @@
 	return alertController;
 }
 
-- (instancetype)show:(NSError *)error withCallback:(void (^)(void))callback
+- (instancetype)show:(NSError *)error withRetryCallback:(void (^)(void))callback
 {
 	return [self show:error withRetryCallback:callback cancelCallback:nil];
 }

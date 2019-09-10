@@ -150,7 +150,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteChatMessage:chatMessageID];
@@ -183,7 +183,7 @@
 			} */
 		
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteChatMessage:chatMessageID];
@@ -307,7 +307,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Delete Chat Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteMultipleChatMessages:failedChatMessages];

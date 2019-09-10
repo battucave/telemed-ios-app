@@ -188,7 +188,7 @@
 			
 			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 			
-			[errorAlertController show:error withCallback:^
+			[errorAlertController show:error withRetryCallback:^
 			{
 				// Re-prompt user to enable remote notifications
 				[self showNotificationRegistration];
