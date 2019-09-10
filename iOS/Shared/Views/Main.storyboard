@@ -79,13 +79,13 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oyb-iw-vYL">
-                                                            <rect key="frame" x="17" y="10" width="23" height="23.5"/>
+                                                            <rect key="frame" x="17" y="11.5" width="20" height="20"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Messages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFg-Ic-1iw">
-                                                            <rect key="frame" x="50" y="0.0" width="255" height="43"/>
+                                                            <rect key="frame" x="47" y="0.0" width="258" height="43"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -198,7 +198,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6r-Ld-dvh">
-                                                            <rect key="frame" x="16" y="10" width="23" height="23.5"/>
+                                                            <rect key="frame" x="16" y="11.5" width="23" height="20"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -628,6 +628,57 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VDt-86-ouU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1083.2" y="108.84557721139431"/>
+        </scene>
+        <!--Phone Call View Controller-->
+        <scene sceneID="geB-Ht-UV1">
+            <objects>
+                <viewController id="RIK-oc-PUe" customClass="PhoneCallViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dVM-E5-6S6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To keep your number private, TeleMed will call you from 404-736-1880 to connect your call." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0rX-YY-gzE">
+                                <rect key="frame" x="20" y="318" width="335" height="31.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bah-wv-Zjr">
+                                <rect key="frame" x="102.5" y="557" width="170" height="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <inset key="contentEdgeInsets" minX="20" minY="10" maxX="20" maxY="10"/>
+                                <state key="normal" title="Continue Working"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.9882352941176471" green="0.85882352941176465" blue="0.015686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="goBack:" destination="RIK-oc-PUe" eventType="touchUpInside" id="UUY-0P-FqO"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="0rX-YY-gzE" firstAttribute="leading" secondItem="RnS-C8-Dte" secondAttribute="leading" constant="20" id="3Yk-yh-jfU"/>
+                            <constraint firstItem="0rX-YY-gzE" firstAttribute="centerX" secondItem="dVM-E5-6S6" secondAttribute="centerX" id="9El-53-nD9"/>
+                            <constraint firstItem="0rX-YY-gzE" firstAttribute="centerY" secondItem="dVM-E5-6S6" secondAttribute="centerY" id="UUx-iq-9Db"/>
+                            <constraint firstItem="RnS-C8-Dte" firstAttribute="trailing" secondItem="0rX-YY-gzE" secondAttribute="trailing" constant="20" id="Vvk-gs-sF2"/>
+                            <constraint firstItem="bah-wv-Zjr" firstAttribute="centerX" secondItem="dVM-E5-6S6" secondAttribute="centerX" id="YQb-FK-Apk"/>
+                            <constraint firstItem="RnS-C8-Dte" firstAttribute="bottom" secondItem="bah-wv-Zjr" secondAttribute="bottom" constant="70" id="fgo-l9-T4F"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="RnS-C8-Dte"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UrU-C4-Up9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2592.8000000000002" y="2406.7466266866568"/>
         </scene>
         <!--New Message-->
         <scene sceneID="UkP-rg-f3L">
@@ -1733,6 +1784,7 @@
                         <segue destination="Zku-Ds-7w4" kind="show" identifier="showMessageForwardFromMessageDetail" id="VXf-fn-O9m"/>
                         <segue destination="wHJ-kp-64t" kind="show" identifier="showMessageEscalateFromMessageDetail" id="253-6l-xSp"/>
                         <segue destination="tgV-mw-u1T" kind="show" identifier="showMessageRedirectFromMessageDetail" id="wT6-Yb-3ns"/>
+                        <segue destination="RIK-oc-PUe" kind="presentation" identifier="showPhoneCallFromMessageDetail" id="ERs-f9-p9u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1i-V9-Qf2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2186,6 +2238,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="sideNavigationButton" destination="qTP-C8-s2w" id="KKb-Ql-uQw"/>
+                        <segue destination="RIK-oc-PUe" kind="presentation" identifier="showPhoneCall" id="eHz-5L-Vwp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CjY-jh-Yxf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2804,7 +2857,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="INY-0o-swE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1796" y="3392.6536731634187"/>
+            <point key="canvasLocation" x="1794" y="3739"/>
         </scene>
         <!--Help-->
         <scene sceneID="PNs-e6-lYJ">
@@ -2961,7 +3014,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bN4-HU-euM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1796" y="4714.9925037481262"/>
+            <point key="canvasLocation" x="1794" y="5061"/>
         </scene>
         <!--User Guide-->
         <scene sceneID="Oa9-51-8nC">
@@ -3015,7 +3068,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eu6-3Y-rtN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2595.2000000000003" y="4715.4422788605698"/>
+            <point key="canvasLocation" x="2593" y="5061"/>
         </scene>
         <!--Notifications-->
         <scene sceneID="NHM-eT-Y0I">
@@ -3122,7 +3175,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SHk-Dt-KUf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2595.2000000000003" y="3393.1034482758623"/>
+            <point key="canvasLocation" x="2593" y="3739"/>
         </scene>
         <!--Settings Notifications Picker Table View Controller-->
         <scene sceneID="6H7-pF-PRm">
@@ -3194,7 +3247,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xHg-VL-N6Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="5XR-pZ-Rgq" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3358.4000000000001" y="3393.1034482758623"/>
+            <point key="canvasLocation" x="3356" y="3739"/>
         </scene>
         <!--Messages-->
         <scene sceneID="b7b-5i-pin">
@@ -3292,7 +3345,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t3a-C1-ewK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1083.2" y="3393.1034482758623"/>
+            <point key="canvasLocation" x="1081" y="3739"/>
         </scene>
         <!--History-->
         <scene sceneID="1mu-YF-fHs">
@@ -3567,6 +3620,7 @@
                         <segue destination="Zku-Ds-7w4" kind="show" identifier="showMessageForwardFromMessageHistory" id="eNK-pz-2OB"/>
                         <segue destination="wHJ-kp-64t" kind="show" identifier="showMessageEscalateFromMessageHistory" id="C3V-ib-alC"/>
                         <segue destination="tgV-mw-u1T" kind="show" identifier="showMessageRedirectFromMessageHistory" id="wLK-8U-oaT"/>
+                        <segue destination="RIK-oc-PUe" kind="presentation" identifier="showPhoneCallFromMessageHistory" id="0jR-zR-Czp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8hd-p3-pJz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3591,7 +3645,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="48z-fI-gbU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1083.2" y="4715.4422788605698"/>
+            <point key="canvasLocation" x="1081" y="5061"/>
         </scene>
         <!--Message Tele Med Compose Table View Controller-->
         <scene sceneID="sKW-Ol-DDK">
@@ -3764,7 +3818,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pFm-xz-Xfl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2595.2000000000003" y="2731.9340329835086"/>
+            <point key="canvasLocation" x="2593" y="3072"/>
         </scene>
         <!--Choose Account-->
         <scene sceneID="QQi-Sg-SyM">
@@ -4863,7 +4917,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IE8-yr-pyW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2594.4000000000001" y="4054.7226386806601"/>
+            <point key="canvasLocation" x="2593" y="4401"/>
         </scene>
         <!--Escalate-->
         <scene sceneID="YzB-WJ-ezX">
@@ -5285,23 +5339,24 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="menu.png" width="19" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="wT6-Yb-3ns"/>
-        <segue reference="253-6l-xSp"/>
+        <segue reference="wLK-8U-oaT"/>
+        <segue reference="C3V-ib-alC"/>
         <segue reference="ejp-fl-nDj"/>
         <segue reference="9pZ-e2-2FC"/>
         <segue reference="ZfR-s3-nyT"/>
         <segue reference="bgc-j8-Gjl"/>
         <segue reference="xeH-nb-wrL"/>
-        <segue reference="KfY-sd-ej7"/>
-        <segue reference="V9Q-rq-EEe"/>
+        <segue reference="RL6-ew-HlW"/>
+        <segue reference="cnj-KY-anY"/>
         <segue reference="nDL-G3-d11"/>
-        <segue reference="SWX-Rd-no8"/>
+        <segue reference="zYP-Wg-Npp"/>
         <segue reference="duc-Go-Hul"/>
         <segue reference="E1e-BY-bXG"/>
-        <segue reference="VXf-fn-O9m"/>
+        <segue reference="eNK-pz-2OB"/>
         <segue reference="yVi-an-TG3"/>
         <segue reference="BhK-Le-o3I"/>
         <segue reference="dmg-yj-Han"/>
+        <segue reference="eHz-5L-Vwp"/>
         <segue reference="FA7-fW-yLW"/>
     </inferredMetricsTieBreakers>
 </document>

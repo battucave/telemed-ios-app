@@ -14,6 +14,8 @@
 
 - (instancetype)show:(NSError *)error;
 - (instancetype)show:(NSError *)error withCallback:(void (^)(void))callback;
+- (instancetype)show:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback;
 - (void)dismiss;
+- (void)presentAlertController:(BOOL)animated completion:(void (^ _Nullable)(void))completion; // Only used by CallModel
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ContactViewController.h"
+#import "PhoneCallViewController.h"
 #import "CallModel.h"
 #import "RegisteredDeviceModel.h"
 
@@ -23,10 +24,8 @@
 		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 		UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
-			CallModel *callModel = [[CallModel alloc] init];
-			
-			[callModel setDelegate:self];
-			[callModel callTeleMed];
+			// Go to PhoneCallViewController
+			[self performSegueWithIdentifier:@"showPhoneCall" sender:self];
 		}];
 
 		[callTeleMedAlertController addAction:callAction];
@@ -63,35 +62,6 @@
 	}
 }
 
-// Return pending from CallTeleMedModel delegate
-- (void)callSenderPending
-{
-	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"Please hold while we return your call." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-	
-	[returnCallAlertController addAction:okAction];
-	
-	// Set preferred action
-	[returnCallAlertController setPreferredAction:okAction];
-
-	// Show alert
-	[self presentViewController:returnCallAlertController animated:YES completion:nil];
-}
-
-// Return success from CallTeleMedModel delegate (no longer used)
-/*- (void)callTeleMedSuccess
-{
-	NSLog(@"Call TeleMed request sent successfully");
-}
-
-// Return error from CallTeleMedModel delegate (no longer used)
-- (void)callTeleMedError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
-}*/
-
 // Override CoreViewController's didChangeRemoteNotificationAuthorization:
 - (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
 {
@@ -107,6 +77,20 @@
 			[self callTeleMed:nil];
 		}
 	});
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	// Go to PhoneCallViewController
+	if ([segue.identifier isEqualToString:@"showPhoneCall"])
+	{
+		// Request a call from TeleMed
+		CallModel *callModel = [[CallModel alloc] init];
+		
+		[callModel setDelegate:segue.destinationViewController];
+
+		[callModel callTeleMed];
+	}
 }
 
 - (void)didReceiveMemoryWarning

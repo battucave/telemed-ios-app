@@ -180,15 +180,19 @@
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// Update remote notification authorization status
-		[self didChangeRemoteNotificationAuthorization:NO];
-		
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController show:error withCallback:^
+		// Dismiss activity indicator with callback
+		[self dismissViewControllerAnimated:NO completion:^
 		{
-			// Re-prompt user to enable remote notifications
-			[self showNotificationRegistration];
+			// Update remote notification authorization status
+			[self didChangeRemoteNotificationAuthorization:NO];
+			
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController show:error withCallback:^
+			{
+				// Re-prompt user to enable remote notifications
+				[self showNotificationRegistration];
+			}];
 		}];
 	});
 }
@@ -276,20 +280,24 @@
 	{
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			// Update remote notification authorization status
-			[self didChangeRemoteNotificationAuthorization:settings.authorizationStatus == UNAuthorizationStatusAuthorized];
-			
-			// If authorizing remote notifications and user has not yet authorized, then prompt user to authorize them
-			if (self.shouldAuthorizeRemoteNotifications)
+			// Dismiss activity indicator with callback
+			[self dismissViewControllerAnimated:NO completion:^
 			{
-				if (settings.authorizationStatus != UNAuthorizationStatusAuthorized)
-				{
-					[self showNotificationAuthorization];
-				}
+				// Update remote notification authorization status
+				[self didChangeRemoteNotificationAuthorization:settings.authorizationStatus == UNAuthorizationStatusAuthorized];
 				
-				// Reset should authorize remote notifications flag
-				[self setShouldAuthorizeRemoteNotifications:NO];
-			}
+				// If authorizing remote notifications and user has not yet authorized, then prompt user to authorize them
+				if (self.shouldAuthorizeRemoteNotifications)
+				{
+					if (settings.authorizationStatus != UNAuthorizationStatusAuthorized)
+					{
+						[self showNotificationAuthorization];
+					}
+					
+					// Reset should authorize remote notifications flag
+					[self setShouldAuthorizeRemoteNotifications:NO];
+				}
+			}];
 		});
 	}];
 }
@@ -366,7 +374,7 @@
 - (void)showNotificationRegistration
 {
 	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
-	UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Please enter the phone number for this device. Your TeleMed profile will be updated." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Please enter the phone number you would like to use for notifications on this device. Your TeleMed profile will be updated." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Update remote notification authorization status
@@ -398,6 +406,9 @@
 		else
 		{
 			[registeredDevice setPhoneNumber:phoneNumber];
+			
+			// Show activity indicator
+			[registeredDevice showActivityIndicator:@"Registering..."];
 			
 			// (Re-)Register device for push notifications
 			[[UIApplication sharedApplication] registerForRemoteNotifications];

@@ -39,6 +39,10 @@
 
 @property (nonatomic) CXCallObserver *callObserver;
 
+#ifdef MYTELEMED
+	@property (nonatomic) dispatch_block_t teleMedCallTimeoutBlock;
+#endif
+
 @end
 
 @implementation AppDelegate
@@ -135,7 +139,12 @@
 	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		// Register device for push notifications (this does not authorize push notifications however - that is done in PhoneNumberViewController)
-		[[UIApplication sharedApplication] registerForRemoteNotifications];
+		#if defined DEBUG
+			NSLog(@"Skip device registration when on Debug");
+	
+		#else
+			[[UIApplication sharedApplication] registerForRemoteNotifications];
+		#endif
 	
 		// Handle push notification data
 		NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -249,23 +258,38 @@
 
 - (void)callObserver:(CXCallObserver *)callObserver callChanged:(CXCall *)call
 {
-	if (call != nil && call.hasEnded == YES)
+	if (call != nil)
 	{
-		NSLog(@"CXCallState: Disconnected");
-		
-		// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController dismiss];
-		
-		// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
-		
-		// Reset idle timer
-		dispatch_async(dispatch_get_main_queue(), ^
+		// Ceck whether call has disconnected
+		if (call.hasEnded == YES)
 		{
-			[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
-		});
+			NSLog(@"CXCallState: Disconnected");
+			
+			// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController dismiss];
+			
+			// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
+			
+			// Reset idle timer
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
+			});
+		}
+		// Check whether call has connected (user answered the call)
+		else if (call.hasConnected == YES)
+		{
+			NSLog(@"CXCallState: Connected");
+			
+			// Post a notification to any listeners (PhoneCallViewController)
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidConnectCall" object:nil];
+			
+			// Stop observing for TeleMed to return phone call
+			dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+		}
 	}
 }
 
@@ -546,45 +570,6 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-	NSLog(@"My Device Token: %@", deviceToken);
-
-    // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
-    const char *data = [deviceToken bytes];
-    NSMutableString *tokenString = [NSMutableString string];
-
-    for (NSUInteger i = 0; i < deviceToken.length; i++)
-    {
-        [tokenString appendFormat:@"%02.2hhX", data[i]];
-    }
-
-    NSLog(@"Token String: %@", tokenString);
-	
-	// Set device token
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-	
-	[registeredDeviceModel setToken:[tokenString copy]];
-	
-	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
-	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
-	{
-		// Post notifications to any observers within the app (MessagesViewController and SettingsTableViewController)
-		if (success)
-		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidRegisterForRemoteNotifications" object:self userInfo:@{
-				@"deviceToken": [tokenString copy]
-			}];
-		}
-		else
-		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:self userInfo:@{
-				@"errorMessage": error.localizedDescription
-			}];
-		}
-	}];
-}
-
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
@@ -653,6 +638,45 @@
 	[self handleRemoteNotification:notification applicationState:(application.applicationState == UIApplicationStateActive ? UIApplicationStateActive : UIApplicationStateBackground)];
 	
 	completionHandler(UIBackgroundFetchResultNoData);
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+	NSLog(@"My Device Token: %@", deviceToken);
+
+    // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
+    const char *data = [deviceToken bytes];
+    NSMutableString *tokenString = [NSMutableString string];
+
+    for (NSUInteger i = 0; i < deviceToken.length; i++)
+    {
+        [tokenString appendFormat:@"%02.2hhX", data[i]];
+    }
+
+    NSLog(@"Token String: %@", tokenString);
+	
+	// Set device token
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	[registeredDeviceModel setToken:[tokenString copy]];
+	
+	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
+	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
+	{
+		// Post notifications to any observers within the app (MessagesViewController and SettingsTableViewController)
+		if (success)
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidRegisterForRemoteNotifications" object:self userInfo:@{
+				@"deviceToken": [tokenString copy]
+			}];
+		}
+		else
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:self userInfo:@{
+				@"errorMessage": error.localizedDescription
+			}];
+		}
+	}];
 }
 
 /**
@@ -949,6 +973,33 @@
 	}
 	
 	return [notificationData copy];
+}
+
+/**
+ * Start observing for TeleMed to return phone call (from CallModel)
+ */
+- (void)startTeleMedCallObserver:(dispatch_block_t)teleMedCallTimeoutBlock timeoutPeriod:(int)timeoutPeriod
+{
+	// Cancel any previous listener to prevent duplicate error messages
+	[self stopTeleMedCallObserver];
+	
+	[self setTeleMedCallTimeoutBlock:teleMedCallTimeoutBlock];
+	
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeoutPeriod * NSEC_PER_SEC)), dispatch_get_main_queue(), self.teleMedCallTimeoutBlock);
+}
+
+/**
+ * Stop observing for TeleMed to return phone call (from CallModel)
+ */
+- (void)stopTeleMedCallObserver
+{
+	if (self.teleMedCallTimeoutBlock != nil)
+	{
+		dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+		
+		// Reset timeout block
+		[self setTeleMedCallTimeoutBlock:nil];
+	}
 }
 
 /**

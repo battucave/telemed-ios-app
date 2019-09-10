@@ -118,7 +118,7 @@
 		errorString = message;
 	}
 	
-	NSLog(@"Error: %@", errorString);
+	NSLog(@"Build Error: %@", errorString);
 	
 	return [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:error.code userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:title, NSLocalizedFailureReasonErrorKey, errorString, NSLocalizedDescriptionKey, nil]];
 }
@@ -135,6 +135,13 @@
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
 	[errorAlertController show:error withCallback:callback];
+}
+
+- (void)showError:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback
+{
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error withRetryCallback:retryCallback cancelCallback:cancelCallback];
 }
 
 - (id)getRootViewController

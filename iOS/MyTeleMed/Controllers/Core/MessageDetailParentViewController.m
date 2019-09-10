@@ -12,6 +12,7 @@
 #import "MessageForwardViewController.h"
 #import "MessageRedirectTableViewController.h"
 #import "MessageTeleMedViewController.h"
+#import "PhoneCallViewController.h"
 #import "CallModel.h"
 #import "MessageModel.h"
 #import "MessageRedirectInfoModel.h"
@@ -188,19 +189,13 @@
 	
 	// NOTE: Return call recording options removed in commit "Remove the Return Call popup since all calls are recorded making the choice irrelevant" (3/01/2019)
 	
-	// Disable return call button
-	[self.buttonReturnCall setEnabled:NO];
-	
 	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
 	// Require device registration with TeleMed in order to return call
 	if ([registeredDevice isRegistered])
 	{
-		// Request a call from the server
-		CallModel *callModel = [[CallModel alloc] init];
-		
-		[callModel setDelegate:self];
-		[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
+		// Go to PhoneCallViewController
+		[self showPhoneCall];
 	}
 	// If device is not already registered with TeleMed, then prompt user to register it
 	else
@@ -239,45 +234,6 @@
 	NSLog(@"Unwind from Message Redirect");
 }
 
-// Return pending from CallTeleMedModel delegate
-- (void)callSenderPending
-{
-	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed is connecting you to your party. Please hold while we connect your call." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-	
-	[returnCallAlertController addAction:okAction];
-	
-	// Set preferred action
-	[returnCallAlertController setPreferredAction:okAction];
-
-	// Show alert
-	[self presentViewController:returnCallAlertController animated:YES completion:nil];
-}
-
-// Return success from CallTeleMedModel delegate
-- (void)callSenderSuccess
-{
-	NSLog(@"Call Message Sender request sent successfully");
-	
-	// Re-enable the return call button after a delay
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
-	{
-		[self.buttonReturnCall setEnabled:YES];
-	});
-}
-
-// Return error from CallTeleMedModel delegate
-- (void)callSenderError:(NSError *)error
-{
-	NSLog(@"Call Message Sender request failed");
-	
-	// Re-enable the return call button
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.buttonReturnCall setEnabled:YES];
-	});
-}
-
 // Override CoreViewController's didChangeRemoteNotificationAuthorization:
 - (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
 {
@@ -290,14 +246,10 @@
 		// If device is registered successfully, then enable the return call button and attempt to return call
 		if ([registeredDevice isRegistered])
 		{
-			[self.buttonReturnCall setEnabled:YES];
-			
 			[self returnCall:nil];
 		}
 	});
 }
-
-
 
 /*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
@@ -502,6 +454,12 @@
 	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageDetail" sender:self];
 }
 
+// Go to PhoneCallViewController
+- (void)showPhoneCall
+{
+	[self performSegueWithIdentifier:@"showPhoneCallFromMessageDetail" sender:self];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Go to MessageEscalateViewController
@@ -555,6 +513,16 @@
 		
 		// Set message
 		[messageTeleMedViewController setMessage:self.message];
+	}
+	// Go to PhoneCallViewController
+	else if ([segue.identifier isEqualToString:@"showPhoneCallFromMessageDetail"] || [segue.identifier isEqualToString:@"showPhoneCallFromMessageHistory"])
+	{
+		// Request a call from TeleMed
+		CallModel *callModel = [[CallModel alloc] init];
+		
+		[callModel setDelegate:segue.destinationViewController];
+
+		[callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"false"];
 	}
 }
 

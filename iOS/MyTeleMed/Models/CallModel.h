@@ -21,11 +21,8 @@
 @protocol CallDelegate <NSObject>
 
 @optional
-- (void)callTeleMedPending;
-- (void)callTeleMedSuccess;
-- (void)callTeleMedError:(NSError *)error;
-- (void)callSenderPending;
-- (void)callSenderSuccess;
-- (void)callSenderError:(NSError *)error;
+- (void)callPending;
+- (void)callSuccess;
+- (void)callError:(NSError *)error;
 
 @end

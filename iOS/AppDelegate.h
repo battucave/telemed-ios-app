@@ -22,4 +22,9 @@
 - (void)goToLoginScreen;
 - (void)goToNextScreen;
 
+#ifdef MYTELEMED
+	- (void)startTeleMedCallObserver:(dispatch_block_t)returnCallTimeout timeoutPeriod:(int)timeoutPeriod;
+	- (void)stopTeleMedCallObserver;
+#endif
+
 @end

@@ -123,6 +123,7 @@
 		E21A0A8F1FC38E7E00CB8B9F /* button-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */; };
 		E21C14691D33E2240025B6ED /* OnePixelLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C14681D33E2240025B6ED /* OnePixelLayoutConstraint.m */; };
 		E21EC5D11CE37C880027AA14 /* AccountPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */; };
+		E2266A382326B71A002F1E2B /* PhoneCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2266A372326B71A002F1E2B /* PhoneCallViewController.m */; };
 		E22C7B222093801B005CFA4A /* TeleMedApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD96F7208FB3440012B1DB /* TeleMedApplication.m */; };
 		E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28CCCD8417F5185B0093CEE2 /* SideNavigationViewController.m */; };
 		E22EF0781FD89BC100A2E6F6 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58F1FBF571B00263497 /* MessageCell.m */; };
@@ -642,6 +643,8 @@
 		E21EC5CF1CE37C880027AA14 /* AccountPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountPickerViewController.h; sourceTree = "<group>"; };
 		E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountPickerViewController.m; sourceTree = "<group>"; };
 		E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedβ.entitlements"; sourceTree = "<group>"; };
+		E2266A362326B71A002F1E2B /* PhoneCallViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhoneCallViewController.h; sourceTree = "<group>"; };
+		E2266A372326B71A002F1E2B /* PhoneCallViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhoneCallViewController.m; sourceTree = "<group>"; };
 		E22EF0981FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsProfileTableViewController.h; sourceTree = "<group>"; };
 		E22EF0991FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsProfileTableViewController.m; sourceTree = "<group>"; };
 		E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue.png"; sourceTree = "<group>"; };
@@ -1197,6 +1200,8 @@
 				0865DBFB1C63AF060028E2B2 /* MessageTeleMedViewController.m */,
 				28CCCD8D17F535DD0093CEE2 /* OnCallScheduleViewController.h */,
 				28CCCD8E17F535DD0093CEE2 /* OnCallScheduleViewController.m */,
+				E2266A362326B71A002F1E2B /* PhoneCallViewController.h */,
+				E2266A372326B71A002F1E2B /* PhoneCallViewController.m */,
 				28ADA6EB17FA1585003A81A1 /* PhoneNumberViewController.h */,
 				28ADA6EC17FA1585003A81A1 /* PhoneNumberViewController.m */,
 				281716191831659200CD3086 /* SettingsNotificationsPickerTableViewController.h */,
@@ -2339,6 +2344,7 @@
 				28CCCD8817F518800093CEE2 /* MessagesViewController.m in Sources */,
 				E27B85211B14D09400AD50C6 /* AccountXMLParser.m in Sources */,
 				E211D59B1FBF571B00263497 /* AutoGrowingTextView.m in Sources */,
+				E2266A382326B71A002F1E2B /* PhoneCallViewController.m in Sources */,
 				E26919E2228EEA750093BB60 /* Validation.m in Sources */,
 				E211D5941FBF571B00263497 /* MessageComposeTableViewController.m in Sources */,
 				E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */,
