@@ -114,7 +114,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Add call disconnected observer to hide keyboard
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"UIApplicationDidDisconnectCall" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:ApplicationDidDisconnectCall object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -131,7 +131,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Remove call disconnected observer to hide keyboard
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidDisconnectCall" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidDisconnectCall object:nil];
 	
 	// Dismiss keyboard
 	[self.view endEditing:YES];

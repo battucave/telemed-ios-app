@@ -31,7 +31,7 @@
 {
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	[settings setBool:YES forKey:@"CDMAVoiceDataHidden"];
+	[settings setBool:YES forKey:CDMAVoiceDataHidden];
 	[settings synchronize];
 	
 	[self dismissViewControllerAnimated:YES completion:nil];
@@ -42,8 +42,8 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Toggle whether this view should show again on next run
-	[settings setBool:sender.isOn forKey:@"showSprintVoiceDataWarning"];
-	[settings setBool:sender.isOn forKey:@"showVerizonVoiceDataWarning"];
+	[settings setBool:sender.isOn forKey:ShowSprintVoiceDataWarning];
+	[settings setBool:sender.isOn forKey:ShowVerizonVoiceDataWarning];
 	[settings synchronize];
 }
 

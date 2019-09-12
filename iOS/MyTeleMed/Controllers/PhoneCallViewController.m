@@ -49,7 +49,7 @@
 	}
 
 	// Add call connected observer to dismiss screen after return call from TeleMed was successfully received
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didConnectCall:) name:@"UIApplicationDidConnectCall" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didConnectCall:) name:ApplicationDidConnectCall object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated

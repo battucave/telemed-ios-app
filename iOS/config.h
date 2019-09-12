@@ -30,7 +30,18 @@
 
 
 /**
- * NOTIFICATIONS
+ * NOTIFICATION CENTER
+ */
+#define ApplicationDidConnectCall @"ApplicationDidConnectCall"
+#define ApplicationDidDisconnectCall @"ApplicationDidDisconnectCall"
+#define ApplicationDidFailToRegisterForRemoteNotifications @"ApplicationDidFailToRegisterForRemoteNotifications"
+#define ApplicationDidReceiveRemoteNotification @"ApplicationDidReceiveRemoteNotification"
+#define ApplicationDidRegisterForRemoteNotifications @"ApplicationDidRegisterForRemoteNotifications"
+#define ApplicationDidTimeout @"ApplicationDidTimeout"
+
+
+/**
+ * NOTIFICATION SETTINGS
  */
 #define NOTIFICATION_TONES_SUBCATEGORIES @"Staff Favorites", @"MyTeleMed", @"Standard", @"Classic"
 #define NOTIFICATION_TONES_CLASSIC_IOS @"Alarm", @"Anticipate", @"Bell", @"Bloom", @"Calypso", @"Chime", @"Choo Choo", @"Descent", @"Electronic", @"Fanfare", @"Glass", @"Horn", @"Ladder", @"Minuet", @"News Flash", @"Noir", @"Sherwood Forest", @"Spell", @"Suspense", @"Telegraph", @"Tiptoes", @"Tri-tone", @"Typewriters", @"Update"
@@ -39,3 +50,19 @@
 #define NOTIFICATION_TONES_STANDARD @"Aurora", @"Bamboo", @"Chord", @"Circles", @"Complete", @"Hello", @"Input", @"Keys", @"Note", @"Popcorn", @"Pulse", @"Synth"
 
 #define NOTIFICATION_INTERVALS @"1 minute", @"5 minutes", @"10 minutes", @"15 minutes", @"20 minutes"
+
+
+/**
+ * SAVED SETTINGS
+ */
+#define CDMAVoiceDataDisabled @"CDMAVoiceDataDisabled"
+#define CDMAVoiceDataHidden @"CDMAVoiceDataHidden"
+#define DateApplicationDidEnterBackground @"dateApplicationDidEnterBackground"
+#define DisableTimeout @"disableTimeout"
+#define ShowSprintVoiceDataWarning @"showSprintVoiceDataWarning"
+#define ShowVerizonVoiceDataWarning @"showVerizonVoiceDataWarning"
+#define SSOProvider @"SSOProvider"
+#define SSOProviderEmailAddress @"SSOProviderEmailAddress"
+#define SwipeMessageDisabled @"swipeMessageDisabled"
+#define UDDIDevice @"UDDIDevice"
+#define UserProfilePhoneNumber @"UserProfilePhoneNumber"

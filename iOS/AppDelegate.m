@@ -58,7 +58,7 @@
 	[self.callObserver setDelegate:self queue:dispatch_get_main_queue()];
 	
 	// Setup app timeout feature
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:kApplicationDidTimeoutNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:ApplicationDidTimeout object:nil];
 	
 	// Setup screenshot notification feature
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
@@ -72,20 +72,20 @@
 	
 	// Med2Med - Prevent swipe message from ever appearing
 	#ifdef MED2MED
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings setBool:YES forKey:SwipeMessageDisabled];
 	
 	// DEBUG Only - reset swipe message on app launch
 	#elif defined DEBUG
-		[settings setBool:NO forKey:@"swipeMessageDisabled"];
+		[settings setBool:NO forKey:SwipeMessageDisabled];
 	#endif
 	
 	// Initialize cdma voice data settings
-	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
+	[settings setBool:NO forKey:CDMAVoiceDataHidden];
 	
-	if ([settings objectForKey:@"showSprintVoiceDataWarning"] == nil || [settings objectForKey:@"showVerizonVoiceDataWarning"] == nil)
+	if ([settings objectForKey:ShowSprintVoiceDataWarning] == nil || [settings objectForKey:ShowVerizonVoiceDataWarning] == nil)
 	{
-		[settings setBool:NO forKey:@"showSprintVoiceDataWarning"];
-		[settings setBool:NO forKey:@"showVerizonVoiceDataWarning"];
+		[settings setBool:NO forKey:ShowSprintVoiceDataWarning];
+		[settings setBool:NO forKey:ShowVerizonVoiceDataWarning];
 		
 		#if !TARGET_IPHONE_SIMULATOR && !defined(DEBUG)
 			// Initialize carrier
@@ -97,12 +97,12 @@
 			NSArray *verizonMobileNetworkCodes = @[@"004", @"005", @"006", @"010", @"012", @"013", @"110", @"270", @"271", @"272", @"273", @"274", @"275", @"276", @"277", @"278", @"279", @"280", @"281", @"282", @"283", @"284", @"285", @"286", @"287", @"288", @"289", @"350", @"390", @"480", @"481", @"482", @"483", @"484", @"485", @"486", @"487", @"488", @"489", @"590", @"770", @"820", @"890", @"910"];
 		
 			// If mobile network code is available and user had not previously disabled the old CDMA warning
-			if (carrier.mobileNetworkCode && [settings boolForKey:@"CDMAVoiceDataDisabled"] != YES)
+			if (carrier.mobileNetworkCode && [settings boolForKey:CDMAVoiceDataDisabled] != YES)
 			{
 				// Enable voice data warning for Sprint users
 				if ([sprintMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
 				{
-					[settings setBool:YES forKey:@"showSprintVoiceDataWarning"];
+					[settings setBool:YES forKey:ShowSprintVoiceDataWarning];
 				}
 				// Enable voice data warning for Verizon users on devices that don't support VoLTE
 				else if ([verizonMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
@@ -123,14 +123,14 @@
 						// Enable voice data warning if device is an iPhone and the model is less than 7 (iPhone 6 and iPhone 6+ are model 7)
 						if ([deviceType isEqualToString:@"iPhone"] && (int)deviceNumber < 7)
 						{
-							[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+							[settings setBool:YES forKey:ShowVerizonVoiceDataWarning];
 						}
 					}
 				}
 			}
 		
 			// Remove old CDMA warning setting
-			[settings removeObjectForKey:@"CDMAVoiceDataDisabled"];
+			[settings removeObjectForKey:CDMAVoiceDataDisabled];
 		#endif
 	}
 	
@@ -161,6 +161,7 @@
 - (void)applicationWillResignActive:(UIApplication *)application
 {
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state
+	// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	
 	// Add view over app to obsure screenshot
 	[self toggleScreenshotView:NO];
@@ -168,7 +169,7 @@
 	// Save current time app was closed (used for showing cdma screen)
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	[settings setObject:[NSDate date] forKey:@"dateApplicationDidEnterBackground"];
+	[settings setObject:[NSDate date] forKey:DateApplicationDidEnterBackground];
 	[settings synchronize];
 	
 	// MyTeleMed - Update app's badge count with number of unread messages
@@ -196,9 +197,9 @@
 	// If more than 15 minutes have passed since app was closed, then reset cdma voice data hidden value
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 1)
+	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:DateApplicationDidEnterBackground]]) > 15)
 	{
-		[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
+		[settings setBool:NO forKey:CDMAVoiceDataHidden];
 		[settings synchronize];
 	}
 	
@@ -253,7 +254,8 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:
+	// Called when the application is about to terminate. Save data if appropriate.
+	// See also applicationDidEnterBackground:
 }
 
 - (void)callObserver:(CXCallObserver *)callObserver callChanged:(CXCall *)call
@@ -271,7 +273,7 @@
 			[errorAlertController dismiss];
 			
 			// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidDisconnectCall object:nil];
 			
 			// Reset idle timer
 			dispatch_async(dispatch_get_main_queue(), ^
@@ -285,7 +287,7 @@
 			NSLog(@"CXCallState: Connected");
 			
 			// Post a notification to any listeners (PhoneCallViewController)
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidConnectCall" object:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidConnectCall object:nil];
 			
 			// Stop observing for TeleMed to return phone call
 			dispatch_block_cancel(self.teleMedCallTimeoutBlock);
@@ -306,7 +308,7 @@
 {
 	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	BOOL timeoutDisabled = [settings boolForKey:@"disableTimeout"];
+	BOOL timeoutDisabled = [settings boolForKey:DisableTimeout];
 	
 	// Only log user out if timeout is enabled and user is not currently on phone call
 	if (! timeoutDisabled && ! [self isCallConnected])
@@ -362,12 +364,12 @@
 	// TEMPORARY (Version 4.08) - Timeout logic was changed to use disableTimeout so that it doesn't have to be initialized - This logic can be removed in a future update (only after Med2Med has received the update)
 	if ([settings objectForKey:@"enableTimeout"])
 	{
-		[settings setBool:! [settings boolForKey:@"enableTimeout"] forKey:@"disableTimeout"];
+		[settings setBool:! [settings boolForKey:@"enableTimeout"] forKey:DisableTimeout];
 		[settings removeObjectForKey:@"enableTimeout"];
 		[settings synchronize];
 	}
 	
-	BOOL timeoutDisabled = [settings boolForKey:@"disableTimeout"];
+	BOOL timeoutDisabled = [settings boolForKey:DisableTimeout];
 	
 	NSLog(@"Timeout Disabled: %@", (timeoutDisabled ? @"YES" : @"NO"));
 	
@@ -575,7 +577,7 @@
 	NSLog(@"Failed to get token, error: %@", error);
 	
 	// Post notification to any observers within the app (MessagesViewController and SettingsTableViewController)
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:self userInfo:@{
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidFailToRegisterForRemoteNotifications object:self userInfo:@{
 		@"errorMessage": error.localizedDescription
 	}];
 }
@@ -666,13 +668,13 @@
 		// Post notifications to any observers within the app (MessagesViewController and SettingsTableViewController)
 		if (success)
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidRegisterForRemoteNotifications" object:self userInfo:@{
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidRegisterForRemoteNotifications object:self userInfo:@{
 				@"deviceToken": [tokenString copy]
 			}];
 		}
 		else
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:self userInfo:@{
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidFailToRegisterForRemoteNotifications object:self userInfo:@{
 				@"errorMessage": error.localizedDescription
 			}];
 		}
@@ -867,7 +869,7 @@
 	if (applicationState == UIApplicationStateActive)
 	{
 		// Post notification to any observers within the app (CoreViewController and CoreTableViewController) regardless of whether user is logged in
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidReceiveRemoteNotification object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
 			@"goToRemoteNotificationScreen": [goToRemoteNotificationScreen copy]
 		} : NULL)];
 	}

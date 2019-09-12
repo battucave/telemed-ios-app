@@ -51,7 +51,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
-	if ([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:SwipeMessageDisabled])
 	{
 		[self.viewSwipeMessage setHidden:YES];
 	}
@@ -226,7 +226,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings setBool:YES forKey:SwipeMessageDisabled];
 		[settings synchronize];
 	}
 }

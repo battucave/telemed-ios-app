@@ -39,7 +39,7 @@
 	if (! _PhoneNumber)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-		_PhoneNumber = [settings valueForKey:@"UserProfilePhoneNumber"];
+		_PhoneNumber = [settings valueForKey:UserProfilePhoneNumber];
 	}
 	
 	return _PhoneNumber ?: @"";

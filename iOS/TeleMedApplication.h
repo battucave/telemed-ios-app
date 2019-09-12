@@ -7,9 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-// Notification that gets sent when the timeout occurs
-#define kApplicationDidTimeoutNotification @"ApplicationDidTimeout"
-
 /**
  * This is a subclass of UIApplication with sendEvent: overridden in order to catch all touch events.
  */

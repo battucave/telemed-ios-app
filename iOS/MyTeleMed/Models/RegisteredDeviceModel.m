@@ -51,7 +51,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	// If ID is not already set, check user preferences
 	if (! _ID)
 	{
-		_ID = [settings valueForKey:@"UDDIDevice"];
+		_ID = [settings valueForKey:UDDIDevice];
 	}
 	
 	// ID not already stored so generate it
@@ -68,7 +68,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		}
 		
 		// Store device id in user preferences
-		[settings setValue:_ID forKey:@"UDDIDevice"];
+		[settings setValue:_ID forKey:UDDIDevice];
 		[settings synchronize];
 	}
 	

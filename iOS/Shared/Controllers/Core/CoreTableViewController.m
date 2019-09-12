@@ -44,7 +44,7 @@
 	
 	#ifdef MYTELEMED
 		// Add application did receive remote notification observer
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:ApplicationDidReceiveRemoteNotification object:nil];
 	
 		// Additional observers are added in registerForRemoteNotifications:
 	#endif
@@ -58,9 +58,9 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	#ifdef MYTELEMED
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidReceiveRemoteNotification object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidRegisterForRemoteNotifications object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidFailToRegisterForRemoteNotifications object:nil];
 	#endif
 }
 
@@ -69,7 +69,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Show CDMAVoiceDataViewController after LoginSSO storyboard process has resolved if it hasn't already been shown or disabled
-	if (! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:@"CDMAVoiceDataHidden"] && ([settings boolForKey:@"showSprintVoiceDataWarning"] || [settings boolForKey:@"showVerizonVoiceDataWarning"]))
+	if (! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:CDMAVoiceDataHidden] && ([settings boolForKey:ShowSprintVoiceDataWarning] || [settings boolForKey:ShowVerizonVoiceDataWarning]))
 	{
 		CDMAVoiceDataViewController *cdmaVoiceDataViewController = [[CDMAVoiceDataViewController alloc] initWithNibName:@"CDMAVoiceData" bundle:nil];
 		
@@ -112,9 +112,9 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	#ifdef MYTELEMED
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidReceiveRemoteNotification" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidReceiveRemoteNotification object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidRegisterForRemoteNotifications object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidFailToRegisterForRemoteNotifications object:nil];
 	#endif
 }
 
@@ -332,12 +332,12 @@
 - (void)registerForRemoteNotifications
 {
 	// Remove any existing remote notification registration observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidRegisterForRemoteNotifications object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ApplicationDidFailToRegisterForRemoteNotifications object:nil];
 
 	// Add remote notification registration observers to detect if user has registered for remote notifications
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:@"UIApplicationDidRegisterForRemoteNotifications" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:@"UIApplicationDidFailToRegisterForRemoteNotifications" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:ApplicationDidRegisterForRemoteNotifications object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:ApplicationDidFailToRegisterForRemoteNotifications object:nil];
 
 	[self showNotificationRegistration];
 }

@@ -25,7 +25,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		_EmailAddress = [settings valueForKey:@"SSOProviderEmailAddress"];
+		_EmailAddress = [settings valueForKey:SSOProviderEmailAddress];
 	}
 	
 	return _EmailAddress ?: nil;
@@ -38,7 +38,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setValue:newEmailAddress forKey:@"SSOProviderEmailAddress"];
+		[settings setValue:newEmailAddress forKey:SSOProviderEmailAddress];
 		[settings synchronize];
 		
 		_EmailAddress = newEmailAddress;
@@ -53,7 +53,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		_Name = [settings valueForKey:@"SSOProvider"];
+		_Name = [settings valueForKey:SSOProvider];
 	}
 	
 	return _Name ?: @"";
@@ -66,7 +66,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setValue:newName forKey:@"SSOProvider"];
+		[settings setValue:newName forKey:SSOProvider];
 		[settings synchronize];
 		
 		_Name = newName;
