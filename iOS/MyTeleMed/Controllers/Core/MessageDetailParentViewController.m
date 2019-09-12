@@ -20,6 +20,8 @@
 
 @interface MessageDetailParentViewController ()
 
+@property (nonatomic) BOOL shouldReturnCallAfterRegistration;
+
 @end
 
 @implementation MessageDetailParentViewController
@@ -62,6 +64,11 @@
 		[self.constraintButtonHistoryLeadingSpace setConstant:spaceAdjustment];
 		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
 	}
+	
+	#if TARGET_IPHONE_SIMULATOR
+		// Disable return call button
+		[self.buttonReturnCall setEnabled:NO];
+	#endif
 	
 	// Set message priority color
 	[self setMessagePriority];
@@ -204,6 +211,9 @@
 		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 		UIAlertAction *registerAction = [UIAlertAction actionWithTitle:@"Register" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
+			// Update should return call flag to automatically return the call after device has successfully registered
+			[self setShouldReturnCallAfterRegistration:YES];
+			
 			// Run CoreViewController's registerForRemoteNotifications:
 			[self registerForRemoteNotifications];
 		}];
@@ -241,14 +251,17 @@
 	
 	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
-	dispatch_async(dispatch_get_main_queue(), ^
+	// If device is registered successfully, then enable the return call button and attempt to return call
+	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
 	{
-		// If device is registered successfully, then enable the return call button and attempt to return call
-		if ([registeredDevice isRegistered])
+		// Reset should return call flag
+		[self setShouldReturnCallAfterRegistration:NO];
+		
+		dispatch_async(dispatch_get_main_queue(), ^
 		{
 			[self returnCall:nil];
-		}
-	});
+		});
+	}
 }
 
 /*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
@@ -517,10 +530,15 @@
 	// Go to PhoneCallViewController
 	else if ([segue.identifier isEqualToString:@"showPhoneCallFromMessageDetail"] || [segue.identifier isEqualToString:@"showPhoneCallFromMessageHistory"])
 	{
+		PhoneCallViewController *phoneCallViewController = segue.destinationViewController;
+		
+		// Set message
+		[phoneCallViewController setMessage:self.message];
+		
 		// Request a call from TeleMed
 		CallModel *callModel = [[CallModel alloc] init];
-		
-		[callModel setDelegate:segue.destinationViewController];
+
+		[callModel setDelegate:phoneCallViewController];
 
 		[callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"false"];
 	}

@@ -427,6 +427,7 @@
 		E2EE4445219621D900FD61C0 /* OnCallSlotXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */; };
 		E2EE4446219621F500FD61C0 /* OnCallSlotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896346208540320055A18E /* OnCallSlotModel.m */; };
 		E2EE44492196262400FD61C0 /* MessageRedirectInfoXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */; };
+		E2F27222232919D900A9E548 /* Shared.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F27221232919D900A9E548 /* Shared.xcassets */; };
 		E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */; };
 		E2FB4035219E30A60037C7A7 /* icon-SwipeMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */; };
 /* End PBXBuildFile section */
@@ -901,6 +902,7 @@
 		E2EE44432196099500FD61C0 /* MessageRedirectInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoModel.h; sourceTree = "<group>"; };
 		E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectInfoXMLParser.m; sourceTree = "<group>"; };
 		E2EE44482196262300FD61C0 /* MessageRedirectInfoXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoXMLParser.h; sourceTree = "<group>"; };
+		E2F27221232919D900A9E548 /* Shared.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Shared.xcassets; sourceTree = "<group>"; };
 		E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeRefresh.png"; sourceTree = "<group>"; };
 		E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeMenu.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1338,6 +1340,7 @@
 			children = (
 				E271C1B92110AF4200256D8B /* Fonts */,
 				E211D5731FBF4BFE00263497 /* Images */,
+				E2F27221232919D900A9E548 /* Shared.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2063,6 +2066,7 @@
 				E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */,
 				E2D567C41CDB85B80054FD3F /* icon-Mail-Unread.png in Resources */,
 				283DF30318CA09EE00A344D2 /* update.caf in Resources */,
+				E2F27222232919D900A9E548 /* Shared.xcassets in Resources */,
 				283DF2D118CA09EE00A344D2 /* chord.caf in Resources */,
 				E2D567AD1CDB85B80054FD3F /* button-TextField-Help@3x.png in Resources */,
 				E21A0A8F1FC38E7E00CB8B9F /* button-Help@3x.png in Resources */,

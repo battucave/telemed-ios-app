@@ -11,6 +11,12 @@
 #import "CallModel.h"
 #import "RegisteredDeviceModel.h"
 
+@interface ContactViewController()
+
+@property (nonatomic) BOOL shouldReturnCallAfterRegistration;
+
+@end
+
 @implementation ContactViewController
 
 - (IBAction)callTeleMed:(id)sender
@@ -20,26 +26,15 @@
 	// Require device registration with TeleMed in order to return call
 	if ([registeredDevice isRegistered])
 	{
-		UIAlertController *callTeleMedAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-		UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Call" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-		{
-			// Go to PhoneCallViewController
-			[self performSegueWithIdentifier:@"showPhoneCall" sender:self];
-		}];
-
-		[callTeleMedAlertController addAction:callAction];
-		[callTeleMedAlertController addAction:cancelAction];
-
-		// Set preferred action
-		[callTeleMedAlertController setPreferredAction:callAction];
-
-		// Show alert dialog
-		[self presentViewController:callTeleMedAlertController animated:YES completion:nil];
+		// Go to PhoneCallViewController
+		[self performSegueWithIdentifier:@"showPhoneCall" sender:self];
 	}
 	// If device is not already registered with TeleMed, then prompt user to register it
 	else
 	{
+		// Update should return call flag to automatically return the call after device has successfully registered
+		[self setShouldReturnCallAfterRegistration:YES];
+		
 		UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"Please register your device to enable the Call TeleMed feature." preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 		UIAlertAction *registerAction = [UIAlertAction actionWithTitle:@"Register" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -69,14 +64,17 @@
 	
 	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
-	dispatch_async(dispatch_get_main_queue(), ^
+	// If device is registered successfully, then attempt to call TeleMed
+	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
 	{
-		// If device is registered successfully, then attempt to call TeleMed
-		if ([registeredDevice isRegistered])
+		// Reset should return call flag
+		[self setShouldReturnCallAfterRegistration:NO];
+		
+		dispatch_async(dispatch_get_main_queue(), ^
 		{
 			[self callTeleMed:nil];
-		}
-	});
+		});
+	}
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -86,7 +84,7 @@
 	{
 		// Request a call from TeleMed
 		CallModel *callModel = [[CallModel alloc] init];
-		
+
 		[callModel setDelegate:segue.destinationViewController];
 
 		[callModel callTeleMed];

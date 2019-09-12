@@ -12,6 +12,13 @@
 
 @interface PhoneCallViewController ()
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageIcon;
+@property (weak, nonatomic) IBOutlet UILabel *labelName;
+@property (weak, nonatomic) IBOutlet UILabel *labelNameIntro;
+@property (weak, nonatomic) IBOutlet UILabel *labelPhoneNumberIntro;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintViewSpacerHeight;
+
 @end
 
 @implementation PhoneCallViewController
@@ -19,9 +26,45 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	// If returning call to sender, then set sender name (unless the sender is TeleMed)
+	if (self.message && ! [self.message.SenderName isEqualToString:@"TeleMed"])
+	{
+		[self.labelName setText:self.message.SenderName];
+	}
+	// If calling TeleMed, then change the wording
+	else
+	{
+		[self.labelNameIntro setText:@"Please hold"];
+		[self.labelName setHidden:YES];
+	}
+	
+	// The System font cannot be assigned for attributed text, so assign it programmatically
+	[self.labelPhoneNumberIntro setFont:[UIFont systemFontOfSize:self.labelPhoneNumberIntro.font.pointSize weight:UIFontWeightSemibold]];
+	
+	// Adjust spacer height for screens less than or equal to 568
+	if ([UIScreen mainScreen].bounds.size.height <= 568)
+	{
+		[self.constraintViewSpacerHeight setConstant:10.0f];
+	}
 
 	// Add call connected observer to dismiss screen after return call from TeleMed was successfully received
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didConnectCall:) name:@"UIApplicationDidConnectCall" object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	
+	// Animate the TeleMed icon to rotate around the y-axis
+	CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.y"];
+
+	rotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
+	rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+	rotationAnimation.duration = 2;
+	rotationAnimation.repeatCount = HUGE_VALF;
+
+	[self.imageIcon.layer addAnimation:rotationAnimation forKey:rotationAnimation.keyPath];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -30,6 +73,15 @@
 	
 	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (IBAction)goBack:(id)sender
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		// Dismiss this screen and go back to the previous one
+		[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+	});
 }
 
 // Return pending from CallTeleMedModel delegate
@@ -60,15 +112,6 @@
 	
 	// Call succeeded so dismiss this screen
 	[self goBack:nil];
-}
-
-- (IBAction)goBack:(id)sender
-{
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		// Dismiss this screen and go back to the previous one
-		[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-	});
 }
 
 - (void)didReceiveMemoryWarning

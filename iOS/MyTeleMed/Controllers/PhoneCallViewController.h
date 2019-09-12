@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PhoneCallViewController : CoreViewController
 
+@property (nonatomic) id <MessageProtocol> message;
+
 @end
 
 NS_ASSUME_NONNULL_END
