@@ -15,7 +15,7 @@
 	NSTimer *_idleTimer;
 }
 
-@property (nonatomic) int timeoutPeriodMins;
+@property (nonatomic) NSInteger timeoutPeriodMins;
 
 /**
  * Resets the idle timer to its initial state. This method gets called

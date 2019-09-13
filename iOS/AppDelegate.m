@@ -194,49 +194,59 @@
 	// Remove view over app that was used to obsure screenshot (calling it here speeds up dismissal of screenshot when returning from background)
 	[self toggleScreenshotView:YES];
 	
-	// If more than 15 minutes have passed since app was closed, then reset cdma voice data hidden value
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	
-	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:DATE_APPLICATION_DID_ENTER_BACKGROUND]]) > 15)
+	// If application has timed out while it was in the background, then log the user out (unless the user was on a phone call)
+	if ([self didApplicationTimeoutWhileInactive])
 	{
-		[settings setBool:NO forKey:CDMA_VOICE_DATA_HIDDEN];
-		[settings synchronize];
+		[self applicationDidTimeout:nil];
 	}
-	
-	// MyTeleMed - Verify account is still valid
-	#ifdef MYTELEMED
-		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-	
-		[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+	// Application has not timed out so verify that account is still valid
+	else
+	{
+		id <ProfileProtocol> profile;
+		
+		#ifdef MYTELEMED
+			profile = [MyProfileModel sharedInstance];
+		
+		#elif defined MED2MED
+			profile = [UserProfileModel sharedInstance];
+		
+		#else
+			NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
+		#endif
+
+		if (profile)
 		{
-			if (success)
+			[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 			{
-				MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
-				
-				// Update MyStatusModel with updated number of unread messages
-				[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
+				if (success)
 				{
-					// No callback needed - values stored in shared instance automatically
-				}];
-			}
-			else
-			{
-				NSLog(@"Error %ld: %@", (long)error.code, error.localizedDescription);
-				
-				// If error is not because device is offline, then account not valid so go to login screen
-				if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
-				{
-					AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+					// MyTeleMed - Update MyStatusModel with updated number of unread messages
+					#ifdef MYTELEMED
+						MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 					
-					// Clear stored authentication data
-					[authenticationModel doLogout];
+						[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
+						{
+							// No callback needed - values are stored in shared instance automatically
+						}];
+					#endif
+				}
+				// If error is not because device is offline, then account is not valid so go to login screen
+				else
+				{
+					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+					
+					// Notify user that their account was invalid
+					[settings setValue:@"There was a problem validating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+					[settings synchronize];
 					
 					// Go to login screen
 					[self goToLoginScreen];
 				}
-			}
-		}];
-	#endif
+			}];
+			
+			return;
+		}
+	}
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -306,19 +316,19 @@
 
 - (void)applicationDidTimeout:(NSNotification *)notification
 {
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	BOOL timeoutDisabled = [settings boolForKey:DISABLE_TIMEOUT];
 	
 	// Only log user out if timeout is enabled and user is not currently on phone call
 	if (! timeoutDisabled && ! [self isCallConnected])
 	{
+		// Notify user that their session timed out
+		[settings setValue:@"Your session has timed out for security. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+		[settings synchronize];
+		
 		// Delay logout to ensure application is fully loaded
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
-			// Clear stored authentication data
-			[authenticationModel doLogout];
-			
 			// Go to login screen
 			[self goToLoginScreen];
 		});
@@ -353,6 +363,33 @@
 	*/
 }
 
+/**
+ * Determine whether application timed out while it was in the background
+ */
+- (BOOL)didApplicationTimeoutWhileInactive
+{
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
+	// If user has timeout disabled, then the application should not time out
+	if ([settings boolForKey:DISABLE_TIMEOUT])
+	{
+		return false;
+	}
+	
+	// Get user timeout period from user prefences
+	NSNumber *userTimeoutPeriodMinutes = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
+	
+	// Get number of seconds list application last resigned active
+	NSDate *dateApplicationResignedActive = (NSDate *)[settings objectForKey:DATE_APPLICATION_DID_ENTER_BACKGROUND];
+	NSTimeInterval timeIntervalSinceApplicationResignedActive = [[NSDate date] timeIntervalSinceDate:dateApplicationResignedActive];
+	
+	NSLog(@"User Timeout Period: %@ minutes", userTimeoutPeriodMinutes);
+	NSLog(@"Application Last Active: %f minutes ago", timeIntervalSinceApplicationResignedActive / 60);
+	
+	// Determine whether application has timed out since it last resigned active
+	return (timeIntervalSinceApplicationResignedActive / 60 > [userTimeoutPeriodMinutes integerValue]);
+}
+
 - (void)didFinishLaunching:(NSNotification *)notification
 {
 	// Remove reachability observer
@@ -369,9 +406,12 @@
 		[settings synchronize];
 	}
 	
+	// Get timeout disabled preference from user prefences
 	BOOL timeoutDisabled = [settings boolForKey:DISABLE_TIMEOUT];
 	
-	NSLog(@"Timeout Disabled: %@", (timeoutDisabled ? @"YES" : @"NO"));
+	NSLog(@"Is Timeout Disabled: %@", (timeoutDisabled ? @"YES" : @"NO"));
+	
+	// Note: App always requires login when launching from cold start (matches behavior of financial apps)
 	
 	// If user has timeout disabled and a refresh token already exists, then attempt to bypass the login screen
 	if (timeoutDisabled && authenticationModel.RefreshToken != nil)
@@ -450,7 +490,11 @@
  */
 - (void)goToLoginScreen
 {
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
+
+	// Clear stored authentication data
+	[authenticationModel doLogout];
 	
 	// Set LoginSSONavigationController as the root view controller
 	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];

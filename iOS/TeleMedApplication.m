@@ -34,7 +34,7 @@
 }
 
 // Override timeoutPeriodMins setter to automatically reset timer with new period
-- (void)setTimeoutPeriodMins:(int)timeoutPeriodMins
+- (void)setTimeoutPeriodMins:(NSInteger)timeoutPeriodMins
 {
 	_timeoutPeriodMins = timeoutPeriodMins;
 	

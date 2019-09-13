@@ -335,15 +335,57 @@
 	// URL is the login screen
 	if ([currentURL rangeOfString:@"login.aspx?"].location != NSNotFound)
 	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
 		// Prevent users from being able to go back to about:blank
 		[self.buttonBack setEnabled:NO];
 		
 		// Update background to be transparent and hide login button
 		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent'; document.getElementById('loginButton').style.display = 'none';"];
 		
+		// Display the reason for application log out (if any)
+		if ([settings objectForKey:REASON_APPLICATION_DID_LOGOUT])
+		{
+			NSString *errorMessage = [settings valueForKey:REASON_APPLICATION_DID_LOGOUT];
+		
+			NSString *javascriptErrorMessage = [NSString stringWithFormat:@
+				"var $errorMessageContainer = document.getElementById('lblGlobalAlert');"
+				"var $logoRow = document.getElementById('toplogorow');"
+				"var errorMessageStyle = 'color: white; display: block; font-size: 13px; font-weight: bold; padding-bottom: 8px;';"
+				
+				// If the error message container already exists
+				"if ($errorMessageContainer) {"
+					"$errorMessageContainer.style.cssText = errorMessageStyle;"
+					"$errorMessageContainer.textContent = '%@';"
+				
+				// If the logo row exists, then insert a new row with the error message container after it
+				"} else if ($logoRow) {"
+					"$errorMessageContainer = document.createElement('tr');"
+					
+					"$errorMessageContainer.innerHTML = '<td colspan=\"2\"><span id=\"lblGlobalAlert\" style=\"' + errorMessageStyle + '\">%@</span></td>';"
+					
+					"$logoRow.parentNode.insertBefore($errorMessageContainer, $logoRow.nextSibling);"
+				
+				// Fall back to showing an alert message
+				"} else {"
+					"alert('%@');"
+				"}",
+				
+				errorMessage,
+				errorMessage,
+				errorMessage
+			];
+			
+			[self.webView stringByEvaluatingJavaScriptFromString:javascriptErrorMessage];
+			
+			// Reset the reason for application log out
+			[settings removeObjectForKey:REASON_APPLICATION_DID_LOGOUT];
+			[settings synchronize];
+		}
+		
 		// Debug mode login shortcuts
 		#ifdef DEBUG
-			NSString *javascript = [NSString stringWithFormat:@
+			NSString *javascriptLogin = [NSString stringWithFormat:@
 				"var $loginButton = document.getElementById('loginButton');"
 				"var $password = document.getElementById('passwordTextBox');"
 				"var $userName = document.getElementById('userNameTextBox');"
@@ -351,10 +393,10 @@
 				// Auto-populate form if value matches shortcut value
 				"var autoPopulate = function(event) {"
 					"switch ($userName.value) {"
-						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = 'passw0rd'; break;"
-						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = 'passw0rd'; break;"
-						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = 'tm4321$$'; break;"
-						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = 'tmd4321$$'; break;"
+						"case 'b': case 'bturner': $userName.value = 'bturner'; $password.value = '%s'; break;"
+						"case 'j': case 'jhutchison': $userName.value = 'jhutchison'; $password.value = '%s'; break;"
+						"case 'm': case 'mattrogers': $userName.value = 'mattrogers'; $password.value = '%s'; break;"
+						"case 's': case 'shanegoodwin': $userName.value = 'shanegoodwin'; $password.value = '%s'; break;"
 					"}"
 				"};"
 				
@@ -386,10 +428,16 @@
 					"if (event.code == 'Enter' && $userName.value.length == 1) {"
 						"$userName.blur();"
 					"}"
-				"});"
+				"});",
+				
+				// Passwords
+				"passw0rd", // bturner
+				"passw0rd", // jhutchison
+				"tm4321$$", // mattrogers
+				"tmd4321$$" // shanegoodwin
 			];
 		
-			[self.webView stringByEvaluatingJavaScriptFromString:javascript];
+			[self.webView stringByEvaluatingJavaScriptFromString:javascriptLogin];
 		#endif
 	}
 	// URL is the forgot password screen

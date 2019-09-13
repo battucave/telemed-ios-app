@@ -375,7 +375,7 @@
     {
     	// Get details of keyboard animation
     	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+    	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16;
 		
     	// Animate table above keyboard
     	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^
@@ -390,7 +390,7 @@
 {
 	// Get details of keyboard animation
 	NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue] << 16;
+	NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16;
 	
 	// Animate table back down to bottom of screen
 	[UIView animateWithDuration:duration delay:0.0 options:curve animations: ^

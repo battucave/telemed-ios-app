@@ -60,6 +60,22 @@
 	return self;
 }
 
+// Override AccessToken setter to also store access token's expiration
+- (void)setAccessToken:(NSString *)newAccessToken
+{
+	if (_AccessToken != newAccessToken)
+	{
+		_AccessTokenExpiration = nil;
+		
+		if (newAccessToken != nil)
+		{
+			_AccessTokenExpiration = [[NSDate date] dateByAddingTimeInterval:ACCESS_TOKEN_EXPIRATION_TIME];
+		}
+		
+		_AccessToken = newAccessToken;
+	}
+}
+
 // Override RefreshToken getter
 - (NSString *)RefreshToken
 {
@@ -77,22 +93,6 @@
 	}
 	
 	return _RefreshToken;
-}
-
-// Override AccessToken setter to also store access token's expiration
-- (void)setAccessToken:(NSString *)newAccessToken
-{
-	if (_AccessToken != newAccessToken)
-	{
-		_AccessTokenExpiration = nil;
-		
-		if (newAccessToken != nil)
-		{
-			_AccessTokenExpiration = [[NSDate date] dateByAddingTimeInterval:ACCESS_TOKEN_EXPIRATION_TIME];
-		}
-		
-		_AccessToken = newAccessToken;
-	}
 }
 
 // Override RefreshToken setter to store value in keychain
@@ -181,9 +181,14 @@
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
 			AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
 			// Turn off isWorking
 			self.isWorking = NO;
+			
+			// Notify user that there was an authentication problem
+			[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+			[settings synchronize];
 			
 			// Clear stored authentication data
 			[self doLogout];
@@ -235,8 +240,14 @@
 			
 			dispatch_async(dispatch_get_main_queue(), ^
 			{
+				NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			
 				// Turn off isWorking
 				self.isWorking = NO;
+				
+				// Notify user that there was an authentication problem
+				[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+				[settings synchronize];
 				
 				// Clear stored authentication data
 				[self doLogout];

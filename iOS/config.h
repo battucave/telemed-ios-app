@@ -59,6 +59,7 @@
 #define CDMA_VOICE_DATA_HIDDEN @"CDMAVoiceDataHidden"
 #define DATE_APPLICATION_DID_ENTER_BACKGROUND @"dateApplicationDidEnterBackground"
 #define DISABLE_TIMEOUT @"disableTimeout"
+#define REASON_APPLICATION_DID_LOGOUT @"ReasonApplicationDidLogout"
 #define SHOW_SPRINT_VOICE_DATA_WARNING @"showSprintVoiceDataWarning"
 #define SHOW_VERIZON_VOICE_DATA_WARNING @"showVerizonVoiceDataWarning"
 #define SSO_PROVIDER @"SSOProvider"
@@ -66,3 +67,4 @@
 #define SWIPE_MESSAGE_DISABLED @"swipeMessageDisabled"
 #define UDDI_DEVICE @"UDDIDevice"
 #define USER_PROFILE_PHONE_NUMBER @"UserProfilePhoneNumber"
+#define USER_TIMEOUT_PERIOD_MINUTES @"userTimeoutPeriodMinutes"
