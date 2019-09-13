@@ -139,7 +139,7 @@
 		{
 			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
-			[settings setBool:YES forKey:DisableTimeout];
+			[settings setBool:YES forKey:DISABLE_TIMEOUT];
 			[settings synchronize];
 		
 			// Toggle title of footer in timeout section
@@ -160,7 +160,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setBool:NO forKey:DisableTimeout];
+		[settings setBool:NO forKey:DISABLE_TIMEOUT];
 		[settings synchronize];
 		
 		// Toggle title of footer in timeout section
@@ -253,7 +253,7 @@
 		{
 			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 			
-			return [self getSectionTimeoutFooterTitle:[settings boolForKey:DisableTimeout]];
+			return [self getSectionTimeoutFooterTitle:[settings boolForKey:DISABLE_TIMEOUT]];
 		}
 	}
 	
@@ -277,7 +277,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[self.switchTimeout setOn:[settings boolForKey:DisableTimeout]];
+		[self.switchTimeout setOn:[settings boolForKey:DISABLE_TIMEOUT]];
 	}
 	// Add version and build numbers to version cell
 	else if (indexPath.section == self.sectionAboutTeleMed)

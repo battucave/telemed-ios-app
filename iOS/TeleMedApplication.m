@@ -51,7 +51,7 @@
 	// Default timeout period to 10 minutes
 	if (self.timeoutPeriodMins < 1)
 	{
-		_timeoutPeriodMins = DEFAULT_APP_TIMEOUT_PERIOD_MINS;
+		_timeoutPeriodMins = DEFAULT_TIMEOUT_PERIOD_MINUTES;
 	}
 	
 	// On app launch and/or login, the timeout period will be overwritten with the timeout period set in MyProfileModel/UserProfileModel
@@ -62,7 +62,7 @@
 - (void)idleTimerExceeded
 {
 	// Post a notification so anyone who subscribes to it can be notified when the application times out
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApplicationDidTimeout object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_TIMEOUT object:nil];
 }
 
 @end

@@ -83,7 +83,7 @@
 	
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	[settings setBool:YES forKey:SwipeMessageDisabled];
+	[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
 	[settings synchronize];
 }
