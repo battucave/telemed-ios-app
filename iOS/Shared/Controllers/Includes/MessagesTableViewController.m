@@ -79,6 +79,9 @@
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
 {
+	// Cancel queued messages refresh when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	[self reloadMessages];
 	
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -214,42 +217,6 @@
 	
 	[self.tableView reloadData];
 }
-
-// Return messages from MessageModel delegate
-- (void)updateMessages:(NSArray *)messages
-{
-	[self setIsLoaded:YES];
-	[self setMessages:messages];
-	[self setFilteredMessages:[messages mutableCopy]];
-
-	// If messages type is active, toggle the parent view controller's edit button based on whether there are any filtered messages
-	if ([self.messagesType isEqualToString:@"Active"])
-	{
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-	}
-
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableView reloadData];
-	});
-	
-	[self.refreshControl endRefreshing];
-}
-
-// Return error from MessageModel delegate
-#ifdef MYTELEMED
-- (void)updateMessagesError:(NSError *)error
-{
-	[self setIsLoaded:YES];
-	
-	[self.refreshControl endRefreshing];
-	
-	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
-}
-#endif
 
 // Return sent messages from SentMessageModel delegate
 - (void)updateSentMessages:(NSArray *)sentMessages
@@ -568,6 +535,14 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Cancel queued messages refresh when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
 // Reload messages
 - (void)reloadMessages
 {
@@ -586,6 +561,44 @@
 	{
 		[self.messageModel getActiveMessages];
 	}
+}
+
+// Return messages from MessageModel delegate
+- (void)updateMessages:(NSArray *)messages
+{
+	[self setIsLoaded:YES];
+	[self setMessages:messages];
+	[self setFilteredMessages:[messages mutableCopy]];
+
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView reloadData];
+
+	// If messages type is active
+	if ([self.messagesType isEqualToString:@"Active"])
+	{
+		// Toggle the parent view controller's edit button based on whether there are any filtered messages
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+		
+		// Refresh messages again after 25 second delay
+		[self performSelector:@selector(reloadMessages) withObject:nil afterDelay:25.0];
+	}
+	});
+	
+	[self.refreshControl endRefreshing];
+}
+
+// Return error from MessageModel delegate
+- (void)updateMessagesError:(NSError *)error
+{
+	[self setIsLoaded:YES];
+	
+	[self.refreshControl endRefreshing];
+	
+	// Show error message
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
 }
 #endif
 

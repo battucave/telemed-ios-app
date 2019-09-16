@@ -60,9 +60,20 @@
 	[self reloadChatMessages];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Cancel queued chat messages refresh when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
 {
+	// Cancel queued chat messages refresh when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	[self reloadChatMessages];
 	
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -182,6 +193,9 @@
 	});
 	
 	[self.refreshControl endRefreshing];
+	
+	// Refresh chat messages again after 25 second delay
+	[self performSelector:@selector(reloadChatMessages) withObject:nil afterDelay:25.0];
 }
 
 // Return error from ChatMessageModel delegate
