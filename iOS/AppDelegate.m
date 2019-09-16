@@ -191,30 +191,31 @@
 {
 	// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background
 	
+	id <ProfileProtocol> profile;
+	
+	#ifdef MYTELEMED
+		profile = [MyProfileModel sharedInstance];
+
+	#elif defined MED2MED
+		profile = [UserProfileModel sharedInstance];
+
+	#else
+		NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
+	#endif
+	
 	// Remove view over app that was used to obsure screenshot (calling it here speeds up dismissal of screenshot when returning from background)
 	[self toggleScreenshotView:YES];
 	
-	// If application has timed out while it was in the background, then log the user out (unless the user was on a phone call)
-	if ([self didApplicationTimeoutWhileInactive])
+	// Re-authenticate user
+	if (profile && [profile isAuthenticated])
 	{
-		[self applicationDidTimeout:nil];
-	}
-	// Application has not timed out so verify that account is still valid
-	else
-	{
-		id <ProfileProtocol> profile;
-		
-		#ifdef MYTELEMED
-			profile = [MyProfileModel sharedInstance];
-		
-		#elif defined MED2MED
-			profile = [UserProfileModel sharedInstance];
-		
-		#else
-			NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
-		#endif
-
-		if (profile)
+		// If application has timed out while it was in the background, then log the user out (unless the user was on a phone call)
+		if ([self didApplicationTimeoutWhileInactive])
+		{
+			[self applicationDidTimeout:nil];
+		}
+		// Application has not timed out so verify that account is still valid
+		else
 		{
 			[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 			{
@@ -243,8 +244,6 @@
 					[self goToLoginScreen];
 				}
 			}];
-			
-			return;
 		}
 	}
 }
