@@ -130,7 +130,7 @@
 			if (self.Interval != nil && [self.Interval integerValue] == 0)
 			{
 				// Default interval to 1
-				self.Interval = [NSNumber numberWithInt:1];
+				self.Interval = @1;
 			}
 			
 			// Save notification settings for type to device

@@ -298,8 +298,10 @@
 			// Post a notification to any listeners (PhoneCallViewController)
 			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
 			
-			// Stop observing for TeleMed to return phone call
-			dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+			// MyTeleMed - Stop observing for TeleMed to return phone call
+			#ifdef MYTELEMED
+				dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+			#endif
 		}
 	}
 }

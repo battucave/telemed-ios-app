@@ -14,13 +14,16 @@
 
 @property (weak) id delegate;
 
-- (void)initMessagesWithType:(NSString *)newMessagesType;
-- (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (void)hideSelectedMessages:(NSArray *)messages;
+- (void)initMessagesWithType:(NSString *)newMessagesType;
 - (void)reloadMessages;
 - (void)removeSelectedMessages:(NSArray *)messages;
-- (void)resetMessages;
 - (void)unHideSelectedMessages:(NSArray *)messages;
+
+#ifdef MYTELEMED
+	- (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+	- (void)resetMessages;
+#endif
 
 @end
 

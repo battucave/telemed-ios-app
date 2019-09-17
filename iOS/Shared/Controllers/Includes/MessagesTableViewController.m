@@ -25,9 +25,7 @@
 
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
-@property (nonatomic) UIRefreshControl *savedRefreshControl;
 @property (nonatomic) NSArray *messages;
-@property (nonatomic) NSMutableArray *filteredMessages;
 @property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
 
@@ -91,38 +89,6 @@
 	[settings synchronize];
 }
 
-- (void)initMessagesWithType:(NSString *)newMessagesType
-{
-	[self setMessages:nil];
-	[self setFilteredMessages:nil];
-	self.messagesType = newMessagesType;
-	
-	// If messages type is active, re-enable refresh control
-	if ([newMessagesType isEqualToString:@"Active"])
-	{
-		if (self.refreshControl == nil)
-		{
-			self.refreshControl = self.savedRefreshControl;
-		}
-	}
-	// If messages type is archives or sent, disable refresh control
-	else
-	{
-		self.savedRefreshControl = self.refreshControl;
-		self.refreshControl = nil;
-	}
-}
-
-// Delegate method from ArchivesViewController
-- (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
-{
-	[self setArchiveAccountID:accountID];
-	[self setArchiveStartDate:startDate];
-	[self setArchiveEndDate:endDate];
-	
-	// Don't need to reload messages here because viewWillAppear fires when ArchivesPickerViewController is popped from navigation controller
-}
-
 - (void)hideSelectedMessages:(NSArray *)messages
 {
 	self.hiddenMessages = [NSMutableArray new];
@@ -140,14 +106,25 @@
 	}
 	
 	// Toggle the edit button
-	[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+	[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	
 	[self.tableView reloadData];
 }
 
+- (void)initMessagesWithType:(NSString *)newMessagesType
+{
+	self.messagesType = newMessagesType;
+	
+	// If messages type is archives or sent, disable refresh control
+	if (! [newMessagesType isEqualToString:@"Active"])
+	{
+		self.refreshControl = nil;
+	}
+}
+
 - (void)removeSelectedMessages:(NSArray *)messages
 {
-	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
+	NSArray *messagesCopy = [self.messages copy];
 	NSMutableArray *indexPaths = [NSMutableArray new];
 	NSMutableArray *mutableMessages = [self.messages mutableCopy];
 	
@@ -157,22 +134,21 @@
 		return;
 	}
 	
-	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
+	// Remove each message from the source data, hidden data, selected data, and the table itself
 	for (id <MessageProtocol> message in messages)
 	{
 		[mutableMessages removeObject:message];
-		[self.filteredMessages removeObject:message];
 		[self.hiddenMessages removeObject:message];
 		[self.selectedMessages removeObject:message];
 		
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[filteredMessagesCopy indexOfObject:message] inSection:0]];
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[messagesCopy indexOfObject:message] inSection:0]];
 	}
 	
 	// Remove selected messages from messages array
 	[self setMessages:[mutableMessages copy]];
 	
 	// Remove rows
-	if ([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
+	if ([self.messages count] > 0 && [self.messages count] > [self.hiddenMessages count])
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
@@ -182,20 +158,11 @@
 		[self.tableView reloadData];
 		
 		// Toggle the edit button
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 || [self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
 	}
 	
 	// Update delegate's list of selected messages
 	[self.delegate setSelectedMessages:self.selectedMessages];
-}
-
-// Reset messages back to loading state
-- (void)resetMessages
-{
-	[self setIsLoaded:NO];
-	[self setMessages:[[NSMutableArray alloc] init]];
-	
-	[self.tableView reloadData];
 }
 
 - (void)unHideSelectedMessages:(NSArray *)messages
@@ -221,7 +188,13 @@
 // Return sent messages from SentMessageModel delegate
 - (void)updateSentMessages:(NSArray *)sentMessages
 {
-	[self updateMessages:sentMessages];
+	[self setIsLoaded:YES];
+	[self setMessages:sentMessages];
+
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView reloadData];
+	});
 }
 
 // Return error from SentMessageModel delegate
@@ -242,15 +215,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return MAX([self.filteredMessages count], 1);
+	return MAX([self.messages count], 1);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are filtered messages and hidden messages and row is not the only row in the table
-	if (! [self.messagesType isEqualToString:@"Sent"] && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
+	// If there are messages and hidden messages and row is not the only row in the table
+	if (! [self.messagesType isEqualToString:@"Sent"] && [self.messages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.messages count] != [self.hiddenMessages count]))
 	{
-		id <MessageProtocol> message = [self.filteredMessages objectAtIndex:indexPath.row];
+		id <MessageProtocol> message = [self.messages objectAtIndex:indexPath.row];
 		
 		// Hide hidden messages by setting the cell's height to 0
 		if ([self.hiddenMessages containsObject:message])
@@ -264,7 +237,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.filteredMessages count] == 0 || (indexPath.row == 0 && [self.filteredMessages count] == [self.hiddenMessages count]))
+	if ([self.messages count] == 0 || (indexPath.row == 0 && [self.messages count] == [self.hiddenMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -277,7 +250,7 @@
 	
 	static NSString *cellIdentifier = @"MessageCell";
 	MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	id message = [self.filteredMessages objectAtIndex:indexPath.row];
+	id message = [self.messages objectAtIndex:indexPath.row];
 	
 	// Sent messages
 	if ([self.messagesType isEqualToString:@"Sent"])
@@ -448,8 +421,8 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no filtered messages, then user clicked the no messages cell
-	return ([self.filteredMessages count] <= indexPath.row ? nil : indexPath);
+	// If there are no messages, then user clicked the no messages cell
+	return ([self.messages count] <= indexPath.row ? nil : indexPath);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -464,7 +437,7 @@
 			
 			for (NSIndexPath *indexPath in indexPaths)
 			{
-				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
+				[self.selectedMessages addObject:[self.messages objectAtIndex:indexPath.row]];
 			}
 			
 			[self.delegate setSelectedMessages:self.selectedMessages];
@@ -484,7 +457,7 @@
 			
 			for (NSIndexPath *indexPath in indexPaths)
 			{
-				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
+				[self.selectedMessages addObject:[self.messages objectAtIndex:indexPath.row]];
 			}
 			
 			[self.delegate setSelectedMessages:self.selectedMessages];
@@ -494,10 +467,10 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-	// If navigating to MessageDetailViewController, but there are no filtered messages, then user clicked the no messages found cell
+	// If navigating to MessageDetailViewController, but there are no messages, then user clicked the no messages found cell
 	if ([identifier isEqualToString:@"showMessageDetail"])
 	{
-		return ! self.editing && [self.filteredMessages count] > 0;
+		return ! self.editing && [self.messages count] > 0;
 	}
 	
 	return YES;
@@ -510,9 +483,9 @@
 		MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
 		long selectedRow = [self.tableView indexPathForSelectedRow].row;
 		
-		if ([self.filteredMessages count] > selectedRow)
+		if ([self.messages count] > selectedRow)
 		{
-			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:selectedRow];
+			id <MessageProtocol> message = [self.messages objectAtIndex:selectedRow];
 			
 			[messageDetailViewController setMessage:message];
 		}
@@ -543,6 +516,16 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
+// Delegate method from ArchivesViewController
+- (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+	[self setArchiveAccountID:accountID];
+	[self setArchiveStartDate:startDate];
+	[self setArchiveEndDate:endDate];
+	
+	// Don't need to reload messages here because viewWillAppear fires when ArchivesPickerViewController is popped from navigation controller
+}
+
 // Reload messages
 - (void)reloadMessages
 {
@@ -563,26 +546,34 @@
 	}
 }
 
+// Reset messages back to loading state
+- (void)resetMessages
+{
+	[self setIsLoaded:NO];
+	[self setMessages:[[NSMutableArray alloc] init]];
+	
+	[self.tableView reloadData];
+}
+
 // Return messages from MessageModel delegate
 - (void)updateMessages:(NSArray *)messages
 {
 	[self setIsLoaded:YES];
 	[self setMessages:messages];
-	[self setFilteredMessages:[messages mutableCopy]];
 
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableView reloadData];
 
-	// If messages type is active
-	if ([self.messagesType isEqualToString:@"Active"])
-	{
-		// Toggle the parent view controller's edit button based on whether there are any filtered messages
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-		
-		// Refresh messages again after 25 second delay
-		[self performSelector:@selector(reloadMessages) withObject:nil afterDelay:25.0];
-	}
+		// If messages type is active
+		if ([self.messagesType isEqualToString:@"Active"])
+		{
+			// Toggle the parent view controller's edit button based on whether there are any messages
+			[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 || [self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+			
+			// Refresh messages again after 25 second delay
+			[self performSelector:@selector(reloadMessages) withObject:nil afterDelay:25.0];
+		}
 	});
 	
 	[self.refreshControl endRefreshing];
