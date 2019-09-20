@@ -68,7 +68,7 @@
 		// Show activity indicator
 		[[self getRootViewController] presentViewController:loadingAlertController animated:NO completion:nil];
 		
-		// Reset has dismissed flag
+		// Reset the hasDismissed flag
 		[self setHasDismissed:NO];
 	});
 }
@@ -93,7 +93,7 @@
 		{
 			[[self getRootViewController] dismissViewControllerAnimated:NO completion:callback];
 			
-			// Update has dismissed flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
+			// Update the hasDismissed flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
 			[self setHasDismissed:YES];
 		}
 	});

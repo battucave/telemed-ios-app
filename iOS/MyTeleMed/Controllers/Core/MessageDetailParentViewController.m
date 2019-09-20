@@ -211,7 +211,7 @@
 		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 		UIAlertAction *registerAction = [UIAlertAction actionWithTitle:@"Register" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
-			// Update should return call flag to automatically return the call after device has successfully registered
+			// Update the shouldReturnCallAfterRegistration flag to automatically return the call after device has successfully registered
 			[self setShouldReturnCallAfterRegistration:YES];
 			
 			// Run CoreViewController's registerForRemoteNotifications:
@@ -254,7 +254,7 @@
 	// If device is registered successfully, then enable the return call button and attempt to return call
 	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
 	{
-		// Reset should return call flag
+		// Reset the shouldReturnCallAfterRegistration flag
 		[self setShouldReturnCallAfterRegistration:NO];
 		
 		dispatch_async(dispatch_get_main_queue(), ^

@@ -118,7 +118,7 @@
 {
 	[self loadMessages:1];
 	
-	// Note: Don't trigger the is fetching flag here (its only used for fetching "next" messages)
+	// Note: Don't trigger the isFetchingNextPage flag here (its only used for fetching "next" messages)
 }
 
 // Return sent messages from SentMessageModel delegate
@@ -799,7 +799,7 @@
 	// If the last row is being pre-fetched, then fetch the next batch of messages
 	if (maximumRow >= (self.currentPage * MessagesPerPage))
 	{
-		// Enable is fetching flag
+		// Enable the isFetchingNextPage flag
 		[self setIsFetchingNextPage:YES];
 		
 		// Increment the current page
@@ -825,7 +825,7 @@
 {
 	[self.sentMessageModel getSentMessages];
 	
-	// Note: Don't trigger the is fetching flag here (its only used for fetching "next" messages)
+	// Note: Don't trigger the isFetchingNextPage here (its only used for fetching "next" messages)
 }
 #endif
 

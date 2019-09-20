@@ -294,7 +294,7 @@
 						[self showNotificationAuthorization];
 					}
 					
-					// Reset should authorize remote notifications flag
+					// Reset the shouldAuthorizeRemoteNotifications flag
 					[self setShouldAuthorizeRemoteNotifications:NO];
 				}
 			}];

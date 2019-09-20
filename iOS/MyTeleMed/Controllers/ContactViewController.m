@@ -32,7 +32,7 @@
 	// If device is not already registered with TeleMed, then prompt user to register it
 	else
 	{
-		// Update should return call flag to automatically return the call after device has successfully registered
+		// Update the shouldReturnCallAfterRegistration flag to automatically return the call after device has successfully registered
 		[self setShouldReturnCallAfterRegistration:YES];
 		
 		UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Call TeleMed" message:@"Please register your device to enable the Call TeleMed feature." preferredStyle:UIAlertControllerStyleAlert];
@@ -67,7 +67,7 @@
 	// If device is registered successfully, then attempt to call TeleMed
 	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
 	{
-		// Reset should return call flag
+		// Reset the shouldReturnCallAfterRegistration flag
 		[self setShouldReturnCallAfterRegistration:NO];
 		
 		dispatch_async(dispatch_get_main_queue(), ^

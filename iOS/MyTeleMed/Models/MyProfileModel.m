@@ -102,7 +102,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Update authenticated flag
+			// Update the isAuthenticated flag
 			[self setIsAuthenticated:YES];
 			
 			// Search user's registered devices to determine whether any match the current device. If so, update the current device with the new phone number

@@ -469,7 +469,7 @@
 				{
 					[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.5];
 					
-					// Reset from push notification flag
+					// Reset the fromPushNotification flag
 					[self setIsFromPushNotification:NO];
 				}
 				

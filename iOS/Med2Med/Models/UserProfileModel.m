@@ -95,7 +95,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Update authenticated flag
+			// Update the isAuthenticated flag
 			[self setIsAuthenticated:YES];
 			
 			callback(YES, (id <ProfileProtocol>)self, nil);

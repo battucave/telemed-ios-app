@@ -175,7 +175,7 @@
 	// Update text view chat participants with chat participant name(s)
 	[self setChatParticipantNames:self.selectedChatParticipants expanded:NO];
 	
-	// Reset chat messages table, conversation id, and is loaded flag
+	// Reset the chat messages table, conversation id, and isLoaded flag
 	[self resetChatMessages];
 	
 	// If only one chat participant or is a group chat, then check if an existing conversation already exists with the selected chat participants
@@ -201,7 +201,7 @@
 				// Get chat messages for conversation id
 				[self.chatMessageModel getChatMessagesByID:self.conversationID];
 				
-				// Reset is loaded flag to show loading message
+				// Reset the isLoaded flag to show loading message
 				[self setIsLoaded:NO];
 				
 				// Update navigation bar title to reflect existing conversation
@@ -294,7 +294,7 @@
 		[self.textViewChatParticipants flashScrollIndicators];
 	}
 	
-	// Toggle participants expanded flag
+	// Toggle the isParticipantsExpanded flag
 	self.isParticipantsExpanded = ! self.isParticipantsExpanded;
 }
 
@@ -422,7 +422,7 @@
 				// Update text view chat participants with chat participant name(s)
 				[self setChatParticipantNames:chatMessage.ChatParticipants expanded:NO];
 				
-				// Reset participants expanded flag
+				// Reset teh isParticipantsExpanded flag
 				self.isParticipantsExpanded = NO;
 			}
 		}
