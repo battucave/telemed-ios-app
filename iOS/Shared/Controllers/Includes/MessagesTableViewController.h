@@ -22,7 +22,7 @@
 #ifdef MYTELEMED
 	- (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 	- (void)resetActiveMessages; // Hopefully temporary - remove if pagination flaw is corrected (see MessagesViewController modifyMultipleMessagesStateSuccess: for more info)
-	- (void)resetArchivedMessages;
+	- (void)resetMessages;
 #endif
 
 @end

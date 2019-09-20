@@ -51,9 +51,9 @@
 - (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue
 {
 	// Reset MessagesTableViewController back to loading state
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetArchivedMessages)])
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
 	{
-		[self.messagesTableViewController resetArchivedMessages];
+		[self.messagesTableViewController resetMessages];
 	}
 	
 	// Obtain reference to source view controller

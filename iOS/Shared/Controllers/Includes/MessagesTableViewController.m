@@ -615,10 +615,19 @@
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no messages left in the source data, simply reload the table to show the no messages cell
+	// If there are no messages left in the source data, then reset the table
 	else
 	{
-		[self.tableView reloadData];
+		// Store value of the isLastPageLoaded flag before it gets reset
+		BOOL wasLastPageLoaded = self.isLastPageLoaded;
+		
+		[self resetMessages];
+		
+		// If the last page had not been loaded yet, then reload the messages in case there are additional messages to be fetched (this should rarely, if ever, happen)
+		if (! wasLastPageLoaded)
+		{
+			[self reloadMessages];
+		}
 		
 		// Toggle the edit button
 		[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 || [self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
@@ -631,30 +640,24 @@
 	}
 }
 
-// HOPEFULLY TEMPORARY: Reset active messages back to loading state (remove if pagination flaw is corrected - see MessagesViewController modifyMultipleMessagesStateSuccess: for more info)
+// HOPEFULLY TEMPORARY: Reset and reload messages (remove if pagination flaw is corrected - see MessagesViewController modifyMultipleMessagesStateSuccess: for more info)
 - (void)resetActiveMessages
 {
+	[self resetMessages];
+	
 	// Reload first page of messages
 	[self reloadMessages];
-	
+}
+
+// Reset messages back to loading state
+- (void)resetMessages
+{
 	[self setCurrentPage:1];
 	[self setIsFirstPageLoaded:NO];
+	[self setIsLastPageLoaded:NO];
 	[self setMessages:[NSMutableArray new]];
 	[self setHiddenMessages:[NSMutableArray new]];
 	[self setSelectedMessages:[NSMutableArray new]];
-	
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		[self.tableView reloadData];
-	});
-}
-
-// Reset archive messages back to loading state
-- (void)resetArchivedMessages
-{
-	[self setCurrentPage:1];
-	[self setIsFirstPageLoaded:NO];
-	[self setMessages:[NSMutableArray new]];
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
@@ -736,13 +739,18 @@
 		if (newMessageCount > 0)
 		{
 			[self.messages insertObjects:newMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, newMessageCount)]];
+			
+			// Insert new messages into the table and end refreshing
+			[self insertNewRowsStartingAt:0 endingAt:newMessageCount withCompletion:^(BOOL finished)
+			{
+				[self.refreshControl endRefreshing];
+			}];
 		}
-		
-		// Insert new messages into the table and end refreshing
-		[self insertNewRowsStartingAt:0 endingAt:newMessageCount withCompletion:^(BOOL finished)
+		// End refreshing
+		else
 		{
 			[self.refreshControl endRefreshing];
-		}];
+		}
 	}
 	// Append new messages to the bottom of existing messages
 	else
@@ -753,16 +761,18 @@
 		if (newMessageCount > 0)
 		{
 			[self.messages addObjectsFromArray:messages];
-		}
-		
-		// Insert new messages into the table with completion block
-		[self insertNewRowsStartingAt:existingMessageCount endingAt:[self.messages count] withCompletion:^(BOOL finished)
-		{
-			[self.refreshControl endRefreshing];
 			
-			// Remove loading indicator from table view
+			// Insert new messages into the table and remove loading indicator from table
+			[self insertNewRowsStartingAt:existingMessageCount endingAt:[self.messages count] withCompletion:^(BOOL finished)
+			{
+				[self.tableView setTableFooterView:[[UIView alloc] init]];
+			}];
+		}
+		// Remove loading indicator from table
+		else
+		{
 			[self.tableView setTableFooterView:[[UIView alloc] init]];
-		}];
+		}
 	}
 	
 	// Refresh the first page of messages again after 25 second delay
@@ -787,6 +797,9 @@
 
 - (void)tableView:(UITableView *)tableView prefetchRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
 {
+	// NSLog(@"PREFETCH ROW AT: %ld", (long)[[indexPaths valueForKeyPath:@"@max.row"] longValue] + 1);
+	// NSLog(@"NEXT FETCH: %ld", (self.currentPage * MessagesPerPage));
+	
 	// Prevent duplicate or unneeded web service requests
 	if (self.isFetchingNextPage || self.isLastPageLoaded)
 	{
