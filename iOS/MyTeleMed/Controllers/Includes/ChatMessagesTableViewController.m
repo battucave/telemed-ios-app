@@ -48,6 +48,9 @@
 	// Initialize ChatMessageModel
 	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
 	[self.chatMessageModel setDelegate:self];
+	
+	// Initialize hidden messages
+	[self setHiddenChatMessages:[NSMutableArray new]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,32 +86,122 @@
 	[settings synchronize];
 }
 
+// Compare chat messages to existing chat messages to determine which chat messages are new
+- (NSArray *)computeNewChatMessages:(NSArray *)chatMessages
+{
+	// Use NSSet's minusSet: to determine which messages are new
+	NSSet *existingChatMessages = [NSSet setWithArray:self.chatMessages];
+	NSMutableSet *newChatMessages = [NSMutableSet setWithArray:chatMessages];
+
+	[newChatMessages minusSet:existingChatMessages];
+
+	// Convert NSSet back into NSArray
+	return [newChatMessages allObjects];
+}
+
 - (void)hideSelectedChatMessages:(NSArray *)chatMessages
 {
-	self.hiddenChatMessages = [NSMutableArray new];
-	
 	// If no chat messages to hide, cancel
 	if ([chatMessages count] == 0)
 	{
 		return;
 	}
 	
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	
 	// Add each chat message to hidden chat messages
 	for (ChatMessageModel *chatMessage in chatMessages)
 	{
 		[self.hiddenChatMessages addObject:chatMessage];
+		
+		// Add index path for reloading in the table
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
 	}
+	
+	// Hide rows at specified index paths in the table
+	[self reloadRowsAtIndexPaths:indexPaths];
 	
 	// Toggle the edit button
 	[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
+}
+
+// Insert new rows into the table
+- (void)insertNewRowsStartingAt:(NSInteger)startIndex endingAt:(NSInteger)endIndex withCompletion:(void (^)(BOOL))completion
+{
+	NSInteger numberOfRows = endIndex - startIndex;
 	
-	[self.tableView reloadData];
+	// If there are no rows to refresh, then execute the completion block
+	if (numberOfRows == 0)
+	{
+		completion(YES);
+		
+		return;
+	}
+
+	NSMutableArray *newIndexPaths = [NSMutableArray new];
+	
+	for (int i = 0; i < numberOfRows; i++)
+	{
+		// Add index path for insertion into the table
+		[newIndexPaths addObject:[NSIndexPath indexPathForRow:(startIndex + i) inSection:0]];
+	}
+
+	// Insert new rows at specified index paths into the table
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
+		if (@available(iOS 11.0, *))
+		{
+			[self.tableView performBatchUpdates:^
+			{
+				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			}
+			completion:completion];
+		}
+		// iOS < 11 - Fall back to using beginUpdates and endUpdates
+		else
+		{
+			[self.tableView beginUpdates];
+			
+			[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			
+			[self.tableView endUpdates];
+			
+			completion(YES);
+		}
+	});
 }
 
 // Reload chat messages
 - (void)reloadChatMessages
 {
 	[self.chatMessageModel getChatMessages];
+}
+
+// TEMPORARY (remove this method when support for iOS 10 is dropped and instead simply call table view's performBatchUpdates: directly)
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
+		if (@available(iOS 11.0, *))
+		{
+			[self.tableView performBatchUpdates:^
+			{
+				[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			}
+			completion:nil];
+		}
+		// iOS < 11 - Fall back to using beginUpdates and endUpdates
+		else
+		{
+			[self.tableView beginUpdates];
+			
+			[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			
+			[self.tableView endUpdates];
+		}
+	});
 }
 
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
@@ -161,16 +254,22 @@
 		return;
 	}
 	
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	
 	// Remove each chat message from hidden chat messages
 	for (ChatMessageModel *chatMessage in chatMessages)
 	{
 		[self.hiddenChatMessages removeObject:chatMessage];
+		
+		// Add index path for reloading in the table
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
 	}
+	
+	// Hide rows at specified index paths in the table
+	[self reloadRowsAtIndexPaths:indexPaths];
 	
 	// Show the edit button (there will always be at least one message when unhiding)
 	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
-	
-	[self.tableView reloadData];
 }
 
 // Return chat messages from ChatMessageModel delegate
@@ -183,16 +282,40 @@
 	}] mutableCopy];
 	
 	[self setIsLoaded:YES];
-	[self setChatMessages:chatMessages];
 	
-	[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
-	
-	dispatch_async(dispatch_get_main_queue(), ^
+	// Set initial chat messages if empty
+	if ([self.chatMessages count] == 0)
 	{
-		[self.tableView reloadData];
-	});
-	
-	[self.refreshControl endRefreshing];
+		[self setChatMessages:chatMessages];
+		
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self.tableView reloadData];
+			
+			[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+			
+			[self.refreshControl endRefreshing];
+		});
+	}
+	// Add new chat messages resulting from a reload to the top of existing chat messages
+	else
+	{
+		// Extract out new chat messages that didn't exist in existing chat messages
+		NSArray *newChatMessages = [self computeNewChatMessages:chatMessages];
+		NSInteger newChatMessageCount = [newChatMessages count];
+		
+		// Prepend any new chat messages to the beginning of the existing chat messages
+		if (newChatMessageCount > 0)
+		{
+			[self setChatMessages:[newChatMessages arrayByAddingObjectsFromArray:self.chatMessages]];
+		}
+		
+		// Insert new chat messages into the table and end refreshing
+		[self insertNewRowsStartingAt:0 endingAt:newChatMessageCount withCompletion:^(BOOL finished)
+		{
+			[self.refreshControl endRefreshing];
+		}];
+	}
 	
 	// Refresh chat messages again after 25 second delay
 	[self performSelector:@selector(reloadChatMessages) withObject:nil afterDelay:25.0];

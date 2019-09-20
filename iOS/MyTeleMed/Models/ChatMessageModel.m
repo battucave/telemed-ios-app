@@ -327,6 +327,19 @@
 	}];
 }
 
+// Returns an integer hash code for this object. Required for object comparison using isEqual
+- (NSUInteger)hash
+{
+	return [self.ID hash];
+}
+
+// Compare this object with the specified object to determine if they are equal
+- (BOOL)isEqual:(id)object
+{
+	NSLog(@"IS EQUAL: %@ = %@", self.ID, [object ID]);
+	return ([object isKindOfClass:[ChatMessageModel class]] && [self.ID isEqual:[object ID]]);
+}
+
 // Network request has been sent, but still awaiting response
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
