@@ -10,6 +10,9 @@
 #import "MessageProtocol.h"
 #import "AccountModel.h"
 
+// Define the number of items to load per page
+extern int const MessagesPerPage;
+
 @interface MessageModel : Model <MessageProtocol>
 
 @property (weak) id delegate;
@@ -32,8 +35,8 @@
 
 @property (nonatomic) NSString *MessageType; // Active, Archived (this property not set by web service)
 
-- (void)getActiveMessages;
-- (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+- (void)getActiveMessages:(NSInteger)page;
+- (void)getArchivedMessages:(NSInteger)page forAccount:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (void)getMessageByDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, MessageModel *message, NSError *error))callback;
 - (void)modifyMessageState:(NSNumber *)messageDeliveryID state:(NSString *)state;
 - (void)modifyMultipleMessagesState:(NSArray *)messages state:(NSString *)state;
@@ -45,7 +48,7 @@
 @protocol MessageDelegate <NSObject>
 
 @required
-- (void)updateMessages:(NSArray *)messages;
+- (void)updateMessages:(NSArray *)messages forPage:(NSInteger)page;
 
 @optional
 - (void)updateMessagesError:(NSError *)error;
