@@ -125,7 +125,10 @@
 	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
 	
 	// Remove selected rows from messages table
-	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
+	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	{
+		[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
+	}
 }
 
 // Override setEditing:
@@ -166,7 +169,10 @@
 - (void)modifyMultipleMessagesStatePending:(NSString *)state
 {
 	// Hide selected rows from messages table
-	[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
+	if ([self.messagesTableViewController respondsToSelector:@selector(hideSelectedMessages:)])
+	{
+		[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
+	}
 	
 	[self setEditing:NO animated:YES];
 }
@@ -175,7 +181,10 @@
 - (void)modifyMultipleMessagesStateSuccess:(NSString *)state
 {
 	// Remove selected rows from messages table
-	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
+	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	{
+		[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
+	}
 }
 
 // Return modify multiple message states error from MessageModel delegate
@@ -187,13 +196,15 @@
 	[successfulMessages removeObjectsInArray:failedMessages];
 	
 	// Remove selected all rows from messages table that were successfully archived
-	if ([self.selectedMessages count] > 0)
+	if ([self.selectedMessages count] > 0 && [self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
 	{
 		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
 	}
-	
 	// Reload messages table to re-show messages that were not archived
-	[self.messagesTableViewController unHideSelectedMessages:failedMessages];
+	else if ([self.messagesTableViewController respondsToSelector:@selector(unhideSelectedMessages:)])
+	{
+		[self.messagesTableViewController unhideSelectedMessages:failedMessages];
+	}
 	
 	// Update selected messages to only the failed messages
 	self.selectedMessages = failedMessages;
@@ -275,7 +286,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to active
-		[self.messagesTableViewController initMessagesWithType:@"Active"];
+		[self.messagesTableViewController setMessagesType:@"Active"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

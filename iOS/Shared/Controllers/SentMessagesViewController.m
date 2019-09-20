@@ -19,20 +19,9 @@
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // Must be a strong reference
 @property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
-@property (nonatomic) NSArray *selectedMessages;
-@property (nonatomic) NSString *navigationBarTitle;
-
 @end
 
 @implementation SentMessagesViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
-	// Store navigation bar title
-	[self setNavigationBarTitle:self.navigationItem.title];
-}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -77,7 +66,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to sent
-		[self.messagesTableViewController initMessagesWithType:@"Sent"];
+		[self.messagesTableViewController setMessagesType:@"Sent"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

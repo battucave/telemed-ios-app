@@ -83,18 +83,12 @@
 	[settings synchronize];
 }
 
-// Reload chat messages
-- (void)reloadChatMessages
-{
-	[self.chatMessageModel getChatMessages];
-}
-
 - (void)hideSelectedChatMessages:(NSArray *)chatMessages
 {
 	self.hiddenChatMessages = [NSMutableArray new];
 	
 	// If no chat messages to hide, cancel
-	if (chatMessages == nil || [chatMessages count] == 0)
+	if ([chatMessages count] == 0)
 	{
 		return;
 	}
@@ -111,24 +105,10 @@
 	[self.tableView reloadData];
 }
 
-- (void)unHideSelectedChatMessages:(NSArray *)chatMessages
+// Reload chat messages
+- (void)reloadChatMessages
 {
-	// If no chat messages to hide, cancel
-	if (chatMessages == nil || [chatMessages count] == 0)
-	{
-		return;
-	}
-	
-	// Remove each chat message from hidden chat messages
-	for (ChatMessageModel *chatMessage in chatMessages)
-	{
-		[self.hiddenChatMessages removeObject:chatMessage];
-	}
-	
-	// Show the edit button (there will always be at least one message when unhiding)
-	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
-	
-	[self.tableView reloadData];
+	[self.chatMessageModel getChatMessages];
 }
 
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
@@ -137,7 +117,7 @@
 	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
 	
 	// If no chat messages to remove, cancel
-	if (chatMessages == nil || [chatMessages count] == 0)
+	if ([chatMessages count] == 0)
 	{
 		return;
 	}
@@ -171,6 +151,26 @@
 	
 	// Update delegate's list of selected messages
 	[self.delegate setSelectedChatMessages:self.selectedChatMessages];
+}
+
+- (void)unhideSelectedChatMessages:(NSArray *)chatMessages
+{
+	// If no chat messages to hide, cancel
+	if ([chatMessages count] == 0)
+	{
+		return;
+	}
+	
+	// Remove each chat message from hidden chat messages
+	for (ChatMessageModel *chatMessage in chatMessages)
+	{
+		[self.hiddenChatMessages removeObject:chatMessage];
+	}
+	
+	// Show the edit button (there will always be at least one message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+	
+	[self.tableView reloadData];
 }
 
 // Return chat messages from ChatMessageModel delegate

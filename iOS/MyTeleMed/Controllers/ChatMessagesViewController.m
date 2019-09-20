@@ -204,7 +204,7 @@
 	}
 	
 	// Reload chat messages table to re-show chat messages that were not deleted
-	[self.chatMessagesTableViewController unHideSelectedChatMessages:failedChatMessages];
+	[self.chatMessagesTableViewController unhideSelectedChatMessages:failedChatMessages];
 	
 	// Update selected chat messages to only the failed chat messages
 	self.selectedChatMessages = failedChatMessages;

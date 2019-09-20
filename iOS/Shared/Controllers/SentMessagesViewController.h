@@ -10,6 +10,4 @@
 
 @interface SentMessagesViewController : RevealViewController
 
-- (void)setSelectedMessages:(NSArray *)theSelectedMessages;
-
 @end

@@ -30,6 +30,8 @@
 @property (nonatomic) NSMutableArray *selectedMessages;
 
 @property (nonatomic) NSString *messagesType; // Active, Archived, Sent
+
+// Archived message properties
 @property (nonatomic) NSNumber *archiveAccountID;
 @property (nonatomic) NSDate *archiveStartDate;
 @property (nonatomic) NSDate *archiveEndDate;
@@ -72,12 +74,18 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	[self reloadMessages];
+	
+	// Disable refresh control for sent and archived messages
+	if (! [self.messagesType isEqualToString:@"Active"])
+	{
+		[self setRefreshControl:nil];
+	}
 }
 
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
 {
-	// Cancel queued messages refresh when user leaves this screen
+	// Cancel queued messages refresh
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	[self reloadMessages];
@@ -94,7 +102,7 @@
 	self.hiddenMessages = [NSMutableArray new];
 	
 	// If no messages to hide, cancel
-	if (messages == nil || [messages count] == 0)
+	if ([messages count] == 0)
 	{
 		return;
 	}
@@ -111,17 +119,6 @@
 	[self.tableView reloadData];
 }
 
-- (void)initMessagesWithType:(NSString *)newMessagesType
-{
-	self.messagesType = newMessagesType;
-	
-	// If messages type is archives or sent, disable refresh control
-	if (! [newMessagesType isEqualToString:@"Active"])
-	{
-		self.refreshControl = nil;
-	}
-}
-
 - (void)removeSelectedMessages:(NSArray *)messages
 {
 	NSArray *messagesCopy = [self.messages copy];
@@ -129,7 +126,7 @@
 	NSMutableArray *mutableMessages = [self.messages mutableCopy];
 	
 	// If no messages to remove, cancel
-	if (messages == nil || [messages count] == 0)
+	if ([messages count] == 0)
 	{
 		return;
 	}
@@ -165,10 +162,10 @@
 	[self.delegate setSelectedMessages:self.selectedMessages];
 }
 
-- (void)unHideSelectedMessages:(NSArray *)messages
+- (void)unhideSelectedMessages:(NSArray *)messages
 {
 	// If no messages to hide, cancel
-	if (messages == nil || [messages count] == 0)
+	if ([messages count] == 0)
 	{
 		return;
 	}
@@ -221,7 +218,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// If there are messages and hidden messages and row is not the only row in the table
-	if (! [self.messagesType isEqualToString:@"Sent"] && [self.messages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.messages count] != [self.hiddenMessages count]))
+	if ([self.messagesType isEqualToString:@"Active"] && [self.messages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.messages count] != [self.hiddenMessages count]))
 	{
 		id <MessageProtocol> message = [self.messages objectAtIndex:indexPath.row];
 		
@@ -358,7 +355,7 @@
 		
 		if ([messageRecipients count] > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %lu more...", [messageRecipients count] - 1];
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %lu more...", (unsigned long)[messageRecipients count] - 1];
 		}
 	}
 	
@@ -517,7 +514,7 @@
 }
 
 // Delegate method from ArchivesViewController
-- (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+- (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
 	[self setArchiveAccountID:accountID];
 	[self setArchiveStartDate:startDate];
@@ -546,8 +543,8 @@
 	}
 }
 
-// Reset messages back to loading state
-- (void)resetMessages
+// Reset archived messages back to loading state
+- (void)resetArchivedMessages
 {
 	[self setIsLoaded:NO];
 	[self setMessages:[[NSMutableArray alloc] init]];
