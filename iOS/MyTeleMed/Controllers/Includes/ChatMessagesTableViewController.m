@@ -87,16 +87,56 @@
 }
 
 // Compare chat messages to existing chat messages to determine which chat messages are new
-- (NSArray *)computeNewChatMessages:(NSArray *)chatMessages
+- (NSArray *)computeNewChatMessages:(NSArray *)newChatMessages from:(NSArray *)chatMessages
 {
 	// Use NSSet's minusSet: to determine which messages are new
-	NSSet *existingChatMessages = [NSSet setWithArray:self.chatMessages];
-	NSMutableSet *newChatMessages = [NSMutableSet setWithArray:chatMessages];
+	NSSet *existingChatMessagesSet = [NSSet setWithArray:chatMessages];
+	NSMutableSet *newChatMessagesSet = [NSMutableSet setWithArray:newChatMessages];
 
-	[newChatMessages minusSet:existingChatMessages];
+	[newChatMessagesSet minusSet:existingChatMessagesSet];
 
-	// Convert NSSet back into NSArray
-	return [newChatMessages allObjects];
+	// Convert NSMutableSet back into NSArray
+	return [newChatMessagesSet allObjects];
+}
+
+// Compare existing chat messages to new chat messages to determine which existing chat messages should be replaced by new chat messages
+- (NSArray *)computeOldChatMessages:(NSArray *)newChatMessages from:(NSArray *)chatMessages
+{
+	// Use NSSet's minusSet: to determine which messages should be replaced
+	NSSet *newChatMessagesSet = [NSSet setWithArray:newChatMessages];
+	NSMutableSet *oldChatMessagesSet = [NSMutableSet setWithArray:chatMessages];
+	
+	[oldChatMessagesSet minusSet:newChatMessagesSet];
+	
+	// Convert NSMutableSet back into NSArray
+	return [oldChatMessagesSet allObjects];
+	
+//	NSMutableArray *oldChatMessages = [NSMutableArray new];
+//	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
+//
+//	// Determine if new chat messages should replace any existing chat messages
+//	for (ChatMessageModel *newChatMessage in newChatMessages)
+//	{
+//		// Sort new chat message participant ids
+//		NSArray *newChatParticipantIDs = [[newChatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
+//
+//		for (ChatMessageModel *existingChatMessage in chatMessages)
+//		{
+//			// Sort existing chat message participant ids
+//			NSArray *existingChatParticipantIDs = [[existingChatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
+//
+//			// If new chat participants matches existing chat participants, then delete the existing chat message
+//			if ([newChatParticipantIDs isEqualToArray:existingChatParticipantIDs])
+//			{
+//				NSLog(@"Chat participants already exist for %@", existingChatMessage.ID);
+//
+//				// Remove existing chat message from existing chat messages
+//				[oldChatMessages addObject:existingChatMessage];
+//			}
+//		}
+//	}
+//
+//	return [oldChatMessages copy];
 }
 
 - (void)hideSelectedChatMessages:(NSArray *)chatMessages
@@ -125,28 +165,10 @@
 	[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
 }
 
-// Insert new rows into the table
-- (void)insertNewRowsStartingAt:(NSInteger)startIndex endingAt:(NSInteger)endIndex withCompletion:(void (^)(BOOL))completion
+// Insert new rows and delete rows at specified index paths in the table
+- (void)insertNewRows:(NSArray *)newIndexPaths deleteRows:(NSArray *)deleteIndexPaths withCompletion:(void (^)(BOOL))completion
 {
-	NSInteger numberOfRows = endIndex - startIndex;
-	
-	// If there are no rows to refresh, then execute the completion block
-	if (numberOfRows == 0)
-	{
-		completion(YES);
-		
-		return;
-	}
-
-	NSMutableArray *newIndexPaths = [NSMutableArray new];
-	
-	for (int i = 0; i < numberOfRows; i++)
-	{
-		// Add index path for insertion into the table
-		[newIndexPaths addObject:[NSIndexPath indexPathForRow:(startIndex + i) inSection:0]];
-	}
-
-	// Insert new rows at specified index paths into the table
+	// Insert new rows and delete rows at specified index paths in the table
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
@@ -154,15 +176,17 @@
 		{
 			[self.tableView performBatchUpdates:^
 			{
+				[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 			}
 			completion:completion];
 		}
-		// iOS < 11 - Fall back to using beginUpdates and endUpdates
+		// iOS 10 - Fall back to using beginUpdates and endUpdates
 		else
 		{
 			[self.tableView beginUpdates];
 			
+			[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 			[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 			
 			[self.tableView endUpdates];
@@ -192,7 +216,7 @@
 			}
 			completion:nil];
 		}
-		// iOS < 11 - Fall back to using beginUpdates and endUpdates
+		// iOS 10 - Fall back to using beginUpdates and endUpdates
 		else
 		{
 			[self.tableView beginUpdates];
@@ -206,14 +230,14 @@
 
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
 {
-	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
-	
 	// If no chat messages to remove, cancel
 	if ([chatMessages count] == 0)
 	{
 		return;
 	}
+	
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
 	
 	// Remove each chat message from the source data, selected data, and the table itself
 	for (ChatMessageModel *chatMessage in chatMessages)
@@ -275,12 +299,6 @@
 // Return chat messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSArray *)chatMessages
 {
-	// Sort chat messages by time sent in descending order
-	chatMessages = [[chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
-	{
-		return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
-	}] mutableCopy];
-	
 	[self setIsLoaded:YES];
 	
 	// Set initial chat messages if empty
@@ -300,25 +318,48 @@
 	// Add new chat messages resulting from a reload to the top of existing chat messages
 	else
 	{
-		// Extract out new chat messages that didn't exist in existing chat messages
-		NSArray *newChatMessages = [self computeNewChatMessages:chatMessages];
+		// Extract out new chat messages that don't exist in the existing chat messages
+		NSArray *newChatMessages = [self computeNewChatMessages:chatMessages from:self.chatMessages];
 		NSInteger newChatMessageCount = [newChatMessages count];
 		
-		// Prepend any new chat messages to the beginning of the existing chat messages
-		if (newChatMessageCount > 0)
-		{
-			[self setChatMessages:[newChatMessages arrayByAddingObjectsFromArray:self.chatMessages]];
-		}
+		// Extract out old chat messages that no longer exist in the chat messages
+		NSArray *oldChatMessages = [self computeOldChatMessages:chatMessages from:self.chatMessages];
+		NSInteger oldChatMessageCount = [oldChatMessages count];
 		
-		// Insert new chat messages into the table and end refreshing
-		[self insertNewRowsStartingAt:0 endingAt:newChatMessageCount withCompletion:^(BOOL finished)
+		if (newChatMessageCount > 0 || oldChatMessageCount > 0)
+		{
+			NSMutableArray *deleteIndexPaths = [NSMutableArray new];
+			NSMutableArray *newIndexPaths = [NSMutableArray new];
+			
+			// Add index path for deletion from table
+			for (ChatMessageModel *oldChatMessage in oldChatMessages)
+			{
+				[deleteIndexPaths addObject:[NSIndexPath indexPathForRow:[self.chatMessages indexOfObject:oldChatMessage] inSection:0]];
+			}
+			
+			[self setChatMessages:chatMessages];
+			
+			// Add index path for insertion into table
+			for (ChatMessageModel *newChatMessage in newChatMessages)
+			{
+				[newIndexPaths addObject:[NSIndexPath indexPathForRow:[self.chatMessages indexOfObject:newChatMessage] inSection:0]];
+			}
+			
+			// Insert new chat messages into the table, remove old chat messages from the table, and end refreshing
+			[self insertNewRows:newIndexPaths deleteRows:deleteIndexPaths withCompletion:^(BOOL finished)
+			{
+				[self.refreshControl endRefreshing];
+			}];
+		}
+		// End refreshing
+		else
 		{
 			[self.refreshControl endRefreshing];
-		}];
+		}
 	}
 	
-	// Refresh chat messages again after 25 second delay
-	[self performSelector:@selector(reloadChatMessages) withObject:nil afterDelay:25.0];
+	// Refresh chat messages again after 30 second delay
+	[self performSelector:@selector(reloadChatMessages) withObject:nil afterDelay:30.0];
 }
 
 // Return error from ChatMessageModel delegate

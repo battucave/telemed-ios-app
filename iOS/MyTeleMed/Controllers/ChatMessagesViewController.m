@@ -56,6 +56,14 @@
 	[super viewWillAppear:animated];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Cancel queued chat messages refresh when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
 // User clicked delete bar button in toolbar
 - (IBAction)deleteMessages:(id)sender
 {
@@ -151,28 +159,6 @@
 	[self toggleToolbarButtons:editing];
 }
 
-- (void)toggleToolbarButtons:(BOOL)editing
-{
-	// Initialize toolbar items with only the left flexible space button
-	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
-	
-	// If in editing mode, add the delete and right flexible space buttons
-	if (editing)
-	{
-		[self.barButtonDelete setEnabled:NO];
-		
-		[toolbarItems addObject:self.barButtonDelete];
-		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
-	}
-	// If not in editing mode, add the compose button
-	else
-	{
-		[toolbarItems addObject:self.barButtonCompose];
-	}
-	
-	[self.toolbarBottom setItems:toolbarItems animated:YES];
-}
-
 // Return delete multiple chat message pending from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesPending
 {
@@ -227,6 +213,28 @@
 		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		[settings synchronize];
 	}
+}
+
+- (void)toggleToolbarButtons:(BOOL)editing
+{
+	// Initialize toolbar items with only the left flexible space button
+	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
+	
+	// If in editing mode, add the delete and right flexible space buttons
+	if (editing)
+	{
+		[self.barButtonDelete setEnabled:NO];
+		
+		[toolbarItems addObject:self.barButtonDelete];
+		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
+	}
+	// If not in editing mode, add the compose button
+	else
+	{
+		[toolbarItems addObject:self.barButtonCompose];
+	}
+	
+	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

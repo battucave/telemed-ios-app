@@ -53,11 +53,24 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Sort chat messages by time sent
-			NSArray *chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+			NSArray *chatMessages;
+			
+			// Sort chat messages for specific conversation by time sent in ascending order
+			if (chatMessageID)
 			{
-				return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
-			}];
+				chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+				{
+					return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
+				}];
+			}
+			// Sort chat messages by time sent in descending order
+			else
+			{
+				chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+				{
+					return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
+				}];
+			}
 			
 			if ([chatMessages count] > 0)
 			{
@@ -336,7 +349,6 @@
 // Compare this object with the specified object to determine if they are equal
 - (BOOL)isEqual:(id)object
 {
-	NSLog(@"IS EQUAL: %@ = %@", self.ID, [object ID]);
 	return ([object isKindOfClass:[ChatMessageModel class]] && [self.ID isEqual:[object ID]]);
 }
 
