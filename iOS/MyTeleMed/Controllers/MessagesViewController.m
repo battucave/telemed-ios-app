@@ -122,13 +122,38 @@
 // Unwind segue from MessageDetailViewController (only after archive action)
 - (IBAction)unwindArchiveMessage:(UIStoryboardSegue *)segue
 {
+	/*
+	 * 9/29/2019 - Pagination was added, but contains a flaw:
+	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next page of messages
+	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
+	 *
+	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next set of messages
+	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
+	 *
+	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
+	 */
+	
+	/*/ Preferred solution - Remove selected rows from messages table
 	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
 	
-	// Remove selected rows from messages table
 	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
 	{
 		[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
 	}
+	// End preferred solution */
+	
+	// Fallback solution - Reset the messages table (viewWillAppear will be called on MessagesTableViewController after this which will reload the table)
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
+	{
+		[self.messagesTableViewController resetMessages];
+	}
+	// End fallback solution
 }
 
 // Override setEditing:

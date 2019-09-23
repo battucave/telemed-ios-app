@@ -446,6 +446,19 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
+// Compare new messages to existing messages to determine which messages are new
+- (NSArray *)computeNewMessages:(NSArray *)newMessages from:(NSArray *)messages
+{
+	// Use NSSet's minusSet: to determine which messages are new
+	NSSet *existingMessagesSet = [NSSet setWithArray:messages];
+	NSMutableOrderedSet *newMessagesSet = [NSMutableOrderedSet orderedSetWithArray:newMessages];
+
+	[newMessagesSet minusSet:existingMessagesSet];
+
+	// Convert NSMutableOrderedSet back into NSArray
+	return [newMessagesSet array];
+}
+
 // Delegate method from ArchivesViewController
 - (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
@@ -454,19 +467,6 @@
 	[self setArchiveEndDate:endDate];
 	
 	// Don't need to reload messages here because viewWillAppear fires when ArchivesPickerViewController is popped from navigation controller
-}
-
-// Compare messages to existing messages to determine which messages are new
-- (NSArray *)computeNewMessages:(NSArray *)messages
-{
-	// Use NSSet's minusSet: to determine which messages are new
-	NSSet *existingMessages = [NSSet setWithArray:self.messages];
-	NSMutableSet *newMessages = [NSMutableSet setWithArray:messages];
-
-	[newMessages minusSet:existingMessages];
-
-	// Convert NSSet back into NSArray
-	return [newMessages allObjects];
 }
 
 // Hide selected messages that are pending deletion (called from MessagesViewController)
@@ -491,32 +491,16 @@
 	// Hide rows at specified index paths in the table
 	[self reloadRowsAtIndexPaths:indexPaths];
 	
-	// Toggle the edit button
-	[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+	// Remove the parent view controller's edit button if there aren't any more messages
+	if ([self.messagesType isEqualToString:@"Active"] && [self.messages count] == [self.hiddenMessages count])
+	{
+		[self.parentViewController.navigationItem setRightBarButtonItem:nil];
+	}
 }
 
-// Insert new rows into the table
-- (void)insertNewRowsStartingAt:(NSInteger)startIndex endingAt:(NSInteger)endIndex withCompletion:(void (^)(BOOL))completion
+// Insert new rows at specified index paths in the table
+- (void)insertNewRows:(NSArray *)newIndexPaths withCompletion:(void (^)(BOOL))completion
 {
-	NSInteger numberOfRows = endIndex - startIndex;
-	
-	// If there are no rows to refresh, then execute the completion block
-	if (numberOfRows == 0)
-	{
-		completion(YES);
-		
-		return;
-	}
-
-	NSMutableArray *newIndexPaths = [NSMutableArray new];
-	
-	for (int i = 0; i < numberOfRows; i++)
-	{
-		// Add index path for insertion into the table
-		[newIndexPaths addObject:[NSIndexPath indexPathForRow:(startIndex + i) inSection:0]];
-	}
-
-	// Insert new rows at specified index paths into the table
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
@@ -528,7 +512,7 @@
 			}
 			completion:completion];
 		}
-		// iOS < 11 - Fall back to using beginUpdates and endUpdates
+		// iOS 10 - Fall back to using beginUpdates and endUpdates
 		else
 		{
 			[self.tableView beginUpdates];
@@ -576,7 +560,7 @@
 			}
 			completion:nil];
 		}
-		// iOS < 11 - Fall back to using beginUpdates and endUpdates
+		// iOS 10 - Fall back to using beginUpdates and endUpdates
 		else
 		{
 			[self.tableView beginUpdates];
@@ -588,7 +572,7 @@
 	});
 }
 
-// Active messages only (MessagesViewController)
+// Active messages only (MessagesViewController - not currently being used due to a flaw in pagination. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
 - (void)removeSelectedMessages:(NSArray *)messages
 {
 	// If there are no messages to remove, then stop
@@ -597,17 +581,16 @@
 		return;
 	}
 	
-	NSArray *messagesCopy = [self.messages copy];
 	NSMutableArray *indexPaths = [NSMutableArray new];
 	
-	// Remove each message from the source data, hidden data, selected data, and the table itself
+	// Remove each message from the source table, data, hidden data, and selected data
 	for (id <MessageProtocol> message in messages)
 	{
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.messages indexOfObject:message] inSection:0]];
+		
 		[self.messages removeObject:message];
 		[self.hiddenMessages removeObject:message];
 		[self.selectedMessages removeObject:message];
-		
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[messagesCopy indexOfObject:message] inSection:0]];
 	}
 	
 	// Remove rows at specified index paths from the table
@@ -628,9 +611,17 @@
 		{
 			[self reloadMessages];
 		}
+		// Show the no messages row
+		else
+		{
+			[self setIsFirstPageLoaded:YES];
+		}
 		
-		// Toggle the edit button
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 || [self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+		// Remove the parent view controller's edit button if there aren't any more messages
+		if ([self.messagesType isEqualToString:@"Active"] && [self.messages count] == [self.hiddenMessages count])
+		{
+			[self.parentViewController.navigationItem setRightBarButtonItem:nil];
+		}
 	}
 	
 	// Update delegate's list of selected messages
@@ -640,7 +631,7 @@
 	}
 }
 
-// HOPEFULLY TEMPORARY: Reset and reload messages (remove if pagination flaw is corrected - see MessagesViewController modifyMultipleMessagesStateSuccess: for more info)
+// HOPEFULLY TEMPORARY: Reset and reload messages (remove if pagination flaw is corrected. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
 - (void)resetActiveMessages
 {
 	[self resetMessages];
@@ -728,20 +719,48 @@
 			[self.refreshControl endRefreshing];
 		});
 	}
-	// Add new messages resulting from a reload to the top of existing messages
-	else if (page == 1)
+	else
 	{
-		// Extract out new messages that didn't exist in existing messages
-		NSArray *newMessages = [self computeNewMessages:messages];
+		// Extract out new messages that don't exist in the existing messages
+		NSArray *newMessages = [self computeNewMessages:messages from:self.messages];
 		NSInteger newMessageCount = [newMessages count];
 		
-		// Prepend any new messages to the beginning of the existing messages
 		if (newMessageCount > 0)
 		{
-			[self.messages insertObjects:newMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, newMessageCount)]];
+			NSMutableArray *newIndexPaths = [NSMutableArray new];
+			
+			// Add new messages resulting from a reload
+			if (page == 1)
+			{
+				for (MessageModel *newMessage in newMessages)
+				{
+					// Determine where the message should be inserted (usually at the top, but it can be the bottom if user deleted a message from another device)
+					NSUInteger newMessageIndex = [messages indexOfObject:newMessage];
+					
+					// Add the new message to the existing messages
+					[self.messages insertObject:newMessage atIndex:newMessageIndex];
+					
+					// Add index path for row to be added to the table
+					[newIndexPaths addObject:[NSIndexPath indexPathForRow:newMessageIndex inSection:0]];
+				}
+			}
+			// Append new messages to the bottom of existing messages
+			else
+			{
+				NSInteger existingMessageCount = [self.messages count];
+				
+				// Append new messages to the bottom of existing messages
+				[self.messages addObjectsFromArray:newMessages];
+				
+				for (NSInteger i = existingMessageCount; i < newMessageCount + existingMessageCount; i++)
+				{
+					// Add index path for row to be added to the table
+					[newIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+				}
+			}
 			
 			// Insert new messages into the table and end refreshing
-			[self insertNewRowsStartingAt:0 endingAt:newMessageCount withCompletion:^(BOOL finished)
+			[self insertNewRows:newIndexPaths withCompletion:^(BOOL finished)
 			{
 				[self.refreshControl endRefreshing];
 			}];
@@ -752,33 +771,11 @@
 			[self.refreshControl endRefreshing];
 		}
 	}
-	// Append new messages to the bottom of existing messages
-	else
-	{
-		NSInteger existingMessageCount = [self.messages count];
-		NSInteger newMessageCount = [messages count];
-		
-		if (newMessageCount > 0)
-		{
-			[self.messages addObjectsFromArray:messages];
-			
-			// Insert new messages into the table and remove loading indicator from table
-			[self insertNewRowsStartingAt:existingMessageCount endingAt:[self.messages count] withCompletion:^(BOOL finished)
-			{
-				[self.tableView setTableFooterView:[[UIView alloc] init]];
-			}];
-		}
-		// Remove loading indicator from table
-		else
-		{
-			[self.tableView setTableFooterView:[[UIView alloc] init]];
-		}
-	}
 	
-	// Refresh the first page of messages again after 25 second delay
+	// Refresh the first page of messages again after 30 second delay
 	if (page == 1)
 	{
-		[self performSelector:@selector(reloadMessages) withObject:nil afterDelay:25.0];
+		[self performSelector:@selector(reloadMessages) withObject:nil afterDelay:30.0];
 	}
 }
 

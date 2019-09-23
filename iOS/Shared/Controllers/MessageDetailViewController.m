@@ -476,8 +476,8 @@
 				// Update message count with new number of filtered message events
 				self.messageCount = [self.filteredMessageEvents count];
 				
-				// Refresh message events again after 25 second delay
-				[self performSelector:@selector(getMessageEvents) withObject:nil afterDelay:25.0];
+				// Refresh message events again after 20 second delay
+				[self performSelector:@selector(getMessageEvents) withObject:nil afterDelay:20.0];
 			});
 		}
 		else
