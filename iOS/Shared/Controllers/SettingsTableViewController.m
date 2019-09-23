@@ -58,10 +58,7 @@
 	// Initialize sections
 	[self setSectionSessionTimeout:0];
 	
-	#ifdef MED2MED
-		[self setSectionAboutTeleMed:2];
-	
-	#elif defined MYTELEMED
+	#ifdef MYTELEMED
 		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
 		[self setSectionAboutTeleMed:3];
@@ -69,6 +66,9 @@
 	
 		// Initialize notifications enabled value
 		[self setAreNotificationsEnabled:[registeredDevice isRegistered]];
+		
+	#elif defined MED2MED
+		[self setSectionAboutTeleMed:2];
 	#endif
 }
 
@@ -88,6 +88,12 @@
 		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"comment"]];
 		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"normal"]];
 		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"stat"]];
+	
+		// Reload notification cells in case notification setting data has changed
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
+		});
 	
 		// Determine whether notifications are enabled
 		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
