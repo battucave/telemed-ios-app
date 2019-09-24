@@ -158,6 +158,12 @@
 
 - (void)setCurrentDevice
 {
+	#ifdef DEBUG
+		NSLog(@"Skip Set Current Device step when on Simulator or Debugging");
+		
+		return;
+	#endif
+	
 	if ([self.MyRegisteredDevices count] == 0)
 	{
 		return;
