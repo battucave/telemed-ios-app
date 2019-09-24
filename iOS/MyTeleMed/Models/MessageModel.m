@@ -9,12 +9,14 @@
 #import "MessageModel.h"
 #import "MessageXMLParser.h"
 
+// Define the number of items to load per page
+const int MessagesPerPage = 25;
+
 @interface MessageModel()
 
 @property (nonatomic) NSString *messageState;
 @property (nonatomic) int totalNumberOfOperations;
 @property (nonatomic) int numberOfFinishedOperations;
-@property (nonatomic) NSMutableArray *failedMessages;
 @property (nonatomic) BOOL queueCancelled;
 @property (nonatomic) BOOL pendingComplete;
 
@@ -22,24 +24,26 @@
 
 @implementation MessageModel
 
-- (void)getActiveMessages
+- (void)getActiveMessages:(NSInteger)page
 {
 	NSDictionary *parameters = @{
+		@"ipp"		: [NSNumber numberWithInt:MessagesPerPage],
+		@"pn"		: [NSNumber numberWithInteger:page],
 		@"state"	: @"active"
 	};
 	
 	[self getMessages:parameters];
 }
 
-- (void)getArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+- (void)getArchivedMessages:(NSInteger)page forAccount:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
-	// Set Default End Date
+	// Set default End Date
 	if (endDate == nil)
 	{
 		endDate = [NSDate date];
 	}
 	
-	// Set Default Start Date
+	// Set default Start Date to 7 days ago
 	if (startDate == nil)
 	{
 		startDate = [endDate dateByAddingTimeInterval:60 * 60 * 24 * -7];
@@ -50,13 +54,15 @@
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 	
 	NSMutableDictionary *parameters = [@{
-		@"state"		: @"archived",
+		@"end_utc"		: [dateFormatter stringFromDate:endDate],
+		@"ipp"			: [NSNumber numberWithInt:MessagesPerPage],
+		@"pn"			: [NSNumber numberWithInteger:page],
 		@"start_utc"	: [dateFormatter stringFromDate:startDate],
-		@"end_utc"		: [dateFormatter stringFromDate:endDate]
+		@"state"		: @"archived"
 	} mutableCopy];
 	
 	// If using specific Account, alter the URL to include the Account Public Key
-	if (accountID > 0)
+	if ([accountID integerValue] > 0)
 	{
 		[parameters setValue:accountID forKey:@"acctID"];
 	}
@@ -78,9 +84,11 @@
 		if ([xmlParser parse])
 		{
 			// Handle success via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(updateMessages:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(updateMessages:forPage:)])
 			{
-				[self.delegate updateMessages:[[parser messages] copy]];
+				NSArray *messages = [[parser messages] copy];
+				
+				[self.delegate updateMessages:messages forPage:[[parameters objectForKey:@"pn"] integerValue]];
 			}
 		}
 		// Error parsing xml file
@@ -215,7 +223,7 @@
 				if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 				{
 					// Show error even if user has navigated to another screen
-					[self showError:error withCallback:^
+					[self showError:error withRetryCallback:^
 					{
 						// Include callback to retry the request
 						[self modifyMessageState:messageDeliveryID state:state];
@@ -247,7 +255,7 @@
 			if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 			{
 				// Show error even if user has navigated to another screen
-				[self showError:error withCallback:^
+				[self showError:error withRetryCallback:^
 				{
 					// Include callback to retry the request
 					[self modifyMessageState:messageDeliveryID state:state];
@@ -259,12 +267,13 @@
 
 - (void)modifyMultipleMessagesState:(NSArray *)messages state:(NSString *)state
 {
-	self.failedMessages = [[NSMutableArray alloc] init];
-	
 	if ([messages count] < 1)
 	{
 		return;
 	}
+	
+	// Initialize failed messages
+	NSMutableArray *failedMessages = [[NSMutableArray alloc] init];
 	
 	// Validate message state
 	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
@@ -308,7 +317,7 @@
 				NSLog(@"MessageModel Error: %@", error);
 				
 				// Add message to failed messages
-				[self.failedMessages addObject:message];
+				[failedMessages addObject:message];
 			}
 			
 			// Increment number of finished operations
@@ -317,7 +326,7 @@
 			// Execute queue finished method if all operations have completed
 			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
-				[self messageStateQueueFinished:state];
+				[self messageStateQueueFinished:state withFailedMessages:[failedMessages copy]];
 			}
 		}
 		failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -331,13 +340,13 @@
 				[self.operationManager.operationQueue cancelAllOperations];
 				self.queueCancelled = YES;
 				
-				[self messageStateQueueFinished:state];
+				[self messageStateQueueFinished:state withFailedMessages:[failedMessages copy]];
 				
 				return;
 			}
 			
 			// Add message to failed messages
-			[self.failedMessages addObject:message];
+			[failedMessages addObject:message];
 			
 			// Increment number of finished operations
 			self.numberOfFinishedOperations++;
@@ -345,15 +354,15 @@
 			// Execute queue finished method if all operations have completed
 			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
-				[self messageStateQueueFinished:state];
+				[self messageStateQueueFinished:state withFailedMessages:[failedMessages copy]];
 			}
 		}];
 	}
 }
 
-- (void)messageStateQueueFinished:(NSString *)state
+- (void)messageStateQueueFinished:(NSString *)state withFailedMessages:(NSArray *)failedMessages
 {
-	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedMessages count], self.totalNumberOfOperations);
+	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[failedMessages count], self.totalNumberOfOperations);
 	
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
@@ -362,10 +371,8 @@
 	[self hideActivityIndicator:^
 	{
 		// If a failure occurred while modifying message state
-		if ([self.failedMessages count] > 0)
+		if ([failedMessages count] > 0)
 		{
-			NSArray *failedMessages = [self.failedMessages copy];
-			
 			// Handle error via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
 			{
@@ -385,7 +392,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Archive Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self modifyMultipleMessagesState:failedMessages state:state];
@@ -400,9 +407,19 @@
 		// Reset queue variables
 		self.totalNumberOfOperations = 0;
 		self.numberOfFinishedOperations = 0;
-		
-		[self.failedMessages removeAllObjects];
 	}];
+}
+
+// Returns an integer hash code for this object. Required for object comparison using isEqual
+- (NSUInteger)hash
+{
+	return [self.MessageDeliveryID hash];
+}
+
+// Compare this object with the specified object to determine if they are equal
+- (BOOL)isEqual:(id)object
+{
+	return ([object isKindOfClass:[MessageModel class]] && [self.MessageDeliveryID isEqual:[object MessageDeliveryID]]);
 }
 
 // Network request has been sent, but still awaiting response

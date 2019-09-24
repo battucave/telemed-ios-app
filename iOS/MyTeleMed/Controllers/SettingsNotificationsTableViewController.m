@@ -147,7 +147,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Chat and comments: Hide everything except alert sound
+	// Chat and comments: Repeat notifications are not used
 	if (self.notificationSettingsType >= 2 && indexPath.row > 0)
 	{
 		return 0;
@@ -222,7 +222,7 @@
 		// Set selected notification interval
 		else
 		{
-			[settingsNotificationsPickerTableViewController setSelectedOption:[[self.notificationSettings.Interval stringValue] stringByAppendingFormat:@" minute%@", ([self.notificationSettings.Interval isEqualToNumber:[NSNumber numberWithInt:1]] ? @"" : @"s")]];
+			[settingsNotificationsPickerTableViewController setSelectedOption:[[self.notificationSettings.Interval stringValue] stringByAppendingFormat:@" minute%@", ([self.notificationSettings.Interval isEqualToNumber:@1] ? @"" : @"s")]];
 		}
 	}
 }

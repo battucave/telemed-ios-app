@@ -16,9 +16,8 @@
 @property (nonatomic) NSArray *chatMessages;
 
 - (void)hideSelectedChatMessages:(NSArray *)chatMessages;
-- (void)reloadChatMessages;
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages;
-- (void)unHideSelectedChatMessages:(NSArray *)chatMessages;
+- (void)unhideSelectedChatMessages:(NSArray *)chatMessages;
 
 @end
 

@@ -53,11 +53,24 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Sort chat messages by time sent
-			NSArray *chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+			NSArray *chatMessages;
+			
+			// Sort chat messages for specific conversation by time sent in ascending order
+			if (chatMessageID)
 			{
-				return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
-			}];
+				chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+				{
+					return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
+				}];
+			}
+			// Sort chat messages by time sent in descending order
+			else
+			{
+				chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+				{
+					return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
+				}];
+			}
 			
 			if ([chatMessages count] > 0)
 			{
@@ -150,7 +163,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteChatMessage:chatMessageID];
@@ -183,7 +196,7 @@
 			} */
 		
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteChatMessage:chatMessageID];
@@ -307,7 +320,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Delete Chat Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteMultipleChatMessages:failedChatMessages];
@@ -325,6 +338,18 @@
 		
 		[self.failedChatMessages removeAllObjects];
 	}];
+}
+
+// Returns an integer hash code for this object. Required for object comparison using isEqual
+- (NSUInteger)hash
+{
+	return [self.ID hash];
+}
+
+// Compare this object with the specified object to determine if they are equal
+- (BOOL)isEqual:(id)object
+{
+	return ([object isKindOfClass:[ChatMessageModel class]] && [self.ID isEqual:[object ID]]);
 }
 
 // Network request has been sent, but still awaiting response

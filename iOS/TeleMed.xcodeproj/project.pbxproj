@@ -123,6 +123,7 @@
 		E21A0A8F1FC38E7E00CB8B9F /* button-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */; };
 		E21C14691D33E2240025B6ED /* OnePixelLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C14681D33E2240025B6ED /* OnePixelLayoutConstraint.m */; };
 		E21EC5D11CE37C880027AA14 /* AccountPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */; };
+		E2266A382326B71A002F1E2B /* PhoneCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2266A372326B71A002F1E2B /* PhoneCallViewController.m */; };
 		E22C7B222093801B005CFA4A /* TeleMedApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD96F7208FB3440012B1DB /* TeleMedApplication.m */; };
 		E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28CCCD8417F5185B0093CEE2 /* SideNavigationViewController.m */; };
 		E22EF0781FD89BC100A2E6F6 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58F1FBF571B00263497 /* MessageCell.m */; };
@@ -426,6 +427,7 @@
 		E2EE4445219621D900FD61C0 /* OnCallSlotXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */; };
 		E2EE4446219621F500FD61C0 /* OnCallSlotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896346208540320055A18E /* OnCallSlotModel.m */; };
 		E2EE44492196262400FD61C0 /* MessageRedirectInfoXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */; };
+		E2F27222232919D900A9E548 /* Shared.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F27221232919D900A9E548 /* Shared.xcassets */; };
 		E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */; };
 		E2FB4035219E30A60037C7A7 /* icon-SwipeMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */; };
 /* End PBXBuildFile section */
@@ -642,6 +644,8 @@
 		E21EC5CF1CE37C880027AA14 /* AccountPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountPickerViewController.h; sourceTree = "<group>"; };
 		E21EC5D01CE37C880027AA14 /* AccountPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountPickerViewController.m; sourceTree = "<group>"; };
 		E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MyTeleMedβ.entitlements"; sourceTree = "<group>"; };
+		E2266A362326B71A002F1E2B /* PhoneCallViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhoneCallViewController.h; sourceTree = "<group>"; };
+		E2266A372326B71A002F1E2B /* PhoneCallViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhoneCallViewController.m; sourceTree = "<group>"; };
 		E22EF0981FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsProfileTableViewController.h; sourceTree = "<group>"; };
 		E22EF0991FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsProfileTableViewController.m; sourceTree = "<group>"; };
 		E232D7051E675E7800B797E1 /* indicator-CommentRightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator-CommentRightBlue.png"; sourceTree = "<group>"; };
@@ -898,6 +902,7 @@
 		E2EE44432196099500FD61C0 /* MessageRedirectInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoModel.h; sourceTree = "<group>"; };
 		E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectInfoXMLParser.m; sourceTree = "<group>"; };
 		E2EE44482196262300FD61C0 /* MessageRedirectInfoXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoXMLParser.h; sourceTree = "<group>"; };
+		E2F27221232919D900A9E548 /* Shared.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Shared.xcassets; sourceTree = "<group>"; };
 		E2FB4032219E30A40037C7A7 /* icon-SwipeRefresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeRefresh.png"; sourceTree = "<group>"; };
 		E2FB4033219E30A50037C7A7 /* icon-SwipeMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-SwipeMenu.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1197,6 +1202,8 @@
 				0865DBFB1C63AF060028E2B2 /* MessageTeleMedViewController.m */,
 				28CCCD8D17F535DD0093CEE2 /* OnCallScheduleViewController.h */,
 				28CCCD8E17F535DD0093CEE2 /* OnCallScheduleViewController.m */,
+				E2266A362326B71A002F1E2B /* PhoneCallViewController.h */,
+				E2266A372326B71A002F1E2B /* PhoneCallViewController.m */,
 				28ADA6EB17FA1585003A81A1 /* PhoneNumberViewController.h */,
 				28ADA6EC17FA1585003A81A1 /* PhoneNumberViewController.m */,
 				281716191831659200CD3086 /* SettingsNotificationsPickerTableViewController.h */,
@@ -1333,6 +1340,7 @@
 			children = (
 				E271C1B92110AF4200256D8B /* Fonts */,
 				E211D5731FBF4BFE00263497 /* Images */,
+				E2F27221232919D900A9E548 /* Shared.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2058,6 +2066,7 @@
 				E2FB4034219E30A60037C7A7 /* icon-SwipeRefresh.png in Resources */,
 				E2D567C41CDB85B80054FD3F /* icon-Mail-Unread.png in Resources */,
 				283DF30318CA09EE00A344D2 /* update.caf in Resources */,
+				E2F27222232919D900A9E548 /* Shared.xcassets in Resources */,
 				283DF2D118CA09EE00A344D2 /* chord.caf in Resources */,
 				E2D567AD1CDB85B80054FD3F /* button-TextField-Help@3x.png in Resources */,
 				E21A0A8F1FC38E7E00CB8B9F /* button-Help@3x.png in Resources */,
@@ -2339,6 +2348,7 @@
 				28CCCD8817F518800093CEE2 /* MessagesViewController.m in Sources */,
 				E27B85211B14D09400AD50C6 /* AccountXMLParser.m in Sources */,
 				E211D59B1FBF571B00263497 /* AutoGrowingTextView.m in Sources */,
+				E2266A382326B71A002F1E2B /* PhoneCallViewController.m in Sources */,
 				E26919E2228EEA750093BB60 /* Validation.m in Sources */,
 				E211D5941FBF571B00263497 /* MessageComposeTableViewController.m in Sources */,
 				E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */,
@@ -2532,6 +2542,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 263;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2564,6 +2575,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 263;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2595,6 +2607,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 263;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2626,6 +2639,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 263;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2658,6 +2672,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 263;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2689,6 +2704,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 263;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2769,6 +2785,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMedβ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 263;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2906,6 +2923,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTmd Debug.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 263;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2938,6 +2956,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMed.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 263;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";

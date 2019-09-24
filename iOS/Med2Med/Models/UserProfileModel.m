@@ -19,6 +19,8 @@
 
 @implementation UserProfileModel
 
+@synthesize TimeoutPeriodMins = _TimeoutPeriodMins;
+
 + (id <ProfileProtocol>)sharedInstance
 {
 	static dispatch_once_t token;
@@ -39,21 +41,40 @@
 	if (! _PhoneNumber)
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-		_PhoneNumber = [settings valueForKey:@"UserProfilePhoneNumber"];
+		_PhoneNumber = [settings valueForKey:USER_PROFILE_PHONE_NUMBER];
 	}
 	
 	return _PhoneNumber ?: @"";
 }
 
-// Override TimeoutPeriodMins setter to also update application's timeout period
+// Override TimeoutPeriodMins getter
+- (NSNumber *)TimeoutPeriodMins
+{
+	// If app timeout period is not already set, then check user preferences
+	if (! _TimeoutPeriodMins)
+	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		_TimeoutPeriodMins = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
+	}
+	
+	return _TimeoutPeriodMins ?: [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD_MINUTES];
+}
+
+// Override TimeoutPeriodMins setter to update application's timeout period and store value in user preferences
 - (void)setTimeoutPeriodMins:(NSNumber *)TimeoutPeriodMins
 {
 	if (_TimeoutPeriodMins != TimeoutPeriodMins)
 	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		[settings setValue:TimeoutPeriodMins forKey:USER_TIMEOUT_PERIOD_MINUTES];
+		[settings synchronize];
+		
 		_TimeoutPeriodMins = TimeoutPeriodMins;
 	}
 	
-	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
+	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins integerValue]];
 }
 
 - (void)doLogout
@@ -74,7 +95,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Update authenticated flag
+			// Update the isAuthenticated flag
 			[self setIsAuthenticated:YES];
 			
 			callback(YES, (id <ProfileProtocol>)self, nil);

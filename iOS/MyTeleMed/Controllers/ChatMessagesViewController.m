@@ -46,7 +46,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
-	if ([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
 	{
 		[self.viewSwipeMessage setHidden:YES];
 	}
@@ -54,6 +54,14 @@
 	[self toggleToolbarButtons:NO];
 	
 	[super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Cancel queued chat messages refresh when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
 // User clicked delete bar button in toolbar
@@ -151,28 +159,6 @@
 	[self toggleToolbarButtons:editing];
 }
 
-- (void)toggleToolbarButtons:(BOOL)editing
-{
-	// Initialize toolbar items with only the left flexible space button
-	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
-	
-	// If in editing mode, add the delete and right flexible space buttons
-	if (editing)
-	{
-		[self.barButtonDelete setEnabled:NO];
-		
-		[toolbarItems addObject:self.barButtonDelete];
-		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
-	}
-	// If not in editing mode, add the compose button
-	else
-	{
-		[toolbarItems addObject:self.barButtonCompose];
-	}
-	
-	[self.toolbarBottom setItems:toolbarItems animated:YES];
-}
-
 // Return delete multiple chat message pending from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesPending
 {
@@ -204,7 +190,7 @@
 	}
 	
 	// Reload chat messages table to re-show chat messages that were not deleted
-	[self.chatMessagesTableViewController unHideSelectedChatMessages:failedChatMessages];
+	[self.chatMessagesTableViewController unhideSelectedChatMessages:failedChatMessages];
 	
 	// Update selected chat messages to only the failed chat messages
 	self.selectedChatMessages = failedChatMessages;
@@ -224,9 +210,31 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		[settings synchronize];
 	}
+}
+
+- (void)toggleToolbarButtons:(BOOL)editing
+{
+	// Initialize toolbar items with only the left flexible space button
+	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
+	
+	// If in editing mode, add the delete and right flexible space buttons
+	if (editing)
+	{
+		[self.barButtonDelete setEnabled:NO];
+		
+		[toolbarItems addObject:self.barButtonDelete];
+		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
+	}
+	// If not in editing mode, add the compose button
+	else
+	{
+		[toolbarItems addObject:self.barButtonCompose];
+	}
+	
+	[self.toolbarBottom setItems:toolbarItems animated:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

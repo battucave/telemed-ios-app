@@ -39,6 +39,10 @@
 
 @property (nonatomic) CXCallObserver *callObserver;
 
+#ifdef MYTELEMED
+	@property (nonatomic) dispatch_block_t teleMedCallTimeoutBlock;
+#endif
+
 @end
 
 @implementation AppDelegate
@@ -48,15 +52,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	
 	// Initialize call observer
 	self.callObserver = [CXCallObserver new];
 	
 	[self.callObserver setDelegate:self queue:dispatch_get_main_queue()];
 	
 	// Setup app timeout feature
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:kApplicationDidTimeoutNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:NOTIFICATION_APPLICATION_DID_TIMEOUT object:nil];
 	
 	// Setup screenshot notification feature
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
@@ -66,22 +68,24 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLaunching:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
 	// Med2Med - Prevent swipe message from ever appearing
 	#ifdef MED2MED
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
 	// DEBUG Only - reset swipe message on app launch
 	#elif defined DEBUG
-		[settings setBool:NO forKey:@"swipeMessageDisabled"];
+		[settings setBool:NO forKey:SWIPE_MESSAGE_DISABLED];
 	#endif
 	
 	// Initialize cdma voice data settings
-	[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
+	[settings setBool:NO forKey:CDMA_VOICE_DATA_HIDDEN];
 	
-	if ([settings objectForKey:@"showSprintVoiceDataWarning"] == nil || [settings objectForKey:@"showVerizonVoiceDataWarning"] == nil)
+	if ([settings objectForKey:SHOW_SPRINT_VOICE_DATA_WARNING] == nil || [settings objectForKey:SHOW_VERIZON_VOICE_DATA_WARNING] == nil)
 	{
-		[settings setBool:NO forKey:@"showSprintVoiceDataWarning"];
-		[settings setBool:NO forKey:@"showVerizonVoiceDataWarning"];
+		[settings setBool:NO forKey:SHOW_SPRINT_VOICE_DATA_WARNING];
+		[settings setBool:NO forKey:SHOW_VERIZON_VOICE_DATA_WARNING];
 		
 		#if !TARGET_IPHONE_SIMULATOR && !defined(DEBUG)
 			// Initialize carrier
@@ -93,12 +97,12 @@
 			NSArray *verizonMobileNetworkCodes = @[@"004", @"005", @"006", @"010", @"012", @"013", @"110", @"270", @"271", @"272", @"273", @"274", @"275", @"276", @"277", @"278", @"279", @"280", @"281", @"282", @"283", @"284", @"285", @"286", @"287", @"288", @"289", @"350", @"390", @"480", @"481", @"482", @"483", @"484", @"485", @"486", @"487", @"488", @"489", @"590", @"770", @"820", @"890", @"910"];
 		
 			// If mobile network code is available and user had not previously disabled the old CDMA warning
-			if (carrier.mobileNetworkCode && [settings boolForKey:@"CDMAVoiceDataDisabled"] != YES)
+			if (carrier.mobileNetworkCode && [settings boolForKey:CDMA_VOICE_DATA_DISABLED] != YES)
 			{
 				// Enable voice data warning for Sprint users
 				if ([sprintMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
 				{
-					[settings setBool:YES forKey:@"showSprintVoiceDataWarning"];
+					[settings setBool:YES forKey:SHOW_SPRINT_VOICE_DATA_WARNING];
 				}
 				// Enable voice data warning for Verizon users on devices that don't support VoLTE
 				else if ([verizonMobileNetworkCodes containsObject:carrier.mobileNetworkCode])
@@ -119,36 +123,30 @@
 						// Enable voice data warning if device is an iPhone and the model is less than 7 (iPhone 6 and iPhone 6+ are model 7)
 						if ([deviceType isEqualToString:@"iPhone"] && (int)deviceNumber < 7)
 						{
-							[settings setBool:YES forKey:@"showVerizonVoiceDataWarning"];
+							[settings setBool:YES forKey:SHOW_VERIZON_VOICE_DATA_WARNING];
 						}
 					}
 				}
 			}
 		
 			// Remove old CDMA warning setting
-			[settings removeObjectForKey:@"CDMAVoiceDataDisabled"];
+			[settings removeObjectForKey:CDMA_VOICE_DATA_DISABLED];
 		#endif
 	}
 	
 	[settings synchronize];
 	
-	// MyTeleMed - Register for push notifications
 	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
-		UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-		
-		[userNotificationCenter setDelegate:self];
-		[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
-		{
-			if (granted)
-			{
-				dispatch_async(dispatch_get_main_queue(), ^
-				{
-					[application registerForRemoteNotifications];
-				});
-			}
-		}];
+		// Register device for push notifications (this does not authorize push notifications however - that is done in PhoneNumberViewController)
+		#if defined DEBUG
+			NSLog(@"Skip device registration when on Debug");
 	
+		#else
+			[[UIApplication sharedApplication] registerForRemoteNotifications];
+		#endif
+	
+		// Handle push notification data
 		NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 	
 		if (remoteNotification)
@@ -163,6 +161,7 @@
 - (void)applicationWillResignActive:(UIApplication *)application
 {
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state
+	// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	
 	// Add view over app to obsure screenshot
 	[self toggleScreenshotView:NO];
@@ -170,7 +169,7 @@
 	// Save current time app was closed (used for showing cdma screen)
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	[settings setObject:[NSDate date] forKey:@"dateApplicationDidEnterBackground"];
+	[settings setObject:[NSDate date] forKey:DATE_APPLICATION_DID_ENTER_BACKGROUND];
 	[settings synchronize];
 	
 	// MyTeleMed - Update app's badge count with number of unread messages
@@ -192,52 +191,61 @@
 {
 	// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background
 	
+	id <ProfileProtocol> profile;
+	
+	#ifdef MYTELEMED
+		profile = [MyProfileModel sharedInstance];
+
+	#elif defined MED2MED
+		profile = [UserProfileModel sharedInstance];
+
+	#else
+		NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
+	#endif
+	
 	// Remove view over app that was used to obsure screenshot (calling it here speeds up dismissal of screenshot when returning from background)
 	[self toggleScreenshotView:YES];
 	
-	// If more than 15 minutes have passed since app was closed, then reset cdma voice data hidden value
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	
-	if (fabs([[NSDate date] timeIntervalSinceDate:(NSDate *)[settings objectForKey:@"dateApplicationDidEnterBackground"]]) > 1)
+	// Re-authenticate user
+	if (profile && [profile isAuthenticated])
 	{
-		[settings setBool:NO forKey:@"CDMAVoiceDataHidden"];
-		[settings synchronize];
-	}
-	
-	// MyTeleMed - Verify account is still valid
-	#ifdef MYTELEMED
-		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
-	
-		[myProfileModel getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
+		// If application has timed out while it was in the background, then log the user out (unless the user was on a phone call)
+		if ([self didApplicationTimeoutWhileInactive])
 		{
-			if (success)
+			[self applicationDidTimeout:nil];
+		}
+		// Application has not timed out so verify that account is still valid
+		else
+		{
+			[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 			{
-				MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
-				
-				// Update MyStatusModel with updated number of unread messages
-				[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
+				if (success)
 				{
-					// No callback needed - values stored in shared instance automatically
-				}];
-			}
-			else
-			{
-				NSLog(@"Error %ld: %@", (long)error.code, error.localizedDescription);
-				
-				// If error is not because device is offline, then account not valid so go to login screen
-				if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
-				{
-					AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+					// MyTeleMed - Update MyStatusModel with updated number of unread messages
+					#ifdef MYTELEMED
+						MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 					
-					// Clear stored authentication data
-					[authenticationModel doLogout];
+						[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
+						{
+							// No callback needed - values are stored in shared instance automatically
+						}];
+					#endif
+				}
+				// If error is not because device is offline, then account is not valid so go to login screen
+				else
+				{
+					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+					
+					// Notify user that their account was invalid
+					[settings setValue:@"There was a problem validating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+					[settings synchronize];
 					
 					// Go to login screen
 					[self goToLoginScreen];
 				}
-			}
-		}];
-	#endif
+			}];
+		}
+	}
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -255,28 +263,46 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:
+	// Called when the application is about to terminate. Save data if appropriate.
+	// See also applicationDidEnterBackground:
 }
 
 - (void)callObserver:(CXCallObserver *)callObserver callChanged:(CXCall *)call
 {
-	if (call != nil && call.hasEnded == YES)
+	if (call != nil)
 	{
-		NSLog(@"CXCallState: Disconnected");
-		
-		// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-		
-		[errorAlertController dismiss];
-		
-		// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidDisconnectCall" object:nil];
-		
-		// Reset idle timer
-		dispatch_async(dispatch_get_main_queue(), ^
+		// Ceck whether call has disconnected
+		if (call.hasEnded == YES)
 		{
-			[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
-		});
+			NSLog(@"CXCallState: Disconnected");
+			
+			// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
+			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			
+			[errorAlertController dismiss];
+			
+			// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
+			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+			
+			// Reset idle timer
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[(TeleMedApplication *)[UIApplication sharedApplication] resetIdleTimer];
+			});
+		}
+		// Check whether call has connected (user answered the call)
+		else if (call.hasConnected == YES)
+		{
+			NSLog(@"CXCallState: Connected");
+			
+			// Post a notification to any listeners (PhoneCallViewController)
+			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
+			
+			// MyTeleMed - Stop observing for TeleMed to return phone call
+			#ifdef MYTELEMED
+				dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+			#endif
+		}
 	}
 }
 
@@ -291,19 +317,22 @@
 
 - (void)applicationDidTimeout:(NSNotification *)notification
 {
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
+	NSLog(@"Application timed out");
 	
-	// Only log user out if timeout is enabled and user is not currently on phone call
-	if (timeoutEnabled && ! [self isCallConnected])
+	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	BOOL timeoutDisabled = [settings boolForKey:DISABLE_TIMEOUT];
+	
+	// Only log user out if timeout is enabled, user is not currently on a phone call, and user is not currently on the login screen
+	if (! timeoutDisabled && ! [self isCallConnected] && ! [[currentStoryboard valueForKey:@"name"] isEqualToString:@"LoginSSO"])
 	{
+		// Notify user that their session timed out
+		[settings setValue:@"Your session has timed out for security. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+		[settings synchronize];
+		
 		// Delay logout to ensure application is fully loaded
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
 		{
-			// Clear stored authentication data
-			[authenticationModel doLogout];
-			
 			// Go to login screen
 			[self goToLoginScreen];
 		});
@@ -338,28 +367,58 @@
 	*/
 }
 
+/**
+ * Determine whether application timed out while it was in the background
+ */
+- (BOOL)didApplicationTimeoutWhileInactive
+{
+	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	
+	// If user has timeout disabled, then the application should not time out
+	if ([settings boolForKey:DISABLE_TIMEOUT])
+	{
+		return false;
+	}
+	
+	// Get user timeout period from user prefences
+	NSNumber *userTimeoutPeriodMinutes = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
+	
+	// Get number of seconds list application last resigned active
+	NSDate *dateApplicationResignedActive = (NSDate *)[settings objectForKey:DATE_APPLICATION_DID_ENTER_BACKGROUND];
+	NSTimeInterval timeIntervalSinceApplicationResignedActive = [[NSDate date] timeIntervalSinceDate:dateApplicationResignedActive];
+	
+	NSLog(@"User Timeout Period: %@ minutes", userTimeoutPeriodMinutes);
+	NSLog(@"Application Last Active: %f minutes ago", timeIntervalSinceApplicationResignedActive / 60);
+	
+	// Determine whether application has timed out since it last resigned active
+	return (timeIntervalSinceApplicationResignedActive / 60 > [userTimeoutPeriodMinutes integerValue]);
+}
+
 - (void)didFinishLaunching:(NSNotification *)notification
 {
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	
 	// Remove reachability observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	// If session timeout preference has never been set, then default it to true
-	if (! [settings objectForKey:@"enableTimeout"])
+	// TEMPORARY (Version 4.08) - Timeout logic was changed to use disableTimeout so that it doesn't have to be initialized - This logic can be removed in a future update (only after Med2Med has received the update)
+	if ([settings objectForKey:@"enableTimeout"])
 	{
-		[settings setBool:YES forKey:@"enableTimeout"];
+		[settings setBool:! [settings boolForKey:@"enableTimeout"] forKey:DISABLE_TIMEOUT];
+		[settings removeObjectForKey:@"enableTimeout"];
 		[settings synchronize];
 	}
 	
-	BOOL timeoutEnabled = [settings boolForKey:@"enableTimeout"];
+	// Get timeout disabled preference from user prefences
+	BOOL timeoutDisabled = [settings boolForKey:DISABLE_TIMEOUT];
 	
-	NSLog(@"Timeout Enabled: %@", (timeoutEnabled ? @"YES" : @"NO"));
+	NSLog(@"Is Timeout Disabled: %@", (timeoutDisabled ? @"YES" : @"NO"));
+	
+	// Note: App always requires login when launching from cold start (matches behavior of financial apps)
 	
 	// If user has timeout disabled and a refresh token already exists, then attempt to bypass the login screen
-	if (! timeoutEnabled && authenticationModel.RefreshToken != nil)
+	if (timeoutDisabled && authenticationModel.RefreshToken != nil)
 	{
 		id <ProfileProtocol> profile;
 		
@@ -435,7 +494,11 @@
  */
 - (void)goToLoginScreen
 {
+	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
 	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
+
+	// Clear stored authentication data
+	[authenticationModel doLogout];
 	
 	// Set LoginSSONavigationController as the root view controller
 	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
@@ -557,42 +620,14 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-	NSLog(@"My Device Token: %@", deviceToken);
-
-    // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
-    const char *data = [deviceToken bytes];
-    NSMutableString *tokenString = [NSMutableString string];
-
-    for (NSUInteger i = 0; i < deviceToken.length; i++)
-    {
-        [tokenString appendFormat:@"%02.2hhX", data[i]];
-    }
-
-    NSLog(@"Token String: %@", tokenString);
-	
-	// Set device token
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
-	
-	[registeredDeviceModel setToken:[tokenString copy]];
-	
-	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
-	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
-	{
-		// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
-		if (error != nil && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
-		{
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-			
-			[errorAlertController show:error];
-		}
-	}];
-}
-
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
+	
+	// Post notification to any observers within the app (MessagesViewController and SettingsTableViewController)
+	[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
+		@"errorMessage": error.localizedDescription
+	}];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
@@ -653,6 +688,45 @@
 	[self handleRemoteNotification:notification applicationState:(application.applicationState == UIApplicationStateActive ? UIApplicationStateActive : UIApplicationStateBackground)];
 	
 	completionHandler(UIBackgroundFetchResultNoData);
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+	NSLog(@"My Device Token: %@", deviceToken);
+
+    // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
+    const char *data = [deviceToken bytes];
+    NSMutableString *tokenString = [NSMutableString string];
+
+    for (NSUInteger i = 0; i < deviceToken.length; i++)
+    {
+        [tokenString appendFormat:@"%02.2hhX", data[i]];
+    }
+
+    NSLog(@"Token String: %@", tokenString);
+	
+	// Set device token
+	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	
+	[registeredDeviceModel setToken:[tokenString copy]];
+	
+	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
+	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
+	{
+		// Post notifications to any observers within the app (MessagesViewController and SettingsTableViewController)
+		if (success)
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
+				@"deviceToken": [tokenString copy]
+			}];
+		}
+		else
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
+				@"errorMessage": error.localizedDescription
+			}];
+		}
+	}];
 }
 
 /**
@@ -739,7 +813,7 @@
 		[self goToMainScreen];
 	}
 	// If device has not previously registered with TeleMed, then go to phone number screen
-	else if (! registeredDeviceModel.hasRegistered)
+	else if (! [registeredDeviceModel isRegistered] && ! [registeredDeviceModel hasSkippedRegistration])
 	{
 		[self goToPhoneNumberScreen];
 	}
@@ -843,7 +917,7 @@
 	if (applicationState == UIApplicationStateActive)
 	{
 		// Post notification to any observers within the app (CoreViewController and CoreTableViewController) regardless of whether user is logged in
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidReceiveRemoteNotification" object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
+		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
 			@"goToRemoteNotificationScreen": [goToRemoteNotificationScreen copy]
 		} : NULL)];
 	}
@@ -952,6 +1026,33 @@
 }
 
 /**
+ * Start observing for TeleMed to return phone call (from CallModel)
+ */
+- (void)startTeleMedCallObserver:(dispatch_block_t)teleMedCallTimeoutBlock timeoutPeriod:(int)timeoutPeriod
+{
+	// Cancel any previous listener to prevent duplicate error messages
+	[self stopTeleMedCallObserver];
+	
+	[self setTeleMedCallTimeoutBlock:teleMedCallTimeoutBlock];
+	
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeoutPeriod * NSEC_PER_SEC)), dispatch_get_main_queue(), self.teleMedCallTimeoutBlock);
+}
+
+/**
+ * Stop observing for TeleMed to return phone call (from CallModel)
+ */
+- (void)stopTeleMedCallObserver
+{
+	if (self.teleMedCallTimeoutBlock != nil)
+	{
+		dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+		
+		// Reset timeout block
+		[self setTeleMedCallTimeoutBlock:nil];
+	}
+}
+
+/**
  * Re-register user's device with TeleMed if needed
  */
 - (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
@@ -962,12 +1063,11 @@
 	NSLog(@"Preferred Account ID: %@", profile.MyPreferredAccount.ID);
 	NSLog(@"Device ID: %@", registeredDeviceModel.ID);
 	NSLog(@"Phone Number: %@", registeredDeviceModel.PhoneNumber);
+	NSLog(@"Is Registered: %@", [registeredDeviceModel isRegistered] ? @"Yes" : @"No");
 	
 	// If this device was previously registered with TeleMed, then we should update the device token in case it changed
-	if (registeredDeviceModel.hasRegistered)
+	if ([registeredDeviceModel isRegistered])
 	{
-		[registeredDeviceModel setShouldRegister:YES];
-		
 		[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *registeredDeviceError)
 		{
 			// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
@@ -976,12 +1076,6 @@
 				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 				
 				[errorAlertController show:registeredDeviceError];
-			}
-			
-			// If the request was not successful, direct the user to re-enter their phone number again (handled by goToNextScreen:)
-			if (! success)
-			{
-				[registeredDeviceModel setHasRegistered:NO];
 			}
 			
 			// Go to the next screen in the login process

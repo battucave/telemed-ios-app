@@ -24,6 +24,8 @@
 
 @implementation MyProfileModel
 
+@synthesize TimeoutPeriodMins = _TimeoutPeriodMins;
+
 + (id <ProfileProtocol>)sharedInstance
 {
 	static dispatch_once_t token;
@@ -52,15 +54,34 @@
 	}
 }
 
-// Override TimeoutPeriodMins setter to also update application's timeout period
+// Override TimeoutPeriodMins getter
+- (NSNumber *)TimeoutPeriodMins
+{
+	// If app timeout period is not already set, then check user preferences
+	if (! _TimeoutPeriodMins)
+	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		_TimeoutPeriodMins = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
+	}
+	
+	return _TimeoutPeriodMins ?: [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD_MINUTES];
+}
+
+// Override TimeoutPeriodMins setter to update application's timeout period and store value in user preferences
 - (void)setTimeoutPeriodMins:(NSNumber *)TimeoutPeriodMins
 {
 	if (_TimeoutPeriodMins != TimeoutPeriodMins)
 	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		[settings setValue:TimeoutPeriodMins forKey:USER_TIMEOUT_PERIOD_MINUTES];
+		[settings synchronize];
+		
 		_TimeoutPeriodMins = TimeoutPeriodMins;
 	}
 	
-	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins intValue]];
+	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins integerValue]];
 }
 
 - (void)doLogout
@@ -81,7 +102,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			// Update authenticated flag
+			// Update the isAuthenticated flag
 			[self setIsAuthenticated:YES];
 			
 			// Search user's registered devices to determine whether any match the current device. If so, update the current device with the new phone number
@@ -137,6 +158,12 @@
 
 - (void)setCurrentDevice
 {
+	#ifdef DEBUG
+		NSLog(@"Skip Set Current Device step when on Simulator or Debugging");
+		
+		return;
+	#endif
+	
 	if ([self.MyRegisteredDevices count] == 0)
 	{
 		return;
@@ -150,8 +177,7 @@
 		// If found, set the current device's phone number
 		if ([registeredDevice.ID caseInsensitiveCompare:registeredDeviceModel.ID] == NSOrderedSame)
 		{
-			[registeredDeviceModel setHasRegistered:YES];
-			[registeredDeviceModel setPhoneNumber:registeredDevice.PhoneNumber];
+			[registeredDeviceModel setCurrentDevice:registeredDevice];
 			
 			NSLog(@"Current Device already Registered with ID: %@ and Phone Number: %@", registeredDeviceModel.ID, registeredDeviceModel.PhoneNumber);
 		}

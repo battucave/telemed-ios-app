@@ -12,11 +12,15 @@
 #import "MessageForwardViewController.h"
 #import "MessageRedirectTableViewController.h"
 #import "MessageTeleMedViewController.h"
+#import "PhoneCallViewController.h"
 #import "CallModel.h"
 #import "MessageModel.h"
 #import "MessageRedirectInfoModel.h"
+#import "RegisteredDeviceModel.h"
 
 @interface MessageDetailParentViewController ()
+
+@property (nonatomic) BOOL shouldReturnCallAfterRegistration;
 
 @end
 
@@ -60,6 +64,11 @@
 		[self.constraintButtonHistoryLeadingSpace setConstant:spaceAdjustment];
 		[self.constraintButtonHistoryTrailingSpace setConstant:-spaceAdjustment];
 	}
+	
+	#if TARGET_IPHONE_SIMULATOR
+		// Disable return call button
+		[self.buttonReturnCall setEnabled:NO];
+	#endif
 	
 	// Set message priority color
 	[self setMessagePriority];
@@ -187,14 +196,40 @@
 	
 	// NOTE: Return call recording options removed in commit "Remove the Return Call popup since all calls are recorded making the choice irrelevant" (3/01/2019)
 	
-	// Disable return call button
-	[self.buttonReturnCall setEnabled:NO];
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
-	// Request a call from the server
-	CallModel *callModel = [[CallModel alloc] init];
-	
-	[callModel setDelegate:self];
-	[callModel callSenderForMessage:self.messageDeliveryID recordCall:@"false"];
+	// Require device registration with TeleMed in order to return call
+	if ([registeredDevice isRegistered])
+	{
+		// Go to PhoneCallViewController
+		[self showPhoneCall];
+	}
+	// If device is not already registered with TeleMed, then prompt user to register it
+	else
+	{
+		UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"Please register your device to enable the Return Call feature." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+		UIAlertAction *registerAction = [UIAlertAction actionWithTitle:@"Register" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+		{
+			// Update the shouldReturnCallAfterRegistration flag to automatically return the call after device has successfully registered
+			[self setShouldReturnCallAfterRegistration:YES];
+			
+			// Run CoreViewController's registerForRemoteNotifications:
+			[self registerForRemoteNotifications];
+		}];
+		
+		[registerDeviceAlertController addAction:registerAction];
+		[registerDeviceAlertController addAction:cancelAction];
+
+		// PreferredAction only supported in 9.0+
+		if ([registerDeviceAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[registerDeviceAlertController setPreferredAction:registerAction];
+		}
+
+		// Show alert
+		[self presentViewController:registerDeviceAlertController animated:YES completion:nil];
+	}
 }
 
 // Unwind segue from MessageEscalateTableViewController
@@ -209,40 +244,25 @@
 	NSLog(@"Unwind from Message Redirect");
 }
 
-// Return pending from CallTeleMedModel delegate
-- (void)callSenderPending
+// Override CoreViewController's didChangeRemoteNotificationAuthorization:
+- (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
 {
-	UIAlertController *returnCallAlertController = [UIAlertController alertControllerWithTitle:@"Return Call" message:@"To keep your number private, TeleMed will call you to connect your party. Please wait while we return your call." preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
 	
-	[returnCallAlertController addAction:okAction];
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
-	// Set preferred action
-	[returnCallAlertController setPreferredAction:okAction];
-
-	// Show alert
-	[self presentViewController:returnCallAlertController animated:YES completion:nil];
-}
-
-// Return success from CallTeleMedModel delegate
-- (void)callSenderSuccess
-{
-	NSLog(@"Call Message Sender request sent successfully");
-	
-	// Re-enable the return call button after a short delay
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
+	// If device is registered successfully, then enable the return call button and attempt to return call
+	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
 	{
-		[self.buttonReturnCall setEnabled:YES];
-	});
+		// Reset the shouldReturnCallAfterRegistration flag
+		[self setShouldReturnCallAfterRegistration:NO];
+		
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self returnCall:nil];
+		});
+	}
 }
-
-/*/ Return error from CallTeleMedModel delegate (no longer used)
-- (void)callSenderError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
- 
-	[errorAlertController show:error];
-}*/
 
 /*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
 - (void)modifyMessageStatePending:(NSString *)state
@@ -447,6 +467,12 @@
 	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageDetail" sender:self];
 }
 
+// Go to PhoneCallViewController
+- (void)showPhoneCall
+{
+	[self performSegueWithIdentifier:@"showPhoneCallFromMessageDetail" sender:self];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Go to MessageEscalateViewController
@@ -500,6 +526,21 @@
 		
 		// Set message
 		[messageTeleMedViewController setMessage:self.message];
+	}
+	// Go to PhoneCallViewController
+	else if ([segue.identifier isEqualToString:@"showPhoneCallFromMessageDetail"] || [segue.identifier isEqualToString:@"showPhoneCallFromMessageHistory"])
+	{
+		PhoneCallViewController *phoneCallViewController = segue.destinationViewController;
+		
+		// Set message
+		[phoneCallViewController setMessage:self.message];
+		
+		// Request a call from TeleMed
+		CallModel *callModel = [[CallModel alloc] init];
+
+		[callModel setDelegate:phoneCallViewController];
+
+		[callModel callSenderForMessage:self.message.MessageDeliveryID recordCall:@"false"];
 	}
 }
 

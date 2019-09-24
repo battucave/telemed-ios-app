@@ -10,10 +10,12 @@
 
 @interface ErrorAlertController : UIAlertController
 
-+ (instancetype)sharedInstance;
++ (instancetype _Nonnull)sharedInstance;
 
-- (instancetype)show:(NSError *)error;
-- (instancetype)show:(NSError *)error withCallback:(void (^)(void))callback;
+- (instancetype _Nonnull)show:(NSError * _Nullable)error;
+- (instancetype _Nonnull)show:(NSError * _Nullable)error withRetryCallback:(void (^ _Nullable)(void))callback;
+- (instancetype _Nonnull)show:(NSError * _Nullable)error withRetryCallback:(void (^ _Nullable)(void))retryCallback cancelCallback:(void (^ _Nullable)(void))cancelCallback;
 - (void)dismiss;
+- (void)presentAlertController:(BOOL)animated completion:(void (^ _Nullable)(void))completion; // Only used by CallModel
 
 @end

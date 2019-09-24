@@ -68,7 +68,7 @@
 		// Show activity indicator
 		[[self getRootViewController] presentViewController:loadingAlertController animated:NO completion:nil];
 		
-		// Reset has dismissed flag
+		// Reset the hasDismissed flag
 		[self setHasDismissed:NO];
 	});
 }
@@ -93,7 +93,7 @@
 		{
 			[[self getRootViewController] dismissViewControllerAnimated:NO completion:callback];
 			
-			// Update has dismissed flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
+			// Update the hasDismissed flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
 			[self setHasDismissed:YES];
 		}
 	});
@@ -118,7 +118,7 @@
 		errorString = message;
 	}
 	
-	NSLog(@"Error: %@", errorString);
+	NSLog(@"Build Error: %@", errorString);
 	
 	return [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:error.code userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:title, NSLocalizedFailureReasonErrorKey, errorString, NSLocalizedDescriptionKey, nil]];
 }
@@ -130,11 +130,18 @@
 	[errorAlertController show:error];
 }
 
-- (void)showError:(NSError *)error withCallback:(void (^)(void))callback
+- (void)showError:(NSError *)error withRetryCallback:(void (^)(void))callback
 {
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
 	
-	[errorAlertController show:error withCallback:callback];
+	[errorAlertController show:error withRetryCallback:callback];
+}
+
+- (void)showError:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback
+{
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error withRetryCallback:retryCallback cancelCallback:cancelCallback];
 }
 
 - (id)getRootViewController

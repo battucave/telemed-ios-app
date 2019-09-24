@@ -11,7 +11,10 @@
 @interface CoreViewController : UIViewController
 
 #ifdef MYTELEMED
+- (void)authorizeForRemoteNotifications;
+- (void)authorizeForRemoteNotifications:(NSString *)authorizationMessage;
 - (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction;
+- (void)registerForRemoteNotifications;
 #endif
 
 @end

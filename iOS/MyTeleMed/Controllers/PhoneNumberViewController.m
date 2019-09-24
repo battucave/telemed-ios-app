@@ -120,21 +120,26 @@
 		{
 			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 			
-			// Register phone number along with new device token
-			[registeredDeviceModel setShouldRegister:YES];
-			
-			// Save phone number to device
 			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
 			
-			// Run register device web service
+			// Register device with TeleMed
 			[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
 			{
 				AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 				
 				if (success)
 				{
-					// Go to the next screen in the login process
-					[appDelegate goToNextScreen];
+					// Ask user to authorize push notifications for the app
+					UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+
+					[userNotificationCenter requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError * _Nullable error)
+					{
+						dispatch_async(dispatch_get_main_queue(), ^
+						{
+							// Go to the next screen in the login process
+							[appDelegate goToNextScreen];
+						});
+					}];
 				}
 				else
 				{
@@ -153,14 +158,14 @@
 					UIAlertController *errorAlertController = [UIAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@ Please ensure that the phone number already exists in your account.", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
 					UIAlertAction *goBackAction = [UIAlertAction actionWithTitle:@"Go Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 					{
-						AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	
-						// Clear stored authenticated data
-						[authenticationModel doLogout];
-						
 						// Go back to login screen (user navigated here from login screen)
 						if ([self.navigationController.viewControllers count] > 1)
 						{
+							AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	
+							// Clear stored authenticated data
+							[authenticationModel doLogout];
+							
 							[self.navigationController popToRootViewControllerAnimated:YES];
 						}
 						// Go back to login screen (user bypassed login, but was sent here due to invalid phone number)

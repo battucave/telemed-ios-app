@@ -6,26 +6,31 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
+#import <UserNotifications/UserNotifications.h>
+
 #import "MessagesViewController.h"
+#import "ErrorAlertController.h"
 #import "MessageDetailViewController.h"
 #import "MessagesTableViewController.h"
 #import "SWRevealViewController.h"
 #import "MessageModel.h"
+#import "RegisteredDeviceModel.h"
 
 @interface MessagesViewController ()
 
 @property (weak, nonatomic) MessagesTableViewController *messagesTableViewController;
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonArchive; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonCompose; // Must be a strong reference
+@property (nonatomic) IBOutlet UIBarButtonItem *barButtonRegisterDevice; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // Must be a strong reference
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
-@property (nonatomic) NSArray *selectedMessages;
 @property (nonatomic) NSString *navigationBarTitle;
 @property (weak, nonatomic) UIColor *segmentedControlColor;
+@property (nonatomic) NSArray *selectedMessages;
 
 @end
 
@@ -38,7 +43,7 @@
 	// Store navigation bar title
 	[self setNavigationBarTitle:self.navigationItem.title];
 	
-	// Note: programmatically set right bar button item to Apple's built-in edit button is toggled from within MessagesTableViewController.m based on number of filtered messages
+	// Note: programmatically setting the right bar button item to Apple's built-in edit button is toggled from within MessagesTableViewController.m based on number of filtered messages
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -46,7 +51,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
-	if ([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
 	{
 		[self.viewSwipeMessage setHidden:YES];
 	}
@@ -108,26 +113,47 @@
 	[self presentViewController:archiveMessagesAlertController animated:YES completion:nil];
 }
 
+- (IBAction)registerDevice:(id)sender
+{
+	// Run CoreViewController's authorizeForRemoteNotifications:
+	[self authorizeForRemoteNotifications];
+}
+
 // Unwind segue from MessageDetailViewController (only after archive action)
 - (IBAction)unwindArchiveMessage:(UIStoryboardSegue *)segue
 {
+	/*
+	 * 9/29/2019 - Pagination was added, but contains a flaw:
+	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next page of messages
+	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
+	 *
+	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next set of messages
+	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
+	 *
+	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
+	 */
+	
+	/*/ Preferred solution - Remove selected rows from messages table
 	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
 	
-	// Remove selected rows from messages table
-	[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
-}
-
-// Override selectedMessages setter
-- (void)setSelectedMessages:(NSArray *)theSelectedMessages
-{
-	_selectedMessages = [NSArray arrayWithArray:theSelectedMessages];
-	NSInteger selectedMessageCount = [theSelectedMessages count];
+	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	{
+		[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
+	}
+	// End preferred solution */
 	
-	// Toggle archive bar button on/off based on number of selected messages
-	[self.barButtonArchive setEnabled:(selectedMessageCount > 0)];
-	
-	// Update navigation bar title based on number of messages selected
-	[self.navigationItem setTitle:(selectedMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedMessageCount] : self.navigationBarTitle)];
+	// Fallback solution - Reset the messages table (viewWillAppear will be called on MessagesTableViewController after this which will reload the table)
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
+	{
+		[self.messagesTableViewController resetMessages];
+	}
+	// End fallback solution
 }
 
 // Override setEditing:
@@ -156,8 +182,157 @@
 	[self toggleToolbarButtons:editing];
 }
 
+// Override CoreViewController's didChangeRemoteNotificationAuthorization:
+- (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
+{
+	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
+	
+	[self toggleToolbarButtons:super.isEditing];
+}
+
+// Return modify multiple message states pending from MessageModel delegate
+- (void)modifyMultipleMessagesStatePending:(NSString *)state
+{
+	// Hide selected rows from messages table
+	if ([self.messagesTableViewController respondsToSelector:@selector(hideSelectedMessages:)])
+	{
+		[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
+	}
+	
+	[self setEditing:NO animated:YES];
+}
+
+// Return modify multiple message states success from MessageModel delegate
+- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
+{
+	/*
+	 * 9/29/2019 - Pagination was added, but contains a flaw:
+	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next page of messages
+	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
+	 *
+	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next set of messages
+	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
+	 *
+	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
+	 */
+	
+	/*/ Preferred solution - Remove selected messages from the messages table
+	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	{
+		[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
+	}
+	// End preferred solution */
+	
+	// Fallback solution - Reset the messages table and reload messages
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetActiveMessages)])
+	{
+		[self.messagesTableViewController resetActiveMessages];
+	}
+	// End fallback solution
+}
+
+// Return modify multiple message states error from MessageModel delegate
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
+{
+	// Determine which messages were successfully archived
+	NSMutableArray *successfulMessages = [self.selectedMessages mutableCopy];
+	
+	[successfulMessages removeObjectsInArray:failedMessages];
+	
+	/*
+	 * 9/29/2019 - Pagination was added, but contains a flaw:
+	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next page of messages
+	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
+	 *
+	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next set of messages
+	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
+	 *
+	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
+	 */
+	
+	/*/ Preferred solution - Remove the successfully archived messages and unhide the failed messages in the messages table
+	// Update selected messages to only the failed messages
+	self.selectedMessages = failedMessages;
+	
+	// Remove all rows from messages table that were successfully archived
+	if ([successfulMessages count] > 0 && [self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	{
+		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
+	}
+	
+	// Re-show messages that were not archived
+	if ([self.messagesTableViewController respondsToSelector:@selector(unhideSelectedMessages:)])
+	{
+		[self.messagesTableViewController unhideSelectedMessages:failedMessages];
+	}
+	// End preferred solution */
+	
+	// Fallback solution - Reset the messages table if there are any successfully archived messages */
+	if ([successfulMessages count] > 0)
+	{
+		// Reset selected messages and reload messages
+		self.selectedMessages = [NSArray new];
+		
+		if ([self.messagesTableViewController respondsToSelector:@selector(resetActiveMessages)])
+		{
+			[self.messagesTableViewController resetActiveMessages];
+		}
+	}
+	else if ([self.messagesTableViewController respondsToSelector:@selector(unhideSelectedMessages:)])
+	{
+		// Re-show messages that were not archived
+		[self.messagesTableViewController unhideSelectedMessages:failedMessages];
+	}
+}
+
+// Delegate method from SWRevealController that fires when a recognized gesture has ended
+- (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
+{
+	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
+}
+
+// Override selectedMessages setter
+- (void)setSelectedMessages:(NSArray *)theSelectedMessages
+{
+	_selectedMessages = [NSArray arrayWithArray:theSelectedMessages];
+	NSInteger selectedMessageCount = [theSelectedMessages count];
+	
+	// Toggle archive bar button on/off based on number of selected messages
+	[self.barButtonArchive setEnabled:(selectedMessageCount > 0)];
+	
+	// Update navigation bar title based on number of messages selected
+	[self.navigationItem setTitle:(selectedMessageCount > 0 ? [NSString stringWithFormat:@"%ld Selected", (long)selectedMessageCount] : self.navigationBarTitle)];
+}
+
+// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if gesture resulted in opening the SWRevealController
+- (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
+{
+	// If position is open
+	if (revealController.frontViewPosition == FrontViewPositionRight)
+	{
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
+		[settings synchronize];
+	}
+}
+
 - (void)toggleToolbarButtons:(BOOL)editing
 {
+	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	
 	// Initialize toolbar items with only the left flexible space button
 	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
 	
@@ -169,69 +344,21 @@
 		[toolbarItems addObject:self.barButtonArchive];
 		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
 	}
-	// If not in editing mode, add the compose button
+	// If device is not registered with TeleMed, then add register app button
+	else if (! [registeredDevice isRegistered])
+	{
+		[toolbarItems addObject:self.barButtonRegisterDevice];
+	}
+	// Add compose message button
 	else
 	{
 		[toolbarItems addObject:self.barButtonCompose];
 	}
 	
-	[self.toolbarBottom setItems:toolbarItems animated:YES];
-}
-
-// Return modify multiple message states pending from MessageModel delegate
-- (void)modifyMultipleMessagesStatePending:(NSString *)state
-{
-	// Hide selected rows from messages table
-	[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
-	
-	[self setEditing:NO animated:YES];
-}
-
-// Return modify multiple message states success from MessageModel delegate
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
-{
-	// Remove selected rows from messages table
-	[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
-}
-
-// Return modify multiple message states error from MessageModel delegate
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
-{
-	// Determine which messages were successfully archived
-	NSMutableArray *successfulMessages = [self.selectedMessages mutableCopy];
-	
-	[successfulMessages removeObjectsInArray:failedMessages];
-	
-	// Remove selected all rows from messages table that were successfully archived
-	if ([self.selectedMessages count] > 0)
+	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
-	}
-	
-	// Reload messages table to re-show messages that were not archived
-	[self.messagesTableViewController unHideSelectedMessages:failedMessages];
-	
-	// Update selected messages to only the failed messages
-	self.selectedMessages = failedMessages;
-}
-
-// Delegate method from SWRevealController that fires when a recognized gesture has ended
-- (void)revealControllerPanGestureEnded:(SWRevealViewController *)revealController
-{
-	[self performSelector:@selector(SWRevealControllerDidMoveToPosition:) withObject:revealController afterDelay:0.25];
-}
-
-// Determine if SWRevealController has opened. This method is only fired after a delay from revealControllerPanGestureEnded Delegate method so we can determine if gesture resulted in opening the SWRevealController
-- (void)SWRevealControllerDidMoveToPosition:(SWRevealViewController *)revealController
-{
-	// If position is open
-	if (revealController.frontViewPosition == FrontViewPositionRight)
-	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-		
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
-		[settings synchronize];
-	}
+		[self.toolbarBottom setItems:toolbarItems animated:YES];
+	});
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -242,7 +369,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to active
-		[self.messagesTableViewController initMessagesWithType:@"Active"];
+		[self.messagesTableViewController setMessagesType:@"Active"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

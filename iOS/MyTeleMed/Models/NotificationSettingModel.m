@@ -67,7 +67,7 @@
 		[notificationSettings setEnabled:YES];
 		[notificationSettings setIsReminderOn:YES];
 		
-		[notificationSettings setToneTitle:@"default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
+		[notificationSettings setToneTitle:@"Default"]; // Default to system's alert sound (this is also returned from TeleMed server on first load)
 		
 		// Intervals should always exist
 		if ([intervals count] > 0)
@@ -130,7 +130,7 @@
 			if (self.Interval != nil && [self.Interval integerValue] == 0)
 			{
 				// Default interval to 1
-				self.Interval = [NSNumber numberWithInt:1];
+				self.Interval = @1;
 			}
 			
 			// Save notification settings for type to device
@@ -237,7 +237,7 @@
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"notification settings Error", NSLocalizedFailureReasonErrorKey, @"There was a problem saving your notification settings.", NSLocalizedDescriptionKey, nil]];
 			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self saveNotificationSettingsByName:name settings:notificationSettings];
@@ -270,7 +270,7 @@
 			}
 		
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self saveNotificationSettingsByName:name settings:notificationSettings];

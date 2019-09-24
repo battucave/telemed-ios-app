@@ -19,20 +19,9 @@
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // Must be a strong reference
 @property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
-@property (nonatomic) NSArray *selectedMessages;
-@property (nonatomic) NSString *navigationBarTitle;
-
 @end
 
 @implementation SentMessagesViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
-	// Store navigation bar title
-	[self setNavigationBarTitle:self.navigationItem.title];
-}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -42,7 +31,7 @@
 	[self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Sent" style:UIBarButtonItemStylePlain target:nil action:nil]];
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
-	if ([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
 	{
 		[self.viewSwipeMessage setHidden:YES];
 	}
@@ -64,7 +53,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		[settings synchronize];
 	}
 }
@@ -77,7 +66,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to sent
-		[self.messagesTableViewController initMessagesWithType:@"Sent"];
+		[self.messagesTableViewController setMessagesType:@"Sent"];
 		[self.messagesTableViewController setDelegate:self];
 		
 		// In XCode 8+, all view frame sizes are initially 1000x1000. Have to call "layoutIfNeeded" first to get actual value.

@@ -7,6 +7,8 @@
 //
 
 #import "CallModel.h"
+#import "AppDelegate.h"
+#import "ErrorAlertController.h"
 #import "RegisteredDeviceModel.h"
 
 @interface CallModel ()
@@ -19,12 +21,13 @@
 
 - (void)callTeleMed
 {
-	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
-	// Return error if no phone number is set (this should only be applicable to debug builds since they bypass phone number registration)
+	// Reset observer for TeleMed to return phone call
+	[appDelegate stopTeleMedCallObserver];
+	
+	// Return error if no phone number is set (this should only be applicable to debug builds if they bypass phone number registration)
 	if (! registeredDeviceModel.PhoneNumber)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Call TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
@@ -33,54 +36,54 @@
 		[self showError:error];
 	
 		// Handle error via delegate
-		/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 		{
-			[self.delegate callTeleMedError:error];
-		} */
+			[self.delegate callError:error];
+		}
 		
 		return;
 	}
 	
-	// Show activity indicator
-	[self showActivityIndicator];
+	// Add network activity observer
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
 		@"recordCall"	: @"false",
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	// This web service method requires a longer timeout interval
-	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
-	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
-		
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
 			// Handle success via delegate (not currently used)
-			if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedSuccess)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callSuccess)])
 			{
-				[self.delegate callTeleMedSuccess];
+				[self.delegate callSuccess];
 			}
 		}
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Call TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
 			
+			// Stop observing for TeleMed to return phone call
+			[appDelegate stopTeleMedCallObserver];
+			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self callTeleMed];
-			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			}
+			cancelCallback:^
 			{
-				[self.delegate callTeleMedError:error];
-			} */
+				// Handle error via delegate
+				if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
+				{
+					[self.delegate callError:error];
+				}
+			}];
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -90,36 +93,38 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Stop observing for TeleMed to return phone call
+		[appDelegate stopTeleMedCallObserver];
+	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem requesting a Return Call." andTitle:@"Call TeleMed Error"];
 		
-		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
-		[self hideActivityIndicator:^
+		// Show error even if user has navigated to another screen
+		[self showError:error withRetryCallback:^
+		{
+			// Include callback to retry the request
+			[self callTeleMed];
+		}
+		cancelCallback:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 			{
-				[self.delegate callTeleMedError:error];
-			} */
-		
-			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
-			{
-				// Include callback to retry the request
-				[self callTeleMed];
-			}];
+				[self.delegate callError:error];
+			}
 		}];
 	}];
-	
-	// Restore timeout interval to default
-	[self.operationManager.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 }
 
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
 	
-	// Phone number is not available when on simulator or debugging and will cause crash so skip calling the sender. (This should only happen when in debug mode; never for an actual user.)
+	// Stop observing for TeleMed to return phone call (reset the listener)
+	[appDelegate stopTeleMedCallObserver];
+	
+	// Return error if no phone number is set (this should only be applicable to debug builds if they bypass phone number registration)
 	if (! registeredDeviceModel.PhoneNumber)
 	{
 		NSLog(@"Skip Call Sender when on Simulator or Debugging because Phone Number is not available.");
@@ -129,11 +134,14 @@
 		// Show error
 		[self showError:error];
 		
+		// Handle error via delegate
+		if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
+		{
+			[self.delegate callError:error];
+		}
+		
 		return;
 	}
-	
-	// Show activity indicator
-	[self showActivityIndicator];
 	
 	// Add network activity observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
@@ -144,39 +152,38 @@
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	// The web service method only returns a result after the phone call has been answered so increase timeout interval
-	[self.operationManager.requestSerializer setTimeoutInterval:120.0];
-	
-	// This web service method only returns after the phone call has been answered
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
-		
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderSuccess)])
+			// Handle success via delegate (not currently used)
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callSuccess)])
 			{
-				[self.delegate callSenderSuccess];
+				[self.delegate callSuccess];
 			}
 		}
 		else
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Return Call Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
 			
+			// Stop observing for TeleMed to return phone call
+			[appDelegate stopTeleMedCallObserver];
+			
 			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
+			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self callSenderForMessage:messageID recordCall:recordCall];
-			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
+			}
+			cancelCallback:^
 			{
-				[self.delegate callSenderError:error];
-			} */
+				// Handle error via delegate
+				if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
+				{
+					[self.delegate callError:error];
+				}
+			}];
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -186,29 +193,27 @@
 		// Remove network activity observer
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
+		// Stop observing for TeleMed to return phone call
+		[appDelegate stopTeleMedCallObserver];
+	
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem requesting a Return Call." andTitle:@"Return Call Error"];
 		
-		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
-		[self hideActivityIndicator:^
+		// Show error even if user has navigated to another screen
+		[self showError:error withRetryCallback:^
+		{
+			// Include callback to retry the request
+			[self callSenderForMessage:messageID recordCall:recordCall];
+		}
+		cancelCallback:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 			{
-				[self.delegate callSenderError:error];
-			} */
-		
-			// Show error even if user has navigated to another screen
-			[self showError:error withCallback:^
-			{
-				// Include callback to retry the request
-				[self callSenderForMessage:messageID recordCall:recordCall];
-			}];
+				[self.delegate callError:error];
+			}
 		}];
 	}];
-	
-	// Reset timeout interval to default
-	[self.operationManager.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
 }
 
 // Network request has been sent, but still awaiting response
@@ -217,26 +222,51 @@
 	// Remove network activity observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	if (! self.pendingComplete)
 	{
-		if (! self.pendingComplete)
+		// Notify delegate that TeleMed call request has been sent to server
+		if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
 		{
-			// Notify delegate that TeleMed call request has been sent to server
-			if (self.delegate && [self.delegate respondsToSelector:@selector(callTeleMedPending)])
-			{
-				[self.delegate callTeleMedPending];
-			}
-			// Notify delegate that sender call request has been sent to server
-			else if (self.delegate && [self.delegate respondsToSelector:@selector(callSenderPending)])
-			{
-				[self.delegate callSenderPending];
-			}
+			[self.delegate callPending];
 		}
 		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+		// Start observing for TeleMed to return phone call
+		[self startTeleMedCallObserver];
+	}
+	
+	// Ensure that pending callback doesn't fire again after possible error
+	self.pendingComplete = YES;
+}
+
+// Start observing for TeleMed to return phone call
+- (void)startTeleMedCallObserver
+{
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+	// Set telemed call timeout block on AppDelegate
+	[appDelegate startTeleMedCallObserver:dispatch_block_create(0, ^
+	{
+		ErrorAlertController *returnCallTimeoutAlertController = [ErrorAlertController alertControllerWithTitle:@"Return Call Timed Out" message:@"There may have been a problem calling you. Please verify that our phone number isn't being blocked on your device:\n\n1) Open the Settings App\n2) Tap Phone\n3) Tap Call Blocking & Identification\n4) Search for and unblock +1 (404) 736-1880 if present" preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+		{
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
+			{
+				[self.delegate callError:nil];
+			}
+		}];
+
+		[returnCallTimeoutAlertController addAction:okAction];
+
+		// PreferredAction only supported in 9.0+
+		if ([returnCallTimeoutAlertController respondsToSelector:@selector(setPreferredAction:)])
+		{
+			[returnCallTimeoutAlertController setPreferredAction:okAction];
+		}
+
+		// Show alert
+		[returnCallTimeoutAlertController presentAlertController:YES completion:nil];
+	}) timeoutPeriod:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
 }
 
 @end

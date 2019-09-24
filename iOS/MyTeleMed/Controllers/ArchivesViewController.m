@@ -36,7 +36,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
-	if ([settings boolForKey:@"swipeMessageDisabled"])
+	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
 	{
 		[self.viewSwipeMessage setHidden:YES];
 	}
@@ -51,7 +51,10 @@
 - (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue
 {
 	// Reset MessagesTableViewController back to loading state
-	[self.messagesTableViewController resetMessages];
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
+	{
+		[self.messagesTableViewController resetMessages];
+	}
 	
 	// Obtain reference to source view controller
 	[self setArchivesPickerViewController:segue.sourceViewController];
@@ -76,9 +79,9 @@
 	[self.labelResults setText:[NSString stringWithFormat:@"Results from %@ for %@", self.archivesPickerViewController.selectedDate, self.archivesPickerViewController.selectedAccount.Name]];
 	
 	// Update MessagesTableViewController with updated messages
-	if ([self.messagesTableViewController respondsToSelector:@selector(filterArchiveMessages:startDate:endDate:)])
+	if ([self.messagesTableViewController respondsToSelector:@selector(filterArchivedMessages:startDate:endDate:)])
 	{
-		[self.messagesTableViewController filterArchiveMessages:self.archivesPickerViewController.selectedAccount.ID startDate:self.archivesPickerViewController.startDate endDate:self.archivesPickerViewController.endDate];
+		[self.messagesTableViewController filterArchivedMessages:self.archivesPickerViewController.selectedAccount.ID startDate:self.archivesPickerViewController.startDate endDate:self.archivesPickerViewController.endDate];
 	}
 }
 
@@ -96,7 +99,7 @@
 	{
 		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 		
-		[settings setBool:YES forKey:@"swipeMessageDisabled"];
+		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		
 		[settings synchronize];
 	}
@@ -109,7 +112,7 @@
 		[self setMessagesTableViewController:segue.destinationViewController];
 		
 		// Set messages type to archived
-		[self.messagesTableViewController initMessagesWithType:@"Archived"];
+		[self.messagesTableViewController setMessagesType:@"Archived"];
 	}
 	else if ([segue.identifier isEqualToString:@"showArchivesPicker"])
 	{

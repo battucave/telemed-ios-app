@@ -25,20 +25,23 @@
 
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
-@property (nonatomic) UIRefreshControl *savedRefreshControl;
-@property (nonatomic) NSArray *messages;
-@property (nonatomic) NSMutableArray *filteredMessages;
+@property (nonatomic) NSMutableArray *messages;
 @property (nonatomic) NSMutableArray *hiddenMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
 
 @property (nonatomic) NSString *messagesType; // Active, Archived, Sent
+
+// Archived message properties
 @property (nonatomic) NSNumber *archiveAccountID;
 @property (nonatomic) NSDate *archiveStartDate;
 @property (nonatomic) NSDate *archiveEndDate;
 
-@property (nonatomic) BOOL isLoaded;
-
-- (IBAction)refreshControlRequest:(id)sender;
+// Pagination properties
+@property (nonatomic) NSInteger currentPage;
+@property (nonatomic) BOOL isFetchingNextPage;
+@property (nonatomic) BOOL isFirstPageLoaded;
+@property (nonatomic) BOOL isLastPageLoaded;
+@property (nonatomic) UIActivityIndicatorView *loadingActivityIndicator;
 
 @end
 
@@ -55,15 +58,28 @@
 		[self.refreshControl endRefreshing];
 	});
 	
-	// Initialize MessageModel
-	#ifdef MYTELEMED
-		[self setMessageModel:[[MessageModel alloc] init]];
-		[self.messageModel setDelegate:self];
-	#endif
-	
 	// Initialize SentMessageModel
 	[self setSentMessageModel:[[SentMessageModel alloc] init]];
 	[self.sentMessageModel setDelegate:self];
+	
+	// Initialize current page
+	[self setCurrentPage:1];
+	
+	#ifdef MYTELEMED
+		// Initialize MessageModel
+		[self setMessageModel:[[MessageModel alloc] init]];
+		[self.messageModel setDelegate:self];
+	
+		// Initialize loading activity indicator to be used when loading additional messages
+		[self setLoadingActivityIndicator:[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]];
+
+		[self.loadingActivityIndicator setColor:[UIColor darkGrayColor]];
+		[self.loadingActivityIndicator setFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 60.0)];
+		[self.loadingActivityIndicator startAnimating];
+	#endif
+	
+	// Initialize hidden messages
+	[self setHiddenMessages:[NSMutableArray new]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,193 +90,53 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	[self reloadMessages];
+	
+	// Disable refresh control for sent and archived messages
+	if (! [self.messagesType isEqualToString:@"Active"])
+	{
+		[self setRefreshControl:nil];
+	}
 }
 
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
 {
+	// Cancel queued messages refresh
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	[self reloadMessages];
 	
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
-	[settings setBool:YES forKey:@"swipeMessageDisabled"];
+	[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
 	[settings synchronize];
 }
 
-- (void)initMessagesWithType:(NSString *)newMessagesType
+// Reload messages
+- (void)reloadMessages
 {
-	[self setMessages:nil];
-	[self setFilteredMessages:nil];
-	self.messagesType = newMessagesType;
+	[self loadMessages:1];
 	
-	// If messages type is active, re-enable refresh control
-	if ([newMessagesType isEqualToString:@"Active"])
-	{
-		if (self.refreshControl == nil)
-		{
-			self.refreshControl = self.savedRefreshControl;
-		}
-	}
-	// If messages type is archives or sent, disable refresh control
-	else
-	{
-		self.savedRefreshControl = self.refreshControl;
-		self.refreshControl = nil;
-	}
+	// Note: Don't trigger the isFetchingNextPage flag here (its only used for fetching "next" messages)
 }
 
-// Delegate method from ArchivesViewController
-- (void)filterArchiveMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+// Return sent messages from SentMessageModel delegate
+- (void)updateSentMessages:(NSArray *)sentMessages
 {
-	[self setArchiveAccountID:accountID];
-	[self setArchiveStartDate:startDate];
-	[self setArchiveEndDate:endDate];
-	
-	// Don't need to reload messages here because viewWillAppear fires when ArchivesPickerViewController is popped from navigation controller
-}
-
-- (void)hideSelectedMessages:(NSArray *)messages
-{
-	self.hiddenMessages = [NSMutableArray new];
-	
-	// If no messages to hide, cancel
-	if (messages == nil || [messages count] == 0)
-	{
-		return;
-	}
-	
-	// Add each message to hidden messages
-	for (id <MessageProtocol> message in messages)
-	{
-		[self.hiddenMessages addObject:message];
-	}
-	
-	// Toggle the edit button
-	[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-	
-	[self.tableView reloadData];
-}
-
-- (void)removeSelectedMessages:(NSArray *)messages
-{
-	NSArray *filteredMessagesCopy = [self.filteredMessages copy];
-	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSMutableArray *mutableMessages = [self.messages mutableCopy];
-	
-	// If no messages to remove, cancel
-	if (messages == nil || [messages count] == 0)
-	{
-		return;
-	}
-	
-	// Remove each message from the source data, filtered data, hidden data, selected data, and the table itself
-	for (id <MessageProtocol> message in messages)
-	{
-		[mutableMessages removeObject:message];
-		[self.filteredMessages removeObject:message];
-		[self.hiddenMessages removeObject:message];
-		[self.selectedMessages removeObject:message];
-		
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[filteredMessagesCopy indexOfObject:message] inSection:0]];
-	}
-	
-	// Remove selected messages from messages array
-	[self setMessages:[mutableMessages copy]];
-	
-	// Remove rows
-	if ([self.filteredMessages count] > 0 && [self.filteredMessages count] > [self.hiddenMessages count])
-	{
-		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-	}
-	// If there are no messages left in the source data, simply reload the row to show the no messages cell
-	else
-	{
-		[self.tableView reloadData];
-		
-		// Toggle the edit button
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-	}
-	
-	// Update delegate's list of selected messages
-	[self.delegate setSelectedMessages:self.selectedMessages];
-}
-
-// Reset messages back to loading state
-- (void)resetMessages
-{
-	[self setIsLoaded:NO];
-	[self setMessages:[[NSMutableArray alloc] init]];
-	
-	[self.tableView reloadData];
-}
-
-- (void)unHideSelectedMessages:(NSArray *)messages
-{
-	// If no messages to hide, cancel
-	if (messages == nil || [messages count] == 0)
-	{
-		return;
-	}
-	
-	// Remove each message from hidden messages
-	for (id <MessageProtocol> message in messages)
-	{
-		[self.hiddenMessages removeObject:message];
-	}
-	
-	// Show the edit button (there will always be at least one message when unhiding)
-	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
-	
-	[self.tableView reloadData];
-}
-
-// Return messages from MessageModel delegate
-- (void)updateMessages:(NSArray *)messages
-{
-	[self setIsLoaded:YES];
-	[self setMessages:messages];
-	[self setFilteredMessages:[messages mutableCopy]];
-
-	// If messages type is active, toggle the parent view controller's edit button based on whether there are any filtered messages
-	if ([self.messagesType isEqualToString:@"Active"])
-	{
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.filteredMessages count] == 0 || [self.filteredMessages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
-	}
+	[self setIsFirstPageLoaded:YES];
+	[self setMessages:[sentMessages mutableCopy]];
 
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.tableView reloadData];
 	});
-	
-	[self.refreshControl endRefreshing];
-}
-
-// Return error from MessageModel delegate
-#ifdef MYTELEMED
-- (void)updateMessagesError:(NSError *)error
-{
-	[self setIsLoaded:YES];
-	
-	[self.refreshControl endRefreshing];
-	
-	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
-}
-#endif
-
-// Return sent messages from SentMessageModel delegate
-- (void)updateSentMessages:(NSArray *)sentMessages
-{
-	[self updateMessages:sentMessages];
 }
 
 // Return error from SentMessageModel delegate
 - (void)updateSentMessagesError:(NSError *)error
 {
-	[self setIsLoaded:YES];
+	[self setIsFirstPageLoaded:YES];
 	
 	// Show error message
 	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
@@ -275,15 +151,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return MAX([self.filteredMessages count], 1);
+	return MAX([self.messages count], 1);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are filtered messages and hidden messages and row is not the only row in the table
-	if (! [self.messagesType isEqualToString:@"Sent"] && [self.filteredMessages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.filteredMessages count] != [self.hiddenMessages count]))
+	// If there are messages and hidden messages and row is not the only row in the table
+	if ([self.messagesType isEqualToString:@"Active"] && [self.messages count] > 0 && [self.hiddenMessages count] > 0 && (indexPath.row > 0 || [self.messages count] != [self.hiddenMessages count]))
 	{
-		id <MessageProtocol> message = [self.filteredMessages objectAtIndex:indexPath.row];
+		id <MessageProtocol> message = [self.messages objectAtIndex:indexPath.row];
 		
 		// Hide hidden messages by setting the cell's height to 0
 		if ([self.hiddenMessages containsObject:message])
@@ -297,20 +173,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.filteredMessages count] == 0 || (indexPath.row == 0 && [self.filteredMessages count] == [self.hiddenMessages count]))
+	if ([self.messages count] == 0 || (indexPath.row == 0 && [self.messages count] == [self.hiddenMessages count]))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
-		[emptyCell.textLabel setText:(self.isLoaded ? @"No messages available." : @"Loading...")];
+		[emptyCell.textLabel setText:(self.isFirstPageLoaded ? @"No messages available." : @"Loading...")];
 		
 		return emptyCell;
 	}
 	
 	static NSString *cellIdentifier = @"MessageCell";
 	MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	id message = [self.filteredMessages objectAtIndex:indexPath.row];
+	id message = [self.messages objectAtIndex:indexPath.row];
 	
 	// Sent messages
 	if ([self.messagesType isEqualToString:@"Sent"])
@@ -326,12 +202,6 @@
 
 - (UITableViewCell *)cellForReceivedMessage:(MessageCell *)cell withMessage:(id <MessageProtocol>)message atIndexPath:(NSIndexPath *)indexPath
 {
-	// Hide hidden messages
-	if ([self.hiddenMessages count] > 0 && [self.hiddenMessages containsObject:message])
-	{
-		[cell setHidden:YES];
-	}
-	
 	// Set name, phone number, and message
 	[cell.labelName setText:message.SenderName];
 	[cell.labelPhoneNumber setText:message.SenderContact];
@@ -418,7 +288,7 @@
 		
 		if ([messageRecipients count] > 1)
 		{
-			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %u more...", [messageRecipients count] - 1];
+			messageRecipientNames = [messageRecipientNames stringByAppendingFormat:@" & %lu more...", (unsigned long)[messageRecipients count] - 1];
 		}
 	}
 	
@@ -481,8 +351,8 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If there are no filtered messages, then user clicked the no messages cell
-	return ([self.filteredMessages count] <= indexPath.row ? nil : indexPath);
+	// If there are no messages, then user clicked the no messages cell
+	return ([self.messages count] <= indexPath.row ? nil : indexPath);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -497,7 +367,7 @@
 			
 			for (NSIndexPath *indexPath in indexPaths)
 			{
-				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
+				[self.selectedMessages addObject:[self.messages objectAtIndex:indexPath.row]];
 			}
 			
 			[self.delegate setSelectedMessages:self.selectedMessages];
@@ -517,7 +387,7 @@
 			
 			for (NSIndexPath *indexPath in indexPaths)
 			{
-				[self.selectedMessages addObject:[self.filteredMessages objectAtIndex:indexPath.row]];
+				[self.selectedMessages addObject:[self.messages objectAtIndex:indexPath.row]];
 			}
 			
 			[self.delegate setSelectedMessages:self.selectedMessages];
@@ -527,10 +397,10 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-	// If navigating to MessageDetailViewController, but there are no filtered messages, then user clicked the no messages found cell
+	// If navigating to MessageDetailViewController, but there are no messages, then user clicked the no messages found cell
 	if ([identifier isEqualToString:@"showMessageDetail"])
 	{
-		return ! self.editing && [self.filteredMessages count] > 0;
+		return ! self.editing && [self.messages count] > 0;
 	}
 	
 	return YES;
@@ -543,9 +413,9 @@
 		MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
 		long selectedRow = [self.tableView indexPathForSelectedRow].row;
 		
-		if ([self.filteredMessages count] > selectedRow)
+		if ([self.messages count] > selectedRow)
 		{
-			id <MessageProtocol> message = [self.filteredMessages objectAtIndex:selectedRow];
+			id <MessageProtocol> message = [self.messages objectAtIndex:selectedRow];
 			
 			[messageDetailViewController setMessage:message];
 		}
@@ -568,13 +438,117 @@
 #pragma mark - MyTeleMed
 
 #ifdef MYTELEMED
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Stop refreshing messages when user leaves this screen
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+// Compare new messages to existing messages to determine which messages are new
+- (NSArray *)computeNewMessages:(NSArray *)newMessages from:(NSArray *)messages
+{
+	// Use NSSet's minusSet: to determine which messages are new
+	NSSet *existingMessagesSet = [NSSet setWithArray:messages];
+	NSMutableOrderedSet *newMessagesSet = [NSMutableOrderedSet orderedSetWithArray:newMessages];
+
+	[newMessagesSet minusSet:existingMessagesSet];
+
+	// Convert NSMutableOrderedSet back into NSArray
+	return [newMessagesSet array];
+}
+
+// Delegate method from ArchivesViewController
+- (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+	[self setArchiveAccountID:accountID];
+	[self setArchiveStartDate:startDate];
+	[self setArchiveEndDate:endDate];
+	
+	// Don't need to reload messages here because viewWillAppear fires when ArchivesPickerViewController is popped from navigation controller
+}
+
+// Hide selected messages that are pending deletion (called from MessagesViewController)
+- (void)hideSelectedMessages:(NSArray *)messages
+{
+	// If there are no messages to hide, then stop
+	if ([messages count] == 0)
+	{
+		return;
+	}
+	
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	
+	for (id <MessageProtocol> message in messages)
+	{
+		[self.hiddenMessages addObject:message];
+		
+		// Add index path for reloading in the table
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.messages indexOfObject:message] inSection:0]];
+	}
+	
+	// Hide rows at specified index paths in the table
+	[self reloadRowsAtIndexPaths:indexPaths];
+	
+	// Remove the parent view controller's edit button if there aren't any more messages
+	if ([self.messagesType isEqualToString:@"Active"] && [self.messages count] == [self.hiddenMessages count])
+	{
+		[self.parentViewController.navigationItem setRightBarButtonItem:nil];
+	}
+}
+
+// Insert new rows at specified index paths in the table
+- (void)insertNewRows:(NSArray *)newIndexPaths useAnimation:(BOOL)useAnimation onComplete:(void (^)(BOOL))completion
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
+		if (@available(iOS 11.0, *))
+		{
+			// Disable animation when appending rows for pagination
+			if (! useAnimation)
+			{
+				[CATransaction begin];
+				[CATransaction setDisableActions:YES];
+			}
+			
+			[self.tableView performBatchUpdates:^
+			{
+				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			}
+			completion:^(BOOL finished)
+			{
+				completion(finished);
+				
+				// Disable animation when appending rows for pagination
+				if (! useAnimation)
+				{
+					[CATransaction commit];
+				}
+			}];
+		}
+		// iOS 10 - Fall back to using beginUpdates and endUpdates
+		else
+		{
+			[self.tableView beginUpdates];
+			
+			[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			
+			[self.tableView endUpdates];
+			
+			completion(YES);
+		}
+	});
+}
+
 // Reload messages
-- (void)reloadMessages
+- (void)loadMessages:(NSInteger)page
 {
 	// Get archived messages
 	if ([self.messagesType isEqualToString:@"Archived"])
 	{
-		[self.messageModel getArchivedMessages:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
+		[self.messageModel getArchivedMessages:page forAccount:self.archiveAccountID startDate:self.archiveStartDate endDate:self.archiveEndDate];
 	}
 	// Get sent messages
 	else if ([self.messagesType isEqualToString:@"Sent"])
@@ -584,7 +558,291 @@
 	// Get active messages
 	else
 	{
-		[self.messageModel getActiveMessages];
+		[self.messageModel getActiveMessages:page];
+	}
+}
+
+// TEMPORARY (remove this method when support for iOS 10 is dropped and instead simply call table view's performBatchUpdates: directly)
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths
+{
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
+		if (@available(iOS 11.0, *))
+		{
+			[self.tableView performBatchUpdates:^
+			{
+				[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			}
+			completion:nil];
+		}
+		// iOS 10 - Fall back to using beginUpdates and endUpdates
+		else
+		{
+			[self.tableView beginUpdates];
+			
+			[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+			
+			[self.tableView endUpdates];
+		}
+	});
+}
+
+// Active messages only (MessagesViewController - not currently being used due to a flaw in pagination. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
+- (void)removeSelectedMessages:(NSArray *)messages
+{
+	// If there are no messages to remove, then stop
+	if ([messages count] == 0)
+	{
+		return;
+	}
+	
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	
+	// Remove each message from the source table, data, hidden data, and selected data
+	for (id <MessageProtocol> message in messages)
+	{
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.messages indexOfObject:message] inSection:0]];
+		
+		[self.messages removeObject:message];
+		[self.hiddenMessages removeObject:message];
+		[self.selectedMessages removeObject:message];
+	}
+	
+	// Remove rows at specified index paths from the table
+	if ([self.messages count] > 0 && [self.messages count] > [self.hiddenMessages count])
+	{
+		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	// If there are no messages left in the source data, then reset the table
+	else
+	{
+		// Store value of the isLastPageLoaded flag before it gets reset
+		BOOL wasLastPageLoaded = self.isLastPageLoaded;
+		
+		[self resetMessages];
+		
+		// If the last page had not been loaded yet, then reload the messages in case there are additional messages to be fetched (this should rarely, if ever, happen)
+		if (! wasLastPageLoaded)
+		{
+			[self reloadMessages];
+		}
+		// Show the no messages row
+		else
+		{
+			[self setIsFirstPageLoaded:YES];
+		}
+		
+		// Remove the parent view controller's edit button if there aren't any more messages
+		if ([self.messagesType isEqualToString:@"Active"] && [self.messages count] == [self.hiddenMessages count])
+		{
+			[self.parentViewController.navigationItem setRightBarButtonItem:nil];
+		}
+	}
+	
+	// Update delegate's list of selected messages
+	if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
+	{
+		[self.delegate setSelectedMessages:self.selectedMessages];
+	}
+}
+
+// HOPEFULLY TEMPORARY: Reset and reload messages (remove if pagination flaw is corrected. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
+- (void)resetActiveMessages
+{
+	[self resetMessages];
+	
+	// Reload first page of messages
+	[self reloadMessages];
+}
+
+// Reset messages back to loading state
+- (void)resetMessages
+{
+	[self setCurrentPage:1];
+	[self setIsFirstPageLoaded:NO];
+	[self setIsLastPageLoaded:NO];
+	[self setMessages:[NSMutableArray new]];
+	[self setHiddenMessages:[NSMutableArray new]];
+	[self setSelectedMessages:[NSMutableArray new]];
+	
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.tableView reloadData];
+	});
+}
+
+// Unhide selected messages that failed during deletion (called from MessagesViewController)
+- (void)unhideSelectedMessages:(NSArray *)messages
+{
+	// If there are no messages to unhide, then stop
+	if ([messages count] == 0)
+	{
+		return;
+	}
+	
+	NSMutableArray *indexPaths = [NSMutableArray new];
+	
+	for (id <MessageProtocol> message in messages)
+	{
+		[self.hiddenMessages removeObject:message];
+		
+		// Add index path for reloading in the table
+		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.messages indexOfObject:message] inSection:0]];
+	}
+	
+	// Re-show rows at specified index paths in the table
+	[self reloadRowsAtIndexPaths:indexPaths];
+	
+	// Show the edit button (there will always be at least one message when unhiding)
+	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+}
+
+// Return messages from MessageModel delegate
+- (void)updateMessages:(NSArray *)messages forPage:(NSInteger)page
+{
+	NSLog(@"UPDATE MESSAGES FOR PAGE: %ld", (long)page);
+	
+	[self setIsFetchingNextPage:NO];
+	[self setIsFirstPageLoaded:YES];
+	
+	// If the number of items returned is less than the number of messages per page, then assume the last page has been loaded
+	if ([messages count] < MessagesPerPage)
+	{
+		[self setIsLastPageLoaded:YES];
+	}
+	
+	// Set initial messages if empty
+	if ([self.messages count] == 0)
+	{
+		[self setMessages:[messages mutableCopy]];
+		
+		// Insert initial messages into the table
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self.tableView reloadData];
+			
+			// Remove loading indicator from table view
+			[self.tableView setTableFooterView:[[UIView alloc] init]];
+			
+			// If messages type is active
+			if ([self.messagesType isEqualToString:@"Active"])
+			{
+				// Toggle the parent view controller's edit button based on whether there are any messages
+				[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 || [self.messages count] == [self.hiddenMessages count] ? nil : self.parentViewController.editButtonItem)];
+			}
+			
+			[self.refreshControl endRefreshing];
+		});
+	}
+	else
+	{
+		// Extract out new messages that don't exist in the existing messages
+		NSArray *newMessages = [self computeNewMessages:messages from:self.messages];
+		NSInteger newMessageCount = [newMessages count];
+		
+		if (newMessageCount > 0)
+		{
+			NSMutableArray *newIndexPaths = [NSMutableArray new];
+			BOOL useAnimation = YES;
+			
+			// Add new messages resulting from a reload
+			if (page == 1)
+			{
+				for (MessageModel *newMessage in newMessages)
+				{
+					// Determine where the message should be inserted (usually at the top, but it can be the bottom if user deleted a message from another device)
+					NSUInteger newMessageIndex = [messages indexOfObject:newMessage];
+					
+					// Add the new message to the existing messages
+					[self.messages insertObject:newMessage atIndex:newMessageIndex];
+					
+					// Add index path for row to be added to the table
+					[newIndexPaths addObject:[NSIndexPath indexPathForRow:newMessageIndex inSection:0]];
+				}
+			}
+			// Append new messages to the bottom of existing messages
+			else
+			{
+				NSInteger existingMessageCount = [self.messages count];
+				
+				// Animation messes up the scroll position when appending messages to the bottom
+				useAnimation = NO;
+				
+				// Append new messages to the bottom of existing messages
+				[self.messages addObjectsFromArray:newMessages];
+				
+				for (NSInteger i = existingMessageCount; i < newMessageCount + existingMessageCount; i++)
+				{
+					// Add index path for row to be added to the table
+					[newIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+				}
+			}
+			
+			// Insert new messages into the table
+			[self insertNewRows:newIndexPaths useAnimation:useAnimation onComplete:^(BOOL finished)
+			{
+				// Remove loading indicator from table view
+				[self.tableView setTableFooterView:[[UIView alloc] init]];
+				
+				// End refreshing
+				[self.refreshControl endRefreshing];
+			}];
+		}
+		else
+		{
+			// Remove loading indicator from table view
+			[self.tableView setTableFooterView:[[UIView alloc] init]];
+			
+			// End refreshing
+			[self.refreshControl endRefreshing];
+		}
+	}
+}
+
+// Return error from MessageModel delegate
+- (void)updateMessagesError:(NSError *)error
+{
+	[self setIsFetchingNextPage:NO];
+	
+	[self.refreshControl endRefreshing];
+	
+	// Show error message
+	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	
+	[errorAlertController show:error];
+}
+
+- (void)tableView:(UITableView *)tableView prefetchRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
+{
+	// NSLog(@"PREFETCH ROW AT: %ld", (long)[[indexPaths valueForKeyPath:@"@max.row"] longValue] + 1);
+	// NSLog(@"NEXT FETCH: %ld", (self.currentPage * MessagesPerPage));
+	
+	// Prevent duplicate or unneeded web service requests
+	if (self.isFetchingNextPage || self.isLastPageLoaded)
+	{
+		return;
+	}
+	
+	// Get the last (maximum) row number from the array of index paths
+	long maximumRow = (long)[[indexPaths valueForKeyPath:@"@max.row"] longValue] + 1;
+	
+	// If the last row is being pre-fetched, then fetch the next batch of messages
+	if (maximumRow >= (self.currentPage * MessagesPerPage))
+	{
+		// Enable the isFetchingNextPage flag
+		[self setIsFetchingNextPage:YES];
+		
+		// Increment the current page
+		self.currentPage++;
+		
+		// Fetch the next page of messages
+		[self loadMessages:self.currentPage];
+		
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+    		[self.tableView setTableFooterView:self.loadingActivityIndicator];
+		});
 	}
 }
 #endif
@@ -594,9 +852,11 @@
 
 #ifdef MED2MED
 // Reload messages
-- (void)reloadMessages
+- (void)loadMessages:(NSInteger)page
 {
 	[self.sentMessageModel getSentMessages];
+	
+	// Note: Don't trigger the isFetchingNextPage here (its only used for fetching "next" messages)
 }
 #endif
 

@@ -159,6 +159,12 @@
 	[self performSegueWithIdentifier:@"showMessageRedirectFromMessageHistory" sender:self];
 }
 
+// Go to PhoneCallViewController (override method from MessageDetailParentViewController)
+- (void)showPhoneCall
+{
+	[self performSegueWithIdentifier:@"showPhoneCallFromMessageHistory" sender:self];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;

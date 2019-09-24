@@ -450,6 +450,11 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 				dispatch_async(dispatch_get_main_queue(), ^
 				{
 					AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+					
+					// Notify user that there was an authentication problem
+					[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+					[settings synchronize];
 					
 					// Clear stored authentication data
 					[self.authenticationModel doLogout];

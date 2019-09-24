@@ -73,10 +73,6 @@
 - (IBAction)doLogout:(id)sender
 {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	
-	// Clear stored authenticated data
-	[authenticationModel doLogout];
 	
 	// Go to login screen
 	[appDelegate goToLoginScreen];

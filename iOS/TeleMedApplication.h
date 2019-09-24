@@ -7,9 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-// Notification that gets sent when the timeout occurs
-#define kApplicationDidTimeoutNotification @"ApplicationDidTimeout"
-
 /**
  * This is a subclass of UIApplication with sendEvent: overridden in order to catch all touch events.
  */
@@ -18,7 +15,7 @@
 	NSTimer *_idleTimer;
 }
 
-@property (nonatomic) int timeoutPeriodMins;
+@property (nonatomic) NSInteger timeoutPeriodMins;
 
 /**
  * Resets the idle timer to its initial state. This method gets called

@@ -46,7 +46,7 @@
 		// Adjust separator inset to account for editing indentation (the default left edge inset seems to be off so subtracting 3 fixes it)
 		if ([self respondsToSelector:@selector(setSeparatorInset:)])
 		{
-			[self setSeparatorInset:UIEdgeInsetsMake(self.defaultEdgeInsets.top, self.defaultEdgeInsets.left - 3.0f + defaultEditIndentation + additionalEditIndentation, self.defaultEdgeInsets.bottom, self.defaultEdgeInsets.right)];
+			[self setSeparatorInset:UIEdgeInsetsMake(self.defaultEdgeInsets.top, self.defaultEdgeInsets.left - 3.0f + self.viewUnopened.frame.size.width + defaultEditIndentation + additionalEditIndentation, self.defaultEdgeInsets.bottom, self.defaultEdgeInsets.right)];
 		}
 	}
 	else

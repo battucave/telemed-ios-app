@@ -8,6 +8,14 @@
 
 #import "RegisteredDeviceModel.h"
 
+@interface RegisteredDeviceModel()
+
+@property (nonatomic) BOOL hasRegistered; // Whether app has registered during current session (re-registers every launch)
+@property (nonatomic) BOOL hasSkippedRegistration;
+@property (nonatomic) BOOL isRegistered; // Whether device is registered with TeleMed
+
+@end
+
 @implementation RegisteredDeviceModel
 
 @synthesize ID = _ID;
@@ -28,7 +36,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		#if TARGET_IPHONE_SIMULATOR
 			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
 		
-			[sharedRegisteredDeviceInstance setHasRegistered:YES];
+			[sharedRegisteredDeviceInstance setIsRegistered:YES];
 		#endif
 	});
 	
@@ -43,7 +51,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	// If ID is not already set, check user preferences
 	if (! _ID)
 	{
-		_ID = [settings valueForKey:@"UDDIDevice"];
+		_ID = [settings valueForKey:UDDI_DEVICE];
 	}
 	
 	// ID not already stored so generate it
@@ -60,7 +68,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		}
 		
 		// Store device id in user preferences
-		[settings setValue:_ID forKey:@"UDDIDevice"];
+		[settings setValue:_ID forKey:UDDI_DEVICE];
 		[settings synchronize];
 	}
 	
@@ -79,6 +87,18 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 	return _AppVersionInfo;
 }
 
+// Set public hasSkippedRegistration setter
+- (BOOL)hasSkippedRegistration
+{
+	return _hasSkippedRegistration;
+}
+
+// Set public isRegistered setter
+- (BOOL)isRegistered
+{
+	return _isRegistered;
+}
+
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback
 {
 	// Device simulator has no phone number and no device token. Continuing will cause web service error
@@ -87,28 +107,36 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
 	
 		// Disable future registration until next login
-		self.hasRegistered = YES;
-		self.shouldRegister = NO;
+		[self setHasRegistered:YES];
+		[self setIsRegistered:YES];
+	
+		callback(YES, nil);
+	
+		return;
+	#endif
+	
+	// If user has already registered during the current session, then don't register again
+	if (self.hasRegistered)
+	{
+		callback(YES, nil);
+		
+		return;
+	}
+	// Ensure that the phone number is set. This usually only applies when called from AppDelegate's didRegisterForRemoteNotificationsWithDeviceToken:
+	else if (! self.PhoneNumber)
+	{
+		NSLog(@"Phone number not set.");
 		
 		callback(YES, nil);
 		
 		return;
-	#endif
-	
-	// Ensure that token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from AppDelegate's didRegisterForRemoteNotificationsWithDeviceToken:
-	// Also ensure that device actually needs to register
-	if (! self.Token || ! self.PhoneNumber || ! self.shouldRegister)
+	}
+	// Ensure that the token is set. Sometimes the login process completes before the token has been set. For this reason, there is always a second call to this method from AppDelegate's didRegisterForRemoteNotificationsWithDeviceToken:
+	else if (! self.Token)
 	{
-		if (! self.Token)
-		{
-			NSLog(@"IMPORTANT: Device does not have a token so it is not being registered with TeleMed. If this persists, make sure that an explicit provisioning profile is being used for MyTeleMed and that its certificate has Push Notifications enabled.");
-			
-			// If user has already entered their phone number, but notification permissions are disabled/rejected, then pretend that the device has registered anyway to avoid infinite loop of showing phone number screen
-			if (self.PhoneNumber != nil)
-			{
-				self.hasRegistered = YES;
-			}
-		}
+		NSLog(@"IMPORTANT: Device does not have a token so it is not being registered with TeleMed. If this persists, make sure that an explicit provisioning profile is being used for MyTeleMed and that its certificate has Push Notifications enabled.");
+		
+		[self setHasSkippedRegistration:YES];
 		
 		callback(YES, nil);
 		
@@ -138,8 +166,8 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		if (operation.response.statusCode == 204)
 		{
 			// Disable future registration until next login
-			self.hasRegistered = YES;
-			self.shouldRegister = NO;
+			[self setIsRegistered:YES];
+			[self setHasRegistered:YES];
 			
 			callback(YES, nil);
 		}
@@ -159,6 +187,20 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		
 		callback(NO, error);
 	}];
+}
+
+- (void)setCurrentDevice:(RegisteredDeviceModel *)registeredDevice
+{
+	if (! registeredDevice)
+	{
+		return;
+	}
+	
+	// Set current device phone number (ID, AppVersionInfo, and Platform ID are generated locally on the device; Token should only be set by Apple's notifications service)
+	[self setPhoneNumber:registeredDevice.PhoneNumber];
+	
+	// Device is registered
+	[self setIsRegistered:YES];
 }
 
 @end

@@ -68,7 +68,7 @@
 	ForwardMessageModel *forwardMessageModel = [[ForwardMessageModel alloc] init];
 	
 	[forwardMessageModel setDelegate:self];
-	[forwardMessageModel forwardMessage:self.message messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"] withComment:self.messageComposeTableViewController.textViewMessage.text];
+	[forwardMessageModel forwardMessage:self.message messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"] withComment:comment];
 }
 
 // Return pending from ForwardMessageModel delegate

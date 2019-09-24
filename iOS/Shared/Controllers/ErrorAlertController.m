@@ -85,7 +85,12 @@
 	return alertController;
 }
 
-- (instancetype)show:(NSError *)error withCallback:(void (^)(void))callback
+- (instancetype)show:(NSError *)error withRetryCallback:(void (^)(void))callback
+{
+	return [self show:error withRetryCallback:callback cancelCallback:nil];
+}
+
+- (instancetype)show:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback
 {
 	NSLog(@"Show withCallback: %@", error.localizedDescription);
 	
@@ -99,13 +104,20 @@
 	
 	// Configure alert controller
 	ErrorAlertController *alertController = [ErrorAlertController alertControllerWithTitle:error.localizedFailureReason message:[NSString stringWithFormat:@"%@\nWould you like to try again?", errorMessage] preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+	{
+		// Execute callback
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			cancelCallback();
+		});
+	}];
 	UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Execute callback
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			callback();
+			retryCallback();
 		});
 	}];
 	
