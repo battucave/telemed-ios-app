@@ -357,9 +357,6 @@
 			[self.refreshControl endRefreshing];
 		}
 	}
-	
-	// Refresh chat messages again after 30 second delay
-	[self performSelector:@selector(reloadChatMessages) withObject:nil afterDelay:30.0];
 }
 
 // Return error from ChatMessageModel delegate

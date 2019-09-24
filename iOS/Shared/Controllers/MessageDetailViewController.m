@@ -262,7 +262,7 @@
 		// Add keyboard observers
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
-		// Add application did enter background observer to hide keyboard (otherwise it will be hidden when app returns to foreground)
+		// Add application did enter background observer to hide keyboard
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 		// Add call disconnected observer to hide keyboard
@@ -369,10 +369,10 @@
 	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
-	// Remove application did enter background observer to hide keyboard (otherwise it will be hidden when app returns to foreground)
+	// Remove application did enter background observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
-	// Remove call disconnected observer to hide keyboard
+	// Remove call disconnected observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
 	// Dismiss keyboard
@@ -475,9 +475,6 @@
 				
 				// Update message count with new number of filtered message events
 				self.messageCount = [self.filteredMessageEvents count];
-				
-				// Refresh message events again after 20 second delay
-				[self performSelector:@selector(getMessageEvents) withObject:nil afterDelay:20.0];
 			});
 		}
 		else
@@ -568,6 +565,9 @@
 			
 			// Cancel queued comments refresh
 			[NSObject cancelPreviousPerformRequestsWithTarget:self];
+			
+			// Flag message as being loaded from push notification
+			[self setIsFromPushNotification:YES];
 			
 			[self getMessageEvents];
 			

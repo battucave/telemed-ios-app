@@ -108,7 +108,7 @@
 	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
-	// Add application did enter background observer to hide keyboard (otherwise it will be hidden when app returns to foreground)
+	// Add application did enter background observer to hide keyboard
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Add call disconnected observer to hide keyboard
@@ -119,16 +119,16 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Cancel queued chat messages refresh when user leaves this screen
+	// Stop refreshing chat messages when user leaves this screen
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	// Remove keyboard observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
-	// Remove application did enter background observer to hide keyboard (otherwise it will be hidden when app returns to foreground)
+	// Remove application did enter background observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
-	// Remove call disconnected observer to hide keyboard
+	// Remove call disconnected observer
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
 	// Dismiss keyboard
@@ -558,9 +558,6 @@
 		// Update chat message count with new number of chat messages
 		self.chatMessageCount = chatMessageCount;
 	});
-	
-	// Refresh chat messages again after 20 second delay
-	[self performSelector:@selector(reloadChatMessages) withObject:nil afterDelay:20.0];
 }
 
 // Return error from ChatMessageModel delegate

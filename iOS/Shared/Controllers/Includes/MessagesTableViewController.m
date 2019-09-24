@@ -442,7 +442,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Cancel queued messages refresh when user leaves this screen
+	// Stop refreshing messages when user leaves this screen
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
@@ -797,12 +797,6 @@
 			// End refreshing
 			[self.refreshControl endRefreshing];
 		}
-	}
-	
-	// Refresh the first page of messages again after 30 second delay
-	if (page == 1)
-	{
-		[self performSelector:@selector(reloadMessages) withObject:nil afterDelay:30.0];
 	}
 }
 
