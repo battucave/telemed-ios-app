@@ -317,11 +317,14 @@
 
 - (void)applicationDidTimeout:(NSNotification *)notification
 {
+	NSLog(@"Application timed out");
+	
+	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	BOOL timeoutDisabled = [settings boolForKey:DISABLE_TIMEOUT];
 	
-	// Only log user out if timeout is enabled and user is not currently on phone call
-	if (! timeoutDisabled && ! [self isCallConnected])
+	// Only log user out if timeout is enabled, user is not currently on a phone call, and user is not currently on the login screen
+	if (! timeoutDisabled && ! [self isCallConnected] && ! [[currentStoryboard valueForKey:@"name"] isEqualToString:@"LoginSSO"])
 	{
 		// Notify user that their session timed out
 		[settings setValue:@"Your session has timed out for security. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];

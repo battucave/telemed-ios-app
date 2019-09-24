@@ -20,12 +20,12 @@
 
 @property (weak, nonatomic) MessagesTableViewController *messagesTableViewController;
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonArchive; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonCompose; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonRegisterDevice; // Must be a strong reference
 @property (nonatomic) IBOutlet UIBarButtonItem *barButtonRightFlexibleSpace; // Must be a strong reference
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (weak, nonatomic) IBOutlet UIView *viewSwipeMessage;
 
 @property (nonatomic) NSString *navigationBarTitle;
@@ -332,37 +332,33 @@
 - (void)toggleToolbarButtons:(BOOL)editing
 {
 	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
-	UNUserNotificationCenter *userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-
+	
 	// Initialize toolbar items with only the left flexible space button
 	NSMutableArray *toolbarItems = [NSMutableArray arrayWithObjects:[self.toolbarBottom.items objectAtIndex:0], nil];
 	
-	[userNotificationCenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings)
+	// If in editing mode, add the archive and right flexible space buttons
+	if (editing)
 	{
-		// If in editing mode, add the archive and right flexible space buttons
-		if (editing)
-		{
-			[self.barButtonArchive setEnabled:NO];
-			
-			[toolbarItems addObject:self.barButtonArchive];
-			[toolbarItems addObject:self.barButtonRightFlexibleSpace];
-		}
-		// If device is not registered with TeleMed or push notifications are not enabled, then add register app button
-		else if (! [registeredDevice isRegistered] || settings.authorizationStatus != UNAuthorizationStatusAuthorized)
-		{
-			[toolbarItems addObject:self.barButtonRegisterDevice];
-		}
-		// Add compose message button
-		else
-		{
-			[toolbarItems addObject:self.barButtonCompose];
-		}
+		[self.barButtonArchive setEnabled:NO];
 		
-		dispatch_async(dispatch_get_main_queue(), ^
-		{
-			[self.toolbarBottom setItems:toolbarItems animated:YES];
-		});
-	}];
+		[toolbarItems addObject:self.barButtonArchive];
+		[toolbarItems addObject:self.barButtonRightFlexibleSpace];
+	}
+	// If device is not registered with TeleMed, then add register app button
+	else if (! [registeredDevice isRegistered])
+	{
+		[toolbarItems addObject:self.barButtonRegisterDevice];
+	}
+	// Add compose message button
+	else
+	{
+		[toolbarItems addObject:self.barButtonCompose];
+	}
+	
+	dispatch_async(dispatch_get_main_queue(), ^
+	{
+		[self.toolbarBottom setItems:toolbarItems animated:YES];
+	});
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

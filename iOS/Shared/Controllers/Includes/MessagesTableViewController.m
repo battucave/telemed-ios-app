@@ -499,18 +499,34 @@
 }
 
 // Insert new rows at specified index paths in the table
-- (void)insertNewRows:(NSArray *)newIndexPaths withCompletion:(void (^)(BOOL))completion
+- (void)insertNewRows:(NSArray *)newIndexPaths useAnimation:(BOOL)useAnimation onComplete:(void (^)(BOOL))completion
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
 		if (@available(iOS 11.0, *))
 		{
+			// Disable animation when appending rows for pagination
+			if (! useAnimation)
+			{
+				[CATransaction begin];
+				[CATransaction setDisableActions:YES];
+			}
+			
 			[self.tableView performBatchUpdates:^
 			{
 				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 			}
-			completion:completion];
+			completion:^(BOOL finished)
+			{
+				completion(finished);
+				
+				// Disable animation when appending rows for pagination
+				if (! useAnimation)
+				{
+					[CATransaction commit];
+				}
+			}];
 		}
 		// iOS 10 - Fall back to using beginUpdates and endUpdates
 		else
@@ -728,6 +744,7 @@
 		if (newMessageCount > 0)
 		{
 			NSMutableArray *newIndexPaths = [NSMutableArray new];
+			BOOL useAnimation = YES;
 			
 			// Add new messages resulting from a reload
 			if (page == 1)
@@ -749,6 +766,9 @@
 			{
 				NSInteger existingMessageCount = [self.messages count];
 				
+				// Animation messes up the scroll position when appending messages to the bottom
+				useAnimation = NO;
+				
 				// Append new messages to the bottom of existing messages
 				[self.messages addObjectsFromArray:newMessages];
 				
@@ -759,15 +779,22 @@
 				}
 			}
 			
-			// Insert new messages into the table and end refreshing
-			[self insertNewRows:newIndexPaths withCompletion:^(BOOL finished)
+			// Insert new messages into the table
+			[self insertNewRows:newIndexPaths useAnimation:useAnimation onComplete:^(BOOL finished)
 			{
+				// Remove loading indicator from table view
+				[self.tableView setTableFooterView:[[UIView alloc] init]];
+				
+				// End refreshing
 				[self.refreshControl endRefreshing];
 			}];
 		}
-		// End refreshing
 		else
 		{
+			// Remove loading indicator from table view
+			[self.tableView setTableFooterView:[[UIView alloc] init]];
+			
+			// End refreshing
 			[self.refreshControl endRefreshing];
 		}
 	}
