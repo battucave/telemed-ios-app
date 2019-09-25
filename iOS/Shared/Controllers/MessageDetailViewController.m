@@ -501,42 +501,6 @@
 	}
 }
 
-/*/ Load message recipients to determine if message is forwardable
-- (void)getMessageRecipients
-{
-	// MessageRecipientModel callback
-	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
-	{
-		if (success)
-		{
-			// Enable forward button if there are valid message recipients to forward to
-			if ([messageRecipients count] > 0)
-			{
-				[self.buttonForward setEnabled:YES];
-			}
-		}
-		else
-		{
-			// Show error message only if device offline
-			if (error.code == NSURLErrorNotConnectedToInternet)
-			{
-				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-				
-				[errorAlertController show:error];
-			}
-		}
-	};
-	
-	if (self.messageDeliveryID)
-	{
-		[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.messageDeliveryID withCallback:callback];
-	}
-	else if (self.messageID)
-	{
-		[self.messageRecipientModel getMessageRecipientsForMessageID:self.messageID withCallback:callback];
-	}
-} */
-
 // Override default remote notification action from CoreViewController
 - (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
