@@ -232,7 +232,7 @@
 					#endif
 				}
 				// If error is not because device is offline, then account is not valid so go to login screen
-				else
+				else if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 				{
 					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 					
