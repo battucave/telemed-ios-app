@@ -153,6 +153,13 @@
 	// Perform shared logic in MessageDetailParentViewController
 	[super viewWillAppear:animated];
 	
+	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set these colors directly (instead of Tertiary System Grouped Background Color) and remove this logic
+	if (@available(iOS 11.0, *))
+	{
+		[self.scrollView setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
+		[self.tableComments setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
+	}
+	
 	// Change title for sent message in navigation bar
 	if ([self.messageType isEqualToString:@"Sent"])
 	{
@@ -823,8 +830,17 @@
 	if ([textView.text isEqualToString:self.textViewCommentPlaceholder])
 	{
 		[textView setText:@""];
-		[textView setTextColor:[UIColor blackColor]];
-		[textView setFont:[UIFont systemFontOfSize:16.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor labelColor]];
+		}
+		// iOS < 13 - Fallback to use Label Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor blackColor]];
+		}
 	}
 	
 	[textView becomeFirstResponder];
@@ -835,9 +851,16 @@
 	// Show placeholder
 	if ([textView.text isEqualToString:@""])
 	{
-		[textView setText:self.textViewCommentPlaceholder];
-		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];
-		[textView setFont:[UIFont systemFontOfSize:17.0]];
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor placeholderTextColor]];
+		}
+		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.3]];
+		}
 	}
 	
 	[textView resignFirstResponder];
@@ -857,6 +880,12 @@
 	if ([self.filteredMessageEvents count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+		}
 		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];

@@ -28,6 +28,11 @@
 	// Add corner radius to view comment shadow
 	self.viewCommentShadow.layer.cornerRadius = 5;
 	
+	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of Opaque Separator Color) and remove this logic
+	if (@available(iOS 11.0, *))
+	{
+		[self.viewCommentShadow setBackgroundColor:[UIColor colorNamed:@"secondarySeparatorColor"]];
+	}
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

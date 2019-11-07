@@ -52,6 +52,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	// iOS 13+ - Restore navigation bar's bottom border
+	if (@available(iOS 13.0, *))
+	{
+		UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+
+		[appearance configureWithOpaqueBackground];
+
+		[UINavigationBar.appearance setScrollEdgeAppearance:appearance];
+		[UINavigationBar.appearance setStandardAppearance:appearance];
+	}
+	
 	// Initialize call observer
 	self.callObserver = [CXCallObserver new];
 	

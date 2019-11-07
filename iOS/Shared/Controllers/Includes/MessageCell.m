@@ -10,6 +10,7 @@
 
 @interface MessageCell()
 
+@property (nonatomic) IBOutlet NSLayoutConstraint *constraintImageStatusHeight;
 @property (nonatomic) IBOutlet NSLayoutConstraint *constraintViewLeftSpace;
 
 @property (nonatomic) UIEdgeInsets defaultEdgeInsets;
@@ -32,6 +33,16 @@
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
+	
+	if (@available(iOS 13.0, *))
+	{
+		// Nothing needed here
+	}
+	// iOS < 13 - Adjust image status height
+	else
+	{
+		[self.constraintImageStatusHeight setConstant:24.0f];
+	}
 	
 	if (self.editing)
 	{

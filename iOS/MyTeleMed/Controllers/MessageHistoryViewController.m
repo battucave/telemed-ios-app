@@ -15,11 +15,10 @@
 
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-
 @property (weak, nonatomic) IBOutlet UILabel *labelEventsType;
-
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableMessageEvents;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableMessageEventsBottom;
 
 @property (weak, nonatomic) UIColor *segmentedControlColor;

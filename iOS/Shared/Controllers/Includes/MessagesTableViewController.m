@@ -73,7 +73,17 @@
 		// Initialize loading activity indicator to be used when loading additional messages
 		[self setLoadingActivityIndicator:[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]];
 
-		[self.loadingActivityIndicator setColor:[UIColor darkGrayColor]];
+		// iOS 11+ - Use custom color from asset catalog
+		if (@available(iOS 11.0, *))
+		{
+			[self.loadingActivityIndicator setColor:[UIColor colorNamed:@"systemBlackColor"]];
+		}
+		// iOS < 11 - Remove this when iOS 10 support is dropped
+		else
+		{
+			[self.loadingActivityIndicator setColor:[UIColor darkGrayColor]];
+		}
+		
 		[self.loadingActivityIndicator setFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 60.0)];
 		[self.loadingActivityIndicator startAnimating];
 	#endif
@@ -177,6 +187,12 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+		}
+		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isFirstPageLoaded ? @"No messages available." : @"Loading...")];
@@ -232,13 +248,34 @@
 	}
 	
 	// If message has been read, change status image to unread icon
-	if ([message.State isEqualToString:@"Unread"])
+	// if ([message.State isEqualToString:@"Unread"])
+	if (indexPath.row % 2 == 0)
 	{
-		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
+		// iOS 13+ - Use SF Symbols
+		if (@available(iOS 13.0, *))
+		{
+			[cell.imageStatus setImage:[UIImage systemImageNamed:@"envelope"]];
+		}
+		// iOS < 13 - Fall back to vector image from asset catalog
+		else
+		{
+			[cell.imageStatus setImage:[UIImage imageNamed:@"envelope"]];
+		}
 	}
 	else
 	{
-		[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
+		NSLog(@"IS IOS < 13");
+
+		// iOS 13+ - Use SF Symbols
+		if (@available(iOS 13.0, *))
+		{
+			[cell.imageStatus setImage:[UIImage systemImageNamed:@"envelope.open"]];
+		}
+		// iOS < 13 - Fall back to vector image from asset catalog
+		else
+		{
+			[cell.imageStatus setImage:[UIImage imageNamed:@"envelope.open"]];
+		}
 	}
 	
 	/*/ TESTING ONLY (used for generating screenshots)
@@ -247,13 +284,31 @@
 		[cell.labelPhoneNumber setText:@"800-420-4695"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 		
-		if (indexPath.row < 3)
+		// iOS 13+ - Use SF Symbols
+		if (@available(iOS 13.0, *))
 		{
-			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Unread"]];
+			UIImageSymbolConfiguration *symbolConfiguration = [UIImageSymbolConfiguration configurationWithWeight:UIFontWeightThin];
+			
+			if (indexPath.row < 3)
+			{
+				[cell.imageStatus setImage:[UIImage systemImageNamed:@"envelope" withConfiguration:symbolConfiguration]];
+			}
+			else
+			{
+				[cell.imageStatus setImage:[UIImage systemImageNamed:@"envelope.open" withConfiguration:symbolConfiguration]];
+			}
 		}
+		// iOS < 13 - Fall back to SVG's from asset catalog
 		else
 		{
-			[cell.imageStatus setImage:[UIImage imageNamed:@"icon-Mail-Read"]];
+			if (indexPath.row < 3)
+			{
+				[cell.imageStatus setImage:[UIImage imageNamed:@"envelope"]];
+			}
+			else
+			{
+				[cell.imageStatus setImage:[UIImage imageNamed:@"envelope.open"]];
+			}
 		}
 	#endif
 	// END TESTING ONLY */
@@ -261,15 +316,15 @@
 	// Set message priority color
 	if ([message.Priority isEqualToString:@"Priority"])
 	{
-		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+		[cell.viewPriority setBackgroundColor:[UIColor systemYellowColor]];
 	}
 	else if ([message.Priority isEqualToString:@"Stat"])
 	{
-		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+		[cell.viewPriority setBackgroundColor:[UIColor systemRedColor]];
 	}
 	else
 	{
-		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:19.0/255.0 green:182.0/255.0 blue:38.0/255.0 alpha:1]];
+		[cell.viewPriority setBackgroundColor:[UIColor systemGreenColor]];
 	}
 	
 	return cell;
@@ -335,15 +390,15 @@
 	// Set message priority color
 	if ([sentMessage.Priority isEqualToString:@"Priority"])
 	{
-		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+		[cell.viewPriority setBackgroundColor:[UIColor systemYellowColor]];
 	}
 	else if ([sentMessage.Priority isEqualToString:@"Stat"])
 	{
-		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+		[cell.viewPriority setBackgroundColor:[UIColor systemRedColor]];
 	}
 	else
 	{
-		[cell.viewPriority setBackgroundColor:[UIColor colorWithRed:19.0/255.0 green:182.0/255.0 blue:38.0/255.0 alpha:1]];
+		[cell.viewPriority setBackgroundColor:[UIColor systemGreenColor]];
 	}
 	
 	return cell;

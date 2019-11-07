@@ -23,6 +23,8 @@
 
 @interface CoreViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *viewMessageCalloutIOS10; // Remove when iOS 10 support is dropped
+
 @property (nonatomic) NSString *remoteNotificationAuthorizationMessage;
 @property (nonatomic) BOOL shouldAuthorizeRemoteNotifications;
 @property (nonatomic) SystemSoundID systemSoundID;
@@ -48,6 +50,12 @@
 	
 		// Additional observers are added in registerForRemoteNotifications:
 	#endif
+	
+	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of custom color) and remove this logic
+	if (@available(iOS 11.0, *))
+	{
+		[self.viewMessageCalloutIOS10 setBackgroundColor:[UIColor colorNamed:@"messageCalloutBackgroundColor"]];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -352,8 +360,14 @@
 	}];
 	UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
-		// Open settings app for user to enable notifications
-		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+		// Simulator cannot enable notifications so emulate successful authorization
+		#ifdef TARGET_IPHONE_SIMULATOR
+  			[self didChangeRemoteNotificationAuthorization:YES];
+
+  		// Open settings app for user to enable notifications
+  		#else
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+        #endif
 		
 		// Note: The next step will be callback to viewDidBecomeActive: when user returns from the Settings app
 	}];

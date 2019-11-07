@@ -8,19 +8,11 @@
 
 #import "MessageEventCell.h"
 
-@implementation MessageEventCell
+@interface MessageEventCell()
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-	
-	if (self)
-	{
-		// Initialization code
-	}
-	
-	return self;
-}
+@end
+
+@implementation MessageEventCell
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {

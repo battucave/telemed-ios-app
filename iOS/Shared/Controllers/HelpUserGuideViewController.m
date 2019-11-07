@@ -61,7 +61,16 @@
 		
 		if ([NSStringFromClass([view class]) isEqualToString:@"UIWebPDFView"])
 		{
-			[view setBackgroundColor:[UIColor whiteColor]];
+			// iOS 13+ - Support dark mode
+			if (@available(iOS 13.0, *))
+			{
+				[view setBackgroundColor:[UIColor systemBackgroundColor]];
+			}
+			// iOS < 13 - Fallback to use System Background Color light appearance
+			else
+			{
+				[view setBackgroundColor:[UIColor whiteColor]];
+			}
 			
 			[self.webViewPDFViewer setHidden:NO];
 			

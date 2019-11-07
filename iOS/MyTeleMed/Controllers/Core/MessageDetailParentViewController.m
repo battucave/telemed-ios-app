@@ -440,11 +440,11 @@
 	{
 		if ([self.message.Priority isEqualToString:@"Priority"])
 		{
-			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:213.0/255.0 green:199.0/255.0 blue:48.0/255.0 alpha:1]];
+			[self.viewPriority setBackgroundColor:[UIColor systemYellowColor]];
 		}
 		else if ([self.message.Priority isEqualToString:@"Stat"])
 		{
-			[self.viewPriority setBackgroundColor:[UIColor colorWithRed:182.0/255.0 green:42.0/255.0 blue:19.0/255.0 alpha:1]];
+			[self.viewPriority setBackgroundColor:[UIColor systemRedColor]];
 		}
 	}
 }
