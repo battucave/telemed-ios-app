@@ -744,7 +744,7 @@
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
 	BOOL currentUserIsSender = ([chatMessage.SenderID isEqualToNumber:self.currentUserID]);
-	//BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
+	// BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
 	
 	// Set both types of events to use comment cell (purposely reusing comment cell here instead of creating duplicate chat message detail cell)
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];

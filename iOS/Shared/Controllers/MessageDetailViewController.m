@@ -906,7 +906,7 @@
 	
 	BOOL isComment = [messageEvent.Type isEqualToString:@"Comment"];
 	BOOL currentUserIsSender = ([messageEvent.EnteredByID isEqualToNumber:self.currentUserID]);
-	//BOOL currentUserIsSender = ! (indexPath.row % 2); // Only used for testing both cell types
+	// BOOL currentUserIsSender = ! (indexPath.row % 2); // Only used for testing both cell types
 	
 	// Set both types of events to use CommentCell (events of type "User" should technically use MessageEventCell, but it doesn't matter for now since they both share the same label identifiers)
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(isComment ? (currentUserIsSender ? cellIdentifierSent : cellIdentifier) : cellIdentifierEvent)];

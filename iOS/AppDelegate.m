@@ -607,12 +607,13 @@
 		// Only show screenshot view if it is not already visible
 		if (screenshotView == nil)
 		{
-			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"Launch Screen" owner:self options:nil] objectAtIndex:0];
+			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:self options:nil] objectAtIndex:0];
 			UIScreen *screen = [UIScreen mainScreen];
 			
 			[screenshotView setContentMode:UIViewContentModeScaleAspectFill];
 			[screenshotView setFrame:CGRectMake(0.0f, 0.0f, screen.bounds.size.width, screen.bounds.size.height)];
 			[screenshotView setTag:8353633];
+			
 			[self.window addSubview:screenshotView];
 			[self.window bringSubviewToFront:screenshotView];
 		}

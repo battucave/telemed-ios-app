@@ -495,7 +495,7 @@
 	
 	// Set unopened/unread
 	if (chatMessage.Unopened)
-	//if (indexPath.row % 2) // Only used for testing both styles
+	// if (indexPath.row % 2) // Only used for testing both styles
 	{
 		// Show blue bar
 		[cell.viewUnopened setHidden:NO];

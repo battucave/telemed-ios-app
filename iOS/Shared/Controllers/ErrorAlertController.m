@@ -109,7 +109,10 @@
 		// Execute callback
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			cancelCallback();
+			if (cancelCallback)
+			{
+				cancelCallback();
+			}
 		});
 	}];
 	UIAlertAction *retryAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -117,7 +120,10 @@
 		// Execute callback
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			retryCallback();
+			if (retryCallback)
+			{
+				retryCallback();
+			}
 		});
 	}];
 	
