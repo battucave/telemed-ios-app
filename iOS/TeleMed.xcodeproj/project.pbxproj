@@ -18,8 +18,6 @@
 		081710AE1C495896000DD7C9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081710AD1C495896000DD7C9 /* MediaPlayer.framework */; };
 		0865DBFC1C63AF060028E2B2 /* MessageTeleMedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0865DBFB1C63AF060028E2B2 /* MessageTeleMedViewController.m */; };
 		087C00C21B04FD73004E35DE /* LoginSSO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 087C00C11B04FD73004E35DE /* LoginSSO.storyboard */; };
-		0992B3A25F30761171D866B0 /* Pods_TeleMed_Med2Med.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 561751C3ADB49D84268DC377 /* Pods_TeleMed_Med2Med.framework */; };
-		208470137892C69190AADFDD /* Pods_TeleMed_MyTeleMed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54EFB96E8FF305E8573D07FC /* Pods_TeleMed_MyTeleMed.framework */; };
 		280929B418311A6800877D46 /* SettingsNotificationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280929B318311A6800877D46 /* SettingsNotificationsTableViewController.m */; };
 		2817161B1831659200CD3086 /* SettingsNotificationsPickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2817161A1831659200CD3086 /* SettingsNotificationsPickerTableViewController.m */; };
 		28176C141829AB0F00801EC7 /* MessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28176C131829AB0F00801EC7 /* MessageDetailViewController.m */; };
@@ -102,6 +100,7 @@
 		28DAB3541A9687E600400553 /* MessageDetailParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28DAB3531A9687E500400553 /* MessageDetailParentViewController.m */; };
 		28E0CD741822AF8100729B4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E0CD721822AF8100729B4A /* Main.storyboard */; };
 		28EAB9EA194B585100903772 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EAB9E9194B585100903772 /* HelpViewController.m */; };
+		9DD940E5126F9A0DFA0510BE /* Pods_TeleMed_Med2Med.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661181447A1DC948131CF7C4 /* Pods_TeleMed_Med2Med.framework */; };
 		E20295011FBB934F00811DA6 /* Med2Med.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295001FBB934F00811DA6 /* Med2Med.storyboard */; };
 		E20295031FBBA1EE00811DA6 /* LoginSSO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */; };
 		E20295081FBBA4B200811DA6 /* Med2Med.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20295071FBBA4AD00811DA6 /* Med2Med.xcassets */; };
@@ -262,6 +261,7 @@
 		E27B85341B14D11D00AD50C6 /* MyProfileXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85331B14D11D00AD50C6 /* MyProfileXMLParser.m */; };
 		E27B85371B14D12900AD50C6 /* MyStatusXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85361B14D12900AD50C6 /* MyStatusXMLParser.m */; };
 		E28307F11AD83170006FDD6D /* news_flash.caf in Resources */ = {isa = PBXBuildFile; fileRef = E28307F01AD83170006FDD6D /* news_flash.caf */; };
+		E283294C23765AEC001F1580 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24EB2B82375D8B400348F8A /* LaunchScreen.xib */; };
 		E2896347208540320055A18E /* OnCallSlotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896346208540320055A18E /* OnCallSlotModel.m */; };
 		E289634A208542BD0055A18E /* OnCallSlotXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2896349208542BD0055A18E /* OnCallSlotXMLParser.m */; };
 		E2896350208557870055A18E /* OnCallSlotPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E289634E208557850055A18E /* OnCallSlotPickerViewController.m */; };
@@ -330,6 +330,7 @@
 		E2EE44492196262400FD61C0 /* MessageRedirectInfoXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */; };
 		E2F0C56D2374ADF0005F9C8B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2AC2701237204000087912C /* Colors.xcassets */; };
 		E2F27222232919D900A9E548 /* Shared.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F27221232919D900A9E548 /* Shared.xcassets */; };
+		FCA8980A2B0FF03403335E89 /* Pods_TeleMed_MyTeleMed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7494FC413711C9E20BACCC /* Pods_TeleMed_MyTeleMed.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -390,7 +391,8 @@
 		0865DBFA1C63AF060028E2B2 /* MessageTeleMedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTeleMedViewController.h; sourceTree = "<group>"; };
 		0865DBFB1C63AF060028E2B2 /* MessageTeleMedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTeleMedViewController.m; sourceTree = "<group>"; };
 		087C00C11B04FD73004E35DE /* LoginSSO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginSSO.storyboard; sourceTree = "<group>"; };
-		27CD588B76E8EB54D2979796 /* Pods-TeleMed-MyTeleMed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.debug.xcconfig"; sourceTree = "<group>"; };
+		206818FBB51F24CBFEEFB256 /* Pods-TeleMed-MyTeleMed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.debug.xcconfig"; path = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.debug.xcconfig"; sourceTree = "<group>"; };
+		24FFACAA9148FF8A1F83CA31 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.ad hoc.xcconfig"; path = "Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.ad hoc.xcconfig"; sourceTree = "<group>"; };
 		280929B218311A6800877D46 /* SettingsNotificationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsNotificationsTableViewController.h; sourceTree = "<group>"; };
 		280929B318311A6800877D46 /* SettingsNotificationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsNotificationsTableViewController.m; sourceTree = "<group>"; };
 		281716191831659200CD3086 /* SettingsNotificationsPickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsNotificationsPickerTableViewController.h; sourceTree = "<group>"; };
@@ -500,13 +502,11 @@
 		28E0CD721822AF8100729B4A /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		28EAB9E8194B585100903772 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
 		28EAB9E9194B585100903772 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
-		368E2BEA86F2617D5B3184A2 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.ad hoc.xcconfig"; path = "Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.ad hoc.xcconfig"; sourceTree = "<group>"; };
-		4B015A8406028A37AFCD671C /* Pods-TeleMed-MyTeleMed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.release.xcconfig"; path = "Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.release.xcconfig"; sourceTree = "<group>"; };
-		54EFB96E8FF305E8573D07FC /* Pods_TeleMed_MyTeleMed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TeleMed_MyTeleMed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		561751C3ADB49D84268DC377 /* Pods_TeleMed_Med2Med.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TeleMed_Med2Med.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AC1572F6BC54B7DB9A35208 /* Pods-TeleMed-Med2Med.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.debug.xcconfig"; sourceTree = "<group>"; };
-		9263877370784C71228E81E1 /* Pods-TeleMed-Med2Med.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.release.xcconfig"; path = "Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.release.xcconfig"; sourceTree = "<group>"; };
-		BF9E932C15871BBA9F70AE15 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.ad hoc.xcconfig"; path = "Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		649C0EAA99898215C47E3DC8 /* Pods-TeleMed-Med2Med.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.release.xcconfig"; path = "Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.release.xcconfig"; sourceTree = "<group>"; };
+		661181447A1DC948131CF7C4 /* Pods_TeleMed_Med2Med.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TeleMed_Med2Med.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B5DF3752B25AD955A48A0CC /* Pods-TeleMed-Med2Med.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.debug.xcconfig"; path = "Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.debug.xcconfig"; sourceTree = "<group>"; };
+		9C62DBAC722A19079D056F53 /* Pods-TeleMed-MyTeleMed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.release.xcconfig"; path = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.release.xcconfig"; sourceTree = "<group>"; };
+		D3A0221C1BC77CBA23B37CA0 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.ad hoc.xcconfig"; path = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.ad hoc.xcconfig"; sourceTree = "<group>"; };
 		E20294F81FBB920C00811DA6 /* Med2Med-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Med2Med-Info.plist"; sourceTree = "<group>"; };
 		E20295001FBB934F00811DA6 /* Med2Med.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Med2Med.storyboard; sourceTree = "<group>"; };
 		E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginSSO.storyboard; sourceTree = "<group>"; };
@@ -755,6 +755,7 @@
 		E2EE44472196262300FD61C0 /* MessageRedirectInfoXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageRedirectInfoXMLParser.m; sourceTree = "<group>"; };
 		E2EE44482196262300FD61C0 /* MessageRedirectInfoXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageRedirectInfoXMLParser.h; sourceTree = "<group>"; };
 		E2F27221232919D900A9E548 /* Shared.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Shared.xcassets; sourceTree = "<group>"; };
+		FE7494FC413711C9E20BACCC /* Pods_TeleMed_MyTeleMed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TeleMed_MyTeleMed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -787,7 +788,7 @@
 				28CCCD4217F517A50093CEE2 /* CoreGraphics.framework in Frameworks */,
 				28CCCD4417F517A50093CEE2 /* UIKit.framework in Frameworks */,
 				28CCCD4017F517A50093CEE2 /* Foundation.framework in Frameworks */,
-				208470137892C69190AADFDD /* Pods_TeleMed_MyTeleMed.framework in Frameworks */,
+				FCA8980A2B0FF03403335E89 /* Pods_TeleMed_MyTeleMed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -806,7 +807,7 @@
 				E25037091FBB88F400099C7E /* CoreGraphics.framework in Frameworks */,
 				E250370A1FBB88F400099C7E /* UIKit.framework in Frameworks */,
 				E250370B1FBB88F400099C7E /* Foundation.framework in Frameworks */,
-				0992B3A25F30761171D866B0 /* Pods_TeleMed_Med2Med.framework in Frameworks */,
+				9DD940E5126F9A0DFA0510BE /* Pods_TeleMed_Med2Med.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -950,7 +951,7 @@
 				081710771C495603000DD7C9 /* MyTeleMedWatch Extension */,
 				28CCCD3E17F517A50093CEE2 /* Frameworks */,
 				28CCCD3D17F517A50093CEE2 /* Products */,
-				55DF9B8FE9A2E0752E9A4503 /* Pods */,
+				97A795A72B7B37ABA3B18F21 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -980,8 +981,8 @@
 				28CCCD4117F517A50093CEE2 /* CoreGraphics.framework */,
 				28CCCD4317F517A50093CEE2 /* UIKit.framework */,
 				28CCCD5E17F517A50093CEE2 /* XCTest.framework */,
-				561751C3ADB49D84268DC377 /* Pods_TeleMed_Med2Med.framework */,
-				54EFB96E8FF305E8573D07FC /* Pods_TeleMed_MyTeleMed.framework */,
+				661181447A1DC948131CF7C4 /* Pods_TeleMed_Med2Med.framework */,
+				FE7494FC413711C9E20BACCC /* Pods_TeleMed_MyTeleMed.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1072,17 +1073,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		55DF9B8FE9A2E0752E9A4503 /* Pods */ = {
+		97A795A72B7B37ABA3B18F21 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8AC1572F6BC54B7DB9A35208 /* Pods-TeleMed-Med2Med.debug.xcconfig */,
-				9263877370784C71228E81E1 /* Pods-TeleMed-Med2Med.release.xcconfig */,
-				BF9E932C15871BBA9F70AE15 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */,
-				27CD588B76E8EB54D2979796 /* Pods-TeleMed-MyTeleMed.debug.xcconfig */,
-				4B015A8406028A37AFCD671C /* Pods-TeleMed-MyTeleMed.release.xcconfig */,
-				368E2BEA86F2617D5B3184A2 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */,
+				9B5DF3752B25AD955A48A0CC /* Pods-TeleMed-Med2Med.debug.xcconfig */,
+				649C0EAA99898215C47E3DC8 /* Pods-TeleMed-Med2Med.release.xcconfig */,
+				24FFACAA9148FF8A1F83CA31 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */,
+				206818FBB51F24CBFEEFB256 /* Pods-TeleMed-MyTeleMed.debug.xcconfig */,
+				9C62DBAC722A19079D056F53 /* Pods-TeleMed-MyTeleMed.release.xcconfig */,
+				D3A0221C1BC77CBA23B37CA0 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */,
 			);
-			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		E20294F71FBB920C00811DA6 /* Med2Med */ = {
@@ -1657,12 +1658,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 28CCCD6E17F517A50093CEE2 /* Build configuration list for PBXNativeTarget "MyTeleMed" */;
 			buildPhases = (
-				E9D108714D25E1B93407DA15 /* [CP] Check Pods Manifest.lock */,
+				25C4B6F422B55CE0954C9AD5 /* [CP] Check Pods Manifest.lock */,
 				28CCCD3817F517A50093CEE2 /* Sources */,
 				28CCCD3917F517A50093CEE2 /* Frameworks */,
 				28CCCD3A17F517A50093CEE2 /* Resources */,
 				0817108F1C495603000DD7C9 /* Embed Watch Content */,
-				577F29D9E9FD6AC216A5E6BB /* [CP] Embed Pods Frameworks */,
+				DB998D8BBEED0ABF4DE05A98 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1678,11 +1679,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E25037B31FBB88F400099C7E /* Build configuration list for PBXNativeTarget "Med2Med" */;
 			buildPhases = (
-				38810F0F67B09B9E8FD6F328 /* [CP] Check Pods Manifest.lock */,
+				F6BCCA54D53B47039EF33055 /* [CP] Check Pods Manifest.lock */,
 				E250368F1FBB88F400099C7E /* Sources */,
 				E25037001FBB88F400099C7E /* Frameworks */,
 				E250370C1FBB88F400099C7E /* Resources */,
-				C3DA69AA65EECE9A827AD0DA /* [CP] Embed Pods Frameworks */,
+				3378BEDBCBB1BEC43FEA819E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1891,6 +1892,7 @@
 				E250372F1FBB88F400099C7E /* button-Contact-Call@3x.png in Resources */,
 				E2364DC2236B49EF00B0C2C7 /* Shared.xcassets in Resources */,
 				E25037301FBB88F400099C7E /* button-Contact-Mail.png in Resources */,
+				E283294C23765AEC001F1580 /* LaunchScreen.xib in Resources */,
 				E25037391FBB88F400099C7E /* button-Contact-Call.png in Resources */,
 				E250373A1FBB88F400099C7E /* button-Contact-Call@2x.png in Resources */,
 				E2C7C1B81FC3910D00E50F07 /* button-Help@2x.png in Resources */,
@@ -1916,7 +1918,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		38810F0F67B09B9E8FD6F328 /* [CP] Check Pods Manifest.lock */ = {
+		25C4B6F422B55CE0954C9AD5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1931,38 +1933,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TeleMed-Med2Med-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TeleMed-MyTeleMed-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		577F29D9E9FD6AC216A5E6BB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AFNetworkActivityLogger/AFNetworkActivityLogger.framework",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/Harpy/Harpy.framework",
-				"${BUILT_PRODUCTS_DIR}/KeychainItemWrapper/KeychainItemWrapper.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworkActivityLogger.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Harpy.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainItemWrapper.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C3DA69AA65EECE9A827AD0DA /* [CP] Embed Pods Frameworks */ = {
+		3378BEDBCBB1BEC43FEA819E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1986,7 +1964,31 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E9D108714D25E1B93407DA15 /* [CP] Check Pods Manifest.lock */ = {
+		DB998D8BBEED0ABF4DE05A98 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworkActivityLogger/AFNetworkActivityLogger.framework",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Harpy/Harpy.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainItemWrapper/KeychainItemWrapper.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworkActivityLogger.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Harpy.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainItemWrapper.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6BCCA54D53B47039EF33055 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2001,7 +2003,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TeleMed-MyTeleMed-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TeleMed-Med2Med-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2493,7 +2495,7 @@
 		};
 		28A57D5218343F7A005855AC /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 368E2BEA86F2617D5B3184A2 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */;
+			baseConfigurationReference = D3A0221C1BC77CBA23B37CA0 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMedβ.entitlements";
@@ -2632,7 +2634,7 @@
 		};
 		28CCCD6F17F517A50093CEE2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27CD588B76E8EB54D2979796 /* Pods-TeleMed-MyTeleMed.debug.xcconfig */;
+			baseConfigurationReference = 206818FBB51F24CBFEEFB256 /* Pods-TeleMed-MyTeleMed.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTmd Debug.entitlements";
@@ -2666,7 +2668,7 @@
 		};
 		28CCCD7017F517A50093CEE2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4B015A8406028A37AFCD671C /* Pods-TeleMed-MyTeleMed.release.xcconfig */;
+			baseConfigurationReference = 9C62DBAC722A19079D056F53 /* Pods-TeleMed-MyTeleMed.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMed.entitlements";
@@ -2699,7 +2701,7 @@
 		};
 		E25037B41FBB88F400099C7E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8AC1572F6BC54B7DB9A35208 /* Pods-TeleMed-Med2Med.debug.xcconfig */;
+			baseConfigurationReference = 9B5DF3752B25AD955A48A0CC /* Pods-TeleMed-Med2Med.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Med Debug.entitlements";
@@ -2730,7 +2732,7 @@
 		};
 		E25037B51FBB88F400099C7E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9263877370784C71228E81E1 /* Pods-TeleMed-Med2Med.release.xcconfig */;
+			baseConfigurationReference = 649C0EAA99898215C47E3DC8 /* Pods-TeleMed-Med2Med.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Med.entitlements";
@@ -2761,7 +2763,7 @@
 		};
 		E25037B61FBB88F400099C7E /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF9E932C15871BBA9F70AE15 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */;
+			baseConfigurationReference = 24FFACAA9148FF8A1F83CA31 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconAdHoc;
 				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Medβ.entitlements";

@@ -807,6 +807,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
 			productRefGroup = AA8968D3664776DD0A21BE0020F22AFC /* Products */;
@@ -998,40 +999,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		03179733C192B876262270FE4C174642 /* Ad Hoc */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0CD70FE585BCFF8B6E3DAC9BD1049F38 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Ad Hoc";
-		};
 		0A8B58F678830A34053DD5CDB161C887 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8572384366BA7FFD5A59601EF25F7003 /* Pods-TeleMed-Med2Med.debug.xcconfig */;
@@ -1065,6 +1032,37 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
+		};
+		167E6E542EF8D7AACAA14C9448319ED8 /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D12AB2685B3C006C874ABAEBBD99B281 /* AFNetworkActivityLogger.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/AFNetworkActivityLogger/AFNetworkActivityLogger-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/AFNetworkActivityLogger/AFNetworkActivityLogger-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/AFNetworkActivityLogger/AFNetworkActivityLogger.modulemap";
+				PRODUCT_MODULE_NAME = AFNetworkActivityLogger;
+				PRODUCT_NAME = AFNetworkActivityLogger;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Ad Hoc";
 		};
 		17625A30FD01F426E3B940F03CA58F37 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1191,36 +1189,6 @@
 			};
 			name = Release;
 		};
-		2D6F0086237915A48BE9C7C5DB6E8FEE /* Ad Hoc */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 814440C70A7EA7D48F767FF2812B01AA /* Harpy.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Harpy/Harpy-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Harpy/Harpy-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Harpy/Harpy.modulemap";
-				PRODUCT_MODULE_NAME = Harpy;
-				PRODUCT_NAME = Harpy;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Ad Hoc";
-		};
 		43B4E0A14E5C3946A2F968B3ADE74731 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 814440C70A7EA7D48F767FF2812B01AA /* Harpy.xcconfig */;
@@ -1252,9 +1220,9 @@
 			};
 			name = Release;
 		};
-		46590211D3168589900BE2AF4E66B62F /* Ad Hoc */ = {
+		5E0B7AEC5CA64EFE47C4E93565A4C480 /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D12AB2685B3C006C874ABAEBBD99B281 /* AFNetworkActivityLogger.xcconfig */;
+			baseConfigurationReference = 25C2733AEE23BE27DCB688AA044BE51D /* KeychainItemWrapper.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -1265,48 +1233,19 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/AFNetworkActivityLogger/AFNetworkActivityLogger-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/AFNetworkActivityLogger/AFNetworkActivityLogger-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/KeychainItemWrapper/KeychainItemWrapper-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/KeychainItemWrapper/KeychainItemWrapper-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/AFNetworkActivityLogger/AFNetworkActivityLogger.modulemap";
-				PRODUCT_MODULE_NAME = AFNetworkActivityLogger;
-				PRODUCT_NAME = AFNetworkActivityLogger;
+				MODULEMAP_FILE = "Target Support Files/KeychainItemWrapper/KeychainItemWrapper.modulemap";
+				PRODUCT_MODULE_NAME = KeychainItemWrapper;
+				PRODUCT_NAME = KeychainItemWrapper;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Ad Hoc";
-		};
-		6D08B5FF0A099EBFF8CDCEEE7AE9F954 /* Ad Hoc */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D3B7A32D819B824B527D4C2E9ABE14F /* AFNetworking.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/AFNetworking/AFNetworking-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/AFNetworking/AFNetworking-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/AFNetworking/AFNetworking.modulemap";
-				PRODUCT_MODULE_NAME = AFNetworking;
-				PRODUCT_NAME = AFNetworking;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1369,6 +1308,37 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = "Ad Hoc";
+		};
+		76BBD1DA14E30389AB35986C02A0DFFC /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 814440C70A7EA7D48F767FF2812B01AA /* Harpy.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Harpy/Harpy-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Harpy/Harpy-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Harpy/Harpy.modulemap";
+				PRODUCT_MODULE_NAME = Harpy;
+				PRODUCT_NAME = Harpy;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = "Ad Hoc";
 		};
@@ -1657,7 +1627,73 @@
 			};
 			name = Debug;
 		};
-		DA23EB5782D9A5B1D76D35A51D936249 /* Ad Hoc */ = {
+		CCC668AE920AD97F24D4E870D8D32BF1 /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CD70FE585BCFF8B6E3DAC9BD1049F38 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Ad Hoc";
+		};
+		D116B984CAFA785C2040AE4333CA31D1 /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D3B7A32D819B824B527D4C2E9ABE14F /* AFNetworking.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/AFNetworking/AFNetworking-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/AFNetworking/AFNetworking-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/AFNetworking/AFNetworking.modulemap";
+				PRODUCT_MODULE_NAME = AFNetworking;
+				PRODUCT_NAME = AFNetworking;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Ad Hoc";
+		};
+		E08A8FC55436698CA2266FDECAEB235E /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EA85149C4F8F0E1C35A0D6765D9F4D17 /* Pods-TeleMed-Med2Med.ad hoc.xcconfig */;
 			buildSettings = {
@@ -1686,6 +1722,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1722,43 +1759,13 @@
 			};
 			name = Release;
 		};
-		F803193B0C8A3E7E87D2DE739B2DF235 /* Ad Hoc */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 25C2733AEE23BE27DCB688AA044BE51D /* KeychainItemWrapper.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/KeychainItemWrapper/KeychainItemWrapper-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/KeychainItemWrapper/KeychainItemWrapper-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/KeychainItemWrapper/KeychainItemWrapper.modulemap";
-				PRODUCT_MODULE_NAME = KeychainItemWrapper;
-				PRODUCT_NAME = KeychainItemWrapper;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = "Ad Hoc";
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		04F1F8E77C05A2EE0FFC8E5010466F41 /* Build configuration list for PBXNativeTarget "AFNetworkActivityLogger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				46590211D3168589900BE2AF4E66B62F /* Ad Hoc */,
+				167E6E542EF8D7AACAA14C9448319ED8 /* Ad Hoc */,
 				C65D85ECC443C0419E3CBC35844B7633 /* Debug */,
 				1D173BF60A1E003448ECDA4D428A2FDD /* Release */,
 			);
@@ -1768,7 +1775,7 @@
 		1FB5397C6412AD7BEE14FBD6407024DF /* Build configuration list for PBXNativeTarget "Pods-TeleMed-Med2Med" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA23EB5782D9A5B1D76D35A51D936249 /* Ad Hoc */,
+				E08A8FC55436698CA2266FDECAEB235E /* Ad Hoc */,
 				0A8B58F678830A34053DD5CDB161C887 /* Debug */,
 				8B2F8683E7DCCBC9C295D1C20AD5D21A /* Release */,
 			);
@@ -1788,7 +1795,7 @@
 		7BE34DCE858295FF43A5E9A130BD11CE /* Build configuration list for PBXNativeTarget "Harpy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2D6F0086237915A48BE9C7C5DB6E8FEE /* Ad Hoc */,
+				76BBD1DA14E30389AB35986C02A0DFFC /* Ad Hoc */,
 				A5BDDB83F379A34A9D2D50A8C225B3B0 /* Debug */,
 				43B4E0A14E5C3946A2F968B3ADE74731 /* Release */,
 			);
@@ -1798,7 +1805,7 @@
 		B11BAAA67CC597A244EAFF21E4EB8EAF /* Build configuration list for PBXNativeTarget "KeychainItemWrapper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F803193B0C8A3E7E87D2DE739B2DF235 /* Ad Hoc */,
+				5E0B7AEC5CA64EFE47C4E93565A4C480 /* Ad Hoc */,
 				17625A30FD01F426E3B940F03CA58F37 /* Debug */,
 				912C1C83F571CFB6657CDAEA1F966CD8 /* Release */,
 			);
@@ -1808,7 +1815,7 @@
 		E507D8802502B38450AFF940163A6DE4 /* Build configuration list for PBXNativeTarget "Pods-TeleMed-MyTeleMed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				03179733C192B876262270FE4C174642 /* Ad Hoc */,
+				CCC668AE920AD97F24D4E870D8D32BF1 /* Ad Hoc */,
 				7DED3D69E7FB4297F3940D8A1CA020C5 /* Debug */,
 				8AF6A403E0A8B6BF56E4018B1E4B499F /* Release */,
 			);
@@ -1818,7 +1825,7 @@
 		F54DAC21A4C188597647B428D22DCE51 /* Build configuration list for PBXNativeTarget "AFNetworking" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6D08B5FF0A099EBFF8CDCEEE7AE9F954 /* Ad Hoc */,
+				D116B984CAFA785C2040AE4333CA31D1 /* Ad Hoc */,
 				95A89A5C4689CFE36BEF7F71DD64881F /* Debug */,
 				E5E96A2AD341CB1B428F8EE14F591CCB /* Release */,
 			);

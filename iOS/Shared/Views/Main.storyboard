@@ -655,7 +655,7 @@
                                         <rect key="frame" x="0.0" y="139.33333333333334" width="374" height="175.00000000000003"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="telemed-icon" translatesAutoresizingMaskIntoConstraints="NO" id="Tyy-MG-FKI">
-                                                <rect key="frame" x="149.66666666666669" y="0.0" width="75.000000000000028" height="94"/>
+                                                <rect key="frame" x="149.66666666666666" y="0.0" width="75" height="94"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="94" id="60O-eL-keS"/>
                                                     <constraint firstAttribute="width" constant="75" id="GXm-EN-dxL"/>
@@ -1001,7 +1001,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="MessageRecipientPickerViewController" id="dbR-X4-VWn" customClass="MessageRecipientPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vCf-2A-71b">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7fW-0Y-ehL">
@@ -1024,7 +1024,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="44" width="414" height="672"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="572"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
@@ -1220,7 +1220,7 @@ TeleMed will call you momentarily from</string>
                         <attributedString key="attributedTitle">
                             <fragment content="Pull to Refresh">
                                 <attributes>
-                                    <font key="NSFont" metaFont="message" size="11"/>
+                                    <font key="NSFont" metaFont="toolTip"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                 </attributes>
                             </fragment>
@@ -3008,14 +3008,14 @@ TeleMed will call you momentarily from</string>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-Inverted" translatesAutoresizingMaskIntoConstraints="NO" id="Ldu-RX-cdn">
-                                <rect key="frame" x="57" y="21" width="300" height="75"/>
+                                <rect key="frame" x="57" y="65" width="300" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Iqi-5U-W3r"/>
                                     <constraint firstAttribute="width" secondItem="Ldu-RX-cdn" secondAttribute="height" multiplier="4:1" id="fnf-fq-hZU"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ac9-nK-wjB">
-                                <rect key="frame" x="15" y="106" width="384" height="58"/>
+                                <rect key="frame" x="15" y="150" width="384" height="58"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="v8E-N0-EBQ"/>
                                 </constraints>
@@ -3025,7 +3025,7 @@ TeleMed will call you momentarily from</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eoA-Y8-COD">
-                                <rect key="frame" x="111" y="180" width="192" height="120"/>
+                                <rect key="frame" x="111" y="224" width="192" height="120"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSy-kB-Azi">
                                         <rect key="frame" x="9" y="19" width="64" height="82"/>
@@ -3091,7 +3091,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aIX-w7-tsr">
-                                <rect key="frame" x="0.0" y="300" width="414" height="1"/>
+                                <rect key="frame" x="0.0" y="344" width="414" height="1"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="g3w-HW-RNb"/>
@@ -3159,15 +3159,15 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController title="User Guide" automaticallyAdjustsScrollViewInsets="NO" id="ZBZ-8V-igo" customClass="HelpUserGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aZK-BF-j1U">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxl-BZ-RKW">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" address="YES"/>
                             </webView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Q3c-8o-XvK">
-                                <rect key="frame" x="197" y="348" width="20" height="20"/>
+                                <rect key="frame" x="197" y="358" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="cr6-Aw-PiN"/>
                                     <constraint firstAttribute="width" constant="20" id="mLS-b8-qep"/>
@@ -3175,7 +3175,7 @@ TeleMed will call you momentarily from</string>
                                 <color key="color" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0wK-jJ-pFO">
-                                <rect key="frame" x="132" y="380" width="150" height="21"/>
+                                <rect key="frame" x="132" y="390" width="150" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="hke-ff-J5u"/>
                                 </constraints>
@@ -4020,11 +4020,11 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="AccountPicker" title="Choose Account" id="VQu-Ge-aJV" customClass="AccountPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a0L-Ge-VkQ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pUs-a0-7Pa">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                                 <subviews>
                                     <searchBar contentMode="redraw" text="" placeholder="Search Accounts (this is a placeholder only)" translatesAutoresizingMaskIntoConstraints="NO" id="3Vd-pP-0g9">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -4047,7 +4047,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="66" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="QZ7-a8-rYA">
-                                <rect key="frame" x="0.0" y="44" width="414" height="672"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="648"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="AccountHeader" rowHeight="36" id="Po7-KL-4yP">
@@ -5544,7 +5544,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="ZfR-s3-nyT"/>
         <segue reference="xfy-la-02K"/>
         <segue reference="jIb-YA-bfg"/>
-        <segue reference="KfY-sd-ej7"/>
+        <segue reference="RL6-ew-HlW"/>
         <segue reference="V9Q-rq-EEe"/>
         <segue reference="nDL-G3-d11"/>
         <segue reference="SWX-Rd-no8"/>
@@ -5552,7 +5552,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="E1e-BY-bXG"/>
         <segue reference="VXf-fn-O9m"/>
         <segue reference="1fs-hi-JGd"/>
-        <segue reference="Wxx-iI-zqX"/>
+        <segue reference="pW4-rb-CwU"/>
         <segue reference="dmg-yj-Han"/>
         <segue reference="eHz-5L-Vwp"/>
         <segue reference="FA7-fW-yLW"/>
