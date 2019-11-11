@@ -12,7 +12,7 @@
 
 @interface PhoneCallViewController ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *imageTeleMedIcon;
 @property (weak, nonatomic) IBOutlet UILabel *labelName;
 @property (weak, nonatomic) IBOutlet UILabel *labelNameIntro;
 @property (weak, nonatomic) IBOutlet UILabel *labelPhoneNumberIntro;
@@ -64,7 +64,7 @@
 	rotationAnimation.duration = 2;
 	rotationAnimation.repeatCount = HUGE_VALF;
 
-	[self.imageIcon.layer addAnimation:rotationAnimation forKey:rotationAnimation.keyPath];
+	[self.imageTeleMedIcon.layer addAnimation:rotationAnimation forKey:rotationAnimation.keyPath];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

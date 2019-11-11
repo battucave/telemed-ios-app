@@ -77,6 +77,12 @@
 {
 	[super viewWillAppear:animated];
 	
+	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of Tertiary System Grouped Background Color) and remove this logic
+	if (@available(iOS 11.0, *))
+	{
+		[self.tableChatMessages setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
+	}
+	
 	// Get chat messages for conversation id if its set (not a new chat)
 	if (self.conversationID)
 	{
@@ -101,9 +107,6 @@
 	
 	// Set max height of text view chat participants to half of screen size minus max height of text view chat message minus height of navigation bar
 	[self.textViewChatParticipants setMaxHeight:(([UIScreen mainScreen].bounds.size.height - 64.0f - self.textViewChatMessage.bounds.size.height) / 2.5)];
-	
-	// Add 10px to top and bottom of table chat messages
-	[self.tableChatMessages setContentInset:UIEdgeInsetsMake(10, 0, 10, 0)];
 	
 	// Add keyboard observers
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -636,8 +639,17 @@
 	if ([textView.text isEqualToString:self.textViewChatMessagePlaceholder])
 	{
 		[textView setText:@""];
-		[textView setTextColor:[UIColor blackColor]];
-		[textView setFont:[UIFont systemFontOfSize:16.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor labelColor]];
+		}
+		// iOS < 13 - Fallback to use Label Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor blackColor]];
+		}
 	}
 	
 	[textView becomeFirstResponder];
@@ -649,8 +661,17 @@
 	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewChatMessagePlaceholder];
-		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];
-		[textView setFont:[UIFont systemFontOfSize:17.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor placeholderTextColor]];
+		}
+		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.3]];
+		}
 	}
 	
 	[textView resignFirstResponder];
@@ -680,6 +701,15 @@
 	return [self.chatMessages count];
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (indexPath.row == 0 && [self.chatMessages count] > 0)
+	{
+		// Add 10px to top and bottom of table chat messages
+		[self.tableChatMessages setContentInset:UIEdgeInsetsMake(10, 0, 10, 0)];
+	}
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// Set default message if no chat messages available
@@ -690,6 +720,12 @@
 		// If loading chat messages, but there are no chat messages, show a message
 		if (self.conversationID)
 		{
+			// iOS 13+ - Support dark mode
+			if (@available(iOS 13.0, *))
+			{
+				[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+			}
+			
 			[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 			[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
@@ -708,7 +744,7 @@
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
 	
 	BOOL currentUserIsSender = ([chatMessage.SenderID isEqualToNumber:self.currentUserID]);
-	//BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
+	// BOOL currentUserIsSender = !! (indexPath.row % 2); // Only used for testing both cell types
 	
 	// Set both types of events to use comment cell (purposely reusing comment cell here instead of creating duplicate chat message detail cell)
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(currentUserIsSender ? cellIdentifierSent : cellIdentifier)];

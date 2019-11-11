@@ -153,6 +153,13 @@
 	// Perform shared logic in MessageDetailParentViewController
 	[super viewWillAppear:animated];
 	
+	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set these colors directly (instead of Tertiary System Grouped Background Color) and remove this logic
+	if (@available(iOS 11.0, *))
+	{
+		[self.scrollView setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
+		[self.tableComments setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
+	}
+	
 	// Change title for sent message in navigation bar
 	if ([self.messageType isEqualToString:@"Sent"])
 	{
@@ -501,42 +508,6 @@
 	}
 }
 
-/*/ Load message recipients to determine if message is forwardable
-- (void)getMessageRecipients
-{
-	// MessageRecipientModel callback
-	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
-	{
-		if (success)
-		{
-			// Enable forward button if there are valid message recipients to forward to
-			if ([messageRecipients count] > 0)
-			{
-				[self.buttonForward setEnabled:YES];
-			}
-		}
-		else
-		{
-			// Show error message only if device offline
-			if (error.code == NSURLErrorNotConnectedToInternet)
-			{
-				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-				
-				[errorAlertController show:error];
-			}
-		}
-	};
-	
-	if (self.messageDeliveryID)
-	{
-		[self.messageRecipientModel getMessageRecipientsForMessageDeliveryID:self.messageDeliveryID withCallback:callback];
-	}
-	else if (self.messageID)
-	{
-		[self.messageRecipientModel getMessageRecipientsForMessageID:self.messageID withCallback:callback];
-	}
-} */
-
 // Override default remote notification action from CoreViewController
 - (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction
 {
@@ -859,8 +830,17 @@
 	if ([textView.text isEqualToString:self.textViewCommentPlaceholder])
 	{
 		[textView setText:@""];
-		[textView setTextColor:[UIColor blackColor]];
-		[textView setFont:[UIFont systemFontOfSize:16.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor labelColor]];
+		}
+		// iOS < 13 - Fallback to use Label Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor blackColor]];
+		}
 	}
 	
 	[textView becomeFirstResponder];
@@ -871,9 +851,16 @@
 	// Show placeholder
 	if ([textView.text isEqualToString:@""])
 	{
-		[textView setText:self.textViewCommentPlaceholder];
-		[textView setTextColor:[UIColor colorWithRed:98.0/255.0 green:98.0/255.0 blue:98.0/255.0 alpha:1]];
-		[textView setFont:[UIFont systemFontOfSize:17.0]];
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor placeholderTextColor]];
+		}
+		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.3]];
+		}
 	}
 	
 	[textView resignFirstResponder];
@@ -894,6 +881,12 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+		}
+		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isLoaded ? @"No comments have been added yet." : @"Loading...")];
@@ -913,7 +906,7 @@
 	
 	BOOL isComment = [messageEvent.Type isEqualToString:@"Comment"];
 	BOOL currentUserIsSender = ([messageEvent.EnteredByID isEqualToNumber:self.currentUserID]);
-	//BOOL currentUserIsSender = ! (indexPath.row % 2); // Only used for testing both cell types
+	// BOOL currentUserIsSender = ! (indexPath.row % 2); // Only used for testing both cell types
 	
 	// Set both types of events to use CommentCell (events of type "User" should technically use MessageEventCell, but it doesn't matter for now since they both share the same label identifiers)
 	CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:(isComment ? (currentUserIsSender ? cellIdentifierSent : cellIdentifier) : cellIdentifierEvent)];

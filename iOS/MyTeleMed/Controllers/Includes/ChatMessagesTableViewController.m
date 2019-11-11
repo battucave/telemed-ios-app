@@ -405,6 +405,12 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+		}
+		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
@@ -489,13 +495,12 @@
 	
 	// Set unopened/unread
 	if (chatMessage.Unopened)
-	//if (indexPath.row % 2) // Only used for testing both styles
+	// if (indexPath.row % 2) // Only used for testing both styles
 	{
 		// Show blue bar
 		[cell.viewUnopened setHidden:NO];
 		
 		// Style message
-		[cell.labelMessage setTextColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0]];
 		[cell.labelMessage setFont:[UIFont boldSystemFontOfSize:cell.labelMessage.font.pointSize]];
 	}
 	// Set opened/read
@@ -505,7 +510,6 @@
 		[cell.viewUnopened setHidden:YES];
 		
 		// Style message
-		[cell.labelMessage setTextColor:cell.labelMessage.textColor];
 		[cell.labelMessage setFont:[UIFont systemFontOfSize:cell.labelMessage.font.pointSize]];
 	}
 	

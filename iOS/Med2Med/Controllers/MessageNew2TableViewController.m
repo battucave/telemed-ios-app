@@ -51,8 +51,18 @@
 		[self.textViewAdditionalInformation setText:additionalInformationValue];
 		
 		// Turn off placeholder styling
-		[self.textViewAdditionalInformation setTextColor:[UIColor blackColor]];
 		[self.textViewAdditionalInformation setFont:[UIFont systemFontOfSize:14.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[self.textViewAdditionalInformation setTextColor:[UIColor labelColor]];
+		}
+		// iOS < 13 - Fallback to use Label Color light appearance
+		else
+		{
+			[self.textViewAdditionalInformation setTextColor:[UIColor blackColor]];
+		}
 	}
 	
 	// Force user interface changes to take effect
@@ -160,8 +170,18 @@
 	if ([textView.text isEqualToString:self.textViewAdditionalInformationPlaceholder])
 	{
 		[textView setText:@""];
-		[textView setTextColor:[UIColor blackColor]];
 		[textView setFont:[UIFont systemFontOfSize:14.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor labelColor]];
+		}
+		// iOS < 13 - Fallback to use Black Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor blackColor]];
+		}
 	}
 	
 	[textView becomeFirstResponder];
@@ -190,8 +210,18 @@
 	if ([textView.text isEqualToString:@""])
 	{
 		[textView setText:self.textViewAdditionalInformationPlaceholder];
-		[textView setTextColor:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:142.0/255.0 alpha:1]];
 		[textView setFont:[UIFont systemFontOfSize:15.0]];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[textView setTextColor:[UIColor secondaryLabelColor]];
+		}
+		// iOS < 13 - Fallback to use Secondary Label Color light appearance
+		else
+		{
+			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.6]];
+		}
 	}
 	
 	[textView resignFirstResponder];

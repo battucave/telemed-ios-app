@@ -311,6 +311,12 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+		}
+		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		

@@ -118,7 +118,7 @@
 	if (indexPath.row == 0)
 	{
 		UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-		topLineView.backgroundColor = [UIColor colorWithRed:125.0/255.0 green:125.0/255.0 blue:125.0/255.0 alpha:1];
+		topLineView.backgroundColor = [UIColor systemGrayColor];
 		
 		[cell.contentView addSubview:topLineView];
 	}

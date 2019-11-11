@@ -330,6 +330,23 @@
 {
 	NSString *currentURL = webView.request.URL.absoluteString;
 	
+	// Inject CSS file into all pages of mytelemed.com
+	if ([currentURL rangeOfString:@"mytelemed.com"].location != NSNotFound)
+	{
+		NSString *cssPath = [[NSBundle mainBundle] pathForResource:@"login" ofType:@"css"];
+		NSString *cssString = [[NSString stringWithContentsOfFile:cssPath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+		
+		NSString *javascriptCssInjection = [NSString stringWithFormat:@
+			"var $style = document.createElement('style');"
+			"$style.innerHTML = '%@';"
+			"document.getElementsByTagName('head')[0].appendChild($style);",
+
+			cssString
+		];
+		
+		 [self.webView stringByEvaluatingJavaScriptFromString:javascriptCssInjection];
+	}
+	
 	// Success screen will never load here because it is not loaded by web view. Instead it is handled by NSURLConnection didReceiveResponse:.
 	
 	// URL is the login screen
@@ -339,9 +356,6 @@
 		
 		// Prevent users from being able to go back to about:blank
 		[self.buttonBack setEnabled:NO];
-		
-		// Update background to be transparent and hide login button
-		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent'; document.getElementById('loginButton').style.display = 'none';"];
 		
 		// Display the reason for application log out (if any)
 		if ([settings objectForKey:REASON_APPLICATION_DID_LOGOUT])
@@ -439,12 +453,6 @@
 		
 			[self.webView stringByEvaluatingJavaScriptFromString:javascriptLogin];
 		#endif
-	}
-	// URL is the forgot password screen
-	else if ([currentURL rangeOfString:@"ForgotPassword"].location != NSNotFound)
-	{
-		// Update background to be transparent
-		[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.backgroundColor = 'transparent';"];
 	}
 	// URL is a blank screen
 	else if ([currentURL isEqualToString:@"about:blank"])

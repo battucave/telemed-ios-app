@@ -52,6 +52,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	// iOS 13+ - Restore navigation bar's bottom border
+	if (@available(iOS 13.0, *))
+	{
+		UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+
+		[appearance configureWithOpaqueBackground];
+
+		[UINavigationBar.appearance setScrollEdgeAppearance:appearance];
+		[UINavigationBar.appearance setStandardAppearance:appearance];
+	}
+	
 	// Initialize call observer
 	self.callObserver = [CXCallObserver new];
 	
@@ -139,6 +150,7 @@
 	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		// Register device for push notifications (this does not authorize push notifications however - that is done in PhoneNumberViewController)
+		// NOTE: Device registration in debug mode is not working in iOS 13 when built with XCode 11.2.1 GM, but does still work in ad hoc and production apps.
 		#if defined DEBUG
 			NSLog(@"Skip device registration when on Debug");
 	
@@ -232,7 +244,7 @@
 					#endif
 				}
 				// If error is not because device is offline, then account is not valid so go to login screen
-				else
+				else if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 				{
 					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 					
@@ -596,12 +608,13 @@
 		// Only show screenshot view if it is not already visible
 		if (screenshotView == nil)
 		{
-			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"Launch Screen" owner:self options:nil] objectAtIndex:0];
+			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:self options:nil] objectAtIndex:0];
 			UIScreen *screen = [UIScreen mainScreen];
 			
 			[screenshotView setContentMode:UIViewContentModeScaleAspectFill];
 			[screenshotView setFrame:CGRectMake(0.0f, 0.0f, screen.bounds.size.width, screen.bounds.size.height)];
 			[screenshotView setTag:8353633];
+			
 			[self.window addSubview:screenshotView];
 			[self.window bringSubviewToFront:screenshotView];
 		}

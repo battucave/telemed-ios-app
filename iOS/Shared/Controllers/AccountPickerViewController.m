@@ -160,7 +160,8 @@
 			UIBarButtonItem *buttonSend = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAccountRequest)];
 			
 			// [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:buttonSend, nil]];
-			[self.navigationItem setRightBarButtonItem:buttonSend];*/
+			[self.navigationItem setRightBarButtonItem:buttonSend];
+			//*/
 		}
 	#endif
 }
@@ -371,10 +372,23 @@
 		{
 			static NSString *cellIdentifier = @"AccountHeader";
 			
-			return [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of custom color) and use the current iOS 10 logic below
+			if (@available(iOS 11.0, *))
+			{
+				UIView *viewForHeader = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+				
+				[viewForHeader setBackgroundColor:[UIColor colorNamed:@"tableHeaderColor"]];
+				
+				return viewForHeader;
+			}
+			// iOS 10 - When iOS 10 support is dropped, simply return this value
+			else
+			{
+				return [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			}
 		}
 	#endif
-	
+
 	return nil;
 }
 
@@ -383,6 +397,12 @@
 	if ([self.accounts count] == 0 || (self.searchController.active && self.searchController.searchBar.text.length > 0 && [self.filteredAccounts count] == 0))
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
+		
+		// iOS 13+ - Support dark mode
+		if (@available(iOS 13.0, *))
+		{
+			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+		}
 		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];

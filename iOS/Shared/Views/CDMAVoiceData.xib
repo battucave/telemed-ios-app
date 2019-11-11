@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,15 +22,15 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="PtA-Kb-x72">
-                    <rect key="frame" x="47.5" y="30" width="280" height="70"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-InterfaceLight" translatesAutoresizingMaskIntoConstraints="NO" id="PtA-Kb-x72">
+                    <rect key="frame" x="47.5" y="10" width="280" height="70"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="280" id="GCi-y9-NxB"/>
                         <constraint firstAttribute="height" constant="70" id="onn-OS-2Ox"/>
                     </constraints>
                 </imageView>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WPa-Kc-7Do" userLabel="Text View CDMA">
-                    <rect key="frame" x="16" y="106" width="343" height="501"/>
+                    <rect key="frame" x="16" y="86" width="343" height="521"/>
                     <attributedString key="attributedText">
                         <fragment content="WARNING">
                             <attributes>
@@ -83,7 +81,6 @@ Please note that this only applies while device is on a phone call.</string>
                             <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="5xg-fI-ylR">
                                 <rect key="frame" x="16" y="6.5" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" red="0.18772074580000001" green="0.51381963490000004" blue="0.98369586470000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="toggleCDMAVoiceDataWarning:" destination="-1" eventType="valueChanged" id="1DK-26-3ff"/>
                                 </connections>
@@ -122,6 +119,6 @@ Please note that this only applies while device is on a phone call.</string>
         </view>
     </objects>
     <resources>
-        <image name="Logo" width="300" height="75"/>
+        <image name="Logo-InterfaceLight" width="300" height="75"/>
     </resources>
 </document>

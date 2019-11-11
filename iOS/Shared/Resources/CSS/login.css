@@ -1,0 +1,22 @@
+body {
+	background-color: transparent;
+}
+
+input:focus {
+	outline: none;
+}
+
+#loginButton {
+	display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	input:not([type="button"], [type="image"], [type="reset"], [type="submit"]) {
+		background-color: #1c1c1e;
+		color: #fff;
+	}
+	
+	::placeholder {
+		color: #5b5b5f;
+	}
+}

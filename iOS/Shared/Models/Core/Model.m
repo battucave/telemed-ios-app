@@ -46,10 +46,20 @@
 		NSDictionary *views = NSDictionaryOfVariableBindings(loadingAlertController.view, activityIndicatorView, labelMessage);
 		
 		// Configure activity indicator
-		[activityIndicatorView setColor:[UIColor blackColor]];
-		[activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints:NO];
+  		[activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints:NO];
 		[activityIndicatorView setUserInteractionEnabled:NO];
 		[activityIndicatorView startAnimating];
+		
+		// iOS 11+ - Use custom color from asset catalog to support dark mode
+		if (@available(iOS 11.0, *))
+		{
+			[activityIndicatorView setColor:[UIColor colorNamed:@"systemBlackColor"]];
+		}
+		// iOS < 11 - Fallback to use custom systemBlackColor light appearance; Remove this logic when iOS 10 support is dropped
+		else
+		{
+			[activityIndicatorView setColor:[UIColor blackColor]];
+		}
 		
 		// Configure message
 		[labelMessage setTranslatesAutoresizingMaskIntoConstraints:NO];
