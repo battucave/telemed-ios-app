@@ -508,7 +508,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColorview.backgroundColor">
+                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
                             <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
@@ -693,7 +693,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColorview.backgroundColor">
+                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
                             <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>

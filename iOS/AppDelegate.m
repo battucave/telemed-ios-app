@@ -150,6 +150,7 @@
 	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		// Register device for push notifications (this does not authorize push notifications however - that is done in PhoneNumberViewController)
+		// NOTE: Device registration in debug mode is not working in iOS 13 when built with XCode 11.2.1 GM, but does still work in ad hoc and production apps.
 		#if defined DEBUG
 			NSLog(@"Skip device registration when on Debug");
 	

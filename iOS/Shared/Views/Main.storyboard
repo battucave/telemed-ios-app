@@ -77,13 +77,13 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oyb-iw-vYL">
-                                                            <rect key="frame" x="22" y="11.666666666666664" width="20" height="20"/>
+                                                            <rect key="frame" x="22" y="9.9999999999999982" width="23" height="23.333333333333329"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Messages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFg-Ic-1iw">
-                                                            <rect key="frame" x="52" y="0.0" width="292" height="43.666666666666664"/>
+                                                            <rect key="frame" x="55" y="0.0" width="289" height="43.666666666666664"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -196,7 +196,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6r-Ld-dvh">
-                                                            <rect key="frame" x="21" y="11.666666666666664" width="23" height="20"/>
+                                                            <rect key="frame" x="21" y="9.9999999999999982" width="23" height="23.333333333333329"/>
                                                             <fontDescription key="fontDescription" name="FontAwesome5ProLight" family="Font Awesome 5 Pro" pointSize="20"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -1220,7 +1220,7 @@ TeleMed will call you momentarily from</string>
                         <attributedString key="attributedTitle">
                             <fragment content="Pull to Refresh">
                                 <attributes>
-                                    <font key="NSFont" metaFont="toolTip"/>
+                                    <font key="NSFont" metaFont="message" size="11"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                 </attributes>
                             </fragment>
@@ -4818,16 +4818,16 @@ TeleMed will call you momentarily from</string>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CT7-aH-Wfk">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t9q-n4-YYx">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XBU-Lc-IUQ">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="49.666666666666664"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="42.666666666666664"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(       )" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OQF-GC-UXu">
-                                                        <rect key="frame" x="14" y="16.666666666666668" width="37" height="17.000000000000004"/>
+                                                        <rect key="frame" x="14" y="13" width="37" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="17" id="PSq-C9-ygR"/>
                                                             <constraint firstAttribute="width" constant="37" id="Qku-QY-GTJ"/>
@@ -4837,14 +4837,14 @@ TeleMed will call you momentarily from</string>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="ilm-e9-hga">
-                                                        <rect key="frame" x="23" y="15" width="19" height="20"/>
+                                                        <rect key="frame" x="23" y="11.666666666666664" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="19" id="nt5-XZ-PyV"/>
                                                             <constraint firstAttribute="height" constant="20" id="q9D-HL-Bkg"/>
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe to the right to access the menu." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A69-YN-bYv">
-                                                        <rect key="frame" x="55" y="13" width="349" height="24"/>
+                                                        <rect key="frame" x="55" y="13" width="349" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="fMD-4K-ZEy"/>
                                                         </constraints>
@@ -4875,7 +4875,7 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                     </view>
                                     <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E1p-Le-I9D">
-                                        <rect key="frame" x="0.0" y="50" width="414" height="686"/>
+                                        <rect key="frame" x="0.0" y="43" width="414" height="649"/>
                                         <connections>
                                             <segue destination="4fX-RS-WG1" kind="embed" identifier="embedSentMessagesTable" id="HXd-Da-xht"/>
                                         </connections>
@@ -5539,7 +5539,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
     <inferredMetricsTieBreakers>
         <segue reference="wT6-Yb-3ns"/>
         <segue reference="253-6l-xSp"/>
-        <segue reference="ejp-fl-nDj"/>
+        <segue reference="Qj5-xD-AWZ"/>
         <segue reference="9pZ-e2-2FC"/>
         <segue reference="ZfR-s3-nyT"/>
         <segue reference="xfy-la-02K"/>

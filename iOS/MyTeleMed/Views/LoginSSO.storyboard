@@ -479,7 +479,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColorview.backgroundColor">
+                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
                             <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
@@ -502,7 +502,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColorview.backgroundColor">
+                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
                             <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
@@ -525,7 +525,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColorview.backgroundColor">
+                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
                             <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
@@ -955,7 +955,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColorview.backgroundColor">
+                        <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
                             <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
