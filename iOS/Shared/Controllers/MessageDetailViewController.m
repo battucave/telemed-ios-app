@@ -564,7 +564,7 @@
 		{
 			[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Read"];
 		}
-		/*/ TESTING ONLY (set message back to unread)
+		/*/ TESTING ONLY (set read messages back to unread or archived messages back to unarchived)
 		#ifdef DEBUG
 			// Set message back to unread
 			else if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Read"])
@@ -830,17 +830,17 @@
 	if ([textView.text isEqualToString:self.textViewCommentPlaceholder])
 	{
 		[textView setText:@""];
-		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor labelColor]];
-		}
-		// iOS < 13 - Fallback to use Label Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor blackColor]];
-		}
+	}
+	
+	// iOS 13+ - Support dark mode
+	if (@available(iOS 13.0, *))
+	{
+		[textView setTextColor:[UIColor labelColor]];
+	}
+	// iOS < 13 - Fallback to use Label Color light appearance
+	else
+	{
+		[textView setTextColor:[UIColor blackColor]];
 	}
 	
 	[textView becomeFirstResponder];
@@ -851,6 +851,8 @@
 	// Show placeholder
 	if ([textView.text isEqualToString:@""])
 	{
+		[textView setText:self.textViewCommentPlaceholder];
+		
 		// iOS 13+ - Support dark mode
 		if (@available(iOS 13.0, *))
 		{
@@ -859,7 +861,7 @@
 		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
 		else
 		{
-			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.3]];
+			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.3]];
 		}
 	}
 	

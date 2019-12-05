@@ -69,7 +69,7 @@
 {
 	NSInteger selectedChatMessageCount = [self.selectedChatMessages count];
 	NSInteger unreadChatMessageCount = 0;
-	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@.", (selectedChatMessageCount == 1 ? @"this secure chat message" : @"these secure chat messages")];
+	NSString *notificationMessage = [NSString stringWithFormat:@"Selecting Continue will delete %@ from our system.", (selectedChatMessageCount == 1 ? @"this secure chat message" : @"these secure chat messages")];
 	
 	// Ensure at least one selected chat message (should never happen as delete button should be disabled when no chat messages selected)
 	if (selectedChatMessageCount < 1)

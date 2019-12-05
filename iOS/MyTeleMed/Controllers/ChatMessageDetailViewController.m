@@ -639,17 +639,17 @@
 	if ([textView.text isEqualToString:self.textViewChatMessagePlaceholder])
 	{
 		[textView setText:@""];
-		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor labelColor]];
-		}
-		// iOS < 13 - Fallback to use Label Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor blackColor]];
-		}
+	}
+	
+	// iOS 13+ - Support dark mode
+	if (@available(iOS 13.0, *))
+	{
+		[textView setTextColor:[UIColor labelColor]];
+	}
+	// iOS < 13 - Fallback to use Label Color light appearance
+	else
+	{
+		[textView setTextColor:[UIColor blackColor]];
 	}
 	
 	[textView becomeFirstResponder];
@@ -670,7 +670,7 @@
 		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
 		else
 		{
-			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.3]];
+			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.3]];
 		}
 	}
 	
