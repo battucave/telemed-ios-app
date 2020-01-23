@@ -701,7 +701,7 @@
 	}
 }
 
-// HOPEFULLY TEMPORARY: Reset and reload messages (remove if pagination flaw is corrected. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
+// Reset and reload messages (remove if pagination flaw is corrected. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
 - (void)resetActiveMessages
 {
 	[self resetMessages];
@@ -760,7 +760,7 @@
 	[self setIsFetchingNextPage:NO];
 	[self setIsFirstPageLoaded:YES];
 	
-	// If the number of items returned is less than the number of messages per page, then assume the last page has been loaded
+	// If the number of messages returned is less than the number of messages per page, then assume the last page has been loaded
 	if ([messages count] < MessagesPerPage)
 	{
 		[self setIsLastPageLoaded:YES];
@@ -859,6 +859,9 @@
 {
 	[self setIsFetchingNextPage:NO];
 	
+	// Decrement current page so the previous one can be retried
+	self.currentPage--;
+	
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
@@ -887,11 +890,8 @@
 		// Enable the isFetchingNextPage flag
 		[self setIsFetchingNextPage:YES];
 		
-		// Increment the current page
-		self.currentPage++;
-		
 		// Fetch the next page of messages
-		[self loadMessages:self.currentPage];
+		[self loadMessages:++self.currentPage];
 		
 		dispatch_async(dispatch_get_main_queue(), ^
 		{

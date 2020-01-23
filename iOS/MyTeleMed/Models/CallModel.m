@@ -246,7 +246,7 @@
 	// Set telemed call timeout block on AppDelegate
 	[appDelegate startTeleMedCallObserver:dispatch_block_create(0, ^
 	{
-		ErrorAlertController *returnCallTimeoutAlertController = [ErrorAlertController alertControllerWithTitle:@"Return Call Timed Out" message:@"There may have been a problem calling you. Please verify that our phone number isn't being blocked on your device:\n\n1) Open the Settings App\n2) Tap Phone\n3) Tap Call Blocking & Identification\n4) Search for and unblock +1 (404) 736-1880 if present" preferredStyle:UIAlertControllerStyleAlert];
+		ErrorAlertController *returnCallTimeoutAlertController = [ErrorAlertController alertControllerWithTitle:@"Return Call Timed Out" message:@"There may have been a problem calling you. Please verify that our phone number isn't being blocked on your device:\n\n1) Open the Settings App\n2) Tap Phone\n3) Tap Call Blocking & Identification\n4) Unblock +1 (404) 736-1880 if present" preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 		{
 			// Handle error via delegate

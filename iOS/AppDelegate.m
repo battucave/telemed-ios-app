@@ -312,7 +312,7 @@
 			
 			// MyTeleMed - Stop observing for TeleMed to return phone call
 			#ifdef MYTELEMED
-				dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+				[self stopTeleMedCallObserver];
 			#endif
 		}
 	}
@@ -870,6 +870,9 @@
 			// Show alert
 			[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
 		});
+		
+		// Prevent additional alerts from appearing as they will replace this one
+		return;
 	#endif
 	// END TESTING ONLY */
 	
