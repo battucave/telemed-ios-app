@@ -352,7 +352,7 @@
 
 - (void)showNotificationAuthorization
 {
-	UIAlertController *allowNotificationsAlertController = [UIAlertController alertControllerWithTitle:@"Enable Notifications" message:[NSString stringWithFormat:@"%@\n\n1) Press the Settings button\n2) Tap Notifications\n3) Set 'Allow Notifications' to On", self.remoteNotificationAuthorizationMessage] preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *allowNotificationsAlertController = [UIAlertController alertControllerWithTitle:@"Enable Notifications" message:[NSString stringWithFormat:@"%@\n\n1) Press the Settings button below\n2) Tap Notifications\n3) Turn on 'Allow Notifications'", self.remoteNotificationAuthorizationMessage] preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Update remote notification authorization status
@@ -361,7 +361,7 @@
 	UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 	{
 		// Simulator cannot enable notifications so emulate successful authorization
-		#ifdef TARGET_IPHONE_SIMULATOR
+		#if TARGET_IPHONE_SIMULATOR
   			[self didChangeRemoteNotificationAuthorization:YES];
 
   		// Open settings app for user to enable notifications
