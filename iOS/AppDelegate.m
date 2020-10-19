@@ -19,7 +19,6 @@
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
 #import "SSOProviderModel.h"
-#import "Harpy.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 
 #ifdef MYTELEMED
