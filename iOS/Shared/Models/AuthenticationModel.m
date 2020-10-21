@@ -13,11 +13,11 @@
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MyProfileModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "UserProfileModel.h"
 #endif
 
@@ -288,7 +288,7 @@
 	self.RefreshToken = nil;
 	
 	// Log out of profile
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[[MyProfileModel sharedInstance] doLogout];
 
 	#elif defined MED2MED

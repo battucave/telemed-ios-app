@@ -11,7 +11,7 @@
 #import "AccountCell.h"
 #import "AccountModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MessageRecipientPickerViewController.h"
 	#import "MyProfileModel.h"
 	#import "PreferredAccountModel.h"
@@ -37,7 +37,7 @@
     [super viewDidLoad];
 	
 	// Med2Med refers to accounts as medical groups
-    #ifdef MED2MED
+    #if MED2MED
     	[self setTextAccount:@"Medical Group"];
 	
 	#else
@@ -106,7 +106,7 @@
 		[self.searchBar setHidden:YES];
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// If selected account not already set, then set it to MyProfileModel's MyPreferredAccount
 		if (! self.selectedAccount)
 		{
@@ -148,7 +148,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// If user navigated from SettingsTableViewController
 		if (! self.shouldSelectAccount)
 		{
@@ -219,7 +219,7 @@
 // Return accounts from AccountModel delegate
 - (void)updateAccounts:(NSArray *)accounts
 {
-	#ifdef MED2MED
+	#if MED2MED
 		// Filter and store only authorized or pending medical groups (accounts)
 		NSPredicate *predicate;
 	
@@ -354,7 +354,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	// Med2Med - Only show a header when calling TeleMed
-	#ifdef MED2MED
+	#if MED2MED
 		if (self.shouldCallAccount)
 		{
 			return 36.0f;
@@ -367,7 +367,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
 	// Med2Med - Only show a header when calling TeleMed
-	#ifdef MED2MED
+	#if MED2MED
 		if (self.shouldCallAccount)
 		{
 			static NSString *cellIdentifier = @"AccountHeader";
@@ -453,20 +453,20 @@
 	[cell.labelPublicKey setText:account.PublicKey];
 	
 	// Med2Med - Update account number text to medical group number
-	#ifdef MED2MED
+	#if MED2MED
 		[cell.labelAccountNumber setText:@"Medical Group Number:"];
 	#endif
 	
 	// Med2Med - Hide authorization pending label if account is not pending
 	// MyTeleMed - Always hide authorization pending label
-	#ifdef MED2MED
+	#if MED2MED
 	if (! [account isPending])
 	{
 	#endif
 		[cell.labelAuthorizationPending setHidden:YES];
 		[cell.constraintAuthorizationPendingHeight setConstant:0.0f];
 		[cell.constraintAuthorizationPendingTopSpace setConstant:0.0f];
-	#ifdef MED2MED
+	#if MED2MED
 	}
 	#endif
 	
@@ -514,7 +514,7 @@
 	// Completion block for handling selected row after closing the search results
 	void(^completion)(UITableViewCell *) = ^(UITableViewCell *cell)
 	{
-		#ifdef MYTELEMED
+		#if MYTELEMED
 			// Add checkmark of selected account
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 		
@@ -606,7 +606,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Set account for MessageRecipientPickerTableViewController
 		if ([segue.identifier isEqualToString:@"showMessageRecipientPickerFromAccountPicker"])
 		{
@@ -647,7 +647,7 @@
 
 # pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 // Required for unwind compatibility with MessageNewUnauthorizedTableViewController (both unwind from AccountRequestTableViewController)
 - (IBAction)unwindFromAccountRequest:(UIStoryboardSegue *)segue
 {

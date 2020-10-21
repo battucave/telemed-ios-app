@@ -9,7 +9,7 @@
 #import "MyStatusModel.h"
 #import "MyStatusXMLParser.h"
 
-#ifdef DEBUG
+#if DEBUG
 	#import "MyProfileModel.h"
 #endif
 
@@ -42,7 +42,7 @@
 		if ([xmlParser parse])
 		{
 			/*/ TESTING ONLY (used to generate fictitious on call entries if none were found)
-			#ifdef DEBUG
+			#if DEBUG
 				if ([self.CurrentOnCallEntries count] == 0)
 				{
 					// Config settings

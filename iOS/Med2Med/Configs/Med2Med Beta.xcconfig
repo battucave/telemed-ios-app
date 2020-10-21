@@ -1,0 +1,26 @@
+//
+//  Med2Med Beta.xcconfig
+//  TeleMed
+//
+//  Created by Shane Goodwin on 10/20/20.
+//  Copyright © 2020 SolutionBuilt. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// CocoaPods
+#include "Pods/Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.beta.xcconfig"
+
+// App Settings
+PRODUCT_BUNDLE_IDENTIFIER = com.telemed.medtomed.adhoc
+PRODUCT_NAME = Med2Med β
+
+
+// API Settings
+API_PREFIX = MedToMed
+AUTHENTICATION_AUDIENCE = m2m
+BASE_URL = https:/${}/test.mytelemed.com
+XMLNS = MedToMed
+
+#include "Shared/Configs/Shared.xcconfig"

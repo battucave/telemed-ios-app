@@ -12,7 +12,7 @@
 #import "CoreTableViewController.h"
 #import "CDMAVoiceDataViewController.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "AppDelegate.h"
 	#import "ChatMessageDetailViewController.h"
 	#import "ErrorAlertController.h"
@@ -44,7 +44,7 @@
 	// Add application did become active notification observer
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Add application did receive remote notification observer
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
 	
@@ -65,7 +65,7 @@
 	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
@@ -89,7 +89,7 @@
 {
 	[self showCDMAVoiceDataViewController];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Update remote notifications enabled status in case user just came back from authorizing them in Settings app
 		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
@@ -119,7 +119,7 @@
 	// Remove notification observers
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
@@ -129,7 +129,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)authorizeForRemoteNotifications
 {
 	[self authorizeForRemoteNotifications:nil];
@@ -216,16 +216,10 @@
 	// Play notification sound
 	if (tone != nil)
 	{
-		// If tone is "default", then use Standard's default tone (there is no way to retrieve system's default alert sound)
+		// If tone is "default", then use Note tone as default (there is no way to retrieve system's default alert sound)
 		if ([tone isEqualToString:@"default"])
 		{
-			NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
-			NSArray *tones = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
-			
-			if ([tones count] > 8)
-			{
-				tone = [notificationSettingModel getToneFromToneTitle:[tones objectAtIndex:8]]; // Default to Note tone
-			}
+			tone = NotificationSettingModel.defaultTone;
 		}
 		
 		NSString *tonePath = [[NSBundle mainBundle] pathForResource:tone ofType:nil];

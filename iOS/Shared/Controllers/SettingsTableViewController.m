@@ -12,13 +12,13 @@
 #import "AccountPickerViewController.h"
 #import "ProfileProtocol.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "SettingsNotificationsTableViewController.h"
 	#import "MyProfileModel.h"
 	#import "RegisteredDeviceModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "HospitalPickerViewController.h"
 	#import "UserProfileModel.h"
 #endif
@@ -34,7 +34,7 @@
 @property (nonatomic) NSInteger sectionNotifications;
 @property (nonatomic) NSInteger sectionSessionTimeout;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (weak, nonatomic) IBOutlet UISwitch *switchNotifications;
 
 	@property (nonatomic) NotificationSettingModel *chatMessageNotificationSettings;
@@ -58,7 +58,7 @@
 	// Initialize sections
 	[self setSectionSessionTimeout:0];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
 	
 		[self setSectionAboutTeleMed:3];
@@ -76,7 +76,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[self setProfile:[MyProfileModel sharedInstance]];
 	
 		// Load notification settings for each type
@@ -227,7 +227,7 @@
 		return 0.1f;
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// If notifications are disabled, hide notifications section by setting its footer height to 0
 		if (section == self.sectionNotifications && ! self.areNotificationsEnabled)
 		{
@@ -263,7 +263,7 @@
 		}
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// If notifications are disabled, hide notifications section by clearing its footer title
 		if (section == self.sectionNotifications && ! self.areNotificationsEnabled)
 		{
@@ -304,7 +304,7 @@
 		}
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 	// Set notification settings in cell's detail
 	else if (indexPath.section == self.sectionNotifications)
 	{
@@ -371,7 +371,7 @@
 	{
 		AccountPickerViewController *accountPickerViewController = segue.destinationViewController;
 		
-		#ifdef MYTELEMED
+		#if MYTELEMED
 			[accountPickerViewController setTitle:@"Preferred Account"];
 			[accountPickerViewController setShouldSetPreferredAccount:YES];
 		
@@ -381,7 +381,7 @@
 		#endif
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Embedded table view controller inside container
 		else if ([segue.identifier isEqualToString:@"showSettingsNotifications"])
 		{
@@ -411,7 +411,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 // Override CoreTableViewController's didChangeRemoteNotificationAuthorization:
 - (void)didChangeRemoteNotificationAuthorization:(BOOL)isEnabled
 {

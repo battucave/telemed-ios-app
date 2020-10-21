@@ -97,7 +97,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		[self.reachabilityManager startMonitoring];
 		
 		// Initialize Activity Logger
-		#ifdef DEBUG
+		#if DEBUG
 			[[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
 			//[[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelInfo];
 			[[AFNetworkActivityLogger sharedLogger] startLogging];

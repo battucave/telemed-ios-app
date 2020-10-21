@@ -13,13 +13,13 @@
 #import "MessageProtocol.h"
 #import "SentMessageModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MessageModel.h"
 #endif
 
 @interface MessagesTableViewController ()
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) MessageModel *messageModel;
 #endif
 
@@ -65,7 +65,7 @@
 	// Initialize current page
 	[self setCurrentPage:1];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Initialize MessageModel
 		[self setMessageModel:[[MessageModel alloc] init]];
 		[self.messageModel setDelegate:self];
@@ -277,7 +277,7 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating screenshots)
-	#ifdef DEBUG
+	#if DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelPhoneNumber setText:@"800-420-4695"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
@@ -380,7 +380,7 @@
 	[cell.constraintNameLeadingSpace setConstant:7.0f];
 	
 	/*/ TESTING ONLY (used for generating screenshots)
-	#ifdef DEBUG
+	#if DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 	#endif
@@ -491,7 +491,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
@@ -904,7 +904,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 // Reload messages
 - (void)loadMessages:(NSInteger)page
 {

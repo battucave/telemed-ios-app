@@ -18,6 +18,42 @@
 
 @implementation NotificationSettingModel
 
+// Notification Options
++ (NSArray *)classicTones
+{
+    return @[@"Alarm", @"Anticipate", @"Bell", @"Bloom", @"Calypso", @"Chime", @"Choo Choo", @"Descent", @"Electronic", @"Fanfare", @"Glass", @"Horn", @"Ladder", @"Minuet", @"News Flash", @"Noir", @"Sherwood Forest", @"Spell", @"Suspense", @"Telegraph", @"Tiptoes", @"Tri-tone", @"Typewriters", @"Update"];
+}
+
++ (NSString *)defaultTone
+{
+    return @"note.caf";
+}
+
++ (NSArray *)intervals
+{
+    return @[@"1 minute", @"5 minutes", @"10 minutes", @"15 minutes", @"20 minutes"];
+}
+
++ (NSArray *)myTeleMedTones
+{
+    return @[@"Alert", @"Chirp", @"Low", @"Notice", @"Quantum", @"Sonar"];
+}
+
++ (NSArray *)staffFavoriteTones
+{
+    return @[@"Ascending", @"Digital Alarm 1", @"Digital Alarm 2", @"Irritating", @"Nuclear", @"Sci-Fi", @"Sonic Reverb", @"Warning"];
+}
+
++ (NSArray *)standardTones
+{
+    return @[@"Aurora", @"Bamboo", @"Chord", @"Circles", @"Complete", @"Hello", @"Input", @"Keys", @"Note", @"Popcorn", @"Pulse", @"Synth"];
+}
+
++ (NSArray *)subCategoryTones
+{
+    return @[@"Staff Favorites", @"MyTeleMed", @"Standard", @"Classic"];
+}
+
 // Override Tone setter to also store tone title (user friendly tone)
 - (void)setTone:(NSString *)newTone
 {
@@ -60,7 +96,7 @@
 		[self getServerNotificationSettingsByName:name];
 		
 		// Return default notification settings
-		NSArray *intervals = [[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil];
+		NSArray *intervals = NotificationSettingModel.intervals;
 		
 		notificationSettings = [[NotificationSettingModel alloc] init];
 		

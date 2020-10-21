@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 SolutionBuilt. All rights reserved.
 //
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MessageDetailParentViewController.h"
 
 	@interface MessageDetailViewController : MessageDetailParentViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>

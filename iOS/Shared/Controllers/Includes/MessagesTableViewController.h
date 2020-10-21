@@ -19,7 +19,7 @@
 - (void)setMessagesType:(NSString *)messagesType; // Public setter; private getter
 - (void)unhideSelectedMessages:(NSArray *)messages;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	- (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 	- (void)resetActiveMessages; // Hopefully temporary - remove if pagination flaw is corrected (see MessagesViewController modifyMultipleMessagesStateSuccess: for more info)
 	- (void)resetMessages;
@@ -28,7 +28,7 @@
 @end
 
 
-#ifdef MYTELEMED // Only implemented by MessagesViewController
+#if MYTELEMED // Only implemented by MessagesViewController
 	@protocol MessagesDelegate <NSObject>
 
 	@optional

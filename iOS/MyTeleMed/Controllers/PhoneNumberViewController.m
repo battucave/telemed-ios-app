@@ -41,7 +41,7 @@
 	[self.textPhoneNumber setInputAccessoryView:self.toolbar];
 	[self.toolbar removeFromSuperview];
 	
-	#ifdef DEBUG
+	#if DEBUG
 		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
 		
 		switch ([myProfileModel.ID integerValue])

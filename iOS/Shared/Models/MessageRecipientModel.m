@@ -55,7 +55,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)getMessageRecipientsForAccountID:(NSNumber *)accountID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{
@@ -87,7 +87,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 - (void)getMessageRecipientsForAccountID:(NSNumber *)accountID slotID:(NSNumber *)slotID withCallback:(void (^)(BOOL success, NSArray *messageRecipients, NSError *error))callback
 {
 	NSDictionary *parameters = @{

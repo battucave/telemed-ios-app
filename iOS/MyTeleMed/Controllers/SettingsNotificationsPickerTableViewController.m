@@ -15,7 +15,6 @@
 
 @property (nonatomic) NSArray *pickerOptions;
 @property (nonatomic) NSString *selectedTempOption;
-@property (nonatomic) NSArray *subCategories;
 
 @property (nonatomic) SystemSoundID systemSoundID;
 
@@ -27,9 +26,6 @@
 {
 	[super viewWillAppear:animated];
 	
-	// Store notification tone subcategories as array
-	[self setSubCategories:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, nil]];
-	
 	// Set selected temp option to selected option
 	[self setSelectedTempOption:self.selectedOption];
 	
@@ -38,7 +34,7 @@
 	{
 		// Subcategories and silent tone
 		case 0:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_SUBCATEGORIES, @"Silent", nil]];
+			[self setPickerOptions:[NotificationSettingModel.subCategoryTones arrayByAddingObject:@"Silent"]];
 			
 			// Hide save button
 			[self.navigationItem setRightBarButtonItem:nil];
@@ -46,7 +42,7 @@
 		
 		// Notification intervals
 		case 1:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_INTERVALS, nil]];
+			[self setPickerOptions:NotificationSettingModel.intervals];
 			
 			// Hide save button
 			[self.navigationItem setRightBarButtonItem:nil];
@@ -54,22 +50,22 @@
 		
 		// Staff favorite tones
 		case 2:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil]];
+			[self setPickerOptions:NotificationSettingModel.staffFavoriteTones];
 			break;
 		
 		// MyTeleMed tones
 		case 3:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil]];
+			[self setPickerOptions:NotificationSettingModel.myTeleMedTones];
 			break;
 		
 		// Standard tones
 		case 4:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil]];
+			[self setPickerOptions:NotificationSettingModel.standardTones];
 			break;
 		
 		// Classic iOS tones
 		case 5:
-			[self setPickerOptions:[[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil]];
+			[self setPickerOptions:NotificationSettingModel.classicTones];
 			break;
 	}
 	
@@ -136,9 +132,9 @@
 		case 5:
 		{
 			// Get subcategory from array
-			if ([self.subCategories count] > self.pickerType - 2)
+			if ([NotificationSettingModel.subCategoryTones count] > self.pickerType - 2)
 			{
-				NSString *subCategory = [self.subCategories objectAtIndex:self.pickerType - 2];
+				NSString *subCategory = [NotificationSettingModel.subCategoryTones objectAtIndex:self.pickerType - 2];
 				
 				// Singularize subcategory
 				if ([[subCategory substringFromIndex:subCategory.length - 1] isEqualToString:@"s"])
@@ -170,35 +166,35 @@
 	UITableViewCell *cell;
 	
 	// Notification tone subcategory
-	if (self.pickerType == 0 && [self.subCategories containsObject:optionText])
+	if (self.pickerType == 0 && [NotificationSettingModel.subCategoryTones containsObject:optionText])
 	{
 		NSArray *notificationTonesArray;
 		
 		cell = [tableView dequeueReusableCellWithIdentifier:SubcategoryCellIdentifier forIndexPath:indexPath];
 		
 		// Set custom tag value to be used in prepareForSegue for determining which notification tones to display
-		[cell setTag:[self.subCategories indexOfObject:optionText] + 2];
+		[cell setTag:[NotificationSettingModel.subCategoryTones indexOfObject:optionText] + 2];
 		
 		switch (cell.tag)
 		{
 			// Staff favorite tones
 			case 2:
-				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STAFF_FAVORITES, nil];
+				notificationTonesArray = NotificationSettingModel.staffFavoriteTones;
 				break;
 			
 			// MyTeleMed tones
 			case 3:
-				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_MYTELEMED, nil];
+				notificationTonesArray = NotificationSettingModel.myTeleMedTones;
 				break;
 			
 			// Standard tones
 			case 4:
-				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_STANDARD, nil];
+				notificationTonesArray = NotificationSettingModel.standardTones;
 				break;
 			
 			// Classic iOS tones
 			case 5:
-				notificationTonesArray = [[NSArray alloc] initWithObjects:NOTIFICATION_TONES_CLASSIC_IOS, nil];
+				notificationTonesArray = NotificationSettingModel.classicTones;
 				break;
 		}
 		

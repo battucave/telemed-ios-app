@@ -12,12 +12,12 @@
 #import "SideNavigationCountCell.h"
 #import "AuthenticationModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "OnCallScheduleViewController.h"
 	#import "MyStatusModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "UserProfileModel.h"
 #endif
 
@@ -28,7 +28,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) MyStatusModel *myStatusModel;
 
 	@property (nonatomic) BOOL isStatusLoaded;
@@ -42,7 +42,7 @@
 {
     [super viewDidLoad];
 	
-	#ifdef MED2MED
+	#if MED2MED
 		[self setMenuItems:@[@"New Message", @"Sent Messages", @"Settings", @"Log Out", @"Help"]];
 	
 	#else
@@ -60,7 +60,7 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// MyTeleMed - Update message counts on messages row and on call date on on call schedule row
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
 		{
 			[self setIsStatusLoaded:YES];
@@ -91,7 +91,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    #ifdef MED2MED
+    #if MED2MED
 		// Log out has padding above it
 		if ([[self.menuItems objectAtIndex:indexPath.row] isEqualToString:@"Log Out"])
 		{
@@ -123,7 +123,7 @@
 		[cell.contentView addSubview:topLineView];
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Reset text label's font size
 		UIFont *fontTextLabel = cell.textLabel.font;
 
@@ -224,7 +224,7 @@
 		swSegue.performBlock = ^(SWRevealViewControllerSegue *revealViewControllerSegue, UIViewController *sourceViewController, UIViewController *destinationViewController)
 		{
 			// MyTeleMed - Set default segment control Index for OnCallScheduleViewController
-			#ifdef MYTELEMED
+			#if MYTELEMED
 				if ([segue.identifier isEqualToString:@"showOnCallSchedule"])
 				{
 					[(OnCallScheduleViewController *)destinationViewController setDefaultSegmentControlIndex:self.onCallScheduleDefaultSegmentControlIndex];
@@ -254,7 +254,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];

@@ -41,7 +41,7 @@
 			}];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
-			#ifdef MED2MED
+			#if MED2MED
 				for (int i = 0; i < 5; i++)
 				{
 					AccountModel *account = [[AccountModel alloc] init];
@@ -107,7 +107,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)getAccountByID:(NSNumber *)accountID
 {
 	NSLog(@"Get Account By ID: %@", accountID);
@@ -122,7 +122,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback
 {
 	NSDictionary *parameters = @{

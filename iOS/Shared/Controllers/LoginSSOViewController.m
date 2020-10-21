@@ -398,7 +398,7 @@
 		}
 		
 		// Debug mode login shortcuts
-		#ifdef DEBUG
+		#if DEBUG
 			NSString *javascriptLogin = [NSString stringWithFormat:@
 				"var $loginButton = document.getElementById('loginButton');"
 				"var $password = document.getElementById('passwordTextBox');"
