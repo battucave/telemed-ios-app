@@ -484,7 +484,7 @@
 		28CCCD3F17F517A50093CEE2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		28CCCD4117F517A50093CEE2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28CCCD4317F517A50093CEE2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		28CCCD4717F517A50093CEE2 /* MyTeleMed-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyTeleMed-Info.plist"; sourceTree = "<group>"; };
+		28CCCD4717F517A50093CEE2 /* TeleMed-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TeleMed-Info.plist"; sourceTree = "<group>"; };
 		28CCCD4B17F517A50093CEE2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		28CCCD4D17F517A50093CEE2 /* TeleMed-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TeleMed-Prefix.pch"; sourceTree = "<group>"; };
 		28CCCD4E17F517A50093CEE2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -516,7 +516,6 @@
 		9B5DF3752B25AD955A48A0CC /* Pods-TeleMed-Med2Med.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-Med2Med.debug.xcconfig"; path = "Target Support Files/Pods-TeleMed-Med2Med/Pods-TeleMed-Med2Med.debug.xcconfig"; sourceTree = "<group>"; };
 		9C62DBAC722A19079D056F53 /* Pods-TeleMed-MyTeleMed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.release.xcconfig"; path = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.release.xcconfig"; sourceTree = "<group>"; };
 		D3A0221C1BC77CBA23B37CA0 /* Pods-TeleMed-MyTeleMed.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TeleMed-MyTeleMed.ad hoc.xcconfig"; path = "Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.ad hoc.xcconfig"; sourceTree = "<group>"; };
-		E20294F81FBB920C00811DA6 /* Med2Med-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Med2Med-Info.plist"; sourceTree = "<group>"; };
 		E20295001FBB934F00811DA6 /* Med2Med.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Med2Med.storyboard; sourceTree = "<group>"; };
 		E20295021FBBA1ED00811DA6 /* LoginSSO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginSSO.storyboard; sourceTree = "<group>"; };
 		E20295071FBBA4AD00811DA6 /* Med2Med.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Med2Med.xcassets; sourceTree = "<group>"; };
@@ -683,8 +682,8 @@
 		E2964B461E675860002FF97B /* ErrorAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorAlertController.m; sourceTree = "<group>"; };
 		E2964B481E67587F002FF97B /* SideNavigationCountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideNavigationCountCell.h; sourceTree = "<group>"; };
 		E2964B491E67587F002FF97B /* SideNavigationCountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideNavigationCountCell.m; sourceTree = "<group>"; };
-		E29788AF253F544A00DBFE23 /* MyTeleMed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyTeleMed-Bridging-Header.h"; sourceTree = "<group>"; };
-		E29788B0253F544A00DBFE23 /* Med2Med-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Med2Med-Bridging-Header.h"; sourceTree = "<group>"; };
+		E29788AF253F544A00DBFE23 /* MyTeleMed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyTeleMed-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		E29788B0253F544A00DBFE23 /* Med2Med-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Med2Med-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		E29788F3253F883F00DBFE23 /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		E29788FF253F88B100DBFE23 /* Med2Med Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Med2Med Debug.xcconfig"; sourceTree = "<group>"; };
 		E2978909253F88C900DBFE23 /* Med2Med Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Med2Med Beta.xcconfig"; sourceTree = "<group>"; };
@@ -1012,7 +1011,7 @@
 				28CCCD8217F518420093CEE2 /* Controllers */,
 				E27B84AF1B14B96A00AD50C6 /* Models */,
 				28CCCD7717F517FC0093CEE2 /* Resources */,
-				E211D5691FBF394400263497 /* Supporting Files */,
+				E29789D42540A42400DBFE23 /* Supporting Files */,
 				28E0CD701822AF8100729B4A /* Views */,
 			);
 			path = MyTeleMed;
@@ -1114,7 +1113,7 @@
 				E211D5A01FBF5F1900263497 /* Controllers */,
 				E2C7C1BA1FC4914700E50F07 /* Models */,
 				E20294FD1FBB933F00811DA6 /* Resources */,
-				E211D5681FBF393600263497 /* Supporting Files */,
+				E29789D32540A40600DBFE23 /* Supporting Files */,
 				E20294FE1FBB933F00811DA6 /* Views */,
 			);
 			path = Med2Med;
@@ -1135,28 +1134,6 @@
 				E20295001FBB934F00811DA6 /* Med2Med.storyboard */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		E211D5681FBF393600263497 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				E20294F81FBB920C00811DA6 /* Med2Med-Info.plist */,
-				E2DFACE020938DE100B798F8 /* Med2Med Debug.entitlements */,
-				E2DFACE32093908A00B798F8 /* Med2Medβ.entitlements */,
-				E2DFACE22093908A00B798F8 /* Med2Med.entitlements */,
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		E211D5691FBF394400263497 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				28CCCD4717F517A50093CEE2 /* MyTeleMed-Info.plist */,
-				E2DFACE120938DF400B798F8 /* MyTmd Debug.entitlements */,
-				E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */,
-				E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		E211D56A1FBF443A00263497 /* Supporting Files */ = {
@@ -1558,8 +1535,7 @@
 			isa = PBXGroup;
 			children = (
 				28CCCD4B17F517A50093CEE2 /* main.m */,
-				E29788B0253F544A00DBFE23 /* Med2Med-Bridging-Header.h */,
-				E29788AF253F544A00DBFE23 /* MyTeleMed-Bridging-Header.h */,
+				28CCCD4717F517A50093CEE2 /* TeleMed-Info.plist */,
 				28CCCD4D17F517A50093CEE2 /* TeleMed-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -1591,6 +1567,28 @@
 				E297892A253F892A00DBFE23 /* MyTeleMed Release.xcconfig */,
 			);
 			path = Configs;
+			sourceTree = "<group>";
+		};
+		E29789D32540A40600DBFE23 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E29788B0253F544A00DBFE23 /* Med2Med-Bridging-Header.h */,
+				E2DFACE020938DE100B798F8 /* Med2Med Debug.entitlements */,
+				E2DFACE32093908A00B798F8 /* Med2Medβ.entitlements */,
+				E2DFACE22093908A00B798F8 /* Med2Med.entitlements */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E29789D42540A42400DBFE23 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E29788AF253F544A00DBFE23 /* MyTeleMed-Bridging-Header.h */,
+				E2DFACE120938DF400B798F8 /* MyTmd Debug.entitlements */,
+				E220E5A41F955A1C003A9817 /* MyTeleMedβ.entitlements */,
+				E263C8BB1F3B634100913BF1 /* MyTeleMed.entitlements */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		E2C7C1BA1FC4914700E50F07 /* Models */ = {
@@ -2568,7 +2566,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBeta;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMedβ.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTeleMedβ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
@@ -2579,7 +2577,7 @@
 					"$(inherited)",
 					"MYTELEMED=1",
 				);
-				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
+				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.10;
@@ -2709,7 +2707,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTmd Debug.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTmd Debug.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
@@ -2720,7 +2718,7 @@
 					"$(inherited)",
 					"MYTELEMED=1",
 				);
-				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
+				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.10;
@@ -2744,7 +2742,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/Supporting Files/MyTeleMed.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MyTeleMed/MyTeleMed.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
@@ -2755,7 +2753,7 @@
 					"$(inherited)",
 					"MYTELEMED=1",
 				);
-				INFOPLIST_FILE = "MyTeleMed/Supporting Files/MyTeleMed-Info.plist";
+				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.10;
@@ -2777,9 +2775,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Med Debug.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Med2Med/Med2Med Debug.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2787,9 +2786,10 @@
 					"$(inherited)",
 					"MED2MED=1",
 				);
-				INFOPLIST_FILE = "Med2Med/Supporting Files/Med2Med-Info.plist";
+				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.04;
 				OTHER_SWIFT_FLAGS = "-D DEBUG -D MED2MED -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
@@ -2809,9 +2809,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Med.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Med2Med/Med2Med.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2819,9 +2820,10 @@
 					"$(inherited)",
 					"MED2MED=1",
 				);
-				INFOPLIST_FILE = "Med2Med/Supporting Files/Med2Med-Info.plist";
+				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.04;
 				OTHER_SWIFT_FLAGS = "-D RELEASE -D MED2MED -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
@@ -2840,9 +2842,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBeta;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "Med2Med/Supporting Files/Med2Medβ.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Med2Med/Med2Medβ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2850,9 +2853,10 @@
 					"$(inherited)",
 					"MED2MED=1",
 				);
-				INFOPLIST_FILE = "Med2Med/Supporting Files/Med2Med-Info.plist";
+				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.04;
 				OTHER_SWIFT_FLAGS = "-D BETA -D MED2MED -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
