@@ -58,7 +58,7 @@
 		_TimeoutPeriodMins = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
 	}
 	
-	return _TimeoutPeriodMins ?: [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD_MINUTES];
+	return _TimeoutPeriodMins ?: [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD];
 }
 
 // Override TimeoutPeriodMins setter to update application's timeout period and store value in user preferences
@@ -119,11 +119,13 @@
 	}];
 }
 
-- (BOOL)isAuthenticated {
+- (BOOL)isAuthenticated
+{
 	return _IsAuthenticated;
 }
 
-- (BOOL)isAuthorized {
+- (BOOL)isAuthorized
+{
 	return _IsAuthorized;
 }
 

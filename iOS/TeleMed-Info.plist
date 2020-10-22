@@ -70,5 +70,25 @@
 	<array>
 		<string>telprompt</string>
 	</array>
+	<key>ACCESS_TOKEN_EXPIRATION_TIME</key>
+	<string>$(ACCESS_TOKEN_EXPIRATION_TIME)</string>
+	<key>API_BASE_URL</key>
+	<string>$(API_BASE_URL)</string>
+	<key>AUTHENTICATION_AUDIENCE</key>
+	<string>$(AUTHENTICATION_AUDIENCE)</string>
+	<key>AUTHENTICATION_BASE_URL</key>
+	<string>$(AUTHENTICATION_BASE_URL)</string>
+	<key>AUTHENTICATION_CALLBACK_PAGE</key>
+	<string>$(AUTHENTICATION_CALLBACK_PAGE)</string>
+	<key>DEFAULT_TIMEOUT_PERIOD</key>
+	<string>$(DEFAULT_TIMEOUT_PERIOD)</string>
+	<key>REASON_APPLICATION_DID_LOGOUT</key>
+	<string>$(REASON_APPLICATION_DID_LOGOUT)</string>
+	<key>URLREQUEST_EXTENDED_TIMEOUT_PERIOD</key>
+	<string>$(URLREQUEST_EXTENDED_TIMEOUT_PERIOD)</string>
+	<key>URLREQUEST_TIMEOUT_PERIOD</key>
+	<string>$(URLREQUEST_TIMEOUT_PERIOD)</string>
+	<key>XMLNS</key>
+	<string>$(XMLNS)</string>
 </dict>
 </plist>

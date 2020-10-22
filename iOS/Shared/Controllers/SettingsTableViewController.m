@@ -182,7 +182,7 @@
 	}
 	else
 	{
-		NSNumber *timeoutPeriodMins = (self.profile ? self.profile.TimeoutPeriodMins : [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD_MINUTES]);
+		NSNumber *timeoutPeriodMins = (self.profile ? self.profile.TimeoutPeriodMins : [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD]);
 		
 		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:[timeoutPeriodMins stringValue]];
 	}

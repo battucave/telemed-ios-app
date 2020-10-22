@@ -146,13 +146,12 @@
 	
 	[settings synchronize];
 	
-	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		// Register device for push notifications (this does not authorize push notifications however - that is done in PhoneNumberViewController)
 		// NOTE: Device registration in debug mode is not working in iOS 13 when built with XCode 11.2.1 GM, but does still work in ad hoc and production apps.
 		#if defined DEBUG
 			NSLog(@"Skip device registration when on Debug");
-	
+
 		#else
 			[[UIApplication sharedApplication] registerForRemoteNotifications];
 		#endif
@@ -704,7 +703,7 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-	NSLog(@"My Device Token: %@", deviceToken);
+	NSLog(@"Remote Notifications Device Token: %@", deviceToken);
 
     // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
     const char *data = [deviceToken bytes];
@@ -715,7 +714,7 @@
         [tokenString appendFormat:@"%02.2hhX", data[i]];
     }
 
-    NSLog(@"Token String: %@", tokenString);
+    NSLog(@"Remote Notifications Device Token String: %@", tokenString);
 	
 	// Set device token
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];

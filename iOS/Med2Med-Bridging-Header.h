@@ -2,8 +2,8 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#import "AFNetworking.h"
-#import "AFNetworkReachabilityManager.h"
+// Shared imports
+#import "TeleMed-Bridging-Header.h"
 
-#import "CoreViewController.h"
-#import "SSOProviderModel.h"
+// Med2Med models
+#import "UserProfileModel.h"

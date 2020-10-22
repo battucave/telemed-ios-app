@@ -266,7 +266,7 @@
 
 		// Show alert
 		[returnCallTimeoutAlertController presentAlertController:YES completion:nil];
-	}) timeoutPeriod:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
+	}) timeoutPeriod:NSURLREQUEST_EXTENDED_TIMEOUT_PERIOD];
 }
 
 @end

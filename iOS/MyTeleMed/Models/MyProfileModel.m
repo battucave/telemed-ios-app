@@ -65,7 +65,7 @@
 		_TimeoutPeriodMins = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
 	}
 	
-	return _TimeoutPeriodMins ?: [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD_MINUTES];
+	return _TimeoutPeriodMins ?: [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD];
 }
 
 // Override TimeoutPeriodMins setter to update application's timeout period and store value in user preferences

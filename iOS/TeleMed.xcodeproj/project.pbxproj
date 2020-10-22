@@ -114,7 +114,6 @@
 		E211D59A1FBF571B00263497 /* ChatMessagesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58D1FBF571B00263497 /* ChatMessagesTableViewController.m */; };
 		E211D59B1FBF571B00263497 /* AutoGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58E1FBF571B00263497 /* AutoGrowingTextView.m */; };
 		E211D59C1FBF571B00263497 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D58F1FBF571B00263497 /* MessageCell.m */; };
-		E211D59F1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E211D59E1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m */; };
 		E21A0A8D1FC38E7E00CB8B9F /* button-Help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8A1FC38E7300CB8B9F /* button-Help@2x.png */; };
 		E21A0A8E1FC38E7E00CB8B9F /* button-Help.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8B1FC38E7700CB8B9F /* button-Help.png */; };
 		E21A0A8F1FC38E7E00CB8B9F /* button-Help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */; };
@@ -134,7 +133,6 @@
 		E232AD2E2375B4D300E8114F /* login.css in Resources */ = {isa = PBXBuildFile; fileRef = E232AD2D2375B4D300E8114F /* login.css */; };
 		E2364DC2236B49EF00B0C2C7 /* Shared.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F27221232919D900A9E548 /* Shared.xcassets */; };
 		E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F461FC3273A00DC899D /* AccountNewViewController.m */; };
-		E23A4F4A1FC3325C00DC899D /* LoginSSOMed2MedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23A4F491FC3325C00DC899D /* LoginSSOMed2MedViewController.m */; };
 		E240EE6D1F54A462009D8ED1 /* UIView+IBDesignable.m in Sources */ = {isa = PBXBuildFile; fileRef = E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */; };
 		E24A44321FCC6DF900A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
 		E24A44331FCC6ED400A06EE8 /* CDMAVoiceData.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */; };
@@ -154,7 +152,6 @@
 		E250369D1FBB88F400099C7E /* CoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AE66441CE1428300953EFA /* CoreViewController.m */; };
 		E25036A31FBB88F400099C7E /* SentMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C961E82BC73004BEF10 /* SentMessageModel.m */; };
 		E25036A71FBB88F400099C7E /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84B11B14B96A00AD50C6 /* Model.m */; };
-		E25036AC1FBB88F400099C7E /* LoginSSOViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E272B8881B0D327100A7154B /* LoginSSOViewController.m */; };
 		E25036AD1FBB88F400099C7E /* SentMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */; };
 		E25036B41FBB88F400099C7E /* ScreenshotAlertModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B850E1B14D03500AD50C6 /* ScreenshotAlertModel.m */; };
 		E25036B51FBB88F400099C7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 28CCCD4F17F517A50093CEE2 /* AppDelegate.m */; };
@@ -182,7 +179,6 @@
 		E25037031FBB88F400099C7E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A57D2F1833F2B0005855AC /* MessageUI.framework */; };
 		E25037041FBB88F400099C7E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A57D0F1832E938005855AC /* AudioToolbox.framework */; };
 		E25037051FBB88F400099C7E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28ADA6E617FA0123003A81A1 /* libz.dylib */; };
-		E25037061FBB88F400099C7E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28ADA6E417FA0108003A81A1 /* MobileCoreServices.framework */; };
 		E25037071FBB88F400099C7E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28ADA6E217FA00FF003A81A1 /* SystemConfiguration.framework */; };
 		E25037081FBB88F400099C7E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2888C48217FA00B100729D20 /* CFNetwork.framework */; };
 		E25037091FBB88F400099C7E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CCCD4117F517A50093CEE2 /* CoreGraphics.framework */; };
@@ -226,7 +222,6 @@
 		E271C1C42110AF7A00256D8B /* fa-regular-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E271C1BC2110AF4200256D8B /* fa-regular-400.ttf */; };
 		E271C1C52110AF7D00256D8B /* fa-light-300.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E271C1BD2110AF4200256D8B /* fa-light-300.ttf */; };
 		E272B8861B0D30B900A7154B /* SSOProviderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E272B8851B0D30B900A7154B /* SSOProviderViewController.m */; };
-		E272B8891B0D327200A7154B /* LoginSSOViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E272B8881B0D327100A7154B /* LoginSSOViewController.m */; };
 		E273718221ACA50600C6DD0C /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E273718321ACA50700C6DD0C /* ErrorAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B461E675860002FF97B /* ErrorAlertController.m */; };
 		E275C2111D3836E1004C0744 /* image-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E275C20E1D3836E1004C0744 /* image-logo@3x.png */; };
@@ -270,6 +265,8 @@
 		E2920C971E82BC73004BEF10 /* SentMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C961E82BC73004BEF10 /* SentMessageModel.m */; };
 		E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2920C991E82BC96004BEF10 /* SentMessageXMLParser.m */; };
 		E2964B4A1E67587F002FF97B /* SideNavigationCountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964B491E67587F002FF97B /* SideNavigationCountCell.m */; };
+		E29788B2253F544B00DBFE23 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29788B1253F544B00DBFE23 /* LoginViewController.swift */; };
+		E29788B3253F544B00DBFE23 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29788B1253F544B00DBFE23 /* LoginViewController.swift */; };
 		E29788F4253F883F00DBFE23 /* Shared.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E29788F3253F883F00DBFE23 /* Shared.xcconfig */; };
 		E29788F5253F883F00DBFE23 /* Shared.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E29788F3253F883F00DBFE23 /* Shared.xcconfig */; };
 		E2978900253F88B100DBFE23 /* Med2Med Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E29788FF253F88B100DBFE23 /* Med2Med Debug.xcconfig */; };
@@ -278,6 +275,11 @@
 		E297891B253F890700DBFE23 /* MyTeleMed Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E297891A253F890700DBFE23 /* MyTeleMed Debug.xcconfig */; };
 		E2978925253F891900DBFE23 /* MyTeleMed Beta.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E2978924253F891900DBFE23 /* MyTeleMed Beta.xcconfig */; };
 		E297892B253F892A00DBFE23 /* MyTeleMed Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E297892A253F892A00DBFE23 /* MyTeleMed Release.xcconfig */; };
+		E29789EE2540AC5600DBFE23 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29789ED2540AC5600DBFE23 /* Config.swift */; };
+		E29789EF2540AC5600DBFE23 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29789ED2540AC5600DBFE23 /* Config.swift */; };
+		E2978A172540D44B00DBFE23 /* LoginViewController+MyTeleMed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2978A162540D44B00DBFE23 /* LoginViewController+MyTeleMed.swift */; };
+		E2978A472541D37900DBFE23 /* LoginViewController+Med2Med.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2978A462541D37900DBFE23 /* LoginViewController+Med2Med.swift */; };
+		E2978A652541F7BB00DBFE23 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F5A9EB253DFFF70057A950 /* CoreServices.framework */; };
 		E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */; };
 		E2A607D41FDB27930014F1E2 /* AccountXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85191B14D09400AD50C6 /* AccountXMLParser.m */; };
 		E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B84EA1B14CF6A00AD50C6 /* AccountModel.m */; };
@@ -541,8 +543,6 @@
 		E211D58F1FBF571B00263497 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		E211D5901FBF571B00263497 /* MessageComposeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageComposeTableViewController.h; sourceTree = "<group>"; };
 		E211D5911FBF571B00263497 /* AccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCell.h; sourceTree = "<group>"; };
-		E211D59D1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginSSOMyTeleMedViewController.h; sourceTree = "<group>"; };
-		E211D59E1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginSSOMyTeleMedViewController.m; sourceTree = "<group>"; };
 		E21A0A8A1FC38E7300CB8B9F /* button-Help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help@2x.png"; sourceTree = "<group>"; };
 		E21A0A8B1FC38E7700CB8B9F /* button-Help.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help.png"; sourceTree = "<group>"; };
 		E21A0A8C1FC38E7800CB8B9F /* button-Help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-Help@3x.png"; sourceTree = "<group>"; };
@@ -558,8 +558,6 @@
 		E232AD2D2375B4D300E8114F /* login.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = login.css; sourceTree = "<group>"; };
 		E23A4F431FC3269F00DC899D /* AccountNewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountNewViewController.h; sourceTree = "<group>"; };
 		E23A4F461FC3273A00DC899D /* AccountNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountNewViewController.m; sourceTree = "<group>"; };
-		E23A4F481FC3325C00DC899D /* LoginSSOMed2MedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginSSOMed2MedViewController.h; sourceTree = "<group>"; };
-		E23A4F491FC3325C00DC899D /* LoginSSOMed2MedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginSSOMed2MedViewController.m; sourceTree = "<group>"; };
 		E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IBDesignable.h"; sourceTree = "<group>"; };
 		E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+IBDesignable.m"; sourceTree = "<group>"; };
 		E24A44311FCC6DF900A06EE8 /* CDMAVoiceData.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CDMAVoiceData.xib; sourceTree = "<group>"; };
@@ -602,8 +600,6 @@
 		E271C1BD2110AF4200256D8B /* fa-light-300.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fa-light-300.ttf"; sourceTree = "<group>"; };
 		E272B8841B0D30B900A7154B /* SSOProviderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSOProviderViewController.h; sourceTree = "<group>"; };
 		E272B8851B0D30B900A7154B /* SSOProviderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSOProviderViewController.m; sourceTree = "<group>"; };
-		E272B8871B0D327100A7154B /* LoginSSOViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginSSOViewController.h; sourceTree = "<group>"; };
-		E272B8881B0D327100A7154B /* LoginSSOViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginSSOViewController.m; sourceTree = "<group>"; };
 		E275C20E1D3836E1004C0744 /* image-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo@3x.png"; sourceTree = "<group>"; };
 		E275C20F1D3836E1004C0744 /* image-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo.png"; sourceTree = "<group>"; };
 		E275C2101D3836E1004C0744 /* image-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-logo@2x.png"; sourceTree = "<group>"; };
@@ -684,6 +680,7 @@
 		E2964B491E67587F002FF97B /* SideNavigationCountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideNavigationCountCell.m; sourceTree = "<group>"; };
 		E29788AF253F544A00DBFE23 /* MyTeleMed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyTeleMed-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		E29788B0253F544A00DBFE23 /* Med2Med-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Med2Med-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		E29788B1253F544B00DBFE23 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E29788F3253F883F00DBFE23 /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		E29788FF253F88B100DBFE23 /* Med2Med Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Med2Med Debug.xcconfig"; sourceTree = "<group>"; };
 		E2978909253F88C900DBFE23 /* Med2Med Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Med2Med Beta.xcconfig"; sourceTree = "<group>"; };
@@ -691,6 +688,10 @@
 		E297891A253F890700DBFE23 /* MyTeleMed Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MyTeleMed Debug.xcconfig"; sourceTree = "<group>"; };
 		E2978924253F891900DBFE23 /* MyTeleMed Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MyTeleMed Beta.xcconfig"; sourceTree = "<group>"; };
 		E297892A253F892A00DBFE23 /* MyTeleMed Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MyTeleMed Release.xcconfig"; sourceTree = "<group>"; };
+		E29789ED2540AC5600DBFE23 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E2978A152540D36500DBFE23 /* TeleMed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TeleMed-Bridging-Header.h"; sourceTree = "<group>"; };
+		E2978A162540D44B00DBFE23 /* LoginViewController+MyTeleMed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginViewController+MyTeleMed.swift"; sourceTree = "<group>"; };
+		E2978A462541D37900DBFE23 /* LoginViewController+Med2Med.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginViewController+Med2Med.swift"; sourceTree = "<group>"; };
 		E2A4BBF31FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNewUnauthorizedTableViewController.h; sourceTree = "<group>"; };
 		E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNewUnauthorizedTableViewController.m; sourceTree = "<group>"; };
 		E2AC2701237204000087912C /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -819,12 +820,12 @@
 				E25037031FBB88F400099C7E /* MessageUI.framework in Frameworks */,
 				E25037041FBB88F400099C7E /* AudioToolbox.framework in Frameworks */,
 				E25037051FBB88F400099C7E /* libz.dylib in Frameworks */,
-				E25037061FBB88F400099C7E /* MobileCoreServices.framework in Frameworks */,
 				E25037071FBB88F400099C7E /* SystemConfiguration.framework in Frameworks */,
 				E25037081FBB88F400099C7E /* CFNetwork.framework in Frameworks */,
 				E25037091FBB88F400099C7E /* CoreGraphics.framework in Frameworks */,
 				E250370A1FBB88F400099C7E /* UIKit.framework in Frameworks */,
 				E250370B1FBB88F400099C7E /* Foundation.framework in Frameworks */,
+				E2978A652541F7BB00DBFE23 /* CoreServices.framework in Frameworks */,
 				9DD940E5126F9A0DFA0510BE /* Pods_TeleMed_Med2Med.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -957,6 +958,7 @@
 			children = (
 				28CCCD4E17F517A50093CEE2 /* AppDelegate.h */,
 				28CCCD4F17F517A50093CEE2 /* AppDelegate.m */,
+				E29789ED2540AC5600DBFE23 /* Config.swift */,
 				E2AD96F8208FB3450012B1DB /* TeleMedApplication.h */,
 				E2AD96F7208FB3440012B1DB /* TeleMedApplication.m */,
 				E211D5701FBF4A4F00263497 /* Shared */,
@@ -1053,8 +1055,7 @@
 				E2D567101CD95C500054FD3F /* ContactMessageViewController.m */,
 				28CCCD8B17F535DD0093CEE2 /* ContactViewController.h */,
 				28CCCD8C17F535DD0093CEE2 /* ContactViewController.m */,
-				E211D59D1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.h */,
-				E211D59E1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m */,
+				E2978A162540D44B00DBFE23 /* LoginViewController+MyTeleMed.swift */,
 				E259B65921A4B7720013A9EE /* MessageEscalateViewController.h */,
 				E259B65A21A4B7720013A9EE /* MessageEscalateViewController.m */,
 				28A8DA3F182BDEBC00C9DB08 /* MessageForwardViewController.h */,
@@ -1269,8 +1270,7 @@
 				28990CEA194F3A7E009BA9E0 /* HelpUserGuideViewController.m */,
 				28EAB9E8194B585100903772 /* HelpViewController.h */,
 				28EAB9E9194B585100903772 /* HelpViewController.m */,
-				E272B8871B0D327100A7154B /* LoginSSOViewController.h */,
-				E272B8881B0D327100A7154B /* LoginSSOViewController.m */,
+				E29788B1253F544B00DBFE23 /* LoginViewController.swift */,
 				28176C121829AB0F00801EC7 /* MessageDetailViewController.h */,
 				28176C131829AB0F00801EC7 /* MessageDetailViewController.m */,
 				28A8DA46182C3E5C00C9DB08 /* MessageRecipientPickerViewController.h */,
@@ -1360,8 +1360,7 @@
 				E24A443A1FCE181A00A06EE8 /* HospitalPickerViewController.m */,
 				E2CAB4421FE9B49A00202CCD /* HospitalRequestTableViewController.h */,
 				E2CAB4431FE9B49A00202CCD /* HospitalRequestTableViewController.m */,
-				E23A4F481FC3325C00DC899D /* LoginSSOMed2MedViewController.h */,
-				E23A4F491FC3325C00DC899D /* LoginSSOMed2MedViewController.m */,
+				E2978A462541D37900DBFE23 /* LoginViewController+Med2Med.swift */,
 				E2A4BBF31FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.h */,
 				E2A4BBF41FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m */,
 				E2622D0A1FC5F8B0008BCFF3 /* MessageNewTableViewController.h */,
@@ -1535,6 +1534,7 @@
 			isa = PBXGroup;
 			children = (
 				28CCCD4B17F517A50093CEE2 /* main.m */,
+				E2978A152540D36500DBFE23 /* TeleMed-Bridging-Header.h */,
 				28CCCD4717F517A50093CEE2 /* TeleMed-Info.plist */,
 				28CCCD4D17F517A50093CEE2 /* TeleMed-Prefix.pch */,
 			);
@@ -2115,7 +2115,6 @@
 				28CCCD9317F535DD0093CEE2 /* OnCallScheduleViewController.m in Sources */,
 				28CCCD9117F535DD0093CEE2 /* ArchivesViewController.m in Sources */,
 				E27B84D71B14B96A00AD50C6 /* Model.m in Sources */,
-				E272B8891B0D327200A7154B /* LoginSSOViewController.m in Sources */,
 				E2920C9A1E82BC96004BEF10 /* SentMessageXMLParser.m in Sources */,
 				E27B852E1B14D0F400AD50C6 /* MessageRecipientXMLParser.m in Sources */,
 				E27B850C1B14D02A00AD50C6 /* RegisteredDeviceModel.m in Sources */,
@@ -2124,7 +2123,9 @@
 				28CCCD8817F518800093CEE2 /* MessagesViewController.m in Sources */,
 				E27B85211B14D09400AD50C6 /* AccountXMLParser.m in Sources */,
 				E211D59B1FBF571B00263497 /* AutoGrowingTextView.m in Sources */,
+				E2978A172540D44B00DBFE23 /* LoginViewController+MyTeleMed.swift in Sources */,
 				E2266A382326B71A002F1E2B /* PhoneCallViewController.m in Sources */,
+				E29789EE2540AC5600DBFE23 /* Config.swift in Sources */,
 				E26919E2228EEA750093BB60 /* Validation.m in Sources */,
 				E211D5941FBF571B00263497 /* MessageComposeTableViewController.m in Sources */,
 				E2E7F6FB200E648F00648D61 /* NSMutableString+XML.m in Sources */,
@@ -2156,7 +2157,6 @@
 				E259B65F21A5A46D0013A9EE /* OnCallSlotPickerViewController.m in Sources */,
 				E270ED8B1B18F24B00DD43B8 /* AuthenticationXMLParser.m in Sources */,
 				E27B20B720A4A3F300FA3405 /* PasswordViewController.m in Sources */,
-				E211D59F1FBF5B0400263497 /* LoginSSOMyTeleMedViewController.m in Sources */,
 				E2ECFB591B331F910024D970 /* SSOProviderModel.m in Sources */,
 				E211D59C1FBF571B00263497 /* MessageCell.m in Sources */,
 				E259B65B21A4B7720013A9EE /* MessageEscalateViewController.m in Sources */,
@@ -2191,6 +2191,7 @@
 				E2ECFB5C1B33223C0024D970 /* SSOProviderXMLParser.m in Sources */,
 				E27B85031B14CFE600AD50C6 /* MessageRecipientModel.m in Sources */,
 				28661E1818353B630071FADF /* RevealTableViewController.m in Sources */,
+				E29788B2253F544B00DBFE23 /* LoginViewController.swift in Sources */,
 				E2AE66371CE0DD7300953EFA /* NSObject+Swizzle.m in Sources */,
 				E24D45081E8953FD00B36DD6 /* PasswordChangeModel.m in Sources */,
 				28CCCD7D17F517FC0093CEE2 /* SWRevealViewController.m in Sources */,
@@ -2210,7 +2211,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E22C7B222093801B005CFA4A /* TeleMedApplication.m in Sources */,
-				E23A4F4A1FC3325C00DC899D /* LoginSSOMed2MedViewController.m in Sources */,
 				E22EF07C1FD99CBC00A2E6F6 /* MessageDetailViewController.m in Sources */,
 				E25036951FBB88F400099C7E /* GenericErrorXMLParser.m in Sources */,
 				E26CB72C22A1CEFE0010ACFE /* EmailAddressViewController.m in Sources */,
@@ -2224,7 +2224,6 @@
 				E2622D0C1FC5F8B0008BCFF3 /* MessageNewTableViewController.m in Sources */,
 				E25036A31FBB88F400099C7E /* SentMessageModel.m in Sources */,
 				E25036A71FBB88F400099C7E /* Model.m in Sources */,
-				E25036AC1FBB88F400099C7E /* LoginSSOViewController.m in Sources */,
 				E2896350208557870055A18E /* OnCallSlotPickerViewController.m in Sources */,
 				E22EF09A1FD9ECFB00A2E6F6 /* SettingsProfileTableViewController.m in Sources */,
 				E25036AD1FBB88F400099C7E /* SentMessageXMLParser.m in Sources */,
@@ -2245,11 +2244,14 @@
 				E25036C71FBB88F400099C7E /* TeleMedHTTPRequestOperationManager.m in Sources */,
 				E25036CC1FBB88F400099C7E /* AuthenticationXMLParser.m in Sources */,
 				E22EF0751FD7261800A2E6F6 /* SideNavigationViewController.m in Sources */,
+				E29788B3253F544B00DBFE23 /* LoginViewController.swift in Sources */,
 				E2CAB4441FE9B49A00202CCD /* HospitalRequestTableViewController.m in Sources */,
 				E25036CD1FBB88F400099C7E /* SSOProviderModel.m in Sources */,
+				E2978A472541D37900DBFE23 /* LoginViewController+Med2Med.swift in Sources */,
 				E2896347208540320055A18E /* OnCallSlotModel.m in Sources */,
 				E2A607D51FDB27B40014F1E2 /* AccountModel.m in Sources */,
 				E26919E3228EEA750093BB60 /* Validation.m in Sources */,
+				E29789EF2540AC5600DBFE23 /* Config.swift in Sources */,
 				E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */,
 				E25036D01FBB88F400099C7E /* main.m in Sources */,
 				E25036D31FBB88F400099C7E /* CoreTableViewController.m in Sources */,
@@ -2581,7 +2583,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.10;
-				OTHER_SWIFT_FLAGS = "-D BETA -D MYTELEMED -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D MYTELEMED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2723,7 +2725,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.10;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_SWIFT_FLAGS = "-D DEBUG -D MYTELEMED -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D MYTELEMED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2757,7 +2759,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.10;
-				OTHER_SWIFT_FLAGS = "-D RELEASE -D MYTELEMED -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D MYTELEMED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2790,7 +2792,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.04;
-				OTHER_SWIFT_FLAGS = "-D DEBUG -D MED2MED -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D MED2MED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2824,7 +2826,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.04;
-				OTHER_SWIFT_FLAGS = "-D RELEASE -D MED2MED -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D MED2MED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2857,7 +2859,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.04;
-				OTHER_SWIFT_FLAGS = "-D BETA -D MED2MED -D COCOAPODS";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D MED2MED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE = "";
