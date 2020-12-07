@@ -50,7 +50,7 @@
 		
 		self.currentModel = @"RegisteredDeviceModel";
 	}
-	else if ([elementName isEqualToString:@"TimeZone"] || [elementName isEqualToString:@"MyTimeZone"])
+	else if ([elementName isEqualToString:@"MyTimeZone"] || [elementName isEqualToString:@"TimeZone"])
 	{
 		// Initialize a time zone
 		self.timeZone = [[TimeZoneModel alloc] init];
