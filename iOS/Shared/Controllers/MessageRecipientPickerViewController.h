@@ -11,7 +11,7 @@
 #import "AccountModel.h"
 #import "OnCallSlotModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MessageRecipientModel.h"
 #endif
 
@@ -26,7 +26,7 @@
 @property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
 
 
-#ifdef MED2MED
+#if MED2MED
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
 
 #else
@@ -37,7 +37,7 @@
 @end
 
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@protocol MessageRedirectRecipientDelegate <NSObject>
 
 	@optional

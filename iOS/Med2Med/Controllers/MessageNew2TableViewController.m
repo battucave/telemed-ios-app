@@ -220,7 +220,7 @@
 		// iOS < 13 - Fallback to use Secondary Label Color light appearance
 		else
 		{
-			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.6]];
+			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.6]];
 		}
 	}
 	

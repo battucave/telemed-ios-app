@@ -14,7 +14,7 @@
 @property (nonatomic) NSArray *accounts;
 @property (nonatomic) AccountModel *selectedAccount;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) NSString *messageRecipientType; // New (Chat, Forward, and Redirect not used here)
 	@property (nonatomic) NSMutableArray *selectedMessageRecipients;
 	@property (nonatomic) BOOL shouldSetPreferredAccount;

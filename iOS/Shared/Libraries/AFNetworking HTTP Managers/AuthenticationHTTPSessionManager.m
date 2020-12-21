@@ -32,7 +32,7 @@
 		
 		// Customize Request Serializer
 		[self.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_PERIOD];
 		
 		// Set required XML Request Headers
 		[self.requestSerializer setValue:@"application/xml" forHTTPHeaderField:@"Accept"];

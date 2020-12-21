@@ -12,11 +12,11 @@
 #import "ProfileProtocol.h"
 #import "PasswordChangeModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MyProfileModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "UserProfileModel.h"
 #endif
 
@@ -181,7 +181,7 @@
 - (void)changePasswordSuccess
 {
 	// Remove password change requirement
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
 	
 		[profile setPasswordChangeRequired:NO];

@@ -58,7 +58,7 @@
 	#endif
 	
 	// Med2Med
-	#ifdef MED2MED
+	#if MED2MED
 		// Update intro text with correct app name
 		[self.labelIntro setText:[self.labelIntro.text stringByReplacingOccurrencesOfString:@"MyTeleMed" withString:@"Med2Med"]];
 	
@@ -104,7 +104,7 @@
 	// Dispose of any resources that can be recreated.
 }
 
-#ifdef MED2MED
+#if MED2MED
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	// Account picker

@@ -60,7 +60,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		
 		// Customize Request Serializer
 		[self.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_PERIOD];
 		
 		// Set required XML Request Headers
 		[self.requestSerializer setValue:@"application/xml" forHTTPHeaderField:@"Accept"];
@@ -97,7 +97,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		[self.reachabilityManager startMonitoring];
 		
 		// Initialize Activity Logger
-		#ifdef DEBUG
+		#if DEBUG
 			[[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
 			//[[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelInfo];
 			[[AFNetworkActivityLogger sharedLogger] startLogging];
@@ -225,15 +225,15 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Shorten timeout for GET requests
-	if (self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
+	if (self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_PERIOD)
 	{
-		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_PERIOD];
 	}
 	
 	NSMutableURLRequest *request = [self HTTPRequestWithHTTPMethod:@"GET" URLString:URLString parameters:parameters failure:failure];
 	
 	// Restore timeout interval to default
-	[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
+	[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_PERIOD];
 	
 	return [self addAuthenticatedRequest:request success:success failure:failure];
 }
@@ -245,15 +245,15 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 						 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	// Shorten timeout for HEAD requests
-	if (self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL)
+	if (self.requestSerializer.timeoutInterval == NSURLREQUEST_EXTENDED_TIMEOUT_PERIOD)
 	{
-		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_INTERVAL];
+		[self.requestSerializer setTimeoutInterval:NSURLREQUEST_TIMEOUT_PERIOD];
 	}
 	
 	NSMutableURLRequest *request = [self HTTPRequestWithHTTPMethod:@"HEAD" URLString:URLString parameters:parameters failure:failure];
 	
 	// Restore timeout interval to default
-	[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_INTERVAL];
+	[self.requestSerializer setTimeoutInterval:NSURLREQUEST_EXTENDED_TIMEOUT_PERIOD];
 	
 	return [self addAuthenticatedRequest:request success:^(AFHTTPRequestOperation *requestOperation, __unused id responseObject)
 	{

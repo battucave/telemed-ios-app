@@ -13,11 +13,11 @@
 #import "TeleMedHTTPRequestOperationManager.h"
 #import "AuthenticationXMLParser.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MyProfileModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "UserProfileModel.h"
 #endif
 
@@ -178,20 +178,21 @@
 		// Tokens not found in response or error parsing the xml file
 		NSLog(@"Error Refreshing Tokens");
 		
+		// Turn off isWorking
+		self.isWorking = NO;
+		
+		// Notify user that there was an authentication problem
+		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		
+		[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+		[settings synchronize];
+		
+		// Clear stored authentication data
+		[self doLogout];
+
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
 			AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-			
-			// Turn off isWorking
-			self.isWorking = NO;
-			
-			// Notify user that there was an authentication problem
-			[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
-			[settings synchronize];
-			
-			// Clear stored authentication data
-			[self doLogout];
 			
 			// Go to login screen
 			[appDelegate goToLoginScreen];
@@ -237,21 +238,21 @@
 		else
 		{
 			NSLog(@"Error Refreshing Tokens: %@", error);
+   
+			// Turn off isWorking
+			self.isWorking = NO;
+
+			// Notify user that there was an authentication problem
+			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			
+			[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
+			[settings synchronize];
+
+			// Clear stored authentication data
+			[self doLogout];
 			
 			dispatch_async(dispatch_get_main_queue(), ^
 			{
-				NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-			
-				// Turn off isWorking
-				self.isWorking = NO;
-				
-				// Notify user that there was an authentication problem
-				[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
-				[settings synchronize];
-				
-				// Clear stored authentication data
-				[self doLogout];
-				
 				// Go to login screen
 				[appDelegate goToLoginScreen];
 			});
@@ -287,7 +288,7 @@
 	self.RefreshToken = nil;
 	
 	// Log out of profile
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[[MyProfileModel sharedInstance] doLogout];
 
 	#elif defined MED2MED

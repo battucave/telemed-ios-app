@@ -1,0 +1,26 @@
+//
+//  MyTeleMed Debug.xcconfig
+//  MyTeleMed
+//
+//  Created by Shane Goodwin on 10/20/20.
+//  Copyright © 2020 SolutionBuilt. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// CocoaPods
+#include "Pods/Target Support Files/Pods-TeleMed-MyTeleMed/Pods-TeleMed-MyTeleMed.debug.xcconfig"
+
+// App Settings
+PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug
+PRODUCT_NAME = MyTmd Debug
+
+
+// API Settings
+API_PREFIX = MyTmdWebApi
+AUTHENTICATION_AUDIENCE = mytmd
+BASE_URL = https:/${}/test.mytelemed.com
+XMLNS = MyTmd
+
+#include "Shared/Configs/Shared.xcconfig"

@@ -13,7 +13,7 @@
 #import "AutoGrowingTextView.h"
 #import "ProfileProtocol.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MessageHistoryViewController.h"
 	#import "CommentCell.h" // Med2Med Phase 2
 	#import "MessageEventCell.h" // Med2Med Phase 2
@@ -25,13 +25,13 @@
 	#import "SentMessageModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "UserProfileModel.h"
 #endif
 
 @interface MessageDetailViewController ()
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) CommentModel *commentModel;
 	@property (nonatomic) MessageEventModel *messageEventModel;
 	@property (nonatomic) MessageRecipientModel *messageRecipientModel;
@@ -83,7 +83,7 @@
 	// Default message type to active
 	self.messageType = @"Archived";
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Initialize BasiceEventModel
 		[self setMessageEventModel:[[MessageEventModel alloc] init]];
 		[self.messageEventModel setDelegate:self];
@@ -128,7 +128,7 @@
 		self.messageType = self.message.MessageType;
 		
 		// MyTeleMed - Active or archived message
-		#ifdef MYTELEMED
+		#if MYTELEMED
 			if ([self.message respondsToSelector:@selector(MessageDeliveryID)] && self.message.MessageDeliveryID)
 			{
 				self.messageDeliveryID = self.message.MessageDeliveryID;
@@ -179,7 +179,7 @@
 			[self setSentMessageDetails];
 		}
 		// MyTeleMed - Set active or archived message details
-		#ifdef MYTELEMED
+		#if MYTELEMED
 			else
 			{
 				[self setMessageDetails];
@@ -193,7 +193,7 @@
 		#endif
 	}
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Load message details from server (opened via push notification)
 		else if (self.messageDeliveryID)
 		{
@@ -365,7 +365,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
@@ -430,7 +430,7 @@
 			}
 			
 			/*/ TESTING ONLY (used for generating screenshots)
-			#ifdef DEBUG
+			#if DEBUG
 				[self.filteredMessageEvents removeAllObjects];
 			 
 				for (int i = 0; i < 3; i++)
@@ -514,7 +514,7 @@
 	NSLog(@"Received Push Notification MessageDetailViewController");
 	
 	/*/ TESTING ONLY (test custom handling of push notification comment to a particular message)
-	#ifdef DEBUG
+	#if DEBUG
 		[notificationInfo setValue:@"Shane Goodwin added a comment to a message." forKey:@"message"];
 		[notificationInfo setValue:5133538688695397 forKey:@"notificationID"];
 		notificationType = @"Comment";
@@ -564,8 +564,8 @@
 		{
 			[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Read"];
 		}
-		/*/ TESTING ONLY (set message back to unread)
-		#ifdef DEBUG
+		/*/ TESTING ONLY (set read messages back to unread or archived messages back to unarchived)
+		#if DEBUG
 			// Set message back to unread
 			else if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Read"])
 			{
@@ -741,7 +741,7 @@
 	[self.textViewMessage setText:self.message.FormattedMessageText];
 	
 	/*/ TESTING ONLY (used for generating screenshots)
-	#ifdef DEBUG
+	#if DEBUG
 		[self.labelName setText:@"TeleMed"];
 		[self.buttonPhoneNumber setTitle:@"800-420-4695" forState:UIControlStateNormal];
 		[self.textViewMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
@@ -830,17 +830,17 @@
 	if ([textView.text isEqualToString:self.textViewCommentPlaceholder])
 	{
 		[textView setText:@""];
-		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor labelColor]];
-		}
-		// iOS < 13 - Fallback to use Label Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor blackColor]];
-		}
+	}
+	
+	// iOS 13+ - Support dark mode
+	if (@available(iOS 13.0, *))
+	{
+		[textView setTextColor:[UIColor labelColor]];
+	}
+	// iOS < 13 - Fallback to use Label Color light appearance
+	else
+	{
+		[textView setTextColor:[UIColor blackColor]];
 	}
 	
 	[textView becomeFirstResponder];
@@ -851,6 +851,8 @@
 	// Show placeholder
 	if ([textView.text isEqualToString:@""])
 	{
+		[textView setText:self.textViewCommentPlaceholder];
+		
 		// iOS 13+ - Support dark mode
 		if (@available(iOS 13.0, *))
 		{
@@ -859,7 +861,7 @@
 		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
 		else
 		{
-			[textView setTextColor:[UIColor colorWithRed:60.0f green:60.0f blue:67.0f alpha:0.3]];
+			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.3]];
 		}
 	}
 	
@@ -968,7 +970,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 // TEMPORARY (remove in phase 2 if comments/events added to sent messages)
 - (void)viewDidLayoutSubviews
 {

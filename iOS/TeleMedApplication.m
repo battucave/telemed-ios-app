@@ -51,7 +51,7 @@
 	// Default timeout period to 10 minutes
 	if (self.timeoutPeriodMins < 1)
 	{
-		_timeoutPeriodMins = DEFAULT_TIMEOUT_PERIOD_MINUTES;
+		_timeoutPeriodMins = DEFAULT_TIMEOUT_PERIOD;
 	}
 	
 	// On app launch and/or login, the timeout period will be overwritten with the timeout period set in MyProfileModel/UserProfileModel

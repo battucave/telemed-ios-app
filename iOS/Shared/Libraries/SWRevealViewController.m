@@ -681,7 +681,7 @@ const int FrontViewPositionNone = 0xff;
 
 - (UIViewController *)childViewControllerForStatusBarStyle
 {
-    int positionDif =  _frontViewPosition - FrontViewPositionLeft;
+    long positionDif = _frontViewPosition - FrontViewPositionLeft;
 	
     UIViewController *controller = _frontViewController;
     if ( positionDif > 0 ) controller = _rearViewController;
@@ -1637,7 +1637,7 @@ const int FrontViewPositionNone = 0xff;
 	
     if ( [controllerView isKindOfClass:[UIScrollView class]] )
     {
-        BOOL adjust = controller.automaticallyAdjustsScrollViewInsets;
+        BOOL adjust = ((UIScrollView *)controller).contentInsetAdjustmentBehavior;
 		
         if ( adjust )
         {

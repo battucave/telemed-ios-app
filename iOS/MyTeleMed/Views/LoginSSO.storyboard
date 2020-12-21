@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PB9-Do-or9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PB9-Do-or9">
     <device id="retina5_5" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,12 +25,12 @@
                                 </constraints>
                             </imageView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="IcL-gm-gyx"/>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="IcL-gm-gyx" firstAttribute="centerX" secondItem="vFU-OY-4yh" secondAttribute="centerX" id="Q2w-Em-Jcq"/>
                             <constraint firstAttribute="centerY" secondItem="vFU-OY-4yh" secondAttribute="centerY" id="W5y-LQ-7VA"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="IcL-gm-gyx"/>
                     </view>
                     <navigationItem key="navigationItem" id="ZIf-yN-Uu2"/>
                 </viewController>
@@ -37,10 +38,10 @@
             </objects>
             <point key="canvasLocation" x="310" y="258"/>
         </scene>
-        <!--LoginSSO My Tele Med View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="qUb-3F-ygI">
             <objects>
-                <viewController storyboardIdentifier="LoginSSOViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FjD-qd-sAh" customClass="LoginSSOMyTeleMedViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginSSOViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FjD-qd-sAh" customClass="LoginViewController" customModule="MyTeleMed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yc8-1y-hy3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -52,14 +53,14 @@
                                     <constraint firstAttribute="height" constant="70" id="zs7-ni-0Vu"/>
                                 </constraints>
                             </imageView>
-                            <webView hidden="YES" opaque="NO" contentMode="scaleToFill" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAU-mb-TqS">
+                            <wkWebView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CzQ-bm-eGE">
                                 <rect key="frame" x="0.0" y="88" width="414" height="604"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                                <connections>
-                                    <outlet property="delegate" destination="FjD-qd-sAh" id="9By-kA-lnQ"/>
-                                </connections>
-                            </webView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pkv-s5-a7B">
                                 <rect key="frame" x="157" y="355" width="100" height="70"/>
                                 <subviews>
@@ -109,7 +110,7 @@
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="he5-gv-e9L"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
                                     <barButtonItem title="Login" width="62" style="plain" id="as0-45-LXf">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eZi-Wo-MRE">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="eZi-Wo-MRE">
                                             <rect key="frame" x="328" y="1" width="66" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -126,21 +127,21 @@
                                 <color key="barTintColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="IB7-nJ-RG2"/>
                         <color key="backgroundColor" red="0.20000000000000001" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="e5G-nr-thO" firstAttribute="top" secondItem="HAU-mb-TqS" secondAttribute="bottom" id="8WT-2l-UVL"/>
-                            <constraint firstItem="HAU-mb-TqS" firstAttribute="top" secondItem="QCH-SR-qFX" secondAttribute="bottom" constant="8" id="9Vk-Xf-J6K"/>
-                            <constraint firstItem="IB7-nJ-RG2" firstAttribute="centerX" secondItem="pkv-s5-a7B" secondAttribute="centerX" id="Nnw-T2-BRh"/>
+                            <constraint firstItem="IB7-nJ-RG2" firstAttribute="trailing" secondItem="CzQ-bm-eGE" secondAttribute="trailing" id="J7B-R0-JKZ"/>
                             <constraint firstItem="IB7-nJ-RG2" firstAttribute="bottom" secondItem="e5G-nr-thO" secondAttribute="bottom" id="QOV-RJ-mjV"/>
                             <constraint firstItem="IB7-nJ-RG2" firstAttribute="trailing" secondItem="e5G-nr-thO" secondAttribute="trailing" id="TOO-CQ-e7m"/>
-                            <constraint firstItem="HAU-mb-TqS" firstAttribute="centerY" secondItem="pkv-s5-a7B" secondAttribute="centerY" id="XZa-5F-CTK"/>
+                            <constraint firstItem="e5G-nr-thO" firstAttribute="top" secondItem="CzQ-bm-eGE" secondAttribute="bottom" id="TvY-Eo-eqh"/>
+                            <constraint firstItem="pkv-s5-a7B" firstAttribute="centerX" secondItem="Yc8-1y-hy3" secondAttribute="centerX" id="VOS-O4-toN"/>
+                            <constraint firstItem="CzQ-bm-eGE" firstAttribute="top" secondItem="QCH-SR-qFX" secondAttribute="bottom" constant="8" id="VPI-ed-pCq"/>
+                            <constraint firstItem="CzQ-bm-eGE" firstAttribute="leading" secondItem="IB7-nJ-RG2" secondAttribute="leading" id="WVj-v3-zt8"/>
                             <constraint firstItem="QCH-SR-qFX" firstAttribute="top" secondItem="IB7-nJ-RG2" secondAttribute="top" constant="10" id="Xt4-lc-sgh"/>
                             <constraint firstItem="e5G-nr-thO" firstAttribute="leading" secondItem="IB7-nJ-RG2" secondAttribute="leading" id="bxV-al-C1x"/>
-                            <constraint firstItem="HAU-mb-TqS" firstAttribute="leading" secondItem="IB7-nJ-RG2" secondAttribute="leading" id="kGK-Gi-3eh"/>
-                            <constraint firstItem="IB7-nJ-RG2" firstAttribute="trailing" secondItem="HAU-mb-TqS" secondAttribute="trailing" id="n1S-Ya-LlR"/>
+                            <constraint firstItem="pkv-s5-a7B" firstAttribute="centerY" secondItem="CzQ-bm-eGE" secondAttribute="centerY" id="wGl-8A-yeN"/>
                             <constraint firstItem="IB7-nJ-RG2" firstAttribute="centerX" secondItem="QCH-SR-qFX" secondAttribute="centerX" id="yOe-Nl-RpY"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="IB7-nJ-RG2"/>
                     </view>
                     <navigationItem key="navigationItem" id="q1K-Cr-ScC"/>
                     <connections>
@@ -148,12 +149,12 @@
                         <outlet property="buttonBack" destination="L6n-6o-7ZE" id="Zev-OQ-XxH"/>
                         <outlet property="constraintToolbarBottom" destination="QOV-RJ-mjV" id="Rgv-gr-GBL"/>
                         <outlet property="loadingView" destination="pkv-s5-a7B" id="Pg2-xR-Vuh"/>
-                        <outlet property="webView" destination="HAU-mb-TqS" id="QO0-LX-oBu"/>
+                        <outlet property="webView" destination="CzQ-bm-eGE" id="yuh-90-AX1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zbR-an-VdQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1790" y="258"/>
+            <point key="canvasLocation" x="1789.8550724637682" y="257.60869565217394"/>
         </scene>
         <!--Enter SSO ID Provider-->
         <scene sceneID="Az2-Pj-ksJ">
@@ -218,7 +219,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Yjw-jX-gad" secondAttribute="trailing" constant="10" id="3RP-Lx-Oq1"/>
                                     <constraint firstAttribute="height" constant="32" id="FxP-hr-HQX"/>
@@ -232,7 +233,7 @@
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="value" systemColor="separatorColor"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
@@ -250,7 +251,7 @@
                                 </constraints>
                                 <items>
                                     <barButtonItem title="Cancel" width="74" style="plain" id="TpR-xs-z4l">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pgb-mk-ii5">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="pgb-mk-ii5">
                                             <rect key="frame" x="20" y="1" width="85" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -266,7 +267,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="sBt-rY-09t"/>
                                     <barButtonItem title="Save" style="plain" id="oIe-lE-DoR">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nqh-Aq-oGv">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="nqh-Aq-oGv">
                                             <rect key="frame" x="333" y="1" width="61" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -283,6 +284,7 @@
                                 <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="r63-GT-mcY"/>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="sGk-HG-IID" firstAttribute="top" secondItem="r63-GT-mcY" secondAttribute="top" constant="10" id="02y-Mp-VPw"/>
@@ -298,7 +300,6 @@
                             <constraint firstItem="RYd-W7-08S" firstAttribute="trailing" secondItem="r63-GT-mcY" secondAttribute="trailing" id="wlu-WG-e8X"/>
                             <constraint firstItem="SBj-Vd-cPA" firstAttribute="trailing" secondItem="PcG-tc-T3B" secondAttribute="trailing" id="xxt-pz-fao"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="r63-GT-mcY"/>
                     </view>
                     <navigationItem key="navigationItem" id="OrO-Wv-J0I"/>
                     <connections>
@@ -364,7 +365,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="CrA-Ex-elv" firstAttribute="top" secondItem="ypL-ek-8BB" secondAttribute="top" constant="2" id="Gb2-7T-Bfm"/>
                                     <constraint firstAttribute="height" constant="32" id="J67-Je-A4e"/>
@@ -377,7 +378,7 @@
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="value" systemColor="separatorColor"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
@@ -387,7 +388,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gm9-BN-gJl">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gm9-BN-gJl">
                                 <rect key="frame" x="57" y="204" width="52" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="4wI-4o-Lrk"/>
@@ -412,7 +413,7 @@
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ufR-Jb-GaO"/>
                                     <barButtonItem title="Continue" width="90" style="plain" id="Ixx-li-gj6">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zIX-63-xXa">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="zIX-63-xXa">
                                             <rect key="frame" x="301" y="1" width="93" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -429,6 +430,7 @@
                                 <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="2Rk-A7-EG8"/>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ypL-ek-8BB" firstAttribute="top" secondItem="TNx-l8-qo5" secondAttribute="bottom" constant="7" id="8TB-C5-yz7"/>
@@ -444,7 +446,6 @@
                             <constraint firstItem="HyV-rs-JVc" firstAttribute="trailing" secondItem="2Rk-A7-EG8" secondAttribute="trailing" id="tmV-dV-Eix"/>
                             <constraint firstItem="TNx-l8-qo5" firstAttribute="leading" secondItem="ypL-ek-8BB" secondAttribute="leading" id="yns-eO-x1d"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="2Rk-A7-EG8"/>
                     </view>
                     <navigationItem key="navigationItem" id="dIx-OW-dxU"/>
                     <connections>
@@ -480,7 +481,7 @@
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
-                            <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="value" systemColor="systemBackgroundColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -503,7 +504,7 @@
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
-                            <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="value" systemColor="systemBackgroundColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -526,7 +527,7 @@
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
-                            <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="value" systemColor="systemBackgroundColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -579,7 +580,7 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="300" id="6qv-vP-SsL"/>
                                                     <constraint firstAttribute="bottom" secondItem="Xi6-G0-af0" secondAttribute="bottom" constant="2" id="KFN-Ag-He3"/>
@@ -590,7 +591,7 @@
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="value" systemColor="separatorColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                         <real key="value" value="1"/>
@@ -612,7 +613,7 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="WeA-hq-wLi" secondAttribute="bottom" constant="2" id="Ddn-pw-YwG"/>
                                                     <constraint firstItem="WeA-hq-wLi" firstAttribute="leading" secondItem="cEj-fx-i4O" secondAttribute="leading" constant="10" id="asn-dx-Xgl"/>
@@ -621,7 +622,7 @@
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="value" systemColor="separatorColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                         <real key="value" value="1"/>
@@ -643,7 +644,7 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="qEC-iK-Uud" secondAttribute="trailing" constant="10" id="DuQ-Tl-1v2"/>
                                                     <constraint firstItem="qEC-iK-Uud" firstAttribute="top" secondItem="nTQ-MY-Hmh" secondAttribute="top" constant="2.5" id="QkG-Xw-frw"/>
@@ -654,7 +655,7 @@
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="value" systemColor="separatorColor"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                         <real key="value" value="1"/>
@@ -735,7 +736,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="CHr-4y-1nn"/>
                                     <barButtonItem title="Continue" width="90" style="plain" id="eu8-ge-xWK">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MsX-v3-yLE">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="MsX-v3-yLE">
                                             <rect key="frame" x="301" y="1" width="93" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -752,6 +753,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="QFa-kD-Dm3"/>
                         <color key="backgroundColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="gg6-tC-p9e" firstAttribute="leading" secondItem="QFa-kD-Dm3" secondAttribute="leading" id="6we-cf-xt1"/>
@@ -763,7 +765,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                             <constraint firstItem="tRK-B7-eMK" firstAttribute="trailing" secondItem="QFa-kD-Dm3" secondAttribute="trailing" id="sMp-l4-C0V"/>
                             <constraint firstItem="gg6-tC-p9e" firstAttribute="trailing" secondItem="QFa-kD-Dm3" secondAttribute="trailing" id="xlY-cv-0Wa"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="QFa-kD-Dm3"/>
                     </view>
                     <navigationItem key="navigationItem" id="cFw-Eh-HNF"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -817,7 +818,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                         </connections>
                                     </textField>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="t2w-43-o3T" firstAttribute="top" secondItem="lWM-E0-dER" secondAttribute="top" constant="2.5" id="2sr-cm-UBJ"/>
                                     <constraint firstItem="t2w-43-o3T" firstAttribute="leading" secondItem="lWM-E0-dER" secondAttribute="leading" constant="10" id="5Rw-1E-LSr"/>
@@ -831,7 +832,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                         <real key="value" value="4"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="value" systemColor="separatorColor"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
@@ -850,7 +851,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                         </connections>
                                     </textField>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="WjY-br-WVF" secondAttribute="trailing" constant="10" id="5bh-Up-Ljn"/>
                                     <constraint firstItem="WjY-br-WVF" firstAttribute="leading" secondItem="i2s-OT-yX8" secondAttribute="leading" constant="10" id="EZk-P4-kPb"/>
@@ -861,7 +862,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="value" systemColor="separatorColor"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="1"/>
@@ -871,7 +872,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PA0-4Y-UgG">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PA0-4Y-UgG">
                                 <rect key="frame" x="57" y="218" width="62" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="62" id="Hh4-XM-m6S"/>
@@ -895,7 +896,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="UlA-7A-qQd"/>
                                     <barButtonItem title="Continue" width="90" style="plain" id="Ikt-bS-b3W">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OG9-dd-VRe">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="OG9-dd-VRe">
                                             <rect key="frame" x="301" y="1" width="93" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -912,6 +913,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 <color key="barTintColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="qKA-ff-WtC"/>
                         <color key="backgroundColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="HBG-P8-y5W" firstAttribute="centerX" secondItem="Sv3-yj-BRw" secondAttribute="centerX" id="4Sb-OR-9ry"/>
@@ -930,7 +932,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                             <constraint firstItem="PA0-4Y-UgG" firstAttribute="top" secondItem="i2s-OT-yX8" secondAttribute="bottom" constant="10" id="igT-Gv-R6B"/>
                             <constraint firstItem="PA0-4Y-UgG" firstAttribute="leading" secondItem="i2s-OT-yX8" secondAttribute="leading" id="wZs-sA-fnZ"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="qKA-ff-WtC"/>
                     </view>
                     <navigationItem key="navigationItem" id="mff-ka-cCJ"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -956,7 +957,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
-                            <color key="value" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="value" systemColor="systemBackgroundColor"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -968,14 +969,23 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <point key="canvasLocation" x="1041" y="-467"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="7Cm-Eo-Uci"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Logo-InterfaceLight" width="400" height="100"/>
         <image name="button-Help.png" width="10" height="14"/>
         <image name="button-TextField-Help.png" width="20" height="20"/>
-        <image name="chevron.left" catalog="system" width="48" height="64"/>
-        <image name="chevron.right" catalog="system" width="48" height="64"/>
+        <image name="chevron.left" catalog="system" width="96" height="128"/>
+        <image name="chevron.right" catalog="system" width="96" height="128"/>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="EId-x6-V12"/>
-    </inferredMetricsTieBreakers>
 </document>

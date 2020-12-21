@@ -19,10 +19,9 @@
 #import "ProfileProtocol.h"
 #import "AuthenticationModel.h"
 #import "SSOProviderModel.h"
-#import "Harpy.h"
 #import "TeleMedHTTPRequestOperationManager.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "ChatMessageDetailViewController.h"
 	#import "MessageDetailViewController.h"
 	#import "MyProfileModel.h"
@@ -30,7 +29,7 @@
 	#import "RegisteredDeviceModel.h"
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	#import "AccountModel.h"
 	#import "UserProfileModel.h"
 #endif
@@ -39,7 +38,7 @@
 
 @property (nonatomic) CXCallObserver *callObserver;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) dispatch_block_t teleMedCallTimeoutBlock;
 #endif
 
@@ -52,7 +51,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	// iOS 13+ - Restore navigation bar's bottom border
+    // iOS 13+ - Restore navigation bar's bottom border
 	if (@available(iOS 13.0, *))
 	{
 		UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
@@ -82,7 +81,7 @@
 	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 	
 	// Med2Med - Prevent swipe message from ever appearing
-	#ifdef MED2MED
+	#if MED2MED
 		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
 	// DEBUG Only - reset swipe message on app launch
@@ -147,13 +146,12 @@
 	
 	[settings synchronize];
 	
-	// #if defined(MYTELEMED) && ! defined(DEBUG)
 	#if defined(MYTELEMED) && ! TARGET_IPHONE_SIMULATOR
 		// Register device for push notifications (this does not authorize push notifications however - that is done in PhoneNumberViewController)
 		// NOTE: Device registration in debug mode is not working in iOS 13 when built with XCode 11.2.1 GM, but does still work in ad hoc and production apps.
 		#if defined DEBUG
 			NSLog(@"Skip device registration when on Debug");
-	
+
 		#else
 			[[UIApplication sharedApplication] registerForRemoteNotifications];
 		#endif
@@ -185,7 +183,7 @@
 	[settings synchronize];
 	
 	// MyTeleMed - Update app's badge count with number of unread messages
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 	
 		// Set badge number for app icon. These values are updated every time user resumes app and opens side navigation. Idea is that if user is actively using app, then they will use side navigation which will update the unread message count. If they just briefly open the app to check messages, then the app resume will update the unread message count
@@ -205,7 +203,7 @@
 	
 	id <ProfileProtocol> profile;
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		profile = [MyProfileModel sharedInstance];
 
 	#elif defined MED2MED
@@ -234,7 +232,7 @@
 				if (success)
 				{
 					// MyTeleMed - Update MyStatusModel with updated number of unread messages
-					#ifdef MYTELEMED
+					#if MYTELEMED
 						MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
 					
 						[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
@@ -311,8 +309,8 @@
 			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
 			
 			// MyTeleMed - Stop observing for TeleMed to return phone call
-			#ifdef MYTELEMED
-				dispatch_block_cancel(self.teleMedCallTimeoutBlock);
+			#if MYTELEMED
+				[self stopTeleMedCallObserver];
 			#endif
 		}
 	}
@@ -367,7 +365,7 @@
 	[harpy setShowAlertAfterCurrentVersionHasBeenReleasedForDays:10];
 	
 	// DEBUG Only - check version on every app launch
-	#ifdef DEBUG
+	#if DEBUG
 		// [harpy testSetCurrentInstalledVersion:@"4.04"];
 		[harpy setDebugEnabled:YES];
 		[harpy checkVersion];
@@ -434,7 +432,7 @@
 	{
 		id <ProfileProtocol> profile;
 		
-		#ifdef MYTELEMED
+		#if MYTELEMED
 			profile = [MyProfileModel sharedInstance];
 		
 		#elif defined MED2MED
@@ -452,7 +450,7 @@
 				if (success)
 				{
 					// MyTeleMed - Validate device registration with server
-					#ifdef MYTELEMED
+					#if MYTELEMED
 						[self validateMyTeleMedRegistration:profile];
 					
 					// Med2Med - Validate that at least one account is authorized
@@ -632,7 +630,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
 	NSLog(@"Failed to get token, error: %@", error);
@@ -705,7 +703,7 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-	NSLog(@"My Device Token: %@", deviceToken);
+	NSLog(@"Remote Notifications Device Token: %@", deviceToken);
 
     // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
     const char *data = [deviceToken bytes];
@@ -716,7 +714,7 @@
         [tokenString appendFormat:@"%02.2hhX", data[i]];
     }
 
-    NSLog(@"Token String: %@", tokenString);
+    NSLog(@"Remote Notifications Device Token String: %@", tokenString);
 	
 	// Set device token
 	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
@@ -870,6 +868,9 @@
 			// Show alert
 			[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
 		});
+		
+		// Prevent additional alerts from appearing as they will replace this one
+		return;
 	#endif
 	// END TESTING ONLY */
 	
@@ -1107,7 +1108,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 
 /**
  * Go to MessageNewTableViewController or MessageNewUnauthorizedTableViewController depending on authorization status

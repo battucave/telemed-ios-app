@@ -12,6 +12,16 @@
 
 @property (weak) id delegate;
 
+// Class variables
+@property (class, nonatomic, readonly) NSArray *classicTones;
+@property (class, nonatomic, readonly) NSString *defaultTone;
+@property (class, nonatomic, readonly) NSArray *intervals;
+@property (class, nonatomic, readonly) NSArray *myTeleMedTones;
+@property (class, nonatomic, readonly) NSArray *staffFavoriteTones;
+@property (class, nonatomic, readonly) NSArray *standardTones;
+@property (class, nonatomic, readonly) NSArray *subCategoryTones;
+
+// Instance variables
 @property (nonatomic) BOOL Enabled;
 @property (nonatomic) BOOL isReminderOn; // Not passed from web service
 @property (nonatomic) NSNumber *Interval;

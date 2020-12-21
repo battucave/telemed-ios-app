@@ -105,7 +105,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// Initialize OnCallSlotModel
 		OnCallSlotModel *onCallSlotModel = [[OnCallSlotModel alloc] init];
 	
@@ -130,7 +130,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
 		if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 		{
@@ -154,7 +154,7 @@
 // MyTeleMed only - Send message from MessageRedirectTableViewController
 - (IBAction)saveOnCallSlot:(id)sender
 {
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageToOnCallSlot:)])
 		{
 			// Verify that on call slot is selected
@@ -389,7 +389,7 @@
 	// Define callback to execute either immediately or after search search results have closed
 	void (^callback)(void);
 	
-	#ifdef MED2MED
+	#if MED2MED
 		callback = ^
 		{
 			// Go to MessageRecipientPickerTableViewController
@@ -441,7 +441,7 @@
 	// Remove checkmark of selected on call slot
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// MyTeleMed - Disable send button if no on call slot selected
 		if (self.navigationItem.rightBarButtonItem != nil && ! self.selectedOnCallSlot)
 		{
@@ -466,7 +466,7 @@
 		[messageRecipientPickerViewController setSelectedOnCallSlot:self.selectedOnCallSlot];
 		[messageRecipientPickerViewController setTitle:@"Choose Recipient"];
 		
-		#ifdef MED2MED
+		#if MED2MED
 			// Add on call slot id to form values
 			[self.formValues setValue:self.selectedOnCallSlot.ID forKey:@"OnCallSlotID"];
 		
@@ -495,7 +495,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 // Return on call slots from OnCallSlotModel delegate
 - (void)updateOnCallSlots:(NSArray *)onCallSlots
 {

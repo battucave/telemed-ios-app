@@ -32,7 +32,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 		sharedRegisteredDeviceInstance = [[self alloc] init];
 		
 		// If using Simulator, then skip phone number step because it is always invalid
-		// #ifdef DEBUG
+		// #if DEBUG
 		#if TARGET_IPHONE_SIMULATOR
 			NSLog(@"Skip Phone Number step when on Simulator or Debugging");
 		
@@ -102,7 +102,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 - (void)registerDeviceWithCallback:(void(^)(BOOL success, NSError *error))callback
 {
 	// Device simulator has no phone number and no device token. Continuing will cause web service error
-	// #ifdef DEBUG
+	// #if DEBUG
 	#if TARGET_IPHONE_SIMULATOR
 		NSLog(@"Skip Register Device Token step when on Simulator or Debugging");
 	

@@ -13,13 +13,13 @@
 #import "MessageProtocol.h"
 #import "SentMessageModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "MessageModel.h"
 #endif
 
 @interface MessagesTableViewController ()
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) MessageModel *messageModel;
 #endif
 
@@ -65,7 +65,7 @@
 	// Initialize current page
 	[self setCurrentPage:1];
 	
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		// Initialize MessageModel
 		[self setMessageModel:[[MessageModel alloc] init]];
 		[self.messageModel setDelegate:self];
@@ -277,7 +277,7 @@
 	}
 	
 	/*/ TESTING ONLY (used for generating screenshots)
-	#ifdef DEBUG
+	#if DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelPhoneNumber setText:@"800-420-4695"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
@@ -380,7 +380,7 @@
 	[cell.constraintNameLeadingSpace setConstant:7.0f];
 	
 	/*/ TESTING ONLY (used for generating screenshots)
-	#ifdef DEBUG
+	#if DEBUG
 		[cell.labelName setText:@"TeleMed"];
 		[cell.labelMessage setText:@"Welcome to MyTeleMed. The MyTeleMed app gives you new options for your locate plan. Please call TeleMed for details."];
 	#endif
@@ -491,7 +491,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
@@ -701,7 +701,7 @@
 	}
 }
 
-// HOPEFULLY TEMPORARY: Reset and reload messages (remove if pagination flaw is corrected. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
+// Reset and reload messages (remove if pagination flaw is corrected. See MessagesViewController::modifyMultipleMessagesStateSuccess: for more info)
 - (void)resetActiveMessages
 {
 	[self resetMessages];
@@ -760,7 +760,7 @@
 	[self setIsFetchingNextPage:NO];
 	[self setIsFirstPageLoaded:YES];
 	
-	// If the number of items returned is less than the number of messages per page, then assume the last page has been loaded
+	// If the number of messages returned is less than the number of messages per page, then assume the last page has been loaded
 	if ([messages count] < MessagesPerPage)
 	{
 		[self setIsLastPageLoaded:YES];
@@ -859,6 +859,9 @@
 {
 	[self setIsFetchingNextPage:NO];
 	
+	// Decrement current page so the previous one can be retried
+	self.currentPage--;
+	
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
@@ -887,11 +890,8 @@
 		// Enable the isFetchingNextPage flag
 		[self setIsFetchingNextPage:YES];
 		
-		// Increment the current page
-		self.currentPage++;
-		
 		// Fetch the next page of messages
-		[self loadMessages:self.currentPage];
+		[self loadMessages:++self.currentPage];
 		
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
@@ -904,7 +904,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 // Reload messages
 - (void)loadMessages:(NSInteger)page
 {

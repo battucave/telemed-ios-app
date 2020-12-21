@@ -2,6 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ACCESS_TOKEN_EXPIRATION_TIME</key>
+	<string>$(ACCESS_TOKEN_EXPIRATION_TIME)</string>
+	<key>API_BASE_URL</key>
+	<string>$(API_BASE_URL)</string>
+	<key>AUTHENTICATION_AUDIENCE</key>
+	<string>$(AUTHENTICATION_AUDIENCE)</string>
+	<key>AUTHENTICATION_BASE_URL</key>
+	<string>$(AUTHENTICATION_BASE_URL)</string>
+	<key>AUTHENTICATION_CALLBACK_PAGE</key>
+	<string>$(AUTHENTICATION_CALLBACK_PAGE)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -26,6 +36,12 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>DEFAULT_TIMEOUT_PERIOD</key>
+	<string>$(DEFAULT_TIMEOUT_PERIOD)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>telprompt</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -41,6 +57,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>REASON_APPLICATION_DID_LOGOUT</key>
+	<string>$(REASON_APPLICATION_DID_LOGOUT)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fa-light-300.ttf</string>
@@ -66,5 +84,11 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>URLREQUEST_EXTENDED_TIMEOUT_PERIOD</key>
+	<string>$(URLREQUEST_EXTENDED_TIMEOUT_PERIOD)</string>
+	<key>URLREQUEST_TIMEOUT_PERIOD</key>
+	<string>$(URLREQUEST_TIMEOUT_PERIOD)</string>
+	<key>XMLNS</key>
+	<string>$(XMLNS)</string>
 </dict>
 </plist>

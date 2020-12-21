@@ -15,14 +15,14 @@
 @property (nonatomic) UIWindow *window;
 @property (nonatomic) UIStoryboard *storyboard;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) void (^goToRemoteNotificationScreen)(UINavigationController *navigationController); // Used by AppDelegate, CoreViewController, and CoreTableViewController
 #endif
 
 - (void)goToLoginScreen;
 - (void)goToNextScreen;
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	- (void)startTeleMedCallObserver:(dispatch_block_t)returnCallTimeout timeoutPeriod:(int)timeoutPeriod;
 	- (void)stopTeleMedCallObserver;
 #endif

@@ -10,7 +10,7 @@
 #import "ErrorAlertController.h"
 #import "MessageRecipientModel.h"
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	#import "ChatParticipantModel.h"
 
 #elif defined MED2MED
@@ -19,7 +19,7 @@
 
 @interface MessageRecipientPickerViewController ()
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@property (nonatomic) ChatParticipantModel *chatParticipantModel;
 #endif
 
@@ -43,7 +43,7 @@
 	[super viewDidLoad];
 	
 	// Initialize ChatParticipantModel (only used for chat)
-	#ifdef MYTELEMED
+	#if MYTELEMED
 		[self setChatParticipantModel:[[ChatParticipantModel alloc] init]];
 		[self.chatParticipantModel setDelegate:self];
 	#endif
@@ -80,7 +80,7 @@
 	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
 	
 	// Initialize search bar placeholder for chat
-	#ifdef MYTELEMED
+	#if MYTELEMED
 	if ([self.messageRecipientType isEqualToString:@"Chat"]) {
 		[self.searchController.searchBar setPlaceholder:@"Search Participants"];
 	}
@@ -175,7 +175,7 @@
 		}
 	};
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// Force single selection of recipients
 		[self.tableMessageRecipients setAllowsMultipleSelection:NO];
 	
@@ -245,7 +245,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
 		if ([self.delegate respondsToSelector:@selector(setFormValues:)])
 		{
@@ -265,7 +265,7 @@
 {
 	[self setHasSubmitted:YES];
 	
-	#ifdef MED2MED // (not currently used - only used if table allows multiple selection)
+	#if MED2MED // (not currently used - only used if table allows multiple selection)
 		[self performSegueWithIdentifier:@"showMessageNew2" sender:self];
 	
 	#else
@@ -470,7 +470,7 @@
 	}
 	
 	// Med2Med - Re-enable next button if at least one message recipient is still selected (not currently used - only used if table allows multiple selection)
-	#ifdef MED2MED
+	#if MED2MED
 		if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] > 0)
 		{
 			[self.navigationItem.rightBarButtonItem setEnabled:YES];
@@ -648,7 +648,7 @@
 		[self.navigationItem.rightBarButtonItem setEnabled:YES];
 	}
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// Execute segue (only used if table is limited to single selection)
 		if (! self.navigationItem.rightBarButtonItem)
 		{
@@ -722,7 +722,7 @@
 		if (self.navigationItem.rightBarButtonItem != nil && [self.selectedMessageRecipients count] == 0)
 		{
 			// Med2Med - Disable next button if no recipients selected and table allows multiple selection (not currently used)
-			#ifdef MED2MED
+			#if MED2MED
 				if (self.tableMessageRecipients.allowsMultipleSelection)
 				{
 					[self.navigationItem.rightBarButtonItem setEnabled:NO];
@@ -748,7 +748,7 @@
 		return;
 	}
 	
-	#ifdef MED2MED
+	#if MED2MED
 		// Message new 2
 		if ([segue.identifier isEqualToString:@"showMessageNew2"])
 		{
@@ -786,7 +786,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 // Return chat participants from ChatParticipantModel delegate
 - (void)updateChatParticipants:(NSArray *)chatParticipants
 {

@@ -9,7 +9,7 @@
 #import "CoreViewController.h"
 #import "OnCallSlotModel.h"
 
-#ifdef MED2MED
+#if MED2MED
 	#import "AccountModel.h"
 #endif
 
@@ -20,7 +20,7 @@
 @property (nonatomic) NSArray *onCallSlots;
 @property (nonatomic) OnCallSlotModel *selectedOnCallSlot;
 
-#ifdef MED2MED
+#if MED2MED
 	@property (nonatomic) AccountModel *selectedAccount;
 
 	@property (nonatomic) NSMutableDictionary *formValues; // Store form values to be passed to next screen
@@ -33,7 +33,7 @@
 @end
 
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	@protocol MessageRedirectOnCallSlotDelegate <NSObject>
 
 	@optional

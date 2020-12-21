@@ -26,7 +26,7 @@
 
 #pragma mark - MyTeleMed
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)getAccountByID:(NSNumber *)accountID;
 - (void)getAccountByPublicKey:(NSNumber *)publicKey;
 #endif
@@ -34,7 +34,7 @@
 
 #pragma mark - Med2Med
 
-#ifdef MED2MED
+#if MED2MED
 - (void)getAccountsByHospital:(NSNumber *)hospitalID withCallback:(void (^)(BOOL success, NSArray *accounts, NSError *error))callback;
 - (BOOL)isAuthorized;
 - (BOOL)isPending;

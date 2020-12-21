@@ -10,7 +10,7 @@
 
 @interface CoreTableViewController : UITableViewController
 
-#ifdef MYTELEMED
+#if MYTELEMED
 - (void)authorizeForRemoteNotifications;
 - (void)authorizeForRemoteNotifications:(NSString *)authorizationMessage;
 - (void)handleRemoteNotification:(NSMutableDictionary *)notificationInfo ofType:(NSString *)notificationType withViewAction:(UIAlertAction *)viewAction;

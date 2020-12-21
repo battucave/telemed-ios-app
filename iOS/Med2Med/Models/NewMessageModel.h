@@ -16,11 +16,11 @@
 
 // Header files are shared by all targets so have to include the method signatures used by both MyTeleMed and Med2Med.
 
-#ifdef MYTELEMED
+#if MYTELEMED
 	- (void)sendNewMessage:(NSString *)message accountID:(NSNumber *)accountID messageRecipientIDs:(NSArray *)messageRecipientIDs;
 #endif
 
-#ifdef MED2MED
+#if MED2MED
 	- (void)sendNewMessage:(NSDictionary *)data withOrder:(NSArray *)sortedKeys;
 #endif
 
