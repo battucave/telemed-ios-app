@@ -67,7 +67,7 @@
 	[self setNotificationSettingModel:[[NotificationSettingModel alloc] init]];
 	
 	[self.notificationSettingModel setDelegate:self];
-	[self setNotificationSettings:[self.notificationSettingModel getNotificationSettingsByName:self.notificationSettingsName]];
+	[self setNotificationSettings:[self.notificationSettingModel getNotificationSettingsForName:self.notificationSettingsName]];
 }
 
 - (IBAction)reminderChanged:(id)sender
@@ -77,7 +77,7 @@
 	[self.tableView reloadData];
 	
 	// Save to server
-	[self.notificationSettingModel saveNotificationSettingsByName:self.notificationSettingsName settings:self.notificationSettings];
+	[self.notificationSettingModel saveNotificationSettingsForName:self.notificationSettingsName settings:self.notificationSettings];
 }
 
 // Unwind segue from SettingsNotificationsPickerTableViewController
@@ -90,7 +90,7 @@
 	// Set selected notification interval
 	if (settingsNotificationsPickerTableViewController.pickerType == 1)
 	{
-		[self.notificationSettings setInterval:[NSNumber numberWithInteger:[selectedOption integerValue]]];
+		[self.notificationSettings setInterval:[NSNumber numberWithInteger:selectedOption.integerValue]];
 	}
 	// Set selected notification tone
 	else
@@ -101,7 +101,7 @@
 	[self.tableView reloadData];
 	
 	// Save to server
-	[self.notificationSettingModel saveNotificationSettingsByName:self.notificationSettingsName settings:self.notificationSettings];
+	[self.notificationSettingModel saveNotificationSettingsForName:self.notificationSettingsName settings:self.notificationSettings];
 }
 
 // Return server notification settings from NotificationSettingModel delegate
@@ -120,7 +120,7 @@
 	// Show error message only if device offline
 	if (error.code == NSURLErrorNotConnectedToInternet)
 	{
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 		
 		[errorAlertController show:error];
 	}
@@ -135,7 +135,7 @@
 // Return save error from NotificationSettingModel delegate (no longer used)
 -(void)saveNotificationSettingsError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }*/
@@ -187,7 +187,7 @@
 		case 2:
 		{
 			// Set interval text
-			[cell.detailTextLabel setText:[[self.notificationSettings.Interval stringValue] stringByAppendingString:@" min"]];
+			[cell.detailTextLabel setText:[self.notificationSettings.Interval.stringValue stringByAppendingString:@" min"]];
 			break;
 		}
 	}
@@ -222,7 +222,7 @@
 		// Set selected notification interval
 		else
 		{
-			[settingsNotificationsPickerTableViewController setSelectedOption:[[self.notificationSettings.Interval stringValue] stringByAppendingFormat:@" minute%@", ([self.notificationSettings.Interval isEqualToNumber:@1] ? @"" : @"s")]];
+			[settingsNotificationsPickerTableViewController setSelectedOption:[self.notificationSettings.Interval.stringValue stringByAppendingFormat:@" minute%@", ([self.notificationSettings.Interval isEqualToNumber:@1] ? @"" : @"s")]];
 		}
 	}
 }

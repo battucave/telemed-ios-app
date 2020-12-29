@@ -42,9 +42,9 @@
 	[self.toolbar removeFromSuperview];
 	
 	#if DEBUG
-		MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+		MyProfileModel *myProfileModel = MyProfileModel.sharedInstance;
 		
-		switch ([myProfileModel.ID integerValue])
+		switch (myProfileModel.ID.integerValue)
 		{
 			// Jason Hutchison
 			case 5320:
@@ -118,7 +118,7 @@
 		UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
 		UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
-			RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+			RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 			
 			[registeredDeviceModel setPhoneNumber:self.textPhoneNumber.text];
 			
@@ -148,7 +148,7 @@
 					// If device offline, show offline message
 					if (error.code == NSURLErrorNotConnectedToInternet)
 					{
-						ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+						ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 						
 						[errorAlertController show:error];
 						
@@ -161,7 +161,7 @@
 						// Go back to login screen (user navigated here from login screen)
 						if ([self.navigationController.viewControllers count] > 1)
 						{
-							AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+							AuthenticationModel *authenticationModel = AuthenticationModel.sharedInstance;
 	
 							// Clear stored authenticated data
 							[authenticationModel doLogout];

@@ -83,7 +83,7 @@
 			}
 			else if ([elementName isEqualToString:@"MayDisableTimeout"])
 			{
-				self.userProfile.MayDisableTimeout = [self.currentElementValue boolValue];
+				self.userProfile.MayDisableTimeout = self.currentElementValue.boolValue;
 			}
 			else
 			{

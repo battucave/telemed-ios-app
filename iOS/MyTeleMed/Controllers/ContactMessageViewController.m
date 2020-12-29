@@ -78,7 +78,7 @@
 /*/ Return error from EmailTelemedModel delegate (no longer used)
 - (void)emailTeleMedMessageError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }*/

@@ -67,7 +67,7 @@
 			// Re-show keyboard
 			[self.textFieldSSOProvider becomeFirstResponder];
 			
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}

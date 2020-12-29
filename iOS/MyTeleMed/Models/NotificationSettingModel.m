@@ -74,9 +74,9 @@
 	return [NSString stringWithFormat:@"%@.caf", [[toneTitle stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowercaseString]];
 }
 
-- (NotificationSettingModel *)getNotificationSettingsByName:(NSString *)name
+- (NotificationSettingModel *)getNotificationSettingsForName:(NSString *)name
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	NSString *notificationKey = [NSString stringWithFormat:@"%@Settings", name];
 	NotificationSettingModel *notificationSettings;
 	
@@ -93,7 +93,7 @@
 	if (notificationSettings == nil || notificationSettings.Tone == nil)
 	{
 		// Check server for previously saved notification settings
-		[self getServerNotificationSettingsByName:name];
+		[self getServerNotificationSettingsForName:name];
 		
 		// Return default notification settings
 		NSArray *intervals = NotificationSettingModel.intervals;
@@ -139,10 +139,10 @@
 	}];
 }
 
-- (void)getServerNotificationSettingsByName:(NSString *)name
+- (void)getServerNotificationSettingsForName:(NSString *)name
 {
 	NSDictionary *parameters = @{
-		@"setting"	: [([name isEqualToString:@"priority"] ? @"prio" : name) uppercaseString]
+		@"setting"	: ([name isEqualToString:@"priority"] ? @"prio" : name).uppercaseString
 	};
 	
 	[self.operationManager GET:@"NotificationSettings" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
@@ -157,13 +157,13 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			// Set isReminderOn
-			[self setIsReminderOn:([self.Interval integerValue] > 0)];
+			self.isReminderOn = (self.Interval.integerValue > 0);
 			
 			// Prevent interval of 0 on device (interval of 0 is used by server to denote that reminders are off)
-			if (self.Interval != nil && [self.Interval integerValue] == 0)
+			if (self.Interval != nil && self.Interval.integerValue == 0)
 			{
 				// Default interval to 1
 				self.Interval = @1;
@@ -206,13 +206,13 @@
 	}];
 }
 
-- (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings
+- (void)saveNotificationSettingsForName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings
 {
 	// Show activity indicator
 	[self showActivityIndicator];
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Create interval value (chat and comment settings do not include interval)
 	NSString *interval;
@@ -251,7 +251,7 @@
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			// Save notification settings for type to device
 			[settings setObject:[NSKeyedArchiver archivedDataWithRootObject:notificationSettings] forKey:notificationKey];
@@ -260,7 +260,7 @@
 			// Priority message notification settings removed in version 3.85. If saving notification settings for normal messages, then also save them for priority messages
 			if ([name isEqualToString:@"normal"])
 			{
-				[self saveNotificationSettingsByName:@"priority" settings:notificationSettings];
+				[self saveNotificationSettingsForName:@"priority" settings:notificationSettings];
 			}
 			// Handle success via delegate (not currently used)
 			else if (self.delegate && [self.delegate respondsToSelector:@selector(saveNotificationSettingsSuccess)])
@@ -276,7 +276,7 @@
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
-				[self saveNotificationSettingsByName:name settings:notificationSettings];
+				[self saveNotificationSettingsForName:name settings:notificationSettings];
 			}];
 			
 			// Handle error via delegate (temporarily handle additional logic in UIViewController+NotificationTonesFix.m)
@@ -291,7 +291,7 @@
 		NSLog(@"NotificationSettingModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem saving your notification settings." andTitle:@"notification settings Error"];
@@ -309,7 +309,7 @@
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
-				[self saveNotificationSettingsByName:name settings:notificationSettings];
+				[self saveNotificationSettingsForName:name settings:notificationSettings];
 			}];
 		}];
 	}];
@@ -319,7 +319,7 @@
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^

@@ -62,7 +62,7 @@
 	{
 		// Show error message without title
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 		
 		[errorAlertController show:error];
 	}
@@ -71,7 +71,7 @@
 	{
 		// Show error message without title
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"Email Address and Confirm Email Address fields do not match.", NSLocalizedDescriptionKey, nil]];
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 		
 		[errorAlertController show:error];
 		
@@ -97,7 +97,7 @@
 				// Re-show keyboard
 				[self.textFieldEmailAddress becomeFirstResponder];
 				
-				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 				
 				[errorAlertController show:error];
 			}

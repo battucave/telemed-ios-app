@@ -24,13 +24,13 @@
 - (void)savePreferredAccount:(AccountModel *)account
 {
 	// Initialize MyProfileModel
-	[self setMyProfileModel:[MyProfileModel sharedInstance]];
+	[self setMyProfileModel:MyProfileModel.sharedInstance];
 	
 	// Show activity indicator
 	[self showActivityIndicator];
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Store preferred account to be used when network request is sent
 	[self setPreferredAccount:account];
@@ -78,7 +78,7 @@
 		NSLog(@"PasswordChangeModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem changing your Preferred Account." andTitle:@"Preferred Account Error"];
@@ -109,7 +109,7 @@
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^

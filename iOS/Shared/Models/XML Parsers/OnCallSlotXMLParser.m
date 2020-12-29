@@ -63,11 +63,11 @@
 	}
 	else if ([elementName isEqualToString:@"IsEscalationSlot"])
 	{
-		self.onCallSlot.IsEscalationSlot = [self.currentElementValue boolValue];
+		self.onCallSlot.IsEscalationSlot = self.currentElementValue.boolValue;
 	}
 	else if ([elementName isEqualToString:@"SelectRecipient"])
 	{
-		self.onCallSlot.SelectRecipient = [self.currentElementValue boolValue];
+		self.onCallSlot.SelectRecipient = self.currentElementValue.boolValue;
 	}
 	else
 	{

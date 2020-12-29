@@ -39,7 +39,7 @@
 	{
 		// Show error message without title
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password fields do not match.", NSLocalizedDescriptionKey, nil]];
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 		
 		[errorAlertController show:error];
 		

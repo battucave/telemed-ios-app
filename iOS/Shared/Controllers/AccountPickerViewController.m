@@ -110,7 +110,7 @@
 		// If selected account not already set, then set it to MyProfileModel's MyPreferredAccount
 		if (! self.selectedAccount)
 		{
-			MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+			MyProfileModel *myProfileModel = MyProfileModel.sharedInstance;
 			
 			if (myProfileModel.MyPreferredAccount)
 			{
@@ -145,8 +145,8 @@
 	}
 	
 	// Add keyboard observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
 	#if MED2MED
 		// If user navigated from SettingsTableViewController
@@ -171,8 +171,8 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -253,7 +253,7 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -410,7 +410,7 @@
 		// Accounts table
 		if ([self.accounts count] == 0)
 		{
-			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s available.", [self.textAccount lowercaseString]] : @"Loading...")];
+			[emptyCell.textLabel setText:(self.isLoaded ? [NSString stringWithFormat: @"No %@s available.", self.textAccount.lowercaseString] : @"Loading...")];
 		}
 		// Search results table
 		else

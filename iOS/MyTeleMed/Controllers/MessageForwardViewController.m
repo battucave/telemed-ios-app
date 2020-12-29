@@ -88,7 +88,7 @@
 // Return error from ForwardMessageModel delegate (no longer used)
 - (void)forwardMessageError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }*/

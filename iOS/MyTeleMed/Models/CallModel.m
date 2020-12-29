@@ -22,7 +22,7 @@
 - (void)callTeleMed
 {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
 	// Reset observer for TeleMed to return phone call
 	[appDelegate stopTeleMedCallObserver];
@@ -45,7 +45,7 @@
 	}
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
 		@"recordCall"	: @"false",
@@ -91,7 +91,7 @@
 		NSLog(@"CallModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Stop observing for TeleMed to return phone call
 		[appDelegate stopTeleMedCallObserver];
@@ -119,7 +119,7 @@
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
 	// Stop observing for TeleMed to return phone call (reset the listener)
 	[appDelegate stopTeleMedCallObserver];
@@ -144,7 +144,7 @@
 	}
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
 		@"mdid"			: messageID,
@@ -191,7 +191,7 @@
 		NSLog(@"CallModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Stop observing for TeleMed to return phone call
 		[appDelegate stopTeleMedCallObserver];
@@ -220,7 +220,7 @@
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	if (! self.pendingComplete)
 	{

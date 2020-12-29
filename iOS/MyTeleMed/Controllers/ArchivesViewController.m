@@ -33,7 +33,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
@@ -97,7 +97,7 @@
 	// If position is open
 	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		

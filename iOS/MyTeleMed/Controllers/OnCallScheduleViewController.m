@@ -36,7 +36,7 @@
     [super viewDidLoad];
 	
 	// Initialize MyStatusModel
-	[self setMyStatusModel:[MyStatusModel sharedInstance]];
+	[self setMyStatusModel:MyStatusModel.sharedInstance];
 	[self.myStatusModel setDelegate:self];
 }
 
@@ -77,7 +77,7 @@
 			NSLog(@"OnCallScheduleViewController Error: %@", error);
 			
 			// Show error message
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}

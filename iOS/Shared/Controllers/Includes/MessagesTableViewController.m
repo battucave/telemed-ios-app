@@ -116,7 +116,7 @@
 	
 	[self reloadMessages];
 	
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
@@ -149,7 +149,7 @@
 	[self setIsFirstPageLoaded:YES];
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -485,7 +485,7 @@
 - (void)dealloc
 {
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 
@@ -865,7 +865,7 @@
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }

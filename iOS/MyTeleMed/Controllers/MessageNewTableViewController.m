@@ -94,7 +94,7 @@
 - (void)updateAccountsError:(NSError *)error
 {
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -115,7 +115,7 @@
 // Return error from NewMessageModel delegate (no longer used)
 - (void)sendNewMessageError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
  
 	[errorAlertController show:error];
 }*/

@@ -58,7 +58,7 @@
 {
 	if ([elementName isEqualToString:@"OnCallNow"])
 	{
-		self.myStatus.OnCallNow = [self.currentElementValue boolValue];
+		self.myStatus.OnCallNow = self.currentElementValue.boolValue;
 	}
 	else if ([elementName isEqualToString:@"NextOnCallEntries"])
 	{

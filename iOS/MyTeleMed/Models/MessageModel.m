@@ -62,7 +62,7 @@ const int MessagesPerPage = 25;
 	} mutableCopy];
 	
 	// If using specific Account, alter the URL to include the Account Public Key
-	if ([accountID integerValue] > 0)
+	if (accountID.integerValue > 0)
 	{
 		[parameters setValue:accountID forKey:@"acctID"];
 	}
@@ -86,7 +86,7 @@ const int MessagesPerPage = 25;
 			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(updateMessages:forPage:)])
 			{
-				NSArray *messages = [[parser messages] copy];
+				NSArray *messages = [parser.messages copy];
 				
 				[self.delegate updateMessages:messages forPage:[[parameters objectForKey:@"pn"] integerValue]];
 			}
@@ -134,7 +134,7 @@ const int MessagesPerPage = 25;
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			MessageModel *message = [[parser messages] objectAtIndex:0];
+			MessageModel *message = [parser.messages objectAtIndex:0];
 			
 			// Handle success via callback
 			callback(YES, message, nil);
@@ -185,7 +185,7 @@ const int MessagesPerPage = 25;
 	}
 	
 	// Add network activity observer (not currently used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
-	// [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	// [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Store state for modifyMessageStatePending:
 	self.messageState = state;
@@ -237,7 +237,7 @@ const int MessagesPerPage = 25;
 		NSLog(@"MessageModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:[NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")] andTitle:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")]];
@@ -292,7 +292,7 @@ const int MessagesPerPage = 25;
 	}
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Store state for modifyMessageStatePending:
 	self.messageState = state;
@@ -365,7 +365,7 @@ const int MessagesPerPage = 25;
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[failedMessages count], self.totalNumberOfOperations);
 	
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
 	[self hideActivityIndicator:^
@@ -426,7 +426,7 @@ const int MessagesPerPage = 25;
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^

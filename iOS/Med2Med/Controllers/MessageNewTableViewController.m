@@ -90,7 +90,7 @@
 	// Pre-populate callback data with data from user profile
 	if (self.shouldInitializeCallbackData)
 	{
-		UserProfileModel *profile = [UserProfileModel sharedInstance];
+		UserProfileModel *profile = UserProfileModel.sharedInstance;
 		
 		for (UITextField *textField in self.textFields)
 		{
@@ -177,7 +177,7 @@
 	
 	// Show error message without title for invalid callback number
 	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"Callback Number %@ is invalid. Please enter a valid phone number.", callbackPhoneNumberValue], NSLocalizedDescriptionKey, nil]];
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -477,7 +477,7 @@
 		}
 		else
 		{
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}

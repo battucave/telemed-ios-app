@@ -68,17 +68,17 @@
 	[self.callObserver setDelegate:self queue:dispatch_get_main_queue()];
 	
 	// Setup app timeout feature
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidTimeout:) name:NOTIFICATION_APPLICATION_DID_TIMEOUT object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidTimeout:) name:NOTIFICATION_APPLICATION_DID_TIMEOUT object:nil];
 	
 	// Setup screenshot notification feature
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(userDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
 	
 	// Add reachability observer to defer web services until reachability has been determined
-	__unused TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
+	__unused TeleMedHTTPRequestOperationManager *operationManager = TeleMedHTTPRequestOperationManager.sharedInstance;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLaunching:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didFinishLaunching:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Med2Med - Prevent swipe message from ever appearing
 	#if MED2MED
@@ -177,17 +177,17 @@
 	[self toggleScreenshotView:NO];
 	
 	// Save current time app was closed (used for showing cdma screen)
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	[settings setObject:[NSDate date] forKey:DATE_APPLICATION_DID_ENTER_BACKGROUND];
 	[settings synchronize];
 	
 	// MyTeleMed - Update app's badge count with number of unread messages
 	#if MYTELEMED
-		MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
+		MyStatusModel *myStatusModel = MyStatusModel.sharedInstance;
 	
 		// Set badge number for app icon. These values are updated every time user resumes app and opens side navigation. Idea is that if user is actively using app, then they will use side navigation which will update the unread message count. If they just briefly open the app to check messages, then the app resume will update the unread message count
-		[application setApplicationIconBadgeNumber:[myStatusModel.UnreadMessageCount integerValue]];
+		[application setApplicationIconBadgeNumber:myStatusModel.UnreadMessageCount.integerValue];
 	#endif
 }
 
@@ -204,10 +204,10 @@
 	id <ProfileProtocol> profile;
 	
 	#if MYTELEMED
-		profile = [MyProfileModel sharedInstance];
+		profile = MyProfileModel.sharedInstance;
 
 	#elif defined MED2MED
-		profile = [UserProfileModel sharedInstance];
+		profile = UserProfileModel.sharedInstance;
 
 	#else
 		NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
@@ -233,7 +233,7 @@
 				{
 					// MyTeleMed - Update MyStatusModel with updated number of unread messages
 					#if MYTELEMED
-						MyStatusModel *myStatusModel = [MyStatusModel sharedInstance];
+						MyStatusModel *myStatusModel = MyStatusModel.sharedInstance;
 					
 						[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
 						{
@@ -244,7 +244,7 @@
 				// If error is not because device is offline, then account is not valid so go to login screen
 				else if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 				{
-					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+					NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 					
 					// Notify user that their account was invalid
 					[settings setValue:@"There was a problem validating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
@@ -266,7 +266,7 @@
 	[self toggleScreenshotView:YES];
 	
 	// Dismiss error alert if showing
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController dismiss];
 }
@@ -287,12 +287,12 @@
 			NSLog(@"CXCallState: Disconnected");
 			
 			// Dismiss error alert if showing (after phone call has ended, user should not see data connection unavailable error)
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController dismiss];
 			
 			// Post a notification to any listeners (ChatMessageDetailViewController and MessageDetailViewController)
-			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+			[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 			
 			// Reset idle timer
 			dispatch_async(dispatch_get_main_queue(), ^
@@ -306,7 +306,7 @@
 			NSLog(@"CXCallState: Connected");
 			
 			// Post a notification to any listeners (PhoneCallViewController)
-			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
+			[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
 			
 			// MyTeleMed - Stop observing for TeleMed to return phone call
 			#if MYTELEMED
@@ -319,7 +319,7 @@
 - (void)dealloc
 {
 	// Remove all observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 
@@ -330,7 +330,7 @@
 	NSLog(@"Application timed out");
 	
 	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	BOOL timeoutDisabled = [settings boolForKey:DISABLE_TIMEOUT];
 	
 	// Only log user out if timeout is enabled, user is not currently on a phone call, and user is not currently on the login screen
@@ -357,7 +357,7 @@
 	/* TEMPORARILY COMMENTED OUT
 	 * Need to decide if there should be a remote server integration so that version checks can be disabled or prioritized (change showAlertAfterCurrentVersionHasBeenReleasedForDays to 1)
 	
-	Harpy *harpy = [Harpy sharedInstance];
+	Harpy *harpy = Harpy.sharedInstance;
 	
 	[harpy setPresentingViewController:self.window.rootViewController];
 	
@@ -382,7 +382,7 @@
  */
 - (BOOL)didApplicationTimeoutWhileInactive
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// If user has timeout disabled, then the application should not time out
 	if ([settings boolForKey:DISABLE_TIMEOUT])
@@ -401,16 +401,16 @@
 	NSLog(@"Application Last Active: %f minutes ago", timeIntervalSinceApplicationResignedActive / 60);
 	
 	// Determine whether application has timed out since it last resigned active
-	return (timeIntervalSinceApplicationResignedActive / 60 > [userTimeoutPeriodMinutes integerValue]);
+	return (timeIntervalSinceApplicationResignedActive / 60 > userTimeoutPeriodMinutes.integerValue);
 }
 
 - (void)didFinishLaunching:(NSNotification *)notification
 {
 	// Remove reachability observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingReachabilityDidChangeNotification object:nil];
 	
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	AuthenticationModel *authenticationModel = AuthenticationModel.sharedInstance;
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// TEMPORARY (Version 4.08) - Timeout logic was changed to use disableTimeout so that it doesn't have to be initialized - This logic can be removed in a future update (only after Med2Med has received the update)
 	if ([settings objectForKey:@"enableTimeout"])
@@ -433,10 +433,10 @@
 		id <ProfileProtocol> profile;
 		
 		#if MYTELEMED
-			profile = [MyProfileModel sharedInstance];
+			profile = MyProfileModel.sharedInstance;
 		
 		#elif defined MED2MED
-			profile = [UserProfileModel sharedInstance];
+			profile = UserProfileModel.sharedInstance;
 		
 		#else
 			NSLog(@"Error - Target is neither MyTeleMed nor Med2Med");
@@ -504,7 +504,7 @@
  */
 - (void)goToLoginScreen
 {
-	AuthenticationModel *authenticationModel = [AuthenticationModel sharedInstance];
+	AuthenticationModel *authenticationModel = AuthenticationModel.sharedInstance;
 	UIStoryboard *loginSSOStoryboard = [self getLoginSSOStoryboard];
 
 	// Clear stored authentication data
@@ -513,7 +513,7 @@
 	// Set LoginSSONavigationController as the root view controller
 	UINavigationController *loginSSONavigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:@"LoginSSONavigationController"];
 	
-	[self.window setRootViewController:loginSSONavigationController];
+	self.window.rootViewController = loginSSONavigationController;
 	[self.window makeKeyAndVisible];
 	
 	// Check whether a new version of the app is available in the app store
@@ -557,7 +557,7 @@
 	{
 		UINavigationController *navigationController = [loginSSOStoryboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@NavigationController", identifier]];
 		
-		[self.window setRootViewController:navigationController];
+		self.window.rootViewController = navigationController;
 		[self.window makeKeyAndVisible];
 	}
 }
@@ -592,7 +592,7 @@
 		{
 			[UIView animateWithDuration:0.25f animations:^
 			{
-				[screenshotView setAlpha:0.0];
+				screenshotView.alpha = 0.0;
 			}
 			completion:^(BOOL finished)
 			{
@@ -607,11 +607,11 @@
 		if (screenshotView == nil)
 		{
 			UIView *screenshotView = [[[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:self options:nil] objectAtIndex:0];
-			UIScreen *screen = [UIScreen mainScreen];
+			UIScreen *screen = UIScreen.mainScreen;
 			
-			[screenshotView setContentMode:UIViewContentModeScaleAspectFill];
-			[screenshotView setFrame:CGRectMake(0.0f, 0.0f, screen.bounds.size.width, screen.bounds.size.height)];
-			[screenshotView setTag:8353633];
+			screenshotView.contentMode = UIViewContentModeScaleAspectFill;
+			screenshotView.frame = CGRectMake(0.0f, 0.0f, screen.bounds.size.width, screen.bounds.size.height);
+			screenshotView.tag = 8353633;
 			
 			[self.window addSubview:screenshotView];
 			[self.window bringSubviewToFront:screenshotView];
@@ -636,7 +636,7 @@
 	NSLog(@"Failed to get token, error: %@", error);
 	
 	// Post notification to any observers within the app (MessagesViewController and SettingsTableViewController)
-	[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
+	[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
 		@"errorMessage": error.localizedDescription
 	}];
 }
@@ -706,7 +706,7 @@
 	NSLog(@"Remote Notifications Device Token: %@", deviceToken);
 
     // Get device token as a string (NOTE: Do not use device token's description as it has changed in iOS 13)
-    const char *data = [deviceToken bytes];
+    const char *data = deviceToken.bytes;
     NSMutableString *tokenString = [NSMutableString string];
 
     for (NSUInteger i = 0; i < deviceToken.length; i++)
@@ -717,9 +717,9 @@
     NSLog(@"Remote Notifications Device Token String: %@", tokenString);
 	
 	// Set device token
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
-	[registeredDeviceModel setToken:[tokenString copy]];
+	registeredDeviceModel.Token = [tokenString copy];
 	
 	// Run update device token web service. This will only fire if either MyProfileModel's getWithCallback: has already completed or phone number has been entered/confirmed (this method can sometimes be delayed, so fire it here too)
 	[registeredDeviceModel registerDeviceWithCallback:^(BOOL success, NSError *error)
@@ -727,13 +727,13 @@
 		// Post notifications to any observers within the app (MessagesViewController and SettingsTableViewController)
 		if (success)
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
+			[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
 				@"deviceToken": [tokenString copy]
 			}];
 		}
 		else
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
+			[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:self userInfo:@{
 				@"errorMessage": error.localizedDescription
 			}];
 		}
@@ -769,7 +769,7 @@
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
 	
-	[self.window setRootViewController:initialViewController];
+	self.window.rootViewController = initialViewController;
 	[self.window makeKeyAndVisible];
 	
 	// If app should navigate to remote notification screen after login or app launch
@@ -785,7 +785,7 @@
 			{
 				self.goToRemoteNotificationScreen(navigationController);
 				
-				[self setGoToRemoteNotificationScreen:nil];
+				self.goToRemoteNotificationScreen = nil;
 			});
 		}
 	}
@@ -800,8 +800,8 @@
 - (void)goToNextScreen
 {
 	UIStoryboard *currentStoryboard = self.window.rootViewController.storyboard;
-	id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	id <ProfileProtocol> profile = MyProfileModel.sharedInstance;
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
 	/*/ 8/09/2019 - SSO email collection has been postponed to a future release
 	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
@@ -898,8 +898,8 @@
 			{
 				ChatMessageDetailViewController *chatMessageDetailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ChatMessageDetailViewController"];
 				
-				[chatMessageDetailViewController setIsNewChat:NO];
-				[chatMessageDetailViewController setConversationID:notificationID];
+				chatMessageDetailViewController.isNewChat = NO;
+				chatMessageDetailViewController.conversationID = notificationID;
 				
 				[navigationController pushViewController:chatMessageDetailViewController animated:YES];
 			};
@@ -914,12 +914,12 @@
 				// Comment notifications on sent messages only contain MessageID
 				if ([notificationType isEqualToString:@"SentComment"])
 				{
-					[messageDetailViewController setMessageID:notificationID];
+					messageDetailViewController.messageID = notificationID;
 				}
 				// Comment and message notifications contain DeliveryID
 				else
 				{
-					[messageDetailViewController setMessageDeliveryID:notificationID];
+					messageDetailViewController.messageDeliveryID = notificationID;
 				}
 				
 				[navigationController pushViewController:messageDetailViewController animated:YES];
@@ -931,7 +931,7 @@
 	if (applicationState == UIApplicationStateActive)
 	{
 		// Post notification to any observers within the app (CoreViewController and CoreTableViewController) regardless of whether user is logged in
-		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
+		[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:notificationData userInfo:(goToRemoteNotificationScreen != nil ? @{
 			@"goToRemoteNotificationScreen": [goToRemoteNotificationScreen copy]
 		} : NULL)];
 	}
@@ -1047,7 +1047,7 @@
 	// Cancel any previous listener to prevent duplicate error messages
 	[self stopTeleMedCallObserver];
 	
-	[self setTeleMedCallTimeoutBlock:teleMedCallTimeoutBlock];
+	self.teleMedCallTimeoutBlock = teleMedCallTimeoutBlock;
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeoutPeriod * NSEC_PER_SEC)), dispatch_get_main_queue(), self.teleMedCallTimeoutBlock);
 }
@@ -1062,7 +1062,7 @@
 		dispatch_block_cancel(self.teleMedCallTimeoutBlock);
 		
 		// Reset timeout block
-		[self setTeleMedCallTimeoutBlock:nil];
+		self.teleMedCallTimeoutBlock = nil;
 	}
 }
 
@@ -1071,7 +1071,7 @@
  */
 - (void)validateMyTeleMedRegistration:(id <ProfileProtocol>)profile
 {
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 
 	NSLog(@"User ID: %@", profile.ID);
 	NSLog(@"Preferred Account ID: %@", profile.MyPreferredAccount.ID);
@@ -1087,7 +1087,7 @@
 			// If there is an error other than the device offline error, show the error. Show the error even if success returned true so that TeleMed can track issue down
 			if (registeredDeviceError && registeredDeviceError.code != NSURLErrorNotConnectedToInternet && registeredDeviceError.code != NSURLErrorTimedOut)
 			{
-				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 				
 				[errorAlertController show:registeredDeviceError];
 			}
@@ -1115,7 +1115,7 @@
  */
 - (void)goToMainScreen
 {
-	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+	id <ProfileProtocol> profile = UserProfileModel.sharedInstance;
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Med2Med" bundle:nil];
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];
 	UINavigationController *navigationController;
@@ -1131,9 +1131,9 @@
 		navigationController = [mainStoryboard instantiateViewControllerWithIdentifier:@"MessageNewUnauthorizedNavigationController"];
 	}
 	
-	[initialViewController setFrontViewController:navigationController];
+	initialViewController.frontViewController = navigationController;
 	
-	[self.window setRootViewController:initialViewController];
+	self.window.rootViewController = initialViewController;
 	[self.window makeKeyAndVisible];
 	
 	// Check whether a new version of the app is available in the app store
@@ -1145,7 +1145,7 @@
  */
 - (void)goToNextScreen
 {
-	id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+	id <ProfileProtocol> profile = UserProfileModel.sharedInstance;
 	
 	/*/ 8/09/2019 - SSO email collection has been postponed to a future release
 	SSOProviderModel *ssoProviderModel = [[SSOProviderModel alloc] init];
@@ -1194,7 +1194,7 @@
 			{
 				if ([account isAuthorized])
 				{
-					[profile setIsAuthorized:YES];
+					profile.IsAuthorized = YES;
 				}
 				
 				NSLog(@"Account Name: %@; Status: %@", account.Name, account.MyAuthorizationStatus);
@@ -1202,7 +1202,7 @@
 		}
 		else
 		{
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}

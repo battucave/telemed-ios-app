@@ -50,7 +50,7 @@
 	[self setNavigationBarTitle:self.navigationItem.title];
 	
 	// Set current user id
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	MyProfileModel *myProfileModel = MyProfileModel.sharedInstance;
 	self.currentUserID = myProfileModel.ID;
 	
 	// Initialize selected chat participants
@@ -109,13 +109,13 @@
 	[self.textViewChatParticipants setMaxHeight:(([UIScreen mainScreen].bounds.size.height - 64.0f - self.textViewChatMessage.bounds.size.height) / 2.5)];
 	
 	// Add keyboard observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Add application did enter background observer to hide keyboard
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Add call disconnected observer to hide keyboard
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -126,13 +126,13 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Remove application did enter background observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Remove call disconnected observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
 	// Dismiss keyboard
 	[self.view endEditing:YES];
@@ -569,7 +569,7 @@
 	[self setIsLoaded:YES];
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -816,7 +816,7 @@
 - (void)dealloc
 {
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 @end

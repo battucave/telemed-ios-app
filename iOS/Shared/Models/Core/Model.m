@@ -24,7 +24,7 @@
 	if (self = [super init])
 	{
 		// Initialize operation manager
-		self.operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
+		self.operationManager = TeleMedHTTPRequestOperationManager.sharedInstance;
 	}
 	
 	return self;
@@ -135,21 +135,21 @@
 
 - (void)showError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
 
 - (void)showError:(NSError *)error withRetryCallback:(void (^)(void))callback
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error withRetryCallback:callback];
 }
 
 - (void)showError:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error withRetryCallback:retryCallback cancelCallback:cancelCallback];
 }
@@ -174,7 +174,7 @@
 - (void)dealloc
 {
 	// Remove all observers if applicable (models with POST or DELETE requests have network activity observers)
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 @end

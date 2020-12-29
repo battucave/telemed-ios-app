@@ -23,7 +23,7 @@
 	
 	[[self.textFields objectAtIndex:0] becomeFirstResponder];
 	
-	UserProfileModel *profile = [UserProfileModel sharedInstance];
+	UserProfileModel *profile = UserProfileModel.sharedInstance;
 	
 	// Initialize text field values
 	[self setTextFieldValues: profile];
@@ -44,7 +44,7 @@
 {
 	NSLog(@"Save Profile");
 	
-	// UserProfileModel *profile = [UserProfileModel sharedInstance];
+	// UserProfileModel *profile = UserProfileModel.sharedInstance;
 	
 	// [profile saveUserProfile:data];
 }

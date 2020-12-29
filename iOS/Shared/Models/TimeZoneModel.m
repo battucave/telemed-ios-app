@@ -26,7 +26,7 @@
 			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(updateTimeZones:)])
 			{
-				[self.delegate updateTimeZones:[[parser timeZones] copy]];
+				[self.delegate updateTimeZones:[parser.timeZones copy]];
 			}
 		}
 		// Error parsing xml file

@@ -30,8 +30,8 @@
 @property (nonatomic) NSString *ToneTitle; // Not passed from web service
 
 - (NSString *)getToneFromToneTitle:(NSString *)toneTitle;
-- (NotificationSettingModel *)getNotificationSettingsByName:(NSString *)name;
-- (void)saveNotificationSettingsByName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings;
+- (NotificationSettingModel *)getNotificationSettingsForName:(NSString *)name;
+- (void)saveNotificationSettingsForName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings;
 
 @end
 

@@ -48,7 +48,7 @@
 	#else
 		[self setMenuItems:@[@"Messages", @"Sent Messages", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
-		[self setMyStatusModel:[MyStatusModel sharedInstance]];
+		[self setMyStatusModel:MyStatusModel.sharedInstance];
 	#endif
 }
 
@@ -141,12 +141,12 @@
 				// If cell is for secure chat, set chat counts
 				if ([cell.reuseIdentifier isEqualToString:@"Secure Chat"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnopenedChatConvoCount integerValue], 99), MIN([self.myStatusModel.ActiveChatConvoCount integerValue], 99)]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN(self.myStatusModel.UnopenedChatConvoCount.integerValue, 99), MIN(self.myStatusModel.ActiveChatConvoCount.integerValue, 99)]];
 				}
 				// If cell is for messages, set message counts
 				else if ([cell.reuseIdentifier isEqualToString:@"Messages"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnreadMessageCount integerValue], 99), MIN([self.myStatusModel.ActiveMessageCount integerValue], 99)]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN(self.myStatusModel.UnreadMessageCount.integerValue, 99), MIN(self.myStatusModel.ActiveMessageCount.integerValue, 99)]];
 				}
                 
                 // TESTING ONLY (set counts to random numbers)
@@ -236,7 +236,7 @@
 			// Workaround to remove observers on these view controllers since dealloc is not fired as expected
 			if ([navController.viewControllers count] > 0)
 			{
-				[[NSNotificationCenter defaultCenter] removeObserver:[navController.viewControllers objectAtIndex:0]];
+				[NSNotificationCenter.defaultCenter removeObserver:[navController.viewControllers objectAtIndex:0]];
 			}
 			
 			[navController setViewControllers:@[destinationViewController] animated:NO];
@@ -263,7 +263,7 @@
 	if ([cell.reuseIdentifier isEqualToString:@"New Message"])
 	{
 		// Show MessageNewTableViewController
-		if ([[UserProfileModel sharedInstance] isAuthorized])
+		if ([UserProfileModel.sharedInstance isAuthorized])
 		{
 			[self performSegueWithIdentifier:@"showMessageNew" sender:cell];
 		}

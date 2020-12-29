@@ -21,7 +21,7 @@
 
 - (IBAction)callTeleMed:(id)sender
 {
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// Require device registration with TeleMed in order to return call
 	if ([registeredDevice isRegistered])
@@ -62,7 +62,7 @@
 {
 	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
 	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// If device is registered successfully, then attempt to call TeleMed
 	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])

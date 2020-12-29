@@ -30,7 +30,7 @@
 			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(updateSentMessages:)])
 			{
-				[self.delegate updateSentMessages:[[parser sentMessages] copy]];
+				[self.delegate updateSentMessages:[parser.sentMessages copy]];
 			}
 		}
 		// Error parsing xml file
@@ -76,7 +76,7 @@
 		// Parse the xml file
 		if ([xmlParser parse])
 		{
-			SentMessageModel *sentMessage = [[parser sentMessages] objectAtIndex:0];
+			SentMessageModel *sentMessage = [parser.sentMessages objectAtIndex:0];
 			
 			callback(YES, sentMessage, nil);
 		}

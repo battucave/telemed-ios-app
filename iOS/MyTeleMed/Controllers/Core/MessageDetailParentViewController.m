@@ -144,7 +144,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -177,7 +177,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -196,7 +196,7 @@
 	
 	// NOTE: Return call recording options removed in commit "Remove the Return Call popup since all calls are recorded making the choice irrelevant" (3/01/2019)
 	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// Require device registration with TeleMed in order to return call
 	if ([registeredDevice isRegistered])
@@ -249,7 +249,7 @@
 {
 	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
 	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// If device is registered successfully, then enable the return call button and attempt to return call
 	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
@@ -314,7 +314,7 @@
 	// Show error message
 	if ([state isEqualToString:@"Archive"])
 	{
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
  
 		[errorAlertController show:error];
 	}

@@ -49,7 +49,7 @@
 	}
 
 	// Add call connected observer to dismiss screen after return call from TeleMed was successfully received
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didConnectCall:) name:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didConnectCall:) name:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -72,7 +72,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (IBAction)goBack:(id)sender
@@ -123,7 +123,7 @@
 - (void)dealloc
 {
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 @end

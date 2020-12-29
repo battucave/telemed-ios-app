@@ -29,7 +29,7 @@
 		if ([xmlParser parse])
 		{
 			// Sort hospitals by name
-			NSArray *hospitals = [[parser hospitals] sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
+			NSArray *hospitals = [parser.hospitals sortedArrayUsingComparator:^NSComparisonResult(HospitalModel *hospitalModelA, HospitalModel *hospitalModelB)
 			{
 				return [hospitalModelA.Name compare:hospitalModelB.Name];
 			}];

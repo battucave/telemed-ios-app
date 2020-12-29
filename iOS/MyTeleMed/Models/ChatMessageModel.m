@@ -58,7 +58,7 @@
 			// Sort chat messages for specific conversation by time sent in ascending order
 			if (chatMessageID)
 			{
-				chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+				chatMessages = [parser.chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
 				{
 					return [chatMessageModelA.TimeSent_UTC compare:chatMessageModelB.TimeSent_UTC];
 				}];
@@ -66,7 +66,7 @@
 			// Sort chat messages by time sent in descending order
 			else
 			{
-				chatMessages = [[parser chatMessages] sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
+				chatMessages = [parser.chatMessages sortedArrayUsingComparator:^NSComparisonResult(ChatMessageModel *chatMessageModelA, ChatMessageModel *chatMessageModelB)
 				{
 					return [chatMessageModelB.TimeSent_UTC compare:chatMessageModelA.TimeSent_UTC];
 				}];
@@ -138,7 +138,7 @@
 	[self showActivityIndicator:@"Deleting..."];
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
 		@"chatMsgID"	: chatMessageID,
@@ -181,7 +181,7 @@
 		NSLog(@"ChatMessageModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem deleting the Chat Message." andTitle:@"Chat Message Error"];
@@ -220,7 +220,7 @@
 	[self showActivityIndicator:@"Deleting..."];
 	
 	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	for (ChatMessageModel *chatMessage in chatMessages)
 	{
@@ -291,7 +291,7 @@
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedChatMessages count], self.totalNumberOfOperations);
 	
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^
@@ -356,7 +356,7 @@
 - (void)networkRequestDidStart:(NSNotification *)notification
 {
 	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^

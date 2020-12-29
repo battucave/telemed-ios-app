@@ -29,7 +29,7 @@
 
 - (IBAction)dismissViewController:(id)sender
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	[settings setBool:YES forKey:CDMA_VOICE_DATA_HIDDEN];
 	[settings synchronize];
@@ -39,7 +39,7 @@
 
 - (IBAction)toggleCDMAVoiceDataWarning:(UISwitch *)sender
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Toggle whether this view should show again on next run
 	[settings setBool:sender.isOn forKey:SHOW_SPRINT_VOICE_DATA_WARNING];

@@ -121,7 +121,7 @@
 	}
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -189,7 +189,7 @@
 		[scanner scanUpToCharactersFromSet:numbers intoString:nil];
 		[scanner scanCharactersFromSet:numbers intoString:&numberOfDays];
 		
-		[self setStartDate:[self.endDate dateByAddingTimeInterval:60 * 60 * 24 * -[numberOfDays integerValue]]];
+		[self setStartDate:[self.endDate dateByAddingTimeInterval:60 * 60 * 24 * -numberOfDays.integerValue]];
 	}
 	// Set selected account
 	else

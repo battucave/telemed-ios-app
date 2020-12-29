@@ -31,7 +31,7 @@
 		if ([xmlParser parse])
 		{
 			// Sort chat participants by last name, first name
-			NSArray *chatParticipants = [[parser chatParticipants] sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
+			NSArray *chatParticipants = [parser.chatParticipants sortedArrayUsingComparator:^NSComparisonResult(ChatParticipantModel *chatParticipantModelA, ChatParticipantModel *chatParticipantModelB)
 			{
 				return [chatParticipantModelA.FormattedNameLNF compare:chatParticipantModelB.FormattedNameLNF];
 			}];

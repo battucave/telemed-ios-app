@@ -50,7 +50,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		__weak typeof(self) weakSelf = self;
 		
 		// Initialize AuthenticationModel
-		self.authenticationModel = [AuthenticationModel sharedInstance];
+		self.authenticationModel = AuthenticationModel.sharedInstance;
 		
 		self.pendingOperations = [[NSMutableArray alloc] init];
 		
@@ -450,7 +450,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 				dispatch_async(dispatch_get_main_queue(), ^
 				{
 					AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-					NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+					NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 					
 					// Notify user that there was an authentication problem
 					[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
@@ -645,7 +645,7 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 		// Dispatch AFNetworkingOperationDidStartNotification as shortcut to force models to execute pending callbacks
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:AFNetworkingOperationDidStartNotification object:self];
+			[NSNotificationCenter.defaultCenter postNotificationName:AFNetworkingOperationDidStartNotification object:self];
 		});
 	}
 }

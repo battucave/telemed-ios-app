@@ -35,7 +35,7 @@
 		if ([xmlParser parse])
 		{
 			// Sort accounts by name
-			NSArray *accounts = [[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
+			NSArray *accounts = [parser.accounts sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
 			{
 				return [accountModelA.Name compare:accountModelB.Name];
 			}];

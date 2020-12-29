@@ -23,7 +23,7 @@
 	// If email address is not already set, then check user preferences
 	if (! _EmailAddress)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		_EmailAddress = [settings valueForKey:SSO_PROVIDER_EMAIL_ADDRESS];
 	}
@@ -36,7 +36,7 @@
 {
 	if (_EmailAddress != newEmailAddress)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setValue:newEmailAddress forKey:SSO_PROVIDER_EMAIL_ADDRESS];
 		[settings synchronize];
@@ -51,7 +51,7 @@
 	// If name is not already set, then check user preferences
 	if (! _Name)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		_Name = [settings valueForKey:SSO_PROVIDER];
 	}
@@ -64,7 +64,7 @@
 {
 	if (_Name != newName)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setValue:newName forKey:SSO_PROVIDER];
 		[settings synchronize];
@@ -98,7 +98,7 @@
 		return;
 	}
 	
-	AuthenticationHTTPSessionManager *authenticationManager = [AuthenticationHTTPSessionManager sharedInstance];
+	AuthenticationHTTPSessionManager *authenticationManager = AuthenticationHTTPSessionManager.sharedInstance;
 	
 	emailAddress = [emailAddress stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 	
@@ -166,7 +166,7 @@
 		return callback(YES, nil);
 	}
 	
-	AuthenticationHTTPSessionManager *authenticationManager = [AuthenticationHTTPSessionManager sharedInstance];
+	AuthenticationHTTPSessionManager *authenticationManager = AuthenticationHTTPSessionManager.sharedInstance;
 	
 	name = [name stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 	

@@ -59,7 +59,7 @@
 	[self setSectionSessionTimeout:0];
 	
 	#if MYTELEMED
-		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+		RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 		[self setSectionAboutTeleMed:3];
 		[self setSectionNotifications:1];
@@ -77,17 +77,17 @@
 	[super viewWillAppear:animated];
 	
 	#if MYTELEMED
-		[self setProfile:[MyProfileModel sharedInstance]];
+		[self setProfile:MyProfileModel.sharedInstance];
 	
 		// Load notification settings for each type
 		NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
 	
 		[notificationSettingModel setDelegate:self];
 	
-		[self setChatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"chat"]];
-		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"comment"]];
-		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"normal"]];
-		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"stat"]];
+		[self setChatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"chat"]];
+		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"comment"]];
+		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"normal"]];
+		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"stat"]];
 	
 		// Reload notification cells in case notification setting data has changed
 		dispatch_async(dispatch_get_main_queue(), ^
@@ -113,7 +113,7 @@
 		}];
 
 	#elif defined MED2MED
-		[self setProfile:[UserProfileModel sharedInstance]];
+		[self setProfile:UserProfileModel.sharedInstance];
 	#endif
 	
 	// Set may disable timeout value
@@ -143,7 +143,7 @@
 		}];
 		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			[settings setBool:YES forKey:DISABLE_TIMEOUT];
 			[settings synchronize];
@@ -164,7 +164,7 @@
 	// If remember me option is disabled
 	else
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setBool:NO forKey:DISABLE_TIMEOUT];
 		[settings synchronize];
@@ -184,7 +184,7 @@
 	{
 		NSNumber *timeoutPeriodMins = (self.profile ? self.profile.TimeoutPeriodMins : [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD]);
 		
-		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:[timeoutPeriodMins stringValue]];
+		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:timeoutPeriodMins.stringValue];
 	}
 }
 
@@ -257,7 +257,7 @@
 		// Update default footer title with user's account TimeoutPeriodMins
 		else
 		{
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			return [self getSectionTimeoutFooterTitle:[settings boolForKey:DISABLE_TIMEOUT]];
 		}
@@ -281,7 +281,7 @@
 	// Set timeout value
 	if (indexPath.section == self.sectionSessionTimeout)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[self.switchTimeout setOn:[settings boolForKey:DISABLE_TIMEOUT]];
 	}
@@ -473,7 +473,7 @@
 	// Reload corresponding notification cell
 	if (row != NULL)
 	{
-		[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[row integerValue] inSection:self.sectionNotifications]] withRowAnimation:UITableViewRowAnimationNone];
+		[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row.integerValue inSection:self.sectionNotifications]] withRowAnimation:UITableViewRowAnimationNone];
 	}
 }
 
@@ -516,7 +516,7 @@
 -(void)dealloc
 {
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 #endif
 

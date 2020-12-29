@@ -28,7 +28,7 @@
 		if ([xmlParser parse])
 		{
 			// Sort on call slots by name (commented out because not sure if there should be a specific order)
-			/* NSArray *onCallSlots = [[parser onCallSlots] sortedArrayUsingComparator:^NSComparisonResult(OnCallSlotModel *onCallSlotModelA, OnCallSlotModel *onCallSlotModelB)
+			/* NSArray *onCallSlots = [parser.onCallSlots sortedArrayUsingComparator:^NSComparisonResult(OnCallSlotModel *onCallSlotModelA, OnCallSlotModel *onCallSlotModelB)
 			{
 				return [onCallSlotModelA.Name compare:onCallSlotModelB.Name];
 			}];*/
@@ -36,7 +36,7 @@
 			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(updateOnCallSlots:)])
 			{
-				[self.delegate updateOnCallSlots:[[parser onCallSlots] copy]];
+				[self.delegate updateOnCallSlots:[parser.onCallSlots copy]];
 			}
 		}
 		// Error parsing xml file

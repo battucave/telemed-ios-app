@@ -101,14 +101,14 @@
 		self.textViewCommentPlaceholder = self.textViewComment.text;
 	
 		// Initialize MyProfileModel
-		profile = [MyProfileModel sharedInstance];
+		profile = MyProfileModel.sharedInstance;
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
 	
 	// Initialize UserProfileModel
 	#elif defined MED2MED
-		profile = [UserProfileModel sharedInstance];
+		profile = UserProfileModel.sharedInstance;
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
@@ -229,7 +229,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -259,7 +259,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -267,13 +267,13 @@
 		}
 	
 		// Add keyboard observers
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 		// Add application did enter background observer to hide keyboard
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 		// Add call disconnected observer to hide keyboard
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
 	// Med2Med - Hide buttons
 	#elif defined MED2MED
@@ -359,7 +359,7 @@
 - (void)dealloc
 {
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 
@@ -374,13 +374,13 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Remove application did enter background observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Remove call disconnected observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
 	// Dismiss keyboard
 	[self.view endEditing:YES];
@@ -489,7 +489,7 @@
 			// Show error message only if device offline
 			if (error.code == NSURLErrorNotConnectedToInternet)
 			{
-				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 				
 				[errorAlertController show:error];
 			}
@@ -728,7 +728,7 @@
 // Return error from CommentModel delegate (no longer used)
 - (void)saveCommentError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
  
 	[errorAlertController show:error];
 }*/

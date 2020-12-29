@@ -61,7 +61,7 @@
 	}
 	else if ([elementName isEqualToString:@"Enabled"])
 	{
-		self.notificationSetting.Enabled = [self.currentElementValue boolValue];
+		self.notificationSetting.Enabled = self.currentElementValue.boolValue;
 	}
 	else if ([elementName isEqualToString:@"Interval"])
 	{
