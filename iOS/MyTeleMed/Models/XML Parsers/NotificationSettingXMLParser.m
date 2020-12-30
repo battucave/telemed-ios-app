@@ -12,6 +12,7 @@
 @interface NotificationSettingXMLParser()
 
 @property (nonatomic) NSMutableString *currentElementValue;
+@property (nonatomic) NotificationSettingModel *notificationSetting;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 
 @end
@@ -29,13 +30,10 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
-	if ([elementName isEqualToString:@"NotificationSettings"])
+	if ([elementName isEqualToString:@"NotificationSetting"])
 	{
-		// Initialize a notification setting (Only when retrieving all notification settings. When retrieving a single notification setting, this will already be initialized)
-		if (! self.notificationSetting)
-		{
-			self.notificationSetting = [[NotificationSettingModel alloc] init];
-		}
+		// Initialize a notification setting
+		self.notificationSetting = [[NotificationSettingModel alloc] init];
 	}
 }
 
@@ -53,7 +51,7 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName
 {
-	if ([elementName isEqualToString:@"NotificationSettings"])
+	if ([elementName isEqualToString:@"NotificationSetting"])
 	{
 		[self.notificationSettings addObject:self.notificationSetting];
 		

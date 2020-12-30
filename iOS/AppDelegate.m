@@ -26,6 +26,7 @@
 	#import "MessageDetailViewController.h"
 	#import "MyProfileModel.h"
 	#import "MyStatusModel.h"
+    #import "NotificationSettingModel.h"
 	#import "RegisteredDeviceModel.h"
 #endif
 
@@ -765,6 +766,11 @@
  */
 - (void)goToMainScreen
 {
+    // Initialize notification settings
+    NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
+    
+    [notificationSettingModel initialize];
+    
 	// Set MessagesNavigationController as the root view controller
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 	SWRevealViewController *initialViewController = [mainStoryboard instantiateInitialViewController];

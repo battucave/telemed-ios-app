@@ -82,14 +82,12 @@
 		// Load notification settings for each type
 		NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
 	
-		[notificationSettingModel setDelegate:self];
-	
 		[self setChatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"chat"]];
 		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"comment"]];
 		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"normal"]];
 		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"stat"]];
 	
-		// Reload notification cells in case notification setting data has changed
+		// Reload notification cells with new notification settings data
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
 			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
@@ -434,55 +432,6 @@
 		// Run CoreTableViewController's authorizeForRemoteNotifications:
 		[self authorizeForRemoteNotifications:@"Please confirm your preference to enable notifications."];
 	}
-}
-
-// Return server notification settings from NotificationSettingModel delegate
-- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name
-{
-	NSNumber *row;
-	
-	// Chat message settings
-	if ([name isEqualToString:@"chat"])
-	{
-		[self setChatMessageNotificationSettings:serverNotificationSettings];
-		
-		row = @3;
-	}
-	// Comment settings
-	else if ([name isEqualToString:@"comment"])
-	{
-		[self setCommentNotificationSettings:serverNotificationSettings];
-		
-		row = @4;
-	}
-	// Normal message settings
-	else if ([name isEqualToString:@"normal"])
-	{
-		[self setNormalMessageNotificationSettings:serverNotificationSettings];
-		
-		row = @2;
-	}
-	// Stat message settings
-	else if ([name isEqualToString:@"stat"])
-	{
-		[self setStatMessageNotificationSettings:serverNotificationSettings];
-		
-		row = @1;
-	}
-	
-	// Reload corresponding notification cell
-	if (row != NULL)
-	{
-		[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row.integerValue inSection:self.sectionNotifications]] withRowAnimation:UITableViewRowAnimationNone];
-	}
-}
-
-// Return error from NotificationSettingModel delegate
-- (void)updateNotificationSettingsError:(NSError *)error
-{
-	NSLog(@"Error loading notification settings");
-	
-	// Fail silently and let SettingsNotificationsTableViewController handle
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

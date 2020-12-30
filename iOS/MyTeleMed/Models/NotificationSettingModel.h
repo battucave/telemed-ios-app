@@ -10,8 +10,6 @@
 
 @interface NotificationSettingModel : Model
 
-@property (weak) id delegate;
-
 // Class variables
 @property (class, nonatomic, readonly) NSArray *classicTones;
 @property (class, nonatomic, readonly) NSString *defaultTone;
@@ -31,20 +29,7 @@
 
 - (NSString *)getToneFromToneTitle:(NSString *)toneTitle;
 - (NotificationSettingModel *)getNotificationSettingsForName:(NSString *)name;
+- (void)initialize;
 - (void)saveNotificationSettingsForName:(NSString *)name settings:(NotificationSettingModel *)notificationSettings;
-
-@end
-
-
-@protocol NotificationSettingDelegate <NSObject>
-
-@required
-- (void)updateNotificationSettings:(id)serverNotificationSettings forName:(NSString *)name;
-
-@optional
-- (void)updateNotificationSettingsError:(NSError *)error;
-- (void)saveNotificationSettingsPending;
-- (void)saveNotificationSettingsSuccess;
-- (void)saveNotificationSettingsError:(NSError *)error;
 
 @end

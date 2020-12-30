@@ -216,8 +216,8 @@
 	// Play notification sound
 	if (tone != nil)
 	{
-		// If tone is "default", then use Note tone as default (there is no way to retrieve system's default alert sound)
-		if ([tone isEqualToString:@"default"])
+		// If tone is "default", then use MyTeleMed's alert tone (should never happen because NotificationSettingsModel::initialize overrides "default" on app launch)
+		if ([tone hasPrefix:@"default"])
 		{
 			tone = NotificationSettingModel.defaultTone;
 		}

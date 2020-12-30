@@ -66,7 +66,6 @@
 	// Load notification settings for name
 	[self setNotificationSettingModel:[[NotificationSettingModel alloc] init]];
 	
-	[self.notificationSettingModel setDelegate:self];
 	[self setNotificationSettings:[self.notificationSettingModel getNotificationSettingsForName:self.notificationSettingsName]];
 }
 
@@ -103,42 +102,6 @@
 	// Save to server
 	[self.notificationSettingModel saveNotificationSettingsForName:self.notificationSettingsName settings:self.notificationSettings];
 }
-
-// Return server notification settings from NotificationSettingModel delegate
-- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name
-{
-	[self setNotificationSettings:serverNotificationSettings];
-	
-	[self.tableView reloadData];
-}
-
-// Return error from NotificationSettingModel delegate
-- (void)updateNotificationSettingsError:(NSError *)error
-{
-	NSLog(@"Error loading notification settings");
-	
-	// Show error message only if device offline
-	if (error.code == NSURLErrorNotConnectedToInternet)
-	{
-		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
-		
-		[errorAlertController show:error];
-	}
-}
-
-/*/ Return save success from NotificationSettingModel delegate (no longer used)
-- (void)saveNotificationSettingsSuccess
-{
-	NSLog(@"Notification Settings saved to server successfully");
-}
-
-// Return save error from NotificationSettingModel delegate (no longer used)
--(void)saveNotificationSettingsError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
-	
-	[errorAlertController show:error];
-}*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
