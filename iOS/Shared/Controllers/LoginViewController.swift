@@ -16,7 +16,7 @@ class LoginViewController: CoreViewController {
     @IBOutlet weak var buttonCreateAccount: UIBarButtonItem! // Med2Med only; TEMPORARY
     @IBOutlet private weak var constraintToolbarBottom: NSLayoutConstraint!
     @IBOutlet private weak var loadingView: UIView!
-    @IBOutlet private weak var webView: WKWebView!
+    @IBOutlet private weak var webView: WKWebView?
     
     var isLoading: Bool = false
     
@@ -44,7 +44,7 @@ class LoginViewController: CoreViewController {
         super.viewWillDisappear(animated)
         
         // Stop web view loading
-        self.webView.stopLoading()
+        self.webView?.stopLoading()
         
         // Remove keyboard observers
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -55,42 +55,44 @@ class LoginViewController: CoreViewController {
     }
     
     @IBAction func doLogin(_ sender: Any) {
-        guard let url = webView.url else {
+        guard let webView = self.webView,
+            let url = webView.url else {
             return
         }
         
         // Trigger click on web view form's login button
         if url.absoluteString.contains("login.aspx") {
-            self.webView.evaluateJavaScript("document.getElementById('loginButton').click();", completionHandler: nil)
+            webView.evaluateJavaScript("document.getElementById('loginButton').click();", completionHandler: nil)
         }
     }
     
     @IBAction func goBackWebView(_ sender: UIBarButtonItem) {
-        self.webView.goBack()
+        self.webView?.goBack()
     }
     
     @IBAction func refreshWebView(_ sender: UIBarButtonItem) {
         // If web view is loading, let it finish before refreshing again
-        guard !self.isLoading else {
-            return;
+        guard !self.isLoading,
+            let webView = self.webView else {
+            return
         }
         
         // Set is loading to true
-        self.isLoading = true;
+        self.isLoading = true
             
         // If web view is currently showing a blank screen or error message, then redirect to login page
-        if self.webView.url?.absoluteString == "about:blank" {
+        if webView.url?.absoluteString == "about:blank" {
             // Show loading screen
             self.updateWebViewLoading(true)
             
             // Delay is here is required because there is a slight delay between device going back online and requests actually going through
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                self.startAuthentication(webView: self.webView)
+                self.startAuthentication(webView: webView)
             }
             
         // Reload current page
         } else {
-            self.webView.reload()
+            webView.reload()
         }
     }
     
@@ -125,10 +127,14 @@ class LoginViewController: CoreViewController {
         object_setClass(target, noInputAccessoryClass)
     }
     
-    private func initializeWebView(webView: WKWebView) {
+    private func initializeWebView(webView: WKWebView?) {
+        guard let webView = webView else {
+            return
+        }
+        
         // Set WKWebView delegates
-        self.webView.navigationDelegate = self
-        self.webView.scrollView.delegate = self
+        webView.navigationDelegate = self
+        webView.scrollView.delegate = self
         
         // Hide keyboard accessory view for WKWebView text fields
         self.hideKeyboardAccessoryView(view: webView.scrollView)
@@ -181,7 +187,7 @@ class LoginViewController: CoreViewController {
         animator.startAnimation()
         
         // Reset scroll position of webview
-        self.webView.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        self.webView?.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -223,10 +229,10 @@ class LoginViewController: CoreViewController {
         
         let errorHTML = "<div style=\"margin: 50px 10px 0; color: #fff; font-size: 16px;\"><p>\(errorMessage)</p><p>Please check your network connection and press the refresh button below to try again.</p></div>"
         
-        self.webView.loadHTMLString(errorHTML, baseURL: nil)
+        self.webView?.loadHTMLString(errorHTML, baseURL: nil)
     }
     
-    private func startAuthentication(webView: WKWebView) {
+    private func startAuthentication(webView: WKWebView?) {
         // Set is loading to true
         self.isLoading = true
         
@@ -241,13 +247,17 @@ class LoginViewController: CoreViewController {
         let url = URL(string: fullURL)
         let urlRequest = URLRequest(url: url!, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: Config.urlRequestTimeoutPeriod)
         
-        webView.load(urlRequest)
+        webView?.load(urlRequest)
         
         // Show loading screen
         self.updateWebViewLoading(true)
     }
     
     private func updateWebViewLoading(_ isLoading: Bool) {
+        guard let webView = self.webView else {
+            return
+        }
+        
         // Speed up toggling the loading screen by forcing it to execute in main thread
         DispatchQueue.main.async {
             // Toggle activity indicator
@@ -262,10 +272,10 @@ class LoginViewController: CoreViewController {
             self.loadingView.isHidden = !isLoading
             
             // Toggle web view
-            self.webView.isHidden = isLoading
+            webView.isHidden = isLoading
             
             // Toggle back button
-            self.buttonBack.isEnabled = self.webView.canGoBack
+            self.buttonBack.isEnabled = webView.canGoBack
         }
     }
 }
