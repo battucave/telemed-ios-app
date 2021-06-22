@@ -23,8 +23,6 @@
 
 @interface CoreViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *viewMessageCalloutIOS10; // Remove when iOS 10 support is dropped
-
 @property (nonatomic) NSString *remoteNotificationAuthorizationMessage;
 @property (nonatomic) BOOL shouldAuthorizeRemoteNotifications;
 @property (nonatomic) SystemSoundID systemSoundID;
@@ -50,12 +48,6 @@
 	
 		// Additional observers are added in registerForRemoteNotifications:
 	#endif
-	
-	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of custom color) and remove this logic
-	if (@available(iOS 11.0, *))
-	{
-		[self.viewMessageCalloutIOS10 setBackgroundColor:[UIColor colorNamed:@"messageCalloutBackgroundColor"]];
-	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated

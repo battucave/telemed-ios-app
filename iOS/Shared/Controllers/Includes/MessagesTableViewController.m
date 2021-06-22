@@ -51,7 +51,7 @@
 {
 	[super viewDidLoad];
 	
-	// Fix bug in iOS 7+ where text overlaps indicator on first run
+	// Fix bug where text overlaps indicator on first run
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.refreshControl beginRefreshing];
@@ -73,16 +73,8 @@
 		// Initialize loading activity indicator to be used when loading additional messages
 		[self setLoadingActivityIndicator:[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]];
 
-		// iOS 11+ - Use custom color from asset catalog
-		if (@available(iOS 11.0, *))
-		{
-			[self.loadingActivityIndicator setColor:[UIColor colorNamed:@"systemBlackColor"]];
-		}
-		// iOS < 11 - Remove this when iOS 10 support is dropped
-		else
-		{
-			[self.loadingActivityIndicator setColor:[UIColor darkGrayColor]];
-		}
+		// Use custom color from asset catalog with dark mode support
+		[self.loadingActivityIndicator setColor:[UIColor colorNamed:@"systemBlackColor"]];
 		
 		[self.loadingActivityIndicator setFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 60.0)];
 		[self.loadingActivityIndicator startAnimating];
@@ -557,42 +549,27 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
-		if (@available(iOS 11.0, *))
-		{
-			// Disable animation when appending rows for pagination
-			if (! useAnimation)
-			{
-				[CATransaction begin];
-				[CATransaction setDisableActions:YES];
-			}
-			
-			[self.tableView performBatchUpdates:^
-			{
-				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			}
-			completion:^(BOOL finished)
-			{
-				completion(finished);
-				
-				// Disable animation when appending rows for pagination
-				if (! useAnimation)
-				{
-					[CATransaction commit];
-				}
-			}];
-		}
-		// iOS 10 - Fall back to using beginUpdates and endUpdates
-		else
-		{
-			[self.tableView beginUpdates];
-			
-			[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableView endUpdates];
-			
-			completion(YES);
-		}
+        // Disable animation when appending rows for pagination
+        if (! useAnimation)
+        {
+            [CATransaction begin];
+            [CATransaction setDisableActions:YES];
+        }
+        
+        [self.tableView performBatchUpdates:^
+        {
+            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        completion:^(BOOL finished)
+        {
+            completion(finished);
+            
+            // Disable animation when appending rows for pagination
+            if (! useAnimation)
+            {
+                [CATransaction commit];
+            }
+        }];
 	});
 }
 
@@ -621,24 +598,11 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
-		if (@available(iOS 11.0, *))
-		{
-			[self.tableView performBatchUpdates:^
-			{
-				[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			}
-			completion:nil];
-		}
-		// iOS 10 - Fall back to using beginUpdates and endUpdates
-		else
-		{
-			[self.tableView beginUpdates];
-			
-			[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableView endUpdates];
-		}
+        [self.tableView performBatchUpdates:^
+        {
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        completion:nil];
 	});
 }
 

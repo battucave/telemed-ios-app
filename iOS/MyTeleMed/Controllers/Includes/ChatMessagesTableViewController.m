@@ -34,7 +34,7 @@
 {
 	[super viewDidLoad];
 	
-	// Fix bug in iOS 7+ where text overlaps indicator on first run
+	// Fix bug where text overlaps indicator on first run
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.refreshControl beginRefreshing];
@@ -171,28 +171,12 @@
 	// Insert new rows and delete rows at specified index paths in the table
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
-		if (@available(iOS 11.0, *))
-		{
-			[self.tableView performBatchUpdates:^
-			{
-				[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			}
-			completion:completion];
-		}
-		// iOS 10 - Fall back to using beginUpdates and endUpdates
-		else
-		{
-			[self.tableView beginUpdates];
-			
-			[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableView endUpdates];
-			
-			completion(YES);
-		}
+        [self.tableView performBatchUpdates:^
+        {
+            [self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        completion:completion];
 	});
 }
 
@@ -207,24 +191,11 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
-		if (@available(iOS 11.0, *))
-		{
-			[self.tableView performBatchUpdates:^
-			{
-				[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			}
-			completion:nil];
-		}
-		// iOS 10 - Fall back to using beginUpdates and endUpdates
-		else
-		{
-			[self.tableView beginUpdates];
-			
-			[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableView endUpdates];
-		}
+        [self.tableView performBatchUpdates:^
+        {
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        completion:nil];
 	});
 }
 

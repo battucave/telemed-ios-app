@@ -77,12 +77,6 @@
 {
 	[super viewWillAppear:animated];
 	
-	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of Tertiary System Grouped Background Color) and remove this logic
-	if (@available(iOS 11.0, *))
-	{
-		[self.tableChatMessages setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
-	}
-	
 	// Get chat messages for conversation id if its set (not a new chat)
 	if (self.conversationID)
 	{

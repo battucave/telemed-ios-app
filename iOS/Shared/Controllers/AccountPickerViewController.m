@@ -19,7 +19,6 @@
 
 @interface AccountPickerViewController ()
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableAccounts;
 @property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
@@ -59,52 +58,19 @@
 	[self.searchController.searchBar setPlaceholder:[NSString stringWithFormat:@"Search %@s", self.textAccount]];
 	[self.searchController.searchBar sizeToFit];
 	
-	// iOS 11+ navigation bar has support for search controller
-	if (@available(iOS 11.0, *))
-	{
-		[self.navigationItem setSearchController:self.searchController];
-		
-		[self.viewSearchBarContainer setHidden:YES];
-		
-		for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
-		{
-			if (constraint.firstAttribute == NSLayoutAttributeHeight)
-			{
-				[constraint setConstant:0.0f];
-				break;
-			}
-		}
-	}
-	// iOS < 11 places search controller under navigation bar
-	else
-	{
-		// Add auto-generated constraints that allow search bar to animate without disappearing
-		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
-		
-		// Add search bar to search bar's container view
-		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
-		
-		// Copy constraints from Storyboard's placeholder search bar onto the search controller's search bar
-		for (NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
-		{
-			if (constraint.firstItem == self.searchBar)
-			{
-				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-			}
-			else if (constraint.secondItem == self.searchBar)
-			{
-				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-			}
-		}
-		
-		for (NSLayoutConstraint *constraint in self.searchBar.constraints)
-		{
-			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-		}
-		
-		// Hide placeholder search bar from Storyboard (UISearchController and its search bar cannot be implemented in Storyboard so we use a placeholder search bar instead)
-		[self.searchBar setHidden:YES];
-	}
+    // Add search controller to navigation bar
+    [self.navigationItem setSearchController:self.searchController];
+    
+    [self.viewSearchBarContainer setHidden:YES];
+    
+    for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+    {
+        if (constraint.firstAttribute == NSLayoutAttributeHeight)
+        {
+            [constraint setConstant:0.0f];
+            break;
+        }
+    }
 	
 	#if MYTELEMED
 		// If selected account not already set, then set it to MyProfileModel's MyPreferredAccount
@@ -372,20 +338,7 @@
 		{
 			static NSString *cellIdentifier = @"AccountHeader";
 			
-			// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of custom color) and use the current iOS 10 logic below
-			if (@available(iOS 11.0, *))
-			{
-				UIView *viewForHeader = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-				
-				[viewForHeader setBackgroundColor:[UIColor colorNamed:@"tableHeaderColor"]];
-				
-				return viewForHeader;
-			}
-			// iOS 10 - When iOS 10 support is dropped, simply return this value
-			else
-			{
-				return [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-			}
+			return [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		}
 	#endif
 

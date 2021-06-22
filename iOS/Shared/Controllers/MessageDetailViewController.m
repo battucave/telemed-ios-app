@@ -153,13 +153,6 @@
 	// Perform shared logic in MessageDetailParentViewController
 	[super viewWillAppear:animated];
 	
-	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set these colors directly (instead of Tertiary System Grouped Background Color) and remove this logic
-	if (@available(iOS 11.0, *))
-	{
-		[self.scrollView setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
-		[self.tableComments setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
-	}
-	
 	// Change title for sent message in navigation bar
 	if ([self.messageType isEqualToString:@"Sent"])
 	{

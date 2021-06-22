@@ -50,16 +50,8 @@
 		[activityIndicatorView setUserInteractionEnabled:NO];
 		[activityIndicatorView startAnimating];
 		
-		// iOS 11+ - Use custom color from asset catalog to support dark mode
-		if (@available(iOS 11.0, *))
-		{
-			[activityIndicatorView setColor:[UIColor colorNamed:@"systemBlackColor"]];
-		}
-		// iOS < 11 - Fallback to use custom systemBlackColor light appearance; Remove this logic when iOS 10 support is dropped
-		else
-		{
-			[activityIndicatorView setColor:[UIColor blackColor]];
-		}
+		// Use custom color from asset catalog with dark mode support
+		[activityIndicatorView setColor:[UIColor colorNamed:@"systemBlackColor"]];
 		
 		// Configure message
 		[labelMessage setTranslatesAutoresizingMaskIntoConstraints:NO];
