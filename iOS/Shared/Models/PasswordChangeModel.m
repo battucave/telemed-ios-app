@@ -23,14 +23,14 @@
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"Current password and new password fields are required.", NSLocalizedDescriptionKey, nil]];
 		
-		// Show error
-		[self showError:error];
-		
 		// Handle error via delegate
-		/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 		{
 			[self.delegate changePasswordError:error];
-		}*/
+		}
+		
+		// Show error
+		[self showError:error];
 		
 		return;
 	}
@@ -68,13 +68,13 @@
 			}
 			else
 			{
+				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
+				
 				// Handle error via delegate
-				/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 				{
 					[self.delegate changePasswordError:error];
-				} */
-				
-				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
+				}
 				
 				// Show error
 				[self showError:error];
@@ -92,10 +92,10 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
 				[self.delegate changePasswordError:error];
-			} */
+			}
 		
 			// Show error
 			[self showError:error];

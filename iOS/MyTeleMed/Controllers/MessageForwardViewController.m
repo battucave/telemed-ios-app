@@ -71,6 +71,12 @@
 	[forwardMessageModel forwardMessage:self.message messageRecipientIDs:[self.selectedMessageRecipients valueForKey:@"ID"] withComment:comment];
 }
 
+// Return error from ForwardMessageModel delegate
+- (void)forwardMessageError:(NSError *)error
+{
+	// Empty
+}
+
 // Return pending from ForwardMessageModel delegate
 - (void)forwardMessagePending
 {
@@ -78,20 +84,11 @@
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-/*/ Return success from ForwardMessageModel delegate (no longer used)
+// Return success from ForwardMessageModel delegate
 - (void)forwardMessageSuccess
 {
-	// Go back to MessageDetailViewController
-	[self.navigationController popViewControllerAnimated:YES];
+	// Empty
 }
-
-// Return error from ForwardMessageModel delegate (no longer used)
-- (void)forwardMessageError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
-	
-	[errorAlertController show:error];
-}*/
 
 // Fired from message compose table to perform segue to MessageRecipientPickerViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender

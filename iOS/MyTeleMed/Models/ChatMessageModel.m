@@ -132,6 +132,7 @@
 	}];
 }
 
+// (Not used)
 - (void)deleteChatMessage:(NSNumber *)chatMessageID
 {
 	// Show activity indicator
@@ -162,18 +163,18 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+			{
+				[self.delegate deleteChatMessageError:error];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self deleteChatMessage:chatMessageID];
 			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
-			{
-				[self.delegate deleteChatMessageError:error];
-			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -190,10 +191,10 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
 			{
 				[self.delegate deleteChatMessageError:error];
-			} */
+			}
 		
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
@@ -301,12 +302,6 @@
 		{
 			NSArray *failedChatMessages = [self.failedChatMessages copy];
 		
-			// Handle success via delegate to reset chat messages
-			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
-			{
-				[self.delegate deleteMultipleChatMessagesError:failedChatMessages];
-			}
-		
 			// Default to all chat messages failed to delete
 			NSString *errorMessage = @"There was a problem deleting your Chat Messages.";
 			
@@ -319,6 +314,12 @@
 			// Show error message
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Delete Chat Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
+			// Handle success via delegate to reset chat messages
+			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesError:)])
+			{
+				[self.delegate deleteMultipleChatMessagesError:failedChatMessages];
+			}
+		
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{

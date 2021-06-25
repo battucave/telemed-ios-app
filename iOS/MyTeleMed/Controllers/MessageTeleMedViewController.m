@@ -37,26 +37,24 @@
 	}
 }
 
+// Return error from EmailTelemedModel delegate
+- (void)emailTeleMedMessageError:(NSError *)error
+{
+	// Empty
+}
+
 // Return pending from EmailTelemedModel delegate
 - (void)emailTeleMedMessagePending
 {
-	// Go back to message detail
+	// Go back to message detail (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-/*/ Return success from EmailTelemedModel delegate (no longer used)
+// Return success from EmailTelemedModel delegate
 - (void)emailTeleMedMessageSuccess
 {
- 
+	// Empty
 }
-
-// Return error from EmailTelemedModel delegate (no longer used)
-- (void)emailTeleMedMessageError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
-	
-	[errorAlertController show:error];
-}*/
 
 // Check required fields to determine if form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress

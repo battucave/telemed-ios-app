@@ -31,15 +31,15 @@
 	if (! registeredDeviceModel.PhoneNumber)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Call TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
-	
-		// Show error
-		[self showError:error];
-	
+		
 		// Handle error via delegate
 		if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 		{
 			[self.delegate callError:error];
 		}
+		
+		// Show error
+		[self showError:error];
 		
 		return;
 	}
@@ -57,7 +57,7 @@
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate (not currently used)
+			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(callSuccess)])
 			{
 				[self.delegate callSuccess];
@@ -131,14 +131,14 @@
 		
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Return Call Error", NSLocalizedFailureReasonErrorKey, @"A valid Phone Number is not available on this device.", NSLocalizedDescriptionKey, nil]];
 		
-		// Show error
-		[self showError:error];
-		
 		// Handle error via delegate
 		if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 		{
 			[self.delegate callError:error];
 		}
+		
+		// Show error
+		[self showError:error];
 		
 		return;
 	}
@@ -157,7 +157,7 @@
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate (not currently used)
+			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(callSuccess)])
 			{
 				[self.delegate callSuccess];

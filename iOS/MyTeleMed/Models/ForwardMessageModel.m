@@ -63,6 +63,12 @@
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Forward Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem forwarding your Message.", NSLocalizedDescriptionKey, nil]];
 			
+		// Handle error via delegate
+		if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
+		{
+			[self.delegate forwardMessageError:error];
+		}
+		
 		// Show error (user cannot have navigated to another screen at this point)
 		[self showError:error];
 	}
@@ -94,18 +100,18 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Forward Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem forwarding your Message.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
+			{
+				[self.delegate forwardMessageError:error];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self forwardMessage:message messageRecipientIDs:messageRecipientIDs withComment:comment];
 			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
-			{
-				[self.delegate forwardMessageError:error];
-			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -122,12 +128,11 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessageError:)])
 			{
 				[self.delegate forwardMessageError:error];
-				}];
-			} */
-		
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{

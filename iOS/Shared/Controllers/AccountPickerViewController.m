@@ -224,11 +224,23 @@
 	[errorAlertController show:error];
 }
 
+// Return error from PreferredAccountModel delegate
+- (void)savePreferredAccountError:(NSError *)error
+{
+	// Empty
+}
+
 // Return pending from PreferredAccountModel delegate
 - (void)savePreferredAccountPending
 {
 	// Go back to settings (assume success)
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+// Return success from PreferredAccountModel delegate
+- (void)savePreferredAccountSuccess
+{
+	// Empty
 }
 
 - (void)scrollToSelectedAccount

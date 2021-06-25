@@ -84,18 +84,6 @@
 	});
 }
 
-// Return pending from CallTeleMedModel delegate
-- (void)callPending
-{
-	NSLog(@"Call Sender request pending.");
-}
-
-/*/ Return success from CallTeleMedModel delegate (no longer used)
-- (void)callSuccess
-{
-	NSLog(@"Call TeleMed request sent successfully");
-} */
-
 // Return error from CallTeleMedModel delegate (received if user does not retry the request)
 - (void)callError:(NSError *)error
 {
@@ -103,6 +91,18 @@
 	
 	// Call failed so dismiss this screen
 	[self goBack:nil];
+}
+
+// Return pending from CallTeleMedModel delegate
+- (void)callPending
+{
+	NSLog(@"Call Sender request pending.");
+}
+
+// Return success from CallTeleMedModel delegate
+- (void)callSuccess
+{
+	// Empty
 }
 
 // User answered a phone call so assume that the return call from TeleMed was successfully received

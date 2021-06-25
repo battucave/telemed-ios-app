@@ -264,6 +264,12 @@
 	}
 }
 
+// Return message state error from MessageModel delegate
+- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
+{
+	// Empty
+}
+
 // Return message state pending from MessageModel delegate
 - (void)modifyMessageStatePending:(NSString *)state
 {
@@ -286,16 +292,10 @@
 	}
 }
 
-// Return message state error from MessageModel delegate
-- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
-{
-	// Empty
-}
-
 // Return message state success from MessageModel delegate
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
-	// Handled by pending callback
+	// Empty
 }
 
 // Show error alert that message cannot be forwarded

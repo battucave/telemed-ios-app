@@ -33,6 +33,12 @@
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Redirect Message Error", NSLocalizedFailureReasonErrorKey, @"Redirect requires a message recipient or an on call slot.", NSLocalizedDescriptionKey, nil]];
 		
+		// Handle error via delegate
+		if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
+		{
+			[self.delegate redirectMessageError:error];
+		}
+		
 		// Show error even if user has navigated to another screen
 		[self showError:error];
 		
@@ -130,18 +136,18 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:errorTitle, NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
+			{
+				[self.delegate redirectMessageError:error];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot useSlotEscalation:useSlotEscalation];
 			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
-			{
-				[self.delegate redirectMessageError:error];
-			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -158,12 +164,11 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
 			{
 				[self.delegate redirectMessageError:error];
-				}];
-			} */
-		
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{

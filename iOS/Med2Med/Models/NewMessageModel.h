@@ -30,8 +30,8 @@
 @protocol NewMessageDelegate <NSObject>
 
 @optional
+- (void)sendNewMessageError:(NSError *)error;
 - (void)sendNewMessagePending;
 - (void)sendNewMessageSuccess;
-- (void)sendNewMessageError:(NSError *)error;
 
 @end

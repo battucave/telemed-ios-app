@@ -159,22 +159,6 @@
 	[self toggleToolbarButtons:editing];
 }
 
-// Return delete multiple chat message pending from ChatMessageModel delegate
-- (void)deleteMultipleChatMessagesPending
-{
-	// Hide selected rows from chat messages table
-	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
-	
-	[self setEditing:NO animated:YES];
-}
-
-// Return delete multiple chat message success from ChatMessageModel delegate
-- (void)deleteMultipleChatMessagesSuccess
-{
-	// Remove selected rows from chat messages table
-	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
-}
-
 // Return delete multiple chat message error from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
 {
@@ -194,6 +178,22 @@
 	
 	// Update selected chat messages to only the failed chat messages
 	self.selectedChatMessages = failedChatMessages;
+}
+
+// Return delete multiple chat message pending from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesPending
+{
+	// Hide selected rows from chat messages table
+	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
+	
+	[self setEditing:NO animated:YES];
+}
+
+// Return delete multiple chat message success from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesSuccess
+{
+	// Remove selected rows from chat messages table
+	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
 }
 
 // Delegate method from SWRevealController that fires when a recognized gesture has ended

@@ -31,14 +31,14 @@
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"From field must be a valid email address.", NSLocalizedDescriptionKey, nil]];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error];
-		
 		// Handle error via delegate
-		/* if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
 		{
 			[self.delegate emailTeleMedMessageError:error];
-		} */
+		}
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error];
 		
 		return;
 	}
@@ -83,18 +83,18 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
+			{
+				[self.delegate emailTeleMedMessageError:error];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
 			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
-			{
-				[self.delegate emailTeleMedMessageError:error];
-			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -111,11 +111,11 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
 			{
 				[self.delegate emailTeleMedMessageError:error];
-			} */
-		
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{

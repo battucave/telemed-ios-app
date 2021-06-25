@@ -240,17 +240,17 @@ const int MessagesPerPage = 25;
 			}
 			else
 			{
-				// Handle error via delegate
-				/* if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
-				{
-					[self.delegate modifyMessageStateError:error forState:state];
-				} */
-			
 				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")], NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")], NSLocalizedDescriptionKey, nil]];
 				
 				// Only show error if archiving or unarchiving
 				if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 				{
+					// Handle error via delegate
+					if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
+					{
+						[self.delegate modifyMessageStateError:error forState:state];
+					}
+					
 					// Show error even if user has navigated to another screen
 					[self showError:error withRetryCallback:^
 					{
@@ -274,15 +274,15 @@ const int MessagesPerPage = 25;
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
-			{
-				[self.delegate modifyMessageStateError:error forState:state];
-			} */
-		
 			// Only show error if archiving or unarchiving
 			if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
 			{
+				// Handle error via delegate
+				if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStateError:forState:)])
+				{
+					[self.delegate modifyMessageStateError:error forState:state];
+				}
+				
 				// Show error even if user has navigated to another screen
 				[self showError:error withRetryCallback:^
 				{
@@ -402,12 +402,6 @@ const int MessagesPerPage = 25;
 		// If a failure occurred while modifying message state
 		if ([failedMessages count] > 0)
 		{
-			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
-			{
-				[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
-			}
-		
 			// Default to all messages failed to archive
 			NSString *errorMessage = @"There was a problem archiving your Messages.";
 			
@@ -420,6 +414,12 @@ const int MessagesPerPage = 25;
 			// Show error message
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Archive Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
+			{
+				[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
+			}
+		
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{

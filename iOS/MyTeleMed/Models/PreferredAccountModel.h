@@ -21,8 +21,8 @@
 @protocol PreferredAccountDelegate <NSObject>
 
 @optional
+- (void)savePreferredAccountError:(NSError *)error;
 - (void)savePreferredAccountPending;
 - (void)savePreferredAccountSuccess;
-- (void)savePreferredAccountError:(NSError *)error;
 
 @end

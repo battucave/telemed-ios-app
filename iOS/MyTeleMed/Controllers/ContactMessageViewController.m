@@ -41,6 +41,12 @@
 	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
 }
 
+// Return error from EmailTelemedModel delegate
+- (void)emailTeleMedMessageError:(NSError *)error
+{
+	// Empty
+}
+
 // Return pending from EmailTeleMedModel delegate
 - (void)emailTeleMedMessagePending
 {
@@ -74,14 +80,6 @@
 		[self presentViewController:successAlertController animated:YES completion:nil];
 	#endif
 }
-
-/*/ Return error from EmailTelemedModel delegate (no longer used)
-- (void)emailTeleMedMessageError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
-	
-	[errorAlertController show:error];
-}*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress

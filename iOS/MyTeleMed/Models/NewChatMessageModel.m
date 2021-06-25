@@ -13,7 +13,6 @@
 
 @property (nonatomic) NSString *chatMessage;
 @property (nonatomic) NSNumber *pendingID;
-//@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -22,19 +21,18 @@
 - (void)sendNewChatMessage:(NSString *)message chatParticipantIDs:(NSArray *)chatParticipantIDs isGroupChat:(BOOL)isGroupChat withPendingID:(NSNumber *)pendingID
 {
 	// Validate max length
-	// if ([[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] length] > 1000)
 	if ([[message stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] length] > 1000)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"Message field cannot exceed 1000 characters.", NSLocalizedDescriptionKey, nil]];
 		
-		// Show error even if user has navigated to another screen
-		[self showError:error];
-		
-		/*/ Handle error via delegate (not needed here)
+		// Handle error via delegate
 		if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
 		{
 			[self.delegate sendChatMessageError:error withPendingID:pendingID];
-		} */
+		}
+		
+		// Show error even if user has navigated to another screen
+		[self showError:error];
 		
 		return;
 	}
@@ -94,18 +92,18 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Chat Message.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
+			{
+				[self.delegate sendChatMessageError:error withPendingID:pendingID];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self sendNewChatMessage:message chatParticipantIDs:chatParticipantIDs isGroupChat:isGroupChat withPendingID:pendingID];
 			}];
-			
-			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessageError:withPendingID:)])
-			{
-				[self.delegate sendChatMessageError:error withPendingID:pendingID];
-			}
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -126,7 +124,7 @@
 			{
 				[self.delegate sendChatMessageError:error withPendingID:pendingID];
 			}
-		
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
@@ -147,13 +145,10 @@
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that chat message has been sent to server
-		if (/* ! self.pendingComplete &&*/ self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 		{
 			[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
 		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		//self.pendingComplete = YES;
 	}];
 }
 

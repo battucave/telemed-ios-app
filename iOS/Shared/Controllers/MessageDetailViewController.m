@@ -557,7 +557,7 @@
 		{
 			[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Read"];
 		}
-		/*/ TESTING ONLY (set read messages back to unread or archived messages back to unarchived)
+		// TESTING ONLY (set read messages back to unread or archived messages back to unarchived)
 		#if DEBUG
 			// Set message back to unread
 			else if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Read"])
@@ -571,6 +571,35 @@
 			}
 		#endif
 		// END TESTING ONLY */
+	}
+}
+
+// Return error from CommentModel delegate
+- (void)saveCommentError:(NSError *)error withPendingID:(NSNumber *)pendingID
+{
+	// Find comment with pending id in Filtered message events
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
+	NSArray *results = [self.filteredMessageEvents filteredArrayUsingPredicate:predicate];
+	
+	if ([results count] > 0)
+	{
+		// Find and delete table cell that contains the comment
+		MessageEventModel *messageEvent = [results objectAtIndex:0];
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.filteredMessageEvents indexOfObject:messageEvent] inSection:0]];
+		
+		// Remove comment from filtered message events
+		[self.filteredMessageEvents removeObject:messageEvent];
+		
+		// If removing the only comment/event
+		if ([self.filteredMessageEvents count] == 0)
+		{
+			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		// If removing from existing comments/events
+		else
+		{
+			[self.tableComments deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
 	}
 }
 
@@ -633,98 +662,11 @@
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
 
-// Return error from CommentModel delegate
-- (void)saveCommentError:(NSError *)error withPendingID:(NSNumber *)pendingID
-{
-	// Find comment with pending id in Filtered message events
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
-	NSArray *results = [self.filteredMessageEvents filteredArrayUsingPredicate:predicate];
-	
-	if ([results count] > 0)
-	{
-		// Find and delete table cell that contains the comment
-		MessageEventModel *messageEvent = [results objectAtIndex:0];
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.filteredMessageEvents indexOfObject:messageEvent] inSection:0]];
-		
-		// Remove comment from filtered message events
-		[self.filteredMessageEvents removeObject:messageEvent];
-		
-		// If removing the only comment/event
-		if ([self.filteredMessageEvents count] == 0)
-		{
-			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-		// If removing from existing comments/events
-		else
-		{
-			[self.tableComments deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-	}
-}
-
-/*/ Return success from CommentModel delegate (no longer used)
+// Return success from CommentModel delegate
 - (void)saveCommentSuccess:(NSString *)commentText
 {
-	// Add comment to basic events array
-	MessageEventModel *comment = [[MessageEventModel alloc] init];
-	NSDate *currentDate = [[NSDate alloc] init];
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
- 
-	// Create local date
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-	[comment setTime_LCL:[dateFormatter stringFromDate:currentDate]];
- 
-	// Create UTC date
-	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-	[comment setTime_UTC:[dateFormatter stringFromDate:currentDate]];
- 
-	[comment setDetail:[commentText stringByRemovingPercentEncoding]];
-	[comment setType:@"Comment"];
-	[comment setEnteredByID:self.currentUserID];
- 
-	[self.filteredMessageEvents addObject:comment];
- 
-	// Begin actual update
-	[self.tableComments beginUpdates];
- 
-	// If adding first comment
-	if ([self.filteredMessageEvents count] == 1)
-	{
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
- 
-		[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-	}
-	// If adding to already existing comments
-	else
-	{
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.filteredMessageEvents count] - 1 inSection:0]];
- 
-		[self.tableComments insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-	}
- 
-	// Commit row updates
-	[self.tableComments endUpdates];
- 
-	// Auto size table comments height to show all rows
-	[self autoSizeTableComments];
- 
-	// Clear and resign focus from text view comment
-	[self.textViewComment setText:@""];
-	[self.textViewComment resignFirstResponder];
-	[self.buttonSend setEnabled:NO];
- 
-	// Trigger a scroll to bottom to ensure the newly added comment is shown
-	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
+	// Empty
 }
-
-// Return error from CommentModel delegate (no longer used)
-- (void)saveCommentError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
- 
-	[errorAlertController show:error];
-}*/
 
 - (void)setMessageDetails
 {

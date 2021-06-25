@@ -76,11 +76,23 @@
 	[messageRedirectRequestModel redirectMessage:self.message messageRecipient:messageRecipient onCallSlot:onCallSlot];
 }
 
+// Return error from MessageRedirectRequestModel delegate
+- (void)redirectMessageError:(NSError *)error
+{
+	// Empty
+}
+
 // Return pending from MessageRedirectRequestModel delegate
 - (void)redirectMessagePending
 {
 	// Go back to message detail (assume success)
 	[self performSegueWithIdentifier:@"unwindFromMessageRedirect" sender:self];
+}
+
+// Return success from MessageRedirectRequestModel delegate
+- (void)redirectMessageSuccess
+{
+	// Empty
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

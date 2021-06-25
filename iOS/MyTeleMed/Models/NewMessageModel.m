@@ -70,18 +70,18 @@
 		{
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
+			{
+				[self.delegate sendNewMessageError:error];
+			}
+						
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self sendNewMessage:message accountID:accountID messageRecipientIDs:messageRecipientIDs];
 			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
-			{
-				[self.delegate sendNewMessageError:error];
-			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -98,11 +98,11 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
 			{
 				[self.delegate sendNewMessageError:error];
-			} */
-		
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{

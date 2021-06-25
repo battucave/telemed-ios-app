@@ -25,8 +25,8 @@
 @protocol MessageRedirectRequestDelegate <NSObject>
 
 @optional
+- (void)redirectMessageError:(NSError *)error;
 - (void)redirectMessagePending;
 - (void)redirectMessageSuccess;
-- (void)redirectMessageError:(NSError *)error;
 
 @end

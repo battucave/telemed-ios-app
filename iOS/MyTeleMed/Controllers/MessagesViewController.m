@@ -164,6 +164,25 @@
 	[self toggleToolbarButtons:super.isEditing];
 }
 
+// Return modify multiple message states error from MessageModel delegate
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
+{
+	// Reset selected messages
+	self.selectedMessages = [NSArray new];
+	
+	// Reset messages
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages:)])
+	{
+		[self.messagesTableViewController resetMessages:YES];
+	
+		// Reload messages
+		if ([self.messagesTableViewController respondsToSelector:@selector(reloadMessages)])
+		{
+			[self.messagesTableViewController reloadMessages];
+		}
+	}
+}
+
 // Return modify multiple message states pending from MessageModel delegate
 - (void)modifyMultipleMessagesStatePending:(NSString *)state
 {
@@ -194,23 +213,10 @@
 	[self setEditing:NO animated:YES];
 }
 
-// Return modify multiple message states error from MessageModel delegate
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
+// Return modify multiple message states success from MessageModel delegate
+- (void)modifyMultipleMessagesStateSuccess
 {
-	// Reset selected messages
-	self.selectedMessages = [NSArray new];
-	
-	// Reset messages
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages:)])
-	{
-		[self.messagesTableViewController resetMessages:YES];
-	
-		// Reload messages
-		if ([self.messagesTableViewController respondsToSelector:@selector(reloadMessages)])
-		{
-			[self.messagesTableViewController reloadMessages];
-		}
-	}
+	// Empty
 }
 
 // Delegate method from SWRevealController that fires when a recognized gesture has ended

@@ -392,7 +392,6 @@
 	}
 }
 
-// Return message recipients from MessageRecipientModel delegate
 - (void)updateMessageRecipients:(NSArray *)messageRecipients
 {
 	[self setMessageRecipients:messageRecipients];

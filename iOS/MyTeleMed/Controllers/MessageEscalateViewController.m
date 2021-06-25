@@ -66,11 +66,23 @@
 	[messageRedirectRequestModel escalateMessage:self.message withMessageRecipient:messageRecipient];
 }
 
+// Return error from MessageRedirectRequestModel delegate
+- (void)redirectMessageError:(NSError *)error
+{
+	// Empty
+}
+
 // Return pending from MessageRedirectRequestModel delegate
 - (void)redirectMessagePending
 {
 	// Go back to message detail (assume success)
 	[self performSegueWithIdentifier:@"unwindFromMessageEscalate" sender:self];
+}
+
+// Return success from MessageRedirectRequestModel delegate
+- (void)redirectMessageSuccess
+{
+	// Empty
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

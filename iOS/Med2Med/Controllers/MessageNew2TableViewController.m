@@ -118,6 +118,16 @@
 	}
 }
 
+// Return error from NewMessageModel delegate (currently only used for callback number error)
+- (void)sendNewMessageError:(NSError *)error
+{
+	// Unwind to first screen of MessageNewTableViewController form to show error for callback number
+	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
+	{
+		[self performSegueWithIdentifier:@"unwindErrorCallbackNumber" sender:self];
+	}
+}
+
 // Return success from NewMessageModel delegate (this logic should only be called after web service completes to avoid issues)
 - (void)sendNewMessageSuccess
 {
@@ -135,16 +145,6 @@
 
 	// Show Alert
 	[self presentViewController:successAlertController animated:YES completion:nil];
-}
-
-// Return error from NewMessageModel delegate (currently only used for callback number error)
-- (void)sendNewMessageError:(NSError *)error
-{
-	// Unwind to first screen of MessageNewTableViewController form to show error for callback number
-	if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
-	{
-		[self performSegueWithIdentifier:@"unwindErrorCallbackNumber" sender:self];
-	}
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

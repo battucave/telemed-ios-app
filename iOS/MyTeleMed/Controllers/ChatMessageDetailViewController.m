@@ -305,6 +305,35 @@
 	}
 }
 
+// Return error from NewChatMessageModel delegate
+- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID
+{
+	// Find comment with pending id in filtered message events
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
+	NSArray *results = [self.chatMessages filteredArrayUsingPredicate:predicate];
+	
+	if ([results count] > 0)
+	{
+		// Find and delete table cell that contains the chat message
+		ChatMessageModel *chatMessage = [results objectAtIndex:0];
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
+		
+		// Remove chat message from chat messages
+		[self.chatMessages removeObject:chatMessage];
+		
+		// If removing the only chat message
+		if ([self.chatMessages count] == 0)
+		{
+			[self.tableChatMessages reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		// If removing from existing chat messages
+		else
+		{
+			[self.tableChatMessages deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+	}
+}
+
 // Return pending from NewChatMessageModel delegate
 - (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
@@ -379,34 +408,10 @@
 	// Trigger a scroll to bottom to ensure the newly added comment is shown
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
-
-// Return error from NewChatMessageModel delegate
-- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID
+// Return success from NewChatMessageModel delegate
+- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
-	// Find comment with pending id in filtered message events
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
-	NSArray *results = [self.chatMessages filteredArrayUsingPredicate:predicate];
-	
-	if ([results count] > 0)
-	{
-		// Find and delete table cell that contains the chat message
-		ChatMessageModel *chatMessage = [results objectAtIndex:0];
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
-		
-		// Remove chat message from chat messages
-		[self.chatMessages removeObject:chatMessage];
-		
-		// If removing the only chat message
-		if ([self.chatMessages count] == 0)
-		{
-			[self.tableChatMessages reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-		// If removing from existing chat messages
-		else
-		{
-			[self.tableChatMessages deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-	}
+	// Empty
 }
 
 // Update text view chat participants with chat participant name(s)

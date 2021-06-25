@@ -59,18 +59,18 @@
 			
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Preferred Account Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Preferred Account.", NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+			{
+				[self.delegate savePreferredAccountError:error];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self savePreferredAccount:account];
 			}];
-			
-			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
-			{
-				[self.delegate savePreferredAccountError:error];
-			} */
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -90,10 +90,10 @@
 			[self.myProfileModel restoreMyPreferredAccount];
 			
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountError:)])
 			{
 				[self.delegate savePreferredAccountError:error];
-			} */
+			}
 		
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^

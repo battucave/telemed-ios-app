@@ -74,14 +74,14 @@
 		NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment from the Message Detail screen." : @"There was a problem adding your Comment.");
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Add Comment Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 		
-		// Show error (user cannot have navigated to another screen at this point)
-		[self showError:error];
-		
 		// Handle error via delegate
 		if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
 		{
 			[self.delegate saveCommentError:error withPendingID:pendingID];
 		}
+		
+		// Show error (user cannot have navigated to another screen at this point)
+		[self showError:error];
 	}
 	
 	NSLog(@"XML Body: %@", xmlBody);
@@ -104,18 +104,18 @@
 			NSString *errorMessage = (toForwardMessage ? @"Message forwarded successfully, but there was a problem adding your comment. Please retry your comment from the Message Detail screen." : @"There was a problem adding your Comment.");
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Add Comment Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
+			{
+				[self.delegate saveCommentError:error withPendingID:pendingID];
+			}
+			
 			// Show error even if user has navigated to another screen
 			[self showError:error withRetryCallback:^
 			{
 				// Include callback to retry the request
 				[self addMessageComment:message comment:comment withPendingID:pendingID toForwardMessage:toForwardMessage];
 			}];
-			
-			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentError:withPendingID:)])
-			{
-				[self.delegate saveCommentError:error withPendingID:pendingID];
-			}
 		}
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)

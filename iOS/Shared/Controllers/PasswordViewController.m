@@ -170,12 +170,11 @@
 	return YES;
 }
 
-// Return pending from PasswordChangeModel delegate (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc)
-/*- (void)changePasswordPending
+// Return error from PasswordChangeModel delegate
+- (void)changePasswordError:(NSError *)error
 {
-	// Go back to Settings (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
-}*/
+	// Empty
+}
 
 // Return success from PasswordChangeModel delegate
 - (void)changePasswordSuccess
