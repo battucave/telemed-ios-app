@@ -75,6 +75,11 @@
 	});
 }
 
+- (void)hideActivityIndicator
+{
+	[self hideActivityIndicator:nil];
+}
+
 - (void)hideActivityIndicator:(void (^)(void))callback
 {
 	dispatch_async(dispatch_get_main_queue(), ^

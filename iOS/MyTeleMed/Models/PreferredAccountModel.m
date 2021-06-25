@@ -15,7 +15,6 @@
 @property (nonatomic) MyProfileModel *myProfileModel;
 
 @property (nonatomic) AccountModel *preferredAccount;
-@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -111,21 +110,17 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Save preferred account to MyProfileModel (assume success so save it immediately and then roll back if error occurs)
+	[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
+	
+	// Notify delegate that message has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
 	{
-		// Save preferred account to MyProfileModel (assume success so save it immediately and then roll back if error occurs)
-		[self.myProfileModel setMyPreferredAccount:self.preferredAccount];
-		
-		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(savePreferredAccountPending)])
-		{
-			[self.delegate savePreferredAccountPending];
-		};
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+		[self.delegate savePreferredAccountPending];
+	};
 }
 
 @end

@@ -8,12 +8,6 @@
 
 #import "MessageRedirectRequestModel.h"
 
-@interface MessageRedirectRequestModel ()
-
-@property BOOL pendingComplete;
-
-@end
-
 @implementation MessageRedirectRequestModel
 
 - (void)escalateMessage:(id <MessageProtocol>)message
@@ -185,18 +179,14 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that message has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessagePending)])
 	{
-		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(redirectMessagePending)])
-		{
-			[self.delegate redirectMessagePending];
-		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+		[self.delegate redirectMessagePending];
+	}
 }
 
 @end

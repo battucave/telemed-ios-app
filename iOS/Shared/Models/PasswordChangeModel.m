@@ -8,12 +8,6 @@
 
 #import "PasswordChangeModel.h"
 
-@interface PasswordChangeModel ()
-
-@property (nonatomic) BOOL pendingComplete;
-
-@end
-
 @implementation PasswordChangeModel
 
 - (void)changePassword:(NSString *)newPassword withOldPassword:(NSString *)oldPassword

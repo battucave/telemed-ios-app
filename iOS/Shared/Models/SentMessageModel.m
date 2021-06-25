@@ -9,10 +9,6 @@
 #import "SentMessageModel.h"
 #import "SentMessageXMLParser.h"
 
-@interface SentMessageModel()
-
-@end
-
 @implementation SentMessageModel
 
 - (void)getSentMessages

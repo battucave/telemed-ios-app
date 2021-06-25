@@ -16,7 +16,6 @@
 @property (nonatomic) int numberOfFinishedOperations;
 @property (nonatomic) NSMutableArray *failedChatMessages;
 @property (nonatomic) BOOL queueCancelled;
-@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -359,23 +358,19 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that delete chat message has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
 	{
-		// Notify delegate that delete chat message has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
-		{
-			[self.delegate deleteChatMessagePending];
-		}
-		// Notify delegate that multiple chat message deletions have begun being sent to server (should always run multiple times if needed)
-		else if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
-		{
-			[self.delegate deleteMultipleChatMessagesPending];
-		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+		[self.delegate deleteChatMessagePending];
+	}
+	// Notify delegate that multiple chat message deletions have begun being sent to server (should always run multiple times if needed)
+	else if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
+	{
+		[self.delegate deleteMultipleChatMessagesPending];
+	}
 }
 
 @end

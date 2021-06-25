@@ -141,15 +141,14 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that chat message has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
 	{
-		// Notify delegate that chat message has been sent to server
-		if (self.delegate && [self.delegate respondsToSelector:@selector(sendChatMessagePending:withPendingID:)])
-		{
-			[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
-		}
-	}];
+		[self.delegate sendChatMessagePending:self.chatMessage withPendingID:self.pendingID];
+	}
 }
 
 @end

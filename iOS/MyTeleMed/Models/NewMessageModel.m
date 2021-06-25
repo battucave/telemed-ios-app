@@ -10,12 +10,6 @@
 #import "RegisteredDeviceModel.h"
 #import "NSString+XML.h"
 
-@interface NewMessageModel ()
-
-@property BOOL pendingComplete;
-
-@end
-
 @implementation NewMessageModel
 
 - (void)sendNewMessage:(NSString *)message accountID:(NSNumber *)accountID messageRecipientIDs:(NSArray *)messageRecipientIDs
@@ -119,18 +113,14 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that mssage has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessagePending)])
 	{
-		// Notify delegate that mssage has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessagePending)])
-		{
-			[self.delegate sendNewMessagePending];
-		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+		[self.delegate sendNewMessagePending];
+	}
 }
 
 @end

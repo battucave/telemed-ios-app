@@ -14,7 +14,6 @@
 
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSNumber *pendingID;
-//@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -154,18 +153,14 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that comment has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
 	{
-		// Notify delegate that comment has been sent to server
-		if (/* ! self.pendingComplete &&*/ self.delegate && [self.delegate respondsToSelector:@selector(saveCommentPending:withPendingID:)])
-		{
-			[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
-		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		// self.pendingComplete = YES;
-	}];
+		[self.delegate saveCommentPending:self.comment withPendingID:self.pendingID];
+	}
 }
 
 @end

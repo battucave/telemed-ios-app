@@ -10,12 +10,6 @@
 #import "Validation.h"
 #import "NSString+XML.h"
 
-@interface EmailTelemedModel ()
-
-@property (nonatomic) BOOL pendingComplete;
-
-@end
-
 @implementation EmailTelemedModel
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress
@@ -25,7 +19,6 @@
 
 - (void)sendTelemedMessage:(NSString *)message fromEmailAddress:(NSString *)fromEmailAddress withMessageDeliveryID:(NSNumber *)messageDeliveryID
 {
-	
 	// Validate email address
 	if (! [Validation isEmailAddressValid:fromEmailAddress])
 	{
@@ -132,18 +125,14 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
-	{
-		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessagePending)])
-		{
-			[self.delegate emailTeleMedMessagePending];
-		}
+	// Close activity indicator
+	[self hideActivityIndicator];
 	
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+	// Notify delegate that message has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessagePending)])
+	{
+		[self.delegate emailTeleMedMessagePending];
+	}
 }
 
 @end

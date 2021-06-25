@@ -10,12 +10,6 @@
 #import "MessageProtocol.h"
 #import "CommentModel.h"
 
-@interface ForwardMessageModel ()
-
-@property (nonatomic) BOOL pendingComplete;
-
-@end
-
 @implementation ForwardMessageModel
 
 - (void)forwardMessage:(id <MessageProtocol>)message messageRecipientIDs:(NSArray *)messageRecipientIDs withComment:(NSString *)comment
@@ -149,18 +143,14 @@
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that message has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(forwardMessagePending)])
 	{
-		// Notify delegate that message has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(forwardMessagePending)])
-		{
-			[self.delegate forwardMessagePending];
-		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
-	}];
+		[self.delegate forwardMessagePending];
+	}
 }
 
 @end

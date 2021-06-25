@@ -10,12 +10,6 @@
 #import "MessageRecipientModel.h"
 #import "NSString+XML.h"
 
-@interface NewMessageModel ()
-
-@property BOOL pendingComplete;
-
-@end
-
 @implementation NewMessageModel
 
 - (void)sendNewMessage:(NSDictionary *)messageData withOrder:(NSArray *)sortedKeys

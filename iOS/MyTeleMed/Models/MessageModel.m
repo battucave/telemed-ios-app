@@ -457,20 +457,19 @@ const int MessagesPerPage = 25;
 	// Remove network activity observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 	
-	// Close activity indicator with callback
-	[self hideActivityIndicator:^
+	// Close activity indicator
+	[self hideActivityIndicator];
+	
+	// Notify delegate that message state has been sent to server
+	if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
 	{
-		// Notify delegate that message state has been sent to server
-		if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
-		{
-			[self.delegate modifyMessageStatePending:self.messageState];
-		}
-		// Notify delegate that multiple message states have begun being sent to server
-		else if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
-		{
-			[self.delegate modifyMultipleMessagesStatePending:self.messageState];
-		}
-	}];
+		[self.delegate modifyMessageStatePending:self.messageState];
+	}
+	// Notify delegate that multiple message states have begun being sent to server
+	else if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
+	{
+		[self.delegate modifyMultipleMessagesStatePending:self.messageState];
+	}
 }
 
 @end
