@@ -162,29 +162,30 @@
 // Return delete multiple chat message error from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
 {
-	// Determine which chat messages were successfully delete4d
-	NSMutableArray *successfulChatMessages = [self.selectedChatMessages mutableCopy];
+	// Reset selected chat messages
+	self.selectedChatMessages = [NSArray new];
 	
-	[successfulChatMessages removeObjectsInArray:failedChatMessages];
-	
-	// Remove selected all rows from chat messages table that were successfully archived
-	if ([self.selectedChatMessages count] > 0)
+	// Reset chat messages
+	if ([self.chatMessagesTableViewController respondsToSelector:@selector(resetChatMessages:)])
 	{
-		[self.chatMessagesTableViewController removeSelectedChatMessages:successfulChatMessages];
+		[self.chatMessagesTableViewController resetChatMessages:YES];
+	
+		// Reload chat messages
+		if ([self.chatMessagesTableViewController respondsToSelector:@selector(reloadChatMessages)])
+		{
+			[self.chatMessagesTableViewController reloadChatMessages];
+		}
 	}
-	
-	// Reload chat messages table to re-show chat messages that were not deleted
-	[self.chatMessagesTableViewController unhideSelectedChatMessages:failedChatMessages];
-	
-	// Update selected chat messages to only the failed chat messages
-	self.selectedChatMessages = failedChatMessages;
 }
 
 // Return delete multiple chat message pending from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesPending
 {
-	// Hide selected rows from chat messages table
-	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
+	// Remove selected rows from chat messages table
+	if ([self.chatMessagesTableViewController respondsToSelector:@selector(removeSelectedChatMessages:)])
+	{
+		[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
+	}
 	
 	[self setEditing:NO animated:YES];
 }
@@ -192,8 +193,7 @@
 // Return delete multiple chat message success from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesSuccess
 {
-	// Remove selected rows from chat messages table
-	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
+	// Empty
 }
 
 // Delegate method from SWRevealController that fires when a recognized gesture has ended

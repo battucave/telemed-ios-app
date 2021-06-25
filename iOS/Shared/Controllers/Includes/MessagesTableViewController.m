@@ -595,6 +595,9 @@
 		[self resetMessages:NO];
 		
 		[self reloadMessages];
+	
+		// Toggle the parent view controller's edit button
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 ? nil : self.parentViewController.editButtonItem)];
 	}
 	// Remove rows at specified index paths from the table
 	else
@@ -671,7 +674,7 @@
 			// If messages type is active
 			if ([self.messagesType isEqualToString:@"Active"])
 			{
-				// Toggle the parent view controller's edit button based on whether there are any messages
+				// Toggle the parent view controller's edit button
 				[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 ? nil : self.parentViewController.editButtonItem)];
 			}
 			

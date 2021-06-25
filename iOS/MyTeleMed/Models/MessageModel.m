@@ -88,13 +88,13 @@ const int MessagesPerPage = 25;
                     @"[A]   Welcome to MyTeleMed.  This welcome message indicates that you’ve successfully registered the App on your phone and you can now receive and send messages. Make sure to update the settings for all your notification types (STAT, Normal, Secure Chat, and Comments). You can find this under your App main menu “Settings” button. If you’d like a training session to learn details of the App, please use the “Contact TeleMed” button on your App main menu to request training session."
                     : [NSString stringWithFormat:@"Message %d", i]
                 );
-                long messageID = 10000000 + i;
+                long ID = 10000000 + i;
                 
                 NSString *xmlMessage = [NSString stringWithFormat:@"<Message><Account><ID>948</ID><Name>TeleMed</Name><PublicKey>1</PublicKey><TimeZone><Description>EDT</Description><Offset>-4</Offset></TimeZone></Account><FormattedMessageText>%@</FormattedMessageText><MessageID>%ld</MessageID><PatientName></PatientName><Priority>Normal</Priority><SenderContact>800-420-4695</SenderContact><SenderID>10</SenderID><SenderName>TeleMed</SenderName><ID>%ld</ID><MessageDeliveryID>%ld</MessageDeliveryID><State>Unread</State><TimeReceived_LCL>2021-06-23T09:38:23.289</TimeReceived_LCL><TimeReceived_UTC>2021-06-23T13:38:23.288Z</TimeReceived_UTC></Message>",
                     formattedMessageText,
-                    messageID,
-                    messageID,
-                    messageID
+                    ID,
+                    ID,
+                    ID
                 ];
                 
                 [xmlMessages addObject:xmlMessage];
