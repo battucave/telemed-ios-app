@@ -51,9 +51,9 @@
 - (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue
 {
 	// Reset MessagesTableViewController back to loading state
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages:)])
 	{
-		[self.messagesTableViewController resetMessages];
+		[self.messagesTableViewController resetMessages:NO];
 	}
 	
 	// Obtain reference to source view controller
@@ -78,7 +78,7 @@
 	// Update results label with selected account and date values
 	[self.labelResults setText:[NSString stringWithFormat:@"Results from %@ for %@", self.archivesPickerViewController.selectedDate, self.archivesPickerViewController.selectedAccount.Name]];
 	
-	// Update MessagesTableViewController with updated messages
+	// Update MessagesTableViewController with updated messages (viewWillAppear will be called on MessagesTableViewController after this which will re-fetch messages)
 	if ([self.messagesTableViewController respondsToSelector:@selector(filterArchivedMessages:startDate:endDate:)])
 	{
 		[self.messagesTableViewController filterArchivedMessages:self.archivesPickerViewController.selectedAccount.ID startDate:self.archivesPickerViewController.startDate endDate:self.archivesPickerViewController.endDate];

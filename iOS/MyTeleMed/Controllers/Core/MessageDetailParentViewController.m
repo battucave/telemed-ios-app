@@ -264,30 +264,8 @@
 	}
 }
 
-/*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
+// Return message state pending from MessageModel delegate
 - (void)modifyMessageStatePending:(NSString *)state
-{
-	// If finished archiving message, send user back
-	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
-	{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
-		{
-			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
-			@try
-			{
-				[self performSegueWithIdentifier:@"unwindArchiveMessage" sender:self];
-			}
-			// Just in case the unwind segue isn't found, simply pop the view controller
-			@catch(NSException *exception)
-			{
-				[self.navigationController popViewControllerAnimated:YES];
-			}
-		});
-	}
-}*/
-
-// Return message state success from MessageModel delegate
-- (void)modifyMessageStateSuccess:(NSString *)state
 {
 	// If finished archiving message, send user back
 	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
@@ -308,17 +286,17 @@
 	}
 }
 
-/*/ Return message state error from MessageModel delegate
+// Return message state error from MessageModel delegate
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
 {
-	// Show error message
-	if ([state isEqualToString:@"Archive"])
-	{
-		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
- 
-		[errorAlertController show:error];
-	}
-}*/
+	// Empty
+}
+
+// Return message state success from MessageModel delegate
+- (void)modifyMessageStateSuccess:(NSString *)state
+{
+	// Handled by pending callback
+}
 
 // Show error alert that message cannot be forwarded
 - (void)showMessageCannotForwardError

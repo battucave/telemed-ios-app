@@ -122,38 +122,12 @@
 // Unwind segue from MessageDetailViewController (only after archive action)
 - (IBAction)unwindArchiveMessage:(UIStoryboardSegue *)segue
 {
-	/*
-	 * 9/29/2019 - Pagination was added, but contains a flaw:
-	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next page of messages
-	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
-	 *
-	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next set of messages
-	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
-	 *
-	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
-	 */
-	
-	/*/ Preferred solution - Remove selected rows from messages table
 	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
 	
 	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
 	{
 		[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
 	}
-	// End preferred solution */
-	
-	// Fallback solution - Reset the messages table (viewWillAppear will be called on MessagesTableViewController after this which will reload the table)
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
-	{
-		[self.messagesTableViewController resetMessages];
-	}
-	// End fallback solution
 }
 
 // Override setEditing:
@@ -193,107 +167,49 @@
 // Return modify multiple message states pending from MessageModel delegate
 - (void)modifyMultipleMessagesStatePending:(NSString *)state
 {
-	// Hide selected rows from messages table
-	if ([self.messagesTableViewController respondsToSelector:@selector(hideSelectedMessages:)])
+    /*
+	 * 9/29/2019 - Pagination was added, but contains a flaw:
+	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next page of messages
+	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
+	 *
+	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
+	 *     1. User loads the first page of messages with 25 items
+	 *     2. User archives one or more messages
+	 *     3. User scrolls down and loads the next set of messages
+	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, or just current messages count + 1
+	 *
+	 *   This recommended solution was not accepted.
+	 *
+	 *   Instead, reload the current page of messages to backfill any that would be skipped. If user archived more than one page of messages (25), then reset the table since reloading the current page would still skip messages.
+	 */
+	// Remove selected rows from messages table
+	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
 	{
-		[self.messagesTableViewController hideSelectedMessages:self.selectedMessages];
+		[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
 	}
 	
 	[self setEditing:NO animated:YES];
 }
 
-// Return modify multiple message states success from MessageModel delegate
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state
-{
-	/*
-	 * 9/29/2019 - Pagination was added, but contains a flaw:
-	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next page of messages
-	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
-	 *
-	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next set of messages
-	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
-	 *
-	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
-	 */
-	
-	/*/ Preferred solution - Remove selected messages from the messages table
-	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
-	{
-		[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
-	}
-	// End preferred solution */
-	
-	// Fallback solution - Reset the messages table and reload messages
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetActiveMessages)])
-	{
-		[self.messagesTableViewController resetActiveMessages];
-	}
-	// End fallback solution
-}
-
 // Return modify multiple message states error from MessageModel delegate
 - (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
 {
-	// Determine which messages were successfully archived
-	NSMutableArray *successfulMessages = [self.selectedMessages mutableCopy];
+	// Reset selected messages
+	self.selectedMessages = [NSArray new];
 	
-	[successfulMessages removeObjectsInArray:failedMessages];
-	
-	/*
-	 * 9/29/2019 - Pagination was added, but contains a flaw:
-	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next page of messages
-	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
-	 *
-	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next set of messages
-	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, which is just current messages count + 1
-	 *
-	 *   This recommended solution was not accepted. Instead, we have to reset the table after messages have been archived resulting in a poor user experience.
-	 */
-	
-	/*/ Preferred solution - Remove the successfully archived messages and unhide the failed messages in the messages table
-	// Update selected messages to only the failed messages
-	self.selectedMessages = failedMessages;
-	
-	// Remove all rows from messages table that were successfully archived
-	if ([successfulMessages count] > 0 && [self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	// Reset messages
+	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages:)])
 	{
-		[self.messagesTableViewController removeSelectedMessages:successfulMessages];
-	}
+		[self.messagesTableViewController resetMessages:YES];
 	
-	// Re-show messages that were not archived
-	if ([self.messagesTableViewController respondsToSelector:@selector(unhideSelectedMessages:)])
-	{
-		[self.messagesTableViewController unhideSelectedMessages:failedMessages];
-	}
-	// End preferred solution */
-	
-	// Fallback solution - Reset the messages table if there are any successfully archived messages */
-	if ([successfulMessages count] > 0)
-	{
-		// Reset selected messages and reload messages
-		self.selectedMessages = [NSArray new];
-		
-		if ([self.messagesTableViewController respondsToSelector:@selector(resetActiveMessages)])
+		// Reload messages
+		if ([self.messagesTableViewController respondsToSelector:@selector(reloadMessages)])
 		{
-			[self.messagesTableViewController resetActiveMessages];
+			[self.messagesTableViewController reloadMessages];
 		}
-	}
-	else if ([self.messagesTableViewController respondsToSelector:@selector(unhideSelectedMessages:)])
-	{
-		// Re-show messages that were not archived
-		[self.messagesTableViewController unhideSelectedMessages:failedMessages];
 	}
 }
 

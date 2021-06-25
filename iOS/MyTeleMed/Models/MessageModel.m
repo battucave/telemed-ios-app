@@ -18,7 +18,6 @@ const int MessagesPerPage = 25;
 @property (nonatomic) int totalNumberOfOperations;
 @property (nonatomic) int numberOfFinishedOperations;
 @property (nonatomic) BOOL queueCancelled;
-@property (nonatomic) BOOL pendingComplete;
 
 @end
 
@@ -76,6 +75,36 @@ const int MessagesPerPage = 25;
 	[self.operationManager GET:@"Messages" parameters:parameters success:^(__unused AFHTTPRequestOperation *operation, id responseObject)
 	{
 		NSXMLParser *xmlParser = (NSXMLParser *)responseObject;
+        
+        /*/ TESTING ONLY (generate test messages)
+        #if DEBUG
+            int pageNumber = [[parameters objectForKey:@"pn"] intValue];
+            int startValue = (pageNumber - 1) * MessagesPerPage + 1;
+            NSMutableArray *xmlMessages = [NSMutableArray new];
+            
+            for (int i = startValue; i < startValue + MessagesPerPage; i++)
+            {
+                NSString *formattedMessageText = (i == startValue ?
+                    @"[A]   Welcome to MyTeleMed.  This welcome message indicates that you’ve successfully registered the App on your phone and you can now receive and send messages. Make sure to update the settings for all your notification types (STAT, Normal, Secure Chat, and Comments). You can find this under your App main menu “Settings” button. If you’d like a training session to learn details of the App, please use the “Contact TeleMed” button on your App main menu to request training session."
+                    : [NSString stringWithFormat:@"Message %d", i]
+                );
+                long messageID = 10000000 + i;
+                
+                NSString *xmlMessage = [NSString stringWithFormat:@"<Message><Account><ID>948</ID><Name>TeleMed</Name><PublicKey>1</PublicKey><TimeZone><Description>EDT</Description><Offset>-4</Offset></TimeZone></Account><FormattedMessageText>%@</FormattedMessageText><MessageID>%ld</MessageID><PatientName></PatientName><Priority>Normal</Priority><SenderContact>800-420-4695</SenderContact><SenderID>10</SenderID><SenderName>TeleMed</SenderName><ID>%ld</ID><MessageDeliveryID>%ld</MessageDeliveryID><State>Unread</State><TimeReceived_LCL>2021-06-23T09:38:23.289</TimeReceived_LCL><TimeReceived_UTC>2021-06-23T13:38:23.288Z</TimeReceived_UTC></Message>",
+                    formattedMessageText,
+                    messageID,
+                    messageID,
+                    messageID
+                ];
+                
+                [xmlMessages addObject:xmlMessage];
+            }
+            
+            NSString *xmlString = [NSString stringWithFormat:@"<ArrayOfMessage xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/MyTmd.Models\">%@</ArrayOfMessage>", [xmlMessages componentsJoinedByString:@""]];
+            xmlParser = [[NSXMLParser alloc] initWithData:[xmlString dataUsingEncoding:NSUnicodeStringEncoding]];
+        #endif
+        // END TESTING ONLY */
+        
 		MessageXMLParser *parser = [[MessageXMLParser alloc] init];
 		
 		[xmlParser setDelegate:parser];
@@ -184,8 +213,8 @@ const int MessagesPerPage = 25;
 		[self showActivityIndicator:@"Unarchiving..."];
 	}
 	
-	// Add network activity observer (not currently used because client noticed "bug" when on a slow network connection - the message will still show in Messages list until the archive process completes)
-	// [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+	// Add network activity observer
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	// Store state for modifyMessageStatePending:
 	self.messageState = state;
@@ -432,18 +461,15 @@ const int MessagesPerPage = 25;
 	[self hideActivityIndicator:^
 	{
 		// Notify delegate that message state has been sent to server
-		if (! self.pendingComplete && self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
+		if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
 		{
 			[self.delegate modifyMessageStatePending:self.messageState];
 		}
-		// Notify delegate that multiple message states have begun being sent to server (should always run multiple times if needed)
+		// Notify delegate that multiple message states have begun being sent to server
 		else if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
 		{
 			[self.delegate modifyMultipleMessagesStatePending:self.messageState];
 		}
-		
-		// Ensure that pending callback doesn't fire again after possible error
-		self.pendingComplete = YES;
 	}];
 }
 
