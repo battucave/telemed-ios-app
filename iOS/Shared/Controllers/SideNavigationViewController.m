@@ -149,8 +149,11 @@
 					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN(self.myStatusModel.UnreadMessageCount.integerValue, 99), MIN(self.myStatusModel.ActiveMessageCount.integerValue, 99)]];
 				}
                 
-                // TESTING ONLY (set counts to random numbers)
-                // [cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+                /*/ TESTING ONLY (set counts to random numbers)
+                #if DEBUG
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+				#endif
+                // END TESTING ONLY */
 				
 				// Store old frame size
 				CGRect oldFrame = cell.labelCounts.frame;

@@ -41,7 +41,7 @@
 			}];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
-			#if MED2MED
+			#if DEBUG && MED2MED
 				for (int i = 0; i < 5; i++)
 				{
 					AccountModel *account = [[AccountModel alloc] init];

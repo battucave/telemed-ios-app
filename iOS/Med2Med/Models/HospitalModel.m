@@ -35,17 +35,19 @@
 			}];
 			
 			/*/ TESTING ONLY (generate fictitious hospitals for testing)
-			for (int i = 0; i < 5; i++)
-			{
-				HospitalModel *hospital = [[HospitalModel alloc] init];
-				
-				[hospital setID:[NSNumber numberWithInt:i]];
-				[hospital setMyAuthenticationStatus:@"OK"]; // NONE, Requested, OK, Admin, Denied, Blocked
-				[hospital setName:[NSString stringWithFormat:@"Hospital %d", i]];
-				[hospital setAbbreviatedName:[NSString stringWithFormat:@"Hospital %d", i]];
-			 
-				[hospitals addObject:hospital];
-			}
+			#if DEBUG
+				for (int i = 0; i < 5; i++)
+				{
+					HospitalModel *hospital = [[HospitalModel alloc] init];
+					
+					[hospital setID:[NSNumber numberWithInt:i]];
+					[hospital setMyAuthenticationStatus:@"OK"]; // NONE, Requested, OK, Admin, Denied, Blocked
+					[hospital setName:[NSString stringWithFormat:@"Hospital %d", i]];
+					[hospital setAbbreviatedName:[NSString stringWithFormat:@"Hospital %d", i]];
+				 
+					[hospitals addObject:hospital];
+				}
+			#endif
 			// END TESTING ONLY */
 			
 			// Handle success via callback

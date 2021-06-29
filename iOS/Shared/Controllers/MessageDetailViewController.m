@@ -557,7 +557,7 @@
 		{
 			[self.messageModel modifyMessageState:self.messageDeliveryID state:@"Read"];
 		}
-		// TESTING ONLY (set read messages back to unread or archived messages back to unarchived)
+		/*/ TESTING ONLY (set read messages back to unread or archived messages back to unarchived)
 		#if DEBUG
 			// Set message back to unread
 			else if ([self.message.MessageType isEqualToString:@"Active"] && [self.message.State isEqualToString:@"Read"])
