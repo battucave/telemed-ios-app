@@ -25,8 +25,13 @@ const int MessagesPerPage = 25;
 
 - (void)getActiveMessages:(NSInteger)page
 {
+	[self getActiveMessages:page perPage:MessagesPerPage];
+}
+
+- (void)getActiveMessages:(NSInteger)page perPage:(NSInteger)perPage
+{
 	NSDictionary *parameters = @{
-		@"ipp"		: [NSNumber numberWithInt:MessagesPerPage],
+		@"ipp"		: [NSNumber numberWithInteger:perPage],
 		@"pn"		: [NSNumber numberWithInteger:page],
 		@"state"	: @"active"
 	};
@@ -79,10 +84,11 @@ const int MessagesPerPage = 25;
         /*/ TESTING ONLY (generate test messages)
         #if DEBUG
             int pageNumber = [[parameters objectForKey:@"pn"] intValue];
+            int perPage = [[parameters objectForKey:@"ipp"] intValue];
             int startValue = (pageNumber - 1) * MessagesPerPage + 1;
             NSMutableArray *xmlMessages = [NSMutableArray new];
             
-            for (int i = startValue; i < startValue + MessagesPerPage; i++)
+            for (int i = startValue; i < startValue + perPage; i++)
             {
                 NSString *formattedMessageText = (i == startValue ?
                     @"[A]   Welcome to MyTeleMed.  This welcome message indicates that you’ve successfully registered the App on your phone and you can now receive and send messages. Make sure to update the settings for all your notification types (STAT, Normal, Secure Chat, and Comments). You can find this under your App main menu “Settings” button. If you’d like a training session to learn details of the App, please use the “Contact TeleMed” button on your App main menu to request training session."
@@ -301,8 +307,9 @@ const int MessagesPerPage = 25;
 		return;
 	}
 	
-	// Initialize failed messages
+	// Initialize failed and successful messages
 	NSMutableArray *failedMessages = [[NSMutableArray alloc] init];
+	NSMutableArray *successfulMessages = [[NSMutableArray alloc] init];
 	
 	// Validate message state
 	if (! [state isEqualToString:@"Read"] && ! [state isEqualToString:@"Unread"] && ! [state isEqualToString:@"Archive"] && ! [state isEqualToString:@"Unarchive"])
@@ -339,7 +346,12 @@ const int MessagesPerPage = 25;
 		[self.operationManager POST:@"Messages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 		{
 			// Successful post returns a 204 code with no response
-			if (operation.response.statusCode != 204)
+			if (operation.response.statusCode == 204)
+			{
+				// Add message to successful messages
+				[successfulMessages addObject:message];
+			}
+			else
 			{
 				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message Archive Error", NSLocalizedFailureReasonErrorKey, @"There was a problem modifying the Message Status.", NSLocalizedDescriptionKey, nil]];
 				
@@ -355,7 +367,7 @@ const int MessagesPerPage = 25;
 			// Execute queue finished method if all operations have completed
 			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
-				[self messageStateQueueFinished:state withFailedMessages:[failedMessages copy]];
+				[self messageStateQueueFinished:state successfulMessages:[successfulMessages copy] failedMessages:[failedMessages copy]];
 			}
 		}
 		failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -369,7 +381,7 @@ const int MessagesPerPage = 25;
 				[self.operationManager.operationQueue cancelAllOperations];
 				self.queueCancelled = YES;
 				
-				[self messageStateQueueFinished:state withFailedMessages:[failedMessages copy]];
+				[self messageStateQueueFinished:state successfulMessages:[successfulMessages copy] failedMessages:[failedMessages copy]];
 				
 				return;
 			}
@@ -383,13 +395,13 @@ const int MessagesPerPage = 25;
 			// Execute queue finished method if all operations have completed
 			if (self.numberOfFinishedOperations == self.totalNumberOfOperations)
 			{
-				[self messageStateQueueFinished:state withFailedMessages:[failedMessages copy]];
+				[self messageStateQueueFinished:state successfulMessages:[successfulMessages copy] failedMessages:[failedMessages copy]];
 			}
 		}];
 	}
 }
 
-- (void)messageStateQueueFinished:(NSString *)state withFailedMessages:(NSArray *)failedMessages
+- (void)messageStateQueueFinished:(NSString *)state successfulMessages:(NSArray *)successfulMessages failedMessages:(NSArray *)failedMessages
 {
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[failedMessages count], self.totalNumberOfOperations);
 	
@@ -406,7 +418,7 @@ const int MessagesPerPage = 25;
 			NSString *errorMessage = @"There was a problem archiving your Messages.";
 			
 			// Only some messages failed to archive
-			if ([failedMessages count] != self.totalNumberOfOperations)
+			if ([failedMessages count] < self.totalNumberOfOperations)
 			{
 				errorMessage = @"There was a problem archiving some of your Messages.";
 			}
@@ -415,9 +427,9 @@ const int MessagesPerPage = 25;
 			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Archive Messages Error", NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
 			
 			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:forState:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateError:successfulMessages:forState:)])
 			{
-				[self.delegate modifyMultipleMessagesStateError:failedMessages forState:state];
+				[self.delegate modifyMultipleMessagesStateError:failedMessages successfulMessages:successfulMessages forState:state];
 			}
 		
 			// Show error even if user has navigated to another screen
@@ -428,9 +440,9 @@ const int MessagesPerPage = 25;
 			}];
 		}
 		// If request was not cancelled, then handle success via delegate
-		else if (! self.queueCancelled && self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:)])
+		else if (! self.queueCancelled && self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStateSuccess:forState:)])
 		{
-			[self.delegate modifyMultipleMessagesStateSuccess:state];
+			[self.delegate modifyMultipleMessagesStateSuccess:successfulMessages forState:state];
 		}
 		
 		// Reset queue variables

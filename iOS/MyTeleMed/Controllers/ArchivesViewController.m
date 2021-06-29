@@ -50,12 +50,6 @@
 // Unwind segue from ArchivesPickerViewController
 - (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue
 {
-	// Reset MessagesTableViewController back to loading state
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages:)])
-	{
-		[self.messagesTableViewController resetMessages:NO];
-	}
-	
 	// Obtain reference to source view controller
 	[self setArchivesPickerViewController:segue.sourceViewController];
 	

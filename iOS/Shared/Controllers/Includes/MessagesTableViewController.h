@@ -19,8 +19,7 @@
 #if MYTELEMED
 	- (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 	- (void)reloadMessages;
-	- (void)removeSelectedMessages:(NSArray *)messages;
-	- (void)resetMessages:(BOOL)resetHidden;
+	- (void)removeSelectedMessages:(NSArray *)messages isPending:(BOOL)isPending;
 #endif
 
 @end

@@ -26,7 +26,7 @@
 @property (nonatomic) SentMessageModel *sentMessageModel;
 
 @property (nonatomic) NSMutableArray *messages;
-@property (nonatomic) NSMutableArray *hiddenMessages;
+@property (nonatomic) NSMutableArray *removedMessages;
 @property (nonatomic) NSMutableArray *selectedMessages;
 
 @property (nonatomic) NSString *messagesType; // Active, Archived, Sent
@@ -38,6 +38,7 @@
 
 // Pagination properties
 @property (nonatomic) NSInteger currentPage;
+@property (nonatomic) BOOL isRemovalPending;
 @property (nonatomic) BOOL isFetchingNextPage;
 @property (nonatomic) BOOL isFirstPageLoaded;
 @property (nonatomic) BOOL isLastPageLoaded;
@@ -74,8 +75,8 @@
 		[self setMessageModel:[[MessageModel alloc] init]];
 		[self.messageModel setDelegate:self];
 		
-		// Initialize hidden messages
-		[self setHiddenMessages:[NSMutableArray new]];
+		// Initialize removed messages
+		[self setRemovedMessages:[NSMutableArray new]];
 	
 		// Initialize loading activity indicator to be used when loading additional messages
 		[self setLoadingActivityIndicator:[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]];
@@ -95,8 +96,8 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// Always reload messages to ensure that any new messages are fetched from server when user returns to this screen
-	[self reloadMessages];
+	// Always reload first page of messages to ensure that any new messages are fetched from server when user returns to this screen
+	[self loadMessages:1];
 	
 	// Disable refresh control for sent and archived messages
 	if (! [self.messagesType isEqualToString:@"Active"])
@@ -111,19 +112,13 @@
 	// Cancel queued messages refresh
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	[self reloadMessages];
+	[self loadMessages:1];
 	
 	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
 	[settings synchronize];
-}
-
-// Reload messages
-- (void)reloadMessages
-{
-	[self loadMessages:1];
 }
 
 // Return sent messages from SentMessageModel delegate
@@ -501,6 +496,10 @@
 // Delegate method from ArchivesViewController
 - (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
+	// Reset messages back to loading state
+	[self resetMessages];
+	
+	// Set filter data
 	[self setArchiveAccountID:accountID];
 	[self setArchiveStartDate:startDate];
 	[self setArchiveEndDate:endDate];
@@ -563,14 +562,76 @@
 	}
 }
 
-// Remove selected messages. Active messages only
-- (void)removeSelectedMessages:(NSArray *)messages
+// Reset and reload first page of messages
+- (void)reloadMessages
+{
+	[self resetMessages];
+	[self.removedMessages removeAllObjects];
+	
+	[self setIsRemovalPending:NO];
+	
+	[self loadMessages:1];
+}
+
+/**
+ * Remove selected messages. (Active messages only)
+ *
+ * Currently, this method removes selected messages while they are pending archive to web services. If an error occurs, then have to reset the table.
+ * Ideally, this method would hide selected messages while pending, then unhide them on error or remove them on successful archive.
+ * However, this adds complexity and the hide/unhide logic was causing some rare crashes.
+ *
+ * See commit 27d132a (6/22/2021) for implementation example (hideSelectedMessage, unhideSelectedMessages, reloadRowsAtIndexPaths, heightForRowAtIndexPath, and cellForRowAtIndexPath).
+ *   The reloadRowsAtIndexPaths method was the cause of the crash issues.
+ *
+ * Note: The web service pagination logic causes skipping of messages after archive:
+ * 	 If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
+ * 	    1. User loads the first page of messages with 25 items
+ * 	    2. User archives one or more messages
+ * 	    3. The messages are removed from the server, altering the returned messages for a particular page
+ * 	    4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
+ */
+- (void)removeSelectedMessages:(NSArray *)messages isPending:(BOOL)isPending
 {
 	// If there are no messages to remove, then stop
 	if ([messages count] == 0)
 	{
+		// Disabled removal pending flag
+		[self setIsRemovalPending:NO];
+		
 		return;
 	}
+	// If pending removal has completed, then load current and next pages to avoid skipped messages
+	else if (self.isRemovalPending && ! isPending)
+	{
+		// Enable the isFetchingNextPage flag
+		[self setIsFetchingNextPage:YES];
+		
+		// Update removal pending flag
+		[self setIsRemovalPending:isPending];
+		
+		// Adjust current page to account for the removed messages on web service
+		if (self.currentPage > 1)
+		{
+			int pageAdjustment = floor([messages count] / MessagesPerPage);
+			
+			self.currentPage -= pageAdjustment;
+		}
+		
+		// Load current and next pages of active messages
+		if ([self.messagesType isEqualToString:@"Active"] && ! self.isLastPageLoaded)
+		{
+			// Fetch current and next pages as a single request by requesting double the standard number of messages
+			[self.messageModel getActiveMessages:self.currentPage perPage:MessagesPerPage * 2];
+			
+			// Increment current page
+			self.currentPage++;
+		}
+		
+		return;
+	}
+	
+	// Update removal pending flag
+	self.isRemovalPending = isPending;
 	
 	NSMutableArray *indexPaths = [NSMutableArray new];
 	
@@ -584,53 +645,33 @@
 	[self.messages removeObjectsInArray:messages];
 	[self.selectedMessages removeObjectsInArray:messages];
 	
-	// Add messages to hidden data
-	[self.hiddenMessages addObjectsFromArray:messages];
+	// Add messages to removed data
+	[self.removedMessages addObjectsFromArray:messages];
 	
-	// If there are no messages left in the source data or if removing more than one page of messages (25), then reset and reload messages
-	// Note: Due to flaw in pagination, removing more than one page of messages would result in skipped messages when loading the next page
-	// (See MessagesViewController::modifyMultipleMessagesStatePending: for more info)
-	if ([self.messages count] == 0 || [messages count] > MessagesPerPage)
+	// If there are no messages left in the source data, then reset messages back to loading state
+	if ([self.messages count] == 0)
 	{
-		[self resetMessages:NO];
-		
-		[self reloadMessages];
+		[self resetMessages];
 	
 		// Toggle the parent view controller's edit button
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.messages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+		[self.parentViewController.navigationItem setRightBarButtonItem:nil];
 	}
 	// Remove rows at specified index paths from the table
 	else
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		
-		// Due to flaw in pagination, reload current page of messages to backfill any messages that would be skipped when loading the next page
-		// (See MessagesViewController::modifyMultipleMessagesStatePending: for more info)
-		[self loadMessages:self.currentPage];
-		
-	}
-	
-	// Update delegate's list of selected messages
-	if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
-	{
-		[self.delegate setSelectedMessages:self.selectedMessages];
 	}
 }
 
 // Reset messages back to loading state
-- (void)resetMessages:(BOOL)resetHidden
+- (void)resetMessages
 {
 	[self setCurrentPage:1];
 	[self setIsFirstPageLoaded:NO];
 	[self setIsLastPageLoaded:NO];
+	
 	[self.messages removeAllObjects];
 	[self.selectedMessages removeAllObjects];
-	
-	// Additionally reset hidden messages
-	if (resetHidden)
-	{
-		[self.hiddenMessages removeAllObjects];
-	}
 	
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
@@ -652,10 +693,10 @@
 		[self setIsLastPageLoaded:YES];
 	}
 	
-	// Filter out messages that have been archived locally, but are still pending web service response
-	if ([self.hiddenMessages count] > 0)
+	// Filter out messages that have been removed (archived) locally, but are still pending web service response
+	if ([self.removedMessages count] > 0)
 	{
-		messages = [self computeNewMessages:messages from:self.hiddenMessages];
+		messages = [self computeNewMessages:messages from:self.removedMessages];
 	}
 	
 	// Set initial messages if empty
@@ -769,6 +810,16 @@
 	{
 		return;
 	}
+	// Prevent unnecessary web service request, but add loading indicator
+	else if (self.isRemovalPending)
+	{
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+    		[self.tableView setTableFooterView:self.loadingActivityIndicator];
+		});
+		
+		return;
+	}
 	
 	// Get the last (maximum) row number from the array of index paths
 	long maximumRow = (long)[[indexPaths valueForKeyPath:@"@max.row"] longValue] + 1;
@@ -779,7 +830,10 @@
 	// If the last row is being pre-fetched, then fetch the next batch of messages
 	if (maximumRow >= [self.messages count])
 	{
-		[self loadMessages:++self.currentPage];
+		// Increment current page
+		self.currentPage++;
+		
+		[self loadMessages:self.currentPage];
 		
 		dispatch_async(dispatch_get_main_queue(), ^
 		{

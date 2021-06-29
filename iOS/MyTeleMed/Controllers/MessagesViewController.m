@@ -124,9 +124,9 @@
 {
 	MessageDetailViewController *messageDetailViewController = segue.sourceViewController;
 	
-	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:isPending:)])
 	{
-		[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message]];
+		[self.messagesTableViewController removeSelectedMessages:@[messageDetailViewController.message] isPending:NO];
 	}
 }
 
@@ -165,16 +165,13 @@
 }
 
 // Return modify multiple message states error from MessageModel delegate
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages forState:(NSString *)state
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages successfulMessages:(NSArray *)successfulMessages forState:(NSString *)state
 {
 	// Reset selected messages
 	self.selectedMessages = [NSArray new];
 	
-	// Reset messages
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages:)])
+	if ([state isEqualToString:@"Archive"])
 	{
-		[self.messagesTableViewController resetMessages:YES];
-	
 		// Reload messages
 		if ([self.messagesTableViewController respondsToSelector:@selector(reloadMessages)])
 		{
@@ -186,37 +183,32 @@
 // Return modify multiple message states pending from MessageModel delegate
 - (void)modifyMultipleMessagesStatePending:(NSString *)state
 {
-    /*
-	 * 9/29/2019 - Pagination was added, but contains a flaw:
-	 *   If user archives message(s), then loads the next page of messages, some messages will be skipped. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next page of messages
-	 *     4. The next page will start from the 26th message, thereby skipping over some number of messages equal to the number of messages that were archived
-	 *
-	 *   The recommended solution is to update the Messages web service endpoint to include a parameter that defines the next item to be fetched. Example scenario:
-	 *     1. User loads the first page of messages with 25 items
-	 *     2. User archives one or more messages
-	 *     3. User scrolls down and loads the next set of messages
-	 *     4. App simply requests the next 25 items starting from the next message needed, which is: initial messages count - archived messages count + 1, or just current messages count + 1
-	 *
-	 *   This recommended solution was not accepted.
-	 *
-	 *   Instead, reload the current page of messages to backfill any that would be skipped. If user archived more than one page of messages (25), then reset the table since reloading the current page would still skip messages.
-	 */
-	// Remove selected rows from messages table
-	if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:)])
+    if ([state isEqualToString:@"Archive"])
 	{
-		[self.messagesTableViewController removeSelectedMessages:self.selectedMessages];
+		// Remove (pending) selected messages from messages table
+		if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:isPending:)])
+		{
+			[self.messagesTableViewController removeSelectedMessages:self.selectedMessages isPending:YES];
+		}
 	}
+	
+	// Reset selected messages
+	self.selectedMessages = [NSArray new];
 	
 	[self setEditing:NO animated:YES];
 }
 
 // Return modify multiple message states success from MessageModel delegate
-- (void)modifyMultipleMessagesStateSuccess
+- (void)modifyMultipleMessagesStateSuccess:(NSArray *)messages forState:(NSString *)state
 {
-	// Empty
+	if ([state isEqualToString:@"Archive"])
+	{
+		// Remove selected messages from messages table
+		if ([self.messagesTableViewController respondsToSelector:@selector(removeSelectedMessages:isPending:)])
+		{
+			[self.messagesTableViewController removeSelectedMessages:messages isPending:NO];
+		}
+	}
 }
 
 // Delegate method from SWRevealController that fires when a recognized gesture has ended

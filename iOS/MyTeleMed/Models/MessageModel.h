@@ -36,6 +36,7 @@ extern int const MessagesPerPage;
 @property (nonatomic) NSString *MessageType; // Active, Archived (this property not set by web service)
 
 - (void)getActiveMessages:(NSInteger)page;
+- (void)getActiveMessages:(NSInteger)page perPage:(NSInteger)perPage;
 - (void)getArchivedMessages:(NSInteger)page forAccount:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (void)getMessageByDeliveryID:(NSNumber *)messageDeliveryID withCallback:(void (^)(BOOL success, MessageModel *message, NSError *error))callback;
 - (void)modifyMessageState:(NSNumber *)messageDeliveryID state:(NSString *)state;
@@ -56,7 +57,7 @@ extern int const MessagesPerPage;
 - (void)modifyMessageStateSuccess:(NSString *)state;
 - (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state;
 - (void)modifyMultipleMessagesStatePending:(NSString *)state;
-- (void)modifyMultipleMessagesStateSuccess:(NSString *)state;
-- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessageIDs forState:(NSString *)state;
+- (void)modifyMultipleMessagesStateSuccess:(NSArray *)messages forState:(NSString *)state;
+- (void)modifyMultipleMessagesStateError:(NSArray *)failedMessages successfulMessages:(NSArray *)successfulMessages forState:(NSString *)state;
 
 @end
