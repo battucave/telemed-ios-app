@@ -408,6 +408,7 @@
 	// Trigger a scroll to bottom to ensure the newly added comment is shown
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
+
 // Return success from NewChatMessageModel delegate
 - (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID
 {

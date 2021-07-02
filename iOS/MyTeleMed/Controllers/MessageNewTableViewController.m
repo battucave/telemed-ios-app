@@ -108,7 +108,7 @@
 // Return pending from NewMessageModel delegate
 - (void)sendNewMessagePending
 {
-	// Go back to MessagesViewController (assume success)
+	// Go back to MessagesViewController
 	[self.navigationController popViewControllerAnimated:YES];
 }
 

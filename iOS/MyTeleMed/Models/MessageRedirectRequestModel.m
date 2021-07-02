@@ -46,13 +46,6 @@
 {
 	NSString *errorMessage = [NSString stringWithFormat:@"There was a problem %@ your Message.", (useSlotEscalation ? @"escalating" : @"redirecting")];
 	NSString *errorTitle = [NSString stringWithFormat:@"%@ Message Error", (useSlotEscalation ? @"Escalate" : @"Redirect")];
-	
-	// Show activity indicator
-	[self showActivityIndicator];
-	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
 	NSString *xmlMessageRecipient = @"";
 	NSString *xmlOnCallSlot = @"";
 	
@@ -112,49 +105,59 @@
 	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
+ 
+    // Notify delegate that message is pending server response
+	if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessagePending)])
+	{
+		[self.delegate redirectMessagePending];
+	}
+    // Show activity indicator
+    else
+    {
+        [self showActivityIndicator];
+    }
 	
 	[self.operationManager POST:@"MsgRedirectionRequests" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
-		
-		// Successful post returns a 204 code with no response
-		if (operation.response.statusCode == 200 || operation.response.statusCode == 204)
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
 		{
-			// Handle success via delegate (not currently used)
-			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageSuccess)])
-			{
-				[self.delegate redirectMessageSuccess];
-			}
-		}
-		else
-		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:errorTitle, NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
-			
-			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
-			{
-				[self.delegate redirectMessageError:error];
-			}
-			
-			// Show error even if user has navigated to another screen
-			[self showError:error withRetryCallback:^
-			{
-				// Include callback to retry the request
-				[self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot useSlotEscalation:useSlotEscalation];
-			}];
-		}
+            // Successful post returns a 204 code with no response
+            if (operation.response.statusCode == 200 || operation.response.statusCode == 204)
+            {
+                // Handle success via delegate (not currently used)
+                if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageSuccess)])
+                {
+                    [self.delegate redirectMessageSuccess];
+                }
+            }
+            else
+            {
+                NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:errorTitle, NSLocalizedFailureReasonErrorKey, errorMessage, NSLocalizedDescriptionKey, nil]];
+                
+                // Handle error via delegate
+                if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessageError:)])
+                {
+                    [self.delegate redirectMessageError:error];
+                }
+                
+                // Show error even if user has navigated to another screen
+                [self showError:error withRetryCallback:^
+                {
+                    // Include callback to retry the request
+                    [self redirectMessage:message messageRecipient:messageRecipient onCallSlot:onCallSlot useSlotEscalation:useSlotEscalation];
+                }];
+            }
+        }];
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"MessageRedirectRequestModel Error: %@", error);
 		
-		// Remove network activity observer
-		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:errorMessage andTitle:errorTitle];
 		
-		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
@@ -171,22 +174,6 @@
 			}];
 		}];
 	}];
-}
-
-// Network request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Close activity indicator
-	[self hideActivityIndicator];
-	
-	// Notify delegate that message has been sent to server
-	if (self.delegate && [self.delegate respondsToSelector:@selector(redirectMessagePending)])
-	{
-		[self.delegate redirectMessagePending];
-	}
 }
 
 @end

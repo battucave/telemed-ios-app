@@ -29,11 +29,6 @@
 		return;
 	}
 	
-	// Show activity indicator
-	[self showActivityIndicator];
-	
-	// Don't add network activity observer because can't assume success - old password may be incorrect, new password may not meet requirements, etc
-	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<PasswordChange xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
 			"<NewPassword>%@</NewPassword>"
@@ -45,6 +40,11 @@
 	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
+	
+	// Don't add pending callback because can't assume success - old password may be incorrect, new password may not meet requirements, etc
+	
+	// Show activity indicator
+	[self showActivityIndicator];
 	
 	[self.operationManager POST:@"PasswordChanges" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{

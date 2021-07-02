@@ -166,59 +166,63 @@
 // (Not used)
 - (void)deleteChatMessage:(NSNumber *)chatMessageID
 {
-	// Show activity indicator
-	[self showActivityIndicator:@"Deleting..."];
-	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	NSDictionary *parameters = @{
+    NSDictionary *parameters = @{
 		@"chatMsgID"	: chatMessageID,
 		@"entireConvo"	: @"true"
 	};
 	
+	// Notify delegate that delete chat message is pending server response
+	if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
+	{
+		[self.delegate deleteChatMessagePending];
+	}
+	// Show activity indicator
+    else
+    {
+        [self showActivityIndicator:@"Deleting..."];
+    }
+	
 	[self.operationManager DELETE:@"ChatMessages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
-		
-		// Successful post returns a 204 code with no response
-		if (operation.response.statusCode == 204)
-		{
-			// Handle success via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageSuccess)])
-			{
-				[self.delegate deleteChatMessageSuccess];
-			}
-		}
-		else
-		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
-			
-			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
-			{
-				[self.delegate deleteChatMessageError:error];
-			}
-			
-			// Show error even if user has navigated to another screen
-			[self showError:error withRetryCallback:^
-			{
-				// Include callback to retry the request
-				[self deleteChatMessage:chatMessageID];
-			}];
-		}
+		// Close activity indicator with callback
+        [self hideActivityIndicator:^
+        {
+            // Successful post returns a 204 code with no response
+            if (operation.response.statusCode == 204)
+            {
+                // Handle success via delegate
+                if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageSuccess)])
+                {
+                    [self.delegate deleteChatMessageSuccess];
+                }
+            }
+            else
+            {
+                NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Chat Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem deleting the Chat Message.", NSLocalizedDescriptionKey, nil]];
+                
+                // Handle error via delegate
+                if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessageError:)])
+                {
+                    [self.delegate deleteChatMessageError:error];
+                }
+                
+                // Show error even if user has navigated to another screen
+                [self showError:error withRetryCallback:^
+                {
+                    // Include callback to retry the request
+                    [self deleteChatMessage:chatMessageID];
+                }];
+            }
+        }];
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"ChatMessageModel Error: %@", error);
 		
-		// Remove network activity observer
-		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem deleting the Chat Message." andTitle:@"Chat Message Error"];
 		
-		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
@@ -246,13 +250,16 @@
 		return;
 	}
 	
-	NSLog(@"Delete Multiple Chat Messages");
-	
+	// Notify delegate that multiple chat message deletions are pending server response
+	if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
+	{
+		[self.delegate deleteMultipleChatMessagesPending];
+	}
 	// Show activity indicator
-	[self showActivityIndicator:@"Deleting..."];
-	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+    else
+    {
+        [self showActivityIndicator:@"Deleting..."];
+    }
 	
 	for (ChatMessageModel *chatMessage in chatMessages)
 	{
@@ -322,9 +329,6 @@
 {
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[self.failedChatMessages count], self.totalNumberOfOperations);
 	
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
 	// Close activity indicator with callback
 	[self hideActivityIndicator:^
 	{
@@ -382,27 +386,6 @@
 - (BOOL)isEqual:(id)object
 {
 	return ([object isKindOfClass:[ChatMessageModel class]] && [self.ID isEqual:[object ID]]);
-}
-
-// Network request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Close activity indicator
-	[self hideActivityIndicator];
-	
-	// Notify delegate that delete chat message has been sent to server
-	if (self.delegate && [self.delegate respondsToSelector:@selector(deleteChatMessagePending)])
-	{
-		[self.delegate deleteChatMessagePending];
-	}
-	// Notify delegate that multiple chat message deletions have begun being sent to server (should always run multiple times if needed)
-	else if (self.delegate && [self.delegate respondsToSelector:@selector(deleteMultipleChatMessagesPending)])
-	{
-		[self.delegate deleteMultipleChatMessagesPending];
-	}
 }
 
 @end

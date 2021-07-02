@@ -46,7 +46,7 @@
 // Return pending from EmailTelemedModel delegate
 - (void)emailTeleMedMessagePending
 {
-	// Go back to message detail (assume success)
+	// Go back to message detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
 

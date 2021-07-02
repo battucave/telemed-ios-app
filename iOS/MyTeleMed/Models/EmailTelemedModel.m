@@ -36,13 +36,7 @@
 		return;
 	}
 	
-	// Show activity indicator
-	[self showActivityIndicator];
-	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Add message identifier if a message delivery id exists (exists for MessageTelemedViewController, doesn't exist for ContactEmailViewController)
+    // Add message identifier if a message delivery id exists (exists for MessageTelemedViewController, doesn't exist for ContactEmailViewController)
 	NSString *messageIdentifier = (messageDeliveryID ? [NSString stringWithFormat:@"<MessageDeliveryID>%@</MessageDeliveryID>", messageDeliveryID] : @"");
 	
 	NSString *xmlBody = [NSString stringWithFormat:
@@ -59,48 +53,58 @@
 	
 	NSLog(@"XML Body: %@", xmlBody);
 	
+	// Notify delegate that message is pending server response
+	if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessagePending)])
+	{
+		[self.delegate emailTeleMedMessagePending];
+	}
+    else
+    {
+        // Show activity indicator
+        [self showActivityIndicator];
+    }
+	
 	[self.operationManager POST:@"EmailToTelemed" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
-		// Activity indicator already closed in AFNetworkingOperationDidStartNotification: callback
-		
-		// Successful post returns a 204 code with no response
-		if (operation.response.statusCode == 204)
+		// Close activity indicator with callback
+		[self hideActivityIndicator:^
 		{
-			// Handle success via delegate (not currently used)
-			if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageSuccess)])
-			{
-				[self.delegate emailTeleMedMessageSuccess];
-			}
-		}
-		else
-		{
-			NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
-			
-			// Handle error via delegate
-			if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
-			{
-				[self.delegate emailTeleMedMessageError:error];
-			}
-			
-			// Show error even if user has navigated to another screen
-			[self showError:error withRetryCallback:^
-			{
-				// Include callback to retry the request
-				[self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
-			}];
-		}
+            // Successful post returns a 204 code with no response
+            if (operation.response.statusCode == 204)
+            {
+                // Handle success via delegate (not currently used)
+                if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageSuccess)])
+                {
+                    [self.delegate emailTeleMedMessageSuccess];
+                }
+            }
+            else
+            {
+                NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Message TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
+                
+                // Handle error via delegate
+                if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessageError:)])
+                {
+                    [self.delegate emailTeleMedMessageError:error];
+                }
+                
+                // Show error even if user has navigated to another screen
+                [self showError:error withRetryCallback:^
+                {
+                    // Include callback to retry the request
+                    [self sendTelemedMessage:message fromEmailAddress:fromEmailAddress withMessageDeliveryID:messageDeliveryID];
+                }];
+            }
+        }];
 	}
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"EmailTelemed Error: %@", error);
 		
-		// Remove network activity observer
-		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:@"There was a problem sending your Message." andTitle:@"Message TeleMed Error"];
 		
-		// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
@@ -117,22 +121,6 @@
 			}];
 		}];
 	}];
-}
-
-// Network request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Close activity indicator
-	[self hideActivityIndicator];
-	
-	// Notify delegate that message has been sent to server
-	if (self.delegate && [self.delegate respondsToSelector:@selector(emailTeleMedMessagePending)])
-	{
-		[self.delegate emailTeleMedMessagePending];
-	}
 }
 
 @end

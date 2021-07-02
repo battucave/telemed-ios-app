@@ -14,7 +14,6 @@ const int MessagesPerPage = 25;
 
 @interface MessageModel()
 
-@property (nonatomic) NSString *messageState;
 @property (nonatomic) int totalNumberOfOperations;
 @property (nonatomic) int numberOfFinishedOperations;
 @property (nonatomic) BOOL queueCancelled;
@@ -209,26 +208,25 @@ const int MessagesPerPage = 25;
 		state = @"Read";
 	}
 	
-	// Show activity indicator
-	if ([state isEqualToString:@"Archive"])
-	{
-		[self showActivityIndicator:@"Archiving..."];
-	}
-	if ([state isEqualToString:@"Unarchive"])
-	{
-		[self showActivityIndicator:@"Unarchiving..."];
-	}
-	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Store state for modifyMessageStatePending:
-	self.messageState = state;
-	
 	NSDictionary *parameters = @{
 		@"mdid"		: messageDeliveryID,
 		@"method"	: state
 	};
+	
+    // Notify delegate that message state is pending server response
+	if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
+	{
+		[self.delegate modifyMessageStatePending:state];
+	}
+	// Show activity indicator
+	else if ([state isEqualToString:@"Archive"])
+	{
+		[self showActivityIndicator:@"Archiving..."];
+	}
+	else if ([state isEqualToString:@"Unarchive"])
+	{
+		[self showActivityIndicator:@"Unarchiving..."];
+	}
 	
 	[self.operationManager POST:@"Messages" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -270,9 +268,6 @@ const int MessagesPerPage = 25;
 	failure:^(AFHTTPRequestOperation *operation, NSError *error)
 	{
 		NSLog(@"MessageModel Error: %@", error);
-		
-		// Remove network activity observer
-		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Build a generic error message
 		error = [self buildError:error usingData:operation.responseData withGenericMessage:[NSString stringWithFormat:@"There was a problem %@ your Message.", ([state isEqualToString:@"Unarchive"] ? @"Unarchiving" : @"Archiving")] andTitle:[NSString stringWithFormat:@"Message %@ Error", ([state isEqualToString:@"Unarchive"] ? @"Unarchive" : @"Archive")]];
@@ -317,21 +312,20 @@ const int MessagesPerPage = 25;
 		state = @"Read";
 	}
 	
+    // Notify delegate that multiple message states are pending server response
+	if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
+	{
+		[self.delegate modifyMultipleMessagesStatePending:state];
+	}
 	// Show activity indicator
-	if ([state isEqualToString:@"Archive"])
+	else if ([state isEqualToString:@"Archive"])
 	{
 		[self showActivityIndicator:@"Archiving..."];
 	}
-	if ([state isEqualToString:@"Unarchive"])
+	else if ([state isEqualToString:@"Unarchive"])
 	{
 		[self showActivityIndicator:@"Unarchiving..."];
 	}
-	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Store state for modifyMessageStatePending:
-	self.messageState = state;
 	
 	for (MessageModel *message in messages)
 	{
@@ -405,10 +399,7 @@ const int MessagesPerPage = 25;
 {
 	NSLog(@"Queue Finished: %lu of %d operations failed", (unsigned long)[failedMessages count], self.totalNumberOfOperations);
 	
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Close activity indicator with callback (in case networkRequestDidStart was not triggered)
+	// Close activity indicator with callback
 	[self hideActivityIndicator:^
 	{
 		// If a failure occurred while modifying message state
@@ -461,27 +452,6 @@ const int MessagesPerPage = 25;
 - (BOOL)isEqual:(id)object
 {
 	return ([object isKindOfClass:[MessageModel class]] && [self.MessageDeliveryID isEqual:[object MessageDeliveryID]]);
-}
-
-// Network request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	// Close activity indicator
-	[self hideActivityIndicator];
-	
-	// Notify delegate that message state has been sent to server
-	if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMessageStatePending:)])
-	{
-		[self.delegate modifyMessageStatePending:self.messageState];
-	}
-	// Notify delegate that multiple message states have begun being sent to server
-	else if (self.delegate && [self.delegate respondsToSelector:@selector(modifyMultipleMessagesStatePending:)])
-	{
-		[self.delegate modifyMultipleMessagesStatePending:self.messageState];
-	}
 }
 
 @end

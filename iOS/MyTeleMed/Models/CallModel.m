@@ -11,12 +11,6 @@
 #import "ErrorAlertController.h"
 #import "RegisteredDeviceModel.h"
 
-@interface CallModel ()
-
-@property (nonatomic) BOOL pendingComplete;
-
-@end
-
 @implementation CallModel
 
 - (void)callTeleMed
@@ -44,13 +38,19 @@
 		return;
 	}
 	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
 	NSDictionary *parameters = @{
 		@"recordCall"	: @"false",
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
+ 
+    // Notify delegate that TeleMed call request is pending server response
+    if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
+    {
+        [self.delegate callPending];
+    }
+		
+    // Start observing for TeleMed to return phone call
+    [self startTeleMedCallObserver];
 	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -143,16 +143,22 @@
 		return;
 	}
 	
-	// Add network activity observer
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-	
 	NSDictionary *parameters = @{
 		@"mdid"			: messageID,
 		@"recordCall"	: recordCall,
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
+	// Notify delegate that TeleMed call request is pending server response
+    if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
+    {
+        [self.delegate callPending];
+    }
+		
+    // Start observing for TeleMed to return phone call
+    [self startTeleMedCallObserver];
+    
+    [self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
@@ -214,28 +220,6 @@
 			}
 		}];
 	}];
-}
-
-// Network request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove network activity observer
-	[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	if (! self.pendingComplete)
-	{
-		// Notify delegate that TeleMed call request has been sent to server
-		if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
-		{
-			[self.delegate callPending];
-		}
-		
-		// Start observing for TeleMed to return phone call
-		[self startTeleMedCallObserver];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
 }
 
 // Start observing for TeleMed to return phone call

@@ -640,14 +640,6 @@ typedef void(^FailureMainThread)(AFHTTPRequestOperation *operation, NSError *err
 	{
 		[self.authenticationModel getNewTokensWithSuccess:authenticationSuccess failure:authenticationFailure];
 	}
-	else if (self.authenticationModel.isWorking)
-	{
-		// Dispatch AFNetworkingOperationDidStartNotification as shortcut to force models to execute pending callbacks
-		dispatch_async(dispatch_get_main_queue(), ^
-		{
-			[NSNotificationCenter.defaultCenter postNotificationName:AFNetworkingOperationDidStartNotification object:self];
-		});
-	}
 }
 
 - (void)processPendingOperations

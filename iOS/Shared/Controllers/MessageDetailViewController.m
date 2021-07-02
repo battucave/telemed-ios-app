@@ -663,7 +663,7 @@
 }
 
 // Return success from CommentModel delegate
-- (void)saveCommentSuccess:(NSString *)commentText
+- (void)saveCommentSuccess:(NSString *)commentText withPendingID:(NSNumber *)pendingID
 {
 	// Empty
 }

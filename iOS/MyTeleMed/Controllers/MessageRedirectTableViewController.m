@@ -85,7 +85,7 @@
 // Return pending from MessageRedirectRequestModel delegate
 - (void)redirectMessagePending
 {
-	// Go back to message detail (assume success)
+	// Go back to message detail
 	[self performSegueWithIdentifier:@"unwindFromMessageRedirect" sender:self];
 }
 

@@ -80,7 +80,7 @@
 // Return pending from ForwardMessageModel delegate
 - (void)forwardMessagePending
 {
-	// Go back to message detail (assume success)
+	// Go back to message detail
 	[self.navigationController popViewControllerAnimated:YES];
 }
 

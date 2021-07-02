@@ -47,16 +47,16 @@
 	// Empty
 }
 
-// Return pending from EmailTeleMedModel delegate
+// Return pending from EmailTeleMedModel delegate (Med2Med does not use pending callbacks)
+#if MYTELEMED
 - (void)emailTeleMedMessagePending
 {
-	// Go back to messages (assume success)
-	#if MYTELEMED
-		[self.navigationController popViewControllerAnimated:YES];
-	#endif
+	// Go back to messages
+    [self.navigationController popViewControllerAnimated:YES];
 }
+#endif
 
-// Return success from EmailTelemedModel delegate (no longer used)
+// Return success from EmailTelemedModel delegate
 - (void)emailTeleMedMessageSuccess
 {
 	#if MED2MED
