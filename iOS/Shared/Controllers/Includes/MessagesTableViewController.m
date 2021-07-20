@@ -227,7 +227,7 @@
 		[cell.labelTime setText:time];
 	}
 	
-	// If message has been read, change status image to unread icon
+	// Set status image for unread message to the unopened appearance
 	if ([message.State isEqualToString:@"Unread"])
 	{
 		// iOS 13+ - Use SF Symbols
@@ -241,6 +241,7 @@
 			[cell.imageStatus setImage:[UIImage imageNamed:@"envelope"]];
 		}
 	}
+	// Set status image for read message to the opened appearance
 	else
 	{
 		// iOS 13+ - Use SF Symbols
@@ -389,7 +390,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// If in editing mode, toggle the archive button in MessagesViewController
+    // If in editing mode, toggle the archive button in MessagesViewController
 	if (self.editing)
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedMessages:)])
@@ -404,6 +405,25 @@
 			}
 			
 			[self.delegate setSelectedMessages:self.selectedMessages];
+		}
+	}
+	// Mark active messages as read
+	else if ([self.messagesType isEqualToString:@"Active"])
+	{
+		MessageCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+		
+		// Set status image for read message to the opened appearance
+		
+		// iOS 13+ - Use SF Symbols
+		if (@available(iOS 13.0, *))
+		{
+			[cell.imageStatus setImage:[UIImage systemImageNamed:@"envelope.open"]];
+		}
+		// iOS < 13 - Fall back to vector image from asset catalog
+		else
+		{
+			// Note: image name cannot contain "." as anything after it will be treated as a file extension
+			[cell.imageStatus setImage:[UIImage imageNamed:@"envelope-open"]];
 		}
 	}
 }
