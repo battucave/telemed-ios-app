@@ -166,10 +166,4 @@
 	return rootViewController;
 }
 
-- (void)dealloc
-{
-	// Remove all observers if applicable (models with POST or DELETE requests have network activity observers)
-	[NSNotificationCenter.defaultCenter removeObserver:self];
-}
-
 @end

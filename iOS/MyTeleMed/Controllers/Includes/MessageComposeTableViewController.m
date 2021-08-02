@@ -173,10 +173,4 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-	// Remove notification observers
-	[NSNotificationCenter.defaultCenter removeObserver:self];
-}
-
 @end

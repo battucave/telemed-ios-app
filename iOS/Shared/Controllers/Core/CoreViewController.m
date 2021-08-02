@@ -106,18 +106,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-	// Remove notification observers
-	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-	
-	#if MYTELEMED
-		[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
-		[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-		[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-	#endif
-}
-
 
 #pragma mark - MyTeleMed
 

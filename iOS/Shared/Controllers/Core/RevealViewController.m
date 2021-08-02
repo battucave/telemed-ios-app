@@ -61,12 +61,4 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-	// IMPORTANT: These ViewControllers are not dealloc'd as expected when using side navigation. Workaround has been added to SideNavigationViewController.m to manually remove observers
-	
-	// Remove notification observers
-	[NSNotificationCenter.defaultCenter removeObserver:self];
-}
-
 @end

@@ -461,12 +461,6 @@
 	
 	// Note: MyProfile cells use segues directly from table cell
 }
-
--(void)dealloc
-{
-	// Remove notification observers
-	[NSNotificationCenter.defaultCenter removeObserver:self];
-}
 #endif
 
 @end
