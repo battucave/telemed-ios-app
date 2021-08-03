@@ -97,28 +97,42 @@
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
 	// Always reload first page of messages to ensure that any new messages are fetched from server when user returns to this screen
-	[self loadMessages:1];
+	[self loadMessages];
 	
 	// Disable refresh control for sent and archived messages
 	if (! [self.messagesType isEqualToString:@"Active"])
 	{
 		[self setRefreshControl:nil];
 	}
+	
+	// Add application did become active observer to reload messages when this screen is visible
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(loadMessages) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
 {
-	// Cancel queued messages refresh
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
-	[self loadMessages:1];
+	[self loadMessages];
 	
 	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
 	[settings synchronize];
+}
+
+// Load first page of messages (Swift: combine this method with loadMessages: with default parameter of 1)
+- (void)loadMessages
+{
+	[self loadMessages:1];
 }
 
 // Return sent messages from SentMessageModel delegate
@@ -486,14 +500,6 @@
 #pragma mark - MyTeleMed
 
 #if MYTELEMED
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	// Stop refreshing messages when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-}
-
 // Compare new messages to existing messages to determine which messages are new
 - (NSArray *)computeNewMessages:(NSArray *)newMessages from:(NSArray *)messages
 {
@@ -550,7 +556,7 @@
 	});
 }
 
-// Reload messages
+// Load a page of messages
 - (void)loadMessages:(NSInteger)page
 {
 	if (! self.isFetchingNextPage)
@@ -584,7 +590,7 @@
 	
 	[self setIsRemovalPending:NO];
 	
-	[self loadMessages:1];
+	[self loadMessages];
 }
 
 /**
@@ -861,7 +867,7 @@
 #pragma mark - Med2Med
 
 #if MED2MED
-// Reload messages
+// Load a page of messages
 - (void)loadMessages:(NSInteger)page
 {
 	if (! self.isFetchingNextPage)

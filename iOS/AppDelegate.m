@@ -230,20 +230,8 @@
 		{
 			[profile getWithCallback:^(BOOL success, id <ProfileProtocol> profile, NSError *error)
 			{
-				if (success)
-				{
-					// MyTeleMed - Update MyStatusModel with updated number of unread messages
-					#if MYTELEMED
-						MyStatusModel *myStatusModel = MyStatusModel.sharedInstance;
-					
-						[myStatusModel getWithCallback:^(BOOL success, MyStatusModel *profile, NSError *error)
-						{
-							// No callback needed - values are stored in shared instance automatically
-						}];
-					#endif
-				}
 				// If error is not because device is offline, then account is not valid so go to login screen
-				else if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
+				if (! success && error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorTimedOut)
 				{
 					NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 					

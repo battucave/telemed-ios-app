@@ -268,6 +268,9 @@
 		// Add call disconnected observer to hide keyboard
 		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
+		// Add application did become active observer to reload message events when this screen is visible
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(getMessageEvents) name:UIApplicationDidBecomeActiveNotification object:nil];
+	
 	// Med2Med - Hide buttons
 	#elif defined MED2MED
 		[self.viewButtons setHidden:YES];
@@ -357,9 +360,6 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Stop refreshing message events when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
 	// Remove keyboard observers
 	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
@@ -368,6 +368,9 @@
 	
 	// Remove call disconnected observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	// Dismiss keyboard
 	[self.view endEditing:YES];
@@ -520,9 +523,6 @@
 			(self.messageID && [notificationID isEqualToNumber:self.messageID])
 		) {
 			NSLog(@"Refresh Comments with Message %@ ID: %@", (self.messageDeliveryID && [notificationID isEqualToNumber:self.messageDeliveryID] ? @"Delivery" : @""), notificationID);
-			
-			// Cancel queued comments refresh
-			[NSObject cancelPreviousPerformRequestsWithTarget:self];
 			
 			// Flag message as being loaded from push notification
 			[self setIsFromPushNotification:YES];

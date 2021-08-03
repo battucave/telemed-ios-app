@@ -116,10 +116,6 @@
         [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:saveButton, nil]];
 	}
 	
-	// Add keyboard observers
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-	
 	// MessageRecipientModel callback
 	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
 	{
@@ -198,15 +194,15 @@
 			[self setIsLoaded:YES];
 		}
 	#endif
+	
+	// Add keyboard observers
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
-	
-	// Remove keyboard observers
-	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
 	#if MED2MED
 		// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
@@ -221,6 +217,10 @@
 			[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
 		}
 	#endif
+	
+	// Remove keyboard observers
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 // Unwind to previous controller (ChatMessageDetailViewController, MessageForwardViewController, or MessageNewViewController), send message (MessageEscalateTableViewController or MessageRedirectTableViewController), or go to next controller (MessageNew2TableViewController)

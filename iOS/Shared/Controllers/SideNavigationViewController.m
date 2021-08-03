@@ -45,7 +45,7 @@
 	#if MED2MED
 		[self setMenuItems:@[@"New Message", @"Sent Messages", @"Settings", @"Log Out", @"Help"]];
 	
-	#else
+	#elif MYTELEMED
 		[self setMenuItems:@[@"Messages", @"Sent Messages", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
 		[self setMyStatusModel:MyStatusModel.sharedInstance];
@@ -59,14 +59,12 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// MyTeleMed - Update message counts on messages row and on call date on on call schedule row
 	#if MYTELEMED
-		[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
-		{
-			[self setIsStatusLoaded:YES];
-			
-			[self.tableView reloadData];
-		}];
+		// Update message counts on messages row and on call date on on call schedule row
+		[self loadMyStatus];
+		
+		// Add application did become active observer to update message counts on messages row and on call date on on call schedule row (only while screen is visible)
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(loadMyStatus) name:UIApplicationDidBecomeActiveNotification object:nil];
 	#endif
 }
 
@@ -253,6 +251,29 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - MyTeleMed
+
+#if MYTELEMED
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)loadMyStatus
+{
+	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
+	{
+		[self setIsStatusLoaded:YES];
+		
+		[self.tableView reloadData];
+	}];
+}
+#endif
 
 
 #pragma mark - Med2Med

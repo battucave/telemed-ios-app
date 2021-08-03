@@ -80,13 +80,17 @@
 	// Get chat messages for conversation id if its set (not a new chat)
 	if (self.conversationID)
 	{
-		[self reloadChatMessages];
-
 		// Existing chat messages are always a group chat
 		self.isGroupChat = YES;
 		
 		// Hide Add chat participant button
 		[self.buttonAddChatParticipant setHidden:YES];
+		
+		// Load chat messages
+		[self reloadChatMessages];
+		
+		// Add application did become active observer to reload chat messages when this screen is visible
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(reloadChatMessages) name:UIApplicationDidBecomeActiveNotification object:nil];
 	}
 	// Update navigation bar title if this is a new chat
 	else if (self.isNewChat)
@@ -116,8 +120,8 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Stop refreshing chat messages when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	// Dismiss keyboard
+	[self.view endEditing:YES];
 	
 	// Remove keyboard observers
 	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -128,8 +132,8 @@
 	// Remove call disconnected observer
 	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 	
-	// Dismiss keyboard
-	[self.view endEditing:YES];
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (IBAction)sendChatMessage:(id)sender
@@ -190,9 +194,6 @@
 			{
 				[self setConversationID:chatMessage.ID];
 				
-				// Cancel queued chat messages refresh
-				[NSObject cancelPreviousPerformRequestsWithTarget:self];
-				
 				// Get chat messages for conversation id
 				[self reloadChatMessages];
 				
@@ -237,9 +238,6 @@
 		
 		__block UIAlertAction *viewActionBlock = viewAction;
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
-		
-		// Cancel queued chat messages refresh
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 		
 		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
 		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSArray *chatMessages, NSError *error)

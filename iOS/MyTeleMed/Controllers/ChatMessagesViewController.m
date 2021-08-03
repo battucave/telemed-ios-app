@@ -56,14 +56,6 @@
 	[super viewWillAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-}
-
 // User clicked delete bar button in toolbar
 - (IBAction)deleteMessages:(id)sender
 {

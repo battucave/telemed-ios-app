@@ -24,8 +24,6 @@
 @property (nonatomic) NSMutableArray *selectedChatMessages;
 @property (nonatomic) NSNumber *currentUserID;
 
-- (IBAction)refreshControlRequest:(id)sender;
-
 @end
 
 @implementation ChatMessagesTableViewController
@@ -63,22 +61,22 @@
 	
 	// Always reload messages to ensure that any new messages are fetched from server when user returns to this screen
 	[self reloadChatMessages];
+	
+	// Add application did become active observer to reload chat messages when this screen is visible
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(reloadChatMessages) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
-{
-	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
+{	
 	[self reloadChatMessages];
 	
 	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
