@@ -615,19 +615,19 @@
 	// If there are no messages to remove, then stop
 	if ([messages count] == 0)
 	{
-		// Disabled removal pending flag
+		// Disable removal pending flag
 		[self setIsRemovalPending:NO];
+		
+		// Disable the isFetchingNextPage flag
+		[self setIsFetchingNextPage:NO];
 		
 		return;
 	}
 	// If pending removal has completed, then load current and next pages to avoid skipped messages
 	else if (self.isRemovalPending && ! isPending)
 	{
-		// Enable the isFetchingNextPage flag
-		[self setIsFetchingNextPage:YES];
-		
-		// Update removal pending flag
-		[self setIsRemovalPending:isPending];
+		// Disable removal pending flag
+		[self setIsRemovalPending:NO];
 		
 		// Adjust current page to account for the removed messages on web service
 		if (self.currentPage > 1)
@@ -640,6 +640,9 @@
 		// Load current and next pages of active messages
 		if ([self.messagesType isEqualToString:@"Active"] && ! self.isLastPageLoaded)
 		{
+			// Enable the isFetchingNextPage flag
+			[self setIsFetchingNextPage:YES];
+			
 			// Fetch current and next pages as a single request by requesting double the standard number of messages
 			[self.messageModel getActiveMessages:self.currentPage perPage:MessagesPerPage * 2];
 			
@@ -676,10 +679,18 @@
 		// Toggle the parent view controller's edit button
 		[self.parentViewController.navigationItem setRightBarButtonItem:nil];
 	}
+	// If indexPaths count does not match the number of messages, then reset messages (should never happen)
+	else if ([indexPaths count] != [messages count])
+	{
+		[self resetMessages];
+	}
 	// Remove rows at specified index paths from the table
 	else
 	{
-		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		});
 	}
 }
 
