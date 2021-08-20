@@ -638,7 +638,7 @@
 	// Sample notifications that can be used with apn tester free (these are real notifications that come from TeleMed)
 	/* Message push notification
 	{
-		"DeliveryID":6099510726108687,
+		"DeliveryID":6806505303036450,
 		"NotificationType":"Message",
 		"aps":
 		{
@@ -650,8 +650,7 @@
 
 	/* Message comment push notification
 	{
-		"DeliveryID":6099510726108458,
-		"MessageID":"",
+		"DeliveryID":6806505303036450,
 		"NotificationType":"Comment",
 		"aps":
 		{
