@@ -96,7 +96,7 @@
 	}
 	else if ([elementName isEqualToString:@"Unopened"])
 	{
-		self.chatMessage.Unopened = [self.currentElementValue boolValue];
+		self.chatMessage.Unopened = self.currentElementValue.boolValue;
 	}
 	else
 	{

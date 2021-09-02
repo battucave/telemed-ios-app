@@ -53,7 +53,7 @@
 					NSMutableArray *debugCurrentOnCallEntries = [[NSMutableArray alloc] init];
 					NSMutableArray *debugFutureOnCallEntries = [[NSMutableArray alloc] init];
 					NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-					MyProfileModel *profile = [MyProfileModel sharedInstance];
+					MyProfileModel *profile = MyProfileModel.sharedInstance;
 					
 					NSArray *randomAccountNames = @[profile.MyPreferredAccount.Name, @"Long Name That Doesn't Fit Onto One Line", @"Short Name", @"Really Long Name That Spans Multiple Lines With A Demo Account Attached", @"Jason's Demo Account", @"Hutchison Family Practice", @"Hutchison Family Practice Demo", @"Hello World"];
 					NSArray *randomSlotDescriptions = @[@"Slot Description", @"Long Slot Description That Doesn't Fit Onto One Line", @"Short", @"Really Long Slot Description That Spans Multiple Lines With A Demo Account Attached", @"Slot This All The Way In There If It Fits", @"Who This?", @"Short Again", @"Another Really Long Slot Description That Should Hopefully Span Multiple Lines Unless User Is On A Tablet"];

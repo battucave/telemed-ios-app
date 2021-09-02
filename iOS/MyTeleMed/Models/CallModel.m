@@ -11,18 +11,12 @@
 #import "ErrorAlertController.h"
 #import "RegisteredDeviceModel.h"
 
-@interface CallModel ()
-
-@property (nonatomic) BOOL pendingComplete;
-
-@end
-
 @implementation CallModel
 
 - (void)callTeleMed
 {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
 	// Reset observer for TeleMed to return phone call
 	[appDelegate stopTeleMedCallObserver];
@@ -31,33 +25,39 @@
 	if (! registeredDeviceModel.PhoneNumber)
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Call TeleMed Error", NSLocalizedFailureReasonErrorKey, @"There was a problem requesting a Return Call.", NSLocalizedDescriptionKey, nil]];
-	
-		// Show error
-		[self showError:error];
-	
+		
 		// Handle error via delegate
 		if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 		{
 			[self.delegate callError:error];
 		}
 		
+		// Show error
+		[self showError:error];
+		
 		return;
 	}
-	
-	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
 		@"recordCall"	: @"false",
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
+ 
+    // Notify delegate that TeleMed call request is pending server response
+    if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
+    {
+        [self.delegate callPending];
+    }
+		
+    // Start observing for TeleMed to return phone call
+    [self startTeleMedCallObserver];
 	
 	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate (not currently used)
+			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(callSuccess)])
 			{
 				[self.delegate callSuccess];
@@ -91,7 +91,7 @@
 		NSLog(@"CallModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Stop observing for TeleMed to return phone call
 		[appDelegate stopTeleMedCallObserver];
@@ -119,7 +119,7 @@
 - (void)callSenderForMessage:(NSNumber *)messageID recordCall:(NSString *)recordCall
 {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
 	// Stop observing for TeleMed to return phone call (reset the listener)
 	[appDelegate stopTeleMedCallObserver];
@@ -131,20 +131,17 @@
 		
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Return Call Error", NSLocalizedFailureReasonErrorKey, @"A valid Phone Number is not available on this device.", NSLocalizedDescriptionKey, nil]];
 		
-		// Show error
-		[self showError:error];
-		
 		// Handle error via delegate
 		if (self.delegate && [self.delegate respondsToSelector:@selector(callError:)])
 		{
 			[self.delegate callError:error];
 		}
 		
+		// Show error
+		[self showError:error];
+		
 		return;
 	}
-	
-	// Add network activity observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
 	
 	NSDictionary *parameters = @{
 		@"mdid"			: messageID,
@@ -152,12 +149,21 @@
 		@"userNumber"	: registeredDeviceModel.PhoneNumber
 	};
 	
-	[self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
+	// Notify delegate that TeleMed call request is pending server response
+    if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
+    {
+        [self.delegate callPending];
+    }
+		
+    // Start observing for TeleMed to return phone call
+    [self startTeleMedCallObserver];
+    
+    [self.operationManager POST:@"Calls" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
 		// Successful post returns a 204 code with no response
 		if (operation.response.statusCode == 204)
 		{
-			// Handle success via delegate (not currently used)
+			// Handle success via delegate
 			if (self.delegate && [self.delegate respondsToSelector:@selector(callSuccess)])
 			{
 				[self.delegate callSuccess];
@@ -191,7 +197,7 @@
 		NSLog(@"CallModel Error: %@", error);
 		
 		// Remove network activity observer
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
 		
 		// Stop observing for TeleMed to return phone call
 		[appDelegate stopTeleMedCallObserver];
@@ -214,28 +220,6 @@
 			}
 		}];
 	}];
-}
-
-// Network request has been sent, but still awaiting response
-- (void)networkRequestDidStart:(NSNotification *)notification
-{
-	// Remove network activity observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:AFNetworkingOperationDidStartNotification object:nil];
-	
-	if (! self.pendingComplete)
-	{
-		// Notify delegate that TeleMed call request has been sent to server
-		if (self.delegate && [self.delegate respondsToSelector:@selector(callPending)])
-		{
-			[self.delegate callPending];
-		}
-		
-		// Start observing for TeleMed to return phone call
-		[self startTeleMedCallObserver];
-	}
-	
-	// Ensure that pending callback doesn't fire again after possible error
-	self.pendingComplete = YES;
 }
 
 // Start observing for TeleMed to return phone call

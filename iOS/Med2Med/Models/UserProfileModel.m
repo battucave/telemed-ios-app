@@ -40,7 +40,7 @@
 	// If phone number is not already set, check user preferences
 	if (! _PhoneNumber)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		_PhoneNumber = [settings valueForKey:USER_PROFILE_PHONE_NUMBER];
 	}
 	
@@ -53,7 +53,7 @@
 	// If app timeout period is not already set, then check user preferences
 	if (! _TimeoutPeriodMins)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		_TimeoutPeriodMins = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
 	}
@@ -66,7 +66,7 @@
 {
 	if (_TimeoutPeriodMins != TimeoutPeriodMins)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setValue:TimeoutPeriodMins forKey:USER_TIMEOUT_PERIOD_MINUTES];
 		[settings synchronize];
@@ -74,7 +74,7 @@
 		_TimeoutPeriodMins = TimeoutPeriodMins;
 	}
 	
-	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins integerValue]];
+	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:TimeoutPeriodMins.integerValue];
 }
 
 - (void)doLogout

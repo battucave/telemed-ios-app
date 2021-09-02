@@ -10,6 +10,6 @@
 
 @interface MessagesViewController : RevealViewController
 
-- (void)setSelectedMessages:(NSArray *)theSelectedMessages;
+- (void)setSelectedMessages:(NSArray *)theSelectedMessages; // Public setter, private getter
 
 @end

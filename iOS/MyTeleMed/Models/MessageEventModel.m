@@ -42,7 +42,7 @@
 		if ([xmlParser parse])
 		{
 			// Handle success via callback
-			callback(YES, [[parser messageEvents] copy], nil);
+			callback(YES, [parser.messageEvents copy], nil);
 		}
 		// Error parsing xml file
 		else

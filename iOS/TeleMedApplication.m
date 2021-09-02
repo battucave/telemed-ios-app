@@ -62,7 +62,7 @@
 - (void)idleTimerExceeded
 {
 	// Post a notification so anyone who subscribes to it can be notified when the application times out
-	[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_APPLICATION_DID_TIMEOUT object:nil];
+	[NSNotificationCenter.defaultCenter postNotificationName:NOTIFICATION_APPLICATION_DID_TIMEOUT object:nil];
 }
 
 @end

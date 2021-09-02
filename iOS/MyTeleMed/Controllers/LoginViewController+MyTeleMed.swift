@@ -40,23 +40,32 @@ extension LoginViewController {
                             // Show the error even if success returned true so that TeleMed can track issue down
                             let alert = UIAlertController(title: "Registration Error", message: "There was a problem registering your device on our network:\n\(registeredDeviceError.localizedDescription)", preferredStyle: .alert)
                             
-                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                                // Go to the next screen in the login process
+                                (UIApplication.shared.delegate as! AppDelegate).goToNextScreen()
+                            }))
                             
                             self.present(alert, animated: true, completion: nil)
+                            
+                        } else {
+                            // Go to the next screen in the login process
+                            (UIApplication.shared.delegate as! AppDelegate).goToNextScreen()
                         }
                     }
+                    
+                    return
                 }
                 
                 // Go to the next screen in the login process
                 (UIApplication.shared.delegate as! AppDelegate).goToNextScreen()
                 
-                return
+            // MyProfile failure
+            } else {
+                // Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
+                let errorDescription = (error != nil ? ":<br>\(error!.localizedDescription)" : ".")
+                
+                self.showWebViewError(errorMessage: "There was a problem registering your device on our network\(errorDescription)")
             }
-            
-            // Even if device offline, show this error message so that user can re-attempt to login (login screen will show offline message)
-            let errorDescription = (error != nil ? ":<br>\(error!.localizedDescription)" : ".")
-            
-            self.showWebViewError(errorMessage: "There was a problem registering your device on our network\(errorDescription)")
         }
     }
 }

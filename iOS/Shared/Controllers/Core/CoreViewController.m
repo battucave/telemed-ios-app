@@ -23,8 +23,6 @@
 
 @interface CoreViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *viewMessageCalloutIOS10; // Remove when iOS 10 support is dropped
-
 @property (nonatomic) NSString *remoteNotificationAuthorizationMessage;
 @property (nonatomic) BOOL shouldAuthorizeRemoteNotifications;
 @property (nonatomic) SystemSoundID systemSoundID;
@@ -42,20 +40,14 @@
 	[super viewWillAppear:animated];
 	
 	// Add application did become active notification observer
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(viewDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	#if MYTELEMED
 		// Add application did receive remote notification observer
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveRemoteNotification:) name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didReceiveRemoteNotification:) name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
 	
 		// Additional observers are added in registerForRemoteNotifications:
 	#endif
-	
-	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of custom color) and remove this logic
-	if (@available(iOS 11.0, *))
-	{
-		[self.viewMessageCalloutIOS10 setBackgroundColor:[UIColor colorNamed:@"messageCalloutBackgroundColor"]];
-	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -63,18 +55,18 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	#if MYTELEMED
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
+		[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
 	#endif
 }
 
 - (void)showCDMAVoiceDataViewController
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Show CDMAVoiceDataViewController after LoginSSO storyboard process has resolved if it hasn't already been shown or disabled
 	if (! [[self.storyboard valueForKey:@"name"] isEqualToString:@"LoginSSO"] && ! [settings boolForKey:CDMA_VOICE_DATA_HIDDEN] && ([settings boolForKey:SHOW_SPRINT_VOICE_DATA_WARNING] || [settings boolForKey:SHOW_VERIZON_VOICE_DATA_WARNING]))
@@ -91,7 +83,7 @@
 	
 	#if MYTELEMED
 		// Update remote notifications enabled status in case user just came back from authorizing them in Settings app
-		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+		RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 		if ([registeredDevice isRegistered])
 		{
@@ -112,18 +104,6 @@
 {
 	[super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-	
-	#if MYTELEMED
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_RECEIVE_REMOTE_NOTIFICATION object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-	#endif
 }
 
 
@@ -149,7 +129,7 @@
 		[self setRemoteNotificationAuthorizationMessage:@"Your device is not registered for notifications. To enable them:"];
 	}
 	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// If device is already registered with TeleMed, then prompt user to authorize remote notifications
 	if ([registeredDevice isRegistered])
@@ -194,7 +174,7 @@
 			// Update remote notification authorization status
 			[self didChangeRemoteNotificationAuthorization:NO];
 			
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error withRetryCallback:^
 			{
@@ -216,8 +196,8 @@
 	// Play notification sound
 	if (tone != nil)
 	{
-		// If tone is "default", then use Note tone as default (there is no way to retrieve system's default alert sound)
-		if ([tone isEqualToString:@"default"])
+		// If tone is "default", then use MyTeleMed's alert tone (should never happen because NotificationSettingsModel::initialize overrides "default" on app launch)
+		if ([tone hasPrefix:@"default"])
 		{
 			tone = NotificationSettingModel.defaultTone;
 		}
@@ -334,12 +314,12 @@
 - (void)registerForRemoteNotifications
 {
 	// Remove any existing remote notification registration observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
 
 	// Add remote notification registration observers to detect if user has registered for remote notifications
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didRegisterForRemoteNotifications:) name:NOTIFICATION_APPLICATION_DID_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didFailToRegisterForRemoteNotifications:) name:NOTIFICATION_APPLICATION_DID_FAIL_TO_REGISTER_FOR_REMOTE_NOTIFICATIONS object:nil];
 
 	[self showNotificationRegistration];
 }
@@ -381,7 +361,7 @@
 
 - (void)showNotificationRegistration
 {
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	UIAlertController *registerDeviceAlertController = [UIAlertController alertControllerWithTitle:@"Register Device" message:@"Please enter the phone number you would like to use for notifications on this device. Your TeleMed profile will be updated." preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
 	{

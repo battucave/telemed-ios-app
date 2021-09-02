@@ -25,7 +25,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Modify text of future back button to this view controller
 	[self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Sent" style:UIBarButtonItemStylePlain target:nil action:nil]];
@@ -51,7 +51,7 @@
 	// If position is open
 	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		[settings synchronize];

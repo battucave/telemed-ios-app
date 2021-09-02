@@ -46,7 +46,7 @@ static RegisteredDeviceModel *sharedRegisteredDeviceInstance = nil;
 // Override ID getter
 - (NSString *)ID
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// If ID is not already set, check user preferences
 	if (! _ID)

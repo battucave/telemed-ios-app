@@ -210,6 +210,8 @@
 		E26919DB228DF0470093BB60 /* EmailAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919DA228DF0470093BB60 /* EmailAddressViewController.m */; };
 		E26919E2228EEA750093BB60 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919E1228EEA750093BB60 /* Validation.m */; };
 		E26919E3228EEA750093BB60 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919E1228EEA750093BB60 /* Validation.m */; };
+		E26BF56F259D288200214D0A /* RestrictedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26BF56E259D288200214D0A /* RestrictedTextView.swift */; };
+		E26BF570259D288200214D0A /* RestrictedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26BF56E259D288200214D0A /* RestrictedTextView.swift */; };
 		E26CB72C22A1CEFE0010ACFE /* EmailAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E26919DA228DF0470093BB60 /* EmailAddressViewController.m */; };
 		E2704819204C2F89005AFFFF /* MessageRecipientPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A8DA47182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m */; };
 		E270481A204C2FA9005AFFFF /* MessageRecipientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B85021B14CFE600AD50C6 /* MessageRecipientModel.m */; };
@@ -593,6 +595,7 @@
 		E26919DA228DF0470093BB60 /* EmailAddressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmailAddressViewController.m; sourceTree = "<group>"; };
 		E26919E0228EEA750093BB60 /* Validation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Validation.h; sourceTree = "<group>"; };
 		E26919E1228EEA750093BB60 /* Validation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Validation.m; sourceTree = "<group>"; };
+		E26BF56E259D288200214D0A /* RestrictedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictedTextView.swift; sourceTree = "<group>"; };
 		E270ED891B18F24B00DD43B8 /* AuthenticationXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationXMLParser.h; sourceTree = "<group>"; };
 		E270ED8A1B18F24B00DD43B8 /* AuthenticationXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationXMLParser.m; sourceTree = "<group>"; };
 		E271C1BB2110AF4200256D8B /* fa-solid-900.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fa-solid-900.ttf"; sourceTree = "<group>"; };
@@ -1247,6 +1250,7 @@
 				E2E7F6F9200E648F00648D61 /* NSString+XML.h */,
 				E2E7F6FA200E648F00648D61 /* NSString+XML.m */,
 				E2AE663A1CE0E7A700953EFA /* ReadMe.md */,
+				E26BF56E259D288200214D0A /* RestrictedTextView.swift */,
 				E240EE6B1F54A462009D8ED1 /* UIView+IBDesignable.h */,
 				E240EE6C1F54A462009D8ED1 /* UIView+IBDesignable.m */,
 			);
@@ -2197,6 +2201,7 @@
 				28CCCD7D17F517FC0093CEE2 /* SWRevealViewController.m in Sources */,
 				28A8DA48182C3E5C00C9DB08 /* MessageRecipientPickerViewController.m in Sources */,
 				E2964B4A1E67587F002FF97B /* SideNavigationCountCell.m in Sources */,
+				E26BF56F259D288200214D0A /* RestrictedTextView.swift in Sources */,
 				E211D5961FBF571B00263497 /* CommentCell.m in Sources */,
 				E211D5921FBF571B00263497 /* MessageTeleMedComposeTableViewController.m in Sources */,
 				E211D5931FBF571B00263497 /* AccountCell.m in Sources */,
@@ -2233,6 +2238,7 @@
 				E2A4BBF51FDEDDFD00491221 /* MessageNewUnauthorizedTableViewController.m in Sources */,
 				E25036B41FBB88F400099C7E /* ScreenshotAlertModel.m in Sources */,
 				E279944A20F914CB004EA215 /* TimeZoneModel.m in Sources */,
+				E26BF570259D288200214D0A /* RestrictedTextView.swift in Sources */,
 				E25036B51FBB88F400099C7E /* AppDelegate.m in Sources */,
 				E25036B71FBB88F400099C7E /* SSOProviderViewController.m in Sources */,
 				E23A4F471FC3273A00DC899D /* AccountNewViewController.m in Sources */,
@@ -2320,7 +2326,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2329,7 +2335,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2350,20 +2356,20 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FLMB52V94K;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2383,20 +2389,20 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FLMB52V94K;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "MyTeleMedWatch Extension/Supporting Files/MyTeleMedWatch Extension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2420,7 +2426,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2429,7 +2435,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.debug.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2450,11 +2456,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2463,7 +2469,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2483,11 +2489,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2496,7 +2502,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IBSC_MODULE = MyTeleMedWatch_Extension;
 				INFOPLIST_FILE = "MyTeleMedWatch/Supporting Files/MyTeleMedWatch-Info.plist";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.solutionbuilt.telemed.adhoc.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2569,9 +2575,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconBeta;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTeleMedβ.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2582,7 +2588,7 @@
 				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D MYTELEMED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";
@@ -2712,7 +2718,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MyTeleMed/MyTmd Debug.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2723,7 +2729,7 @@
 				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D MYTELEMED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
@@ -2745,9 +2751,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MyTeleMed/MyTeleMed.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 267;
+				CURRENT_PROJECT_VERSION = 276;
 				DEVELOPMENT_TEAM = FLMB52V94K;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TeleMed-Prefix.pch";
@@ -2758,7 +2764,7 @@
 				INFOPLIST_FILE = "TeleMed-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.11;
+				MARKETING_VERSION = 4.12;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D MYTELEMED";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(PRODUCT_NAME)";

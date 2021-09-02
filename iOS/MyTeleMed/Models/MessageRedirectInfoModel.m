@@ -79,12 +79,8 @@
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
-			// Close activity indicator with callback
-			[self hideActivityIndicator:^
-			{
-				// Handle error via callback
-				callback(NO, nil, error);
-			}];
+			// Handle error via callback
+			callback(NO, nil, error);
 		}];
 	}];
 }

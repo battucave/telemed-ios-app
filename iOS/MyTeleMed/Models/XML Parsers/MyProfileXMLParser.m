@@ -159,19 +159,19 @@
 				}
 				else if ([elementName isEqualToString:@"BlockCallerID"])
 				{
-					self.myProfile.BlockCallerID = [self.currentElementValue boolValue];
+					self.myProfile.BlockCallerID = self.currentElementValue.boolValue;
 				}
 				else if ([elementName isEqualToString:@"IsAuthorized"])
 				{
-					self.myProfile.IsAuthorized = [self.currentElementValue boolValue];
+					self.myProfile.IsAuthorized = self.currentElementValue.boolValue;
 				}
 				else if ([elementName isEqualToString:@"MayDisableTimeout"])
 				{
-					self.myProfile.MayDisableTimeout = [self.currentElementValue boolValue];
+					self.myProfile.MayDisableTimeout = self.currentElementValue.boolValue;
 				}
 				else if ([elementName isEqualToString:@"PasswordChangeRequired"])
 				{
-					self.myProfile.PasswordChangeRequired = [self.currentElementValue boolValue];
+					self.myProfile.PasswordChangeRequired = self.currentElementValue.boolValue;
 				}
 				else
 				{

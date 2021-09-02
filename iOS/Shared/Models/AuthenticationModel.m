@@ -135,7 +135,7 @@
 		return;
 	}
 	
-	AuthenticationHTTPSessionManager *authenticationManager = [AuthenticationHTTPSessionManager sharedInstance];
+	AuthenticationHTTPSessionManager *authenticationManager = AuthenticationHTTPSessionManager.sharedInstance;
 	
 	// Turn on isWorking
 	self.isWorking = YES;
@@ -182,7 +182,7 @@
 		self.isWorking = NO;
 		
 		// Notify user that there was an authentication problem
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
 		[settings synchronize];
@@ -243,7 +243,7 @@
 			self.isWorking = NO;
 
 			// Notify user that there was an authentication problem
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			[settings setValue:@"There was a problem authenticating your account. Please login again." forKey:REASON_APPLICATION_DID_LOGOUT];
 			[settings synchronize];
@@ -262,7 +262,7 @@
 	// Dispatch AFNetworkingOperationDidStartNotification as shortcut to force models to execute pending callbacks
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:AFNetworkingOperationDidStartNotification object:self];
+		[NSNotificationCenter.defaultCenter postNotificationName:AFNetworkingOperationDidStartNotification object:self];
 	});
 }
 
@@ -274,7 +274,7 @@
 - (void)doLogout
 {
 	KeychainItemWrapper *keyChainRefreshToken = [[KeychainItemWrapper alloc] initWithIdentifier:@"RefreshToken" accessGroup:nil];
-	TeleMedHTTPRequestOperationManager *operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
+	TeleMedHTTPRequestOperationManager *operationManager = TeleMedHTTPRequestOperationManager.sharedInstance;
 	
 	// Reset refresh token in keychain
 	[keyChainRefreshToken resetKeychainItem];
@@ -289,10 +289,10 @@
 	
 	// Log out of profile
 	#if MYTELEMED
-		[[MyProfileModel sharedInstance] doLogout];
+		[MyProfileModel.sharedInstance doLogout];
 
 	#elif defined MED2MED
-		[[UserProfileModel sharedInstance] doLogout];
+		[UserProfileModel.sharedInstance doLogout];
 	#endif
 }
 

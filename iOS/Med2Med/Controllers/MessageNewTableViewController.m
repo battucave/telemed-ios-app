@@ -72,17 +72,14 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from OnCallSlotPickerViewController. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
+	// Fix issue with next button that occurs when returning back from OnCallSlotPickerViewController. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem).
 	if (self.hasSubmitted)
 	{
-		if (@available(iOS 11.0, *))
-		{
-			// Workaround the issue by completely replacing the next button with a brand new one
-			UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:self.navigationItem.rightBarButtonItem.title style:self.navigationItem.rightBarButtonItem.style target:self action:@selector(showOnCallSlotPicker:)];
-			
-			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
-		}
-	}
+        // Workaround the issue by completely replacing the next button with a brand new one
+        UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:self.navigationItem.rightBarButtonItem.title style:self.navigationItem.rightBarButtonItem.style target:self action:@selector(showOnCallSlotPicker:)];
+        
+        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:nextButton, nil]];
+    }
 	
 	// Get label urgency level text
 	[self setTextUrgencyLevel:[self.labelUrgencyLevel.text substringWithRange:NSMakeRange(0, [self.labelUrgencyLevel.text rangeOfString:@":"].location + 1)]];
@@ -90,7 +87,7 @@
 	// Pre-populate callback data with data from user profile
 	if (self.shouldInitializeCallbackData)
 	{
-		UserProfileModel *profile = [UserProfileModel sharedInstance];
+		UserProfileModel *profile = UserProfileModel.sharedInstance;
 		
 		for (UITextField *textField in self.textFields)
 		{
@@ -177,7 +174,7 @@
 	
 	// Show error message without title for invalid callback number
 	NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, [NSString stringWithFormat:@"Callback Number %@ is invalid. Please enter a valid phone number.", callbackPhoneNumberValue], NSLocalizedDescriptionKey, nil]];
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -477,7 +474,7 @@
 		}
 		else
 		{
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}

@@ -14,15 +14,12 @@
 
 @property (weak) id delegate;
 
-- (void)hideSelectedMessages:(NSArray *)messages;
-- (void)removeSelectedMessages:(NSArray *)messages;
 - (void)setMessagesType:(NSString *)messagesType; // Public setter; private getter
-- (void)unhideSelectedMessages:(NSArray *)messages;
 
 #if MYTELEMED
 	- (void)filterArchivedMessages:(NSNumber *)accountID startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
-	- (void)resetActiveMessages; // Hopefully temporary - remove if pagination flaw is corrected (see MessagesViewController modifyMultipleMessagesStateSuccess: for more info)
-	- (void)resetMessages;
+	- (void)reloadMessages;
+	- (void)removeSelectedMessages:(NSArray *)messages isPending:(BOOL)isPending;
 #endif
 
 @end

@@ -25,7 +25,7 @@
 		if ([xmlParser parse])
 		{
 			// Sort message recipients by name (Med2Med: FirstName LastName, MyTeleMed: LastName, FirstName)
-			NSArray *messageRecipients = [[parser messageRecipients] sortedArrayUsingComparator:^NSComparisonResult(MessageRecipientModel *messageRecipientModelA, MessageRecipientModel *messageRecipientModelB)
+			NSArray *messageRecipients = [parser.messageRecipients sortedArrayUsingComparator:^NSComparisonResult(MessageRecipientModel *messageRecipientModelA, MessageRecipientModel *messageRecipientModelB)
 			{
 				return [messageRecipientModelA.Name compare:messageRecipientModelB.Name];
 			}];

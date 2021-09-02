@@ -43,7 +43,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
@@ -54,14 +54,6 @@
 	[self toggleToolbarButtons:NO];
 	
 	[super viewWillAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
 // User clicked delete bar button in toolbar
@@ -159,11 +151,33 @@
 	[self toggleToolbarButtons:editing];
 }
 
+// Return delete multiple chat message error from ChatMessageModel delegate
+- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
+{
+	// Reset selected chat messages
+	self.selectedChatMessages = [NSArray new];
+	
+	// Reset chat messages
+	if ([self.chatMessagesTableViewController respondsToSelector:@selector(resetChatMessages:)])
+	{
+		[self.chatMessagesTableViewController resetChatMessages:YES];
+	
+		// Reload chat messages
+		if ([self.chatMessagesTableViewController respondsToSelector:@selector(reloadChatMessages)])
+		{
+			[self.chatMessagesTableViewController reloadChatMessages];
+		}
+	}
+}
+
 // Return delete multiple chat message pending from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesPending
 {
-	// Hide selected rows from chat messages table
-	[self.chatMessagesTableViewController hideSelectedChatMessages:self.selectedChatMessages];
+	// Remove selected rows from chat messages table
+	if ([self.chatMessagesTableViewController respondsToSelector:@selector(removeSelectedChatMessages:)])
+	{
+		[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
+	}
 	
 	[self setEditing:NO animated:YES];
 }
@@ -171,29 +185,7 @@
 // Return delete multiple chat message success from ChatMessageModel delegate
 - (void)deleteMultipleChatMessagesSuccess
 {
-	// Remove selected rows from chat messages table
-	[self.chatMessagesTableViewController removeSelectedChatMessages:self.selectedChatMessages];
-}
-
-// Return delete multiple chat message error from ChatMessageModel delegate
-- (void)deleteMultipleChatMessagesError:(NSArray *)failedChatMessages
-{
-	// Determine which chat messages were successfully delete4d
-	NSMutableArray *successfulChatMessages = [self.selectedChatMessages mutableCopy];
-	
-	[successfulChatMessages removeObjectsInArray:failedChatMessages];
-	
-	// Remove selected all rows from chat messages table that were successfully archived
-	if ([self.selectedChatMessages count] > 0)
-	{
-		[self.chatMessagesTableViewController removeSelectedChatMessages:successfulChatMessages];
-	}
-	
-	// Reload chat messages table to re-show chat messages that were not deleted
-	[self.chatMessagesTableViewController unhideSelectedChatMessages:failedChatMessages];
-	
-	// Update selected chat messages to only the failed chat messages
-	self.selectedChatMessages = failedChatMessages;
+	// Empty
 }
 
 // Delegate method from SWRevealController that fires when a recognized gesture has ended
@@ -208,7 +200,7 @@
 	// If position is open
 	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		[settings synchronize];

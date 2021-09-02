@@ -21,8 +21,8 @@
 @protocol NewChatMessageDelegate <NSObject>
 
 @optional
+- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID;
 - (void)sendChatMessagePending:(NSString *)message withPendingID:(NSNumber *)pendingID;
 - (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID;
-- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID;
 
 @end

@@ -33,7 +33,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	// Hide swipe message if it has been disabled (triggering a swipe to open the menu or refresh the table will disable it)
 	if ([settings boolForKey:SWIPE_MESSAGE_DISABLED])
@@ -50,12 +50,6 @@
 // Unwind segue from ArchivesPickerViewController
 - (IBAction)unwindSetArchiveFilter:(UIStoryboardSegue *)segue
 {
-	// Reset MessagesTableViewController back to loading state
-	if ([self.messagesTableViewController respondsToSelector:@selector(resetMessages)])
-	{
-		[self.messagesTableViewController resetMessages];
-	}
-	
 	// Obtain reference to source view controller
 	[self setArchivesPickerViewController:segue.sourceViewController];
 	
@@ -78,7 +72,7 @@
 	// Update results label with selected account and date values
 	[self.labelResults setText:[NSString stringWithFormat:@"Results from %@ for %@", self.archivesPickerViewController.selectedDate, self.archivesPickerViewController.selectedAccount.Name]];
 	
-	// Update MessagesTableViewController with updated messages
+	// Update MessagesTableViewController with updated messages (viewWillAppear will be called on MessagesTableViewController after this which will re-fetch messages)
 	if ([self.messagesTableViewController respondsToSelector:@selector(filterArchivedMessages:startDate:endDate:)])
 	{
 		[self.messagesTableViewController filterArchivedMessages:self.archivesPickerViewController.selectedAccount.ID startDate:self.archivesPickerViewController.startDate endDate:self.archivesPickerViewController.endDate];
@@ -97,7 +91,7 @@
 	// If position is open
 	if (revealController.frontViewPosition == FrontViewPositionRight)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 		

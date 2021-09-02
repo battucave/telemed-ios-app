@@ -94,31 +94,29 @@
 - (void)updateAccountsError:(NSError *)error
 {
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
+}
+
+// Return error from NewMessageModel delegate
+- (void)sendNewMessageError:(NSError *)error
+{
+	// Empty
 }
 
 // Return pending from NewMessageModel delegate
 - (void)sendNewMessagePending
 {
-	// Go back to MessagesViewController (assume success)
+	// Go back to MessagesViewController
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-/*/ Return success from NewMessageModel delegate (no longer used)
+// Return success from NewMessageModel delegate
 - (void)sendNewMessageSuccess
 {
- 
+	// Empty
 }
-
-// Return error from NewMessageModel delegate (no longer used)
-- (void)sendNewMessageError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
- 
-	[errorAlertController show:error];
-}*/
 
 // Fired from MessageComposeTableViewController to perform segue to either AccountPickerViewController or MessageRecipientPickerViewController - simplifies passing of data to the picker
 - (void)performSegueToMessageRecipientPicker:(id)sender

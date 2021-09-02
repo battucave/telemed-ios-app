@@ -13,7 +13,7 @@
 
 @interface Model()
 
-@property (nonatomic) BOOL hasDismissed;
+@property (nonatomic) BOOL isPresented;
 
 @end
 
@@ -24,7 +24,7 @@
 	if (self = [super init])
 	{
 		// Initialize operation manager
-		self.operationManager = [TeleMedHTTPRequestOperationManager sharedInstance];
+		self.operationManager = TeleMedHTTPRequestOperationManager.sharedInstance;
 	}
 	
 	return self;
@@ -50,16 +50,8 @@
 		[activityIndicatorView setUserInteractionEnabled:NO];
 		[activityIndicatorView startAnimating];
 		
-		// iOS 11+ - Use custom color from asset catalog to support dark mode
-		if (@available(iOS 11.0, *))
-		{
-			[activityIndicatorView setColor:[UIColor colorNamed:@"systemBlackColor"]];
-		}
-		// iOS < 11 - Fallback to use custom systemBlackColor light appearance; Remove this logic when iOS 10 support is dropped
-		else
-		{
-			[activityIndicatorView setColor:[UIColor blackColor]];
-		}
+		// Use custom color from asset catalog with dark mode support
+		[activityIndicatorView setColor:[UIColor colorNamed:@"systemBlackColor"]];
 		
 		// Configure message
 		[labelMessage setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -78,34 +70,37 @@
 		// Show activity indicator
 		[[self getRootViewController] presentViewController:loadingAlertController animated:NO completion:nil];
 		
-		// Reset the hasDismissed flag
-		[self setHasDismissed:NO];
+		// Set the isPresented flag
+		[self setIsPresented:YES];
 	});
+}
+
+- (void)hideActivityIndicator
+{
+	[self hideActivityIndicator:nil];
 }
 
 - (void)hideActivityIndicator:(void (^)(void))callback
 {
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// If activity indicator has already been dismissed, then manually run any callbacks
-		if (self.hasDismissed)
+		// Dismiss activity indicator if it is currently presented
+		if (self.isPresented)
 		{
-			if (callback != nil)
-			{
-				// Delay callback to ensure that activity indicator has finished dismissing
-				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
-				{
-					callback();
-				});
-			}
-		}
-		else
-		{
-			[[self getRootViewController] dismissViewControllerAnimated:NO completion:callback];
+            [[self getRootViewController] dismissViewControllerAnimated:NO completion:callback];
 			
-			// Update the hasDismissed flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
-			[self setHasDismissed:YES];
+			// Update the isPresented flag so that future callbacks can still be handled (dismissViewControllerAnimated's completion block only runs if a view actually dismisses)
+			[self setIsPresented:NO];
 		}
+        // Manually run any callback
+		else if (callback != nil)
+        {
+            // Delay callback to ensure that activity indicator has finished dismissing
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
+            {
+                callback();
+            });
+        }
 	});
 }
 
@@ -135,21 +130,21 @@
 
 - (void)showError:(NSError *)error
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
 
 - (void)showError:(NSError *)error withRetryCallback:(void (^)(void))callback
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error withRetryCallback:callback];
 }
 
 - (void)showError:(NSError *)error withRetryCallback:(void (^)(void))retryCallback cancelCallback:(void (^)(void))cancelCallback
 {
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error withRetryCallback:retryCallback cancelCallback:cancelCallback];
 }
@@ -169,12 +164,6 @@
 	}
 	
 	return rootViewController;
-}
-
-- (void)dealloc
-{
-	// Remove all observers if applicable (models with POST or DELETE requests have network activity observers)
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

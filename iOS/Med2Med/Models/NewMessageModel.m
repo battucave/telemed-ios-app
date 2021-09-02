@@ -10,12 +10,6 @@
 #import "MessageRecipientModel.h"
 #import "NSString+XML.h"
 
-@interface NewMessageModel ()
-
-@property BOOL pendingComplete;
-
-@end
-
 @implementation NewMessageModel
 
 - (void)sendNewMessage:(NSDictionary *)messageData withOrder:(NSArray *)sortedKeys
@@ -127,18 +121,18 @@
 			{
 				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"New Message Error", NSLocalizedFailureReasonErrorKey, @"There was a problem sending your Message.", NSLocalizedDescriptionKey, nil]];
 				
+				// Handle error via delegate
+				if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
+				{
+					[self.delegate sendNewMessageError:error];
+				}
+				
 				// Show error even if user has navigated to another screen
 				[self showError:error withRetryCallback:^
 				{
 					// Include callback to retry the request
 					[self sendNewMessage:messageData withOrder:sortedKeys];
 				}];
-				
-				// Handle error via delegate
-				/* if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
-				{
-					[self.delegate sendNewMessageError:error];
-				} */
 			}
 		}];
 	}
@@ -152,24 +146,22 @@
 		// Close activity indicator with callback
 		[self hideActivityIndicator:^
 		{
-			// If error is related to the callback number, then handle it separately
-			if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location != NSNotFound)
+			// Handle error via delegate
+			if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
 			{
-				// Handle error via delegate
-				if (self.delegate && [self.delegate respondsToSelector:@selector(sendNewMessageError:)])
-				{
-					[self.delegate sendNewMessageError:error];
-					
-					return;
-				}
+				[self.delegate sendNewMessageError:error];
 			}
 			
-			// Show error even if user has navigated to another screen
-			[self showError:error withRetryCallback:^
+			// Show error unless it's related to the callback number
+			if ([error.localizedDescription rangeOfString:@"CallbackPhone"].location == NSNotFound)
 			{
-				// Include callback to retry the request
-				[self sendNewMessage:messageData withOrder:sortedKeys];
-			}];
+				// Show error even if user has navigated to another screen
+				[self showError:error withRetryCallback:^
+				{
+					// Include callback to retry the request
+					[self sendNewMessage:messageData withOrder:sortedKeys];
+				}];
+			}
 		}];
 	}];
 }

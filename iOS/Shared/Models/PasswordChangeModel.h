@@ -20,8 +20,7 @@
 @protocol PasswordChangeDelegate <NSObject>
 
 @optional
-- (void)changePasswordPending;
-- (void)changePasswordSuccess;
 - (void)changePasswordError:(NSError *)error;
+- (void)changePasswordSuccess;
 
 @end

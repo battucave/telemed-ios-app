@@ -24,8 +24,6 @@
 @property (nonatomic) NSMutableArray *selectedChatMessages;
 @property (nonatomic) NSNumber *currentUserID;
 
-- (IBAction)refreshControlRequest:(id)sender;
-
 @end
 
 @implementation ChatMessagesTableViewController
@@ -34,7 +32,7 @@
 {
 	[super viewDidLoad];
 	
-	// Fix bug in iOS 7+ where text overlaps indicator on first run
+	// Fix bug where text overlaps indicator on first run
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
 		[self.refreshControl beginRefreshing];
@@ -42,15 +40,16 @@
 	});
 	
 	// Set current user id
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	MyProfileModel *myProfileModel = MyProfileModel.sharedInstance;
 	self.currentUserID = myProfileModel.ID;
 	
 	// Initialize ChatMessageModel
 	[self setChatMessageModel:[[ChatMessageModel alloc] init]];
 	[self.chatMessageModel setDelegate:self];
 	
-	// Initialize hidden messages
+	// Initialize hidden and selected chat messages
 	[self setHiddenChatMessages:[NSMutableArray new]];
+	[self setSelectedChatMessages:[NSMutableArray new]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,26 +59,27 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
+	// Always reload messages to ensure that any new messages are fetched from server when user returns to this screen
 	[self reloadChatMessages];
+	
+	// Add application did become active observer to reload chat messages when this screen is visible
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(reloadChatMessages) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 // Action to perform when refresh control triggered
 - (IBAction)refreshControlRequest:(id)sender
-{
-	// Cancel queued chat messages refresh when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
+{	
 	[self reloadChatMessages];
 	
-	NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 	
 	[settings setBool:YES forKey:SWIPE_MESSAGE_DISABLED];
 	
@@ -110,59 +110,6 @@
 	
 	// Convert NSMutableSet back into NSArray
 	return [oldChatMessagesSet allObjects];
-	
-//	NSMutableArray *oldChatMessages = [NSMutableArray new];
-//	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
-//
-//	// Determine if new chat messages should replace any existing chat messages
-//	for (ChatMessageModel *newChatMessage in newChatMessages)
-//	{
-//		// Sort new chat message participant ids
-//		NSArray *newChatParticipantIDs = [[newChatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
-//
-//		for (ChatMessageModel *existingChatMessage in chatMessages)
-//		{
-//			// Sort existing chat message participant ids
-//			NSArray *existingChatParticipantIDs = [[existingChatMessage.ChatParticipants valueForKey:@"ID"] sortedArrayUsingDescriptors:@[sortDescriptor]];
-//
-//			// If new chat participants matches existing chat participants, then delete the existing chat message
-//			if ([newChatParticipantIDs isEqualToArray:existingChatParticipantIDs])
-//			{
-//				NSLog(@"Chat participants already exist for %@", existingChatMessage.ID);
-//
-//				// Remove existing chat message from existing chat messages
-//				[oldChatMessages addObject:existingChatMessage];
-//			}
-//		}
-//	}
-//
-//	return [oldChatMessages copy];
-}
-
-- (void)hideSelectedChatMessages:(NSArray *)chatMessages
-{
-	// If no chat messages to hide, cancel
-	if ([chatMessages count] == 0)
-	{
-		return;
-	}
-	
-	NSMutableArray *indexPaths = [NSMutableArray new];
-	
-	// Add each chat message to hidden chat messages
-	for (ChatMessageModel *chatMessage in chatMessages)
-	{
-		[self.hiddenChatMessages addObject:chatMessage];
-		
-		// Add index path for reloading in the table
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
-	}
-	
-	// Hide rows at specified index paths in the table
-	[self reloadRowsAtIndexPaths:indexPaths];
-	
-	// Toggle the edit button
-	[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
 }
 
 // Insert new rows and delete rows at specified index paths in the table
@@ -171,28 +118,12 @@
 	// Insert new rows and delete rows at specified index paths in the table
 	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
-		if (@available(iOS 11.0, *))
-		{
-			[self.tableView performBatchUpdates:^
-			{
-				[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-				[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			}
-			completion:completion];
-		}
-		// iOS 10 - Fall back to using beginUpdates and endUpdates
-		else
-		{
-			[self.tableView beginUpdates];
-			
-			[self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			[self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableView endUpdates];
-			
-			completion(YES);
-		}
+        [self.tableView performBatchUpdates:^
+        {
+            [self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        completion:completion];
 	});
 }
 
@@ -202,32 +133,7 @@
 	[self.chatMessageModel getChatMessages];
 }
 
-// TEMPORARY (remove this method when support for iOS 10 is dropped and instead simply call table view's performBatchUpdates: directly)
-- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths
-{
-	dispatch_async(dispatch_get_main_queue(), ^
-	{
-		// iOS 11+ - performBatchUpdates: is preferred over beginUpdates and endUpdates (supported in iOS 11+)
-		if (@available(iOS 11.0, *))
-		{
-			[self.tableView performBatchUpdates:^
-			{
-				[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			}
-			completion:nil];
-		}
-		// iOS 10 - Fall back to using beginUpdates and endUpdates
-		else
-		{
-			[self.tableView beginUpdates];
-			
-			[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-			
-			[self.tableView endUpdates];
-		}
-	});
-}
-
+// Remove selected chat messages
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages
 {
 	// If no chat messages to remove, cancel
@@ -237,69 +143,74 @@
 	}
 	
 	NSMutableArray *indexPaths = [NSMutableArray new];
-	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
 	
-	// Remove each chat message from the source data, selected data, and the table itself
+	// Add the index path for each chat message to be removed
 	for (ChatMessageModel *chatMessage in chatMessages)
 	{
-		[mutableChatMessages removeObject:chatMessage];
-		[self.hiddenChatMessages removeObject:chatMessage];
-		[self.selectedChatMessages removeObject:chatMessage];
-		
 		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
 	}
 	
-	// Remove selected chat messages from chat messages array
+	// Remove chat messages from source data
+	NSMutableArray *mutableChatMessages = [self.chatMessages mutableCopy];
+	
+	[mutableChatMessages removeObjectsInArray:chatMessages];
 	[self setChatMessages:[mutableChatMessages copy]];
 	
+	// Remove chat messages from selected data
+	[self.selectedChatMessages removeObjectsInArray:chatMessages];
+	
+	// Add chat messages to hidden data
+	[self.hiddenChatMessages addObjectsFromArray:chatMessages];
+	
+	// If there are no chat messages left in the source data, simply reload the table to show the no chat messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from numberOfRowsInSection: (1 - for the no messages cell))
+	if ([self.chatMessages count] == 0)
+	{
+		[self resetChatMessages:NO];
+		
+		// Toggle the parent view controller's edit button
+		[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 ? nil : self.parentViewController.editButtonItem)];
+	}
 	// Remove rows
-	if ([self.chatMessages count] > 0 && [self.chatMessages count] > [self.hiddenChatMessages count])
+	else
 	{
 		[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-	// If there are no chat messages left in the source data, simply reload the table to show the no chat messages cell (deleting the rows as above would result in an inconsistency in which the number of messages in source data (0) does not match the number of rows returned from numberOfRowsInSection: (1 - for the no messages cell))
-	else
-	{
-		[self.tableView reloadData];
-		
-		// Toggle the edit button
-		[self.parentViewController.navigationItem setRightBarButtonItem:([self.chatMessages count] == 0 || [self.chatMessages count] == [self.hiddenChatMessages count] ? nil : self.parentViewController.editButtonItem)];
-	}
 	
 	// Update delegate's list of selected messages
-	[self.delegate setSelectedChatMessages:self.selectedChatMessages];
+	if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
+	{
+		[self.delegate setSelectedChatMessages:self.selectedChatMessages];
+	}
 }
 
-- (void)unhideSelectedChatMessages:(NSArray *)chatMessages
+// Reset chat messages back to loading state
+- (void)resetChatMessages:(BOOL)resetHidden
 {
-	// If no chat messages to hide, cancel
-	if ([chatMessages count] == 0)
+	self.chatMessages = [NSMutableArray new];
+	[self.selectedChatMessages removeAllObjects];
+	
+	// Additionally reset hidden chat messages
+	if (resetHidden)
 	{
-		return;
+		[self.hiddenChatMessages removeAllObjects];
 	}
 	
-	NSMutableArray *indexPaths = [NSMutableArray new];
-	
-	// Remove each chat message from hidden chat messages
-	for (ChatMessageModel *chatMessage in chatMessages)
+	dispatch_async(dispatch_get_main_queue(), ^
 	{
-		[self.hiddenChatMessages removeObject:chatMessage];
-		
-		// Add index path for reloading in the table
-		[indexPaths addObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
-	}
-	
-	// Hide rows at specified index paths in the table
-	[self reloadRowsAtIndexPaths:indexPaths];
-	
-	// Show the edit button (there will always be at least one message when unhiding)
-	[self.parentViewController.navigationItem setRightBarButtonItem:self.parentViewController.editButtonItem];
+		[self.tableView reloadData];
+	});
 }
 
 // Return chat messages from ChatMessageModel delegate
 - (void)updateChatMessages:(NSArray *)chatMessages
 {
 	[self setIsLoaded:YES];
+	
+	// Filter out chat messages that have been archived locally, but are still pending web service response
+	if ([self.hiddenChatMessages count] > 0)
+	{
+		chatMessages = [self computeNewChatMessages:chatMessages from:self.hiddenChatMessages];
+	}
 	
 	// Set initial chat messages if empty
 	if ([self.chatMessages count] == 0)
@@ -367,7 +278,7 @@
 	[self.refreshControl endRefreshing];
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -382,26 +293,9 @@
 	return MAX([self.chatMessages count], 1);
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	// If there are chat messages and hidden chat messages and row is not the only row in the table
-	if ([self.chatMessages count] > 0 && [self.hiddenChatMessages count] > 0 && (indexPath.row > 0 || [self.chatMessages count] != [self.hiddenChatMessages count]))
-	{
-		ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
-		
-		// Hide hidden chat messages by setting the cell's height to 0
-		if ([self.hiddenChatMessages containsObject:chatMessage])
-		{
-			return 0.0f;
-		}
-	}
-	
-	return UITableViewAutomaticDimension;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.chatMessages count] == 0 || (indexPath.row == 0 && [self.chatMessages count] == [self.hiddenChatMessages count]))
+	if ([self.chatMessages count] == 0)
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
@@ -423,12 +317,6 @@
 	
 	// Set up the cell
 	ChatMessageModel *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
-	
-	// Hide hidden chat messages
-	if ([self.hiddenChatMessages count] > 0 && [self.hiddenChatMessages containsObject:chatMessage])
-	{
-		[cell setHidden:YES];
-	}
 	
 	// Set chat participants
 	if (chatMessage.ChatParticipants)
@@ -529,10 +417,11 @@
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
 		{
-			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
-			self.selectedChatMessages = [NSMutableArray new];
+			NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
 			
-			for (NSIndexPath *indexPath in indexPaths)
+			[self.selectedChatMessages removeAllObjects];
+			
+			for (NSIndexPath *indexPath in selectedIndexPaths)
 			{
 				[self.selectedChatMessages addObject:[self.chatMessages objectAtIndex:indexPath.row]];
 			}
@@ -549,10 +438,11 @@
 	{
 		if ([self.delegate respondsToSelector:@selector(setSelectedChatMessages:)])
 		{
-			NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
-			self.selectedChatMessages = [NSMutableArray new];
+			NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
 			
-			for (NSIndexPath *indexPath in indexPaths)
+			[self.selectedChatMessages removeAllObjects];
+			
+			for (NSIndexPath *indexPath in selectedIndexPaths)
 			{
 				[self.selectedChatMessages addObject:[self.chatMessages objectAtIndex:indexPath.row]];
 			}
@@ -593,12 +483,6 @@
 {
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

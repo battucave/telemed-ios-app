@@ -59,7 +59,7 @@
 	[self setSectionSessionTimeout:0];
 	
 	#if MYTELEMED
-		RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+		RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 		[self setSectionAboutTeleMed:3];
 		[self setSectionNotifications:1];
@@ -77,19 +77,17 @@
 	[super viewWillAppear:animated];
 	
 	#if MYTELEMED
-		[self setProfile:[MyProfileModel sharedInstance]];
+		[self setProfile:MyProfileModel.sharedInstance];
 	
 		// Load notification settings for each type
 		NotificationSettingModel *notificationSettingModel = [[NotificationSettingModel alloc] init];
 	
-		[notificationSettingModel setDelegate:self];
+		[self setChatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"chat"]];
+		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"comment"]];
+		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"normal"]];
+		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsForName:@"stat"]];
 	
-		[self setChatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"chat"]];
-		[self setCommentNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"comment"]];
-		[self setNormalMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"normal"]];
-		[self setStatMessageNotificationSettings:[notificationSettingModel getNotificationSettingsByName:@"stat"]];
-	
-		// Reload notification cells in case notification setting data has changed
+		// Reload notification cells with new notification settings data
 		dispatch_async(dispatch_get_main_queue(), ^
 		{
 			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sectionNotifications] withRowAnimation:UITableViewRowAnimationNone];
@@ -113,7 +111,7 @@
 		}];
 
 	#elif defined MED2MED
-		[self setProfile:[UserProfileModel sharedInstance]];
+		[self setProfile:UserProfileModel.sharedInstance];
 	#endif
 	
 	// Set may disable timeout value
@@ -143,7 +141,7 @@
 		}];
 		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 		{
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			[settings setBool:YES forKey:DISABLE_TIMEOUT];
 			[settings synchronize];
@@ -164,7 +162,7 @@
 	// If remember me option is disabled
 	else
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setBool:NO forKey:DISABLE_TIMEOUT];
 		[settings synchronize];
@@ -184,7 +182,7 @@
 	{
 		NSNumber *timeoutPeriodMins = (self.profile ? self.profile.TimeoutPeriodMins : [NSNumber numberWithInteger:DEFAULT_TIMEOUT_PERIOD]);
 		
-		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:[timeoutPeriodMins stringValue]];
+		return [self.defaultTimeoutFooterTitle stringByReplacingOccurrencesOfString:@"%d" withString:timeoutPeriodMins.stringValue];
 	}
 }
 
@@ -257,7 +255,7 @@
 		// Update default footer title with user's account TimeoutPeriodMins
 		else
 		{
-			NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+			NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 			
 			return [self getSectionTimeoutFooterTitle:[settings boolForKey:DISABLE_TIMEOUT]];
 		}
@@ -281,7 +279,7 @@
 	// Set timeout value
 	if (indexPath.section == self.sectionSessionTimeout)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[self.switchTimeout setOn:[settings boolForKey:DISABLE_TIMEOUT]];
 	}
@@ -436,55 +434,6 @@
 	}
 }
 
-// Return server notification settings from NotificationSettingModel delegate
-- (void)updateNotificationSettings:(NotificationSettingModel *)serverNotificationSettings forName:(NSString *)name
-{
-	NSNumber *row;
-	
-	// Chat message settings
-	if ([name isEqualToString:@"chat"])
-	{
-		[self setChatMessageNotificationSettings:serverNotificationSettings];
-		
-		row = @3;
-	}
-	// Comment settings
-	else if ([name isEqualToString:@"comment"])
-	{
-		[self setCommentNotificationSettings:serverNotificationSettings];
-		
-		row = @4;
-	}
-	// Normal message settings
-	else if ([name isEqualToString:@"normal"])
-	{
-		[self setNormalMessageNotificationSettings:serverNotificationSettings];
-		
-		row = @2;
-	}
-	// Stat message settings
-	else if ([name isEqualToString:@"stat"])
-	{
-		[self setStatMessageNotificationSettings:serverNotificationSettings];
-		
-		row = @1;
-	}
-	
-	// Reload corresponding notification cell
-	if (row != NULL)
-	{
-		[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[row integerValue] inSection:self.sectionNotifications]] withRowAnimation:UITableViewRowAnimationNone];
-	}
-}
-
-// Return error from NotificationSettingModel delegate
-- (void)updateNotificationSettingsError:(NSError *)error
-{
-	NSLog(@"Error loading notification settings");
-	
-	// Fail silently and let SettingsNotificationsTableViewController handle
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if (indexPath.section == self.sectionNotifications)
@@ -511,12 +460,6 @@
 	}
 	
 	// Note: MyProfile cells use segues directly from table cell
-}
-
--(void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 #endif
 

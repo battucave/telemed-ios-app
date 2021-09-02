@@ -23,6 +23,14 @@
 
 @implementation SSOProviderViewController
 
+- (void)viewDidLoad
+{
+	[super viewDidLoad];
+	
+	// Initialize sso provider model
+	self.ssoProviderModel = [[SSOProviderModel alloc] init];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -30,8 +38,6 @@
 	[self.navigationController setNavigationBarHidden:YES animated:YES];
 	
 	// Auto-populate sso provider field
-	self.ssoProviderModel = [[SSOProviderModel alloc] init];
-	
 	[self.textFieldSSOProvider setText:self.ssoProviderModel.Name];
 	
 	// Attach toolbar to top of keyboard
@@ -67,7 +73,7 @@
 			// Re-show keyboard
 			[self.textFieldSSOProvider becomeFirstResponder];
 			
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}

@@ -55,8 +55,8 @@
 	}
 	
 	// Add keyboard observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -72,8 +72,8 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (IBAction)changePassword:(id)sender
@@ -83,7 +83,7 @@
 	{
 		// Show error message without title
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"All fields are required.", NSLocalizedDescriptionKey, nil]];
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 		
 		[errorAlertController show:error];
 	}
@@ -92,7 +92,7 @@
 	{
 		// Show error message without title
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"", NSLocalizedFailureReasonErrorKey, @"New Password and Confirm New Password fields do not match.", NSLocalizedDescriptionKey, nil]];
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+		ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 		
 		[errorAlertController show:error];
 		
@@ -170,24 +170,23 @@
 	return YES;
 }
 
-// Return pending from PasswordChangeModel delegate (not used because can't assume success for this scenario - old password may be incorrect, new password may not meet requirements, etc)
-/*- (void)changePasswordPending
+// Return error from PasswordChangeModel delegate
+- (void)changePasswordError:(NSError *)error
 {
-	// Go back to Settings (assume success)
-	[self.navigationController popViewControllerAnimated:YES];
-}*/
+	// Empty
+}
 
 // Return success from PasswordChangeModel delegate
 - (void)changePasswordSuccess
 {
 	// Remove password change requirement
 	#if MYTELEMED
-		id <ProfileProtocol> profile = [MyProfileModel sharedInstance];
+		id <ProfileProtocol> profile = MyProfileModel.sharedInstance;
 	
 		[profile setPasswordChangeRequired:NO];
 
 	#elif defined MED2MED
-		id <ProfileProtocol> profile = [UserProfileModel sharedInstance];
+		id <ProfileProtocol> profile = UserProfileModel.sharedInstance;
 	
 		[profile setPasswordChangeRequired:NO];
 	#endif

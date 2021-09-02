@@ -49,7 +49,7 @@
 	}
 
 	// Add call connected observer to dismiss screen after return call from TeleMed was successfully received
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didConnectCall:) name:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didConnectCall:) name:NOTIFICATION_APPLICATION_DID_CONNECT_CALL object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -72,7 +72,7 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (IBAction)goBack:(id)sender
@@ -84,18 +84,6 @@
 	});
 }
 
-// Return pending from CallTeleMedModel delegate
-- (void)callPending
-{
-	NSLog(@"Call Sender request pending.");
-}
-
-/*/ Return success from CallTeleMedModel delegate (no longer used)
-- (void)callSuccess
-{
-	NSLog(@"Call TeleMed request sent successfully");
-} */
-
 // Return error from CallTeleMedModel delegate (received if user does not retry the request)
 - (void)callError:(NSError *)error
 {
@@ -103,6 +91,18 @@
 	
 	// Call failed so dismiss this screen
 	[self goBack:nil];
+}
+
+// Return pending from CallTeleMedModel delegate
+- (void)callPending
+{
+	NSLog(@"Call Sender request pending.");
+}
+
+// Return success from CallTeleMedModel delegate
+- (void)callSuccess
+{
+	// Empty
 }
 
 // User answered a phone call so assume that the return call from TeleMed was successfully received
@@ -118,12 +118,6 @@
 {
 	[super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

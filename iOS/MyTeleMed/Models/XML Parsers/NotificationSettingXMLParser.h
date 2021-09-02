@@ -14,7 +14,6 @@
 
 @interface NotificationSettingXMLParser : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic) NotificationSettingModel *notificationSetting;
 @property (nonatomic) NSMutableArray *notificationSettings;
 
 @end

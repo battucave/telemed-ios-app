@@ -8,12 +8,6 @@
 
 #import "PasswordChangeModel.h"
 
-@interface PasswordChangeModel ()
-
-@property (nonatomic) BOOL pendingComplete;
-
-@end
-
 @implementation PasswordChangeModel
 
 - (void)changePassword:(NSString *)newPassword withOldPassword:(NSString *)oldPassword
@@ -23,22 +17,17 @@
 	{
 		NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"Current password and new password fields are required.", NSLocalizedDescriptionKey, nil]];
 		
+		// Handle error via delegate
+		if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
+		{
+			[self.delegate changePasswordError:error];
+		}
+		
 		// Show error
 		[self showError:error];
 		
-		// Handle error via delegate
-		/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
-		{
-			[self.delegate changePasswordError:error];
-		}*/
-		
 		return;
 	}
-	
-	// Show activity indicator
-	[self showActivityIndicator];
-	
-	// Don't add network activity observer because can't assume success - old password may be incorrect, new password may not meet requirements, etc
 	
 	NSString *xmlBody = [NSString stringWithFormat:
 		@"<PasswordChange xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/" XMLNS @".Models\">"
@@ -51,6 +40,11 @@
 	];
 	
 	NSLog(@"XML Body: %@", xmlBody);
+	
+	// Don't add pending callback because can't assume success - old password may be incorrect, new password may not meet requirements, etc
+	
+	// Show activity indicator
+	[self showActivityIndicator];
 	
 	[self.operationManager POST:@"PasswordChanges" parameters:nil constructingBodyWithXML:xmlBody success:^(AFHTTPRequestOperation *operation, id responseObject)
 	{
@@ -68,13 +62,13 @@
 			}
 			else
 			{
+				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
+				
 				// Handle error via delegate
-				/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
+				if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 				{
 					[self.delegate changePasswordError:error];
-				} */
-				
-				NSError *error = [NSError errorWithDomain:[[NSBundle mainBundle] bundleIdentifier] code:10 userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:@"Change Password Error", NSLocalizedFailureReasonErrorKey, @"There was a problem changing your Password. Please verify that your Current Password is correct and that your New Password meets requirements.", NSLocalizedDescriptionKey, nil]];
+				}
 				
 				// Show error
 				[self showError:error];
@@ -92,10 +86,10 @@
 		[self hideActivityIndicator:^
 		{
 			// Handle error via delegate
-			/* if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
+			if (self.delegate && [self.delegate respondsToSelector:@selector(changePasswordError:)])
 			{
 				[self.delegate changePasswordError:error];
-			} */
+			}
 		
 			// Show error
 			[self showError:error];

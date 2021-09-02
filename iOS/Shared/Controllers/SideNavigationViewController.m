@@ -45,10 +45,10 @@
 	#if MED2MED
 		[self setMenuItems:@[@"New Message", @"Sent Messages", @"Settings", @"Log Out", @"Help"]];
 	
-	#else
+	#elif MYTELEMED
 		[self setMenuItems:@[@"Messages", @"Sent Messages", @"Archives", @"Secure Chat", @"On Call Schedule", @"Contact TeleMed", @"Settings"]];
 	
-		[self setMyStatusModel:[MyStatusModel sharedInstance]];
+		[self setMyStatusModel:MyStatusModel.sharedInstance];
 	#endif
 }
 
@@ -59,14 +59,12 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableView setTableFooterView:[[UIView alloc] init]];
 	
-	// MyTeleMed - Update message counts on messages row and on call date on on call schedule row
 	#if MYTELEMED
-		[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
-		{
-			[self setIsStatusLoaded:YES];
-			
-			[self.tableView reloadData];
-		}];
+		// Update message counts on messages row and on call date on on call schedule row
+		[self loadMyStatus];
+		
+		// Add application did become active observer to update message counts on messages row and on call date on on call schedule row (only while screen is visible)
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(loadMyStatus) name:UIApplicationDidBecomeActiveNotification object:nil];
 	#endif
 }
 
@@ -141,16 +139,19 @@
 				// If cell is for secure chat, set chat counts
 				if ([cell.reuseIdentifier isEqualToString:@"Secure Chat"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnopenedChatConvoCount integerValue], 99), MIN([self.myStatusModel.ActiveChatConvoCount integerValue], 99)]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN(self.myStatusModel.UnopenedChatConvoCount.integerValue, 99), MIN(self.myStatusModel.ActiveChatConvoCount.integerValue, 99)]];
 				}
 				// If cell is for messages, set message counts
 				else if ([cell.reuseIdentifier isEqualToString:@"Messages"])
 				{
-					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN([self.myStatusModel.UnreadMessageCount integerValue], 99), MIN([self.myStatusModel.ActiveMessageCount integerValue], 99)]];
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%ld/%ld", MIN(self.myStatusModel.UnreadMessageCount.integerValue, 99), MIN(self.myStatusModel.ActiveMessageCount.integerValue, 99)]];
 				}
                 
-                // TESTING ONLY (set counts to random numbers)
-                // [cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+                /*/ TESTING ONLY (set counts to random numbers)
+                #if DEBUG
+					[cell.labelCounts setText:[NSString stringWithFormat:@"%d/%d", arc4random() % 19 + 1, arc4random() % 99 + 1]];
+				#endif
+                // END TESTING ONLY */
 				
 				// Store old frame size
 				CGRect oldFrame = cell.labelCounts.frame;
@@ -236,7 +237,7 @@
 			// Workaround to remove observers on these view controllers since dealloc is not fired as expected
 			if ([navController.viewControllers count] > 0)
 			{
-				[[NSNotificationCenter defaultCenter] removeObserver:[navController.viewControllers objectAtIndex:0]];
+				[NSNotificationCenter.defaultCenter removeObserver:[navController.viewControllers objectAtIndex:0]];
 			}
 			
 			[navController setViewControllers:@[destinationViewController] animated:NO];
@@ -252,6 +253,29 @@
 }
 
 
+#pragma mark - MyTeleMed
+
+#if MYTELEMED
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)loadMyStatus
+{
+	[self.myStatusModel getWithCallback:^(BOOL success, MyStatusModel *status, NSError *error)
+	{
+		[self setIsStatusLoaded:YES];
+		
+		[self.tableView reloadData];
+	}];
+}
+#endif
+
+
 #pragma mark - Med2Med
 
 #if MED2MED
@@ -263,7 +287,7 @@
 	if ([cell.reuseIdentifier isEqualToString:@"New Message"])
 	{
 		// Show MessageNewTableViewController
-		if ([[UserProfileModel sharedInstance] isAuthorized])
+		if ([UserProfileModel.sharedInstance isAuthorized])
 		{
 			[self performSegueWithIdentifier:@"showMessageNew" sender:cell];
 		}

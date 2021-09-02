@@ -144,7 +144,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -177,7 +177,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -196,7 +196,7 @@
 	
 	// NOTE: Return call recording options removed in commit "Remove the Return Call popup since all calls are recorded making the choice irrelevant" (3/01/2019)
 	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// Require device registration with TeleMed in order to return call
 	if ([registeredDevice isRegistered])
@@ -249,7 +249,7 @@
 {
 	NSLog(@"Remote notification authorization did change: %@", (isEnabled ? @"Enabled" : @"Disabled"));
 	
-	RegisteredDeviceModel *registeredDevice = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDevice = RegisteredDeviceModel.sharedInstance;
 	
 	// If device is registered successfully, then enable the return call button and attempt to return call
 	if (self.shouldReturnCallAfterRegistration && [registeredDevice isRegistered])
@@ -264,7 +264,13 @@
 	}
 }
 
-/*/ Return message state pending from MessageModel delegate (not used because client noticed "bug" when on a slow network connection - the message will still show in messages list until the archive process completes)
+// Return message state error from MessageModel delegate
+- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
+{
+	// Empty
+}
+
+// Return message state pending from MessageModel delegate
 - (void)modifyMessageStatePending:(NSString *)state
 {
 	// If finished archiving message, send user back
@@ -284,41 +290,13 @@
 			}
 		});
 	}
-}*/
+}
 
 // Return message state success from MessageModel delegate
 - (void)modifyMessageStateSuccess:(NSString *)state
 {
-	// If finished archiving message, send user back
-	if ([state isEqualToString:@"Archive"] || [state isEqualToString:@"Unarchive"])
-	{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
-		{
-			// First try to unwind back to MessagesViewController so that archived message can immediately be hidden
-			@try
-			{
-				[self performSegueWithIdentifier:@"unwindArchiveMessage" sender:self];
-			}
-			// Just in case the unwind segue isn't found, simply pop the view controller
-			@catch(NSException *exception)
-			{
-				[self.navigationController popViewControllerAnimated:YES];
-			}
-		});
-	}
+	// Empty
 }
-
-/*/ Return message state error from MessageModel delegate
-- (void)modifyMessageStateError:(NSError *)error forState:(NSString *)state
-{
-	// Show error message
-	if ([state isEqualToString:@"Archive"])
-	{
-		ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
- 
-		[errorAlertController show:error];
-	}
-}*/
 
 // Show error alert that message cannot be forwarded
 - (void)showMessageCannotForwardError

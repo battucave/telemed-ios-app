@@ -25,9 +25,8 @@
 
 @property (nonatomic) MessageRecipientModel *messageRecipientModel;
 
-@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableMessageRecipients;
+@property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
 @property (nonatomic) NSMutableArray *filteredMessageRecipients;
 @property (nonatomic) BOOL hasSubmitted;
@@ -86,52 +85,19 @@
 	}
 	#endif
 	
-	// iOS 11+ navigation bar has support for search controller
-	if (@available(iOS 11.0, *))
-	{
-		[self.navigationItem setSearchController:self.searchController];
-		
-		[self.viewSearchBarContainer setHidden:YES];
-		
-		for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
-		{
-			if (constraint.firstAttribute == NSLayoutAttributeHeight)
-			{
-				[constraint setConstant:0.0f];
-				break;
-			}
-		}
-	}
-	// iOS < 11 places search controller under navigation bar
-	else
-	{
-		// Add auto-generated constraints that allow search bar to animate without disappearing
-		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
-		
-		// Add search bar to search bar's container view
-		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
-		
-		// Copy constraints from storyboard's placeholder search bar onto the search controller's search bar
-		for (NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
-		{
-			if (constraint.firstItem == self.searchBar)
-			{
-				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-			}
-			else if (constraint.secondItem == self.searchBar)
-			{
-				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-			}
-		}
-		
-		for (NSLayoutConstraint *constraint in self.searchBar.constraints)
-		{
-			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-		}
-		
-		// Hide placeholder search bar from storyboard (UISearchController and its search bar cannot be implemented in storyboard so we use a placeholder search bar instead)
-		[self.searchBar setHidden:YES];
-	}
+    // Add search controller to navigation bar
+    [self.navigationItem setSearchController:self.searchController];
+    
+    [self.viewSearchBarContainer setHidden:YES];
+    
+    for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+    {
+        if (constraint.firstAttribute == NSLayoutAttributeHeight)
+        {
+            [constraint setConstant:0.0f];
+            break;
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -141,21 +107,14 @@
 	// Remove empty separator lines (By default, UITableView adds empty cells until bottom of screen without this)
 	[self.tableMessageRecipients setTableFooterView:[[UIView alloc] init]];
 	
-	// Fix iOS 11+ issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). (not currently used - only affects Med2Med if table allows multiple selection)
+	// Fix issue with next button that occurs when returning back from another screen. The next button will be selected, but there is no way to programmatically unselect it (UIBarButtonItem). (not currently used - only affects Med2Med if table allows multiple selection)
 	if (self.hasSubmitted && self.navigationItem.rightBarButtonItem != nil)
 	{
-		if (@available(iOS 11.0, *))
-		{
-			// Workaround the issue by completely replacing the next button with a brand new one
-			UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveMessageRecipients:)];
-			
-			[self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:saveButton, nil]];
-		}
+        // Workaround the issue by completely replacing the next button with a brand new one
+        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveMessageRecipients:)];
+        
+        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:saveButton, nil]];
 	}
-	
-	// Add keyboard observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
 	// MessageRecipientModel callback
 	void (^callback)(BOOL success, NSArray *messageRecipients, NSError *error) = ^void(BOOL success, NSArray *messageRecipients, NSError *error)
@@ -169,7 +128,7 @@
 		else
 		{
 			// Show error message
-			ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+			ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 			
 			[errorAlertController show:error];
 		}
@@ -235,15 +194,15 @@
 			[self setIsLoaded:YES];
 		}
 	#endif
+	
+	// Add keyboard observers
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
-	
-	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
 	#if MED2MED
 		// Return updated form values back to previous screen (only used if user returned to this screen from MessageNew2TableViewController)
@@ -258,6 +217,10 @@
 			[self.delegate setSelectedMessageRecipients:self.selectedMessageRecipients];
 		}
 	#endif
+	
+	// Remove keyboard observers
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 // Unwind to previous controller (ChatMessageDetailViewController, MessageForwardViewController, or MessageNewViewController), send message (MessageEscalateTableViewController or MessageRedirectTableViewController), or go to next controller (MessageNew2TableViewController)
@@ -429,7 +392,6 @@
 	}
 }
 
-// Return message recipients from MessageRecipientModel delegate
 - (void)updateMessageRecipients:(NSArray *)messageRecipients
 {
 	[self setMessageRecipients:messageRecipients];
@@ -807,7 +769,7 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }

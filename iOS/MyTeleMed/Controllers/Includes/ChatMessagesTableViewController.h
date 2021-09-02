@@ -15,9 +15,9 @@
 @property (weak) id delegate;
 @property (nonatomic) NSArray *chatMessages;
 
-- (void)hideSelectedChatMessages:(NSArray *)chatMessages;
+- (void)reloadChatMessages;
 - (void)removeSelectedChatMessages:(NSArray *)chatMessages;
-- (void)unhideSelectedChatMessages:(NSArray *)chatMessages;
+- (void)resetChatMessages:(BOOL)resetHidden;
 
 @end
 

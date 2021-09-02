@@ -60,7 +60,7 @@
 	// If app timeout period is not already set, then check user preferences
 	if (! _TimeoutPeriodMins)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		_TimeoutPeriodMins = [settings valueForKey:USER_TIMEOUT_PERIOD_MINUTES];
 	}
@@ -73,7 +73,7 @@
 {
 	if (_TimeoutPeriodMins != TimeoutPeriodMins)
 	{
-		NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+		NSUserDefaults *settings = NSUserDefaults.standardUserDefaults;
 		
 		[settings setValue:TimeoutPeriodMins forKey:USER_TIMEOUT_PERIOD_MINUTES];
 		[settings synchronize];
@@ -81,7 +81,7 @@
 		_TimeoutPeriodMins = TimeoutPeriodMins;
 	}
 	
-	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:[TimeoutPeriodMins integerValue]];
+	[(TeleMedApplication *)[UIApplication sharedApplication] setTimeoutPeriodMins:TimeoutPeriodMins.integerValue];
 }
 
 - (void)doLogout
@@ -169,7 +169,7 @@
 		return;
 	}
 	
-	RegisteredDeviceModel *registeredDeviceModel = [RegisteredDeviceModel sharedInstance];
+	RegisteredDeviceModel *registeredDeviceModel = RegisteredDeviceModel.sharedInstance;
 	
 	// Search user's registered devices for the current device
 	for (RegisteredDeviceModel *registeredDevice in self.MyRegisteredDevices)

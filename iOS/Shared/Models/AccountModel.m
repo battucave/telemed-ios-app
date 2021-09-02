@@ -35,13 +35,13 @@
 		if ([xmlParser parse])
 		{
 			// Sort accounts by name
-			NSArray *accounts = [[parser accounts] sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
+			NSArray *accounts = [parser.accounts sortedArrayUsingComparator:^NSComparisonResult(AccountModel *accountModelA, AccountModel *accountModelB)
 			{
 				return [accountModelA.Name compare:accountModelB.Name];
 			}];
 			
 			/*/ TESTING ONLY (generate fictitious accounts for testing)
-			#if MED2MED
+			#if DEBUG && MED2MED
 				for (int i = 0; i < 5; i++)
 				{
 					AccountModel *account = [[AccountModel alloc] init];

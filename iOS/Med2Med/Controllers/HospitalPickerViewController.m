@@ -14,7 +14,6 @@
 
 @interface HospitalPickerViewController ()
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableHospitals;
 @property (weak, nonatomic) IBOutlet UIView *viewSearchBarContainer;
 
@@ -46,52 +45,19 @@
 	[self.searchController.searchBar setPlaceholder:@"Search Hospitals"];
 	[self.searchController.searchBar sizeToFit];
 	
-	// iOS 11+ navigation bar has support for search controller
-	if (@available(iOS 11.0, *))
-	{
-		[self.navigationItem setSearchController:self.searchController];
-		
-		[self.viewSearchBarContainer setHidden:YES];
-		
-		for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
-		{
-			if (constraint.firstAttribute == NSLayoutAttributeHeight)
-			{
-				[constraint setConstant:0.0f];
-				break;
-			}
-		}
-	}
-	// iOS < 11 places search controller under navigation bar
-	else
-	{
-		// Add auto-generated constraints that allow Search Bar to animate without disappearing
-		[self.searchController.searchBar setTranslatesAutoresizingMaskIntoConstraints:YES];
-		
-		// Add search bar to search bar's container view
-		[self.viewSearchBarContainer addSubview:self.searchController.searchBar];
-		
-		// Copy constraints from storyboard's placeholder search bar onto the search controller's search bar
-		for (NSLayoutConstraint *constraint in self.searchBar.superview.constraints)
-		{
-			if (constraint.firstItem == self.searchBar)
-			{
-				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-			}
-			else if (constraint.secondItem == self.searchBar)
-			{
-				[self.searchBar.superview addConstraint:[NSLayoutConstraint constraintWithItem:constraint.firstItem attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:self.searchController.searchBar attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-			}
-		}
-		
-		for (NSLayoutConstraint *constraint in self.searchBar.constraints)
-		{
-			[self.searchController.searchBar addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:constraint.firstAttribute relatedBy:constraint.relation toItem:constraint.secondItem attribute:constraint.secondAttribute multiplier:constraint.multiplier constant:constraint.constant]];
-		}
-		
-		// Hide placeholder search bar from storyboard (UISearchController and its search bar cannot be implemented in storyboard so we use a placeholder search bar instead)
-		[self.searchBar setHidden:YES];
-	}
+	// Add search controller to navigation bar
+    [self.navigationItem setSearchController:self.searchController];
+    
+    [self.viewSearchBarContainer setHidden:YES];
+    
+    for (NSLayoutConstraint *constraint in self.viewSearchBarContainer.constraints)
+    {
+        if (constraint.firstAttribute == NSLayoutAttributeHeight)
+        {
+            [constraint setConstant:0.0f];
+            break;
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -133,8 +99,8 @@
 	}
 	
 	// Add keyboard observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -142,8 +108,8 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 // Required for unwind compatibility with MessageNewUnauthorizedTableViewController (both unwind from HospitalRequestTableViewController)
@@ -254,7 +220,7 @@
 	self.isLoaded = YES;
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }

@@ -41,16 +41,22 @@
 	[self.emailTelemedModel sendTelemedMessage:self.messageTeleMedComposeTableViewController.textViewMessage.text fromEmailAddress:self.messageTeleMedComposeTableViewController.textFieldSender.text];
 }
 
-// Return pending from EmailTeleMedModel delegate
-- (void)emailTeleMedMessagePending
+// Return error from EmailTelemedModel delegate
+- (void)emailTeleMedMessageError:(NSError *)error
 {
-	// Go back to messages (assume success)
-	#if MYTELEMED
-		[self.navigationController popViewControllerAnimated:YES];
-	#endif
+	// Empty
 }
 
-// Return success from EmailTelemedModel delegate (no longer used)
+// Return pending from EmailTeleMedModel delegate (Med2Med does not use pending callbacks)
+#if MYTELEMED
+- (void)emailTeleMedMessagePending
+{
+	// Go back to messages
+    [self.navigationController popViewControllerAnimated:YES];
+}
+#endif
+
+// Return success from EmailTelemedModel delegate
 - (void)emailTeleMedMessageSuccess
 {
 	#if MED2MED
@@ -74,14 +80,6 @@
 		[self presentViewController:successAlertController animated:YES completion:nil];
 	#endif
 }
-
-/*/ Return error from EmailTelemedModel delegate (no longer used)
-- (void)emailTeleMedMessageError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
-	
-	[errorAlertController show:error];
-}*/
 
 // Check required fields to determine if Form can be submitted - Fired from setRecipient and MessageComposeTableViewController delegate
 - (void)validateForm:(NSString *)messageText senderEmailAddress:(NSString *)senderEmailAddress

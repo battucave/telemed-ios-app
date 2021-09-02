@@ -42,12 +42,12 @@
 	[super viewWillDisappear:animated];
 	
 	// Remove this window from stack
-	[[ErrorAlertController sharedInstance].windows removeObject:self.window];
+	[ErrorAlertController.sharedInstance.windows removeObject:self.window];
 	
 	// Set alpha to 1.0 for last alert to make it appear
 	[UIView animateWithDuration:0.3 animations:^
 	{
-		[[ErrorAlertController sharedInstance].windows.lastObject setAlpha:1.0];
+		[ErrorAlertController.sharedInstance.windows.lastObject setAlpha:1.0];
 	}];
 }
 
@@ -203,8 +203,8 @@
 	[self.window.rootViewController presentViewController:self animated:animated completion:completion];
 	
 	// Set alpha to 0.0 for last alert to make it appear as though there is only a single alert at one time
-	[[ErrorAlertController sharedInstance].windows.lastObject setAlpha:0.0];
-	[[ErrorAlertController sharedInstance].windows addObject:self.window];
+	[ErrorAlertController.sharedInstance.windows.lastObject setAlpha:0.0];
+	[ErrorAlertController.sharedInstance.windows addObject:self.window];
 }
 
 - (NSString *)getOfflineMessage

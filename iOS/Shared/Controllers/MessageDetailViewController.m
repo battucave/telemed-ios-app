@@ -101,14 +101,14 @@
 		self.textViewCommentPlaceholder = self.textViewComment.text;
 	
 		// Initialize MyProfileModel
-		profile = [MyProfileModel sharedInstance];
+		profile = MyProfileModel.sharedInstance;
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
 	
 	// Initialize UserProfileModel
 	#elif defined MED2MED
-		profile = [UserProfileModel sharedInstance];
+		profile = UserProfileModel.sharedInstance;
 	
 		// Set current user id
 		self.currentUserID = profile.ID;
@@ -152,13 +152,6 @@
 {
 	// Perform shared logic in MessageDetailParentViewController
 	[super viewWillAppear:animated];
-	
-	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set these colors directly (instead of Tertiary System Grouped Background Color) and remove this logic
-	if (@available(iOS 11.0, *))
-	{
-		[self.scrollView setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
-		[self.tableComments setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
-	}
 	
 	// Change title for sent message in navigation bar
 	if ([self.messageType isEqualToString:@"Sent"])
@@ -229,7 +222,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -259,7 +252,7 @@
 				// Show error
 				else
 				{
-					ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+					ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 					
 					[errorAlertController show:error];
 				}
@@ -267,13 +260,16 @@
 		}
 	
 		// Add keyboard observers
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 		// Add application did enter background observer to hide keyboard
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 		// Add call disconnected observer to hide keyboard
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	
+		// Add application did become active observer to reload message events when this screen is visible
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(getMessageEvents) name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	// Med2Med - Hide buttons
 	#elif defined MED2MED
@@ -356,12 +352,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 
 #pragma mark - MyTeleMed
 
@@ -370,17 +360,17 @@
 {
 	[super viewWillDisappear:animated];
 	
-	// Stop refreshing message events when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
 	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Remove application did enter background observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Remove call disconnected observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	// Dismiss keyboard
 	[self.view endEditing:YES];
@@ -489,7 +479,7 @@
 			// Show error message only if device offline
 			if (error.code == NSURLErrorNotConnectedToInternet)
 			{
-				ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+				ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 				
 				[errorAlertController show:error];
 			}
@@ -534,9 +524,6 @@
 		) {
 			NSLog(@"Refresh Comments with Message %@ ID: %@", (self.messageDeliveryID && [notificationID isEqualToNumber:self.messageDeliveryID] ? @"Delivery" : @""), notificationID);
 			
-			// Cancel queued comments refresh
-			[NSObject cancelPreviousPerformRequestsWithTarget:self];
-			
 			// Flag message as being loaded from push notification
 			[self setIsFromPushNotification:YES];
 			
@@ -578,6 +565,35 @@
 			}
 		#endif
 		// END TESTING ONLY */
+	}
+}
+
+// Return error from CommentModel delegate
+- (void)saveCommentError:(NSError *)error withPendingID:(NSNumber *)pendingID
+{
+	// Find comment with pending id in Filtered message events
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
+	NSArray *results = [self.filteredMessageEvents filteredArrayUsingPredicate:predicate];
+	
+	if ([results count] > 0)
+	{
+		// Find and delete table cell that contains the comment
+		MessageEventModel *messageEvent = [results objectAtIndex:0];
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.filteredMessageEvents indexOfObject:messageEvent] inSection:0]];
+		
+		// Remove comment from filtered message events
+		[self.filteredMessageEvents removeObject:messageEvent];
+		
+		// If removing the only comment/event
+		if ([self.filteredMessageEvents count] == 0)
+		{
+			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		// If removing from existing comments/events
+		else
+		{
+			[self.tableComments deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
 	}
 }
 
@@ -640,98 +656,11 @@
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
 
-// Return error from CommentModel delegate
-- (void)saveCommentError:(NSError *)error withPendingID:(NSNumber *)pendingID
+// Return success from CommentModel delegate
+- (void)saveCommentSuccess:(NSString *)commentText withPendingID:(NSNumber *)pendingID
 {
-	// Find comment with pending id in Filtered message events
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
-	NSArray *results = [self.filteredMessageEvents filteredArrayUsingPredicate:predicate];
-	
-	if ([results count] > 0)
-	{
-		// Find and delete table cell that contains the comment
-		MessageEventModel *messageEvent = [results objectAtIndex:0];
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.filteredMessageEvents indexOfObject:messageEvent] inSection:0]];
-		
-		// Remove comment from filtered message events
-		[self.filteredMessageEvents removeObject:messageEvent];
-		
-		// If removing the only comment/event
-		if ([self.filteredMessageEvents count] == 0)
-		{
-			[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-		// If removing from existing comments/events
-		else
-		{
-			[self.tableComments deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-	}
+	// Empty
 }
-
-/*/ Return success from CommentModel delegate (no longer used)
-- (void)saveCommentSuccess:(NSString *)commentText
-{
-	// Add comment to basic events array
-	MessageEventModel *comment = [[MessageEventModel alloc] init];
-	NSDate *currentDate = [[NSDate alloc] init];
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
- 
-	// Create local date
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-	[comment setTime_LCL:[dateFormatter stringFromDate:currentDate]];
- 
-	// Create UTC date
-	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-	[comment setTime_UTC:[dateFormatter stringFromDate:currentDate]];
- 
-	[comment setDetail:[commentText stringByRemovingPercentEncoding]];
-	[comment setType:@"Comment"];
-	[comment setEnteredByID:self.currentUserID];
- 
-	[self.filteredMessageEvents addObject:comment];
- 
-	// Begin actual update
-	[self.tableComments beginUpdates];
- 
-	// If adding first comment
-	if ([self.filteredMessageEvents count] == 1)
-	{
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
- 
-		[self.tableComments reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-	}
-	// If adding to already existing comments
-	else
-	{
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.filteredMessageEvents count] - 1 inSection:0]];
- 
-		[self.tableComments insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-	}
- 
-	// Commit row updates
-	[self.tableComments endUpdates];
- 
-	// Auto size table comments height to show all rows
-	[self autoSizeTableComments];
- 
-	// Clear and resign focus from text view comment
-	[self.textViewComment setText:@""];
-	[self.textViewComment resignFirstResponder];
-	[self.buttonSend setEnabled:NO];
- 
-	// Trigger a scroll to bottom to ensure the newly added comment is shown
-	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
-}
-
-// Return error from CommentModel delegate (no longer used)
-- (void)saveCommentError:(NSError *)error
-{
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
- 
-	[errorAlertController show:error];
-}*/
 
 - (void)setMessageDetails
 {

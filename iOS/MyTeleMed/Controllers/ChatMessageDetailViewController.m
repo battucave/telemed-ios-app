@@ -50,7 +50,7 @@
 	[self setNavigationBarTitle:self.navigationItem.title];
 	
 	// Set current user id
-	MyProfileModel *myProfileModel = [MyProfileModel sharedInstance];
+	MyProfileModel *myProfileModel = MyProfileModel.sharedInstance;
 	self.currentUserID = myProfileModel.ID;
 	
 	// Initialize selected chat participants
@@ -77,22 +77,20 @@
 {
 	[super viewWillAppear:animated];
 	
-	// iOS 11+ - When iOS 10 support is dropped, update storyboard to set this color directly (instead of Tertiary System Grouped Background Color) and remove this logic
-	if (@available(iOS 11.0, *))
-	{
-		[self.tableChatMessages setBackgroundColor:[UIColor colorNamed:@"alternateTertiarySystemGroupedBackgroundColor"]];
-	}
-	
 	// Get chat messages for conversation id if its set (not a new chat)
 	if (self.conversationID)
 	{
-		[self reloadChatMessages];
-
 		// Existing chat messages are always a group chat
 		self.isGroupChat = YES;
 		
 		// Hide Add chat participant button
 		[self.buttonAddChatParticipant setHidden:YES];
+		
+		// Load chat messages
+		[self reloadChatMessages];
+		
+		// Add application did become active observer to reload chat messages when this screen is visible
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(reloadChatMessages) name:UIApplicationDidBecomeActiveNotification object:nil];
 	}
 	// Update navigation bar title if this is a new chat
 	else if (self.isNewChat)
@@ -109,33 +107,33 @@
 	[self.textViewChatParticipants setMaxHeight:(([UIScreen mainScreen].bounds.size.height - 64.0f - self.textViewChatMessage.bounds.size.height) / 2.5)];
 	
 	// Add keyboard observers
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	
 	// Add application did enter background observer to hide keyboard
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	// Add call disconnected observer to hide keyboard
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(dismissKeyboard:) name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	// Stop refreshing chat messages when user leaves this screen
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
-	// Remove keyboard observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-	
-	// Remove application did enter background observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-	
-	// Remove call disconnected observer
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
-	
 	// Dismiss keyboard
 	[self.view endEditing:YES];
+	
+	// Remove keyboard observers
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+	
+	// Remove application did enter background observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+	
+	// Remove call disconnected observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:NOTIFICATION_APPLICATION_DID_DISCONNECT_CALL object:nil];
+	
+	// Remove application did become active observer
+	[NSNotificationCenter.defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (IBAction)sendChatMessage:(id)sender
@@ -196,9 +194,6 @@
 			{
 				[self setConversationID:chatMessage.ID];
 				
-				// Cancel queued chat messages refresh
-				[NSObject cancelPreviousPerformRequestsWithTarget:self];
-				
 				// Get chat messages for conversation id
 				[self reloadChatMessages];
 				
@@ -243,9 +238,6 @@
 		
 		__block UIAlertAction *viewActionBlock = viewAction;
 		NSNumber *notificationID = [notificationInfo objectForKey:@"notificationID"];
-		
-		// Cancel queued chat messages refresh
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 		
 		// Reload chat messages for conversation id to determine if push notification is specifically for the current conversation
 		[self.chatMessageModel getChatMessagesByID:self.conversationID withCallback:^(BOOL success, NSArray *chatMessages, NSError *error)
@@ -308,6 +300,35 @@
 		NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:[self.chatMessages count] - 1 inSection:0];
 		
 		[self.tableChatMessages scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	}
+}
+
+// Return error from NewChatMessageModel delegate
+- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID
+{
+	// Find comment with pending id in filtered message events
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
+	NSArray *results = [self.chatMessages filteredArrayUsingPredicate:predicate];
+	
+	if ([results count] > 0)
+	{
+		// Find and delete table cell that contains the chat message
+		ChatMessageModel *chatMessage = [results objectAtIndex:0];
+		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
+		
+		// Remove chat message from chat messages
+		[self.chatMessages removeObject:chatMessage];
+		
+		// If removing the only chat message
+		if ([self.chatMessages count] == 0)
+		{
+			[self.tableChatMessages reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		// If removing from existing chat messages
+		else
+		{
+			[self.tableChatMessages deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
 	}
 }
 
@@ -386,33 +407,10 @@
 	[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.25];
 }
 
-// Return error from NewChatMessageModel delegate
-- (void)sendChatMessageError:(NSError *)error withPendingID:(NSNumber *)pendingID
+// Return success from NewChatMessageModel delegate
+- (void)sendChatMessageSuccess:(NSString *)message withPendingID:(NSNumber *)pendingID
 {
-	// Find comment with pending id in filtered message events
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ID = %@", pendingID];
-	NSArray *results = [self.chatMessages filteredArrayUsingPredicate:predicate];
-	
-	if ([results count] > 0)
-	{
-		// Find and delete table cell that contains the chat message
-		ChatMessageModel *chatMessage = [results objectAtIndex:0];
-		NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForItem:[self.chatMessages indexOfObject:chatMessage] inSection:0]];
-		
-		// Remove chat message from chat messages
-		[self.chatMessages removeObject:chatMessage];
-		
-		// If removing the only chat message
-		if ([self.chatMessages count] == 0)
-		{
-			[self.tableChatMessages reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-		// If removing from existing chat messages
-		else
-		{
-			[self.tableChatMessages deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-	}
+	// Empty
 }
 
 // Update text view chat participants with chat participant name(s)
@@ -447,7 +445,7 @@
 			#if DEBUG
 				chatParticipantNames = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n", chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames, chatParticipantNames];
 			#endif
-			//*/
+			// END TESTING ONLY */
 		}
 		else
 		{
@@ -569,7 +567,7 @@
 	[self setIsLoaded:YES];
 	
 	// Show error message
-	ErrorAlertController *errorAlertController = [ErrorAlertController sharedInstance];
+	ErrorAlertController *errorAlertController = ErrorAlertController.sharedInstance;
 	
 	[errorAlertController show:error];
 }
@@ -811,12 +809,6 @@
 {
 	[super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-	// Remove notification observers
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
