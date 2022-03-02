@@ -79,8 +79,10 @@
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "8"
       notificationPayloadFile = "MyTeleMedWatch Extension/Supporting Files/PushNotificationPayload.apns">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/MyTeleMed">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "081710661C495602000DD7C9"
@@ -88,7 +90,7 @@
             BlueprintName = "MyTeleMedWatch"
             ReferencedContainer = "container:TeleMed.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -98,8 +100,10 @@
       debugDocumentVersioning = "YES"
       launchAutomaticallySubstyle = "8"
       notificationPayloadFile = "MyTeleMedWatch Extension/Supporting Files/PushNotificationPayload.apns">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/MyTeleMed">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "081710661C495602000DD7C9"
@@ -107,7 +111,16 @@
             BlueprintName = "MyTeleMedWatch"
             ReferencedContainer = "container:TeleMed.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "081710661C495602000DD7C9"
+            BuildableName = "MyTeleMedWatch.app"
+            BlueprintName = "MyTeleMedWatch"
+            ReferencedContainer = "container:TeleMed.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
