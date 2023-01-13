@@ -473,7 +473,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="New Message" id="kkN-8t-ymm">
-                        <barButtonItem key="leftBarButtonItem" image="navigation-menu" id="zfS-jn-zhV"/>
+                        <barButtonItem key="leftBarButtonItem" image="navigation-menu" id="zfS-jn-zhV">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Next" id="5YE-9V-Wlx">
                             <connections>
                                 <segue destination="Thg-Kd-Rdi" kind="show" identifier="showOnCallSlotPicker" id="Fa8-qw-aeX"/>
@@ -760,6 +762,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ZbH-3q-7Cz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="Background062035"/>
                     </navigationBar>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="view.backgroundColor">
@@ -1205,7 +1208,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="New Message" id="myC-sW-mis">
-                        <barButtonItem key="leftBarButtonItem" image="navigation-menu" id="ite-iT-tMk"/>
+                        <barButtonItem key="leftBarButtonItem" image="navigation-menu" id="ite-iT-tMk">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="sideNavigationButton" destination="ite-iT-tMk" id="FgQ-tr-3HQ"/>
@@ -1379,7 +1384,9 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Settings" id="MsE-77-Kg8">
-                        <barButtonItem key="leftBarButtonItem" image="navigation-menu" id="nYa-5B-lCu"/>
+                        <barButtonItem key="leftBarButtonItem" image="navigation-menu" id="nYa-5B-lCu">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="sideNavigationButton" destination="nYa-5B-lCu" id="NCh-JT-QDp"/>
@@ -1399,6 +1406,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LuZ-XQ-1Y1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="Background062035"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
@@ -1682,6 +1690,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KO5-zX-lSf">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="Background062035"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
@@ -1790,7 +1799,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="AccountRequestTableViewController" id="For-gb-WKY" customClass="AccountRequestTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="XDB-lE-x7e">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1933,9 +1942,9 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="GBe-0v-zRW"/>
-        <segue reference="rpH-Mr-Mcb"/>
-        <segue reference="ojM-FY-erA"/>
+        <segue reference="UlW-eW-Gmn"/>
+        <segue reference="Q99-L6-eWG"/>
+        <segue reference="v49-7h-3me"/>
         <segue reference="FEU-cP-WQX"/>
         <segue reference="6bW-Sj-6zP"/>
         <segue reference="qok-PU-hvf"/>
@@ -1944,6 +1953,9 @@
         <image name="Logo-InterfaceLight" width="400" height="100"/>
         <image name="button-TextField-Help.png" width="20" height="20"/>
         <image name="navigation-menu" width="24" height="24"/>
+        <namedColor name="Background062035">
+            <color red="0.023529411764705882" green="0.12549019607843137" blue="0.20784313725490194" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="DefaultBackground">
             <color red="0.050999999046325684" green="0.12200000137090683" blue="0.20000000298023224" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
