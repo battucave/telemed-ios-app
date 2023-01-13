@@ -167,9 +167,11 @@
 	{
 		UITableViewCell *emptyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyCell"];
 		
+        [emptyCell setBackgroundColor:[UIColor clearColor]];
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isLoaded ? ([self.segmentedControl selectedSegmentIndex] == 0 ? @"You are not currently on call." : @"You have no upcoming on call entries.") : @"Loading...")];
+        [emptyCell.textLabel setTextColor:[UIColor whiteColor]];
 		
 		return emptyCell;
 	}

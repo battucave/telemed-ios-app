@@ -124,6 +124,7 @@
 		{
 			[textView setTextColor:[UIColor blackColor]];
 		}
+        [textView setTextColor:[UIColor colorWithRed:192.0f/255.0f green:192.0f/255.0f blue:192.0f/255.0f alpha:192.0f/255.0f]];
 	}
 	
 	[textView becomeFirstResponder];
