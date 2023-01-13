@@ -1011,7 +1011,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="MessageRecipientPickerViewController" id="dbR-X4-VWn" customClass="MessageRecipientPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vCf-2A-71b">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7fW-0Y-ehL">
@@ -1034,7 +1034,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="44" width="414" height="672"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="572"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
@@ -3878,7 +3878,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="vUd-oo-bvD" customClass="MessageTeleMedComposeTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Dig-LM-hY9">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -5168,6 +5168,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrows-refresh" translatesAutoresizingMaskIntoConstraints="NO" id="aMw-8a-A2y">
                                                 <rect key="frame" x="18" y="18" width="18" height="24"/>
+                                                <color key="tintColor" name="TextC0C0C0"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="18" id="rEv-dW-UF1"/>
                                                     <constraint firstAttribute="height" constant="24" id="woT-Q4-39X"/>
@@ -5179,11 +5180,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="O17-rz-GvY"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                <color key="textColor" name="TextC0C0C0"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" name="messageCalloutBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="aMw-8a-A2y" firstAttribute="leading" secondItem="WcE-z2-nzF" secondAttribute="leading" constant="18" id="TTY-Ma-CoO"/>
                                             <constraint firstItem="YoO-QC-yJt" firstAttribute="leading" secondItem="aMw-8a-A2y" secondAttribute="trailing" constant="17" id="Xiv-SJ-AeX"/>
@@ -5194,7 +5195,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGrayColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="WcE-z2-nzF" firstAttribute="leading" secondItem="ih4-WG-1sO" secondAttribute="leading" id="PKg-bM-h2d"/>
                                     <constraint firstAttribute="trailing" secondItem="WcE-z2-nzF" secondAttribute="trailing" id="Q2t-eT-0do"/>
@@ -5217,7 +5218,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20.5" id="2ax-ah-W4p"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="251" text="Current On Call:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6rI-2T-Bfd">
@@ -5227,7 +5228,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                             <constraint firstAttribute="width" constant="98" id="lm0-M4-GxX"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{Name}" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uId-mg-r8Y">
@@ -5236,7 +5237,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="ArF-vJ-F0k"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -5259,11 +5260,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <constraint firstAttribute="height" constant="20.5" id="JvJ-n5-crW"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                <color key="textColor" name="TextC0C0C0"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background132B46"/>
                                         <constraints>
                                             <constraint firstItem="mb7-Za-eCF" firstAttribute="top" secondItem="bzu-iq-jfQ" secondAttribute="top" constant="11" id="09C-kh-X3h"/>
                                             <constraint firstAttribute="trailing" secondItem="jSB-Mt-7mV" secondAttribute="trailing" constant="15" id="82v-VH-zvY"/>
@@ -5284,7 +5285,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9l5-zr-3sF"/>
-                        <color key="backgroundColor" name="Background132B46"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <constraints>
                             <constraint firstItem="ih4-WG-1sO" firstAttribute="trailing" secondItem="9l5-zr-3sF" secondAttribute="trailing" id="Kdd-24-qZk"/>
                             <constraint firstItem="ih4-WG-1sO" firstAttribute="leading" secondItem="9l5-zr-3sF" secondAttribute="leading" id="M7V-LW-foq"/>
@@ -5320,7 +5321,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" id="qDf-W0-JUb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="rAy-RQ-zuX">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="77"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5330,6 +5331,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrows-refresh" translatesAutoresizingMaskIntoConstraints="NO" id="uhn-oM-A2g">
                                             <rect key="frame" x="18" y="26.666666666666671" width="18" height="24"/>
+                                            <color key="tintColor" name="TextC0C0C0"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="18" id="3Ao-wG-IGp"/>
                                                 <constraint firstAttribute="height" constant="24" id="VVw-HY-1pM"/>
@@ -5339,11 +5341,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                             <rect key="frame" x="53" y="13" width="351" height="51"/>
                                             <string key="text">Redirect this message to either a slot or a recipient. This message will be reassigned to your selection and followed-up by TeleMed if not opened.</string>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <color key="textColor" name="TextC0C0C0"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" name="messageCalloutBackgroundColor"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="4uM-yH-Yab" secondAttribute="bottom" constant="12.5" id="6s7-Xs-OgR"/>
                                         <constraint firstItem="4uM-yH-Yab" firstAttribute="top" secondItem="NaF-id-00U" secondAttribute="top" constant="13" id="P2y-MA-xQz"/>
@@ -5354,7 +5356,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                     </constraints>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemGrayColor"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="NaF-id-00U" secondAttribute="bottom" constant="0.5" id="OwV-Ko-3if"/>
                                 <constraint firstAttribute="trailing" secondItem="NaF-id-00U" secondAttribute="trailing" id="QfN-I6-cS1"/>
@@ -5376,12 +5378,12 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <rect key="frame" x="20" y="0.0" width="355.66666666666669" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background132B46"/>
                                         <connections>
                                             <segue destination="i6a-8F-IOQ" kind="show" identifier="showOnCallSlotPickerFromMessageRedirect" id="f3o-b0-2pd"/>
                                         </connections>
@@ -5397,12 +5399,12 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                     <rect key="frame" x="20" y="0.0" width="355.66666666666669" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background132B46"/>
                                         <connections>
                                             <segue destination="dbR-X4-VWn" kind="show" identifier="showMessageRecipientPickerFromMessageRedirect" id="BhK-Le-o3I"/>
                                         </connections>
@@ -5573,23 +5575,23 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="wLK-8U-oaT"/>
-        <segue reference="253-6l-xSp"/>
+        <segue reference="C3V-ib-alC"/>
         <segue reference="ejp-fl-nDj"/>
         <segue reference="9pZ-e2-2FC"/>
         <segue reference="Bd7-aS-lX5"/>
         <segue reference="9Rx-MN-6ah"/>
-        <segue reference="xeH-nb-wrL"/>
+        <segue reference="jIb-YA-bfg"/>
         <segue reference="RL6-ew-HlW"/>
         <segue reference="V9Q-rq-EEe"/>
         <segue reference="nDL-G3-d11"/>
         <segue reference="SWX-Rd-no8"/>
         <segue reference="duc-Go-Hul"/>
-        <segue reference="E1e-BY-bXG"/>
-        <segue reference="VXf-fn-O9m"/>
+        <segue reference="tkY-Nl-aTH"/>
+        <segue reference="eNK-pz-2OB"/>
         <segue reference="1fs-hi-JGd"/>
-        <segue reference="Wxx-iI-zqX"/>
+        <segue reference="pW4-rb-CwU"/>
         <segue reference="dmg-yj-Han"/>
-        <segue reference="ERs-f9-p9u"/>
+        <segue reference="0jR-zR-Czp"/>
         <segue reference="FA7-fW-yLW"/>
     </inferredMetricsTieBreakers>
     <resources>
