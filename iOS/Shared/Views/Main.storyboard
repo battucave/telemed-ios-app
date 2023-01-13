@@ -471,10 +471,10 @@
                                                             <constraint firstAttribute="width" constant="37" id="ejz-qR-8XI"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="38K-Qr-6Vp">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right-new" translatesAutoresizingMaskIntoConstraints="NO" id="38K-Qr-6Vp">
                                                         <rect key="frame" x="23" y="11.666666666666664" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="Kdp-ew-uTg"/>
@@ -487,7 +487,7 @@
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="9Y6-j7-mWg"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(       )" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dGR-HW-VvA">
@@ -497,10 +497,10 @@
                                                             <constraint firstAttribute="height" constant="17" id="v6n-QI-ypx"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-down" translatesAutoresizingMaskIntoConstraints="NO" id="n80-EV-NZy">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-down-new" translatesAutoresizingMaskIntoConstraints="NO" id="n80-EV-NZy">
                                                         <rect key="frame" x="23" y="36.666666666666671" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="dzE-uK-hdN"/>
@@ -513,11 +513,11 @@
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="ieH-U8-P4o"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" name="messageCalloutBackgroundColor"/>
+                                                <color key="backgroundColor" name="DefaultBackground"/>
                                                 <constraints>
                                                     <constraint firstItem="bP5-1F-VCy" firstAttribute="leading" secondItem="yCk-lL-EO3" secondAttribute="trailing" constant="4" id="EUj-1y-CuC"/>
                                                     <constraint firstAttribute="bottom" secondItem="frE-zr-8Sm" secondAttribute="bottom" constant="12.5" id="LiH-NU-kdk"/>
@@ -547,25 +547,29 @@
                                     </view>
                                     <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FZ2-X4-3M4">
                                         <rect key="frame" x="0.0" y="68" width="414" height="624"/>
+                                        <color key="backgroundColor" name="DefaultBackground"/>
                                         <connections>
                                             <segue destination="4fX-RS-WG1" kind="embed" identifier="embedActiveMessagesTable" id="yVi-an-TG3"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
                             </stackView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="51k-8H-waR">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="51k-8H-waR">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
+                                <color key="backgroundColor" name="DefaultBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="IgA-Wf-sVM"/>
                                 </constraints>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="yPw-PC-KHL"/>
                                     <barButtonItem enabled="NO" title="Archive" id="mCr-bh-Hsa">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <action selector="archiveMessages:" destination="2Ma-B1-RxK" id="KAR-xa-xVD"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem systemItem="compose" id="KT9-F2-kDn">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="s5K-mq-c5U" kind="show" identifier="showMessageNewFromMessages" id="L7H-SQ-oo6"/>
                                         </connections>
@@ -578,6 +582,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Z3d-2n-jK7"/>
                                 </items>
+                                <color key="barTintColor" name="DefaultBackground"/>
                             </toolbar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ozg-jA-ddl"/>
@@ -636,14 +641,14 @@
             <objects>
                 <viewController storyboardIdentifier="PhoneCallViewController" id="RIK-oc-PUe" customClass="PhoneCallViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dVM-E5-6S6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="624"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen-background" translatesAutoresizingMaskIntoConstraints="NO" id="TyS-GY-Qtp">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="624"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="19" translatesAutoresizingMaskIntoConstraints="NO" id="tlk-6i-LC5">
-                                <rect key="frame" x="20" y="20" width="374" height="696"/>
+                                <rect key="frame" x="20" y="20" width="374" height="584"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JMd-Ts-fny" userLabel="Spacer">
                                         <rect key="frame" x="67" y="0.0" width="240" height="72"/>
@@ -653,7 +658,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-IW-RcO">
-                                        <rect key="frame" x="0.0" y="146" width="374" height="175"/>
+                                        <rect key="frame" x="0.0" y="108.66666666666666" width="374" height="174.99999999999997"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="telemed-icon" translatesAutoresizingMaskIntoConstraints="NO" id="Tyy-MG-FKI">
                                                 <rect key="frame" x="149.66666666666666" y="0.0" width="75" height="94"/>
@@ -672,7 +677,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="4A9-ii-Co0">
-                                                <rect key="frame" x="0.0" y="141" width="374" height="34"/>
+                                                <rect key="frame" x="0.0" y="141.00000000000003" width="374" height="34"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="34" id="x6O-W5-QeD"/>
                                                 </constraints>
@@ -695,7 +700,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="82P-tf-4ab">
-                                        <rect key="frame" x="0.0" y="395" width="374" height="99"/>
+                                        <rect key="frame" x="0.0" y="320.33333333333331" width="374" height="99"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beZ-20-Uru">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
@@ -738,10 +743,10 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q8X-pN-5JX">
-                                        <rect key="frame" x="0.0" y="568" width="374" height="128"/>
+                                        <rect key="frame" x="0.0" y="456" width="374" height="128"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may continue working while waiting for your call." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0KX-5g-7fQ">
-                                                <rect key="frame" x="0.0" y="12.666666666666629" width="374" height="34"/>
+                                                <rect key="frame" x="0.0" y="12.666666666666686" width="374" height="34"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="34" id="av0-GL-9z0"/>
                                                 </constraints>
@@ -1100,7 +1105,7 @@ TeleMed will call you momentarily from</string>
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="60m-NG-kHz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="624"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageCell" rowHeight="89" id="7GR-uf-0bS" customClass="MessageCell">
                                 <rect key="frame" x="0.0" y="50" width="414" height="89"/>
@@ -1118,7 +1123,7 @@ TeleMed will call you momentarily from</string>
                                         </view>
                                         <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="envelope" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="AIY-ys-7hs">
                                             <rect key="frame" x="13" y="14.666666666666668" width="23" height="17.666666666666661"/>
-                                            <color key="tintColor" systemColor="labelColor"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20.999999999999986" id="8FF-ei-R8K"/>
                                                 <constraint firstAttribute="width" constant="23" id="AcG-A7-mYw"/>
@@ -1131,6 +1136,7 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstAttribute="height" constant="21" id="q5a-JW-chQ"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fLf-sX-2sJ">
@@ -1139,6 +1145,7 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstAttribute="height" constant="16" id="r4q-I1-Fja"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hhE-9X-CxK">
@@ -1148,7 +1155,7 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstAttribute="height" constant="16" id="E9s-AG-bTw"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Q0-rs-i8Z">
@@ -1157,18 +1164,20 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstAttribute="height" constant="16" id="9op-U8-Wbd"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6jj-hu-1ao">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6jj-hu-1ao">
                                             <rect key="frame" x="15" y="49" width="384" height="32"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="32" id="lnH-aB-4QV"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <color key="backgroundColor" name="Background062035"/>
                                     <constraints>
                                         <constraint firstItem="6Q0-rs-i8Z" firstAttribute="leading" secondItem="fLf-sX-2sJ" secondAttribute="trailing" constant="5" id="0lm-fX-5i3"/>
                                         <constraint firstItem="hhE-9X-CxK" firstAttribute="leading" secondItem="G35-GL-lV4" secondAttribute="trailing" constant="5" id="521-jr-zKx"/>
@@ -1220,11 +1229,13 @@ TeleMed will call you momentarily from</string>
                         <attributedString key="attributedTitle">
                             <fragment content="Pull to Refresh">
                                 <attributes>
+                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <font key="NSFont" metaFont="menu" size="11"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                 </attributes>
                             </fragment>
                         </attributedString>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <connections>
                             <action selector="refreshControlRequest:" destination="4fX-RS-WG1" eventType="valueChanged" id="6EJ-na-RMV"/>
                         </connections>
@@ -1255,6 +1266,7 @@ TeleMed will call you momentarily from</string>
                                                     <constraint firstAttribute="height" constant="45" id="RQQ-N7-7SD"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="return-call"/>
                                                 <connections>
                                                     <action selector="returnCall:" destination="5rm-Th-Y7w" eventType="touchUpInside" id="PFP-g0-Wxd"/>
@@ -1275,6 +1287,7 @@ TeleMed will call you momentarily from</string>
                                                     <constraint firstAttribute="width" constant="44" id="Eth-Wz-hia"/>
                                                     <constraint firstAttribute="height" constant="45" id="ZVQ-d2-JQw"/>
                                                 </constraints>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="forward-message"/>
                                                 <connections>
                                                     <action selector="forwardMessage:" destination="5rm-Th-Y7w" eventType="touchUpInside" id="sIr-5k-DQD"/>
@@ -1295,6 +1308,7 @@ TeleMed will call you momentarily from</string>
                                                     <constraint firstAttribute="width" constant="47" id="MgS-NU-37G"/>
                                                     <constraint firstAttribute="height" constant="45" id="eYl-1W-VzK"/>
                                                 </constraints>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="message-telemed">
                                                     <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -1318,6 +1332,7 @@ TeleMed will call you momentarily from</string>
                                                     <constraint firstAttribute="width" constant="38" id="sBa-ob-KS5"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="history"/>
                                                 <connections>
                                                     <segue destination="WLz-LF-MQ6" kind="show" identifier="showMessageHistory" id="GNz-8X-Olk"/>
@@ -1339,6 +1354,7 @@ TeleMed will call you momentarily from</string>
                                                     <constraint firstAttribute="width" constant="41" id="mQ5-9v-eXd"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="archive-message"/>
                                                 <connections>
                                                     <action selector="archiveMessage:" destination="5rm-Th-Y7w" eventType="touchUpInside" id="pTx-Ih-Pmn"/>
@@ -1351,7 +1367,7 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="quaternarySystemFillColor"/>
+                                <color key="backgroundColor" name="Background132B46"/>
                                 <constraints>
                                     <constraint firstItem="cvp-hG-0Uo" firstAttribute="top" secondItem="yA3-gt-in8" secondAttribute="top" id="8pl-fp-kyQ"/>
                                     <constraint firstItem="e3z-22-s1l" firstAttribute="width" secondItem="fX9-TG-eGp" secondAttribute="width" id="AAK-RN-hj3"/>
@@ -1395,7 +1411,7 @@ TeleMed will call you momentarily from</string>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBf-kS-WVv">
                                                         <rect key="frame" x="10" y="11.999999999999998" width="299" height="20.333333333333329"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVN-VR-FWn">
@@ -1408,7 +1424,7 @@ TeleMed will call you momentarily from</string>
                                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <inset key="titleEdgeInsets" minX="0.0" minY="-5" maxX="0.0" maxY="0.0"/>
                                                         <state key="normal" title="Phone Number">
-                                                            <color key="titleColor" systemColor="linkColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
                                                         <connections>
@@ -1422,7 +1438,7 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" constant="14" id="nWC-5o-OCg"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vR3-1I-0X4">
@@ -1432,18 +1448,18 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="width" constant="80" id="yMr-gE-g3k"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.59999999999999998" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Message" translatesAutoresizingMaskIntoConstraints="NO" id="Tij-lp-q26" customClass="RestrictedTextView" customModule="M2M_Debug" customModuleProvider="target">
+                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Message" translatesAutoresizingMaskIntoConstraints="NO" id="Tij-lp-q26" customClass="RestrictedTextView" customModule="M2M_Debug" customModuleProvider="target">
                                                         <rect key="frame" x="5" y="49.333333333333329" width="404" height="34.333333333333329"/>
-                                                        <color key="textColor" systemColor="labelColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                                     </textView>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                                <color key="backgroundColor" name="Background132B46"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="Tij-lp-q26" secondAttribute="bottom" id="7n4-Ag-U8g"/>
                                                     <constraint firstItem="yP6-0J-v65" firstAttribute="trailing" secondItem="vR3-1I-0X4" secondAttribute="trailing" id="CrR-rk-4jz"/>
@@ -1473,30 +1489,30 @@ TeleMed will call you momentarily from</string>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkG-sG-N3i">
                                                         <rect key="frame" x="10" y="10" width="389" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Number:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0bH-fP-Lww">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Number:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0bH-fP-Lww">
                                                         <rect key="frame" x="10" y="32" width="115" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="115" id="BfS-Zo-JRC"/>
                                                             <constraint firstAttribute="height" constant="17" id="h7R-xQ-23F"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{#}" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0u-Yb-NI7">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{#}" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0u-Yb-NI7">
                                                         <rect key="frame" x="123" y="32" width="276" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="17" id="gRJ-YH-1re"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                                <color key="backgroundColor" name="Background132B46"/>
                                                 <constraints>
                                                     <constraint firstItem="MpV-2K-vcg" firstAttribute="leading" secondItem="Rbb-Jr-ymV" secondAttribute="leading" id="3TB-2g-5lo"/>
                                                     <constraint firstItem="0bH-fP-Lww" firstAttribute="centerY" secondItem="d0u-Yb-NI7" secondAttribute="centerY" id="4l1-3z-cnJ"/>
@@ -1529,7 +1545,7 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" constant="21" id="xaX-U5-hur"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -1542,7 +1558,7 @@ TeleMed will call you momentarily from</string>
                                             </view>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="62" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="wee-fS-RCK">
                                                 <rect key="frame" x="0.0" y="180.66666666666669" width="414" height="226"/>
-                                                <color key="backgroundColor" name="alternateTertiarySystemGroupedBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="226" id="OBl-yX-RxH"/>
                                                 </constraints>
@@ -1556,6 +1572,8 @@ TeleMed will call you momentarily from</string>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-left-decoration" translatesAutoresizingMaskIntoConstraints="NO" id="L9o-Vq-P6f">
                                                                     <rect key="frame" x="7" y="15" width="10" height="21"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="tintColor" name="Background6ADDCC"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="10" id="QkH-zs-5ml"/>
                                                                         <constraint firstAttribute="height" constant="21" id="jBp-fS-sK6"/>
@@ -1603,7 +1621,7 @@ TeleMed will call you momentarily from</string>
                                                                             </constraints>
                                                                         </view>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                                                    <color key="backgroundColor" name="Background6ADDCC"/>
                                                                     <constraints>
                                                                         <constraint firstItem="vmD-8j-fyg" firstAttribute="centerY" secondItem="diF-K5-LJV" secondAttribute="centerY" id="6NR-JC-HB4"/>
                                                                         <constraint firstItem="aow-7X-jv6" firstAttribute="top" secondItem="BQM-NT-Zq1" secondAttribute="top" constant="8" id="8FT-bA-jDC"/>
@@ -1651,6 +1669,7 @@ TeleMed will call you momentarily from</string>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-right-decoration" translatesAutoresizingMaskIntoConstraints="NO" id="3u2-q2-Ku5">
                                                                     <rect key="frame" x="385" y="15" width="10" height="21"/>
+                                                                    <color key="tintColor" name="Background6ADDCC"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="10" id="GnQ-Fr-EUc"/>
                                                                         <constraint firstAttribute="height" constant="21" id="VYi-ZZ-dDs"/>
@@ -1688,7 +1707,7 @@ TeleMed will call you momentarily from</string>
                                                                             </constraints>
                                                                         </view>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                                                    <color key="backgroundColor" name="Background6ADDCC"/>
                                                                     <constraints>
                                                                         <constraint firstItem="dxP-PH-3I0" firstAttribute="leading" secondItem="fiJ-ho-u0A" secondAttribute="leading" id="5kM-ei-CsS"/>
                                                                         <constraint firstAttribute="trailing" secondItem="7x1-mJ-oij" secondAttribute="trailing" constant="10" id="75Z-Cp-3oW"/>
@@ -1763,7 +1782,7 @@ TeleMed will call you momentarily from</string>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                             </subviews>
-                                                                            <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                                                            <color key="backgroundColor" name="Background6ADDCC"/>
                                                                             <constraints>
                                                                                 <constraint firstItem="Luy-tI-z9W" firstAttribute="top" secondItem="cNJ-AB-xtx" secondAttribute="top" constant="7" id="58u-qB-PYM"/>
                                                                                 <constraint firstItem="rj3-z0-kxp" firstAttribute="top" secondItem="Luy-tI-z9W" secondAttribute="bottom" constant="5" id="FqT-i5-TE3"/>
@@ -1808,9 +1827,10 @@ TeleMed will call you momentarily from</string>
                                                 </connections>
                                             </tableView>
                                         </subviews>
+                                        <color key="backgroundColor" name="DefaultBackground"/>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" name="alternateTertiarySystemGroupedBackgroundColor"/>
+                                <color key="backgroundColor" name="DefaultBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="dlH-m3-AfX" secondAttribute="trailing" id="KP9-NI-cUO"/>
                                     <constraint firstItem="dlH-m3-AfX" firstAttribute="top" secondItem="YrZ-nn-gfM" secondAttribute="top" id="SSo-i5-cBk"/>
@@ -1830,20 +1850,22 @@ TeleMed will call you momentarily from</string>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Add a Comment..." translatesAutoresizingMaskIntoConstraints="NO" id="bUj-hm-VVC" customClass="AutoGrowingTextView">
                                         <rect key="frame" x="0.0" y="1" width="354" height="45"/>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" red="0.10980392156862745" green="0.24313725490196078" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="MDy-Ef-dac"/>
                                         </constraints>
-                                        <color key="textColor" systemColor="placeholderTextColor"/>
+                                        <color key="textColor" name="TextC0C0C0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jqT-W0-siX">
                                         <rect key="frame" x="354" y="1" width="60" height="45"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="N4T-qx-ZRh"/>
                                             <constraint firstAttribute="height" constant="45" id="e2I-Em-5zf"/>
                                         </constraints>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button" image="plus-square-fill"/>
                                         <connections>
                                             <action selector="sendComment:" destination="5rm-Th-Y7w" eventType="touchUpInside" id="asG-SW-E6R"/>
@@ -1865,7 +1887,7 @@ TeleMed will call you momentarily from</string>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="NHB-L4-Gle"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <constraints>
                             <constraint firstItem="yA3-gt-in8" firstAttribute="top" secondItem="NHB-L4-Gle" secondAttribute="top" id="1qo-M3-RO7"/>
                             <constraint firstItem="yA3-gt-in8" firstAttribute="trailing" secondItem="NHB-L4-Gle" secondAttribute="trailing" id="7tS-fs-Bn6"/>
@@ -2169,10 +2191,10 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" constant="17" id="yYz-3V-1Q2"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="8wn-5u-nfS">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right-new" translatesAutoresizingMaskIntoConstraints="NO" id="8wn-5u-nfS">
                                                         <rect key="frame" x="23" y="15" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="19" id="fPb-ev-eyS"/>
@@ -2185,11 +2207,11 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="Tnd-Xs-Mmq"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" name="messageCalloutBackgroundColor"/>
+                                                <color key="backgroundColor" name="DefaultBackground"/>
                                                 <constraints>
                                                     <constraint firstItem="lvx-3c-5PF" firstAttribute="leading" secondItem="Qzf-gF-B0C" secondAttribute="leading" constant="14" id="2yg-rW-wFV"/>
                                                     <constraint firstItem="X5T-zG-ceC" firstAttribute="top" secondItem="Qzf-gF-B0C" secondAttribute="top" constant="13" id="AXg-jC-G4M"/>
@@ -2219,7 +2241,7 @@ TeleMed will call you momentarily from</string>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="lbU-y6-aZa"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="TextC0C0C0"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ct3-Yg-lZR">
@@ -2230,7 +2252,7 @@ TeleMed will call you momentarily from</string>
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" name="DefaultBackground"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="ffJ-b2-l2x" secondAttribute="trailing" constant="10" id="0rT-CJ-Pet"/>
                                             <constraint firstAttribute="bottom" secondItem="Ct3-Yg-lZR" secondAttribute="bottom" id="4dS-Ww-igj"/>
@@ -2287,7 +2309,7 @@ TeleMed will call you momentarily from</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-Inverted" translatesAutoresizingMaskIntoConstraints="NO" id="pnb-4E-CaM">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-InterfaceLight" translatesAutoresizingMaskIntoConstraints="NO" id="pnb-4E-CaM">
                                 <rect key="frame" x="57" y="21" width="300" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="pnb-4E-CaM" secondAttribute="height" multiplier="4:1" id="jTg-3V-bKl"/>
@@ -2307,7 +2329,7 @@ TeleMed will call you momentarily from</string>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
                                         <state key="normal" title="Call" backgroundImage="button-Contact-Call.png">
-                                            <color key="titleColor" systemColor="labelColor"/>
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -2322,7 +2344,7 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <state key="normal" title="Message" backgroundImage="button-Contact-Mail.png">
-                                            <color key="titleColor" systemColor="labelColor"/>
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -2349,7 +2371,7 @@ TeleMed will call you momentarily from</string>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dqL-C9-bbl"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <constraints>
                             <constraint firstItem="zva-Qz-lPM" firstAttribute="leading" secondItem="dqL-C9-bbl" secondAttribute="leading" id="04i-ma-oos"/>
                             <constraint firstItem="dqL-C9-bbl" firstAttribute="trailing" secondItem="zva-Qz-lPM" secondAttribute="trailing" id="AyP-IK-qI6"/>
@@ -3003,25 +3025,25 @@ TeleMed will call you momentarily from</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-Inverted" translatesAutoresizingMaskIntoConstraints="NO" id="Ldu-RX-cdn">
-                                <rect key="frame" x="57" y="21" width="300" height="75"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-InterfaceLight" translatesAutoresizingMaskIntoConstraints="NO" id="Ldu-RX-cdn">
+                                <rect key="frame" x="57" y="65" width="300" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Iqi-5U-W3r"/>
                                     <constraint firstAttribute="width" secondItem="Ldu-RX-cdn" secondAttribute="height" multiplier="4:1" id="fnf-fq-hZU"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ac9-nK-wjB">
-                                <rect key="frame" x="15" y="106" width="384" height="58"/>
+                                <rect key="frame" x="15" y="150" width="384" height="58"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="v8E-N0-EBQ"/>
                                 </constraints>
                                 <string key="text">If you have questions or need further instruction on how to use the MyTeleMed app, please review the User Guide materials below.</string>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="TextC0C0C0"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eoA-Y8-COD">
-                                <rect key="frame" x="111" y="180" width="192" height="120"/>
+                                <rect key="frame" x="111" y="224" width="192" height="120"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSy-kB-Azi">
                                         <rect key="frame" x="9" y="19" width="64" height="82"/>
@@ -3033,7 +3055,7 @@ TeleMed will call you momentarily from</string>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
                                         <state key="normal" title="User Guide" backgroundImage="button-Help-PDF.png">
-                                            <color key="titleColor" systemColor="labelColor"/>
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -3067,7 +3089,7 @@ TeleMed will call you momentarily from</string>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="68" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="20"/>
                                         <state key="normal" title="Demo Video" backgroundImage="button-Help-Video.png">
-                                            <color key="titleColor" systemColor="labelColor"/>
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -3087,7 +3109,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aIX-w7-tsr">
-                                <rect key="frame" x="0.0" y="300" width="414" height="1"/>
+                                <rect key="frame" x="0.0" y="344" width="414" height="1"/>
                                 <color key="backgroundColor" systemColor="separatorColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="g3w-HW-RNb"/>
@@ -3100,7 +3122,7 @@ TeleMed will call you momentarily from</string>
                                     <constraint firstAttribute="height" constant="21" id="Zoi-hb-qoJ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ew-Kc-FAo">
@@ -3110,12 +3132,12 @@ TeleMed will call you momentarily from</string>
                                     <constraint firstAttribute="width" constant="100" id="or1-Zn-VzQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kBF-yL-Vfg"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <constraints>
                             <constraint firstItem="aIX-w7-tsr" firstAttribute="top" secondItem="eoA-Y8-COD" secondAttribute="bottom" id="0Z1-j9-Oag"/>
                             <constraint firstItem="Ac9-nK-wjB" firstAttribute="leading" secondItem="kBF-yL-Vfg" secondAttribute="leading" constant="15" id="9h9-It-eE5"/>
@@ -3155,15 +3177,15 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController title="User Guide" automaticallyAdjustsScrollViewInsets="NO" id="ZBZ-8V-igo" customClass="HelpUserGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aZK-BF-j1U">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxl-BZ-RKW">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" address="YES"/>
                             </webView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Q3c-8o-XvK">
-                                <rect key="frame" x="197" y="348" width="20" height="20"/>
+                                <rect key="frame" x="197" y="358" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="cr6-Aw-PiN"/>
                                     <constraint firstAttribute="width" constant="20" id="mLS-b8-qep"/>
@@ -3171,7 +3193,7 @@ TeleMed will call you momentarily from</string>
                                 <color key="color" systemColor="secondaryLabelColor"/>
                             </activityIndicatorView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0wK-jJ-pFO">
-                                <rect key="frame" x="132" y="380" width="150" height="21"/>
+                                <rect key="frame" x="132" y="390" width="150" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="hke-ff-J5u"/>
                                 </constraints>
@@ -4197,10 +4219,10 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" constant="17" id="ot2-wH-786"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="0DB-Sd-j60">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right-new" translatesAutoresizingMaskIntoConstraints="NO" id="0DB-Sd-j60">
                                                         <rect key="frame" x="23" y="11.666666666666664" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="QFJ-KO-7Cz"/>
@@ -4213,7 +4235,7 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="4NF-TZ-hti"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(       )" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1l6-AV-A7x">
@@ -4223,10 +4245,10 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" constant="17" id="PiI-RW-GRq"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-down" translatesAutoresizingMaskIntoConstraints="NO" id="3sD-PO-B5K">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-down-new" translatesAutoresizingMaskIntoConstraints="NO" id="3sD-PO-B5K">
                                                         <rect key="frame" x="23" y="36.666666666666664" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="6cQ-HE-qK8"/>
@@ -4239,11 +4261,11 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="tOg-F1-0m5"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" name="messageCalloutBackgroundColor"/>
+                                                <color key="backgroundColor" name="DefaultBackground"/>
                                                 <constraints>
                                                     <constraint firstItem="xfY-ll-4Fe" firstAttribute="top" secondItem="R6m-rT-FTl" secondAttribute="top" constant="13" id="6Wd-Dz-RCi"/>
                                                     <constraint firstItem="0DB-Sd-j60" firstAttribute="centerY" secondItem="loH-rt-1yK" secondAttribute="centerY" id="GBo-cR-S7O"/>
@@ -4287,17 +4309,20 @@ TeleMed will call you momentarily from</string>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="5Zp-9A-ihE"/>
                                     <barButtonItem enabled="NO" title="Delete" id="s8S-99-AcK">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <action selector="deleteMessages:" destination="o2h-qA-hBP" id="A0f-HU-imd"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem systemItem="compose" id="o1h-CU-EEc">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="i1Q-xN-TGC" kind="show" identifier="showChatMessageNew" id="j8k-kI-sFx"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Fje-V1-MBs"/>
                                 </items>
+                                <color key="barTintColor" name="DefaultBackground"/>
                             </toolbar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4zj-tN-tpw"/>
@@ -4474,7 +4499,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="ChatMessageDetailViewController" title="Secure Chat Detail" id="i1Q-xN-TGC" customClass="ChatMessageDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n38-BS-AWX">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GjJ-DZ-lPM">
@@ -4543,7 +4568,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="62" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Yf9-Xr-x3o">
-                                <rect key="frame" x="0.0" y="45" width="414" height="557"/>
+                                <rect key="frame" x="0.0" y="45" width="414" height="625"/>
                                 <color key="backgroundColor" name="alternateTertiarySystemGroupedBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageDetailCell" rowHeight="73" id="tqU-Ae-Y1O" customClass="CommentCell">
@@ -4730,7 +4755,7 @@ TeleMed will call you momentarily from</string>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9k-Zv-eY1">
-                                <rect key="frame" x="0.0" y="602" width="414" height="46"/>
+                                <rect key="frame" x="0.0" y="670" width="414" height="46"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XWh-RG-uGU">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
@@ -4827,10 +4852,10 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="width" constant="37" id="Qku-QY-GTJ"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right" translatesAutoresizingMaskIntoConstraints="NO" id="ilm-e9-hga">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-right-new" translatesAutoresizingMaskIntoConstraints="NO" id="ilm-e9-hga">
                                                         <rect key="frame" x="23" y="15" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="19" id="nt5-XZ-PyV"/>
@@ -4843,11 +4868,11 @@ TeleMed will call you momentarily from</string>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="fMD-4K-ZEy"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <color key="textColor" name="TextC0C0C0"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" name="messageCalloutBackgroundColor"/>
+                                                <color key="backgroundColor" name="DefaultBackground"/>
                                                 <constraints>
                                                     <constraint firstItem="A69-YN-bYv" firstAttribute="top" secondItem="XBU-Lc-IUQ" secondAttribute="top" constant="13" id="21T-4p-7JR"/>
                                                     <constraint firstItem="A69-YN-bYv" firstAttribute="leading" secondItem="OQF-GC-UXu" secondAttribute="trailing" constant="4" id="8pR-Xf-7BU"/>
@@ -5525,14 +5550,14 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="wLK-8U-oaT"/>
-        <segue reference="C3V-ib-alC"/>
+        <segue reference="wT6-Yb-3ns"/>
+        <segue reference="253-6l-xSp"/>
         <segue reference="ejp-fl-nDj"/>
-        <segue reference="9pZ-e2-2FC"/>
+        <segue reference="j8k-kI-sFx"/>
         <segue reference="ZfR-s3-nyT"/>
-        <segue reference="9Rx-MN-6ah"/>
+        <segue reference="xfy-la-02K"/>
         <segue reference="xeH-nb-wrL"/>
-        <segue reference="KfY-sd-ej7"/>
+        <segue reference="RL6-ew-HlW"/>
         <segue reference="V9Q-rq-EEe"/>
         <segue reference="nDL-G3-d11"/>
         <segue reference="SWX-Rd-no8"/>
@@ -5542,12 +5567,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <segue reference="yVi-an-TG3"/>
         <segue reference="Xbj-Zr-yMr"/>
         <segue reference="NoH-LA-OtZ"/>
-        <segue reference="eHz-5L-Vwp"/>
+        <segue reference="ERs-f9-p9u"/>
         <segue reference="rKc-RT-hpR"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Logo-InterfaceLight" width="400" height="100"/>
-        <image name="Logo-Inverted" width="400" height="100"/>
         <image name="archive-message" width="40" height="45"/>
         <image name="arrows-refresh" width="18" height="24"/>
         <image name="arrows-refresh-slash" width="18" height="24"/>
@@ -5560,8 +5584,8 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="button-Help-Video.png" width="62" height="82"/>
         <image name="envelope" catalog="system" width="128" height="93"/>
         <image name="forward-message" width="43" height="45"/>
-        <image name="hand-swipe-down" width="19" height="20"/>
-        <image name="hand-swipe-right" width="19" height="20"/>
+        <image name="hand-swipe-down-new" width="19" height="20"/>
+        <image name="hand-swipe-right-new" width="19" height="20"/>
         <image name="history" width="38" height="45"/>
         <image name="message-telemed" width="45.333332061767578" height="45"/>
         <image name="navigation-menu" width="24" height="24"/>
@@ -5569,8 +5593,20 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="return-call" width="59" height="45"/>
         <image name="screen-background" width="414" height="736"/>
         <image name="telemed-icon" width="103" height="129"/>
+        <namedColor name="Background062035">
+            <color red="0.024000000208616257" green="0.125" blue="0.20800000429153442" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Background132B46">
+            <color red="0.074509803921568626" green="0.16862745098039217" blue="0.27450980392156865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Background6ADDCC">
+            <color red="0.41568627450980389" green="0.8666666666666667" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="DefaultBackground">
             <color red="0.050999999046325684" green="0.12200000137090683" blue="0.20000000298023224" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextC0C0C0">
+            <color red="0.75300002098083496" green="0.75300002098083496" blue="0.75300002098083496" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="alternateTertiarySystemGroupedBackgroundColor">
             <color red="0.94900000095367432" green="0.94900000095367432" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -5589,9 +5625,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </systemColor>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -56,6 +56,7 @@
 	if (@available(iOS 13.0, *))
 	{
 		UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+        UIColor *backgroundColor = [UIColor colorWithRed:6.0f/255.0f green:32.0f/255.0f blue:53.0f/255.0f alpha:1.0];
         UINavigationBar.appearance.tintColor = [UIColor whiteColor];
 		[appearance configureWithOpaqueBackground];
         [appearance setBackgroundColor:[UIColor colorWithRed:6.0f/255.0f green:32.0f/255.0f blue:53.0f/255.0f alpha:1.0]];
