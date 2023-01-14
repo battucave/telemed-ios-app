@@ -41,6 +41,11 @@
 	[self.accountModel setDelegate:self];
 	
 	[self.pickerViewDefault selectRow:0 inComponent:0 animated:NO];
+    if (@available(iOS 13.0, *)) {
+        [self.pickerViewDefault setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -46,6 +46,7 @@
 	// Reset message events to not include comments (required for segment control selections)
 	[self setMessageEvents:[self.filteredMessageEvents copy]];
     _segmentedControlColor = [UIColor yellowColor];
+    [[self segmentedControl] setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
 }
 
 - (void)viewWillAppear:(BOOL)animated

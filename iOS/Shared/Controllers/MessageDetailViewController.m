@@ -94,7 +94,7 @@
 	
 		// Initialize text view comment
 		UIEdgeInsets textViewCommentEdgeInsets = self.textViewComment.textContainerInset;
-	
+        [self.textViewComment setTextColor:[UIColor whiteColor]];
 		[self.textViewComment setDelegate:self];
 		[self.textViewComment setTextContainerInset:UIEdgeInsetsMake(textViewCommentEdgeInsets.top, 12.0f, textViewCommentEdgeInsets.bottom, 12.0f)];
 		[self.textViewComment setMaxHeight:120.0f];
@@ -761,16 +761,18 @@
 		[textView setText:@""];
 	}
 	
-	// iOS 13+ - Support dark mode
-	if (@available(iOS 13.0, *))
-	{
-		[textView setTextColor:[UIColor labelColor]];
-	}
-	// iOS < 13 - Fallback to use Label Color light appearance
-	else
-	{
-		[textView setTextColor:[UIColor blackColor]];
-	}
+//	// iOS 13+ - Support dark mode
+//	if (@available(iOS 13.0, *))
+//	{
+//		[textView setTextColor:[UIColor labelColor]];
+//	}
+//	// iOS < 13 - Fallback to use Label Color light appearance
+//	else
+//	{
+//		[textView setTextColor:[UIColor blackColor]];
+//	}
+    
+    [textView setTextColor:[UIColor whiteColor]];
 	
 	[textView becomeFirstResponder];
 }

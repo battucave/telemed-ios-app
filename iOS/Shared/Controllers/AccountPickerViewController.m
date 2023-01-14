@@ -57,6 +57,7 @@
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar setPlaceholder:[NSString stringWithFormat:@"Search %@s", self.textAccount]];
 	[self.searchController.searchBar sizeToFit];
+    [self.searchController.searchBar setBarStyle:UIBarStyleBlack];
 	
     // Add search controller to navigation bar
     [self.navigationItem setSearchController:self.searchController];

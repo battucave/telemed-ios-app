@@ -82,16 +82,17 @@
 		[textView setText:@""];
 		[textView setFont:[UIFont systemFontOfSize:16.0]];
 		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor labelColor]];
-		}
-		// iOS < 13 - Fallback to use Label Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor blackColor]];
-		}
+//		// iOS 13+ - Support dark mode
+//		if (@available(iOS 13.0, *))
+//		{
+//			[textView setTextColor:[UIColor labelColor]];
+//		}
+//		// iOS < 13 - Fallback to use Label Color light appearance
+//		else
+//		{
+//			[textView setTextColor:[UIColor blackColor]];
+//		}
+        [textView setTextColor:[UIColor whiteColor]];
 	}
 	
 	[textView becomeFirstResponder];
@@ -122,17 +123,17 @@
 	{
 		[textView setText:self.textViewMessagePlaceholder];
 		[textView setFont:[UIFont systemFontOfSize:17.0]];
-		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor secondaryLabelColor]];
-		}
-		// iOS < 13 - Fallback to use Secondary Label Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.6]];
-		}
+        
+//		// iOS 13+ - Support dark mode
+//		if (@available(iOS 13.0, *))
+//		{
+//			[textView setTextColor:[UIColor secondaryLabelColor]];
+//		}
+//		// iOS < 13 - Fallback to use Secondary Label Color light appearance
+//		else
+//		{
+//		}
+        [textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.6]];
 	}
 	
 	[textView resignFirstResponder];

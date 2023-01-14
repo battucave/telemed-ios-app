@@ -74,9 +74,9 @@
 	// Initialize search bar
 	[self.searchController.searchBar setDelegate:self];
 	[self.searchController.searchBar sizeToFit];
-	
 	// Initialize search bar placeholder for message
 	[self.searchController.searchBar setPlaceholder:@"Search Recipients"];
+    [self.searchController.searchBar setBarStyle:UIBarStyleBlack];
 	
 	// Initialize search bar placeholder for chat
 	#if MYTELEMED

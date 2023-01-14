@@ -114,17 +114,17 @@
 		[textView setText:@""];
 		[textView setFont:[UIFont systemFontOfSize:16.0]];
 		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor labelColor]];
-		}
-		// iOS < 13 - Fallback to use Label Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor blackColor]];
-		}
-        [textView setTextColor:[UIColor colorWithRed:192.0f/255.0f green:192.0f/255.0f blue:192.0f/255.0f alpha:192.0f/255.0f]];
+//		// iOS 13+ - Support dark mode
+//		if (@available(iOS 13.0, *))
+//		{
+//			[textView setTextColor:[UIColor labelColor]];
+//		}
+//		// iOS < 13 - Fallback to use Label Color light appearance
+//		else
+//		{
+//			[textView setTextColor:[UIColor blackColor]];
+//		}
+        [textView setTextColor:[UIColor whiteColor]];
 	}
 	
 	[textView becomeFirstResponder];

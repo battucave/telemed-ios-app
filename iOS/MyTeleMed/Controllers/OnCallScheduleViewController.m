@@ -38,6 +38,12 @@
 	// Initialize MyStatusModel
 	[self setMyStatusModel:MyStatusModel.sharedInstance];
 	[self.myStatusModel setDelegate:self];
+    if (@available(iOS 13.0, *)) {
+        [[self segmentedControl] setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
+    } else {
+        // Fallback on earlier versions
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

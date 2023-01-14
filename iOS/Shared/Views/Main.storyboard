@@ -641,14 +641,14 @@
             <objects>
                 <viewController storyboardIdentifier="PhoneCallViewController" id="RIK-oc-PUe" customClass="PhoneCallViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dVM-E5-6S6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="636"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="668"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen-background" translatesAutoresizingMaskIntoConstraints="NO" id="TyS-GY-Qtp">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="636"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="668"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="19" translatesAutoresizingMaskIntoConstraints="NO" id="tlk-6i-LC5">
-                                <rect key="frame" x="20" y="20" width="374" height="596"/>
+                                <rect key="frame" x="20" y="20" width="374" height="628"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JMd-Ts-fny" userLabel="Spacer">
                                         <rect key="frame" x="67" y="0.0" width="240" height="72"/>
@@ -658,7 +658,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-IW-RcO">
-                                        <rect key="frame" x="0.0" y="112.66666666666666" width="374" height="174.99999999999997"/>
+                                        <rect key="frame" x="0.0" y="123.33333333333334" width="374" height="175.00000000000003"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="telemed-icon" translatesAutoresizingMaskIntoConstraints="NO" id="Tyy-MG-FKI">
                                                 <rect key="frame" x="149.66666666666666" y="0.0" width="75" height="94"/>
@@ -668,7 +668,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TeleMed is contacting" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="21k-qk-8D0">
-                                                <rect key="frame" x="0.0" y="117" width="374" height="20"/>
+                                                <rect key="frame" x="0.0" y="116.99999999999997" width="374" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="qw0-LO-HXD"/>
                                                 </constraints>
@@ -677,7 +677,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="4A9-ii-Co0">
-                                                <rect key="frame" x="0.0" y="141.00000000000003" width="374" height="34"/>
+                                                <rect key="frame" x="0.0" y="140.99999999999997" width="374" height="34"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="34" id="x6O-W5-QeD"/>
                                                 </constraints>
@@ -700,7 +700,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="82P-tf-4ab">
-                                        <rect key="frame" x="0.0" y="328.33333333333331" width="374" height="99"/>
+                                        <rect key="frame" x="0.0" y="349.66666666666669" width="374" height="99"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beZ-20-Uru">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
@@ -743,10 +743,10 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q8X-pN-5JX">
-                                        <rect key="frame" x="0.0" y="468" width="374" height="128"/>
+                                        <rect key="frame" x="0.0" y="500" width="374" height="128"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You may continue working while waiting for your call." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0KX-5g-7fQ">
-                                                <rect key="frame" x="0.0" y="12.666666666666686" width="374" height="34"/>
+                                                <rect key="frame" x="0.0" y="12.666666666666629" width="374" height="34"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="34" id="av0-GL-9z0"/>
                                                 </constraints>
@@ -875,7 +875,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="Tcd-A0-vuW" customClass="MessageComposeTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="TlV-qX-6XJ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="573"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="DefaultBackground"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -912,6 +912,7 @@ TeleMed will call you momentarily from</string>
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal">
                                                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
@@ -926,6 +927,7 @@ TeleMed will call you momentarily from</string>
                                                         <constraint firstAttribute="width" constant="22" id="j7j-hy-Tep"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
@@ -961,6 +963,7 @@ TeleMed will call you momentarily from</string>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Message:" translatesAutoresizingMaskIntoConstraints="NO" id="9Ug-G8-F2I">
                                                     <rect key="frame" x="11" y="4" width="392" height="135.66666666666666"/>
                                                     <color key="backgroundColor" name="Background132B46"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="textColor" name="TextC0C0C0"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1011,7 +1014,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="MessageRecipientPickerViewController" id="dbR-X4-VWn" customClass="MessageRecipientPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vCf-2A-71b">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7fW-0Y-ehL">
@@ -1019,7 +1022,15 @@ TeleMed will call you momentarily from</string>
                                 <subviews>
                                     <searchBar hidden="YES" contentMode="redraw" placeholder="Search Recipients (this is a placeholder only)" translatesAutoresizingMaskIntoConstraints="NO" id="fdQ-tg-0kE">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="barTintColor" name="Background1C3E64"/>
                                         <textInputTraits key="textInputTraits" textContentType="name"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="searchField.textColor">
+                                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="delegate" destination="dbR-X4-VWn" id="nJf-fn-pTW"/>
                                         </connections>
@@ -1034,8 +1045,8 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="ayW-Td-L8K">
-                                <rect key="frame" x="0.0" y="44" width="414" height="572"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="672"/>
+                                <color key="backgroundColor" name="DefaultBackground"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessageRecipientCell" textLabel="g6D-99-BDF" style="IBUITableViewCellStyleDefault" id="Upo-gR-JBa">
                                         <rect key="frame" x="0.0" y="50" width="414" height="43.666667938232422"/>
@@ -1048,12 +1059,12 @@ TeleMed will call you momentarily from</string>
                                                     <rect key="frame" x="20" y="0.0" width="374" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -1107,7 +1118,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="4fX-RS-WG1" customClass="MessagesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="60m-NG-kHz">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="636"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="668"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="DefaultBackground"/>
                         <prototypes>
@@ -1254,7 +1265,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="MessageDetailViewController" title="Message Detail" id="5rm-Th-Y7w" customClass="MessageDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wat-Vb-eeV">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yA3-gt-in8">
@@ -1404,7 +1415,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YrZ-nn-gfM">
-                                <rect key="frame" x="0.0" y="76" width="414" height="494"/>
+                                <rect key="frame" x="0.0" y="76" width="414" height="526"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dlH-m3-AfX">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="406.66666666666669"/>
@@ -1843,7 +1854,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcv-jw-qVF">
-                                <rect key="frame" x="0.0" y="570" width="414" height="46"/>
+                                <rect key="frame" x="0.0" y="602" width="414" height="46"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hne-BT-fVu">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
@@ -1855,6 +1866,7 @@ TeleMed will call you momentarily from</string>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Add a Comment..." translatesAutoresizingMaskIntoConstraints="NO" id="bUj-hm-VVC" customClass="AutoGrowingTextView">
                                         <rect key="frame" x="0.0" y="1" width="354" height="45"/>
                                         <color key="backgroundColor" red="0.10980392156862745" green="0.24313725490196078" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="tintColor" name="TextC0C0C0"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="MDy-Ef-dac"/>
                                         </constraints>
@@ -1954,7 +1966,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="Zku-Ds-7w4" customClass="MessageForwardViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1jG-UR-rFx">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yc7-wn-ucx">
@@ -2000,7 +2012,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afd-mk-ap7">
-                                <rect key="frame" x="0.0" y="43" width="414" height="573"/>
+                                <rect key="frame" x="0.0" y="43" width="414" height="605"/>
                                 <connections>
                                     <segue destination="Tcd-A0-vuW" kind="embed" identifier="embedMessageForwardTable" id="dmg-yj-Han"/>
                                 </connections>
@@ -2038,11 +2050,11 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="VD9-gx-QWd" customClass="MessageTeleMedViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vMX-sx-xfo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vjQ-9g-J4Z">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                                 <connections>
                                     <segue destination="vUd-oo-bvD" kind="embed" identifier="embedMessageTeleMedTable" id="jIb-YA-bfg"/>
                                 </connections>
@@ -2745,7 +2757,7 @@ TeleMed will call you momentarily from</string>
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="ESE-Wx-j82">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <sections>
                             <tableViewSection headerTitle="SESSION TIMEOUT" footerTitle="Your login session will expire after %d minutes of inactivity. This period is set by your provider." id="MeM-Hz-69f">
                                 <cells>
@@ -2777,7 +2789,7 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstItem="ylM-Vr-5XF" firstAttribute="leading" secondItem="ggE-5l-P5N" secondAttribute="leadingMargin" id="rgS-4n-ewW"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -2824,7 +2836,7 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstItem="7KS-ur-qIC" firstAttribute="leading" secondItem="Kl1-PZ-rgt" secondAttribute="trailing" constant="20" id="zdk-bG-t8H"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="m0u-OQ-5ks" detailTextLabel="sJU-eN-10R" style="IBUITableViewCellStyleSubtitle" id="6Ik-fu-fAt">
                                         <rect key="frame" x="0.0" y="246.33333015441895" width="414" height="56.666667938232422"/>
@@ -2849,7 +2861,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="iR6-Oy-n7R" detailTextLabel="QWc-k3-gSA" style="IBUITableViewCellStyleSubtitle" id="rbj-JL-Stx">
                                         <rect key="frame" x="0.0" y="302.99999809265137" width="414" height="56.666667938232422"/>
@@ -2874,7 +2886,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Fwb-PD-Aso" detailTextLabel="7hm-7x-2wU" style="IBUITableViewCellStyleSubtitle" id="b3F-l6-0ye">
                                         <rect key="frame" x="0.0" y="359.66666603088379" width="414" height="56.666667938232422"/>
@@ -2899,7 +2911,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="6zq-HO-KoN" detailTextLabel="RlH-jw-Cci" style="IBUITableViewCellStyleSubtitle" id="2Un-Pl-lCq">
                                         <rect key="frame" x="0.0" y="416.33333396911621" width="414" height="56.666667938232422"/>
@@ -2924,7 +2936,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -2946,7 +2958,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                         <connections>
                                             <segue destination="mdA-1q-HPh" kind="show" identifier="showSettingsPassword" id="8tX-6a-QQP"/>
                                         </connections>
@@ -2967,7 +2979,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                         <connections>
                                             <segue destination="VQu-Ge-aJV" kind="show" identifier="showAccountPickerFromSettings" id="bgc-j8-Gjl"/>
                                         </connections>
@@ -2999,7 +3011,7 @@ TeleMed will call you momentarily from</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -3033,14 +3045,14 @@ TeleMed will call you momentarily from</string>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-InterfaceLight" translatesAutoresizingMaskIntoConstraints="NO" id="Ldu-RX-cdn">
-                                <rect key="frame" x="57" y="65" width="300" height="75"/>
+                                <rect key="frame" x="57" y="21" width="300" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Iqi-5U-W3r"/>
                                     <constraint firstAttribute="width" secondItem="Ldu-RX-cdn" secondAttribute="height" multiplier="4:1" id="fnf-fq-hZU"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ac9-nK-wjB">
-                                <rect key="frame" x="15" y="150" width="384" height="58"/>
+                                <rect key="frame" x="15" y="106" width="384" height="58"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="v8E-N0-EBQ"/>
                                 </constraints>
@@ -3050,7 +3062,7 @@ TeleMed will call you momentarily from</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eoA-Y8-COD">
-                                <rect key="frame" x="111" y="224" width="192" height="120"/>
+                                <rect key="frame" x="111" y="180" width="192" height="120"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSy-kB-Azi">
                                         <rect key="frame" x="9" y="19" width="64" height="82"/>
@@ -3116,7 +3128,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aIX-w7-tsr">
-                                <rect key="frame" x="0.0" y="344" width="414" height="1"/>
+                                <rect key="frame" x="0.0" y="300" width="414" height="1"/>
                                 <color key="backgroundColor" systemColor="separatorColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="g3w-HW-RNb"/>
@@ -3184,15 +3196,15 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController title="User Guide" automaticallyAdjustsScrollViewInsets="NO" id="ZBZ-8V-igo" customClass="HelpUserGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aZK-BF-j1U">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxl-BZ-RKW">
-                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" address="YES"/>
                             </webView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Q3c-8o-XvK">
-                                <rect key="frame" x="197" y="358" width="20" height="20"/>
+                                <rect key="frame" x="197" y="348" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="cr6-Aw-PiN"/>
                                     <constraint firstAttribute="width" constant="20" id="mLS-b8-qep"/>
@@ -3200,7 +3212,7 @@ TeleMed will call you momentarily from</string>
                                 <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0wK-jJ-pFO">
-                                <rect key="frame" x="132" y="390" width="150" height="21"/>
+                                <rect key="frame" x="132" y="380" width="150" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="hke-ff-J5u"/>
                                 </constraints>
@@ -3544,7 +3556,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController id="WLz-LF-MQ6" customClass="MessageHistoryViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tsp-Tx-wNi">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n9x-J7-z8S">
@@ -3743,7 +3755,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="62" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Cwo-PI-RCQ">
-                                <rect key="frame" x="0.0" y="151" width="414" height="465"/>
+                                <rect key="frame" x="0.0" y="151" width="414" height="497"/>
                                 <color key="backgroundColor" name="DefaultBackground"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="MessageEventCell" rowHeight="62" id="kRw-nD-ZKD" customClass="MessageEventCell">
@@ -3878,7 +3890,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="vUd-oo-bvD" customClass="MessageTeleMedComposeTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Dig-LM-hY9">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -4066,11 +4078,17 @@ TeleMed will call you momentarily from</string>
                                             <string>Title</string>
                                             <string>Title</string>
                                         </scopeButtonTitles>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="searchField.textColor">
+                                                <color key="value" name="TextC0C0C0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="delegate" destination="VQu-Ge-aJV" id="Ju9-0D-Rw0"/>
                                         </connections>
                                     </searchBar>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="6DQ-a7-y0h"/>
                                     <constraint firstAttribute="bottom" secondItem="3Vd-pP-0g9" secondAttribute="bottom" id="RgD-SO-Vj6"/>
@@ -4121,7 +4139,7 @@ TeleMed will call you momentarily from</string>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wMB-OT-lwv">
                                                     <rect key="frame" x="20" y="11.000000000000002" width="374" height="21.666666666666671"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="251" text="Account Number:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vzo-xE-d3d">
@@ -4131,7 +4149,7 @@ TeleMed will call you momentarily from</string>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="106" id="Gbn-OQ-e6E"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="{#}" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZhK-MU-0jb">
@@ -4140,7 +4158,7 @@ TeleMed will call you momentarily from</string>
                                                         <constraint firstAttribute="height" constant="17" id="uN5-v0-5l7"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Authorization Pending" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zby-1U-j89">
@@ -4149,10 +4167,11 @@ TeleMed will call you momentarily from</string>
                                                         <constraint firstAttribute="height" constant="17" id="NGt-7s-0QD"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="Vzo-xE-d3d" firstAttribute="centerY" secondItem="ZhK-MU-0jb" secondAttribute="centerY" id="4rb-S8-cFk"/>
                                                 <constraint firstItem="zby-1U-j89" firstAttribute="top" secondItem="Vzo-xE-d3d" secondAttribute="bottom" constant="6" id="6Uf-mv-p7P"/>
@@ -4168,7 +4187,7 @@ TeleMed will call you momentarily from</string>
                                                 <constraint firstItem="ZhK-MU-0jb" firstAttribute="trailing" secondItem="wMB-OT-lwv" secondAttribute="trailing" id="xVw-pL-Me3"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background132B46"/>
                                         <connections>
                                             <outlet property="constraintAuthorizationPendingHeight" destination="NGt-7s-0QD" id="DM2-eA-u2o"/>
                                             <outlet property="constraintAuthorizationPendingTopSpace" destination="6Uf-mv-p7P" id="NEt-t5-sU7"/>
@@ -4219,7 +4238,7 @@ TeleMed will call you momentarily from</string>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Kkz-9x-TNZ">
-                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GHr-O0-xaE">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="68"/>
@@ -4264,7 +4283,7 @@ TeleMed will call you momentarily from</string>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand-swipe-down-new" translatesAutoresizingMaskIntoConstraints="NO" id="3sD-PO-B5K">
-                                                        <rect key="frame" x="23" y="36.666666666666671" width="19" height="20"/>
+                                                        <rect key="frame" x="23" y="36.666666666666664" width="19" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="6cQ-HE-qK8"/>
                                                             <constraint firstAttribute="width" constant="19" id="T6J-IP-eej"/>
@@ -4309,7 +4328,7 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                     </view>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eVY-fP-srt">
-                                        <rect key="frame" x="0.0" y="68" width="414" height="624"/>
+                                        <rect key="frame" x="0.0" y="68" width="414" height="668"/>
                                         <connections>
                                             <segue destination="hdp-IS-Dco" kind="embed" identifier="embedChatMessagesTable" id="crw-om-0km"/>
                                         </connections>
@@ -4373,7 +4392,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="hdp-IS-Dco" customClass="ChatMessagesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="85" sectionHeaderHeight="1" sectionFooterHeight="1" id="Ze8-VJ-5vP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="624"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="668"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="DefaultBackground"/>
                         <prototypes>
@@ -4386,7 +4405,7 @@ TeleMed will call you momentarily from</string>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o98-gH-7MF">
                                             <rect key="frame" x="0.0" y="0.0" width="8" height="86"/>
-                                            <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="8" id="3wg-yz-OIf"/>
                                             </constraints>
@@ -4515,7 +4534,7 @@ TeleMed will call you momentarily from</string>
             <objects>
                 <viewController storyboardIdentifier="ChatMessageDetailViewController" title="Secure Chat Detail" id="i1Q-xN-TGC" customClass="ChatMessageDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n38-BS-AWX">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="604"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GjJ-DZ-lPM">
@@ -4566,7 +4585,7 @@ TeleMed will call you momentarily from</string>
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" name="Background132B46"/>
+                                <color key="backgroundColor" red="0.10980392156862745" green="0.24313725490196078" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstItem="ncj-vx-etd" firstAttribute="top" secondItem="GjJ-DZ-lPM" secondAttribute="top" id="05v-Mo-cQs"/>
                                     <constraint firstItem="ekG-VR-Qeu" firstAttribute="top" secondItem="GjJ-DZ-lPM" secondAttribute="top" constant="14" id="598-Dc-aTL"/>
@@ -4586,7 +4605,7 @@ TeleMed will call you momentarily from</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="62" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Yf9-Xr-x3o">
-                                <rect key="frame" x="0.0" y="45" width="414" height="513"/>
+                                <rect key="frame" x="0.0" y="45" width="414" height="557"/>
                                 <color key="backgroundColor" name="DefaultBackground"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageDetailCell" rowHeight="73" id="tqU-Ae-Y1O" customClass="CommentCell">
@@ -4606,7 +4625,7 @@ TeleMed will call you momentarily from</string>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="13O-BV-0Y5">
                                                     <rect key="frame" x="16" y="32" width="352" height="10"/>
-                                                    <color key="backgroundColor" name="secondarySeparatorColor"/>
+                                                    <color key="backgroundColor" name="Background1C3E64"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="10" id="Meq-UZ-xfY"/>
                                                     </constraints>
@@ -4628,7 +4647,7 @@ TeleMed will call you momentarily from</string>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
-                                                    <color key="backgroundColor" name="Background132B46"/>
+                                                    <color key="backgroundColor" name="Background1C3E64"/>
                                                     <constraints>
                                                         <constraint firstItem="RUn-Th-0dv" firstAttribute="top" secondItem="C8o-ce-nod" secondAttribute="top" constant="7" id="70b-c7-4IU"/>
                                                         <constraint firstAttribute="trailing" secondItem="8Wa-nJ-JXq" secondAttribute="trailing" id="Fbm-6v-60V"/>
@@ -4775,7 +4794,7 @@ TeleMed will call you momentarily from</string>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9k-Zv-eY1">
-                                <rect key="frame" x="0.0" y="558" width="414" height="46"/>
+                                <rect key="frame" x="0.0" y="602" width="414" height="46"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XWh-RG-uGU">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
@@ -4787,6 +4806,7 @@ TeleMed will call you momentarily from</string>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter Message..." translatesAutoresizingMaskIntoConstraints="NO" id="xz9-uh-Se8" customClass="AutoGrowingTextView">
                                         <rect key="frame" x="0.0" y="1" width="354" height="45"/>
                                         <color key="backgroundColor" name="Background132B46"/>
+                                        <color key="tintColor" name="TextC0C0C0"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="JtU-2Z-eFi"/>
                                         </constraints>
@@ -4952,7 +4972,7 @@ TeleMed will call you momentarily from</string>
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="7eH-rK-tnD">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" name="DefaultBackground"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="5K2-0m-mOm">
                             <rect key="frame" x="0.0" y="133.00000381469727" width="414" height="125"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5025,7 +5045,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                         <constraint firstAttribute="width" constant="160" id="Kdi-DM-DWU"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -5037,7 +5057,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                 <constraint firstItem="SCG-8B-ZoU" firstAttribute="leading" secondItem="NbS-Ru-vEQ" secondAttribute="leadingMargin" id="sv3-60-a7V"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="EJI-Eb-6J7">
                                         <rect key="frame" x="0.0" y="44.666667938232422" width="414" height="43.666667938232422"/>
@@ -5069,7 +5089,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                         <constraint firstAttribute="width" constant="160" id="u0M-Sc-sSo"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -5081,7 +5101,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                 <constraint firstItem="Te3-TJ-q9X" firstAttribute="leading" secondItem="uhn-eF-uE4" secondAttribute="leading" constant="16" id="zIX-6p-cWP"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="n5P-95-3Te">
                                         <rect key="frame" x="0.0" y="88.333335876464844" width="414" height="43.666667938232422"/>
@@ -5113,7 +5133,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                         <constraint firstAttribute="width" constant="160" id="q38-Tx-NI7"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -5125,7 +5145,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                                 <constraint firstItem="o4b-gi-602" firstAttribute="leading" secondItem="Jrk-6b-Gmu" secondAttribute="leadingMargin" id="mOd-Q8-lfG"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
+                                        <color key="backgroundColor" name="Background1C3E64"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -5157,7 +5177,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="wHJ-kp-64t" customClass="MessageEscalateViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rnM-pC-9VD">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ih4-WG-1sO">
@@ -5319,7 +5339,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <objects>
                 <tableViewController title="Redirect" id="tgV-mw-u1T" customClass="MessageRedirectTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" id="qDf-W0-JUb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="DefaultBackground"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="rAy-RQ-zuX">
@@ -5431,7 +5451,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
             <objects>
                 <viewController storyboardIdentifier="OnCallSlotPickerViewController" id="i6a-8F-IOQ" customClass="OnCallSlotPickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T4n-EA-Fvy">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="648"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u12-YD-jFC">
@@ -5458,7 +5478,7 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="66" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="0Yb-Ay-S4Z">
-                                <rect key="frame" x="0.0" y="44" width="414" height="572"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="604"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OnCallSlotCell" rowHeight="66" id="IB2-aV-hhd" customClass="OnCallSlotCell">
@@ -5574,24 +5594,24 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="wLK-8U-oaT"/>
-        <segue reference="C3V-ib-alC"/>
+        <segue reference="wT6-Yb-3ns"/>
+        <segue reference="253-6l-xSp"/>
         <segue reference="ejp-fl-nDj"/>
         <segue reference="9pZ-e2-2FC"/>
-        <segue reference="Bd7-aS-lX5"/>
-        <segue reference="9Rx-MN-6ah"/>
+        <segue reference="ZfR-s3-nyT"/>
+        <segue reference="bgc-j8-Gjl"/>
         <segue reference="jIb-YA-bfg"/>
-        <segue reference="RL6-ew-HlW"/>
+        <segue reference="KfY-sd-ej7"/>
         <segue reference="V9Q-rq-EEe"/>
         <segue reference="nDL-G3-d11"/>
         <segue reference="SWX-Rd-no8"/>
         <segue reference="duc-Go-Hul"/>
-        <segue reference="tkY-Nl-aTH"/>
-        <segue reference="eNK-pz-2OB"/>
-        <segue reference="1fs-hi-JGd"/>
-        <segue reference="pW4-rb-CwU"/>
-        <segue reference="dmg-yj-Han"/>
-        <segue reference="0jR-zR-Czp"/>
+        <segue reference="E1e-BY-bXG"/>
+        <segue reference="VXf-fn-O9m"/>
+        <segue reference="yVi-an-TG3"/>
+        <segue reference="Wxx-iI-zqX"/>
+        <segue reference="NoH-LA-OtZ"/>
+        <segue reference="ERs-f9-p9u"/>
         <segue reference="FA7-fW-yLW"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -5621,6 +5641,9 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </namedColor>
         <namedColor name="Background132B46">
             <color red="0.075000002980232239" green="0.16899999976158142" blue="0.27500000596046448" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Background1C3E64">
+            <color red="0.10980392156862745" green="0.24313725490196078" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Background6ADDCC">
             <color red="0.41600000858306885" green="0.86699998378753662" blue="0.80000001192092896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -5657,9 +5680,6 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

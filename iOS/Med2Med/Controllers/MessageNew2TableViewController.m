@@ -53,16 +53,17 @@
 		// Turn off placeholder styling
 		[self.textViewAdditionalInformation setFont:[UIFont systemFontOfSize:14.0]];
 		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[self.textViewAdditionalInformation setTextColor:[UIColor labelColor]];
-		}
-		// iOS < 13 - Fallback to use Label Color light appearance
-		else
-		{
-			[self.textViewAdditionalInformation setTextColor:[UIColor blackColor]];
-		}
+//		// iOS 13+ - Support dark mode
+//		if (@available(iOS 13.0, *))
+//		{
+//			[self.textViewAdditionalInformation setTextColor:[UIColor labelColor]];
+//		}
+//		// iOS < 13 - Fallback to use Label Color light appearance
+//		else
+//		{
+//			[self.textViewAdditionalInformation setTextColor:[UIColor blackColor]];
+//		}
+        [self.textViewAdditionalInformation setTextColor:[UIColor whiteColor]];
 	}
 	
 	// Force user interface changes to take effect
@@ -182,6 +183,7 @@
 		{
 			[textView setTextColor:[UIColor blackColor]];
 		}
+        
 	}
 	
 	[textView becomeFirstResponder];
