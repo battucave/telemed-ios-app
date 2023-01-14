@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -371,24 +372,19 @@
                                     <constraint firstAttribute="width" constant="98" id="TPE-pk-A77"/>
                                     <constraint firstAttribute="height" constant="23" id="WcQ-Yp-Ha1"/>
                                 </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="titleEdgeInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
-                                        <fragment content="  ">
-                                            <attributes>
-                                                <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <font key="NSFont" metaFont="system" size="20"/>
-                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                            </attributes>
-                                        </fragment>
                                         <fragment content="Log Out">
                                             <attributes>
-                                                <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <font key="NSFont" size="18" name="HelveticaNeue"/>
                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
+                                    <imageReference key="image" image="lock" catalog="system" symbolScale="medium"/>
                                 </state>
                                 <connections>
                                     <action selector="doLogout:" destination="W1Q-1B-CLM" eventType="touchUpInside" id="Odp-ng-NgO"/>
@@ -401,24 +397,19 @@
                                     <constraint firstAttribute="width" constant="70" id="POv-46-Fgg"/>
                                     <constraint firstAttribute="height" constant="23" id="m41-Hi-ERC"/>
                                 </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="titleEdgeInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
-                                        <fragment content="  ">
+                                        <fragment content=" Help">
                                             <attributes>
-                                                <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <font key="NSFont" metaFont="system" size="20"/>
-                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                            </attributes>
-                                        </fragment>
-                                        <fragment content="Help">
-                                            <attributes>
-                                                <color key="NSColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <font key="NSFont" size="18" name="HelveticaNeue"/>
                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
+                                    <imageReference key="image" image="questionmark.circle" catalog="system" symbolScale="medium"/>
                                 </state>
                                 <connections>
                                     <segue destination="fKJ-5X-BvT" kind="custom" identifier="showHelp" customClass="SWRevealViewControllerSegue" id="KfY-sd-ej7"/>
@@ -5630,9 +5621,11 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="hand-swipe-down-new" width="19" height="20"/>
         <image name="hand-swipe-right-new" width="19" height="20"/>
         <image name="history" width="38" height="45"/>
+        <image name="lock" catalog="system" width="125" height="128"/>
         <image name="message-telemed" width="45.333332061767578" height="45"/>
         <image name="navigation-menu" width="24" height="24"/>
         <image name="plus-square-fill" width="135" height="102"/>
+        <image name="questionmark.circle" catalog="system" width="128" height="123"/>
         <image name="return-call" width="59" height="45"/>
         <image name="screen-background" width="414" height="736"/>
         <image name="telemed-icon" width="103" height="129"/>
