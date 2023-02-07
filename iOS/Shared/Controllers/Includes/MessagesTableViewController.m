@@ -177,12 +177,13 @@
 		// iOS 13+ - Support dark mode
 		if (@available(iOS 13.0, *))
 		{
-			[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+			[emptyCell setBackgroundColor:[UIColor clearColor]];
 		}
 		
 		[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 		[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 		[emptyCell.textLabel setText:(self.isFirstPageLoaded ? @"No messages available." : @"Loading...")];
+        [emptyCell.textLabel setTextColor:[UIColor whiteColor]];
 		
 		return emptyCell;
 	}

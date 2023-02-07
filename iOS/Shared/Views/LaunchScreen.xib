@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,17 +23,20 @@
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="jMa-Sq-TYp"/>
+            <color key="backgroundColor" name="DefaultBackground"/>
             <constraints>
                 <constraint firstAttribute="centerY" secondItem="YbA-iH-AFQ" secondAttribute="centerY" id="KXK-03-UbF"/>
                 <constraint firstAttribute="centerX" secondItem="YbA-iH-AFQ" secondAttribute="centerX" id="lrN-Iu-Xnx"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <viewLayoutGuide key="safeArea" id="jMa-Sq-TYp"/>
             <point key="canvasLocation" x="914" y="370"/>
         </view>
     </objects>
     <resources>
         <image name="Logo-InterfaceLight" width="300" height="75"/>
+        <namedColor name="DefaultBackground">
+            <color red="0.050980392156862744" green="0.12156862745098039" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -71,6 +71,7 @@
 	[self.textViewChatMessage setMaxHeight:206.5f]; // (118.5 = iPhone 5 view height - keyboard height - chat participants view height - 1px border)
 	[self.textViewChatMessage setTextContainerInset:UIEdgeInsetsMake(textViewChatMessageEdgeInsets.top, 12.0f, textViewChatMessageEdgeInsets.bottom, 12.0f)];
 	self.textViewChatMessagePlaceholder = self.textViewChatMessage.text;
+    [self.textViewChatMessage setTextColor:[UIColor whiteColor]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -639,16 +640,17 @@
 		[textView setText:@""];
 	}
 	
-	// iOS 13+ - Support dark mode
-	if (@available(iOS 13.0, *))
-	{
-		[textView setTextColor:[UIColor labelColor]];
-	}
-	// iOS < 13 - Fallback to use Label Color light appearance
-	else
-	{
-		[textView setTextColor:[UIColor blackColor]];
-	}
+//	// iOS 13+ - Support dark mode
+//	if (@available(iOS 13.0, *))
+//	{
+//		[textView setTextColor:[UIColor labelColor]];
+//	}
+//	// iOS < 13 - Fallback to use Label Color light appearance
+//	else
+//	{
+//		[textView setTextColor:[UIColor blackColor]];
+//	}
+    [textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.6]];
 	
 	[textView becomeFirstResponder];
 }
@@ -660,16 +662,17 @@
 	{
 		[textView setText:self.textViewChatMessagePlaceholder];
 		
-		// iOS 13+ - Support dark mode
-		if (@available(iOS 13.0, *))
-		{
-			[textView setTextColor:[UIColor placeholderTextColor]];
-		}
-		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
-		else
-		{
-			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.3]];
-		}
+//		// iOS 13+ - Support dark mode
+//		if (@available(iOS 13.0, *))
+//		{
+//			[textView setTextColor:[UIColor placeholderTextColor]];
+//		}
+//		// iOS < 13 - Fallback to use Placeholder Text Color light appearance
+//		else
+//		{
+//			[textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.3]];
+//		}
+        [textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.3]];
 	}
 	
 	[textView resignFirstResponder];
@@ -721,12 +724,13 @@
 			// iOS 13+ - Support dark mode
 			if (@available(iOS 13.0, *))
 			{
-				[emptyCell setBackgroundColor:[UIColor secondarySystemGroupedBackgroundColor]];
+				[emptyCell setBackgroundColor:[UIColor clearColor]];
 			}
 			
 			[emptyCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 			[emptyCell.textLabel setFont:[UIFont systemFontOfSize:17.0]];
 			[emptyCell.textLabel setText:(self.isLoaded ? @"No chat messages available." : @"Loading...")];
+            [emptyCell.textLabel setTextColor:[UIColor whiteColor]];
 		}
 		
 		// Auto size table chat messages height to show all rows

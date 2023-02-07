@@ -70,6 +70,13 @@
 	#elif defined MED2MED
 		[self setSectionAboutTeleMed:2];
 	#endif
+    
+    if (@available(iOS 13.0, *)) {
+        [self setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
+        [[self view] setBackgroundColor:[UIColor colorWithRed:13.0f/255.0f green:31.0f/255.0f blue:51.0f/255.0f alpha:1.0]];
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
