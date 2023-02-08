@@ -45,6 +45,20 @@
 	
 	// Reset message events to not include comments (required for segment control selections)
 	[self setMessageEvents:[self.filteredMessageEvents copy]];
+    
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [UIFont boldSystemFontOfSize:17], NSFontAttributeName,
+                                [UIColor blackColor], NSForegroundColorAttributeName,
+                                nil];
+    [_segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    NSDictionary *highlightedAttributes = [NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:NSForegroundColorAttributeName];
+    [_segmentedControl setTitleTextAttributes:highlightedAttributes forState:UIControlStateSelected];
+    
+    NSDictionary *lightedAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    [_segmentedControl setTitleTextAttributes:lightedAttributes forState:UIControlStateNormal];
+
+    
     _segmentedControlColor = [UIColor yellowColor];
     [[self segmentedControl] setOverrideUserInterfaceStyle:UIUserInterfaceStyleDark];
 }

@@ -628,6 +628,8 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
+    
+    [self.textViewChatMessage setTextColor:[UIColor whiteColor]];
 	// Collapse text view chat participants
 	if (self.isParticipantsExpanded)
 	{
@@ -650,7 +652,7 @@
 //	{
 //		[textView setTextColor:[UIColor blackColor]];
 //	}
-    [textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.6]];
+   // [textView setTextColor:[UIColor colorWithRed:60.0f/255.0f green:60.0f/255.0f blue:67.0f/255.0f alpha:0.6]];
 	
 	[textView becomeFirstResponder];
 }
