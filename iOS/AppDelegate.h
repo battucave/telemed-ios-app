@@ -9,11 +9,14 @@
 #import <CallKit/CallKit.h>
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
+#import <AppAuth/AppAuth.h>
 
 @interface AppDelegate : UIResponder <CXCallObserverDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate>
 
 @property (nonatomic) UIWindow *window;
 @property (nonatomic) UIStoryboard *storyboard;
+@property(nonatomic, strong, nullable) id<OIDExternalUserAgentSession> currentAuthorizationFlow;
+@property(nonatomic, strong, nullable) OIDAuthState *authState;
 
 #if MYTELEMED
 	@property (nonatomic) void (^goToRemoteNotificationScreen)(UINavigationController *navigationController); // Used by AppDelegate, CoreViewController, and CoreTableViewController

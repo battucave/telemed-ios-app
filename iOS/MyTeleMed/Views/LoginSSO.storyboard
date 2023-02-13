@@ -109,6 +109,21 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="he5-gv-e9L"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ha9-K8-NbK"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="nc2-Gb-t5U"/>
+                                    <barButtonItem title="SSO" style="plain" id="kBR-yG-5fB">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="guO-M4-0c3">
+                                            <rect key="frame" x="204.66666666666666" y="1" width="65.999999999999972" height="42"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="SSO"/>
+                                            <connections>
+                                                <action selector="ssoLogin:" destination="FjD-qd-sAh" eventType="touchUpInside" id="mWu-B4-Fgd"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
                                     <barButtonItem title="Login" width="62" style="plain" id="as0-45-LXf">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="eZi-Wo-MRE">
@@ -977,10 +992,10 @@ Must be 8 characters minimum &amp; contain at least 3 of the following 4 types o
         <image name="Logo-InterfaceLight" width="400" height="100"/>
         <image name="button-Help.png" width="10" height="14"/>
         <image name="button-TextField-Help.png" width="20" height="20"/>
-        <image name="chevron.left" catalog="system" width="97" height="128"/>
+        <image name="chevron.left" catalog="system" width="32" height="32"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <namedColor name="DefaultBackground">
-            <color red="0.050980392156862744" green="0.12156862745098039" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.050999999046325684" green="0.12200000137090683" blue="0.20000000298023224" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

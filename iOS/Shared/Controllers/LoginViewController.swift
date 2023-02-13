@@ -8,6 +8,8 @@
 
 import Foundation
 import WebKit
+import AppAuth
+import JWTDecode
 
 class LoginViewController: CoreViewController {
 
@@ -65,6 +67,69 @@ class LoginViewController: CoreViewController {
             webView.evaluateJavaScript("document.getElementById('loginButton').click();", completionHandler: nil)
         }
     }
+    
+    @IBAction func ssoLogin(_ sender: Any) {
+          let issuer = URL(string: "https://id.carexm.com")!
+          let endSessionUrl = issuer.appendingPathComponent("connect/endsession")
+
+          // discovers endpoints
+          OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { configuration, error in
+              guard let config = configuration else {
+                  print("Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")")
+                  return
+              }
+              
+              // builds authentication request
+              let request = OIDAuthorizationRequest(configuration: config,
+                                                    clientId: "MyTelemed.MobileClient",
+                                                    clientSecret: "",
+                                                    scopes: [OIDScopeOpenID, OIDScopeProfile],
+                                                    redirectURL: URL(string: "com.carexm.mytelemedprovider://signin-oidc")!,
+                                                    responseType: OIDResponseTypeCode,
+                                                    additionalParameters: [ "prompt" : "login" ])
+              
+              // performs authentication request
+              print("Initiating authorization request with scope: \(request.scope ?? "nil")")
+              
+              let appDelegate = UIApplication.shared.delegate as! AppDelegate
+              
+              appDelegate.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self)   { authState, error in
+                  
+                  do {
+                      
+                      if let authState = authState {
+                          print("Got authorization tokens. Access token: " +
+                                "\(authState.lastTokenResponse?.accessToken ?? "nil")")
+                          guard let token = authState.lastTokenResponse?.accessToken  else { return }
+              
+                          let jwt = try decode(jwt: token)
+                          if let accessToken = jwt.body["tm_access_token"] as? String,let refreshToken = jwt.body["tm_refresh_token"] as? String,let authenticationModel = AuthenticationModel.sharedInstance() {
+                              
+                              authenticationModel.accessToken = accessToken
+                              authenticationModel.refreshToken = refreshToken
+                              
+                              DispatchQueue.main.async {
+                                  self.finalizeAuthentication()
+                              }
+                          }
+                         
+                          
+                         
+                      } else {
+                          print("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+                      }
+                      
+                  } catch let error as NSError {
+                      print("Fail: \(error.localizedDescription)")
+                  } catch {
+                      print("Fail: \(error)")
+                  }
+                  
+                  
+              }
+          }
+      }
+
     
     @IBAction func goBackWebView(_ sender: UIBarButtonItem) {
         self.webView?.goBack()
