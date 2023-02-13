@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PB9-Do-or9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PB9-Do-or9">
     <device id="retina5_5" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -109,8 +109,23 @@
                                     </barButtonItem>
                                     <barButtonItem width="8" style="plain" systemItem="fixedSpace" id="he5-gv-e9L"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="61N-O7-IdL"/>
-                                    <barButtonItem title="Login" width="62" style="plain" id="as0-45-LXf">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="xoR-vI-zZo"/>
+                                    <barButtonItem width="62" style="plain" id="as0-45-LXf">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="eZi-Wo-MRE">
+                                            <rect key="frame" x="204.66666666666666" y="1" width="65.999999999999972" height="42"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <inset key="titleEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="imageEdgeInsets" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="SSO"/>
+                                            <connections>
+                                                <action selector="ssoLogin:" destination="FjD-qd-sAh" eventType="touchUpInside" id="da6-BQ-E0M"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="9Pi-LY-aZa"/>
+                                    <barButtonItem title="Login" width="62" style="plain" id="8hU-mX-mhW">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="d5g-b8-9tw">
                                             <rect key="frame" x="328" y="1" width="66" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -118,7 +133,7 @@
                                             <inset key="imageEdgeInsets" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" title="Login" image="chevron.right" catalog="system"/>
                                             <connections>
-                                                <action selector="doLogin:" destination="FjD-qd-sAh" eventType="touchUpInside" id="mhS-Gx-23C"/>
+                                                <action selector="doLogin:" destination="FjD-qd-sAh" eventType="touchUpInside" id="8St-BC-D3S"/>
                                             </connections>
                                         </button>
                                     </barButtonItem>
