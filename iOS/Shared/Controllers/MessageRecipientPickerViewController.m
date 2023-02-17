@@ -240,11 +240,7 @@
 				UIAlertController *groupChatAlertController = [UIAlertController alertControllerWithTitle:@"New Chat Message" message:@"Would you like to start a Group Chat?" preferredStyle:UIAlertControllerStyleAlert];
 				UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 				{
-					// Disable group chat
-					self.isGroupChat = NO;
-					
-					// Execute unwind segue
-					[self performSegueWithIdentifier:@"unwindSetChatParticipants" sender:self];
+				
 				}];
 				UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
 				{
